@@ -1,0 +1,20 @@
+ini_open("settings.ini");
+global.key[0] = ini_read_real("Keyboard", "up", ord("W"));
+global.key[1] = ini_read_real("Keyboard", "down", ord("S"));
+global.key[2] = ini_read_real("Keyboard", "left", ord("A"));
+global.key[3] = ini_read_real("Keyboard", "right", ord("D"));
+global.key[4] = ini_read_real("Keyboard", "jump", ord("K"));
+global.key[5] = ini_read_real("Keyboard", "shoot", ord("J"));
+global.key[6] = ini_read_real("Keyboard", "dash", ord("L"));
+global.key[7] = ini_read_real("Keyboard", "angle up", ord("E"));
+global.key[8] = ini_read_real("Keyboard", "angle down", ord("Q"));
+global.key[9] = ini_read_real("Keyboard", "aim lock", ord("U"));
+global.key[10] = ini_read_real("Keyboard", "item select", ord("O"));
+global.key[11] = ini_read_real("Keyboard", "item cancel", ord("I"));
+global.key[12] = ini_read_real("Keyboard", "pause", vk_enter);
+
+global.key_m[0] = ini_read_real("Keyboard", "menu select", ord("K"));
+global.key_m[1] = ini_read_real("Keyboard", "menu cancel", ord("J"));
+global.key_m[2] = ini_read_real("Keyboard", "menu next", ord("E"));
+global.key_m[3] = ini_read_real("Keyboard", "menu previous", ord("Q"));
+ini_close();

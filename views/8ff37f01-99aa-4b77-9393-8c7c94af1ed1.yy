@@ -1,0 +1,33 @@
+{
+    "id": "8ff37f01-99aa-4b77-9393-8c7c94af1ed1",
+    "modelName": "GMFolder",
+    "mvc": "1.1",
+    "name": "8ff37f01-99aa-4b77-9393-8c7c94af1ed1",
+    "children": [
+        "f3b552bc-f97d-4808-b7d4-e563930578c6",
+        "e8d21571-1aac-441a-a5e5-4c548e47ba56",
+        "b69c2f86-b32e-405c-879a-4bc4e38545dd",
+        "0d04213f-f215-4a2c-98bc-01956ccc7756",
+        "14205886-48e0-4d16-982d-05d60d9df881",
+        "22a31c66-c1bb-4be6-83b8-c6204e15efc0",
+        "16b9a233-be96-4bb8-b64e-629aaeced5c5",
+        "66300c4b-99e3-4d33-8dd3-337ae9beb927",
+        "10d2c029-1548-4b24-8655-200ce0a23a5a",
+        "fa98662d-cbe7-4a52-af9c-09186d24ad84",
+        "7817944e-e475-4a89-98b6-8fe1f46d830f",
+        "11924fc1-daa2-4481-a0b7-c2adb224d474",
+        "8017dea0-5ca8-4260-b309-d8a110b1a13d",
+        "96a6da04-be21-4346-a7dd-4539c095ac04",
+        "b932b1b4-c087-4022-b391-efff94355a53",
+        "2ed52443-eeff-4f2c-a54b-0da9008a0b14",
+        "f946ca67-4286-453b-ac3d-fd9f8c67f00e",
+        "b519e3d2-016e-4f48-994f-0c101b087566",
+        "1622c8b7-a4a7-4075-8a4d-38f855b88ccd",
+        "1c433acf-23a3-4115-87d2-a1f9878a0896",
+        "94d7a5a0-02d5-4be5-bbd5-95d48244720f"
+    ],
+    "filterType": "GMSprite",
+    "folderName": "Subscreens",
+    "isDefaultView": false,
+    "localisedFolderName": ""
+}

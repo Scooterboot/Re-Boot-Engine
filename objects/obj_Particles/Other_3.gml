@@ -1,0 +1,16 @@
+if(part_system_exists(partSystemA))
+{
+	part_system_destroy(partSystemA);
+}
+if(part_system_exists(partSystemB))
+{
+	part_system_destroy(partSystemB);
+}
+if(part_system_exists(partSystemC))
+{
+	part_system_destroy(partSystemC);
+}
+if(part_system_exists(partSystemD))
+{
+	part_system_destroy(partSystemD);
+}

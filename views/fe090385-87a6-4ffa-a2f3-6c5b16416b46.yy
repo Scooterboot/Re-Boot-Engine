@@ -1,0 +1,30 @@
+{
+    "id": "fe090385-87a6-4ffa-a2f3-6c5b16416b46",
+    "modelName": "GMFolder",
+    "mvc": "1.1",
+    "name": "fe090385-87a6-4ffa-a2f3-6c5b16416b46",
+    "children": [
+        "5bdf719f-db7a-441c-84ff-ffdf257f06be",
+        "a73ff2e2-18db-414a-8f80-0b3e5da9eafd",
+        "ac73ca14-a181-47fd-b573-f883d77d8420",
+        "4d96c690-65e1-4396-beda-d9e9711650fd",
+        "0e3a717a-c5b5-4179-abe3-637a6cb4aefe",
+        "a1ef175a-0900-4398-8b02-bd7242917a72",
+        "2b115258-b887-453b-9129-67f1ce947a36",
+        "7a2dc7d0-5a36-4938-a52d-69afd68d5b40",
+        "4f16d97d-19c3-44dd-a6a8-e6e8e5852674",
+        "ca900f99-9812-483e-8aff-47073e2aca62",
+        "3e5fec40-38f0-43e9-abfa-7b9c25243326",
+        "0ae3b65a-7549-4eaa-97b1-633500fea8ba",
+        "dd17105c-5eb1-41a3-84bb-fc1b145982eb",
+        "bf9bc181-c61c-4941-9146-f9959fb145e1",
+        "f30caae1-70fb-41b0-8f62-29dac3475cbb",
+        "f48a052f-3b3f-490e-9b62-9f9eaced6316",
+        "603ea950-8915-45f2-adce-9c9c838202ea",
+        "c16b7717-98df-4c68-90a1-3ace6e37be8b"
+    ],
+    "filterType": "GMSprite",
+    "folderName": "BTSTiles",
+    "isDefaultView": false,
+    "localisedFolderName": ""
+}
