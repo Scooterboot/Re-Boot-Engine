@@ -7,8 +7,8 @@ cHUp = obj_Control.up;
 cHDown = obj_Control.down;
 cHToggle = obj_Control.mSelect;
 
-var beamNum = (global.beam[1]+global.beam[2]+global.beam[3]+global.beam[4]),
-	itemNum = (item[0]+item[1]+item[2]+item[3]+item[4]);
+var beamNum = (hasBeam[Beam.Ice]+hasBeam[Beam.Wave]+hasBeam[Beam.Spazer]+hasBeam[Beam.Plasma]),
+	itemNum = (item[Item.Missile]+item[Item.SMissile]+item[Item.PBomb]+item[Item.Grapple]+item[Item.XRay]);
 
 if(!global.roomTrans && !obj_PauseMenu.pause)
 {
@@ -156,11 +156,11 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 		if(cHSelect)
 		{
 			global.gamePaused = true;
-			if(((cHUp && rHUp) || (cHDown && rHDown)) && itemNum > 0)
+			/*if(((cHUp && rHUp) || (cHDown && rHDown)) && itemNum > 0)
 			{
 				itemSelected = scr_wrap(itemSelected + 1, 0, 1);
 				audio_play_sound(snd_MenuTick,0,false);
-			}
+			}*/
 			if((itemSelected == 0 && beamNum > 0) || (itemSelected == 1 && itemNum > 1))
 			{
 				moveH = (cHRight && rHRight) - (cHLeft && rHLeft);
@@ -176,7 +176,7 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 			var itemHighlighted2 = scr_wrap(itemHighlighted[0], 1, 4);
 			if(itemSelected == 0 && itemHighlighted[0] != 0)
 			{
-				if(cHToggle && rHToggle && global.beam[itemHighlighted2])
+				if(cHToggle && rHToggle && hasBeam[itemHighlighted2])
 				{
 					beam[itemHighlighted2] = !beam[itemHighlighted2];
 					audio_play_sound(snd_MenuShwsh,0,false);
@@ -192,7 +192,7 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 }
 
 var numH = 5;
-while(!global.beam[scr_wrap(itemHighlighted[0], 1, 4)] && itemHighlighted[0] != 0 && numH > 0)
+while(!hasBeam[scr_wrap(itemHighlighted[0], 1, 4)] && itemHighlighted[0] != 0 && numH > 0)
 {
 	itemHighlighted[0] += moveHPrev;
 	hudBOffsetX += 28*moveHPrev;

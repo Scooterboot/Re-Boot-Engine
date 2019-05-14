@@ -14,7 +14,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	hSpeed = fVelX;
 	vSpeed = fVelY * 0.75;
 	dir2 = sign(dirFrame);
-	if(dir2 == 0 || (itemSelected == 1 && itemHighlighted[1] == 3 && item[3]))
+	if(dir2 == 0 || (itemSelected == 1 && itemHighlighted[1] == 3 && item[Item.Grapple]))
 	{
 		dir2 = dir;
 	}
@@ -254,7 +254,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 // ----- Update Anims -----
 #region Update Anims
 	drawMissileArm = false;
-	shootFrame = (gunReady || justShot > 0 || (cShoot && (rShoot || (beam[0] && !unchargeable)) && (itemSelected == 1 ||
+	shootFrame = (gunReady || justShot > 0 || (cShoot && (rShoot || (beam[Beam.Charge] && !unchargeable)) && (itemSelected == 1 ||
 	((itemHighlighted[1] != 0 || missileStat > 0) && (itemHighlighted[1] != 1 || superMissileStat > 0)))));
 	sprtOffsetX = 0;
 	sprtOffsetY = 0;
@@ -342,7 +342,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		fDir = 1;
 		torsoR = sprt_StandCenter;
 		torsoL = torsoR;
-		bodyFrame = suit[0];
+		bodyFrame = suit[Suit.Varia];
 	}
 	else if(abs(dirFrameF) < 4 && stateFrame != State.Somersault && stateFrame != State.Morph && stateFrame != State.Spark)
 	{
@@ -612,7 +612,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 				
 				var runNum = floor(max(abs(velX)*1.1, maxSpeed[0,0]));
-				if(boots[2] && (10*(speedCounter/speedCounterMax)) >= abs(velX))
+				if(boots[Boots.SpeedBoost] && (10*(speedCounter/speedCounterMax)) >= abs(velX))
 				{
 					runNum = floor(max(10*(speedCounter/speedCounterMax)*1.1, maxSpeed[0,0]));
 				}
@@ -1130,7 +1130,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					{
 						bodyFrame = wjSequence[scr_round(wjFrame)];
 						frame[6] = 3;
-						if(boots[1] && !liquidMovement)
+						if(boots[Boots.SpaceJump] && !liquidMovement)
 						{
 							frame[6] = 2;
 						}
@@ -1168,7 +1168,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					torsoR = sprt_SomersaultRight;
 					torsoL = sprt_SomersaultLeft;
 					var sFrameMax = 17;
-					if(boots[1] && !liquidMovement)
+					if(boots[Boots.SpaceJump] && !liquidMovement)
 					{
 						torsoR = sprt_SpaceJumpRight;
 						torsoL = sprt_SpaceJumpLeft;
@@ -1199,7 +1199,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					}
 					bodyFrame = frame[6];
 					var degNum = 40;
-					if(boots[1] && !liquidMovement)
+					if(boots[Boots.SpaceJump] && !liquidMovement)
 					{
 						degNum = 90;
 					}
@@ -1374,7 +1374,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 							sprtOffsetY = -8;
 						}
 
-						frame[6] = 10/(1+boots[1]);
+						frame[6] = 10/(1+boots[Boots.SpaceJump]);
 					}
 					else
 					{
@@ -1596,9 +1596,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	beamDelay = 6;
 	beamChargeDelay = 18;
 	
-	var noBeamsActive = ((beam[1]+beam[2]+beam[3]+beam[4]) <= 0);
+	var noBeamsActive = ((beam[Beam.Ice]+beam[Beam.Wave]+beam[Beam.Spazer]+beam[Beam.Plasma]) <= 0);
 	
-	if(beam[3] || (noBeamsActive && itemHighlighted[0] == 3))
+	if(beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3))
 	{
 		// Spazer
 		beamShot = obj_SpazerBeamShot;
@@ -1609,7 +1609,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	    beamAmt = 3;
 	    beamChargeAmt = 3;
 	    beamIconIndex = 4;
-		if(beam[1])
+		if(beam[Beam.Ice])
 		{
 			// Ice Spazer
 			beamShot = obj_IceSpazerBeamShot;
@@ -1618,13 +1618,13 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		    beamSound = snd_IceComboShot;
 		    beamChargeSound = snd_IceBeam_ChargeShot;
 			beamIconIndex = 5;
-			if(beam[2])
+			if(beam[Beam.Wave])
 			{
 				// Ice Wave Spazer
 				beamShot = obj_IceWaveSpazerBeamShot;
 				beamCharge = obj_IceWaveSpazerBeamChargeShot;
 				beamIconIndex = 7;
-				if(beam[4])
+				if(beam[Beam.Plasma])
 				{
 					// Ice Wave Spazer Plasma
 					beamShot = obj_IceWaveSpazerPlasmaBeamShot;
@@ -1632,7 +1632,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					beamIconIndex = 15;
 				}
 			}
-			else if(beam[4])
+			else if(beam[Beam.Plasma])
 			{
 				// Ice Spazer Plasma
 				beamShot = obj_IceSpazerPlasmaBeamShot;
@@ -1640,14 +1640,14 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				beamIconIndex = 13;
 			}
 		}
-		else if(beam[2])
+		else if(beam[Beam.Wave])
 		{
 			// Wave Spazer
 			beamShot = obj_WaveSpazerBeamShot;
 			beamCharge = obj_WaveSpazerBeamChargeShot;
 			beamChargeAnim = sprt_WaveBeamChargeAnim;
 			beamIconIndex = 6;
-			if(beam[4])
+			if(beam[Beam.Plasma])
 			{
 				// Wave Spazer Plasma
 				beamShot = obj_WaveSpazerPlasmaBeamShot;
@@ -1658,7 +1658,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				beamIconIndex = 14;
 			}
 		}
-		else if(beam[4])
+		else if(beam[Beam.Plasma])
 		{
 			// Spazer Plasma
 			beamShot = obj_SpazerPlasmaBeamShot;
@@ -1669,7 +1669,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			beamIconIndex = 12;
 		}
 	}
-	else if(beam[1] || (noBeamsActive && itemHighlighted[0] == 1))
+	else if(beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1))
 	{
 		// Ice
 		beamShot = obj_IceBeamShot;
@@ -1678,14 +1678,14 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		beamSound = snd_IceBeam_Shot;
 		beamChargeSound = snd_IceBeam_ChargeShot;
 		beamIconIndex = 1;
-		if(beam[2])
+		if(beam[Beam.Wave])
 		{
 			// Ice Wave
 			beamShot = obj_IceWaveBeamShot;
 			beamCharge = obj_IceWaveBeamChargeShot;
 			beamChargeAmt = 2;
 			beamIconIndex = 3;
-			if(beam[4])
+			if(beam[Beam.Plasma])
 			{
 				// Ice Wave Plasma
 				beamShot = obj_IceWavePlasmaBeamShot;
@@ -1694,7 +1694,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				beamIconIndex = 11;
 			}
 		}
-		else if(beam[4])
+		else if(beam[Beam.Plasma])
 		{
 			// Ice Plasma
 			beamShot = obj_IcePlasmaBeamShot;
@@ -1703,7 +1703,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			beamIconIndex = 9;
 		}
 	}
-	else if(beam[2] || (noBeamsActive && itemHighlighted[0] == 2))
+	else if(beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2))
 	{
 		// Wave
 		beamShot = obj_WaveBeamShot;
@@ -1713,7 +1713,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		beamChargeSound = snd_WaveBeam_ChargeShot;
 		beamChargeAmt = 2;
 		beamIconIndex = 2;
-		if(beam[4])
+		if(beam[Beam.Plasma])
 		{
 			// Wave Plasma
 			beamShot = obj_WavePlasmaBeamShot;
@@ -1724,7 +1724,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			beamIconIndex = 10;
 		}
 	}
-	else if(beam[4] || (noBeamsActive && itemHighlighted[0] == 4))
+	else if(beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4))
 	{
 		// Plasma
 		beamShot = obj_PlasmaBeamShot;
@@ -1736,42 +1736,42 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 	
 	beamDmg = 20;
-	if(beam[1] || (noBeamsActive && itemHighlighted[0] == 1))
+	if(beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1))
 	{
 		// Ice
 		beamDmg = 30;
-		if(beam[2])
+		if(beam[Beam.Wave])
 		{
 			// Ice Wave
 			beamDmg = 60;
-			if(beam[4])
+			if(beam[Beam.Plasma])
 			{
 				// Ice Wave Plasma
 				beamDmg = 300;
 			}
 		}
-		else if(beam[4])
+		else if(beam[Beam.Plasma])
 		{
 			// Ice Plasma
 			beamDmg = 200;
 		}
 	}
-	else if(beam[2] || (noBeamsActive && itemHighlighted[0] == 2))
+	else if(beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2))
 	{
 		// Wave
 		beamDmg = 50;
-		if(beam[4])
+		if(beam[Beam.Plasma])
 		{
 			// Wave Plasma
 			beamDmg = 250;
 		}
 	}
-	else if(beam[4] || (noBeamsActive && itemHighlighted[0] == 4))
+	else if(beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4))
 	{
 		// Plasma
 		beamDmg = 150;
 	}
-	if(beam[3] || (noBeamsActive && itemHighlighted[0] == 3))
+	if(beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3))
 	{
 		// Spazer
 		beamDmg *= (2/3);
@@ -1786,7 +1786,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		sound = beamSound;
 	if(itemSelected == 1 && itemHighlighted[1] <= 1)
 	{
-		if(itemHighlighted[1] == 0 && missileStat > 0 && item[0])
+		if(itemHighlighted[1] == 0 && missileStat > 0 && item[Item.Missile])
 		{
 			//shotIndex = obj_MissileShot;
 			damage = 50;
@@ -1794,7 +1794,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			amount = 1;
 			sound = snd_Missile_Shot;
 		}
-		if(itemHighlighted[1] == 1 && superMissileStat > 0 && item[1])
+		if(itemHighlighted[1] == 1 && superMissileStat > 0 && item[Item.SMissile])
 		{
 			//shotIndex = obj_SuperMissileShot;
 			damage = 250;
@@ -1811,7 +1811,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		if(state != State.Morph && stateFrame != State.Morph)
 		{
-			if(itemSelected == 1 && itemHighlighted[1] == 3 && item[3] && canShoot)
+			if(itemSelected == 1 && itemHighlighted[1] == 3 && item[Item.Grapple] && canShoot)
 			{
 				// grapple
 			}
@@ -1819,7 +1819,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			{
 				if(canShoot && (itemSelected == 0 || ((itemHighlighted[1] != 0 || missileStat > 0) && (itemHighlighted[1] != 1 || superMissileStat > 0))))
 				{
-					if(rShoot || (beam[0] && !unchargeable))
+					if(rShoot || (beam[Beam.Charge] && !unchargeable))
 					{
 						gunReady = true;
 						justShot = 90;
@@ -1828,11 +1828,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					{
 						if(itemSelected == 1 && itemHighlighted[1] <= 1)
 						{
-							if(itemHighlighted[1] == 0 && missileStat > 0 && item[0])
+							if(itemHighlighted[1] == 0 && missileStat > 0 && item[Item.Missile])
 							{
 								missileStat--;
 							}
-							if(itemHighlighted[1] == 1 && superMissileStat > 0 && item[1])
+							if(itemHighlighted[1] == 1 && superMissileStat > 0 && item[Item.SMissile])
 							{
 								superMissileStat--;
 							}
@@ -1847,7 +1847,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			
 		}
 		
-		if(beam[0] && !unchargeable && (canShoot || statCharge >= 10) &&
+		if(beam[Beam.Charge] && !unchargeable && (canShoot || statCharge >= 10) &&
 		((state != State.Morph && stateFrame != State.Morph) || (statCharge >= 10 && (itemSelected == 0 || (global.HUD <= 0 && itemHighlighted[1] == 4)))))
 		{
 			statCharge = min(statCharge + 1, maxCharge);
@@ -1891,7 +1891,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		{
 			if(state != State.Morph && stateFrame != State.Morph)
 			{
-				if(beam[0] && !unchargeable)
+				if(beam[Beam.Charge] && !unchargeable)
 				{
 					if(statCharge >= maxCharge)
 					{
@@ -1952,9 +1952,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 // ----- Environmental Damage -----
 #region Environmental Damage
-	if(instance_exists(obj_Heat) && !suit[0])
+	if(instance_exists(obj_Heat) && !suit[Suit.Varia])
 	{
-		//scr_ConstantDamageSamus(1, 4 + (2 * suit[1]));
+		//scr_ConstantDamageSamus(1, 4 + (2 * suit[Suit.Gravity]));
 	}
 	
 	

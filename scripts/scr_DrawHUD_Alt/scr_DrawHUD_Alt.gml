@@ -10,7 +10,7 @@ var selecting = (cHSelect && !global.roomTrans && !obj_PauseMenu.pause);
 if(global.hudDisplay || selecting)
 {
 
-    var itemNum = (global.item[0]+global.item[1]+global.item[2]+global.item[3]+global.item[4]);
+    var itemNum = (item[Item.Missile]+item[Item.SMissile]+item[Item.PBomb]+item[Item.Grapple]+item[Item.XRay]);
     
     if(selecting)
     {
@@ -40,7 +40,7 @@ if(global.hudDisplay || selecting)
         draw_roundrect_ext(vX+xx,vY+yy,vX+ww+xx,vY+hh+yy,8,8,false);
     }
     
-    if(global.item[0])
+    if(item[0])
     {
         var xx = 108,
             yy = 2,
@@ -48,7 +48,7 @@ if(global.hudDisplay || selecting)
             hh = 10;
         draw_roundrect_ext(vX+xx,vY+yy,vX+ww+xx,vY+hh+yy,4,4,false);
     }
-    if(global.item[1])
+    if(item[1])
     {
         var xx = 148,
             yy = 2,
@@ -56,7 +56,7 @@ if(global.hudDisplay || selecting)
             hh = 10;
         draw_roundrect_ext(vX+xx,vY+yy,vX+ww+xx,vY+hh+yy,4,4,false);
     }
-    if(global.item[2])
+    if(item[2])
     {
         var xx = 182,
             yy = 2,
@@ -99,7 +99,7 @@ if(global.hudDisplay || selecting)
             for(i = 0; i < 5; i += 1)
             {
                 var j = i;
-                if(global.beam[j] || i == 0)
+                if(hasBeam[j] || i == 0)
                 {
                     comboNum = 10*(beam[j] && i != 0);
                     if(i == itemHighlighted[0])
@@ -165,7 +165,7 @@ if(global.hudDisplay || selecting)
                 yIPos = 38;
             for(i = 0; i < 5; i += 1)
             {
-                if(global.item[i])
+                if(item[i])
                 {
                     if(i == itemHighlighted[1])
                     {
@@ -226,7 +226,7 @@ if(global.hudDisplay || selecting)
         hudIOffsetX = 0;
     }
     
-    if(global.item[0])
+    if(item[0])
     {
         draw_sprite_ext(sprt_HAmmoIcon,(itemSelected == 1 && itemHighlighted[1] == 0 && stateFrame != State.Morph),floor(vX+110),floor(vY+4),1,1,0,c_white,1);
     
@@ -236,7 +236,7 @@ if(global.hudDisplay || selecting)
         var missileNum2 = floor(missileStat/100);
         draw_sprite_ext(sprt_HNumFont2,missileNum2,floor(vX+125),floor(vY+5),1,1,0,c_white,1);
     }
-    if(global.item[1])
+    if(item[1])
     {
         draw_sprite_ext(sprt_HAmmoIcon,2+(itemSelected == 1 && itemHighlighted[1] == 1 && stateFrame != State.Morph),floor(vX+150),floor(vY+4),1,1,0,c_white,1);
     
@@ -244,7 +244,7 @@ if(global.hudDisplay || selecting)
         var superMissileNum = floor(superMissileStat/10);
         draw_sprite_ext(sprt_HNumFont2,superMissileNum,floor(vX+165),floor(vY+5),1,1,0,c_white,1);
     }
-    if(global.item[2])
+    if(item[2])
     {
         draw_sprite_ext(sprt_HAmmoIcon,4+(itemSelected == 1 && (itemHighlighted[1] == 2 || stateFrame == State.Morph)),floor(vX+184),floor(vY+4),1,1,0,c_white,1);
     

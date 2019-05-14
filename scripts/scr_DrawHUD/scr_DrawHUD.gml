@@ -5,7 +5,7 @@ var vX = camera_get_view_x(view_camera[0]),
 
 var col = c_black, alpha = 0.4;
 
-var itemNum = (item[0]+item[1]+item[2]+item[3]+item[4]);
+var itemNum = (item[Item.Missile]+item[Item.SMissile]+item[Item.PBomb]+item[Item.Grapple]+item[Item.XRay]);
 
 var selecting = (pauseSelect && !global.roomTrans && !obj_PauseMenu.pause);
     
@@ -21,7 +21,7 @@ if(global.hudDisplay && itemNum > 0)
         draw_set_alpha(1);
     }
 
-    for(var i = 0; i < 5; i++)
+    for(var i = 0; i < array_length_1d(item); i++)
     {
         if(item[i])
         {

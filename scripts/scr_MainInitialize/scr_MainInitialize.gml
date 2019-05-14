@@ -6,6 +6,7 @@ global.gpButtonNum = 19;	//number of gamepad buttons variable
 scr_LoadKeyboard();	//load keyboard bindings
 scr_LoadGamepad();	//load gamepad bindings
 
+#region Settings
 ini_open("settings.ini"); //load display, audio, and control settings
 global.aimStyle = ini_read_real("Controls", "aim style", 0);					//load aim control setting
 global.spiderBallStyle = ini_read_real("Controls", "spiderball control", 0);	//load spider ball control setting
@@ -22,7 +23,7 @@ global.easySJ = ini_read_real("Controls", "space jump control", false);			//load
 
 global.fullScreen = ini_read_real("Display", "fullscreen", false);				//load fullscreen setting
 global.screenScale = ini_read_real("Display", "scale", 3);						//load display scale setting
-global.vsync = ini_read_real("Display", "vsync", true);						//load vsync setting
+global.vsync = ini_read_real("Display", "vsync", true);							//load vsync setting
 global.upscale = ini_read_real("Display", "upscale", 0);						//load upscale setting
 global.hudDisplay = ini_read_real("Display", "hud", true);						//load display HUD setting
 global.hudMap = ini_read_real("Display", "hud map", true);						//load display map setting
@@ -31,8 +32,12 @@ global.waterDistortion = ini_read_real("Display", "water distortion", true);	//l
 global.musicVolume = ini_read_real("Audio", "music", 1);						//load music volume config
 global.soundVolume = ini_read_real("Audio", "sound", 1);						//load sound volume config
 ini_close(); //done loading display, audio, and control settings
+#endregion
 
 global.maxScreenScale = 1;
+
+global.resWidth = 256;
+global.resHeight = 224;
 
 pal_swap_init_system(shd_pal_swapper); //initialize palette swapper system (Created by PixelatedPope)
 
@@ -40,11 +45,11 @@ global.roomTrans = false;	//variable that checks whether the player is transitio
 global.gamePaused = false;	//variable that checks if the game is paused
 
 //initialize item variables
-global.suit[1] = false;
-global.misc[5] = false;
-global.boots[3] = false;
-global.beam[4] = false;
-global.item[4] = false;
+//global.suit[1] = false;
+//global.misc[5] = false;
+//global.boots[3] = false;
+//global.beam[4] = false;
+//global.item[4] = false;
 
 //initialize map variables
 

@@ -530,96 +530,112 @@ screwSoundPlayed = false;
 // ----- Item Vars -----
 #region Item Vars
 
-energyTanks = 14;
+/*energyTanks = 14;
 missileTanks = 51;
 superMissileTanks = 15;
-powerBombTanks = 10;
+powerBombTanks = 10;*/
 
-energyMax = 99 + (100 * energyTanks);
+energyMax = 1499;//99 + (100 * energyTanks);
 energy = energyMax;
 
-missileMax = 5 * missileTanks;
+missileMax = 250;//5 * missileTanks;
 missileStat = missileMax;
 
-superMissileMax = 2 * superMissileTanks;
+superMissileMax = 50;//2 * superMissileTanks;
 superMissileStat = superMissileMax;
 
-powerBombMax = 2 * powerBombTanks;
+powerBombMax = 50;//2 * powerBombTanks;
 powerBombStat = powerBombMax;
 
+enum Suit
+{
+	Varia,
+	Gravity
+};
+// 2 Suits
 suit[1] = false;
-/*
-0: Varia
-1: Gravity
-*/
 
-misc[5] = false;
-/*
-0: Grip
-1: Morph
-2: Bomb
-3: Spring
-4: Screw
-5: Spider
-*/
-
+enum Boots
+{
+	HiJump,
+	SpaceJump,
+	SpeedBoost,
+	ChainSpark
+};
+// 4 Boots
 boots[3] = false;
-/*
-0: Hi-Jump
-1: Space Jump
-2: Speed Booster
-//3: Chain Spark
-*/
 
+enum Misc
+{
+	PowerGrip,
+	Morph,
+	Bomb,
+	Spring,
+	ScrewAttack,
+	Spider
+};
+// 6 Misc
+misc[5] = false;
+
+enum Beam
+{
+	Charge,
+	Ice,
+	Wave,
+	Spazer,
+	Plasma
+};
+// 5 Beams
 beam[4] = false;
-/*
-0: Charge
-1: Ice
-2: Wave
-3: Spazer
-4: Plasma
-*/
 
+enum Item
+{
+	Missile,
+	SMissile,
+	PBomb,
+	Grapple,
+	XRay
+};
+// 5 Items
 item[4] = false;
-/*
-0: Missile
-1: Super
-2: PBomb
-3: Grapple
-4: X-Ray
-*/
+
+hasSuit[array_length_1d(suit)-1] = false;
+hasMisc[array_length_1d(misc)-1] = false;
+hasBoots[array_length_1d(boots)-1] = false;
+hasBeam[array_length_1d(beam)-1] = false;
+hasItem[array_length_1d(item)-1] = false;
 
 //starting items
-misc[0] = true;
-misc[1] = true;
-misc[2] = true;
-beam[0] = true;
-boots[2] = true;
+misc[Misc.PowerGrip] = true;
+//misc[Misc.Morph] = true;
+//misc[Misc.Bomb] = true;
+//beam[Beam.Charge] = true;
+//boots[Boots.SpeedBoost] = true;
 
 for(var i = 0; i < array_length_1d(suit); i++)
 {
 	suit[i] = true;
-	global.suit[i] = true;
+	hasSuit[i] = suit[i];
 }
 for(var i = 0; i < array_length_1d(misc); i++)
 {
 	misc[i] = true;
-	global.misc[i] = true;
+	hasMisc[i] = misc[i];
 }
 for(var i = 0; i < array_length_1d(boots); i++)
 {
 	boots[i] = true;
-	global.boots[i] = true;
+	hasBoots[i] = boots[i];
 }
 for(var i = 0; i < array_length_1d(beam); i++)
 {
 	beam[i] = true;
-	global.beam[i] = true;
+	hasBeam[i] = beam[i];
 }
 for(var i = 0; i < array_length_1d(item); i++)
 {
 	item[i] = true;
-	global.item[i] = true;
+	hasItem[i] = item[i];
 }
 
 
@@ -668,9 +684,6 @@ pauseSelect = false;
 
 selectTap = 0;
 selectTapMax = 10;
-
-selectAlpha = 0;
-selectCounter[1] = 0;
 
 //currentMap = global.mapArea;
 

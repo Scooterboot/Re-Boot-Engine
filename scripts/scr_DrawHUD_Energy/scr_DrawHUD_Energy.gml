@@ -11,6 +11,8 @@ var xx = vX+2,
 	hh = 8,
 	yDiff = 0;
 
+var energyTanks = floor(energyMax / 100);
+
 if(energyTanks > 0)
 {
 	yDiff = 7;

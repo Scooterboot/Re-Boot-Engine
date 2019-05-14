@@ -4,260 +4,509 @@ cLeft = obj_Control.mLeft;
 cUp = obj_Control.mUp;
 cDown = obj_Control.mDown;
 cSelect = obj_Control.mSelect;
-cBack = obj_Control.mCancel;
-cStart = obj_Control.start;
+cCancel = obj_Control.mCancel;
 cNext = obj_Control.mNext;
 cPrev = obj_Control.mPrev;
+cStart = obj_Control.start;
 
-if(global.roomTrans)// || instance_exists(obj_DeathAnim))
+var canPause = (room != rm_MainMenu && instance_exists(obj_Player));
+
+if(canPause)
 {
-    screenfade = 0;
-    exit;
+	if(cStart && rStart && (pauseFade <= 0 || pauseFade >= 1))
+	{
+		isPaused = !isPaused;
+	}
+	if(isPaused)
+	{
+		pauseFade = min(pauseFade + 0.075, 1);
+	}
+	else
+	{
+		pauseFade = max(pauseFade - 0.075, 0);
+	}
+	
+	pause = (pauseFade > 0);
 }
-
-if(cStart && rStart && room != rm_MainMenu && (screenfade == 0 || screenfade == 1) && (!instance_exists(obj_ControlOptions) ))// || obj_ControlOptions.keySelectDelay <= 0))
+else
 {
-    /*if(pause)
-    {
-        //audio_play_sound(snd_MenuBoop,0,false);
-        audio_play_sound(snd_Menu_Cancel,0,false);
-    }
-    else
-    {
-        audio_play_sound(snd_Menu_Map,0,false);
-    }*/
-    if(!secTransitioning)
-    {
-        pause = !pause;
-    }
+	isPaused = false;
+	pause = false;
+	pauseFade = 0;
 }
 
 if(pause)
 {
-    screenfade = min(screenfade + 0.1, 1);
-    global.gamePaused = true;
-    if(room == rm_MainMenu)
-    {
-        global.gamePaused = false;
-        pause = false;
-    }
+	global.gamePaused = true;
+	unpause = false;
 }
 else
 {
-    screenfade = max(screenfade - 0.1, 0);
-    if(!rStart)
-    {
-        global.gamePaused = false;
-    }
+	if(!unpause)
+	{
+		global.gamePaused = false;
+		unpause = true;
+	}
 }
 
-if(screenfade >= 1 && room != rm_MainMenu && !instance_exists(obj_DisplayOptions) && !instance_exists(obj_AudioOptions) && !instance_exists(obj_ControlOptions))
+if(canPause && pause && pauseFade >= 1)
 {
-    if(!secTransitioning)
-    {
-        changeSection = (cNext && rNext) - (cPrev && rPrev);
-        sectionAnim = scr_wrap(sectionAnim + changeSection, 0, 2);
-        if(changeSection != 0)
-        {
-            audio_play_sound(snd_MenuBoop,0,false);
-            secTransitioning = true;
-        }
-    }
-    section = scr_wrap(section, 0, 2);
-    if(section == 0 && !secTransitioning)
-    {
-        px = global.screenX + (surface_get_width(application_surface)/2);
-        py = global.screenY + (surface_get_height(application_surface)/2);
-    }
-    if(section == 1 && instance_exists(obj_Player))
-    {
-        if(!secTransitioning)
-        {
-            moveX = (cRight && rRight) - (cLeft && rLeft);
-            moveY = (cDown && rDown) - (cUp && rUp);
-            toggleItem = (cSelect && rSelect);
-        }
-        if(moveX != 0 || moveY != 0)
-        {
-            audio_play_sound(snd_MenuTick,0,false);
-        }
-
-        beamSelect = -1;
-        suitSelect = -1;
-        miscSelect = -1;
-        bootsSelect = -1;
-
-        /*if(itemNav >= 0 && itemNav <= 6)
-        {
-            itemNav = scr_wrap(itemNav+moveY,0,6);
-            if(moveX != 0)
-            {
-                itemNav = clamp(itemNav+9,9,17);
-            }
-        }
-        else if(itemNav >= 9 && itemNav <= 17)
-        {
-            itemNav = scr_wrap(itemNav+moveY,9,17);
-            if(moveX != 0)
-            {
-                itemNav = clamp(itemNav-9,0,8);
-            }
-        }*/
-		if(itemNav >= 0 && itemNav <= 6)
-        {
-            itemNav = scr_wrap(itemNav+moveY,0,6);
-            if(moveX != 0)
-            {
-                if(itemNav <= 1)
-				{
-					itemNav = 7;
-				}
-				else
-				{
-					itemNav = 13;
-				}
-            }
-        }
-        else if(itemNav >= 7 && itemNav <= 15)
+	if(screenSelect)
+	{
+		screenSelectAnim = min(screenSelectAnim + 0.1, 1);
+	}
+	else
+	{
+		screenSelectAnim = max(screenSelectAnim - 0.1, 0);
+	}
+	
+	if(screenSelectAnim >= 1 && screenSelect)
+	{
+		if(cUp && rUp)
 		{
-			itemNav = scr_wrap(itemNav+moveY,7,15);
-			if(moveX != 0)
-            {
-                if(itemNav <= 12)
-				{
-					itemNav = 0;
-				}
-				else
-				{
-					itemNav = 2;
-				}
-            }
+			currentScreen = Screen.Map;
+			screenSelect = false;
 		}
+		if(cDown && rDown)
+		{
+			currentScreen = Screen.Options;
+			screenSelect = false;
+		}
+		if(cLeft && rLeft)
+		{
+			currentScreen = Screen.LogBook;
+			screenSelect = false;
+		}
+		if(cRight && rRight)
+		{
+			currentScreen = Screen.Inventory;
+			screenSelect = false;
+		}
+	}
+	
+	if(screenSelectAnim <= 0)
+	{
+		if(cCancel && rCancel)
+		{
+			screenSelect = true;
+		}
+		
+		#region Map Screen
+		if(currentScreen = Screen.Map)
+		{
+			
+		}
+		#endregion
+		#region Inventory Screen
+		if(currentScreen = Screen.Inventory)
+		{
+			var P = obj_Player;
+			
+			var ownBeam = false;
+			for(var i = 0; i < array_length_1d(P.hasBeam); i++)
+			{
+				if(P.hasBeam[i])
+				{
+					ownBeam = true;
+					break;
+				}
+			}
+			var ownSuit = false;
+			for(var i = 0; i < array_length_1d(P.hasSuit); i++)
+			{
+				if(P.hasSuit[i])
+				{
+					ownSuit = true;
+					break;
+				}
+			}
+			var ownBoots = false;
+			for(var i = 0; i < array_length_1d(P.hasBoots); i++)
+			{
+				if(P.hasBoots[i])
+				{
+					ownBoots = true;
+					break;
+				}
+			}
+			var ownMisc = false;
+			for(var i = 0; i < array_length_1d(P.hasMisc); i++)
+			{
+				if(P.hasMisc[i])
+				{
+					ownMisc = true;
+					break;
+				}
+			}
+			
+			if(statusPos == -1)
+			{
+				if(ownBeam)
+				{
+					statusPos = 0;
+				}
+				else if(ownSuit)
+				{
+					statusPos = 2;
+				}
+				else if(ownBoots)
+				{
+					statusPos = 1;
+				}
+				else if(ownMisc)
+				{
+					statusPos = 3;
+				}
+			}
+			else
+			{
+				toggleItem = (cSelect && rSelect);
+				
+				statusMove = (cDown && rDown) - (cUp && rUp);
+				statusMoveX = (cRight && rRight) - (cLeft && rLeft);
+				if(statusMove != 0)
+				{
+					statusMovePrev = statusMove;
+					audio_play_sound(snd_MenuTick,0,false);
+				}
+				if(statusMoveX != 0 && ((statusPos < 2 && (ownSuit || ownMisc)) || (statusPos >= 2 && (ownBeam || ownBoots))))
+				{
+					statusMovePrev = 1;
+					audio_play_sound(snd_MenuTick,0,false);
+				}
+				#region Beam Toggle
+				if(statusPos == 0)
+				{
+					suitSelect = -1;
+					bootsSelect = -1;
+					miscSelect = -1;
+					
+					if(beamSelect == -1)
+					{
+						beamSelect = 0;
+					}
+					else
+					{
+						beamSelect += statusMove;
+						
+						var num = array_length_1d(P.hasBeam);
+						while(!P.hasBeam[scr_wrap(beamSelect,0,array_length_1d(P.hasBeam)-1)] && num > 0)
+						{
+							beamSelect += statusMovePrev;
+							num--;
+						}
+						
+						if(beamSelect < 0 || beamSelect >= array_length_1d(P.hasBeam))
+						{
+							if(ownBoots)
+							{
+								statusPos = 1;
+								beamSelect = -1;
+								if(statusMove < 0)
+								{
+									bootsSelect = array_length_1d(P.hasBoots)-1;
+								}
+								else
+								{
+									bootsSelect = 0;
+								}
+								statusMove = 0;
+							}
+							else
+							{
+								beamSelect = scr_wrap(beamSelect,0,array_length_1d(P.hasBeam)-1);
+							}
+						}
+						
+						if(statusMoveX != 0)
+						{
+							if(ownSuit)
+							{
+								statusPos = 2;
+								beamSelect = -1;
+								suitSelect = 0;
+							}
+							else if(ownMisc)
+							{
+								statusPos = 3;
+								beamSelect = -1;
+								miscSelect = 0;
+							}
+							statusMoveX = 0;
+						}
+						
+						if(toggleItem && beamSelect == clamp(beamSelect,0,array_length_1d(P.hasBeam)-1) && P.hasBeam[beamSelect])
+						{
+							P.beam[beamSelect] = !P.beam[beamSelect];
+							audio_play_sound(snd_MenuBoop,0,false);
+						}
+					}
+				}
+				#endregion
+				#region Boots Toggle
+				if(statusPos == 1)
+				{
+					suitSelect = -1;
+					beamSelect = -1;
+					miscSelect = -1;
+					
+					if(bootsSelect == -1)
+					{
+						bootsSelect = 0;
+					}
+					else
+					{
+						bootsSelect += statusMove;
+						
+						var num = array_length_1d(P.hasBoots);
+						while(!P.hasBoots[scr_wrap(bootsSelect,0,array_length_1d(P.hasBoots)-1)] && num > 0)
+						{
+							bootsSelect += statusMovePrev;
+							num--;
+						}
+						
+						if(bootsSelect < 0 || bootsSelect >= array_length_1d(P.hasBoots))
+						{
+							if(ownBeam)
+							{
+								statusPos = 0;
+								bootsSelect = -1;
+								if(statusMove < 0)
+								{
+									beamSelect = array_length_1d(P.hasBeam)-1;
+								}
+								else
+								{
+									beamSelect = 0;
+								}
+								statusMove = 0;
+							}
+							else
+							{
+								bootsSelect = scr_wrap(bootsSelect,0,array_length_1d(P.hasBoots)-1);
+							}
+						}
+						
+						if(statusMoveX != 0)
+						{
+							if(ownMisc)
+							{
+								statusPos = 3;
+								bootsSelect = -1;
+								miscSelect = 0;
+							}
+							else if(ownSuit)
+							{
+								statusPos = 2;
+								bootsSelect = -1;
+								suitSelect = 0;
+							}
+							statusMoveX = 0;
+						}
+						
+						if(toggleItem && bootsSelect == clamp(bootsSelect,0,array_length_1d(P.hasBoots)-1) && P.hasBoots[bootsSelect])
+						{
+							P.boots[bootsSelect] = !P.boots[bootsSelect];
+							audio_play_sound(snd_MenuBoop,0,false);
+						}
+					}
+				}
+				#endregion
+				#region Suit Toggle
+				if(statusPos == 2)
+				{
+					beamSelect = -1;
+					bootsSelect = -1;
+					miscSelect = -1;
+					
+					if(suitSelect == -1)
+					{
+						suitSelect = 0;
+					}
+					else
+					{
+						suitSelect += statusMove;
+						
+						var num = array_length_1d(P.hasSuit);
+						while(!P.hasSuit[scr_wrap(suitSelect,0,array_length_1d(P.hasSuit)-1)] && num > 0)
+						{
+							suitSelect += statusMovePrev;
+							num--;
+						}
+						
+						if(suitSelect < 0 || suitSelect >= array_length_1d(P.hasSuit))
+						{
+							if(ownMisc)
+							{
+								statusPos = 3;
+								suitSelect = -1;
+								if(statusMove < 0)
+								{
+									miscSelect = array_length_1d(P.hasMisc)-1;
+								}
+								else
+								{
+									miscSelect = 0;
+								}
+								statusMove = 0;
+							}
+							else
+							{
+								suitSelect = scr_wrap(suitSelect,0,array_length_1d(P.hasSuit)-1);
+							}
+						}
+						
+						if(statusMoveX != 0)
+						{
+							if(ownBeam)
+							{
+								statusPos = 0;
+								suitSelect = -1;
+								beamSelect = 0;
+							}
+							else if(ownBoots)
+							{
+								statusPos = 1;
+								suitSelect = -1;
+								bootsSelect = 0;
+							}
+							statusMoveX = 0;
+						}
+						
+						if(toggleItem && suitSelect == clamp(suitSelect,0,array_length_1d(P.hasSuit)-1) && P.hasSuit[suitSelect])
+						{
+							P.suit[suitSelect] = !P.suit[suitSelect];
+							if(P.dir == 0 && P.state == State.Stand)
+							{
+								P.bodyFrame = P.suit[Suit.Varia];
+							}
+							audio_play_sound(snd_MenuBoop,0,false);
+						}
+					}
+				}
+				#endregion
+				#region Misc Toggle
+				if(statusPos == 3)
+				{
+					beamSelect = -1;
+					bootsSelect = -1;
+					suitSelect = -1;
+					
+					if(miscSelect == -1)
+					{
+						miscSelect = 0;
+					}
+					else
+					{
+						miscSelect += statusMove;
+						
+						var num = array_length_1d(P.hasMisc);
+						while(!P.hasMisc[scr_wrap(miscSelect,0,array_length_1d(P.hasMisc)-1)] && num > 0)
+						{
+							miscSelect += statusMovePrev;
+							num--;
+						}
+						
+						if(miscSelect < 0 || miscSelect >= array_length_1d(P.hasMisc))
+						{
+							if(ownSuit)
+							{
+								statusPos = 2;
+								miscSelect = -1;
+								if(statusMove < 0)
+								{
+									suitSelect = array_length_1d(P.hasSuit)-1;
+								}
+								else
+								{
+									suitSelect = 0;
+								}
+								statusMove = 0;
+							}
+							else
+							{
+								miscSelect = scr_wrap(miscSelect,0,array_length_1d(P.hasMisc)-1);
+							}
+						}
+						
+						if(statusMoveX != 0)
+						{
+							if(ownBoots)
+							{
+								statusPos = 1;
+								miscSelect = -1;
+								bootsSelect = 0;
+							}
+							else if(ownBeam)
+							{
+								statusPos = 0;
+								miscSelect = -1;
+								beamSelect = 0;
+							}
+							statusMoveX = 0;
+						}
+						
+						if(toggleItem && miscSelect == clamp(miscSelect,0,array_length_1d(P.hasMisc)-1) && P.hasMisc[miscSelect])
+						{
+							P.misc[miscSelect] = !P.misc[miscSelect];
+							audio_play_sound(snd_MenuBoop,0,false);
+						}
+					}
+				}
+				#endregion
+			}
+		}
+		else
+		{
+			statusMove = 0;
+			statusMovePrev = 1;
 
-        if(itemNav >= 0 && itemNav <= 1)
-        {
-            suitSelect = clamp(itemNav,0,2);
-            if(toggleItem && global.suit[suitSelect])
-            {
-                obj_Player.suit[suitSelect] = !obj_Player.suit[suitSelect];
-                audio_play_sound(snd_MenuBoop,0,false);
-                with(obj_Player)
-                {
-                    if(torsoR == sprt_StandCenter)
-                    {
-                        bodyFrame = suit[0];
-                    }
-                }
-            }
-        }
-        if(itemNav >= 2 && itemNav <= 6)
-        {
-            beamSelect = clamp(itemNav - 2,0,4);
-            if(toggleItem && global.beam[beamSelect])
-            {
-                obj_Player.beam[beamSelect] = !obj_Player.beam[beamSelect];
-                audio_play_sound(snd_MenuBoop,0,false);
-            }
-        }
-        if(itemNav >= 7 && itemNav <= 12)
-        {
-            miscSelect = clamp(itemNav - 7,0,5);
-            if(toggleItem && global.misc[miscSelect])
-            {
-                obj_Player.misc[miscSelect] = !obj_Player.misc[miscSelect];
-                audio_play_sound(snd_MenuBoop,0,false);
-            }
-        }
-        if(itemNav >= 13 && itemNav <= 15)
-        {
-            bootsSelect = clamp(itemNav - 13,0,2);
-            if(toggleItem && global.boots[bootsSelect])
-            {
-                obj_Player.boots[bootsSelect] = !obj_Player.boots[bootsSelect];
-                audio_play_sound(snd_MenuBoop,0,false);
-            }
-        }
-    }
-    else
-    {
-        itemNav = 0;
-    }
-    if((section == 2 && !secTransitioning))
-    {
-        var move = (cDown && rDown) - (cUp && rUp),
-            select = (cSelect && rSelect),
-            back = (cBack && rBack);
-        
-        if(move != 0)
-        {
-            menuPos += move;
-            audio_play_sound(snd_MenuTick,0,false);
-        }
-        if(optMenuState <= 0)
-        {
-            if(menuPos < 0)
-            {
-                menuPos = array_length_1d(menu) - 1;
-            }
-            if(menuPos > array_length_1d(menu) - 1)
-            {
-                menuPos = 0;
-            }
-            if(select)
-            {
-                select = false;
-                if(menuPos < 3)
-                {
-                    audio_play_sound(snd_MenuBoop,0,false);
-                }
-                switch(menuPos)
-                {
-                    case 0:
-                    {
-                        instance_create_depth(0,0,-1,obj_DisplayOptions);
-                        break;
-                    }
-                    case 1:
-                    {
-                        instance_create_depth(0,0,-1,obj_AudioOptions);
-                        break;
-                    }
-                    case 2:
-                    {
-                        instance_create_depth(0,0,-1,obj_ControlOptions);
-                        break;
-                    }
-                    case 3:
-                    {
-                        room_goto(rm_MainMenu);
-                        global.gamePaused = false;
-                        game_restart();
-                        break;
-                    }
-                    case 4:
-                    {
-                        game_end();
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    else if(!secTransitioning)
-    {
-        optMenuState = -1;
-        menuPos = 0;
-    }
+			statusPos = -1;
+
+			beamSelect = -1;
+			suitSelect = -1;
+			bootsSelect = -1;
+			miscSelect = -1;
+			
+			toggleItem = false;
+		}
+		#endregion
+		#region Log Book Screen
+		if(currentScreen = Screen.LogBook)
+		{
+			
+		}
+		#endregion
+		#region Options Screen
+		if(currentScreen = Screen.Options)
+		{
+			
+		}
+		#endregion
+	}
 }
-
-if(screenfade <= 0)
+else
 {
-    menuPos = 0;
-    section = 0;
-    sectionAnim = false;
-    itemNav = 0;
-    optMenuState = -1;
-    surface_free(samusGlowSurf);
+	if(!canPause)
+	{
+		pauseFade = 0;
+	}
+	if(pauseFade <= 0)
+	{
+		screenSelect = false;
+		screenSelectAnim = 0;
+		currentScreen = Screen.Map;
+	
+		statusMove = 0;
+		statusMovePrev = 1;
+
+		statusPos = -1;
+
+		beamSelect = -1;
+		suitSelect = -1;
+		bootsSelect = -1;
+		miscSelect = -1;
+	}
 }
 
 rRight = !cRight;
@@ -265,7 +514,7 @@ rLeft = !cLeft;
 rUp = !cUp;
 rDown = !cDown;
 rSelect = !cSelect;
-rBack = !cBack;
-rStart = !cStart;
+rCancel = !cCancel;
 rNext = !cNext;
 rPrev = !cPrev;
+rStart = !cStart;

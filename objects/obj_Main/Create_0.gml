@@ -11,8 +11,6 @@ if(global.screenScale > 0)
 	screenScale = global.screenScale;
 }
 
-global.resWidth = 256;
-global.resHeight = 224;
 surface_resize(application_surface,global.resWidth,global.resHeight);
 
 if (view_camera[0] == -1)
