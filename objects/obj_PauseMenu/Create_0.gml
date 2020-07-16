@@ -16,11 +16,22 @@ currentScreen = Screen.Map;
 screenSelect = false;
 screenSelectAnim = 0;
 
-statusMove = 0;
-statusMovePrev = 1;
-statusMoveX = 0;
+mapX = 0;
+mapY = 0;
+mapMove = 0;
+mapSurf = surface_create(8,8);
+pMapIconFrame = 0;
+pMapIconFrameCounter = 0;
+pMapIconFrameNum = 1;
 
-statusPos = -1;
+
+invMove = 0;
+invMovePrev = 1;
+invMoveX = 0;
+
+invMoveCounter = 0;
+
+invPos = -1;
 
 beamSelect = -1;
 suitSelect = -1;
@@ -36,7 +47,7 @@ sAlphaNum = 1;
 
 playerOffsetY = 20;
 
-playerStatusSurf = surface_create(global.resWidth,global.resHeight);
+playerInvSurf = surface_create(global.resWidth,global.resHeight);
 
 playerGlowY = 0;
 playerGlowSurf = surface_create(global.resWidth,global.resHeight);
@@ -46,7 +57,22 @@ playerFlashAlpha = 1;
 playerGlowInd = -1;
 playerGlowIndPrev = -1;
 
+
+optionPos = 0;
+
+option = array(
+"DISPLAY OPTIONS",
+"AUDIO OPTIONS",
+"CONTROL OPTIONS",
+"RESTART FROM LAST SAVE",
+"QUIT TO MAIN MENU",
+"QUIT TO DESKTOP");
+
+
 pauseSurf = surface_create(global.resWidth,global.resHeight);
+
+cursorFrame = 0;
+cursorFrameCounter = 0;
 
 cRight = false;
 cLeft = false;
@@ -54,8 +80,6 @@ cUp = false;
 cDown = false;
 cSelect = false;
 cCancel = false;
-cNext = false;
-cPrev = false;
 cStart = false;
 
 rRight = !cRight;
@@ -64,6 +88,4 @@ rUp = !cUp;
 rDown = !cDown;
 rSelect = !cSelect;
 rCancel = !cCancel;
-rNext = !cNext;
-rPrev = !cPrev;
 rStart = !cStart;

@@ -1,7 +1,7 @@
 {
     "id": "9334928a-1721-428d-b2e4-9895247009be",
     "modelName": "GMExtension",
-    "mvc": "1.0",
+    "mvc": "1.2",
     "name": "discordRP",
     "IncludedResources": [
         
@@ -20,6 +20,7 @@
     "copyToTargets": 64,
     "date": "2019-40-03 04:03:20",
     "description": "",
+    "exportToGame": true,
     "extensionName": "",
     "files": [
         {
@@ -161,9 +162,12 @@
     "maccompilerflags": "",
     "maclinkerflags": "",
     "macsourcedir": "",
+    "options": null,
+    "optionsFile": "options.json",
     "packageID": "",
     "productID": "",
     "sourcedir": "",
+    "supportedTargets": 64,
     "tvosProps": false,
     "tvosSystemFrameworkEntries": [
         

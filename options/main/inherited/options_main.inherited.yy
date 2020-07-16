@@ -15,6 +15,26 @@
                     "groupName": "audio_music",
                     "targets": 461609314234257646
                 }
+            },
+            {
+                "Key": 2,
+                "Value": {
+                    "id": "0604df09-db27-4c53-a214-50a6a8d1dbbe",
+                    "modelName": "GMAudioGroup",
+                    "mvc": "1.0",
+                    "groupName": "audio_sound",
+                    "targets": 461609314234257646
+                }
+            },
+            {
+                "Key": 3,
+                "Value": {
+                    "id": "1d754387-1998-45cc-830e-7815b927e66f",
+                    "modelName": "GMAudioGroup",
+                    "mvc": "1.0",
+                    "groupName": "audio_ambiance",
+                    "targets": 461609314234257646
+                }
             }
         ],
         "Checksum": "濑Ⱥ朦씁ᬄ縈",

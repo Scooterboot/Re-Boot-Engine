@@ -12,6 +12,7 @@ kDash = false;
 kAngleUp = false;
 kAngleDown = false;
 kAimLock = false;
+kQuickMorph = false;
 //Samus extra HUD controls
 kHSelect = false;
 kHCancel = false;
@@ -23,8 +24,6 @@ kMUp = false;
 kMDown = false;
 kMSelect = false;
 kMCancel = false;
-kMNext = false;
-kMPrev = false;
 
 kStart = false;
 
@@ -41,6 +40,7 @@ gDash = false;
 gAngleUp = false;
 gAngleDown = false;
 gAimLock = false;
+gQuickMorph = false;
 //Samus extra HUD controls
 gHSelect = false;
 gHCancel = false;
@@ -52,8 +52,6 @@ gMUp = false;
 gMDown = false;
 gMSelect = false;
 gMCancel = false;
-gMNext = false;
-gMPrev = false;
 
 gStart = false;
 
@@ -70,6 +68,7 @@ dash = false;
 angleUp = false;
 angleDown = false;
 aimLock = false;
+quickMorph = false;
 //Samus extra HUD controls
 hSelect = false;
 hCancel = false;
@@ -81,8 +80,6 @@ mUp = false;
 mDown = false;
 mSelect = false;
 mCancel = false;
-mNext = false;
-mPrev = false;
 
 start = false;
 

@@ -56,7 +56,7 @@ if(chargeReleaseFlash > 0)
 }
 else
 {
-	if(isScrewAttacking && (frame[6] >= 1 || spaceJump > 0) && wjFrame <= 0)
+	if(isScrewAttacking && frame[6] >= 1 && spaceJump <= 6 && wjFrame <= 0)
 	{
 		screwPal = clamp(screwPal + 0.25*screwPalNum*(!global.gamePaused), 0, 1);
 		if(screwPal >= 1)

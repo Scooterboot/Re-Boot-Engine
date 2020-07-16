@@ -1,12 +1,13 @@
 /// @description Insert description here
 // You can write your code in this editor
-if(!global.gamePaused && instance_exists(obj_Player))
+if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 {
 	var xx = x + (global.resWidth/2),
 		yy = y + (global.resHeight/2);
 	playerX = obj_Player.x;
 	var ysp = obj_Player.y - obj_Player.yprevious;
-	if((obj_Player.state == State.Stand || obj_Player.state == State.Crouch) && obj_Player.prevState != obj_Player.state)
+	if(((obj_Player.state == State.Stand || obj_Player.state == State.Crouch) && obj_Player.prevState != obj_Player.state)
+		|| (obj_Player.state == State.Morph && obj_Player.prevState == State.Stand))
 	{
 		ysp = 0;
 	}

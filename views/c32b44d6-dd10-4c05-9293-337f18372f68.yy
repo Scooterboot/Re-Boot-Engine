@@ -9,7 +9,8 @@
         "4eeb6f63-926b-47c2-a813-92c5f72d2cd8",
         "aa9125f3-3b43-47e2-9cce-71fe8c916c78",
         "4b91c634-8974-4a93-87c4-f17916ed4c8a",
-        "ee6c230e-ad57-4daf-a2e3-9edcfba39c46"
+        "ee6c230e-ad57-4daf-a2e3-9edcfba39c46",
+        "f0e0e9da-d5df-460e-8479-fe0ba9d55fc4"
     ],
     "filterType": "GMSprite",
     "folderName": "ShineSpark",

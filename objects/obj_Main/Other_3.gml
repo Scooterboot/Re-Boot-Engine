@@ -1,1 +1,1 @@
-discord_stop();
+//discord_stop();

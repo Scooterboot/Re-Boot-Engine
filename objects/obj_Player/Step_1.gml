@@ -17,7 +17,6 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 		itemHighlighted[0] = 0;
 		moveHPrev = 1;
 		pauseSelect = false;
-		selectTap = 0;
 		
 		if(itemNum > 0)
 		{
@@ -94,26 +93,18 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 		{
 			if(cHSelect)
 			{
-				if(selectTap >= selectTapMax)
-				{
-					selectTap = selectTapMax+1;
-					pauseSelect = true;
-					global.gamePaused = true;
+				pauseSelect = true;
+				global.gamePaused = true;
 					
-					if(itemNum > 1)
-					{
-						moveH = (cHRight && rHRight) - (cHLeft && rHLeft);
-						if(moveH != 0)
-						{
-							hudBOffsetX = 28*moveH;
-							hudIOffsetX = 28*moveH;
-							moveHPrev = moveH;
-							audio_play_sound(snd_MenuTick,0,false);
-						}
-						itemHighlighted[1] += moveH;
-					}
+				moveH = (cHRight && rHRight) - (cHLeft && rHLeft);
+				if(moveH != 0)
+				{
+					//hudBOffsetX = 28*moveH;
+					//hudIOffsetX = 28*moveH;
+					moveHPrev = moveH;
+					audio_play_sound(snd_MenuTick,0,false);
 				}
-				selectTap++;
+				itemHighlighted[1] += moveH;
 			}
 			else
 			{
@@ -121,33 +112,17 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 				if(!rHSelect)
 				{
 					global.gamePaused = false;
-					if(selectTap < selectTapMax)
-					{
-						if(itemHighlighted[1] != 0)
-						{
-							itemHighlighted[1] = 0;
-						}
-						else
-						{
-							itemHighlighted[1] = 1;
-						}
-						audio_play_sound(snd_MenuTick,0,false);
-					}
 				}
 				pauseSelect = false;
-				selectTap = max(selectTap - 1, 0);
 			}
 		}
 		else
 		{
-			selectTap = 0;
 			pauseSelect = false;
 		}
 	}
 	else if(global.HUD == 2)
 	{
-		selectTap = 0;
-		
 		if(cHCancel && rHCancel && itemNum > 0)
 		{
 			itemSelected = scr_wrap(itemSelected + 1, 0, 1);

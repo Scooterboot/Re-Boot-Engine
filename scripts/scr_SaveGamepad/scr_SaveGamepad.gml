@@ -39,12 +39,11 @@ ini_write_real("Gamepad", "dash", global.gp[2]);
 ini_write_real("Gamepad", "angle up", global.gp[3]);
 ini_write_real("Gamepad", "angle down", global.gp[4]);
 ini_write_real("Gamepad", "aim lock", global.gp[5]);
-ini_write_real("Gamepad", "item select", global.gp[6]);
-ini_write_real("Gamepad", "item cancel", global.gp[7]);
-ini_write_real("Gamepad", "pause", global.gp[8]);
+ini_write_real("Gamepad", "quick morph", global.gp[6]);
+ini_write_real("Gamepad", "item select", global.gp[7]);
+ini_write_real("Gamepad", "item cancel", global.gp[8]);
 
-ini_write_real("Gamepad", "menu select", global.gp_m[0]);
-ini_write_real("Gamepad", "menu cancel", global.gp_m[1]);
-ini_write_real("Gamepad", "menu next", global.gp_m[2]);
-ini_write_real("Gamepad", "menu previous", global.gp_m[3]);
+ini_write_real("Gamepad", "menu start", global.gp_m[0]);
+ini_write_real("Gamepad", "menu select", global.gp_m[1]);
+ini_write_real("Gamepad", "menu cancel", global.gp_m[2]);
 ini_close();

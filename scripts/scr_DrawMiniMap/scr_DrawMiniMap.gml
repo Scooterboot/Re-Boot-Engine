@@ -20,17 +20,16 @@ draw_set_color(c_white);
 draw_set_alpha(1);
     
 draw_sprite_ext(sprt_HMapBase,0,mapX,mapY,1,1,0,c_white,1);
-/*if(global.mapArea != noone)
+if(global.rmMapSprt != noone)
 {
-    if(!instance_exists(obj_Transition) || obj_Transition.transitionComplete)
-    {
-        currentMap = global.mapArea;
-        samusMapX = (scr_floor(obj_Samus.x/320) + global.rmMapPosX) * 8;
-        samusMapY = (scr_floor(obj_Samus.y/320) + global.rmMapPosY) * 8;
-    }
-        
-    draw_sprite_part_ext(currentMap,0,samusMapX-16,samusMapY-8,40,24,mapX,mapY,1,1,c_white,1);
-}*/
+	if(!instance_exists(obj_Transition) || obj_Transition.transitionComplete)
+	{
+	    currentMap = global.rmMapSprt;
+		playerMapX = (scr_floor(x/global.rmMapSize) + global.rmMapX) * 8;
+		playerMapY = (scr_floor(y/global.rmMapSize) + global.rmMapY) * 8;
+	}
+	scr_DrawMap(currentMap,mapX,mapY,playerMapX-16,playerMapY-8,40,24);
+}
     
 draw_set_color(c_white);
 draw_set_alpha(hudMapFlashAlpha);

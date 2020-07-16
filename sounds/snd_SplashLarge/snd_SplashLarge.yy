@@ -3,7 +3,7 @@
     "modelName": "GMSound",
     "mvc": "1.0",
     "name": "snd_SplashLarge",
-    "audioGroupGuid": "7b2c4976-1e09-44e5-8256-c527145e03bb",
+    "audioGroupGuid": "0604df09-db27-4c53-a214-50a6a8d1dbbe",
     "bitDepth": 1,
     "bitRate": 128,
     "kind": 0,

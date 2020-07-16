@@ -11,20 +11,19 @@ kDash = keyboard_check(global.key[6]);
 kAngleUp = keyboard_check(global.key[7]);
 kAngleDown = keyboard_check(global.key[8]);
 kAimLock = keyboard_check(global.key[9]);
+kQuickMorph = keyboard_check(global.key[10]);
 
-kHSelect = keyboard_check(global.key[10]);
-kHCancel = keyboard_check(global.key[11]);
+kHSelect = keyboard_check(global.key[11]);
+kHCancel = keyboard_check(global.key[12]);
 
-kStart = keyboard_check(global.key[12]);
+kStart = keyboard_check(global.key_m[0]);
 
 kMUp = keyboard_check(global.key[0]);
 kMDown = keyboard_check(global.key[1]);
 kMLeft = keyboard_check(global.key[2]);
 kMRight = keyboard_check(global.key[3]);
-kMSelect = keyboard_check(global.key_m[0]);
-kMCancel = keyboard_check(global.key_m[1]);
-kMNext = keyboard_check(global.key_m[2]);
-kMPrev = keyboard_check(global.key_m[3]);
+kMSelect = keyboard_check(global.key_m[1]);
+kMCancel = keyboard_check(global.key_m[2]);
 
 if(gamepad_is_connected(global.gpSlot))
 {
@@ -38,16 +37,19 @@ if(gamepad_is_connected(global.gpSlot))
     gAngleUp = gamepad_button_check(global.gpSlot, global.gp[3]);
     gAngleDown = gamepad_button_check(global.gpSlot, global.gp[4]);
     gAimLock = gamepad_button_check(global.gpSlot, global.gp[5]);
+    gQuickMorph = gamepad_button_check(global.gpSlot, global.gp[6]);
     
-    gHSelect = gamepad_button_check(global.gpSlot, global.gp[6]);
-    gHCancel = gamepad_button_check(global.gpSlot, global.gp[7]);
+    gHSelect = gamepad_button_check(global.gpSlot, global.gp[7]);
+    gHCancel = gamepad_button_check(global.gpSlot, global.gp[8]);
     
-    gStart = gamepad_button_check(global.gpSlot, global.gp[8]);
+    gStart = gamepad_button_check(global.gpSlot, global.gp_m[0]);
     
-    gMSelect = gamepad_button_check(global.gpSlot, global.gp_m[0]);
-    gMCancel = gamepad_button_check(global.gpSlot, global.gp_m[1]);
-    gMNext = gamepad_button_check(global.gpSlot, global.gp_m[2]);
-    gMPrev = gamepad_button_check(global.gpSlot, global.gp_m[3]);
+	gMRight = gRight;
+	gMLeft = gLeft;
+	gMUp = gUp;
+	gMDown = gDown;
+    gMSelect = gamepad_button_check(global.gpSlot, global.gp_m[1]);
+    gMCancel = gamepad_button_check(global.gpSlot, global.gp_m[2]);
 }
 
 ///Set
@@ -62,6 +64,7 @@ dash = kDash;
 angleUp = kAngleUp;
 angleDown = kAngleDown;
 aimLock = kAimLock;
+quickMorph = kQuickMorph;
 
 hSelect = kHSelect;
 hCancel = kHCancel;
@@ -72,8 +75,6 @@ mUp = kMUp;
 mDown = kMDown;
 mSelect = kMSelect;
 mCancel = kMCancel;
-mNext = kMNext;
-mPrev = kMPrev;
 
 start = kStart;
 
@@ -89,18 +90,17 @@ if(gamepad_is_connected(global.gpSlot))
     angleUp |= gAngleUp;
     angleDown |= gAngleDown;
     aimLock |= gAimLock;
+	quickMorph |= gQuickMorph;
     
     hSelect |= gHSelect;
     hCancel |= gHCancel;
     
-    mRight |= gRight;
-    mLeft |= gLeft;
-    mUp |= gUp;
-    mDown |= gDown;
+    mRight |= gMRight;
+    mLeft |= gMLeft;
+    mUp |= gMUp;
+    mDown |= gMDown;
     mSelect |= gMSelect;
     mCancel |= gMCancel;
-    mNext |= gMNext;
-    mPrev |= gMPrev;
     
     start |= gStart;
 }

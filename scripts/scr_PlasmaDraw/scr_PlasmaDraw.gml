@@ -1,4 +1,11 @@
-///scr_PlasmaDraw(x,y,xscale,yscale,rotation,alpha,overrideOldPositons=false)
+/// @description scr_PlasmaDraw(x,y,xscale,yscale,rotation,alpha,overrideOldPositons=false)
+/// @param x
+/// @param y
+/// @param xscale
+/// @param yscale
+/// @param rotation
+/// @param alpha
+/// @param overrideOldPositons = false
 
 var x1 = argument[0],
 y1 = argument[1],
@@ -7,7 +14,7 @@ yscale = argument[3],
 rot = argument[4],
 alpha = argument[5];
 
-if(!global.gamePaused && string_count("Plasma",object_get_name(object_index)) <= 0)
+if(!global.gamePaused)// && string_count("Plasma",object_get_name(object_index)) <= 0)
 {
     xstart += speed_x;
     ystart += speed_y;
@@ -15,7 +22,7 @@ if(!global.gamePaused && string_count("Plasma",object_get_name(object_index)) <=
 
 var width = sprite_width,
     height = sprite_height;
-var dist = clamp((point_distance(x1,y1,xstart,ystart) + 4 + 4*isMissile)/width,0,1);
+var dist = clamp((point_distance(x1,y1,xstart,ystart) + 2 + 6*isMissile)/width,0,1);
 if(dist < 1 && argument_count >= 7 && argument[6])
 {
     for(var i = 0; i < 11; i++)

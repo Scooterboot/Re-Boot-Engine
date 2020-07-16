@@ -1,7 +1,7 @@
 /// @description Free surfaces
-if(surface_exists(playerStatusSurf))
+if(surface_exists(playerInvSurf))
 {
-    surface_free(playerStatusSurf);
+    surface_free(playerInvSurf);
 }
 if(surface_exists(playerGlowSurf))
 {
@@ -14,4 +14,8 @@ if(surface_exists(playerGlowSurf2))
 if(surface_exists(pauseSurf))
 {
     surface_free(pauseSurf);
+}
+if(surface_exists(mapSurf))
+{
+    surface_free(mapSurf);
 }

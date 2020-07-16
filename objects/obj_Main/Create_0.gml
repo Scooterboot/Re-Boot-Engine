@@ -1,5 +1,5 @@
 /// @description Initialize
-discord_start("569344917676228631");
+//discord_start("569344917676228631");
 
 scr_MainInitialize();
 

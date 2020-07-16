@@ -1,5 +1,1 @@
-/// @description Free surface
-if(surface_exists(playerSurf))
-{
-    surface_free(playerSurf);
-}
+event_perform(ev_game_end,0);

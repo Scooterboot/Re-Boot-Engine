@@ -12,15 +12,36 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 	
 	var P = obj_Player;
 	
+	with(obj_Player)
+	{
+		if(global.hudMap)
+		{
+			scr_DrawMiniMap();
+		}
+		if(global.hudDisplay)
+		{
+			scr_DrawHUD_Energy();
+		}
+		if(global.HUD == 2)
+		{
+			scr_DrawHUD_Alt();
+		}
+		else
+		{
+			scr_DrawHUD();
+		}
+	}
+	draw_set_color(c_black);
+	
 	if(pauseFade > 0)
 	{
-		draw_set_alpha(0.75*pauseFade);
-		draw_rectangle(xx,yy,xx+ww,yy+hh,false);
-		draw_set_alpha(1);
+		//draw_set_alpha(0.75*pauseFade);
+		//draw_rectangle(xx,yy,xx+ww,yy+hh,false);
+		//draw_set_alpha(1);
 		
 		if(currentScreen == Screen.Inventory)
 		{
-			scr_DrawStatusPlayer(xx,yy);
+			//scr_DrawInventoryPlayer(xx,yy);
 		}
 		else
 		{
@@ -30,21 +51,84 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			playerGlowInd = -1;
 			playerGlowIndPrev = -1;
 		}
+		/*if(currentScreen == Screen.Options)
+		{
+			var space = 16;
+				
+			draw_set_font(GUIFont);
+			draw_set_halign(fa_left);
+			draw_set_valign(fa_top);
+			var oX = scr_round(xx + ww/2 - 112),
+				oY = scr_round(yy + hh/2 - 32);
+				
+			for(var o = 0; o < array_length_1d(option); o++)
+			{
+				var col = c_black,
+					alph = 0.5*pauseFade;
+				if(optionPos == o)
+				{
+					col = c_white;
+					alph = 0.15*pauseFade;
+				}
+				var oY2 = oY + (o*space);
+				scr_DrawOptionText(oX,oY2,option[o],pauseFade,string_width(option[o])+1,col,alph);
+			}
+		}*/
+		
+		if(currentScreen == Screen.Map && global.rmMapSprt != noone)
+		{
+			scr_DrawMap(global.rmMapSprt,0,0,0,0,sprite_get_width(global.rmMapSprt),sprite_get_height(global.rmMapSprt),false);
+		}
 		
 	    if(surface_exists(pauseSurf))
 		{
 			surface_set_target(pauseSurf);
-			draw_clear_alpha(c_black,0);
+			
+			draw_clear_alpha(c_black,1);
+			draw_surface_ext(application_surface,0,0,1,1,0,c_white,1);
+			
+			draw_set_alpha(0.75);
+			draw_rectangle(0,0,ww,hh,false);
+			draw_set_alpha(1);
 			
 			#region Draw Map
 			if(currentScreen == Screen.Map)
 			{
-				
+				if(global.rmMapSprt != noone && surface_exists(mapSurf))
+				{
+					var mx = ww/2 - mapX,
+						my = hh/2 - mapY;
+					draw_surface_part_ext(mapSurf,0,0,sprite_get_width(global.rmMapSprt),sprite_get_height(global.rmMapSprt),scr_round(mx),scr_round(my),1,1,c_white,1);
+					
+					var pX = mx + (scr_floor(P.x/global.rmMapSize) + global.rmMapX) * 8,
+						pY = my + (scr_floor(P.y/global.rmMapSize) + global.rmMapY) * 8;
+					
+					pMapIconFrameCounter++;
+					if(pMapIconFrameCounter > 4)
+					{
+						pMapIconFrame += pMapIconFrameNum;
+						pMapIconFrameCounter = 0;
+					}
+					if(pMapIconFrame < 0)
+					{
+						pMapIconFrame = 0;
+						pMapIconFrameNum = 1;
+					}
+					if(pMapIconFrame >= 2)
+					{
+						pMapIconFrame = 2;
+						pMapIconFrameNum = -1;
+					}
+					
+					draw_sprite_ext(sprt_PlayerMapIcon,pMapIconFrame,scr_round(pX+4),scr_round(pY+4),1,1,0,c_white,0.6);
+				}
 			}
 			#endregion
 			#region Draw Inventory Screen
 			if(currentScreen == Screen.Inventory)
 			{
+				scr_DrawInventoryPlayer(0,0);
+				
 				selectorAlpha = clamp(selectorAlpha + 0.05*sAlphaNum,0,1);
 				if(selectorAlpha <= 0)
 				{
@@ -56,8 +140,8 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				}
 				textAnim = min(textAnim + 1.5, 62);
 				var textH = 7;
-				draw_sprite(sprt_Sub_ItemHeader,0,6,51);
-				var yoff = 0;
+				draw_sprite(sprt_Sub_ItemHeader,0,6,53);
+				var yoff = 2;
 				for(var i = 0; i < array_length_1d(P.hasBeam); i++)
 				{
 					if(P.hasBeam[i])
@@ -79,8 +163,8 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					}
 				}
 				
-				draw_sprite(sprt_Sub_ItemHeader,1,6,131);
-				yoff = 0;
+				draw_sprite(sprt_Sub_ItemHeader,1,6,133);
+				yoff = 2;
 				for(var i = 0; i < array_length_1d(P.hasBoots); i++)
 				{
 					if(P.hasBoots[i])
@@ -102,8 +186,8 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					}
 				}
 				
-				draw_sprite(sprt_Sub_ItemHeader,2,174,51);
-				yoff = 0;
+				draw_sprite(sprt_Sub_ItemHeader,2,174,53);
+				yoff = 2;
 				for(var i = 0; i < array_length_1d(P.hasSuit); i++)
 				{
 					if(P.hasSuit[i])
@@ -125,8 +209,8 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					}
 				}
 				
-				draw_sprite(sprt_Sub_ItemHeader,3,174,111);
-				yoff = 0;
+				draw_sprite(sprt_Sub_ItemHeader,3,174,113);
+				yoff = 2;
 				for(var i = 0; i < array_length_1d(P.hasMisc); i++)
 				{
 					if(P.hasMisc[i])
@@ -164,9 +248,44 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			#region Draw Options
 			if(currentScreen == Screen.Options)
 			{
+				cursorFrameCounter++;
+				if(cursorFrameCounter > 5)
+				{
+					cursorFrame++;
+					cursorFrameCounter = 0;
+				}
+				if(cursorFrame >= 4)
+				{
+					cursorFrame = 0;
+				}
 				
+				var space = 16;
+				
+				draw_set_font(GUIFont);
+				draw_set_halign(fa_left);
+				draw_set_valign(fa_top);
+				var oX = scr_round(ww/2 - 96),
+					oY = scr_round(hh/2 - 48);
+				
+				for(var o = 0; o < array_length_1d(option); o++)
+				{
+					var oY2 = oY + (o*space);
+					
+					var col = c_black,
+						alph = 0.5;
+					if(optionPos == o)
+					{
+						col = c_white;
+						alph = 0.15;
+			
+						draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX-4,oY2+string_height(option[o])/2,1,1,0,c_white,1);
+					}
+					scr_DrawOptionText(oX,oY2,option[o],c_white,1,string_width(option[o])+1,col,alph);
+				}
 			}
 			#endregion
+			
+			draw_set_color(c_black);
 			
 			if(screenSelectAnim > 0)
 			{
@@ -179,6 +298,12 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					y3 = scr_round(hh-(hh/2)*anim),
 					x4 = scr_round((ww/2)*anim),
 					y4 = scr_round(hh/2);
+				
+				var shift = 5;
+				y1 += shift;
+				y2 += shift;
+				y3 += shift;
+				y4 += shift;
 				
 				draw_triangle(x1,y1,x1-ww,y1-ww,x1+ww,y1-ww,false);
 				draw_triangle(x2-1,y2-1,x2+ww-2,y2-ww-1,x2+ww-2,y2+ww,false);
@@ -199,38 +324,22 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			}
 			
 			draw_sprite(sprt_Sub_Base,0,0,0);
-			draw_sprite(sprt_Sub_Header,currentScreen,0,0);
+			draw_sprite(sprt_Sub_Header,currentScreen,0,32);
+			
+			draw_surface_ext(application_surface,0,0,1,1,0,c_white,1-pauseFade);
 			
 			surface_reset_target();
 			
-			draw_surface_ext(pauseSurf,xx,yy,1,1,0,c_white,pauseFade);
+			if(isPaused || !instance_exists(obj_ControlOptions))
+			{
+				gpu_set_blendenable(false);
+				draw_surface_ext(pauseSurf,xx,yy,1,1,0,c_white,1);
+				gpu_set_blendenable(true);
+			}
 		}
 		else
 		{
 			pauseSurf = surface_create(global.resWidth,global.resHeight);
-		}
-	}
-	
-	if(instance_exists(obj_Player))
-	{
-		with(obj_Player)
-		{
-			if(global.hudMap)
-			{
-				scr_DrawMiniMap();
-			}
-			if(global.hudDisplay)
-			{
-				scr_DrawHUD_Energy();
-			}
-			if(global.HUD == 2)
-			{
-				scr_DrawHUD_Alt();
-			}
-			else
-			{
-				scr_DrawHUD();
-			}
 		}
 	}
 }

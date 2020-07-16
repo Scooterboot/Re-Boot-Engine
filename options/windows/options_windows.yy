@@ -27,7 +27,7 @@
     "option_windows_splash_screen": "${base_options_dir}\\windows\\splash\\splash.png",
     "option_windows_start_fullscreen": false,
     "option_windows_texture_page": "2048x2048",
-    "option_windows_use_splash": true,
+    "option_windows_use_splash": false,
     "option_windows_version": {
         "build": 0,
         "major": 4,

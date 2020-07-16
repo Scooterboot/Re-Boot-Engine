@@ -53,6 +53,7 @@ move2 = 0;
 pMove = 0;
 
 dir = 0; //0 = face screen, 1 = face right, -1 = face left
+fDir = dir;
 oldDir = dir;
 lastDir = oldDir;
 
@@ -163,6 +164,7 @@ cDash = false;
 cAngleUp = false;
 cAngleDown = false;
 cAimLock = false;
+cMorph = false;
 
 rRight = !cRight;
 rLeft = !cLeft;
@@ -174,6 +176,7 @@ rDash = !cDash;
 rAngleUp = !cAngleUp;
 rAngleDown = !cAngleDown;
 rAimLock = !cAimLock;
+rMorph = !cMorph;
 
 rMorphJump = false;
 
@@ -571,8 +574,8 @@ enum Misc
 	Morph,
 	Bomb,
 	Spring,
-	ScrewAttack,
-	Spider
+	Spider,
+	ScrewAttack
 };
 // 6 Misc
 misc[5] = false;
@@ -682,13 +685,10 @@ itemHighlighted[1] = 0;
 
 pauseSelect = false;
 
-selectTap = 0;
-selectTapMax = 10;
-
-//currentMap = global.mapArea;
-
-//playerMapX = (scr_floor(obj_Player.x/global.resHeight) + global.rmMapPosX) * 8;
-//playerMapY = (scr_floor(obj_Player.y/global.resHeight) + global.rmMapPosY) * 8;
+currentMap = global.rmMapSprt;
+playerMapX = (scr_floor(x/global.resWidth) + global.rmMapX) * 8;
+playerMapY = (scr_floor(y/global.resWidth) + global.rmMapY) * 8;
+mapSurf = surface_create(8,8);
 
 hudMapFlashAlpha = 0;
 hudMapFlashNum = 1;

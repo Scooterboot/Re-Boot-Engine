@@ -39,12 +39,11 @@ ini_write_real("Keyboard", "dash", global.key[6]);
 ini_write_real("Keyboard", "angle up", global.key[7]);
 ini_write_real("Keyboard", "angle down", global.key[8]);
 ini_write_real("Keyboard", "aim lock", global.key[9]);
-ini_write_real("Keyboard", "item select", global.key[10]);
-ini_write_real("Keyboard", "item cancel", global.key[11]);
-ini_write_real("Keyboard", "pause", global.key[12]);
+ini_write_real("Keyboard", "quick morph", global.key[10]);
+ini_write_real("Keyboard", "item select", global.key[11]);
+ini_write_real("Keyboard", "item cancel", global.key[12]);
 
-ini_write_real("Keyboard", "menu select", global.key_m[0]);
-ini_write_real("Keyboard", "menu cancel", global.key_m[1]);
-ini_write_real("Keyboard", "menu next", global.key_m[2]);
-ini_write_real("Keyboard", "menu previous", global.key_m[3]);
+ini_write_real("Keyboard", "menu start", global.key_m[0]);
+ini_write_real("Keyboard", "menu select", global.key_m[1]);
+ini_write_real("Keyboard", "menu cancel", global.key_m[2]);
 ini_close();
