@@ -85,3 +85,5 @@ start = false;
 
 
 scr_LoadGamePadID();
+
+usingGamePad = (global.gpSlot != -1);

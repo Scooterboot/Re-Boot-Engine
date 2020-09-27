@@ -31,3 +31,9 @@ window_set_fullscreen(global.fullScreen);
 display_reset(0, global.vsync);
 window_set_size(global.resWidth*screenScale,global.resHeight*screenScale);
 window_center();
+
+oldDelta = delta_time;
+
+messageCounter = 0;
+messageType = 0;
+message[0] = "GAME SAVED";

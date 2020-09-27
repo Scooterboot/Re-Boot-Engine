@@ -7,7 +7,7 @@ cSelect = obj_Control.mSelect;
 cCancel = obj_Control.mCancel;
 cStart = obj_Control.start;
 
-var canPause = (room != rm_MainMenu && instance_exists(obj_Player));
+var canPause = (room != rm_MainMenu && instance_exists(obj_Player) && obj_Player.state != State.Elevator && !instance_exists(obj_Transition));
 
 if(canPause)
 {

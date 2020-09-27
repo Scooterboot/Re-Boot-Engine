@@ -85,7 +85,10 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			surface_set_target(pauseSurf);
 			
 			draw_clear_alpha(c_black,1);
+			shader_set(shd_GaussianBlur);
+			shader_set_uniform_f(shader_get_uniform(shd_GaussianBlur,"size"), global.resWidth,global.resHeight,4);
 			draw_surface_ext(application_surface,0,0,1,1,0,c_white,1);
+			shader_reset();
 			
 			draw_set_alpha(0.75);
 			draw_rectangle(0,0,ww,hh,false);

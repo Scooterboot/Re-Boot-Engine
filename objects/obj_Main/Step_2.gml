@@ -1,6 +1,6 @@
 /// @description Map
 
-if(instance_exists(obj_Player) && room != rm_MainMenu)
+if(instance_exists(obj_Player) && room != rm_MainMenu && (!instance_exists(obj_Transition) || obj_Transition.transitionComplete))
 {
 	var playerMapX = scr_floor(obj_Player.x/global.rmMapSize) + global.rmMapX,
 		playerMapY = scr_floor(obj_Player.y/global.rmMapSize) + global.rmMapY;

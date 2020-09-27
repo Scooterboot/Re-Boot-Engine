@@ -6,8 +6,7 @@
     "children": [
         "1aea208e-00a8-4c96-9855-f8c1896c6266",
         "81440956-3ab5-4dcb-965b-0b53f131241f",
-        "96bf149a-e3e2-457b-a6f9-f6a54075dce1",
-        "a606fd32-e0e4-470b-b682-e76d7ef54ce3"
+        "96bf149a-e3e2-457b-a6f9-f6a54075dce1"
     ],
     "filterType": "GMObject",
     "folderName": "CollisionTiles",

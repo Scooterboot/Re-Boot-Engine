@@ -104,3 +104,12 @@ if(gamepad_is_connected(global.gpSlot))
     
     start |= gStart;
 }
+
+if(keyboard_check(vk_anykey))
+{
+	usingGamePad = false;
+}
+if(gamepad_button_check(global.gpSlot,gp_anybutton()) || gamepad_axis_value(global.gpSlot, gp_axislh) != 0 || gamepad_axis_value(global.gpSlot, gp_axislv) != 0)
+{
+	usingGamePad = true;
+}

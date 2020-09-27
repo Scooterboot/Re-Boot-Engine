@@ -541,13 +541,24 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		if(state == State.Crouch)
 		{
-			if(velX > 0)
+			if(!misc[Misc.Morph] && move == 1 && place_collide(0,-11) && (!collision_line(bbox_right,bbox_top,bbox_right,bbox_top-11,obj_Tile,true,true) || !collision_line(bbox_right+16,bbox_top,bbox_right+16,bbox_top-11,obj_Tile,true,true)))
 			{
-				velX = max(velX - fFrict*2, 0);
+				velX = 0.5;
 			}
-			if(velX < 0)
+			else if(!misc[Misc.Morph] && move == -1 && place_collide(0,-11) && (!collision_line(bbox_left,bbox_top,bbox_left,bbox_top-11,obj_Tile,true,true) || !collision_line(bbox_left-16,bbox_top,bbox_left-16,bbox_top-11,obj_Tile,true,true)))
 			{
-				velX = min(velX + fFrict*2, 0);
+				velX = -0.5;
+			}
+			else
+			{
+				if(velX > 0)
+				{
+					velX = max(velX - fFrict*2, 0);
+				}
+				if(velX < 0)
+				{
+					velX = min(velX + fFrict*2, 0);
+				}
 			}
 		}
 	}
@@ -1442,9 +1453,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		velY = 0;
 		aimAngle = 0;
 		//if(!instance_exists(obj_Elevator) || obj_Elevator.activeDir == 0)
-		//{
+		if(!instance_exists(obj_SaveStation) || obj_SaveStation.saving <= 0)
+		{
 			state = State.Stand;
-		//}
+		}
 	}
 #endregion
 #region Crouch
@@ -1626,6 +1638,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 						y += 1;
 					}
 				}
+				uncrouching = false;
+				crouchFrame = 5;
+				state = State.Crouch;
 			}
 			else
 			{

@@ -4,7 +4,12 @@ var xx = camera_get_view_x(view_camera[0]),
 	yy = camera_get_view_y(view_camera[0]),
 	ww = global.resWidth,
 	hh = global.resHeight,
+	alpha = screenFade;
+
+if(room != rm_MainMenu)
+{
 	alpha = min(screenFade,obj_PauseMenu.pauseFade);
+}
 
 draw_sprite_tiled_ext(bg_Menu2,0,scr_round(xx),scr_round(yy),1,1,c_white,alpha);
 

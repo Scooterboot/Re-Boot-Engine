@@ -55,26 +55,14 @@ if(room == rm_MainMenu)
 	{
 		instance_destroy(obj_Player);
 	}
-	//if(file selected and stuff)
-	//{
-		// load game stuff here
-		/*room_goto(rm_debug01);
-		var sx = 80,
-			sy = 694;
-		instance_create_layer(sx,sy,"Player",obj_Player);
-		instance_create_layer(sx-(global.resWidth/2),sy-(global.resHeight/2),"Camera",obj_Camera);*/
-	//}
 	if(!instance_exists(obj_MainMenu))
 	{
-		instance_create_depth(0,0,-1,obj_MainMenu);
+		instance_create_depth(0,0,0,obj_MainMenu);
 	}
 }
-else
+else if(!global.gamePaused)
 {
-	if(instance_exists(obj_MainMenu))
-	{
-		instance_destroy(obj_MainMenu);
-	}
+	global.currentPlayTime += (1 / room_speed) * (oldDelta / delta_time);
 }
 
 if(keyboard_check(vk_shift))
@@ -188,3 +176,5 @@ else
 }
 
 global.breakSndCounter = max(global.breakSndCounter-1,0);
+
+oldDelta = delta_time;

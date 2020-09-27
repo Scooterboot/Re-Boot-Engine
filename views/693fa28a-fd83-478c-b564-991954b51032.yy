@@ -8,7 +8,8 @@
         "66524084-dd91-4b1b-a75b-f983cca492fe",
         "66989f7a-219b-4bd6-b01a-79080b7ea41e",
         "54fe2841-5cd7-48b8-845f-0e5d1a8a2890",
-        "edc9f19e-d05b-4c18-a2fe-c5c2ae662dac"
+        "edc9f19e-d05b-4c18-a2fe-c5c2ae662dac",
+        "57e2c0f7-ccd6-408a-9c7e-423a177531fe"
     ],
     "filterType": "GMSound",
     "folderName": "Tiles",

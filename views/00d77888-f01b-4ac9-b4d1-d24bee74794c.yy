@@ -4,10 +4,12 @@
     "mvc": "1.1",
     "name": "00d77888-f01b-4ac9-b4d1-d24bee74794c",
     "children": [
+        "a42ca743-abf3-4799-a982-f27516368ea2",
         "20ee97ef-0053-420c-a2fe-18561698f1c5",
         "6b0c2d31-ba0c-4297-b5c0-6e9153e7efd3",
         "839b0001-da2f-47b4-9176-ae81255197ff",
-        "8780d2f4-17fa-45f5-835f-337838128470"
+        "8780d2f4-17fa-45f5-835f-337838128470",
+        "ffda568c-7b11-4ec0-92ad-6ccc1dca94ab"
     ],
     "filterType": "GMSprite",
     "folderName": "UI",

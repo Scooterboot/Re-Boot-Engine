@@ -44,6 +44,9 @@ global.gamePaused = false;	//variable that checks if the game is paused
 
 global.currentPlayFile = 0; //file that is selected and will be saved over during gameplay
 
+global.currentPlayTime = 0;
+global.currentItemPercent = 0;
+
 //initialize item variables
 //global.suit[1] = false;
 //global.misc[5] = false;

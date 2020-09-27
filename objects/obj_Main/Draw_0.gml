@@ -45,3 +45,5 @@ if(debug)
         draw_text_transformed(xx+10,yy+80,"velY: "+string(velY),1,1,0);
     }
 }
+
+show_debug_message("delta_time: "+string(delta_time));
