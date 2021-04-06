@@ -1,0 +1,1 @@
+scr_InitRoom(sprt_Map_DebugRooms,15,5,mus_BrinstarGreen);

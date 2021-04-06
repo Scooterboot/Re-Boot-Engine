@@ -11,6 +11,15 @@ if(global.screenScale > 0)
 	screenScale = global.screenScale;
 }
 
+if(global.widescreenEnabled)
+{
+	global.resWidth = global.wideResWidth;
+}
+else
+{
+	global.resWidth = global.ogResWidth;
+}
+
 surface_resize(application_surface,global.resWidth,global.resHeight);
 
 if (view_camera[0] == -1)
@@ -31,6 +40,7 @@ window_set_fullscreen(global.fullScreen);
 display_reset(0, global.vsync);
 window_set_size(global.resWidth*screenScale,global.resHeight*screenScale);
 window_center();
+windowResizeTimer = 0;
 
 oldDelta = delta_time;
 

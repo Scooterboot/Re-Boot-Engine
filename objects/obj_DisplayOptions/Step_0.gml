@@ -69,35 +69,67 @@ if(screenFade >= 1 && !menuClosing)
 			}
 			case 2:
 			{
-				//VSync
-				global.vsync = !global.vsync;
-				display_reset(0,global.vsync);
+				//Widescreen
+				global.widescreenEnabled = !global.widescreenEnabled;
+				
+				if(instance_exists(obj_Camera))
+				{
+					var camMoveX = (global.wideResWidth-global.ogResWidth)/2;
+					if(global.widescreenEnabled)
+					{
+						camMoveX = -camMoveX;
+					}
+					obj_Camera.x += camMoveX;
+					camera_set_view_pos(view_camera[0],
+					camera_get_view_x(view_camera[0])+camMoveX,
+					camera_get_view_y(view_camera[0]));
+				}
+				var winMoveX = (global.wideResWidth*obj_Main.screenScale - global.ogResWidth*obj_Main.screenScale)/2;
+				if(global.widescreenEnabled)
+				{
+					winMoveX = -winMoveX;
+				}
+				window_set_position(window_get_x()+winMoveX,window_get_y());
+				
+				screenBlackout = 3;
+				if(!window_get_fullscreen())
+				{
+					screenBlackout = 15;
+				}
 				break;
 			}
 			case 3:
+			{
+				//VSync
+				global.vsync = !global.vsync;
+				display_reset(0,global.vsync);
+				screenBlackout = 3;
+				break;
+			}
+			case 4:
 			{
 				//Upscale mode
 				global.upscale = scr_wrap(global.upscale+select+moveX,0,6);
 				break;
 			}
-			case 4:
+			case 5:
 			{
 				//Show/Hide HUD
 				global.hudDisplay = !global.hudDisplay;
 				break;
 			}
-			case 5:
+			case 6:
 			{
 				//Show/Hide Minimap
 				global.hudMap = !global.hudMap;
 				break;
 			}
-			case 6:
+			case 7:
 			{
 				global.waterDistortion = !global.waterDistortion;
 				break;
 			}
-			case 7:
+			case 8:
 			{
 				//Back
 				menuClosing = true;
@@ -108,6 +140,7 @@ if(screenFade >= 1 && !menuClosing)
 		currentOption = array(
 		global.fullScreen,
 		global.screenScale,
+		global.widescreenEnabled,
 		global.vsync,
 		global.upscale,
 		global.hudDisplay,
@@ -116,6 +149,7 @@ if(screenFade >= 1 && !menuClosing)
 		ini_open("settings.ini");
 		ini_write_real("Display", "fullscreen", global.fullScreen);
 		ini_write_real("Display", "scale", global.screenScale);
+		ini_write_real("Display", "widescreen", global.widescreenEnabled);
 		ini_write_real("Display", "vsync", global.vsync);
 		ini_write_real("Display", "upscale", global.upscale);
 		ini_write_real("Display", "hud", global.hudDisplay);
@@ -134,12 +168,7 @@ if(screenFade >= 1 && !menuClosing)
 
 if(menuClosing)
 {
-	var rate = 0.25;
-	if(!obj_PauseMenu.isPaused)
-	{
-		rate = 0.1;
-	}
-	screenFade = max(screenFade - rate, 0);
+	screenFade = max(screenFade - 0.1, 0);
 	if(screenFade <= 0)
 	{
 		instance_destroy();
@@ -147,7 +176,7 @@ if(menuClosing)
 }
 else
 {
-	screenFade = min(screenFade + 0.25, 1);
+	screenFade = min(screenFade + 0.1, 1);
 }
 
 rRight = !cRight;

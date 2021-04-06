@@ -6,11 +6,11 @@ if(surface_exists(transSurf))
     {
         with(obj_Player)
         {
-            scr_PreDrawPlayer(obj_Transition.samusX,obj_Transition.samusY,0,1);
+            PreDrawPlayer(obj_Transition.samusX,obj_Transition.samusY,0,1);
             pal_swap_set(palShader,palIndex,palIndex2,palDif,false);
-            scr_DrawPlayer(obj_Transition.samusX,obj_Transition.samusY,rotation,1);
+            DrawPlayer(obj_Transition.samusX,obj_Transition.samusY,rotation,1);
             shader_reset();
-            scr_PostDrawPlayer(obj_Transition.samusX,obj_Transition.samusY,0,1);
+            PostDrawPlayer(obj_Transition.samusX,obj_Transition.samusY,0,1);
             water_init(0);
         }
     }

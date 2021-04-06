@@ -5,6 +5,16 @@ if(global.gamePaused)
 	exit;
 }
 
+if(setOldPoses == 0)
+{
+	for(var i = 0; i < 10; i++)
+	{
+		oldPosX[i] = x;
+		oldPosY[i] = y;
+	}
+	setOldPoses = 1;
+}
+
 if(frozen <= 0)
 {
 	grounded = ((collision_line(bbox_left,bbox_bottom+1,bbox_right,bbox_bottom+1,obj_Tile,true,true) || 
@@ -327,11 +337,6 @@ if(frozen <= 0)
 			
 			if(!flag)
 			{
-				var b_rot = 0,
-					r_rot = 90,
-					t_rot = 180,
-					l_rot = 270;
-		
 				var rot = rotation;
 				if(dirY < 0)
 				{
@@ -339,23 +344,19 @@ if(frozen <= 0)
 					{
 						if(collideX)
 						{
-							rotation = l_rot;
 							image_xscale = -1 * abs(image_xscale);
 						}
 						else if(collideY)
 						{
-							rotation = t_rot;
 							image_xscale = 1 * abs(image_xscale);
 						}
 					}
 					else if(collideY)
 					{
-						rotation = t_rot;
 						image_xscale = -1 * abs(image_xscale);
 					}
 					else if(collideX)
 					{
-						rotation = r_rot;
 						image_xscale = 1 * abs(image_xscale);
 					}
 				}
@@ -363,71 +364,126 @@ if(frozen <= 0)
 				{
 					if(collideY)
 					{
-						rotation = b_rot;
 						image_xscale = -1 * abs(image_xscale);
 					}
 					else if(collideX)
 					{
-						rotation = l_rot;
 						image_xscale = 1 * abs(image_xscale);
 					}
 				}
 				else if(collideX)
 				{
-					rotation = r_rot;
 					image_xscale = -1 * abs(image_xscale);
 				}
 				else if(collideY)
 				{
-					rotation = b_rot;
 					image_xscale = 1 * abs(image_xscale);
 				}
-		
-				var br_slope_rot = 45,
-					tr_slope_rot = 135,
-					tl_slope_rot = 225,
-					bl_slope_rot = 315;
+				
+				var margin = 2;
 				var offY = 0;
-				var bottom = place_collide(0,2),
-					left = place_collide(-2,0),
-					top = place_collide(0,-2),
-					right = place_collide(2,0);
+				
+				var dlist = ds_list_create();
+				var col = collision_rectangle_list(bbox_left-margin,bbox_top-margin,bbox_right+margin,bbox_bottom+margin,obj_Tile,true,true,dlist,true);
+				for(var i = 0; i < col; i++)
+				{
+					var tile = dlist[| i];
+					if(instance_exists(tile))
+					{
+						var xx = clamp(x,tile.bbox_left,tile.bbox_right);
+						var yy = clamp(y,tile.bbox_top,tile.bbox_bottom);
+						
+						rotation = point_direction(x,y,xx,yy) + 90;
+						offY = 2.9;
+					}
+				}
+				ds_list_destroy(dlist);
+				
+				var bottom = place_collide(0,margin),
+					left = place_collide(-margin,0),
+					top = place_collide(0,-margin),
+					right = place_collide(margin,0);
+				
+				var margin2 = 16;
+				if(bottom)
+				{
+					var ly = 0, ry = 0;
+					while(!position_meeting(bbox_left,bbox_bottom+ly,obj_Tile) && ly < margin2)
+					{
+						ly++;
+					}
+					while(!position_meeting(bbox_right,bbox_bottom+ry,obj_Tile) && ry < margin2)
+					{
+						ry++;
+					}
+					if(ly < margin2 && ry < margin2)
+					{
+						rotation = roundedAngle(bbox_left,bbox_bottom+ly,bbox_right,bbox_bottom+ry);
+						offY = 2.9;
+					}
+				}
 				if(left)
 				{
-					if(bottom)
+					var tx = 0, bx = 0;
+					while(!position_meeting(bbox_left-tx,bbox_top,obj_Tile) && tx < margin2)
 					{
-						rotation = bl_slope_rot;
-						offY = 3;
+						tx++;
 					}
-					if(top)
+					while(!position_meeting(bbox_left-bx,bbox_bottom,obj_Tile) && bx < margin2)
 					{
-						rotation = tl_slope_rot;
-						offY = 3;
+						bx++;
+					}
+					if(tx < margin2 && bx < margin2)
+					{
+						rotation = roundedAngle(bbox_left-tx,bbox_top,bbox_left-bx,bbox_bottom);
+						offY = 2.9;
 					}
 				}
 				if(right)
 				{
-					if(bottom)
+					var bx = 0, tx = 0;
+					while(!position_meeting(bbox_right+bx,bbox_bottom,obj_Tile) && bx < margin2)
 					{
-						rotation = br_slope_rot;
-						offY = 3;
+						bx++;
 					}
-					if(top)
+					while(!position_meeting(bbox_right+tx,bbox_top,obj_Tile) && tx < margin2)
 					{
-						rotation = tr_slope_rot;
-						offY = 3;
+						tx++;
+					}
+					if(tx < margin2 && bx < margin2)
+					{
+						rotation = roundedAngle(bbox_right+bx,bbox_bottom,bbox_right+tx,bbox_top);
+						offY = 2.9;
 					}
 				}
-				if(offsetY < offY)
+				if(top)
 				{
-					offsetY = min(offsetY+1,offY);
+					var ry = 0, ly = 0;
+					while(!position_meeting(bbox_right,bbox_top-ry,obj_Tile) && ry < margin2)
+					{
+						ry++;
+					}
+					while(!position_meeting(bbox_left,bbox_top-ly,obj_Tile) && ly < margin2)
+					{
+						ly++;
+					}
+					if(ly < margin2 && ry < margin2)
+					{
+						rotation = roundedAngle(bbox_right,bbox_top-ry,bbox_left,bbox_top-ly);
+						offY = 2.9;
+					}
+				}
+				
+				/*if(offsetY < offY)
+				{
+					offsetY = min(offsetY+0.2,offY);
 				}
 				else
 				{
-					offsetY = max(offsetY-1,offY);
-				}
+					offsetY = max(offsetY-0.2,offY);
+				}*/
 		
-				var rot2 = rotation;
+				var rot2 = scr_round(rotation);
 				rotation = rot;
 				if(rotation > 360)
 				{
@@ -447,11 +503,7 @@ if(frozen <= 0)
 					}
 					else
 					{
-						rotation -= rotRate;
-						if(rotation < rot2)
-						{
-							rotation = rot2;
-						}
+						rotation = max(rotation-rotRate,rot2);
 					}
 				}
 				if(rotation < rot2)
@@ -462,18 +514,24 @@ if(frozen <= 0)
 					}
 					else
 					{
-						rotation += rotRate;
-						if(rotation > rot2)
-						{
-							rotation = rot2;
-						}
+						rotation = min(rotation+rotRate,rot2);
 					}
+				}
+				
+				if(offY > 0)
+				{
+					var rot4 = scr_wrap(rotation*2,0,360);
+					offsetY = abs(offY*dsin(rot4));
+				}
+				else
+				{
+					offsetY = max(offsetY-1,0);
 				}
 			}
 			var speed2 = mSpeed;
 			if(!place_collide(speedCheck*dirX,speedCheck*dirY) && !fullSpeedOnSlopes)
 			{
-				speed2 = lengthdir_x(mSpeed,45);
+				//speed2 = lengthdir_x(mSpeed,45);
 			}
 			velX = speed2 * dirX;
 			velY = speed2 * dirY;
@@ -516,7 +574,7 @@ if(!friendly && damage > 0 && !frozen && !dead)
     var player = instance_place(x,y,obj_Player);
     if(instance_exists(player))
     {
-        if (player.immuneTime <= 0 && !player.isScrewAttacking && !player.isSpeedBoosting)
+        if (player.immuneTime <= 0 && !player.isChargeSomersaulting && !player.isScrewAttacking && !player.isSpeedBoosting)
         {
             //var ang = point_direction(x,y,obj_Samus.x,obj_Samus.y);
             var ang = 45;
@@ -539,3 +597,15 @@ if(!friendly && damage > 0 && !frozen && !dead)
     }
 }
 #endregion
+
+if(setOldPoses > 0)
+{
+	for(var i = array_length(oldPosX)-1; i > 0; i--)
+	{
+		oldPosX[i] = oldPosX[i-1];
+		oldPosY[i] = oldPosY[i-1];
+	}
+	oldPosX[0] = x;
+	oldPosY[0] = y;
+	setOldPoses = 2;
+}

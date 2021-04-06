@@ -6,7 +6,7 @@ if(isWave)
 	layer = layer_get_id("Projectiles_fg");
 }
 
-//water_update(isWave,x-xprevious,y-yprevious);
+water_update(isWave,x-xprevious,y-yprevious);
 
 var pNum = 7,
 	pType = -1;
@@ -82,7 +82,17 @@ if(!global.gamePaused)
 	}
 	else
 	{
-		//bubbles?
+		var x1 = bbox_left+2, x2 = bbox_right-1,
+            y1 = bbox_top+2, y2 = bbox_bottom-1;
+        var D = instance_create_layer(random_range(x1,x2),random_range(y1,y2),"Liquids_fg",obj_WaterBubble);
+        if(!isPlasma && !isCharge)
+        {
+            D.sprite_index = sprt_WaterBubbleTiny;
+        }
+        D.Delete = 1;
+        D.CanSpread = choose(0,1);
+        D.Alpha = .7 + random(.2);
+        D.MaxSpeed /= (1 + random(.3));
 	}
 }
 

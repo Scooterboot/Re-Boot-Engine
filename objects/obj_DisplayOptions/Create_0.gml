@@ -2,6 +2,9 @@
 
 screenFade = 0;
 menuClosing = false;
+screenBlackout = 0;
+
+surf = surface_create(global.resWidth,global.resHeight);
 
 header[0] = "SCREEN OPTIONS";
 header[1] = "HUD OPTIONS";
@@ -10,6 +13,7 @@ header[2] = "ENVIRONMENT OPTIONS";
 option = array(
 "WINDOW MODE",
 "DISPLAY SCALE",
+"WIDESCREEN",
 "V-SYNC",
 "UPSCALING MODE",
 "HUD DISPLAY",
@@ -20,6 +24,7 @@ option = array(
 currentOption = array(
 global.fullScreen,
 global.screenScale,
+global.widescreenEnabled,
 global.vsync,
 global.upscale,
 global.hudDisplay,
@@ -36,30 +41,34 @@ currentOptionName[2,0] = "DISABLED";
 currentOptionName[2,1] = "ENABLED";
 
 currentOptionName[3,0] = "DISABLED";
-currentOptionName[3,1] = "LINEAR";
-currentOptionName[3,2] = "HQ4X";
-currentOptionName[3,3] = "5XBR A";
-currentOptionName[3,4] = "5XBR B";
-currentOptionName[3,5] = "5XBR C";
-currentOptionName[3,6] = "SCANLINES";
+currentOptionName[3,1] = "ENABLED";
 
-currentOptionName[4,0] = "HIDE";
-currentOptionName[4,1] = "SHOW";
+currentOptionName[4,0] = "DISABLED";
+currentOptionName[4,1] = "LINEAR";
+currentOptionName[4,2] = "HQ4X";
+currentOptionName[4,3] = "5XBR A";
+currentOptionName[4,4] = "5XBR B";
+currentOptionName[4,5] = "5XBR C";
+currentOptionName[4,6] = "SCANLINES";
 
 currentOptionName[5,0] = "HIDE";
 currentOptionName[5,1] = "SHOW";
 
-currentOptionName[6,0] = "DISABLED";
-currentOptionName[6,1] = "ENABLED";
+currentOptionName[6,0] = "HIDE";
+currentOptionName[6,1] = "SHOW";
+
+currentOptionName[7,0] = "DISABLED";
+currentOptionName[7,1] = "ENABLED";
 
 optionTip[0] = "Switch between Full Screen and Windowed Mode.";
 optionTip[1] = "Sets the size of the Game Window, preserving the aspect ratio.";
-optionTip[2] = "Vertical Sync" + "\n" + "Eliminates tearing (might be slow).";
-optionTip[3] = "Experimental" + "\n" + "Choose between a variety of upscaling modes that smooth out rough pixel edges.";
-optionTip[4] = "Show or hide the Heads-Up Display during gameplay.";
-optionTip[5] = "Show or hide the minimap.";
-optionTip[6] = "Water distorts the environment (might be slow).";
-optionTip[7] = "Exit Display Options Menu";
+optionTip[2] = "Experimental" + "\n" + "Enables widescreen.";
+optionTip[3] = "Vertical Sync" + "\n" + "Eliminates tearing (might be slow).";
+optionTip[4] = "Experimental" + "\n" + "Choose between a variety of upscaling modes that smooth out rough pixel edges.";
+optionTip[5] = "Show or hide the Heads-Up Display during gameplay.";
+optionTip[6] = "Show or hide the minimap.";
+optionTip[7] = "Water distorts the environment (might be slow).";
+optionTip[8] = "Exit Display Options Menu";
 
 
 cursorFrame = 0;

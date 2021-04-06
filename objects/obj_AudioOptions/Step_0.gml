@@ -130,12 +130,7 @@ if(screenFade >= 1 && !menuClosing)
 
 if(menuClosing)
 {
-	var rate = 0.25;
-	if(!obj_PauseMenu.isPaused)
-	{
-		rate = 0.1;
-	}
-	screenFade = max(screenFade - rate, 0);
+	screenFade = max(screenFade - 0.1, 0);
 	if(screenFade <= 0)
 	{
 		instance_destroy();
@@ -143,7 +138,7 @@ if(menuClosing)
 }
 else
 {
-	screenFade = min(screenFade + 0.25, 1);
+	screenFade = min(screenFade + 0.1, 1);
 }
 
 rRight = !cRight;

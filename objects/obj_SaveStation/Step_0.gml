@@ -28,7 +28,7 @@ if(instance_exists(obj_Player) && place_meeting(x,y,obj_Player) &&
 		else
 		{
 			var xx = x,
-				yy = bbox_bottom-42;
+				yy = bbox_bottom-41;
 			if(saving == maxSave)
 			{
 				obj_Player.state = State.Elevator;

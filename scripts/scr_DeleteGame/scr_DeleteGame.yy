@@ -1,8 +1,12 @@
 {
-    "id": "8db41373-28aa-4be2-913b-2e787c103ad8",
-    "modelName": "GMScript",
-    "mvc": "1.0",
-    "name": "scr_DeleteGame",
-    "IsCompatibility": false,
-    "IsDnD": false
+  "isDnD": false,
+  "isCompatibility": false,
+  "parent": {
+    "name": "SaveFile",
+    "path": "folders/Scripts/Main/SaveFile.yy",
+  },
+  "resourceVersion": "1.0",
+  "name": "scr_DeleteGame",
+  "tags": [],
+  "resourceType": "GMScript",
 }

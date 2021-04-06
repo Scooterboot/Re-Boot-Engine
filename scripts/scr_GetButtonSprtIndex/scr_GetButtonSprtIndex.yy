@@ -1,8 +1,12 @@
 {
-    "id": "bc2d2ea5-e425-4e97-866b-238e950ff978",
-    "modelName": "GMScript",
-    "mvc": "1.0",
-    "name": "scr_GetButtonSprtIndex",
-    "IsCompatibility": false,
-    "IsDnD": false
+  "isDnD": false,
+  "isCompatibility": false,
+  "parent": {
+    "name": "Main",
+    "path": "folders/Scripts/Main.yy",
+  },
+  "resourceVersion": "1.0",
+  "name": "scr_GetButtonSprtIndex",
+  "tags": [],
+  "resourceType": "GMScript",
 }

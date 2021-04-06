@@ -23,6 +23,15 @@ if(room == rm_MainMenu)
 		exit;
 	}
 	
+	if(currentScreen == MainScreen.TitleIntro || currentScreen == MainScreen.Title)
+	{
+		camera_set_view_pos(view_camera[0],room_width/2 - global.resWidth/2,0);
+	}
+	else
+	{
+		camera_set_view_pos(view_camera[0],0,0);
+	}
+	
 	if(currentScreen != targetScreen)
 	{
 		if(targetScreen == MainScreen.FileSelect && pressStartAnim < 40)
@@ -197,17 +206,34 @@ if(room == rm_MainMenu)
 			{
 				if(file_exists(scr_GetFileName(i)))
 				{
-					var _wrapper = scr_LoadJSONFromFile(scr_GetFileName(i));
-					var _list = _wrapper[? "ROOT"];
+					try
+					{
+						var _wrapper = scr_LoadJSONFromFile(scr_GetFileName(i));
+						var _list = _wrapper[? "ROOT"];
 					
-					var _map = _list[| 0];
+						var _map = _list[| 0];
 					
-					fileEnergyMax[i] = _map[? "energyMax"];
-					fileEnergy[i] = _map[? "energy"];
+						fileEnergyMax[i] = _map[? "energyMax"];
+						fileEnergy[i] = _map[? "energy"];
 					
-					var _worldFlags_map = _list[| 2];
-					fileTime[i] = _worldFlags_map[? "currentPlayTime"];
-					filePercent[i] = 0; // load file percent
+						var _worldFlags_map = _list[| 2];
+						fileTime[i] = _worldFlags_map[? "currentPlayTime"];
+						filePercent[i] = 0; // load file percent
+					}
+					catch(_exception)
+					{
+						show_debug_message(_exception.message);
+						show_debug_message(_exception.longMessage);
+						show_debug_message(_exception.script);
+						show_debug_message(_exception.stacktrace);
+					}
+					/*finally
+					{
+						fileEnergyMax[i] = -2;
+						fileEnergy[i] = -2;
+						filePercent[i] = -2;
+						fileTime[i] = -2;
+					}*/
 				}
 				else
 				{

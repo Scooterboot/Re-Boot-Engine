@@ -1,5 +1,4 @@
-/// @description Insert description here
-// You can write your code in this editor
+/// @description Camera movement
 if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 {
 	var xx = x + (global.resWidth/2),
@@ -135,14 +134,35 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 	
 	fVelX = velX;
 	
-	var col = camera_collide(0,0);
-	if(instance_exists(col) && (col.image_angle == 90 || (col.image_angle == 270 && col.image_yscale < 0)) && playerX > col.x+(16*abs(col.image_yscale)))
+	var _list = ds_list_create();
+	var _num = camera_collide(0,0,_list);
+	if(_num > 0)
 	{
-		fVelX = min(col.x+(16*abs(col.image_yscale)) - x, 1+abs(playerX-prevPlayerX));
-	}
-	else if(instance_exists(col) && (col.image_angle == 270 || (col.image_angle == 90 && col.image_yscale < 0)) && playerX < col.x-(16*abs(col.image_yscale)))
-	{
-		fVelX = max(col.x-(16*abs(col.image_yscale)) - (x+global.resWidth), -(1+abs(playerX-prevPlayerX)));
+		for(var i = 0; i < _num; i++)
+		{
+			var col = _list[| i];
+			if(instance_exists(col) && (col.image_angle == 90 || (col.image_angle == 270 && col.image_yscale < 0)) && playerX > col.x+(16*abs(col.image_yscale)))
+			{
+				fVelX = min(col.x+(16*abs(col.image_yscale)) - x, 1+abs(playerX-prevPlayerX));
+				break;
+			}
+			else if(instance_exists(col) && (col.image_angle == 270 || (col.image_angle == 90 && col.image_yscale < 0)) && playerX < col.x-(16*abs(col.image_yscale)))
+			{
+				fVelX = max(col.x-(16*abs(col.image_yscale)) - (x+global.resWidth), -(1+abs(playerX-prevPlayerX)));
+				break;
+			}
+			else
+			{
+				if((xx+fVelX) < (playerX - camLimitX))
+				{
+					fVelX = min((playerX-camLimitX) - xx, 1+abs((playerX-prevPlayerX) + velX));
+				}
+				if((xx+fVelX) > (playerX + camLimitX))
+				{
+					fVelX = max((playerX+camLimitX) - xx,-(1+abs((playerX-prevPlayerX) + velX)));
+				}
+			}
+		}
 	}
 	else
 	{
@@ -155,39 +175,68 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 			fVelX = max((playerX+camLimitX) - xx,-(1+abs((playerX-prevPlayerX) + velX)));
 		}
 	}
-	var colX = camera_collide(max(abs(fVelX),1)*sign(fVelX),0);
-	if(instance_exists(colX) && (
-	(fVelX < 0 && (colX.image_angle == 90 || (colX.image_angle == 270 && colX.image_yscale < 0)) && playerX > colX.x+(16*abs(colX.image_yscale))) ||
-	(fVelX > 0 && (colX.image_angle == 270 || (colX.image_angle == 90 && colX.image_yscale < 0)) && playerX < colX.x-(16*abs(colX.image_yscale)))))
+	ds_list_clear(_list);
+	
+	_num = camera_collide(max(abs(fVelX),1)*sign(fVelX),0,_list);
+	for(var i = 0; i < _num; i++)
 	{
-		if(fVelX > 0)
+		var colX = _list[| i];
+		if(instance_exists(colX) && (
+		(fVelX < 0 && (colX.image_angle == 90 || (colX.image_angle == 270 && colX.image_yscale < 0)) && playerX > colX.x+(16*abs(colX.image_yscale))) ||
+		(fVelX > 0 && (colX.image_angle == 270 || (colX.image_angle == 90 && colX.image_yscale < 0)) && playerX < colX.x-(16*abs(colX.image_yscale)))))
 		{
-			x = scr_floor(x);
+			if(fVelX > 0)
+			{
+				x = scr_floor(x);
+			}
+			if(fVelX < 0)
+			{
+				x = scr_ceil(x);
+			}
+			var xnum = abs(fVelX)+2;
+			//while(!camera_collide(sign(fVelX),0) && xnum > 0)
+			while(!collision_rectangle(x+sign(fVelX),y,x+sign(fVelX)+global.resWidth-1,y+global.resHeight-1,colX,false,true) && xnum > 0)
+			{
+				x += sign(fVelX);
+				xnum--;
+			}
+			fVelX = 0;
 		}
-		if(fVelX < 0)
-		{
-			x = scr_ceil(x);
-		}
-		var xnum = abs(fVelX)+2;
-		while(!camera_collide(sign(fVelX),0) && xnum > 0)
-		{
-			x += sign(fVelX);
-			xnum--;
-		}
-		fVelX = 0;
 	}
+	ds_list_clear(_list);
 	x += fVelX;
+	
 	
 	fVelY = velY;
 	
-	col = camera_collide(0,0);
-	if(instance_exists(col) && (col.image_angle == 0 || (col.image_angle == 180 && col.image_yscale < 0)) && playerY > col.y+(16*abs(col.image_yscale)))
+	_num = camera_collide(0,0,_list);
+	if(_num > 0)
 	{
-		fVelY = min(col.y+(16*abs(col.image_yscale)) - y, 1+abs(playerY-prevPlayerY));
-	}
-	else if(instance_exists(col) && (col.image_angle == 180 || (col.image_angle == 0 && col.image_yscale < 0)) && playerY < col.y-(16*abs(col.image_yscale)))
-	{
-		fVelY = max(col.y-(16*abs(col.image_yscale)) - (y+global.resHeight), -(1+abs(playerY-prevPlayerY)));
+		for(var i = 0; i < _num; i++)
+		{
+			col = _list[| i];
+			if(instance_exists(col) && (col.image_angle == 0 || (col.image_angle == 180 && col.image_yscale < 0)) && playerY > col.y+(16*abs(col.image_yscale)))
+			{
+				fVelY = min(col.y+(16*abs(col.image_yscale)) - y, 1+abs(playerY-prevPlayerY));
+				break;
+			}
+			else if(instance_exists(col) && (col.image_angle == 180 || (col.image_angle == 0 && col.image_yscale < 0)) && playerY < col.y-(16*abs(col.image_yscale)))
+			{
+				fVelY = max(col.y-(16*abs(col.image_yscale)) - (y+global.resHeight), -(1+abs(playerY-prevPlayerY)));
+				break;
+			}
+			else
+			{
+				if((yy+fVelY) < (playerY - camLimitY))
+				{
+					fVelY = min((playerY-camLimitY) - yy, 1+abs((playerY-prevPlayerY) + velY));
+				}
+				if((yy+fVelY) > (playerY + camLimitY))
+				{
+					fVelY = max((playerY+camLimitY) - yy,-(1+abs((playerY-prevPlayerY) + velY)));
+				}
+			}
+		}
 	}
 	else
 	{
@@ -200,27 +249,35 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 			fVelY = max((playerY+camLimitY) - yy,-(1+abs((playerY-prevPlayerY) + velY)));
 		}
 	}
-	var colY = camera_collide(0,max(abs(fVelY),1)*sign(fVelY));
-	if(instance_exists(colY) && (
-	(fVelY < 0 && (colY.image_angle == 0 || (colY.image_angle == 180 && colY.image_yscale < 0)) && playerY > colY.y+(16*abs(colY.image_yscale))) ||
-	(fVelY > 0 && (colY.image_angle == 180 || (colY.image_angle == 0 && colY.image_yscale < 0)) && playerY < colY.y-(16*abs(colY.image_yscale)))))
+	ds_list_clear(_list);
+	
+	_num = camera_collide(0,max(abs(fVelY),1)*sign(fVelY),_list);
+	for(var i = 0; i < _num; i++)
 	{
-		if(fVelY > 0)
+		var colY = _list[| i];
+		if(instance_exists(colY) && (
+		(fVelY < 0 && (colY.image_angle == 0 || (colY.image_angle == 180 && colY.image_yscale < 0)) && playerY > colY.y+(16*abs(colY.image_yscale))) ||
+		(fVelY > 0 && (colY.image_angle == 180 || (colY.image_angle == 0 && colY.image_yscale < 0)) && playerY < colY.y-(16*abs(colY.image_yscale)))))
 		{
-			y = scr_floor(y);
+			if(fVelY > 0)
+			{
+				y = scr_floor(y);
+			}
+			if(fVelY < 0)
+			{
+				y = scr_ceil(y);
+			}
+			var ynum = abs(fVelY)+2;
+			//while(!camera_collide(0,sign(fVelY)) && ynum > 0)
+			while(!collision_rectangle(x,y+sign(fVelY),x+global.resWidth-1,y+sign(fVelY)+global.resHeight-1,colY,false,true) && ynum > 0)
+			{
+				y += sign(fVelY);
+				ynum--;
+			}
+			fVelY = 0;
 		}
-		if(fVelY < 0)
-		{
-			y = scr_ceil(y);
-		}
-		var ynum = abs(fVelY)+2;
-		while(!camera_collide(0,sign(fVelY)) && ynum > 0)
-		{
-			y += sign(fVelY);
-			ynum--;
-		}
-		fVelY = 0;
 	}
+	ds_list_destroy(_list);
 	y += fVelY;
 	
 	prevPlayerX = playerX;

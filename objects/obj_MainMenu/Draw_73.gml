@@ -31,7 +31,7 @@ if(currentScreen == MainScreen.Title)
 }
 if(currentScreen == MainScreen.FileSelect)
 {
-	draw_sprite_tiled_ext(bg_Menu2,0,scr_round(xx),scr_round(yy),1,1,c_white,1);
+	draw_sprite_tiled_ext(bg_Menu2,0,scr_round(xx)+ww/2-global.ogResWidth/2,scr_round(yy),1,1,c_white,1);
 	
 	cursorFrameCounter++;
 	if(cursorFrameCounter > 5)
@@ -52,23 +52,27 @@ if(currentScreen == MainScreen.FileSelect)
 	var oX = scr_round(ww/2 - 96),
 		oY = scr_round(hh/2);
 				
-	for(var o = 3; o < array_length_1d(option); o++)
+	for(var o = 3; o < array_length(option); o++)
 	{
 		var oY2 = oY + (o*space);
 					
 		var col = c_black,
-			alph = 0.5;
+			alph = 0.5,
+			indent = 0;
 		if(optionPos == o)
 		{
 			col = c_white;
 			alph = 0.15;
+			indent = 4;
 			
-			draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX-4,oY2+string_height(option[o])/2,1,1,0,c_white,1);
+			draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX+indent-4,oY2+string_height(option[o])/2,1,1,0,c_white,1);
 		}
-		scr_DrawOptionText(oX,oY2,option[o],c_white,1,string_width(option[o])+1,col,alph);
+		scr_DrawOptionText(oX+indent,oY2,option[o],c_white,1,string_width(option[o])+1,col,alph);
 	}
 	
-	oX = 18;
+	//oX = 18;
+	oX = ww/2 - 110;
+	var oX2 = 18;
 	oY = 48;
 	space = 32;
 	
@@ -120,22 +124,22 @@ if(currentScreen == MainScreen.FileSelect)
 			if(fileEnergy[i] < 0)
 			{
 				draw_set_font(GUIFont);
-				scr_DrawOptionText(oX+(ww/2)-(string_width(noDataText)/2),oY2,noDataText,c_white,1,0,c_black,0);
+				scr_DrawOptionText(oX2+(ww/2)-(string_width(noDataText)/2),oY2,noDataText,c_white,1,0,c_black,0);
 			}
 			else
 			{
 				draw_set_font(GUIFontSmall);
-				scr_DrawOptionText(oX+(ww/2)-string_width(energyText)-2,oY2-string_height(timeText)+4,energyText,c_white,1,0,c_black,0);
+				scr_DrawOptionText(oX2+(ww/2)-string_width(energyText)-2,oY2-string_height(timeText)+4,energyText,c_white,1,0,c_black,0);
 				
 				draw_set_font(MenuFont);
 				var str = string(fileEnergy[i]);
 				str = string_char_at(str,string_length(str)-1)+string_char_at(str,string_length(str));
-				scr_DrawOptionText(oX+(ww/2)-(string_width(str)/2)-20,oY2+2,str,c_white,1,0,c_black,0);
+				scr_DrawOptionText(oX2+(ww/2)-(string_width(str)/2)-20,oY2+2,str,c_white,1,0,c_black,0);
 				
 				
 				var energyTanks = floor(fileEnergyMax[i] / 100),
 					statEnergyTanks = floor(fileEnergy[i] / 100);
-				var tx = oX+(ww/2),
+				var tx = oX2+(ww/2),
 					ty = oY2-4;
 				if(energyTanks > 0)
 				{
@@ -165,7 +169,7 @@ if(currentScreen == MainScreen.FileSelect)
 			{
 				if(j <= 0 || exists)
 				{
-					var sx = scr_ceil(oX+(ww/2)-(string_width(subOption[j])/2)+10),
+					var sx = scr_ceil(oX2+(ww/2)-(string_width(subOption[j])/2)+10),
 						sy = oY2;
 					if(exists)
 					{

@@ -43,6 +43,9 @@ if(debug)
         draw_text_transformed(xx+10,yy+60,"lastState: "+string(lastState),1,1,0);
         draw_text_transformed(xx+10,yy+70,"velX: "+string(velX),1,1,0);
         draw_text_transformed(xx+10,yy+80,"velY: "+string(velY),1,1,0);
+		
+        draw_text_transformed(xx+10,yy+90,"obj_Camera.y: "+string(obj_Camera.y),1,1,0);
+        draw_text_transformed(xx+10,yy+100,"camera[0] y: "+string(camera_get_view_y(view_camera[0])),1,1,0);
     }
 }
 

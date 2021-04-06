@@ -1,96 +1,103 @@
-application_surface_draw_enable(false); //disable default application surface drawing
+function scr_MainInitialize()
+{
+	application_surface_draw_enable(false); //disable default application surface drawing
 
-global.gpSlot = -1;			//gamepad slot variable
-global.gpButtonNum = 19;	//number of gamepad buttons variable
+	global.gpSlot = -1;			//gamepad slot variable
+	global.gpButtonNum = 19;	//number of gamepad buttons variable
 
-scr_LoadKeyboard();	//load keyboard bindings
-scr_LoadGamepad();	//load gamepad bindings
+	scr_LoadKeyboard();	//load keyboard bindings
+	scr_LoadGamepad();	//load gamepad bindings
 
 #region Settings
-ini_open("settings.ini"); //load display, audio, and control settings
-global.HUD = ini_read_real("Controls", "hud style", 0);							//load HUD control setting
-global.aimStyle = ini_read_real("Controls", "aim style", 0);					//load aim control setting
-global.autoDash = ini_read_real("Controls", "auto dash", false);				//load dash control setting
-global.quickClimb = ini_read_real("Controls", "quick climb", true);				//load quick climb control setting
+	ini_open("settings.ini"); //load display, audio, and control settings
+	global.HUD = ini_read_real("Controls", "hud style", 0);							//load HUD control setting
+	global.aimStyle = ini_read_real("Controls", "aim style", 0);					//load aim control setting
+	global.autoDash = ini_read_real("Controls", "auto dash", false);				//load dash control setting
+	global.quickClimb = ini_read_real("Controls", "quick climb", true);				//load quick climb control setting
 
-global.gripStyle = ini_read_real("Controls", "grip control", 0);				//load power grip control setting
-global.grappleStyle = ini_read_real("Controls", "grapple control", 0);			//load grapple beam control setting
-global.spiderBallStyle = ini_read_real("Controls", "spiderball control", 0);	//load spider ball control setting
+	global.gripStyle = ini_read_real("Controls", "grip control", 0);				//load power grip control setting
+	global.grappleStyle = ini_read_real("Controls", "grapple control", 0);			//load grapple beam control setting
+	global.spiderBallStyle = ini_read_real("Controls", "spiderball control", 0);	//load spider ball control setting
 
 
-global.fullScreen = ini_read_real("Display", "fullscreen", false);				//load fullscreen setting
-global.screenScale = ini_read_real("Display", "scale", 3);						//load display scale setting
-global.vsync = ini_read_real("Display", "vsync", true);							//load vsync setting
-global.upscale = ini_read_real("Display", "upscale", 0);						//load upscale setting
-global.hudDisplay = ini_read_real("Display", "hud display", true);				//load display HUD setting
-global.hudMap = ini_read_real("Display", "hud map", true);						//load display map setting
-global.waterDistortion = ini_read_real("Display", "water distortion", true);	//load water distortion display setting
+	global.fullScreen = ini_read_real("Display", "fullscreen", false);				//load fullscreen setting
+	global.screenScale = ini_read_real("Display", "scale", 3);						//load display scale setting
+	global.widescreenEnabled = ini_read_real("Display", "widescreen", false);		//load widescreen setting
+	global.vsync = ini_read_real("Display", "vsync", true);							//load vsync setting
+	global.upscale = ini_read_real("Display", "upscale", 0);						//load upscale setting
+	global.hudDisplay = ini_read_real("Display", "hud display", true);				//load display HUD setting
+	global.hudMap = ini_read_real("Display", "hud map", true);						//load display map setting
+	global.waterDistortion = ini_read_real("Display", "water distortion", true);	//load water distortion display setting
 
-global.musicVolume = ini_read_real("Audio", "music", 0.5);						//load music volume config
-global.soundVolume = ini_read_real("Audio", "sound", 0.5);						//load sound volume config
-global.ambianceVolume = ini_read_real("Audio", "ambiance", 0.5);				//load ambiance volume config
-ini_close(); //done loading display, audio, and control settings
+	global.musicVolume = ini_read_real("Audio", "music", 0.5);						//load music volume config
+	global.soundVolume = ini_read_real("Audio", "sound", 0.5);						//load sound volume config
+	global.ambianceVolume = ini_read_real("Audio", "ambiance", 0.5);				//load ambiance volume config
+	ini_close(); //done loading display, audio, and control settings
 #endregion
 
-global.maxScreenScale = 1;
+	global.maxScreenScale = 1;
 
-global.resWidth = 256;
-global.resHeight = 224;
+	global.resWidth = 256;
+	global.resHeight = 224;
+	
+	global.wideResWidth = 400;
+	global.ogResWidth = 256;
 
-pal_swap_init_system(shd_pal_swapper); //initialize palette swapper system (Created by PixelatedPope)
+	pal_swap_init_system(shd_pal_swapper); //initialize palette swapper system (Created by PixelatedPope)
 
-global.roomTrans = false;	//variable that checks whether the player is transitioning from room to room
-global.gamePaused = false;	//variable that checks if the game is paused
+	global.roomTrans = false;	//variable that checks whether the player is transitioning from room to room
+	global.gamePaused = false;	//variable that checks if the game is paused
 
-global.currentPlayFile = 0; //file that is selected and will be saved over during gameplay
+	global.currentPlayFile = 0; //file that is selected and will be saved over during gameplay
 
-global.currentPlayTime = 0;
-global.currentItemPercent = 0;
+	global.currentPlayTime = 0;
+	global.currentItemPercent = 0;
 
-//initialize item variables
-//global.suit[1] = false;
-//global.misc[5] = false;
-//global.boots[3] = false;
-//global.beam[4] = false;
-//global.item[4] = false;
+	//initialize item variables
+	//global.suit[1] = false;
+	//global.misc[5] = false;
+	//global.boots[3] = false;
+	//global.beam[4] = false;
+	//global.item[4] = false;
 
-//initialize map and room variables
-global.rmMapSize = 256;
+	//initialize map and room variables
+	global.rmMapSize = 256;
 
-global.rmMapSprt = noone;
-global.rmMapX = 0;
-global.rmMapY = 0;
+	global.rmMapSprt = noone;
+	global.rmMapX = 0;
+	global.rmMapY = 0;
 
-global.mapReveal_Debug = scr_CreateMapRevealGrid(sprt_Map_DebugRooms);
+	global.mapReveal_Debug = scr_CreateMapRevealGrid(sprt_Map_DebugRooms);
 
-global.rmHeated = false;
+	global.rmHeated = false;
 
-//initialize sound variables
-global.prevShotSndIndex = noone;
-global.prevExplodeSnd = noone;
-global.breakSndCounter = 0;
+	//initialize sound variables
+	global.prevShotSndIndex = noone;
+	global.prevExplodeSnd = noone;
+	global.breakSndCounter = 0;
 
-//initialize music variables
-global.rmMusic = noone;
+	//initialize music variables
+	global.rmMusic = noone;
 
-global.musPrev = noone;
-global.musCurrent = noone;
-global.musNext = noone;
+	global.musPrev = noone;
+	global.musCurrent = noone;
+	global.musNext = noone;
 
 
-audio_group_load(audio_music);		//load music audio group
-audio_group_load(audio_sound);		//load sound audio group
-audio_group_load(audio_ambiance);	//load ambiance audio group
+	audio_group_load(audio_music);		//load music audio group
+	audio_group_load(audio_sound);		//load sound audio group
+	audio_group_load(audio_ambiance);	//load ambiance audio group
 
-audio_group_set_gain(audio_music,global.musicVolume,0);		//set default music volume
-audio_group_set_gain(audio_sound,global.soundVolume,0);		//set default sound volume
-audio_group_set_gain(audio_ambiance,global.ambianceVolume,0);	//set default sound volume
+	audio_group_set_gain(audio_music,global.musicVolume,0);		//set default music volume
+	audio_group_set_gain(audio_sound,global.soundVolume,0);		//set default sound volume
+	audio_group_set_gain(audio_ambiance,global.ambianceVolume,0);	//set default sound volume
 
-randomize(); //randomize seed for various random numbers
+	randomize(); //randomize seed for various random numbers
 
-room_goto(rm_MainMenu); //go to the main menu
+	room_goto(rm_MainMenu); //go to the main menu
 
-instance_create_depth(0,0,0,obj_MainMenu);
-instance_create_depth(0,0,0,obj_PauseMenu);
-instance_create_depth(0,0,0,obj_Particles);
-instance_create_depth(0,0,0,obj_Control);
+	instance_create_depth(0,0,0,obj_MainMenu);
+	instance_create_depth(0,0,0,obj_PauseMenu);
+	instance_create_depth(0,0,0,obj_Particles);
+	instance_create_depth(0,0,0,obj_Control);
+}

@@ -5,6 +5,15 @@
 //discord_update();
 
 
+if(global.widescreenEnabled)
+{
+	global.resWidth = global.wideResWidth;
+}
+else
+{
+	global.resWidth = global.ogResWidth;
+}
+
 if (view_camera[0] == -1)
 {
 	view_camera[0] = camera_create_view(0, 0, global.resWidth, global.resHeight);
@@ -40,7 +49,18 @@ else if(global.screenScale == 0)
 
 if(!window_get_fullscreen())
 {
-	window_set_size(global.resWidth*screenScale,global.resHeight*screenScale);
+	if(windowResizeTimer <= 0)
+	{
+		window_set_size(global.resWidth*screenScale,global.resHeight*screenScale);
+	}
+	else
+	{
+		windowResizeTimer--;
+	}
+}
+else
+{
+	windowResizeTimer = 10;
 }
 
 if(global.gpSlot != -1)

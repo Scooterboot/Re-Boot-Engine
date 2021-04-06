@@ -193,7 +193,7 @@ if(shaderFlash >= shaderFlashMax)
 	shaderFlash = 0;
 }
 
-scr_AfterImage(drawAfterImage,rotation,afterImgDelay,afterImageNum,afterImgAlphaMult);
+AfterImage(drawAfterImage,rotation,afterImgDelay,afterImageNum,afterImgAlphaMult);
 
 if(instance_exists(obj_PlayerEcho))
 {
@@ -203,13 +203,13 @@ if(instance_exists(obj_PlayerEcho))
 		with(echo)
 		{
 			pal_swap_set(palShader,palIndex,palIndex2,palDif,false);
-			scr_DrawPlayer(x,y,rotation,clamp(alpha*alpha2,0,1),false);
+			DrawEcho(x,y,rotation,clamp(alpha*alpha2,0,1));//,false);
 			shader_reset();
 		}
 	}
 }
 
-scr_PreDrawPlayer(x,y,0,1);
+PreDrawPlayer(x,y,0,1);
 
 if(InWater && !liquidMovement && suit[1])
 {
@@ -239,7 +239,7 @@ if(gravGlowAlpha > 0)
 		{
 			var gx = x+scr_ceil(lengthdir_x(1,i)*j),
 			gy = y+scr_ceil(lengthdir_y(1,i)*j);
-			scr_DrawPlayer(gx,gy,rotation,gravGlowAlpha*(0.5*(1/6)),false);
+			DrawPlayer(gx,gy,rotation,gravGlowAlpha*(0.5*(1/6)));//,false);
 		}
 	}
 	gpu_set_blendmode(bm_normal);
@@ -247,10 +247,10 @@ if(gravGlowAlpha > 0)
 }
 
 pal_swap_set(palShader,palIndex,palIndex2,palDif,false);
-scr_DrawPlayer(x,y,rotation,1);
+DrawPlayer(x,y,rotation,1);
 shader_reset();
 
-scr_PostDrawPlayer(x,y,0,1);
+PostDrawPlayer(x,y,0,1);
 
 if(!global.gamePaused)
 {

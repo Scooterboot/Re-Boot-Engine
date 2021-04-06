@@ -1,8 +1,12 @@
 {
-    "id": "0a1022df-eaa4-412d-bc26-782047c320db",
-    "modelName": "GMScript",
-    "mvc": "1.0",
-    "name": "scr_PlasmaDraw",
-    "IsCompatibility": false,
-    "IsDnD": false
+  "isDnD": false,
+  "isCompatibility": false,
+  "parent": {
+    "name": "Weapons",
+    "path": "folders/Scripts/Weapons.yy",
+  },
+  "resourceVersion": "1.0",
+  "name": "scr_PlasmaDraw",
+  "tags": [],
+  "resourceType": "GMScript",
 }

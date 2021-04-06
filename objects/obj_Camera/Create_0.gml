@@ -24,3 +24,8 @@ if(instance_exists(obj_Player))
 }
 prevPlayerX = playerX;
 prevPlayerY = playerY;
+
+function camera_collide(colX, colY, dsList)
+{
+	return collision_rectangle_list(x+colX, y+colY, x+colX+global.resWidth-1, y+colY+global.resHeight-1,obj_CamTile,false,true,dsList,false);
+}

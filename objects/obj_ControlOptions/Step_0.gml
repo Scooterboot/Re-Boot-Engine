@@ -397,12 +397,7 @@ controlButton[6] = controlKey[7];
 
 if(menuClosing)
 {
-	var rate = 0.25;
-	if(!obj_PauseMenu.isPaused)
-	{
-		rate = 0.075;
-	}
-	screenFade = max(screenFade - rate, 0);
+	screenFade = max(screenFade - 0.1, 0);
 	if(screenFade <= 0)
 	{
 		instance_destroy();
@@ -410,7 +405,7 @@ if(menuClosing)
 }
 else
 {
-	screenFade = min(screenFade + 0.25, 1);
+	screenFade = min(screenFade + 0.1, 1);
 }
 
 keySelectDelay = max(keySelectDelay - 1, 0);

@@ -3,6 +3,8 @@
 screenFade = 0;
 menuClosing = false;
 
+surf = surface_create(global.resWidth,global.resHeight);
+
 screen = 0;
 
 header[0] = "CONTROL OPTIONS";
@@ -95,7 +97,7 @@ advOptionTip[1,0] = "Hold [Up] or [Down] to reel up or down.";
 advOptionTip[1,1] = "Hold [Up] or [Down] without pressing [Left] or [Right] to reel up or down.";
 
 advOptionTip[2,0] = "Press any [Aim] button to activate.";
-advOptionTip[2,1] = "Hold any [Aim[ button to activate.";
+advOptionTip[2,1] = "Hold any [Aim] button to activate.";
 advOptionTip[2,2] = "Press [Down] while morphed to activate, press [Jump] to deactivate.";
 
 advOptionTip[3,0] = "Previous Control Options";
@@ -116,13 +118,13 @@ controlKey = array(
 "MENU - START","MENU - SELECT","MENU - CANCEL",
 "BACK");
 
-for(var i = 0; i < array_length_1d(global.key); i++)
+for(var i = 0; i < array_length(global.key); i++)
 {
 	currentControlKey[i] = global.key[i];
 }
-for(var i = 0; i < array_length_1d(global.key_m); i++)
+for(var i = 0; i < array_length(global.key_m); i++)
 {
-	currentControlKey[i+array_length_1d(global.key)] = global.key_m[i];
+	currentControlKey[i+array_length(global.key)] = global.key_m[i];
 }
 
 controlButton = array(
@@ -134,13 +136,13 @@ controlButton = array(
 "BACK");
 
 currentControlButton = array(global.gp_usePad,global.gp_useStick,global.gp_deadZone);
-for(var i = 0; i < array_length_1d(global.gp); i++)
+for(var i = 0; i < array_length(global.gp); i++)
 {
 	currentControlButton[i+3] = global.gp[i];
 }
-for(var i = 0; i < array_length_1d(global.gp_m); i++)
+for(var i = 0; i < array_length(global.gp_m); i++)
 {
-	currentControlButton[i+3+array_length_1d(global.gp)] = global.gp_m[i];
+	currentControlButton[i+3+array_length(global.gp)] = global.gp_m[i];
 }
 
 selectedKey = -1;

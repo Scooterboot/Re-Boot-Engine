@@ -1,8 +1,12 @@
 {
-    "id": "ddec2277-034b-4fcf-a9b5-e0559bc1af1b",
-    "modelName": "GMScript",
-    "mvc": "1.0",
-    "name": "discord_init",
-    "IsCompatibility": false,
-    "IsDnD": false
+  "isDnD": false,
+  "isCompatibility": false,
+  "parent": {
+    "name": "Discord Rich Presence",
+    "path": "folders/Scripts/Discord Rich Presence.yy",
+  },
+  "resourceVersion": "1.0",
+  "name": "discord_init",
+  "tags": [],
+  "resourceType": "GMScript",
 }

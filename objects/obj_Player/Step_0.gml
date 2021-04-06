@@ -4,6 +4,8 @@ var xRayActive = instance_exists(XRay);
 
 if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.pause && !pauseSelect))
 {
+	grappleActive = instance_exists(grapple);
+	
 	//debug keys
 	#region debug keys
 	if(keyboard_check(ord("0")))
@@ -27,7 +29,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	drawAfterImage = false;
 
 	liquidLevel = 0;
+	liquidState = 0;
 
+// ----- Liquid Movement
+#region Liquid Movement
 	var liquidMovement = false;
 	if(instance_exists(obj_Liquid))
 	{
@@ -39,8 +44,20 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	        dph = 3;
 	    }
 	    liquidMovement = (liquidLevel > dph && !suit[Suit.Gravity]);
+		
+		if(liquidMovement)
+		{
+			if(instance_exists(obj_Water))
+			{
+				liquidState = 1;
+			}
+			if(instance_exists(obj_Lava))
+			{
+				liquidState = 2;
+			}
+		}
 	}
-	liquidState = 0;
+#endregion
 	
 // ----- Get Input -----
 #region Input
@@ -75,15 +92,15 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	move = cRight - cLeft;
 	pMove = ((cRight && rRight) - (cLeft && rLeft));
 	
-	gunReady2 = ((abs(velX) > 0 || move != 0) && !ledgeFall);
+	//gunReady2 = ((abs(velX) > 0 || move != 0) && !ledgeFall);
 	
-	grounded = scr_PlayerGrounded();
+	grounded = PlayerGrounded();
 	
-	onPlatform = scr_PlayerOnPlatform();
+	onPlatform = PlayerOnPlatform();
 	
 	if(move != 0 && !brake && morphFrame <= 0 && wjFrame <= 0 && state != State.Grip && 
 	(!cAimLock || cDash || state == State.Somersault || state == State.Morph || xRayActive || (global.aimStyle == 2 && cAngleUp)) && 
-	state != State.Spark && state != State.BallSpark && state != State.Hurt && stateFrame != State.DmgBoost && dmgBoost <= 0)
+	!grappleActive && state != State.Spark && state != State.BallSpark && state != State.Hurt && stateFrame != State.DmgBoost && dmgBoost <= 0)
 	{
 		dir = move;
 	}
@@ -142,103 +159,106 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	prAngle = ((cAngleUp && rAngleUp) || (cAngleDown && rAngleDown));
 	rlAngle = ((!cAngleUp && !rAngleUp) || (!cAngleDown && !rAngleDown));
 	
-	if((aimAngle > -2 && (aimAngle < 2 || state != State.Grip || (rlAngle && global.aimStyle != 2))) ||
-		(prAngle && global.aimStyle != 2) || grounded || move != 0 || xRayActive || 
-		state == State.Morph || state == State.Somersault || state == State.Spark || state == State.BallSpark)
+	if(!grappleActive)
 	{
-		aimAngle = 0;
-	}
-	if(!xRayActive)
-	{
-		if(!grounded && cDown && !cUp && (state != State.Somersault || rDown) && state != State.Morph)
+		if((aimAngle > -2 && (aimAngle < 2 || state != State.Grip || (rlAngle && global.aimStyle != 2))) ||
+			(prAngle && global.aimStyle != 2) || grounded || move != 0 || xRayActive || 
+			state == State.Morph || state == State.Somersault || state == State.Spark || state == State.BallSpark)
 		{
-			if(aimAngle == -2 && move == 0 && rDown && morphFrame <= 0 && state != State.Morph && misc[Misc.Morph] && state != State.Spark && state != State.BallSpark && state != State.Grip && !cAngleUp && !cAngleDown)
-			{
-				audio_play_sound(snd_Morph,0,false);
-				mask_index = mask_Morph;
-				state = State.Morph;
-				morphFrame = 8;
-			}
-			aimAngle = -2;
+			aimAngle = 0;
 		}
-			
-		if(((state != State.Morph && (state != State.Crouch || place_collide(0,-11))) || (global.aimStyle == 2 && cAngleUp)) && morphFrame <= 0)
+		if(!xRayActive)
 		{
-			if(move != 0 && (state != State.Grip || move != dir) && sign(dirFrame) == dir)
+			if(!grounded && cDown && !cUp && (state != State.Somersault || rDown) && state != State.Morph)
 			{
-				if(cUp && !cDown && aimUpDelay <= 0)
+				if(aimAngle == -2 && move == 0 && rDown && morphFrame <= 0 && state != State.Morph && misc[Misc.Morph] && state != State.Spark && state != State.BallSpark && state != State.Grip && !cAngleUp && !cAngleDown)
 				{
-					aimAngle = 1;
+					audio_play_sound(snd_Morph,0,false);
+					mask_index = mask_Morph;
+					state = State.Morph;
+					morphFrame = 8;
 				}
-				else if(cDown)
+				aimAngle = -2;
+			}
+			
+			if(((state != State.Morph && (state != State.Crouch || place_collide(0,-11))) || (global.aimStyle == 2 && cAngleUp)) && morphFrame <= 0)
+			{
+				if(move != 0 && (state != State.Grip || move != dir) && sign(dirFrame) == dir)
+				{
+					if(cUp && !cDown && aimUpDelay <= 0)
+					{
+						aimAngle = 1;
+					}
+					else if(cDown)
+					{
+						aimAngle = -1;
+					}
+				}
+				else
+				{
+					if(cUp && !cDown && aimUpDelay <= 0)
+					{
+						aimAngle = 2;
+					}
+					if(cDown && !cUp && global.aimStyle == 2 && cAngleUp && grounded)
+					{
+						aimAngle = -2;
+					}
+				}
+			}
+		
+			if(global.aimStyle == 0)
+			{
+				if(cAngleUp)
+				{
+					aimAngle = cAngleUp + cAngleDown;
+				}
+				else if(cAngleDown)
 				{
 					aimAngle = -1;
 				}
-			}
-			else
-			{
-				if(cUp && !cDown && aimUpDelay <= 0)
-				{
-					aimAngle = 2;
-				}
-				if(cDown && !cUp && global.aimStyle == 2 && cAngleUp && grounded)
-				{
-					aimAngle = -2;
-				}
-			}
-		}
-		
-		if(global.aimStyle == 0)
-		{
-			if(cAngleUp)
-			{
-				aimAngle = cAngleUp + cAngleDown;
-			}
-			else if(cAngleDown)
-			{
-				aimAngle = -1;
-			}
 			
-			if(cAngleUp && cAngleDown && move != 0 && grounded && !walkState && sign(velX) == dir && abs(dirFrame) >= 4)
-			{
-				aimAngle = 1;
+				if(cAngleUp && cAngleDown && move != 0 && grounded && !walkState && sign(velX) == dir && abs(dirFrame) >= 4)
+				{
+					aimAngle = 1;
+				}
 			}
-		}
 	
-		if(global.aimStyle == 1)
-		{
-			if(cAngleUp)
+			if(global.aimStyle == 1)
 			{
-				if(cDown && !cUp)
+				if(cAngleUp)
 				{
-					gbaAimAngle = -1;
-				}
-				else if((cUp && (stateFrame != State.Morph || place_collide(0,-17))) || gbaAimAngle == 0)
-				{
-					gbaAimAngle = 1;
-				}
+					if(cDown && !cUp)
+					{
+						gbaAimAngle = -1;
+					}
+					else if((cUp && (stateFrame != State.Morph || place_collide(0,-17))) || gbaAimAngle == 0)
+					{
+						gbaAimAngle = 1;
+					}
 			
-				aimAngle = gbaAimAngle;
+					aimAngle = gbaAimAngle;
+				}
+				else
+				{
+					gbaAimAngle = 0;
+				}
 			}
 			else
 			{
 				gbaAimAngle = 0;
 			}
-		}
-		else
-		{
-			gbaAimAngle = 0;
-		}
 	
-		if(global.aimStyle == 2)
-		{
-			if(cAngleUp)
+			if(global.aimStyle == 2)
 			{
-				cUp = false;
-				cDown = false;
-				cLeft = false;
-				cRight = false;
-				move = 0;
+				if(cAngleUp)
+				{
+					cUp = false;
+					cDown = false;
+					cLeft = false;
+					cRight = false;
+					move = 0;
+				}
 			}
 		}
 	}
@@ -251,9 +271,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 
 // ----- Horizontal Movement -----
 #region Horizontal Movement
-	if(sign(velX) != dir || 
-	(move != dir && grounded && (aimAngle > -2 || !cJump) && (state != State.Morph || (state == State.Morph && abs(velX) < 1) || grounded) && morphFrame <= 0) || 
-	abs(dirFrame) < 4 || !boots[Boots.SpeedBoost] || brake)
+	if(state != State.Grapple && (sign(velX) != dir || abs(dirFrame) < 4 || !boots[Boots.SpeedBoost] || brake || 
+	(move != dir && (grounded || !grapBoost) && (aimAngle > -2 || !cJump) && (state != State.Morph || (state == State.Morph && abs(velX) < 1) || grounded) && morphFrame <= 0)))
 	{
 		speedCounter = 0;
 	}
@@ -268,7 +287,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 	if(boots[Boots.SpeedBoost])
 	{
-		speedBoost = (speedCounter >= speedCounterMax || abs(velX) >= minBoostSpeed);
+		speedBoost = (speedCounter >= speedCounterMax || (abs(velX) >= minBoostSpeed && state != State.Grapple && !grapBoost));
 	}
 	else
 	{
@@ -278,7 +297,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 	if(speedBoost && state != State.Spark && state != State.BallSpark)
 	{
-		if((sign(velX) != dir || move != dir) && grounded && (aimAngle > -2 || !cJump) && (state != State.Morph || (state == State.Morph && abs(velX) < 1) || grounded) && morphFrame <= 0)
+		if((sign(velX) != dir || move != dir) && state != State.Grapple && grounded && (aimAngle > -2 || !cJump) && (state != State.Morph || (state == State.Morph && abs(velX) < 1) || grounded) && morphFrame <= 0)
 		{
 			if(state == State.Stand && abs(velX) >= minBoostSpeed && abs(fVelX) > 0 && !cDown && !brake)
 			{
@@ -383,7 +402,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		if(cDash || global.autoDash)
 		{
-			if(boots[Boots.SpeedBoost])
+			if(boots[Boots.SpeedBoost] && liquidState == 0)
 			{
 				moveState = 2;
 			}
@@ -440,7 +459,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		maxSpeed2 = maxSpeed[6,liquidState];
 	}
-	if(move != 0 && abs(velX) > maxSpeed2 && state != State.Spark && state != State.BallSpark)
+	if(move != 0 && abs(velX) > maxSpeed2 && state != State.Spark && state != State.BallSpark && state != State.Grapple)
 	{
 		if(sign(velX) == 1)
 		{
@@ -452,7 +471,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 	}
 	
-	if(state != State.Crouch && state != State.Grip && state != State.Spark && state != State.BallSpark && 
+	if(state != State.Crouch && state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Grapple && 
 	state != State.Hurt && state != State.DmgBoost && (!spiderBall || spiderEdge == Edge.None) && !xRayActive)
 	{
 		if((move == 1 && !brake) || (state == State.Somersault && dir == 1 && velX < 0))
@@ -589,7 +608,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		{
 			if(state != State.Somersault && state != State.Morph)
 			{
-				if(cDash && jump >= fJumpHeight-1)
+				if(cDash && jump >= fJumpHeight-1 && !grappleActive)
 				{
 					state = State.Somersault;
 				}
@@ -661,12 +680,18 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 						spaceJump = 8;
 						//frame[6] = 0;
 					}
-					if(!grounded && canWallJump)
+					if((!grounded || grapWJCounter > 0) && canWallJump)
 					{
+						grapWJCounter = 0;
+						instance_destroy(grapple);
+						grappleDist = 0;
+						grappleActive = 0;
+						
 						audio_stop_sound(snd_Somersault);
 						audio_stop_sound(snd_Somersault_Loop);
 						audio_stop_sound(snd_Somersault_SJ);
 						somerSoundPlayed = false;
+						somerUWSndCounter = 16;
 						
 						audio_stop_sound(snd_ScrewAttack);
 						audio_stop_sound(snd_ScrewAttack_Loop);
@@ -679,7 +704,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 						{
 							m = dir;
 						}
-						velX = maxSpeed[4,liquidLevel]*m;
+						velX = maxSpeed[4,liquidState]*m;
 						state = State.Somersault;
 						wjFrame = 8;
 						wjAnimDelay = 10;
@@ -709,7 +734,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					}
 					if(rJump && state != State.Morph && state != State.Grip)
 					{
-						if((abs(velX) > 0 && sign(velX) == dir) || (move != 0 && move == dir) || !grounded)
+						if(((abs(velX) > 0 && sign(velX) == dir) || (move != 0 && move == dir) || !grounded) && !grappleActive)
 						{
 							state = State.Somersault;
 						}
@@ -721,7 +746,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 				else if(rJump)
 				{
-					if(state != State.Morph && state != State.Grip)
+					if(state != State.Morph && state != State.Grip && !grappleActive)
 					{
 						state = State.Somersault;
 					}
@@ -736,9 +761,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				jump = 0;
 			}
 		}
-		if(velY <= -(fJumpSpeed*0.4) && liquidState == 0 && !outOfLiquid)
+		if(velY <= -(fJumpSpeed*0.3) && liquidState == 0 && !outOfLiquid)
 		{
-			jump += 1;
+			//jump += 1;
+			//velY = min(velY,-fJumpSpeed*0.9);
+			velY = max(velY*2,-fJumpSpeed*0.9);
 		}
 	}
 	
@@ -783,7 +810,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	bombJump = max(bombJump - 1, 0);
 	
 	fGrav = grav[liquidState];
-	if(jump <= 0 && !grounded && (state != State.Grip || (startClimb && climbIndex > 7)) && state != State.Spark && state != State.BallSpark && state != State.Hurt)
+	if(jump <= 0 && !grounded && (state != State.Grip || (startClimb && climbIndex > 7)) && state != State.Spark && state != State.BallSpark && state != State.Grapple && state != State.Hurt)
 	{
 		velY += min(fGrav,max(fallSpeedMax-velY,0));
 	}
@@ -816,6 +843,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		velY = 0;
 	}
 	
+	isChargeSomersaulting = (statCharge >= maxCharge && state == State.Somersault);
 	isSpeedBoosting = (speedBoost || state == State.Spark || state == State.BallSpark);
 	isScrewAttacking = (misc[Misc.ScrewAttack] && liquidState == 0 && state == State.Somersault && stateFrame == State.Somersault);
 	
@@ -853,6 +881,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	sinX = lengthdir_y(abs(velX),sAngle);
 	
 	fVelX = cosX;
+	
+	if(state == State.Grapple)
+	{
+		fVelX += grappleVelX;
+	}
 	
 	if(state == State.Hurt)
 	{
@@ -1059,6 +1092,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		justFell = false;
 	}
 	
+	if(state == State.Grapple)
+	{
+		fVelY += grappleVelY;
+	}
+	
 	if(state == State.Hurt)
 	{
 		fVelY = hurtSpeedY;
@@ -1187,8 +1225,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 #endregion
 	
 	// Update grounded variables
-	grounded = scr_PlayerGrounded();
-	onPlatform = scr_PlayerOnPlatform();
+	grounded = PlayerGrounded();
+	onPlatform = PlayerOnPlatform();
 	
 	move2 = cRight - cLeft;
 	
@@ -1739,10 +1777,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			somerSoundPlayed = false;
 			
 			somerUWSndCounter--;
-			if(oldDir != dir)
+			/*if(oldDir != dir)
 			{
 				somerUWSndCounter = 33;
-			}
+			}*/
 			if(somerUWSndCounter < 0)
 			{
 				audio_play_sound(snd_Somersault_Loop,0,false);
@@ -1820,6 +1858,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		audio_stop_sound(snd_Somersault_SJ);
 		audio_stop_sound(snd_Somersault_Loop);
 		somerSoundPlayed = false;
+		somerUWSndCounter = 16;
 	}
 	
 	if(state != State.Somersault && state != State.Jump)
@@ -1910,9 +1949,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			{
 				slopeOffset = -16;
 			}
-			if(!collision_rectangle(x+6*dir,y-32+slopeOffset,x+19*dir,y-18+slopeOffset,obj_Tile,true,true))
+			if(!collision_rectangle(x+6*dir,y-30+slopeOffset,x+19*dir,y-18+slopeOffset,obj_Tile,true,true))
 			{
-				if(!collision_rectangle(x+6*dir,y-48+slopeOffset,x+19*dir,y-34+slopeOffset,obj_Tile,true,true))
+				if(!collision_rectangle(x+6*dir,y-46+slopeOffset,x+19*dir,y-34+slopeOffset,obj_Tile,true,true))
 				{
 					climbTarget = 2;
 				}
@@ -2201,6 +2240,151 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		shineRestarted = false;
 	}
 #endregion
+#region Grapple
+	if(state == State.Grapple)
+	{
+		stateFrame = State.Grapple;
+		mask_index = mask_Crouch;
+		if(!grappleActive)
+		{
+			stateFrame = State.Somersault;
+			state = State.Somersault;
+			var signx = sign(x - xprevious);
+			if(signx != 0)
+			{
+				dir = signx;
+				dirFrame = 4*dir;
+			}
+		}
+		else
+		{
+			if(abs(x - grapple.x) > 11 && abs(x - grapple.x) < 25 && ((place_collide(10,0) && x < grapple.x) || (place_collide(-10,0) && x > grapple.x)) && (grapAngle <= 45 || grapAngle >= 315) && grappleDist <= 47)
+			{
+			    if(sign(x-grapple.x) != 0)
+			    {
+			        dir = sign(x-grapple.x);
+			    }
+			    velX = 0;
+				velY = 0;
+			    grapDisVel = 0;
+			    speedBoost = false;
+			    speedCounter = 0;
+
+			    grapAngle = scr_wrap(34*dir,0,360);
+			    grappleDist = 31;
+			    x = grapple.x + lengthdir_x(grappleDist, grapAngle - 90);
+			    y = grapple.y + lengthdir_y(grappleDist, grapAngle - 90);
+
+			    dirFrame = 4*dir;
+			    canWallJump = (move != -dir);//place_collide(-10*move,0);
+			    if(cShoot)
+			    {
+			        grapWJCounter = 60;
+			    }
+			}
+			else
+			{
+			    canWallJump = false;
+			    grapWJCounter = 0;
+				
+				if(abs(velX) <= 0.0025 && place_collide(dir,0) && ((dir == 1 && x < grapple.x) || (dir == -1 && x > grapple.x)) && (grapAngle < 25 || grapAngle > 335) && grappleDist > 43)
+			    {
+			        if(cJump && rJump)
+			        {
+			            if(place_collide(1,0))
+			            {
+			                velX = -maxSpeed[1,liquidState];
+			            }
+			            if(place_collide(-1,0))
+			            {
+			                velX = maxSpeed[1,liquidState];
+			            }
+			            audio_play_sound(snd_WallJump,0,false);
+			            grapWallBounceFrame = 15;
+			        }
+			    }
+				
+				grapAngle = point_direction(x, y, grapple.x, grapple.y) - 90;
+				
+				if(!speedBoost)
+				{
+					var angleGrav = fGrav*1.75 * dcos(grapAngle+90);
+					velX += lengthdir_x(fMoveSpeed/(2-liquidMovement) * move + angleGrav,grapAngle);
+					velY += lengthdir_y(fMoveSpeed/(2-liquidMovement) * move + angleGrav,grapAngle);
+					velX *= (0.99 + 0.007*liquidMovement);
+					velY *= (0.99 + 0.007*liquidMovement);
+				}
+				else
+				{
+					var grapAngVel = angle_difference(point_direction(x+velX,y+velY,grapple.x,grapple.y),point_direction(x,y,grapple.x,grapple.y));
+					
+					if(point_distance(x,y,xprevious,yprevious) >= minBoostSpeed*0.75)
+					{
+						if(point_distance(x,y,xprevious,yprevious) < maxSpeed[2,liquidState])
+						{
+							velX += lengthdir_x(fMoveSpeed*sign(grapAngVel),grapAngle);
+							velY += lengthdir_y(fMoveSpeed*sign(grapAngVel),grapAngle);
+						}
+					}
+					else
+					{
+						speedBoost = false;
+						speedCounter = 0;
+					}
+				}
+	
+				var vX = x - grapple.x,
+					vY = y - grapple.y;
+				var dist = point_distance(x,y,grapple.x,grapple.y);
+				var up = (cUp), down = (cDown && grappleDist < grappleMaxDist);
+				var reelSpeed = 6 / (1+liquidMovement);
+	
+				var reel = 0;
+				if(dist < 31)
+				{
+					reel = min(reelSpeed,31-dist);
+					grappleDist = min(dist,grappleMaxDist);
+				}
+				if(up)
+				{
+					reel = max(-reelSpeed,scr_round(31-dist));
+					grappleDist = min(dist,grappleMaxDist);
+				}
+				if(down)
+				{
+					reel = min(reelSpeed,grappleMaxDist-dist);
+					grappleDist = min(dist,grappleMaxDist);
+				}
+				var ndist = point_distance(x+velX,y+velY,grapple.x,grapple.y);
+				var ddist = ndist - dist;
+				vX /= dist;
+				vY /= dist;
+				velX -= vX * ddist;
+				velY -= vY * ddist;
+				vX *= (grappleDist + reel);
+				vY *= (grappleDist + reel);
+				grappleVelX = (grapple.x + vX) - x;
+				grappleVelY = (grapple.y + vY) - y;
+	
+				grapDisVel = reel;
+				
+				grapBoost = true;
+			}
+		}
+	}
+	else
+	{
+		if(grounded || abs(x - xprevious) <= maxSpeed[4,liquidState])
+		{
+			grapBoost = false;
+		}
+		
+		grapAngle = 0;
+		grappleVelX = 0;
+		grappleVelY = 0;
+		grappleDist = 0;
+	}
+#endregion
 #region Hurt
 	if(state == State.Hurt)
 	{
@@ -2338,11 +2522,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 #region Death
 	if(state == State.Death)
 	{
-		/*var d = instance_create_depth(x,y,0,obj_DeathAnim);
+		var d = instance_create_depth(x,y,-1,obj_DeathAnim);
 		d.posX = x-camera_get_view_x(view_camera[0]);
 		d.posY = y-camera_get_view_y(view_camera[0]);
 		d.dir = dir;
-		global.gamePaused = true;*/ state = State.Stand;
+		global.gamePaused = true;
 	}
 #endregion
 
@@ -2382,7 +2566,15 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	if(!speedBoost && state != State.Spark && state != State.BallSpark)
 	{
 		afterImgAlphaMult = 0.375;
-		if(notGrounded && boots[Boots.SpaceJump] && state == State.Somersault && liquidState == 0)
+		if(state == State.Grapple || (grapBoost && !boots[Boots.SpaceJump]))
+		{
+			if(point_distance(xprevious,yprevious,x,y) >= 3)
+			{
+				drawAfterImage = true;
+				afterImageNum = min((point_distance(xprevious,yprevious,x,y)-3),10);
+			}
+		}
+		else if(notGrounded && boots[Boots.SpaceJump] && state == State.Somersault && liquidState == 0)
 		{
 			drawAfterImage = true;
 			afterImageNum = 10;
@@ -2392,9 +2584,14 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			drawAfterImage = true;
 			afterImageNum = min(abs(fVelY)*1.5, 10);
 		}
+		else if(notGrounded && fVelY >= 3)
+		{
+			drawAfterImage = true;
+			afterImageNum = min((abs(fVelY)-3),10);
+		}
 	}
 	
-	//player_water();
+	player_water();
 	
 	if(isSpeedBoosting)
 	{

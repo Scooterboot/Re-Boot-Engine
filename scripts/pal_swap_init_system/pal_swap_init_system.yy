@@ -1,8 +1,12 @@
 {
-    "id": "bec96fe2-6fea-4dfb-ba5f-7f207d126469",
-    "modelName": "GMScript",
-    "mvc": "1.0",
-    "name": "pal_swap_init_system",
-    "IsCompatibility": false,
-    "IsDnD": false
+  "isDnD": false,
+  "isCompatibility": false,
+  "parent": {
+    "name": "PaletteSwap",
+    "path": "folders/Scripts/PaletteSwap.yy",
+  },
+  "resourceVersion": "1.0",
+  "name": "pal_swap_init_system",
+  "tags": [],
+  "resourceType": "GMScript",
 }

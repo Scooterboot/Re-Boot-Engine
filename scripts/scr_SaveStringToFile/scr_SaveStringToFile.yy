@@ -1,8 +1,12 @@
 {
-    "id": "34d48fab-4d4f-48f5-b59b-9d2721b71dfe",
-    "modelName": "GMScript",
-    "mvc": "1.0",
-    "name": "scr_SaveStringToFile",
-    "IsCompatibility": false,
-    "IsDnD": false
+  "isDnD": false,
+  "isCompatibility": false,
+  "parent": {
+    "name": "SaveFile",
+    "path": "folders/Scripts/Main/SaveFile.yy",
+  },
+  "resourceVersion": "1.0",
+  "name": "scr_SaveStringToFile",
+  "tags": [],
+  "resourceType": "GMScript",
 }

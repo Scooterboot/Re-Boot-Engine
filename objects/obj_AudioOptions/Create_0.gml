@@ -3,6 +3,8 @@
 screenFade = 0;
 menuClosing = false;
 
+surf = surface_create(global.resWidth,global.resHeight);
+
 header = "AUDIO OPTIONS";
 
 option = array(

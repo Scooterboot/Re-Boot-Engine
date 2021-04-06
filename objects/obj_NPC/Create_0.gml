@@ -73,3 +73,15 @@ hurtSound = noone;
 freezePlatform = noone;
 
 death1Emit = noone;
+
+setOldPoses = 0;
+for(var i = 0; i < 10; i++)
+{
+	oldPosX[i] = -1;
+	oldPosY[i] = -1;
+}
+
+function roundedAngle(x1,y1,x2,y2)
+{
+	return point_direction(scr_round(x1),scr_round(y1),scr_round(x2),scr_round(y2));
+}
