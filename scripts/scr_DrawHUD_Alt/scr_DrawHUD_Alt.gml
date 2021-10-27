@@ -86,6 +86,8 @@ function scr_DrawHUD_Alt() {
 	    {
 	        draw_set_color(c_white);
 	        draw_set_font(MenuFont);
+			draw_set_halign(fa_left);
+			draw_set_valign(fa_top);
 	        var tX = 0,
 	            tY = 21;
 	        if(itemSelected == 0)
@@ -97,7 +99,7 @@ function scr_DrawHUD_Alt() {
 	            var xBPos = 94 + hudBOffsetX,
 	                xBOffset = 28,
 	                yBPos = 38;
-	            for(i = 0; i < 5; i += 1)
+	            for(var i = 0; i < 5; i += 1)
 	            {
 	                var j = i;
 	                if(hasBeam[j] || i == 0)
@@ -164,7 +166,7 @@ function scr_DrawHUD_Alt() {
 	            var xIPos = 94 + hudIOffsetX,
 	                xIOffset = 28,
 	                yIPos = 38;
-	            for(i = 0; i < 5; i += 1)
+	            for(var i = 0; i < 5; i += 1)
 	            {
 	                if(item[i])
 	                {

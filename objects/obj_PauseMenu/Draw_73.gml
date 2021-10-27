@@ -46,13 +46,18 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		
 	    if(surface_exists(pauseSurf))
 		{
+			var appSurfScale = 1;
+			if(global.upscale == 7)
+			{
+				appSurfScale = 1/obj_Main.screenScale;
+			}
 			surface_resize(pauseSurf,global.resWidth,global.resHeight);
 			surface_set_target(pauseSurf);
 			
 			draw_clear_alpha(c_black,1);
 			shader_set(shd_GaussianBlur);
 			shader_set_uniform_f(shader_get_uniform(shd_GaussianBlur,"size"), global.resWidth,global.resHeight,4);
-			draw_surface_ext(application_surface,0,0,1,1,0,c_white,1);
+			draw_surface_ext(application_surface,0,0,appSurfScale,appSurfScale,0,c_white,1);
 			shader_reset();
 			
 			draw_set_alpha(0.25);
@@ -67,10 +72,12 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				{
 					var mx = ww/2 - mapX,
 						my = hh/2 - mapY;
-					scr_DrawMap(global.rmMapSprt,scr_round(mx),scr_round(my),0,0,sprite_get_width(global.rmMapSprt),sprite_get_height(global.rmMapSprt));
+					obj_Map.DrawMap(global.rmMapSprt,scr_round(mx),scr_round(my),0,0,sprite_get_width(global.rmMapSprt),sprite_get_height(global.rmMapSprt));
 					
-					var pX = mx + (scr_floor(P.x/global.rmMapSize) + global.rmMapX) * 8,
-						pY = my + (scr_floor(P.y/global.rmMapSize) + global.rmMapY) * 8;
+					//var pX = mx + (scr_floor(P.x/global.rmMapSize) + global.rmMapX) * 8,
+					//	pY = my + (scr_floor(P.y/global.rmMapSize) + global.rmMapY) * 8;
+					var pX = mx + obj_Map.playerMapX * 8,
+						pY = my + obj_Map.playerMapY * 8;
 					
 					pMapIconFrameCounter++;
 					if(pMapIconFrameCounter > 4)
@@ -107,7 +114,181 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				{
 					sAlphaNum = -1;
 				}
-				textAnim = min(textAnim + 1.5, 62);
+				textAnim = min(textAnim + 0.5, 16);
+				
+				var suitMax = 0,
+					beamMax = 0,
+					itemMax = 0;
+				for(var i = 0; i < ds_list_size(invListL); i++)
+				{
+					if(string_pos("Suit",ds_list_find_value(invListL,i)) != 0)
+					{
+						suitMax++;
+					}
+					if(string_pos("Beam",ds_list_find_value(invListL,i)) != 0)
+					{
+						beamMax++;
+					}
+					if(string_pos("Item",ds_list_find_value(invListL,i)) != 0)
+					{
+						itemMax++;
+					}
+					
+					var ability = invListL[| i];
+					var index = string_digits(ability);
+					
+					var iBoxX = ww/2 - 149,
+						iBoxY = 54+10*i;
+					var text = "";
+					var enabled = false;
+					var isItem = false;
+					if(i < suitMax)
+					{
+						text = suitName[index];
+						enabled = P.suit[index];
+					}
+					else if(i-suitMax < beamMax)
+					{
+						iBoxY = 92+10*(i-suitMax);
+						text = beamName[index];
+						enabled = P.beam[index];
+					}
+					else if(i-suitMax-beamMax < itemMax)
+					{
+						iBoxY = 160+10*(i-suitMax-beamMax);
+						text = itemName[index];
+						enabled = P.item[index];
+						isItem = true;
+						if(text == itemName[0])
+						{
+							text = string(P.missileStat)+"/"+string(P.missileMax);
+						}
+						if(text == itemName[1])
+						{
+							text = string(P.superMissileStat)+"/"+string(P.superMissileMax);
+						}
+						if(text == itemName[2])
+						{
+							text = string(P.powerBombStat)+"/"+string(P.powerBombMax);
+						}
+					}
+					
+					draw_sprite_ext(sprt_Sub_ItemBox,!enabled,iBoxX,iBoxY,1,1,0,c_white,1);
+					if(isItem)
+					{
+						draw_sprite_ext(sprt_Sub_ItemIcons,index,iBoxX+2,iBoxY+1,1,1,0,c_white,1);
+					}
+					else
+					{
+						draw_sprite_ext(sprt_Sub_ItemDot,!enabled,iBoxX+2,iBoxY+2,1,1,0,c_white,1);
+					}
+					if(invPos == i && invPosX == 0)
+					{
+						gpu_set_blendmode(bm_add);
+						draw_sprite_ext(sprt_Sub_ItemNav_Box,!enabled,iBoxX,iBoxY,1,1,0,c_white,selectorAlpha*1.25);
+						gpu_set_blendmode(bm_normal);
+						if(!isItem)
+						{
+							draw_sprite_ext(sprt_Sub_ItemNav_Dot,0,iBoxX+2,iBoxY+2,1,1,0,c_white,1);
+							draw_sprite_ext(sprt_Sub_ItemNav_Dot,1,iBoxX+2,iBoxY+2,1,1,0,c_white,(1-selectorAlpha)*1.25);
+						}
+					}
+					draw_set_alpha(1);
+					draw_set_halign(fa_left);
+					draw_set_valign(fa_top);
+					draw_set_font(fnt_GUI_Small2);
+					var subTxt = string_copy(text,1,scr_floor(textAnim));
+					var xoffset = 8;
+					if(isItem)
+					{
+						xoffset = 15;
+						if(index == Item.PBomb)
+						{
+							xoffset = 11;
+						}
+						if(index == Item.Grapple || index == Item.XRay)
+						{
+							xoffset = 12;
+						}
+					}
+					TextOutlineSurface(subTxt);
+					draw_set_color(c_white);
+					var textBGColor = make_color_rgb(0,96,107);
+					if(!enabled)
+					{
+						draw_set_color(c_gray);
+						textBGColor = make_color_rgb(53,101,107);
+					}
+					draw_surface_ext(textSurface,iBoxX+xoffset-1,iBoxY,1,1,0,textBGColor,0.5);
+					draw_text(iBoxX+xoffset,iBoxY+1,subTxt);
+				}
+				DrawItemHeader(ww/2 - 152,46,"SUIT",suitMax,1);
+				DrawItemHeader(ww/2 - 152,84,"BEAM",beamMax,1);
+				DrawItemHeader(ww/2 - 152,152,"GEAR",itemMax,1);
+				
+				var miscMax = 0,
+					bootsMax = 0;
+				for(var i = 0; i < ds_list_size(invListR); i++)
+				{
+					if(string_pos("Misc",ds_list_find_value(invListR,i)) != 0)
+					{
+						miscMax++;
+					}
+					if(string_pos("Boots",ds_list_find_value(invListR,i)) != 0)
+					{
+						bootsMax++;
+					}
+					
+					var ability = invListR[| i];
+					var index = string_digits(ability);
+					
+					var iBoxX = ww/2 + 149,
+						iBoxY = 72+10*i;
+					var text = "";
+					var enabled = false;
+					if(i < miscMax)
+					{
+						text = miscName[index];
+						enabled = P.misc[index];
+					}
+					else if(i-miscMax < bootsMax)
+					{
+						iBoxY = 160+10*(i-miscMax);
+						text = bootsName[index];
+						enabled = P.boots[index];
+					}
+					
+					draw_sprite_ext(sprt_Sub_ItemBox,!enabled,iBoxX,iBoxY,-1,1,0,c_white,1);
+					draw_sprite_ext(sprt_Sub_ItemDot,!enabled,iBoxX-71,iBoxY+2,1,1,0,c_white,1);
+					if(invPos == i && invPosX == 1)
+					{
+						gpu_set_blendmode(bm_add);
+						draw_sprite_ext(sprt_Sub_ItemNav_Box,!enabled,iBoxX,iBoxY,-1,1,0,c_white,selectorAlpha*1.25);
+						gpu_set_blendmode(bm_normal);
+						draw_sprite_ext(sprt_Sub_ItemNav_Dot,0,iBoxX-71,iBoxY+2,1,1,0,c_white,1);
+						draw_sprite_ext(sprt_Sub_ItemNav_Dot,1,iBoxX-71,iBoxY+2,1,1,0,c_white,(1-selectorAlpha)*1.25);
+					}
+					draw_set_alpha(1);
+					draw_set_halign(fa_left);
+					draw_set_valign(fa_top);
+					draw_set_font(fnt_GUI_Small2);
+					var subTxt = string_copy(text,1,scr_floor(textAnim));
+					
+					TextOutlineSurface(subTxt);
+					draw_set_color(c_white);
+					var textBGColor = make_color_rgb(0,96,107);
+					if(!enabled)
+					{
+						draw_set_color(c_gray);
+						textBGColor = make_color_rgb(53,101,107);
+					}
+					draw_surface_ext(textSurface,iBoxX-66,iBoxY,1,1,0,textBGColor,0.5);
+					draw_text(iBoxX-65,iBoxY+1,subTxt);
+				}
+				DrawItemHeader(ww/2 + 152,64,"MISC",miscMax,-1);
+				DrawItemHeader(ww/2 + 152,152,"BOOTS",bootsMax,-1);
+				
+				/*textAnim = min(textAnim + 1.5, 62);
 				var xL1 = global.resWidth/2 - 121,
 					xL2 = global.resWidth/2 - 119,
 					xL3 = global.resWidth/2 - 113,
@@ -205,7 +386,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					{
 						yoff -= 10;
 					}
-				}
+				}*/
 			}
 			else
 			{
@@ -236,7 +417,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				
 				var space = 16;
 					
-				draw_set_font(GUIFont);
+				draw_set_font(fnt_GUI);
 				draw_set_halign(fa_left);
 				draw_set_valign(fa_top);
 				
@@ -336,9 +517,65 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			}
 			
 			draw_sprite(sprt_Sub_Base,0,global.resWidth/2,0);
-			draw_sprite(sprt_Sub_Header,currentScreen,global.resWidth/2,32);
 			
-			draw_surface_ext(application_surface,0,0,1,1,0,c_white,1-pauseFade);
+			#region Draw Header
+			draw_sprite(sprt_Sub_Header,currentScreen,global.resWidth/2,29);//32);
+			draw_set_color(c_white);
+			draw_set_alpha(1);
+			if(currentScreen == Screen.Inventory)
+			{
+				draw_sprite_ext(sprt_Sub_SamusText,0,ww/2,35,1,1,0,c_white,1);
+			}
+			else
+			{
+				draw_set_halign(fa_center);
+				draw_set_valign(fa_top);
+				draw_set_font(fnt_Menu);
+				draw_text(global.resWidth/2,36,headerText[currentScreen]);
+			}
+			
+			draw_sprite_ext(sprt_Sub_Clock,0,global.resWidth/2-117,31,1,1,0,c_white,1);
+			draw_set_halign(fa_left);
+			draw_set_valign(fa_top);
+			draw_set_font(fnt_GUI_Small2);
+			var second = floor(global.currentPlayTime);
+			var minute = floor(second / 60);
+			var hour = floor(minute / 60);
+			while(second >= 60)
+			{
+				second -= 60;
+			}
+			while(minute >= 60)
+			{
+				minute -= 60;
+			}
+			var tStr = string_format(hour,2,0)+":"+string_format(minute,2,0)+":"+string_format(second,2,0);
+			tStr = string_replace_all(tStr," ","0");
+			draw_text(ww/2-110,30,tStr);
+			
+			draw_set_halign(fa_right);
+			var percent = global.currentItemPercent;
+			var pStr = string_format(percent,2,0)+"%";
+			pStr = string_replace_all(pStr," ","0");
+			draw_text(ww/2+118,30,"ITEMS: "+pStr);
+			#endregion
+			#region Draw Footer
+			draw_sprite(sprt_Sub_Footer,currentScreen,global.resWidth/2,global.resHeight-36);
+			
+			var str = InsertIconsIntoString(footerText[currentScreen]),
+				strX = scr_round(global.resWidth/2),
+				strY = scr_round(global.resHeight-36+sprite_get_height(sprt_Sub_Footer)/2);
+			if(footerScrib.text != str)
+			{
+				footerScrib.overwrite(str);
+			}
+			footerScrib.blend(c_white,1);
+			footerScrib.draw(strX,strY);
+			#endregion
+			
+			//scr_DrawMouse(mouse_x-xx,mouse_y-yy);
+			
+			draw_surface_ext(application_surface,0,0,appSurfScale,appSurfScale,0,c_white,1-pauseFade);
 			
 			surface_reset_target();
 			

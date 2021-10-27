@@ -256,7 +256,7 @@ part_type_gravity(npcDeath[6],.9,270);
 
 partSystemD = part_system_create();
 //part_system_depth(partSystemD,95);
-part_system_layer(partSystemD,layer_get_id("Tiles_fg0"));
+part_system_layer(partSystemD,layer_get_id("BTS_Tiles"));
 part_system_automatic_update(partSystemD,false);
 
 blockBreak[0] = part_type_create();

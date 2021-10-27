@@ -11,10 +11,10 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_Save",
-  "duration": 2.85924,
+  "duration": 2.85424,
   "parent": {
-    "name": "Tiles",
-    "path": "folders/Sounds/Tiles.yy",
+    "name": "Misc",
+    "path": "folders/Sounds/Misc.yy",
   },
   "resourceVersion": "1.0",
   "name": "snd_Save",

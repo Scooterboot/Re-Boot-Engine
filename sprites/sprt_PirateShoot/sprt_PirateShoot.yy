@@ -83,6 +83,7 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"73bec61d-1bf8-4ede-b7b8-ae79983626b1","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
     "name": "SpacePirate",
     "path": "folders/Sprites/NPCs/SpacePirate.yy",

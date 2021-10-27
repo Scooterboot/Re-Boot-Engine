@@ -8,5 +8,3 @@ if(drawGrapEffect)
 }
 
 drawGrapDelay = max(drawGrapDelay-1,0);
-
-scr_DamageNPC(x,y,damage,damageType,0,-1,4);

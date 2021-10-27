@@ -11,7 +11,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_Morph",
-  "duration": 0.322732,
+  "duration": 0.317732,
   "parent": {
     "name": "Player",
     "path": "folders/Sounds/Player.yy",

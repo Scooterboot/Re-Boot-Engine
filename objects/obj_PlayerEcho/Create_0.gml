@@ -29,12 +29,12 @@ function DrawEcho(posX, posY, rotation, alpha)
 		if(stateFrame == State.Morph)
 		{
 			var ballSprtIndex = sprt_MorphBall;
-			if(misc[3])
+			if(misc[Misc.Spring])
 			{
 				ballSprtIndex = sprt_SpringBall;
 			}
 			draw_sprite_ext(ballSprtIndex,ballFrame,scr_round(surfW/2),scr_round(surfH/2),1,1,0,c_white,morphAlpha);
-			if(misc[3])
+			if(misc[Misc.Spring])
 			{
 				draw_sprite_ext(sprt_SpringBall_Shine,0,scr_round(surfW/2),scr_round(surfH/2),1,1,0,c_white,morphAlpha);
 			}

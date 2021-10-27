@@ -1,8 +1,8 @@
 {
-  "compression": 2,
+  "compression": 1,
   "volume": 1.0,
   "preload": true,
-  "bitRate": 128,
+  "bitRate": 192,
   "sampleRate": 44100,
   "type": 1,
   "bitDepth": 1,
@@ -10,8 +10,8 @@
     "name": "audio_music",
     "path": "audiogroups/audio_music",
   },
-  "soundFile": "mus_Title",
-  "duration": 102.353,
+  "soundFile": "mus_Title.mp3",
+  "duration": 102.034286,
   "parent": {
     "name": "Music",
     "path": "folders/Sounds/Music.yy",

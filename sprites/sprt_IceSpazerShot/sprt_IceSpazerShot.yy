@@ -67,6 +67,7 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"2b374b30-5e03-4ae1-9b42-ecb189b07528","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
     "name": "Spazer",
     "path": "folders/Sprites/Weapons/Beams/Spazer.yy",

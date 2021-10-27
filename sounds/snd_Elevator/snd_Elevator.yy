@@ -11,10 +11,10 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_Elevator",
-  "duration": 1.03833294,
+  "duration": 1.033333,
   "parent": {
-    "name": "Tiles",
-    "path": "folders/Sounds/Tiles.yy",
+    "name": "Misc",
+    "path": "folders/Sounds/Misc.yy",
   },
   "resourceVersion": "1.0",
   "name": "snd_Elevator",

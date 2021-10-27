@@ -1,70 +1,71 @@
 /// @description Camera movement
 if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 {
+	var player = obj_Player;
 	var xx = x + (global.resWidth/2),
 		yy = y + (global.resHeight/2);
-	playerX = obj_Player.x;
-	var ysp = obj_Player.y - obj_Player.yprevious;
-	if(((obj_Player.state == State.Stand || obj_Player.state == State.Crouch) && obj_Player.prevState != obj_Player.state)
-		|| (obj_Player.state == State.Morph && obj_Player.prevState == State.Stand))
+	playerX = player.x;
+	var ysp = player.y - player.yprevious;
+	if(((player.state == State.Stand || player.state == State.Crouch || player.state == State.Dodge || player.state == State.Grip) && player.prevState != player.state)
+		|| (player.prevState == State.Stand && player.state == State.Morph))
 	{
 		ysp = 0;
 	}
 	var fysp = ysp;
-	if(playerY < obj_Player.y)
+	if(playerY < player.y)
 	{
-		fysp = min(ysp+1,obj_Player.y-playerY);
+		fysp = min(ysp+1,player.y-playerY);
 	}
-	if(playerY > obj_Player.y)
+	if(playerY > player.y)
 	{
-		fysp = max(ysp-1,obj_Player.y-playerY);
+		fysp = max(ysp-1,player.y-playerY);
 	}
 	playerY += fysp;
-	playerY = clamp(playerY,obj_Player.y-11,obj_Player.y+11);
+	playerY = clamp(playerY,player.y-11,player.y+11);
 	
 	targetX = playerX;
 	targetY = playerY;
 	velX = 0;
 	velY = 0;
-	var angle = obj_Player.aimAngle,
-		speedX = obj_Player.fVelX,
-		speedY = obj_Player.fVelY,
-		camKey = obj_Player.cAimLock;
+	var angle = player.aimAngle,
+		speedX = player.fVelX,
+		speedY = player.fVelY,
+		camKey = player.cAimLock;
 	
-	if(obj_Player.state == State.Hurt)
+	if(player.state == State.Hurt)
 	{
 		speedX = 0;
 		speedY = 0;
 	}
-	if(obj_Player.state == State.Grapple || (obj_Player.state == State.Morph && obj_Player.spiderBall && obj_Player.spiderEdge != Edge.None))
+	if(player.state == State.Grapple || (player.state == State.Morph && player.spiderBall && player.spiderEdge != Edge.None))
 	{
-		speedX = obj_Player.x - obj_Player.xprevious;
-		speedY = obj_Player.y - obj_Player.yprevious;
+		speedX = player.x - player.xprevious;
+		speedY = player.y - player.yprevious;
 	}
-	xDir = obj_Player.dir;
+	xDir = player.dir;
 	yDir = sign(scr_round(speedY));
 	if(camKey)
 	{
 		yDir = sign(angle) * -1;
 	}
-	if(obj_Player.state == State.Grip && obj_Player.gripGunReady && obj_Player.move != xDir)
+	if(player.state == State.Grip && player.gripGunReady && player.move != xDir)
 	{
 		xDir *= -1;
 	}
 	
 	targetX = playerX + (camLimitX*xDir);
-	if(obj_Player.state == State.Somersault && !camKey)
+	if(player.state == State.Somersault && !camKey)
 	{
 		targetX = playerX;
 	}
 	targetY = playerY + (camLimitY*yDir);
-	if(obj_Player.state == State.Grapple || (obj_Player.state == State.Morph && obj_Player.spiderBall && obj_Player.spiderEdge != Edge.None) || obj_Player.state == State.Elevator)
+	if(player.state == State.Grapple || (player.state == State.Morph && player.spiderBall && player.spiderEdge != Edge.None) || player.state == State.Elevator)
 	{
 		xDir = 0;
 		yDir = 0;
 		targetX = playerX;
 		targetY = playerY;
-		if(obj_Player.state == State.Grapple || obj_Player.state == State.Elevator)
+		if(player.state == State.Grapple || player.state == State.Elevator)
 		{
 			camLimitX = max(camLimitX - 1, 0);
 			camLimitY = max(camLimitY - 1, 0);
@@ -78,14 +79,14 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 	else
 	{
 		camLimitX = camLimitMax;
-		if(obj_Player.grounded && (!camKey || angle == 0))
+		/*if(player.grounded && (!camKey || angle == 0))
 		{
 			camLimitY = max(camLimitY - 1, 0);
 		}
 		else
-		{
+		{*/
 			camLimitY = camLimitMax;
-		}
+		//}
 	}
 	var speedMult = 2,
 		speedMax = 3,
@@ -141,12 +142,12 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 		for(var i = 0; i < _num; i++)
 		{
 			var col = _list[| i];
-			if(instance_exists(col) && (col.image_angle == 90 || (col.image_angle == 270 && col.image_yscale < 0)) && playerX > col.x+(16*abs(col.image_yscale)))
+			if(instance_exists(col) && (angle_difference(col.image_angle,90) == 0 || (angle_difference(col.image_angle,-90) == 0 && col.image_yscale < 0)) && playerX > col.x+(16*abs(col.image_yscale)))
 			{
 				fVelX = min(col.x+(16*abs(col.image_yscale)) - x, 1+abs(playerX-prevPlayerX));
 				break;
 			}
-			else if(instance_exists(col) && (col.image_angle == 270 || (col.image_angle == 90 && col.image_yscale < 0)) && playerX < col.x-(16*abs(col.image_yscale)))
+			else if(instance_exists(col) && (angle_difference(col.image_angle,-90) == 0 || (angle_difference(col.image_angle,90) == 0 && col.image_yscale < 0)) && playerX < col.x-(16*abs(col.image_yscale)))
 			{
 				fVelX = max(col.x-(16*abs(col.image_yscale)) - (x+global.resWidth), -(1+abs(playerX-prevPlayerX)));
 				break;
@@ -182,8 +183,8 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 	{
 		var colX = _list[| i];
 		if(instance_exists(colX) && (
-		(fVelX < 0 && (colX.image_angle == 90 || (colX.image_angle == 270 && colX.image_yscale < 0)) && playerX > colX.x+(16*abs(colX.image_yscale))) ||
-		(fVelX > 0 && (colX.image_angle == 270 || (colX.image_angle == 90 && colX.image_yscale < 0)) && playerX < colX.x-(16*abs(colX.image_yscale)))))
+		(fVelX < 0 && (angle_difference(colX.image_angle,90) == 0 || (angle_difference(colX.image_angle,-90) == 0 && colX.image_yscale < 0)) && playerX > colX.x+(16*abs(colX.image_yscale))) ||
+		(fVelX > 0 && (angle_difference(colX.image_angle,-90) == 0 || (angle_difference(colX.image_angle,90) == 0 && colX.image_yscale < 0)) && playerX < colX.x-(16*abs(colX.image_yscale)))))
 		{
 			if(fVelX > 0)
 			{
@@ -204,7 +205,23 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 		}
 	}
 	ds_list_clear(_list);
-	x += fVelX;
+	
+	if(x >= 0 && x <= room_width-global.resWidth)
+	{
+		x += clamp(fVelX, -x, room_width-global.resWidth-x);
+	}
+	else
+	{
+		if(x < 0)
+		{
+			fVelX = max(5+abs(playerX-prevPlayerX) + velX,5);
+		}
+		if(x > room_width-global.resWidth)
+		{
+			fVelX = min(-(5+abs(playerX-prevPlayerX)) + velX,-5);
+		}
+		x += fVelX;
+	}
 	
 	
 	fVelY = velY;
@@ -215,12 +232,12 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 		for(var i = 0; i < _num; i++)
 		{
 			col = _list[| i];
-			if(instance_exists(col) && (col.image_angle == 0 || (col.image_angle == 180 && col.image_yscale < 0)) && playerY > col.y+(16*abs(col.image_yscale)))
+			if(instance_exists(col) && (col.image_angle == 0 || (angle_difference(col.image_angle,180) == 0 && col.image_yscale < 0)) && playerY > col.y+(16*abs(col.image_yscale)))
 			{
 				fVelY = min(col.y+(16*abs(col.image_yscale)) - y, 1+abs(playerY-prevPlayerY));
 				break;
 			}
-			else if(instance_exists(col) && (col.image_angle == 180 || (col.image_angle == 0 && col.image_yscale < 0)) && playerY < col.y-(16*abs(col.image_yscale)))
+			else if(instance_exists(col) && (angle_difference(col.image_angle,180) == 0 || (col.image_angle == 0 && col.image_yscale < 0)) && playerY < col.y-(16*abs(col.image_yscale)))
 			{
 				fVelY = max(col.y-(16*abs(col.image_yscale)) - (y+global.resHeight), -(1+abs(playerY-prevPlayerY)));
 				break;
@@ -256,8 +273,8 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 	{
 		var colY = _list[| i];
 		if(instance_exists(colY) && (
-		(fVelY < 0 && (colY.image_angle == 0 || (colY.image_angle == 180 && colY.image_yscale < 0)) && playerY > colY.y+(16*abs(colY.image_yscale))) ||
-		(fVelY > 0 && (colY.image_angle == 180 || (colY.image_angle == 0 && colY.image_yscale < 0)) && playerY < colY.y-(16*abs(colY.image_yscale)))))
+		(fVelY < 0 && (colY.image_angle == 0 || (angle_difference(colY.image_angle,180) == 0 && colY.image_yscale < 0)) && playerY > colY.y+(16*abs(colY.image_yscale))) ||
+		(fVelY > 0 && (angle_difference(colY.image_angle,180) == 0 || (colY.image_angle == 0 && colY.image_yscale < 0)) && playerY < colY.y-(16*abs(colY.image_yscale)))))
 		{
 			if(fVelY > 0)
 			{
@@ -278,13 +295,35 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 		}
 	}
 	ds_list_destroy(_list);
-	y += fVelY;
+	
+	if(y >= 0 && y <= room_height-global.resHeight)
+	{
+		y += clamp(fVelY, -y, room_height-global.resHeight-y);
+	}
+	else
+	{
+		if(y < 0)
+		{
+			fVelY = 1+abs(playerY-prevPlayerY);
+		}
+		if(y > room_height-global.resHeight)
+		{
+			fVelY = -(1+abs(playerY-prevPlayerY));
+		}
+		y += fVelY;
+	}
 	
 	prevPlayerX = playerX;
 	prevPlayerY = playerY;
 }
-x = clamp(x,0,room_width-global.resWidth);
-y = clamp(y,0,room_height-global.resHeight);
+
+if(clampCam)
+{
+	x = clamp(x,0,room_width-global.resWidth);
+	y = clamp(y,0,room_height-global.resHeight);
+	clampCam = false;
+}
+
 var xDiff = scr_round(x-playerX),
 	yDiff = scr_round(y-playerY);
 camera_set_view_pos(view_camera[0], scr_round(playerX)+xDiff, scr_round(playerY)+yDiff);

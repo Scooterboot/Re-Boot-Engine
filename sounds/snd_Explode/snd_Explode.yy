@@ -10,8 +10,8 @@
     "name": "audio_sound",
     "path": "audiogroups/audio_sound",
   },
-  "soundFile": "snd_Explode",
-  "duration": 0.778719,
+  "soundFile": "snd_Explode.wav",
+  "duration": 0.773719,
   "parent": {
     "name": "Explosives",
     "path": "folders/Sounds/Weapons/Explosives.yy",

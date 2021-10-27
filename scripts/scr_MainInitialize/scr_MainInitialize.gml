@@ -29,19 +29,19 @@ function scr_MainInitialize()
 	global.hudMap = ini_read_real("Display", "hud map", true);						//load display map setting
 	global.waterDistortion = ini_read_real("Display", "water distortion", true);	//load water distortion display setting
 
-	global.musicVolume = ini_read_real("Audio", "music", 0.5);						//load music volume config
-	global.soundVolume = ini_read_real("Audio", "sound", 0.5);						//load sound volume config
-	global.ambianceVolume = ini_read_real("Audio", "ambiance", 0.5);				//load ambiance volume config
+	global.musicVolume = ini_read_real("Audio", "music", 0.75);						//load music volume config
+	global.soundVolume = ini_read_real("Audio", "sound", 0.75);						//load sound volume config
+	global.ambianceVolume = ini_read_real("Audio", "ambiance", 0.75);				//load ambiance volume config
 	ini_close(); //done loading display, audio, and control settings
 #endregion
 
 	global.maxScreenScale = 1;
 
-	global.resWidth = 256;
-	global.resHeight = 224;
+	global.resWidth = 320;//256;
+	global.resHeight = 240;//224;
 	
-	global.wideResWidth = 400;
-	global.ogResWidth = 256;
+	global.wideResWidth = 426;//400;
+	global.ogResWidth = 320;//256;
 
 	pal_swap_init_system(shd_pal_swapper); //initialize palette swapper system (Created by PixelatedPope)
 
@@ -52,22 +52,10 @@ function scr_MainInitialize()
 
 	global.currentPlayTime = 0;
 	global.currentItemPercent = 0;
+	
+	global.cursorGlow = 0;
 
-	//initialize item variables
-	//global.suit[1] = false;
-	//global.misc[5] = false;
-	//global.boots[3] = false;
-	//global.beam[4] = false;
-	//global.item[4] = false;
-
-	//initialize map and room variables
-	global.rmMapSize = 256;
-
-	global.rmMapSprt = noone;
-	global.rmMapX = 0;
-	global.rmMapY = 0;
-
-	global.mapReveal_Debug = scr_CreateMapRevealGrid(sprt_Map_DebugRooms);
+	//initialize room variables
 
 	global.rmHeated = false;
 
@@ -100,4 +88,9 @@ function scr_MainInitialize()
 	instance_create_depth(0,0,0,obj_PauseMenu);
 	instance_create_depth(0,0,0,obj_Particles);
 	instance_create_depth(0,0,0,obj_Control);
+	instance_create_depth(0,0,0,obj_Music);
+	instance_create_depth(0,0,0,obj_Map);
+	instance_create_depth(0,0,0,obj_Progression);
+	
+	instance_create_depth(0,0,0,obj_TileFadeHandler);
 }

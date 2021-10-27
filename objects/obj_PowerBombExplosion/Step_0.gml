@@ -6,7 +6,7 @@ if(global.gamePaused)
 
 for(var i = 0; i < instance_number(obj_NPC); i++)
 {
-	if(i >= array_length_1d(npcImmuneTime) && i < instance_number(obj_NPC))
+	if(i >= array_length(npcImmuneTime) && i < instance_number(obj_NPC))
 	{
 		npcImmuneTime[i] = 0;
 	}
@@ -24,8 +24,8 @@ if(scaleTimer >= 60)
 	pAlpha = (75 - scaleTimer)/15;
 }
 
-//scr_OpenDoor(x,y);
-//scr_BreakBlock(x,y,4);
+scr_OpenDoor(x,y,3);
+scr_BreakBlock(x,y,4);
 
 scr_DamageNPC(x,y,damage,damageType,0,-1,0);
 

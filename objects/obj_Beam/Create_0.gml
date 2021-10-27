@@ -69,14 +69,15 @@ if(isPlasma)
 {
 	if(isWave || isSpazer)
 	{
-		delay += 3 + (3*isCharge);
+		delay += 2 + (3*isCharge);
 	}
 	multiHit = true;
 }
 else if(isSpazer)
 {
-	delay += 1 + (2*isCharge);
+	delay += 1 + (1*isCharge);
 }
+wavesPerSecond *= 1.25;
 
 if(isCharge || isMissile)
 {

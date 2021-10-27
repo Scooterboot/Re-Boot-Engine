@@ -10,6 +10,7 @@ enum State
 {
 	Stand,
 	Elevator,
+	Recharge,
 	Crouch,
 	Walk,
 	Run,
@@ -23,7 +24,8 @@ enum State
 	Grapple,
 	Hurt,
 	DmgBoost,
-	Death
+	Death,
+	Dodge
 };
 state = State.Stand; //stand, crouch, morph, jump, somersault, grip, spark, ballSpark, grapple, hurt
 prevState = state;
@@ -36,6 +38,7 @@ wallJumpDelay = 6;
 canWallJump = false;
 
 uncrouch = 0;
+//uncrouched = true;
 
 ballBounce = 0;
 mockBall = false;
@@ -63,10 +66,13 @@ speedBoost = false;
 speedFXCounter = 0;
 speedCatchCounter = 0;
 
+speedBoostWJCounter = 0;
+
 shineCharge = 0;
 shineDir = 0;
 shineStart = 0;
 shineEnd = 0;
+shineEndMax = 30;
 shineSparkSpeed = 13;
 shineFXCounter = 0;
 shineRampFix = 0;
@@ -89,7 +95,7 @@ spiderEdge = Edge.None; //none, bottom, top, left, right
 spiderGlowAlpha = 0;
 spiderGlowNum = 1;
 spiderMove = 1;
-spiderStick = false;
+//spiderStick = false;
 
 isChargeSomersaulting = false;
 isSpeedBoosting = false;
@@ -99,7 +105,7 @@ stepSndPlayedAt = 0;
 
 walkState = false;
 
-uncrouching = false;
+//uncrouching = false;
 
 ledgeFall = false;
 ledgeFall2 = false;
@@ -130,11 +136,22 @@ dmgFlash = 0;
 dmgBoost = 0;
 dmgBoostJump = false;
 
+dodgePress = 0;
+groundedDodge = 0;
+dodgeDir = 0;
+dodged = false;
+dodgeLength = 0;
+dodgeLengthMax = 20;//25;
+canDodge = true;
+dodgeRechargeMax = 20;
+dodgeRecharge = dodgeRechargeMax;
+dodgeRechargeRate = 0.5;
+
 liquidState = 0;
 outOfLiquid = (liquidState == 0);
 
 liquidLevel = 0;
-gunLiquidLevel = 0;
+//gunLiquidLevel = 0;
 
 statCharge = 0;
 maxCharge = 60;
@@ -145,7 +162,7 @@ bombChargeMax = 30;
 hSpeed = 0;
 vSpeed = 0;
 shootDir = 0;
-shootSpeed = 8;
+shootSpeed = 10;//8;
 extraSpeed_x = 0;
 extraSpeed_y = 0;
 
@@ -153,6 +170,9 @@ shotDelayTime = 0;
 bombDelayTime = 0;
 
 waveDir = 1;
+
+
+immune = false;
 
 
 cRight = false;
@@ -191,7 +211,7 @@ BreathTimer = 180;
 StepSplash = 0;
 
 XRay = noone;
-XRayDying = 0;
+//XRayDying = 0;
 
 constantDamageDelay = 0;
 
@@ -199,7 +219,7 @@ grapple = noone;
 grappleActive = false;
 grappleDist = 0;
 grappleOldDist = 0;
-grappleMaxDist = 143;
+grappleMaxDist = 160;//143;
 
 grapBoost = false;
 
@@ -222,6 +242,8 @@ maxSpeed[5,0] = 3.25;	// Morph Ball
 maxSpeed[6,0] = 5.25;	// Mock Ball
 maxSpeed[7,0] = 1;		// Air Morph
 maxSpeed[8,0] = 1.25;	// Air Spring Ball
+maxSpeed[9,0] = 5;		// Damage Boost
+maxSpeed[10,0] = 7.25;	// Dodge
 // Underwater
 maxSpeed[0,1] = 2.75;	// Running
 maxSpeed[1,1] = 4.75;	// Dashing (no speed boost)
@@ -232,6 +254,8 @@ maxSpeed[5,1] = 2.75;	// Morph Ball
 maxSpeed[6,1] = 4.75;	// Mock Ball
 maxSpeed[7,1] = 1;		// Air Morph
 maxSpeed[8,1] = 1.25;	// Air Spring Ball
+maxSpeed[9,1] = 3.3;	// Damage Boost
+maxSpeed[10,1] = 3.25;	// Dodge
 // In lava/acid
 maxSpeed[0,2] = 1.75;	// Running
 maxSpeed[1,2] = 3.75;	// Dashing (no speed boost)
@@ -242,6 +266,8 @@ maxSpeed[5,2] = 2.75;	// Morph Ball
 maxSpeed[6,2] = 4.75;	// Mock Ball
 maxSpeed[7,2] = 1;		// Air Morph
 maxSpeed[8,2] = 1.25;	// Air Spring Ball
+maxSpeed[9,2] = 3.3;	// Damage Boost
+maxSpeed[10,2] = 3.25;	// Dodge
 
 // Out of water
 moveSpeed[0,0] = 0.1875;	// Normal
@@ -263,16 +289,19 @@ jumpSpeed[0,0] = 4.875;	// Normal Jump
 jumpSpeed[1,0] = 6;		// Hi Jump
 jumpSpeed[2,0] = 4.625;	// Wall Jump
 jumpSpeed[3,0] = 5.5;	// Hi Wall Jump
+jumpSpeed[4,0] = 1;		// Dodge
 // Underwater
 jumpSpeed[0,1] = 1.75;			// Normal Jump
 jumpSpeed[1,1] = 2.5;			// Hi Jump
 jumpSpeed[2,1] = 1.25;//0.25;	// Wall Jump
 jumpSpeed[3,1] = 2.25;//0.5;	// Hi Wall Jump
+jumpSpeed[4,1] = 0.5;			// Dodge
 // In lava/acid
 jumpSpeed[0,2] = 2.75;	// Normal Jump
 jumpSpeed[1,2] = 3.5;	// Hi Jump
 jumpSpeed[2,2] = 2.625;	// Wall Jump
 jumpSpeed[3,2] = 3.5;	// Hi Wall Jump
+jumpSpeed[4,2] = 0.5;	// Dodge
 
 // Out of water
 jumpHeight[0,0] = 2; // Normal
@@ -288,7 +317,7 @@ grav[0] = 0.109375;		// Out of water
 grav[1] = 0.03125;		// Underwater
 grav[2] = 0.03515625;	// In lava/acid
 
-fallSpeedMax = 5; // Maximum fall speed
+fallSpeedMax = 5; // Maximum fall speed - soft cap
 
 fMaxSpeed = maxSpeed[0,0];
 fMoveSpeed = moveSpeed[0,0];
@@ -319,6 +348,9 @@ sAngle = 0;
 velX = 0;
 velY = 0;
 
+//shiftX = 0;
+//shiftY = 0;
+
 fVelX = 0;
 fVelY = 0;
 
@@ -347,8 +379,8 @@ runAimSequence = array(0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,1,1);
 brake = false;
 brakeFrame = 0;
 
-frame[12] = 0;
-frameCounter[12] = 0;
+frame[13] = 0;
+frameCounter[13] = 0;
 
 idleNum = array(32,8,8,8,16,6,6,6);
 idleSequence = array(0,1,2,3,4,3,2,1);
@@ -381,8 +413,6 @@ walkToStandFrame = 0;
 
 landFrame = 0;
 smallLand = false;
-
-jumpStartFrame = 0;
 
 landSequence = array(0,4,4,4,3,3,2,2,1,0);
 smallLandSequence = array(0,4,4,4,1,1,0);
@@ -526,13 +556,19 @@ rotation = 0;
 hudBOffsetX = 0;
 hudIOffsetX = 0;
 
+dBoostFrame = 0;
+dBoostFrameCounter = 0;
+
+shineFrame = 0;
+shineFrameCounter = 0;
+
+screwFrame = 0;
+screwFrameCounter = 0;
+
 
 // underwater gravity suit glow
 gravGlowAlpha = 0;
 gravGlowNum = 10;
-
-dBoostFrame = 0;
-dBoostFrameCounter = 0;
 
 #endregion
 // ----- Audio -----
@@ -545,11 +581,6 @@ somerUWSndCounter = 0;
 
 speedSoundPlayed = false;
 
-screwFrame = 0;
-screwFrameCounter = 0;
-screwPal = 0;
-screwPalNum = 1;
-
 screwSoundPlayed = false;
 
 #endregion
@@ -561,16 +592,16 @@ missileTanks = 51;
 superMissileTanks = 15;
 powerBombTanks = 10;*/
 
-energyMax = 799;//1499;//99 + (100 * energyTanks);
+energyMax = 99;//1499;//99 + (100 * energyTanks);
 energy = energyMax;
 
-missileMax = 250;//5 * missileTanks;
+missileMax = 0;//250;//5 * missileTanks;
 missileStat = missileMax;
 
-superMissileMax = 50;//2 * superMissileTanks;
+superMissileMax = 0;//50;//2 * superMissileTanks;
 superMissileStat = superMissileMax;
 
-powerBombMax = 50;//2 * powerBombTanks;
+powerBombMax = 0;//50;//2 * powerBombTanks;
 powerBombStat = powerBombMax;
 
 enum Suit
@@ -585,11 +616,12 @@ enum Boots
 {
 	HiJump,
 	SpaceJump,
+	Dodge,
 	SpeedBoost,
 	ChainSpark
 };
-// 4 Boots
-boots[3] = false;
+// 5 Boots
+boots[4] = false;
 
 enum Misc
 {
@@ -625,21 +657,21 @@ enum Item
 // 5 Items
 item[4] = false;
 
-hasSuit[array_length_1d(suit)-1] = false;
-hasMisc[array_length_1d(misc)-1] = false;
-hasBoots[array_length_1d(boots)-1] = false;
-hasBeam[array_length_1d(beam)-1] = false;
-hasItem[array_length_1d(item)-1] = false;
+hasSuit[array_length(suit)-1] = false;
+hasMisc[array_length(misc)-1] = false;
+hasBoots[array_length(boots)-1] = false;
+hasBeam[array_length(beam)-1] = false;
+hasItem[array_length(item)-1] = false;
 
 //starting items
-misc[Misc.PowerGrip] = true;
+/*misc[Misc.PowerGrip] = true;
 hasMisc[Misc.PowerGrip] = true;
 misc[Misc.Morph] = true;
 hasMisc[Misc.Morph] = true;
 misc[Misc.Bomb] = true;
 hasMisc[Misc.Bomb] = true;
 beam[Beam.Charge] = true;
-hasBeam[Beam.Charge] = true;
+hasBeam[Beam.Charge] = true;*/
 //boots[Boots.SpeedBoost] = true;
 
 /*for(var i = 0; i < array_length_1d(suit); i++)
@@ -715,7 +747,10 @@ pauseSelect = false;
 currentMap = global.rmMapSprt;
 playerMapX = (scr_floor(x/global.resWidth) + global.rmMapX) * 8;
 playerMapY = (scr_floor(y/global.resWidth) + global.rmMapY) * 8;
-mapSurf = surface_create(8,8);
+prevPlayerMapX = playerMapX;
+prevPlayerMapY = playerMapY;
+pMapOffsetX = 0;
+pMapOffsetY = 0;
 
 hudMapFlashAlpha = 0;
 hudMapFlashNum = 1;
@@ -757,6 +792,9 @@ heatPalNum = 1;
 heatDmgPal = 0;
 heatDmgPalCounter = 0;
 
+screwPal = 0;
+screwPalNum = 1;
+
 #endregion
 // ----- After Image -----
 #region After Image
@@ -773,9 +811,17 @@ afterImgAlphaMult = 0.625;
 #region PlayerGrounded
 function PlayerGrounded()
 {
-	return ((((collision_line(bbox_left,bbox_bottom+1,bbox_right,bbox_bottom+1,obj_Tile,true,true) || 
-			(collision_line(bbox_left,bbox_bottom+1,bbox_right,bbox_bottom+1,obj_Platform,true,true) && !place_meeting(x,y,obj_Platform)) || 
-			(bbox_bottom+1) >= room_height) && velY >= 0 && velY <= fGrav) || (spiderBall && spiderEdge != Edge.None)) && (jump <= 0 || jumpStartFrame > 0));
+	var xdiff = 0,
+		ydiff = 1;
+	if(argument_count > 0)
+	{
+		ydiff = argument[0];
+	}
+	var bottomCollision = (collision_line(bbox_left+xdiff,bbox_bottom+ydiff,bbox_right+xdiff,bbox_bottom+ydiff,obj_Tile,true,true) || 
+						(collision_line(bbox_left+xdiff,bbox_bottom+ydiff,bbox_right+xdiff,bbox_bottom+ydiff,obj_Platform,true,true) && !place_meeting(x,y,obj_Platform)) || 
+						(y+ydiff) >= room_height);
+	
+	return (((bottomCollision && velY >= 0 && velY <= fGrav) || (spiderBall && spiderEdge != Edge.None)) && jump <= 0);
 }
 #endregion
 #region PlayerOnPlatform
@@ -852,6 +898,284 @@ function AfterImage(draw, rotation, delay, num, alpha)
 	else
 	{
 		afterImgCounter = 0;
+	}
+}
+#endregion
+
+#region SpiderEnable
+function SpiderEnable(flag)
+{
+	if(spiderBall != flag)
+	{
+		spiderBall = flag;
+		audio_play_sound(snd_SpiderStart,0,false);
+		if(flag)
+		{
+			if(!audio_is_playing(snd_SpiderLoop))
+			{
+				audio_play_sound(snd_SpiderLoop,0,true);
+			}
+		}
+		else
+		{
+			audio_stop_sound(snd_SpiderLoop);
+		}
+	}
+}
+#endregion
+#region SpiderMovement
+function SpiderMovement()
+{
+	var edge = spiderEdge;
+	var angle = 270;
+	if(edge == Edge.Right)
+	{
+	    angle = 0;
+	}
+	if(edge == Edge.Top)
+	{
+	    angle = 90;
+	}
+	if(edge == Edge.Left)
+	{
+	    angle = 180;
+	}
+	var angle2 = angle;
+
+	var num = 4;
+	while(spiderMove != 0 && place_collide(scr_ceil(lengthdir_x(1,angle)),scr_ceil(lengthdir_y(1,angle))) && num > 0)
+	{
+	    angle += 45*spiderMove;
+	    num -= 1;
+	}
+
+	var xa = lengthdir_x(spiderMove!=0,angle),
+	    ya = lengthdir_y(spiderMove!=0,angle),
+	    xv = lengthdir_x(1,angle2),
+	    yv = lengthdir_y(1,angle2);
+
+	if(edge == Edge.Bottom || edge == Edge.Top)
+	{
+	    if(!place_collide(xa,0))
+	    {
+	        x += xa;
+	    }
+	    else if(!place_collide(xa,ya))
+	    {
+	        y += ya;
+	        x += xa;
+	    }
+	}
+
+	if(edge == Edge.Left || edge == Edge.Right)
+	{
+	    if(!place_collide(0,ya))
+	    {
+	        y += ya;
+	    }
+	    else if(!place_collide(xa,ya))
+	    {
+	        x += xa;
+	        y += ya;
+	    }
+	}
+
+	if(!place_collide(xv,yv))
+	{
+	    x += xv;
+	    y += yv;
+	}
+	if(place_collide(0,0))
+	{
+	    x -= xv;
+	    y -= yv;
+	}
+}
+#endregion
+#region SpiderBall
+function SpiderBall()
+{
+	if(spiderEdge != Edge.None)
+	{
+	    velX = 0;
+	    fVelX = 0;
+	    velY = 0;
+	    fVelY = 0;
+	    var moveX = (cRight-cLeft),
+	        moveY = (cDown-cUp);
+
+	    if(moveX == 0 && moveY == 0)
+	    {
+	        spiderMove = 0;
+	    }
+	    if(spiderMove == 0)
+	    {
+	        if(spiderEdge == Edge.Bottom)
+	        {
+	            spiderMove = moveX;
+	        }
+	        if(spiderEdge == Edge.Top)
+	        {
+	            spiderMove = -moveX;
+	        }
+	        if(spiderEdge == Edge.Left)
+	        {
+	            spiderMove = moveY;
+	        }
+	        if(spiderEdge == Edge.Right)
+	        {
+	            spiderMove = -moveY;
+	        }
+	    }
+    
+	    switch(spiderEdge)
+	    {
+	        case Edge.Bottom:
+	        {
+	            SpiderMovement();
+
+	            if(place_collide(spiderMove,0))
+	            {
+	                if(spiderMove > 0)
+	                {
+	                    spiderEdge = Edge.Right;
+	                }
+	                if(spiderMove < 0)
+	                {
+	                    spiderEdge = Edge.Left;
+	                }
+	            }
+	            else
+	            {
+	                if(!place_collide(0,1) && place_collide(1,1))
+	                {
+	                    spiderEdge = Edge.Right;
+	                }
+	                if(!place_collide(0,1) && place_collide(-1,1))
+	                {
+	                    spiderEdge = Edge.Left;
+	                }
+	            }
+	            break;
+	        }
+	        case Edge.Left:
+	        {
+	            SpiderMovement();
+
+	            if(place_collide(0,spiderMove))
+	            {
+	                if(spiderMove > 0)
+	                {
+	                    spiderEdge = Edge.Bottom;
+	                }
+	                if(spiderMove < 0)
+	                {
+	                    spiderEdge = Edge.Top;
+	                    dir *= -1;
+	                }
+	            }
+	            else
+	            {
+	                if(!place_collide(-1,0) && place_collide(-1,-1))
+	                {
+	                    spiderEdge = Edge.Top;
+	                    dir *= -1;
+	                }
+	                if(!place_collide(-1,0) && place_collide(-1,1))
+	                {
+	                    spiderEdge = Edge.Bottom;
+	                }
+	            }
+	            break;
+	        }
+	        case Edge.Top:
+	        {
+	            SpiderMovement();
+
+	            if(place_collide(-spiderMove,0))
+	            {
+	                if(spiderMove < 0)
+	                {
+	                    spiderEdge = Edge.Right;
+	                    dir *= -1;
+	                }
+	                if(spiderMove > 0)
+	                {
+	                    spiderEdge = Edge.Left;
+	                    dir *= -1;
+	                }
+	            }
+	            else
+	            {
+	                if(!place_collide(0,-1) && place_collide(-1,-1))
+	                {
+	                    spiderEdge = Edge.Left;
+	                    dir *= -1;
+	                }
+	                if(!place_collide(0,-1) && place_collide(1,-1))
+	                {
+	                    spiderEdge = Edge.Right;
+	                    dir *= -1;
+	                }
+	            }
+	            break;
+	        }
+	        case Edge.Right:
+	        {
+	            SpiderMovement();
+
+	            if(place_collide(0,-spiderMove))
+	            {
+	                if(spiderMove > 0)
+	                {
+	                    spiderEdge = Edge.Top;
+	                    dir *= -1;
+	                }
+	                if(spiderMove < 0)
+	                {
+	                    spiderEdge = Edge.Bottom;
+	                }
+	            }
+	            else
+	            {
+	                if(!place_collide(1,0) && place_collide(1,-1))
+	                {
+	                    spiderEdge = Edge.Top;
+	                    dir *= -1;
+	                }
+	                if(!place_collide(1,0) && place_collide(1,1))
+	                {
+	                    spiderEdge = Edge.Bottom;
+	                }
+	            }
+	            break;
+	        }
+	    }
+
+	    if(!collision_rectangle(bbox_left-4,bbox_top-4,bbox_right+3,bbox_bottom+3,obj_Tile,1,0))
+	    {
+	        spiderEdge = Edge.None;
+	    }
+	}
+	else
+	{
+	    spiderMove = 0;
+	    if(place_collide(1,0))
+	    {
+	        spiderEdge = Edge.Right;
+	    }
+	    if(place_collide(-1,0))
+	    {
+	        spiderEdge = Edge.Left;
+	    }
+	    if(place_collide(0,1))
+	    {
+	        spiderEdge = Edge.Bottom;
+	    }
+	    if(place_collide(0,-1))
+	    {
+	        spiderEdge = Edge.Top;
+	    }
 	}
 }
 #endregion
@@ -1121,6 +1445,204 @@ function player_water()
 			    }
 			}
 		}
+	}
+}
+#endregion
+
+#region Set Beams
+function Set_Beams()
+{
+	beamShot = obj_PowerBeamShot;
+	beamCharge = obj_PowerBeamChargeShot;
+	beamChargeAnim = sprt_PowerBeamChargeAnim;
+	beamSound = snd_PowerBeam_Shot;
+	beamChargeSound = snd_PowerBeam_ChargeShot;
+	beamAmt = 1;
+	beamChargeAmt = 1;
+	beamIconIndex = 0;
+	
+	beamDelay = 0;//6;
+	beamChargeDelay = 6;//18;
+	
+	var noBeamsActive = ((beam[Beam.Ice]+beam[Beam.Wave]+beam[Beam.Spazer]+beam[Beam.Plasma]) <= 0);
+	
+	if(beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3))
+	{
+		// Spazer
+		beamShot = obj_SpazerBeamShot;
+		beamCharge = obj_SpazerBeamChargeShot;
+		beamChargeAnim = sprt_SpazerChargeAnim;
+		beamSound = snd_Spazer_Shot;
+		beamChargeSound = snd_Spazer_ChargeShot;
+		beamAmt = 3;
+		beamChargeAmt = 3;
+		beamIconIndex = 4;
+		if(beam[Beam.Ice])
+		{
+			// Ice Spazer
+			beamShot = obj_IceSpazerBeamShot;
+			beamCharge = obj_IceSpazerBeamChargeShot;
+			beamChargeAnim = sprt_IceBeamChargeAnim;
+			beamSound = snd_IceComboShot;
+			beamChargeSound = snd_IceBeam_ChargeShot;
+			beamIconIndex = 5;
+			if(beam[Beam.Wave])
+			{
+				// Ice Wave Spazer
+				beamShot = obj_IceWaveSpazerBeamShot;
+				beamCharge = obj_IceWaveSpazerBeamChargeShot;
+				beamIconIndex = 7;
+				if(beam[Beam.Plasma])
+				{
+					// Ice Wave Spazer Plasma
+					beamShot = obj_IceWaveSpazerPlasmaBeamShot;
+					beamCharge = obj_IceWaveSpazerPlasmaBeamChargeShot;
+					beamIconIndex = 15;
+				}
+			}
+			else if(beam[Beam.Plasma])
+			{
+				// Ice Spazer Plasma
+				beamShot = obj_IceSpazerPlasmaBeamShot;
+				beamCharge = obj_IceSpazerPlasmaBeamChargeShot;
+				beamIconIndex = 13;
+			}
+		}
+		else if(beam[Beam.Wave])
+		{
+			// Wave Spazer
+			beamShot = obj_WaveSpazerBeamShot;
+			beamCharge = obj_WaveSpazerBeamChargeShot;
+			beamChargeAnim = sprt_WaveBeamChargeAnim;
+			beamIconIndex = 6;
+			if(beam[Beam.Plasma])
+			{
+				// Wave Spazer Plasma
+				beamShot = obj_WaveSpazerPlasmaBeamShot;
+				beamCharge = obj_WaveSpazerPlasmaBeamChargeShot;
+				beamChargeAnim = sprt_PlasmaBeamChargeAnim;
+				beamSound = snd_PlasmaBeam_Shot;
+				beamChargeSound = snd_PlasmaBeam_ChargeShot;
+				beamIconIndex = 14;
+			}
+		}
+		else if(beam[Beam.Plasma])
+		{
+			// Spazer Plasma
+			beamShot = obj_SpazerPlasmaBeamShot;
+			beamCharge = obj_SpazerPlasmaBeamChargeShot;
+			beamChargeAnim = sprt_PlasmaBeamChargeAnim;
+			beamSound = snd_PlasmaBeam_Shot;
+			beamChargeSound = snd_PlasmaBeam_ChargeShot;
+			beamIconIndex = 12;
+		}
+	}
+	else if(beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1))
+	{
+		// Ice
+		beamShot = obj_IceBeamShot;
+		beamCharge = obj_IceBeamChargeShot;
+		beamChargeAnim = sprt_IceBeamChargeAnim;
+		beamSound = snd_IceBeam_Shot;
+		beamChargeSound = snd_IceBeam_ChargeShot;
+		beamIconIndex = 1;
+		if(beam[Beam.Wave])
+		{
+			// Ice Wave
+			beamShot = obj_IceWaveBeamShot;
+			beamCharge = obj_IceWaveBeamChargeShot;
+			beamChargeAmt = 2;
+			beamIconIndex = 3;
+			if(beam[Beam.Plasma])
+			{
+				// Ice Wave Plasma
+				beamShot = obj_IceWavePlasmaBeamShot;
+				beamCharge = obj_IceWavePlasmaBeamChargeShot;
+				beamSound = snd_IceComboShot;
+				beamIconIndex = 11;
+			}
+		}
+		else if(beam[Beam.Plasma])
+		{
+			// Ice Plasma
+			beamShot = obj_IcePlasmaBeamShot;
+			beamCharge = obj_IcePlasmaBeamChargeShot;
+			beamSound = snd_IceComboShot;
+			beamIconIndex = 9;
+		}
+	}
+	else if(beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2))
+	{
+		// Wave
+		beamShot = obj_WaveBeamShot;
+		beamCharge = obj_WaveBeamChargeShot;
+		beamChargeAnim = sprt_WaveBeamChargeAnim;
+		beamSound = snd_WaveBeam_Shot;
+		beamChargeSound = snd_WaveBeam_ChargeShot;
+		beamChargeAmt = 2;
+		beamIconIndex = 2;
+		if(beam[Beam.Plasma])
+		{
+			// Wave Plasma
+			beamShot = obj_WavePlasmaBeamShot;
+			beamCharge = obj_WavePlasmaBeamChargeShot;
+			beamChargeAnim = sprt_PlasmaBeamChargeAnim;
+			beamSound = snd_PlasmaBeam_Shot;
+			beamChargeSound = snd_PlasmaBeam_ChargeShot;
+			beamIconIndex = 10;
+		}
+	}
+	else if(beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4))
+	{
+		// Plasma
+		beamShot = obj_PlasmaBeamShot;
+		beamCharge = obj_PlasmaBeamChargeShot;
+		beamChargeAnim = sprt_PlasmaBeamChargeAnim;
+		beamSound = snd_PlasmaBeam_Shot;
+		beamChargeSound = snd_PlasmaBeam_ChargeShot;
+		beamIconIndex = 8;
+	}
+	
+	beamDmg = 20;
+	if(beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1))
+	{
+		// Ice
+		beamDmg = 30;
+		if(beam[Beam.Wave])
+		{
+			// Ice Wave
+			beamDmg = 60;
+			if(beam[Beam.Plasma])
+			{
+				// Ice Wave Plasma
+				beamDmg = 300;
+			}
+		}
+		else if(beam[Beam.Plasma])
+		{
+			// Ice Plasma
+			beamDmg = 200;
+		}
+	}
+	else if(beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2))
+	{
+		// Wave
+		beamDmg = 50;
+		if(beam[Beam.Plasma])
+		{
+			// Wave Plasma
+			beamDmg = 250;
+		}
+	}
+	else if(beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4))
+	{
+		// Plasma
+		beamDmg = 150;
+	}
+	if(beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3))
+	{
+		// Spazer
+		beamDmg *= (2/3);
 	}
 }
 #endregion
@@ -1507,7 +2029,7 @@ function SetArmPosSomersault(sFrameMax, degNum, frame6)
 #region PreDrawPlayer
 function PreDrawPlayer(xx, yy, rot, alpha)
 {
-	if(stateFrame == State.Morph)
+	/*if(stateFrame == State.Morph)
 	{
 		if(state == State.Morph && morphFrame <= 0 && spiderBall)
 		{
@@ -1537,7 +2059,7 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 	{
 		spiderGlowAlpha = 0;
 		spiderGlowNum = 2;
-	}
+	}*/
 }
 #endregion
 #region DrawPlayer
@@ -1586,12 +2108,12 @@ function DrawPlayer(posX, posY, rotation, alpha)
 				}
 			}
 			var ballSprtIndex = sprt_MorphBall;
-			if(misc[3])
+			if(misc[Misc.Spring])
 			{
 				ballSprtIndex = sprt_SpringBall;
 			}
 			draw_sprite_ext(ballSprtIndex,ballFrame,scr_round(surfW/2),scr_round(surfH/2),1,1,0,c_white,morphAlpha);
-			if(misc[3])
+			if(misc[Misc.Spring])
 			{
 				draw_sprite_ext(sprt_SpringBall_Shine,0,scr_round(surfW/2),scr_round(surfH/2),1,1,0,c_white,morphAlpha);
 			}
@@ -1615,7 +2137,7 @@ function DrawPlayer(posX, posY, rotation, alpha)
 			missileArmFrame = 0;
 		}
 	
-		if(stateFrame == State.Grip && climbIndex <= 0 && gripAimFrame == 0 && dir == -1)
+		if(stateFrame == State.Grip && climbIndex <= 0 && gripAimFrame == 0 && dir == -1 && dirFrame == -4)
 		{
 			draw_sprite_ext(sprt_ArmGripOverlay,gripFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),fDir,1,0,c_white,1);
 		}
@@ -1654,7 +2176,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 	var xx = scr_round(posX),
 		yy = scr_round(posY);
 
-	if(misc[3] && stateFrame == State.Morph)
+	if(misc[Misc.Spring] && stateFrame == State.Morph)
 	{
 		var glowSpeed = 0.25;
 		if(state == State.BallSpark)
@@ -1682,6 +2204,90 @@ function PostDrawPlayer(posX, posY, rot, alph)
 	else
 	{
 		ballGlowIndex = 1;
+	}
+	
+	if(stateFrame == State.Morph)
+	{
+		if(state == State.Morph && morphFrame <= 0 && spiderBall)
+		{
+			spiderGlowAlpha += 0.02 * spiderGlowNum * (!global.gamePaused);
+			if(spiderGlowAlpha <= 0.1)
+			{
+				spiderGlowNum = max(spiderGlowNum,1);
+			}
+			if(spiderGlowAlpha >= 0.75)
+			{
+				spiderGlowNum = -1;
+			}
+		}
+		else
+		{
+			spiderGlowAlpha = max(spiderGlowAlpha - (0.1*(!global.gamePaused)), 0);
+			spiderGlowNum = 2;
+		}
+		if(spiderGlowAlpha > 0)
+		{
+			gpu_set_blendmode(bm_add);
+			draw_sprite_ext(sprt_SpiderBallFX,0,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,rot,c_white,min(spiderGlowAlpha,0.5)*alph);
+			gpu_set_blendmode(bm_normal);
+		}
+	}
+	else
+	{
+		spiderGlowAlpha = 0;
+		spiderGlowNum = 2;
+	}
+	
+	if(state == State.Dodge)
+	{
+		if(shineFrame < 4)
+		{
+			var offset = 6*dodgeDir;
+			if(dodgeDir == -dir)
+			{
+				offset = 0;
+			}
+			gpu_set_blendmode(bm_add);
+			draw_sprite_ext(sprt_ShineSparkFX,shineFrame,xx+offset+sprtOffsetX,yy+sprtOffsetY,dodgeDir,1,0,c_lime,alph*0.75);
+			gpu_set_blendmode(bm_normal);
+			shineFrameCounter += 1*(!global.gamePaused);
+			if(shineFrameCounter >= 2)
+			{
+				shineFrame++;
+				shineFrameCounter = 0;
+			}
+		}
+	}
+	else if(state == State.Spark && shineStart <= 0 && shineEnd <= 0)
+	{
+		shineFrameCounter += 1*(!global.gamePaused);
+		if(shineFrameCounter >= 2+(shineFrame == 0))
+		{
+			shineFrame = scr_wrap(shineFrame+1,0,3);
+			shineFrameCounter = 0;
+		}
+		var sFrame = shineFrame;
+		var shineRot = 90 - 45*shineDir;
+		var len = 6;
+		var shineX = scr_round(xx + lengthdir_x(len,shineRot)),
+			shineY = scr_round(yy + lengthdir_y(len,shineRot));
+		if(abs(shineDir) == 1 || abs(shineDir) == 3)
+		{
+			sFrame += 4;
+			shineRot -= 45*dir;
+		}
+		if(dir == -1)
+		{
+			shineRot -= 180;
+		}
+		gpu_set_blendmode(bm_add);
+		draw_sprite_ext(sprt_ShineSparkFX,sFrame,shineX+sprtOffsetX,shineY+sprtOffsetY,dir,1,shineRot,c_white,alph*0.9);
+		gpu_set_blendmode(bm_normal);
+	}
+	else
+	{
+		shineFrame = 0;
+		shineFrameCounter = 0;
 	}
 
 	if(isScrewAttacking && frame[6] >= 2 && !canWallJump && wjFrame <= 0)
@@ -1865,6 +2471,22 @@ function PostDrawPlayer(posX, posY, rot, alph)
 			if(stateFrame != State.Morph)
 			{
 				draw_sprite_ext(beamChargeAnim,chargeSetFrame,xx+sprtOffsetX+armOffsetX,yy+sprtOffsetY+runYOffset+armOffsetY,image_xscale,image_yscale,0,c_white,alph);
+				var blend = make_color_rgb(230,120,32);
+	            if(isIce)
+	            {
+	                blend = make_color_rgb(16,148,255);
+	            }
+	            else if(isWave)
+	            {
+	                blend = make_color_rgb(210,32,180);
+	            }
+	            else if(isPlasma)
+	            {
+	                blend = make_color_rgb(32,176,16);
+	            }
+	            gpu_set_blendmode(bm_add);
+	            draw_sprite_ext(sprt_ChargeAnimGlow,chargeSetFrame,scr_round(xx+sprtOffsetX+armOffsetX),scr_round(yy+sprtOffsetY+runYOffset+armOffsetY),image_xscale,image_yscale,0,blend,alph*0.5);
+	            gpu_set_blendmode(bm_normal);
 			}
 		}
 		else

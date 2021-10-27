@@ -44,6 +44,23 @@ windowResizeTimer = 0;
 
 oldDelta = delta_time;
 
-messageCounter = 0;
-messageType = 0;
-message[0] = "GAME SAVED";
+
+sndPauseArray = array(
+snd_Somersault,
+snd_Somersault_Loop,
+snd_Somersault_SJ,
+snd_ScrewAttack,
+snd_ScrewAttack_Loop,
+snd_Charge,
+snd_Charge_Loop,
+snd_SpeedBooster,
+snd_SpeedBooster_Loop,
+snd_ShineSpark,
+snd_ShineSpark_Charge,
+snd_PowerBombExplode,
+snd_SpiderLoop,
+snd_GrappleBeam_Loop,
+snd_Elevator,
+snd_LavaLoop,
+snd_LavaDamageLoop,
+snd_HeatDamageLoop);

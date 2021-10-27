@@ -207,6 +207,7 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"ddbeea8e-098f-458c-963f-c925aad001ce","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
     "name": "Grip",
     "path": "folders/Sprites/Player/Grip.yy",

@@ -1,4 +1,6 @@
 /// @description Main Menu
+event_inherited();
+
 cRight = obj_Control.mRight;
 cLeft = obj_Control.mLeft;
 cUp = obj_Control.mUp;
@@ -77,7 +79,8 @@ if(room == rm_MainMenu)
 			if(anyStartButton && targetScreen == currentScreen && titleFade >= 1)
 			{
 				targetScreen = MainScreen.FileSelect;
-				audio_play_sound(snd_StartButton,0,false);
+				//audio_play_sound(snd_StartButton,0,false);
+				audio_play_sound(snd_MenuShwsh,0,false);
 			}
 			titleFade = min(titleFade+0.05,1);
 		}
@@ -100,7 +103,7 @@ if(room == rm_MainMenu)
 				
 				if(move != 0)
 				{
-					optionPos = scr_wrap(optionPos+move,0,array_length_1d(option)-1);
+					optionPos = scr_wrap(optionPos+move,0,array_length(option)-1);
 					audio_play_sound(snd_MenuTick,0,false);
 				}
 				
@@ -163,7 +166,7 @@ if(room == rm_MainMenu)
 				
 				if(move != 0 && selectedFile >= 0 && file_exists(scr_GetFileName(selectedFile)))
 				{
-					optionSubPos = scr_wrap(optionSubPos+move,0,array_length_1d(subOption)-1);
+					optionSubPos = scr_wrap(optionSubPos+move,0,array_length(subOption)-1);
 					audio_play_sound(snd_MenuTick,0,false);
 				}
 				
@@ -175,11 +178,21 @@ if(room == rm_MainMenu)
 						case 0:
 						{
 							//load and start game
-							targetScreen = MainScreen.LoadGame;
-							audio_play_sound(snd_MenuShwsh,0,false);
+							if(targetScreen != MainScreen.LoadGame)
+							{
+								targetScreen = MainScreen.LoadGame;
+								audio_play_sound(snd_MenuShwsh,0,false);
+							}
 							break;
 						}
 						case 1:
+						{
+							//copy file
+							
+							audio_play_sound(snd_MenuTick,0,false);
+							break;
+						}
+						case 2:
 						{
 							//delete file
 							scr_DeleteGame(selectedFile);
@@ -200,7 +213,7 @@ if(room == rm_MainMenu)
 	}
 	if(currentScreen == MainScreen.FileSelect)
 	{
-		for(var i = 0; i < array_length_1d(fileEnergyMax); i++)
+		for(var i = 0; i < array_length(fileEnergyMax); i++)
 		{
 			if(fileEnergyMax[i] == -1)
 			{
@@ -218,7 +231,10 @@ if(room == rm_MainMenu)
 					
 						var _worldFlags_map = _list[| 2];
 						fileTime[i] = _worldFlags_map[? "currentPlayTime"];
-						filePercent[i] = 0; // load file percent
+						
+						var itemList = ds_list_create();
+						ds_list_read(itemList, _worldFlags_map[? "collectedItemList"]);
+						filePercent[i] = (ds_list_size(itemList) / global.totalItems) * 100;
 					}
 					catch(_exception)
 					{
@@ -247,7 +263,7 @@ if(room == rm_MainMenu)
 	}
 	else
 	{
-		for(var i = 0; i < array_length_1d(fileEnergyMax); i++)
+		for(var i = 0; i < array_length(fileEnergyMax); i++)
 		{
 			fileEnergyMax[i] = -1;
 			fileEnergy[i] = -1;
@@ -270,9 +286,9 @@ if(room == rm_MainMenu)
 		{
 			if(skipIntro)
 			{
-				if(audio_sound_get_track_position(titleMusic) < 24.895)
+				if(audio_sound_get_track_position(titleMusic) < 24.753)
 				{
-					audio_sound_set_track_position(titleMusic,24.895);
+					audio_sound_set_track_position(titleMusic,24.753);
 				}
 			}
 			else if(audio_sound_get_track_position(titleMusic) > 25)
@@ -281,7 +297,7 @@ if(room == rm_MainMenu)
 			}
 			
 			var trackPos = audio_sound_get_track_position(titleMusic);
-			if(trackPos >= 91)
+			if(trackPos >= 90.858)
 			{
 				audio_sound_set_track_position(titleMusic,trackPos-32.768);
 			}

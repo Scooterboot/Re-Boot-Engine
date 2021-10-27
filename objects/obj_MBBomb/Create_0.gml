@@ -2,8 +2,8 @@
 
 event_inherited();
 image_speed = 0.25;
-bombTimer = 60;
-exploded = false;
+bombTimer = 55;//60;
+//exploded = false;
 
 velX = 0;
 velY = 0;

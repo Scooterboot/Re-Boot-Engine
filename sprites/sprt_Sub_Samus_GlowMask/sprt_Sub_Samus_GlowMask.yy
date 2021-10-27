@@ -54,6 +54,9 @@
     {"compositeImage":{"FrameId":{"name":"5c721f90-bc6b-4320-be97-61f19a30ad64","path":"sprites/sprt_Sub_Samus_GlowMask/sprt_Sub_Samus_GlowMask.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
         {"FrameId":{"name":"5c721f90-bc6b-4320-be97-61f19a30ad64","path":"sprites/sprt_Sub_Samus_GlowMask/sprt_Sub_Samus_GlowMask.yy",},"LayerId":{"name":"6ed3ad8e-46fd-4c15-8f04-09553398cf67","path":"sprites/sprt_Sub_Samus_GlowMask/sprt_Sub_Samus_GlowMask.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
       ],"parent":{"name":"sprt_Sub_Samus_GlowMask","path":"sprites/sprt_Sub_Samus_GlowMask/sprt_Sub_Samus_GlowMask.yy",},"resourceVersion":"1.0","name":"5c721f90-bc6b-4320-be97-61f19a30ad64","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"75af3fa3-ae3f-43ac-8de8-8912bcd3e4c3","path":"sprites/sprt_Sub_Samus_GlowMask/sprt_Sub_Samus_GlowMask.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"75af3fa3-ae3f-43ac-8de8-8912bcd3e4c3","path":"sprites/sprt_Sub_Samus_GlowMask/sprt_Sub_Samus_GlowMask.yy",},"LayerId":{"name":"6ed3ad8e-46fd-4c15-8f04-09553398cf67","path":"sprites/sprt_Sub_Samus_GlowMask/sprt_Sub_Samus_GlowMask.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"sprt_Sub_Samus_GlowMask","path":"sprites/sprt_Sub_Samus_GlowMask/sprt_Sub_Samus_GlowMask.yy",},"resourceVersion":"1.0","name":"75af3fa3-ae3f-43ac-8de8-8912bcd3e4c3","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "sequence": {
     "spriteId": {"name":"sprt_Sub_Samus_GlowMask","path":"sprites/sprt_Sub_Samus_GlowMask/sprt_Sub_Samus_GlowMask.yy",},
@@ -63,7 +66,7 @@
     "playbackSpeedType": 0,
     "autoRecord": true,
     "volume": 1.0,
-    "length": 10.0,
+    "length": 11.0,
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
@@ -78,9 +81,10 @@
             {"id":"550628cc-7539-47c6-99b9-60c3e3486246","Key":7.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"774d5af8-a75e-4e13-8658-7d397be96f9e","path":"sprites/sprt_Sub_Samus_GlowMask/sprt_Sub_Samus_GlowMask.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"7d459cf1-4e9c-4cdd-9613-b819f556169f","Key":8.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"7b52b929-e26d-4885-ae01-9385b01ec9aa","path":"sprites/sprt_Sub_Samus_GlowMask/sprt_Sub_Samus_GlowMask.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"1fa0aec4-46cd-460d-b7c5-99ae0450191e","Key":9.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"5c721f90-bc6b-4320-be97-61f19a30ad64","path":"sprites/sprt_Sub_Samus_GlowMask/sprt_Sub_Samus_GlowMask.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"modifiers":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack",},
+            {"id":"cb51c08c-e636-4ede-b8b2-ac6e972ff4b6","Key":10.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"75af3fa3-ae3f-43ac-8de8-8912bcd3e4c3","path":"sprites/sprt_Sub_Samus_GlowMask/sprt_Sub_Samus_GlowMask.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
-    "visibleRange": {"x":0.0,"y":0.0,},
+    "visibleRange": null,
     "lockOrigin": false,
     "showBackdrop": true,
     "showBackdropImage": false,
@@ -103,6 +107,7 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"6ed3ad8e-46fd-4c15-8f04-09553398cf67","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
     "name": "Samus",
     "path": "folders/Sprites/UI/Subscreens/Samus.yy",

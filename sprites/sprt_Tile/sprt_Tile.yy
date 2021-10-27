@@ -27,24 +27,28 @@
     {"compositeImage":{"FrameId":{"name":"378bf0ff-3ac2-4c17-b2ca-6ae290d3e6f5","path":"sprites/sprt_Tile/sprt_Tile.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
         {"FrameId":{"name":"378bf0ff-3ac2-4c17-b2ca-6ae290d3e6f5","path":"sprites/sprt_Tile/sprt_Tile.yy",},"LayerId":{"name":"54cf7214-2c65-46ad-873a-52efb8385a75","path":"sprites/sprt_Tile/sprt_Tile.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
       ],"parent":{"name":"sprt_Tile","path":"sprites/sprt_Tile/sprt_Tile.yy",},"resourceVersion":"1.0","name":"378bf0ff-3ac2-4c17-b2ca-6ae290d3e6f5","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"5bd6118d-1b68-47a2-b539-fd8e5d7a84ac","path":"sprites/sprt_Tile/sprt_Tile.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"5bd6118d-1b68-47a2-b539-fd8e5d7a84ac","path":"sprites/sprt_Tile/sprt_Tile.yy",},"LayerId":{"name":"54cf7214-2c65-46ad-873a-52efb8385a75","path":"sprites/sprt_Tile/sprt_Tile.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"sprt_Tile","path":"sprites/sprt_Tile/sprt_Tile.yy",},"resourceVersion":"1.0","name":"5bd6118d-1b68-47a2-b539-fd8e5d7a84ac","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "sequence": {
     "spriteId": {"name":"sprt_Tile","path":"sprites/sprt_Tile/sprt_Tile.yy",},
     "timeUnits": 1,
     "playback": 1,
-    "playbackSpeed": 1.0,
+    "playbackSpeed": 0.0,
     "playbackSpeedType": 1,
     "autoRecord": true,
     "volume": 1.0,
-    "length": 1.0,
+    "length": 2.0,
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
       {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"205745ed-42bd-4991-a651-0013c78ad57e","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"378bf0ff-3ac2-4c17-b2ca-6ae290d3e6f5","path":"sprites/sprt_Tile/sprt_Tile.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"c1bcbe3e-98f9-4675-8fa0-d312f8095660","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"5bd6118d-1b68-47a2-b539-fd8e5d7a84ac","path":"sprites/sprt_Tile/sprt_Tile.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"modifiers":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack",},
     ],
-    "visibleRange": {"x":0.0,"y":0.0,},
+    "visibleRange": null,
     "lockOrigin": false,
     "showBackdrop": true,
     "showBackdropImage": false,
@@ -67,6 +71,31 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"54cf7214-2c65-46ad-873a-52efb8385a75","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": {
+    "left": 1,
+    "top": 1,
+    "right": 1,
+    "bottom": 1,
+    "guideColour": [
+      4294902015,
+      4294902015,
+      4294902015,
+      4294902015,
+    ],
+    "highlightColour": 1728023040,
+    "highlightStyle": 0,
+    "enabled": true,
+    "tileMode": [
+      0,
+      0,
+      0,
+      0,
+      0,
+    ],
+    "resourceVersion": "1.0",
+    "loadedVersion": null,
+    "resourceType": "GMNineSliceData",
+  },
   "parent": {
     "name": "CollisionTiles",
     "path": "folders/Sprites/CollisionTiles.yy",

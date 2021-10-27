@@ -1,4 +1,5 @@
 /// @description Initialize
+event_inherited();
 
 pause = false;
 isPaused = false;
@@ -21,6 +22,8 @@ currentScreen = Screen.Map;
 screenSelect = false;
 screenSelectAnim = 0;
 
+cursorGlowSurf = surface_create(11,15);
+
 mapX = 0;
 mapY = 0;
 mapMove = 0;
@@ -30,20 +33,25 @@ pMapIconFrameCounter = 0;
 pMapIconFrameNum = 1;
 
 
-invMove = 0;
-invMovePrev = 1;
-invMoveX = 0;
+//invMove = 0;
+//invMovePrev = 1;
+//invMoveX = 0;
 
 invMoveCounter = 0;
 
 invPos = -1;
+invPosX = 0;
 
+/*suitSelect = -1;
 beamSelect = -1;
-suitSelect = -1;
-bootsSelect = -1;
+itemSelect = -1;
 miscSelect = -1;
+bootsSelect = -1;*/
 
 toggleItem = false;
+
+invListL = ds_list_create();
+invListR = ds_list_create();
 
 textAnim = 0;
 
@@ -79,6 +87,41 @@ confirmRestart = -1;
 confirmQuitMM = -1;
 confirmQuitDT = -1;
 
+headerText = array(
+"ZEBES",
+"SAMUS",
+"OPTIONS",
+"LOG BOOK");
+
+suitName = array(
+"VARIA SUIT",
+"GRAVITY SUIT");
+beamName = array(
+"CHARGE BEAM",
+"ICE BEAM",
+"WAVE BEAM",
+"SPAZER",
+"PLASMA BEAM");
+itemName = array(
+"MISSILE",
+"SUPER MISSILE",
+"POWER BOMB",
+"GRAPPLE BEAM",
+"X-RAY VISOR");
+
+miscName = array(
+"POWER GRIP",
+"MORPH BALL",
+"BOMB",
+"SPRING BALL",
+"SPIDER BALL",
+"SCREW ATTACK");
+bootsName = array(
+"HI-JUMP",
+"SPACE JUMP",
+"ACCEL DASH",
+"SPEED BOOSTER",
+"CHAIN SPARK");
 
 pauseSurf = surface_create(global.resWidth,global.resHeight);
 
@@ -101,86 +144,93 @@ rSelect = !cSelect;
 rCancel = !cCancel;
 rStart = !cStart;
 
-#region SelectItem
-function SelectItem(itemSelect,itemSelectX,itemSelectY,itemSelectXY, pHasItem,pHasItemY, pItem, ownItemX,ownItemY,ownItemXY, xPos,yPos,xyPos)
+footerText[0] = "${itemSelectButton} -World Map\n"+
+				"${menuSelectButton} -Place Marker\n"+
+				"${menuCancelButton} -Menu Select";
+footerText[1] = "${itemSelectButton} -Ability Info\n"+
+				"${menuSelectButton} -Toggle Ability\n"+
+				"${menuCancelButton} -Menu Select";
+footerText[2] = "${menuSelectButton} -Choose Option\n"+
+				"${menuCancelButton} -Menu Select";
+footerText[3] = "${menuSelectButton} -Open Log\n"+
+				"${menuCancelButton} -Menu Select";
+
+footerScrib = scribble(footerText[0]);
+footerScrib.align(fa_center,fa_middle);
+footerScrib.starting_format("fnt_GUI_Small2",c_white);
+
+textSurface = surface_create(73,9);
+#region TextOutlineSurface
+function TextOutlineSurface(text)
 {
-	itemSelectX = -1;
-	itemSelectY = -1;
-	itemSelectXY = -1;
-					
-	if(itemSelect == -1)
+	if(!surface_exists(textSurface))
 	{
-		itemSelect = 0;
+		textSurface = surface_create(73,9);
 	}
 	else
 	{
-		itemSelect += invMove;
-						
-		var num = array_length(pHasItem);
-		while(!pHasItem[scr_wrap(itemSelect,0,array_length(pHasItem)-1)] && num > 0)
-		{
-			itemSelect += invMovePrev;
-			num--;
-		}
-						
-		if(itemSelect < 0 || itemSelect >= array_length(pHasItem))
-		{
-			if(ownItemY)
-			{
-				invPos = yPos;
-				itemSelect = -1;
-				if(invMove < 0)
-				{
-					itemSelectY = array_length(pHasItemY)-1;
-				}
-				else
-				{
-					itemSelectY = 0;
-				}
-				invMove = 0;
-			}
-			else
-			{
-				itemSelect = scr_wrap(itemSelect,0,array_length(pHasItem)-1);
-			}
-		}
-						
-		if(invMoveX != 0)
-		{
-			if(ownItemX)
-			{
-				invPos = xPos;
-				itemSelect = -1;
-				itemSelectX = 0;
-			}
-			else if(ownItemXY)
-			{
-				invPos = xyPos;
-				itemSelect = -1;
-				itemSelectXY = 0;
-			}
-			invMoveX = 0;
-		}
-						
-		if(toggleItem && itemSelect == clamp(itemSelect,0,array_length(pHasItem)-1) && pHasItem[itemSelect])
-		{
-			pItem[itemSelect] = !pItem[itemSelect];
-			audio_play_sound(snd_MenuBoop,0,false);
-		}
+		surface_set_target(textSurface);
+		draw_clear_alpha(c_black,0);
+		draw_set_color(c_white);
+		draw_set_alpha(1);
+		draw_text(0,0,text);
+		draw_text(1,0,text);
+		draw_text(2,0,text);
+		draw_text(2,1,text);
+		draw_text(2,2,text);
+		draw_text(1,2,text);
+		draw_text(0,2,text);
+		draw_text(0,1,text);
+		surface_reset_target();
 	}
-	
-	var Return;
-	Return[0] = itemSelect;
-	Return[1] = itemSelectX;
-	Return[2] = itemSelectY;
-	Return[3] = itemSelectXY;
-	Return[4] = pHasItem;
-	Return[5] = pHasItemY;
-	Return[6] = pItem;
-	return Return;
 }
 #endregion
 
+#region DrawItemHeader
+function DrawItemHeader(_x,_y,_name,_height,_facing)
+{
+	var h = 10/17;
+	var yscale = 1+h*(_height-1);
+	draw_sprite_ext(sprt_Sub_ItemHeader,0,_x,_y,_facing,yscale,0,c_white,1);
+	
+	var cGreen = make_color_rgb(34,216,6);
+	draw_set_alpha(1);
+	draw_set_color(cGreen);
+	var rx1 = _x+1,
+		ry1 = _y+1,
+		rx2 = rx1+string_width(_name)+2,
+		ry2 = _y+6;
+	
+	var tx1 = rx2,
+		ty1 = ry1,
+		tx2 = rx2,
+		ty2 = ry2,
+		tx3 = tx2+6,
+		ty3 = ty2;
+	if(sign(_facing) == -1)
+	{
+		rx2 = _x-1;
+		rx1 = rx2-string_width(_name)-3;
+		tx1 = rx1-1;
+		tx2 = rx1-1;
+		tx3 = tx2-6;
+	}
+	draw_rectangle(rx1,ry1,rx2,ry2,false);
+	draw_triangle(tx1,ty1,tx2,ty2,tx3,ty3,false);
+	
+	draw_set_valign(fa_top);
+	draw_set_halign(fa_left);
+	var tx = rx1+2,
+		ty = ry1-1;
+	if(sign(_facing) == -1)
+	{
+		draw_set_halign(fa_right);
+		tx = rx2-1;
+	}
+	draw_set_color(c_black);
+	draw_text(tx,ty,_name);
+}
+#endregion
 #region DrawInventoryPlayer
 function DrawInventoryPlayer()
 {
@@ -188,7 +238,14 @@ function DrawInventoryPlayer()
 	var xx = ww/2,
 		yy = 50 + scr_round(playerOffsetY);
 
+	draw_set_color(c_black)
+	draw_set_alpha(0.5);
+	draw_rectangle(-1,-1,ww+1,global.resHeight+1,false);
+	draw_set_color(c_white);
+	draw_set_alpha(1);
+	gpu_set_blendmode(bm_add);
 	draw_sprite_ext(sprt_Sub_InvBG,0,ww/2,-30+scr_round(playerOffsetY/2),1,1,0,c_white,1);
+	gpu_set_blendmode(bm_normal);
 
 	var P = obj_Player;
 
@@ -244,40 +301,68 @@ function DrawInventoryPlayer()
 	}
 
 	playerGlowInd = -1;
+	var playerGlowInd2 = -1;
 	var yDest = 0;
-
-	if(beamSelect != -1)
+	
+	if(invPos != -1 && ((invPosX == 0 && !ds_list_empty(invListL)) || (invPosX == 1 && !ds_list_empty(invListR))))
 	{
-		playerGlowInd = 2;
-	}
-	else if(bootsSelect != -1)
-	{
-		yDest = -20;
-		playerGlowInd = 0;
-		if(bootsSelect == Boots.HiJump)
+		var ability = invListL[| invPos];
+		if(invPosX == 1)
 		{
-			playerGlowInd = 8;
+			ability = invListR[| invPos];
 		}
-		if(bootsSelect == Boots.SpaceJump)
-		{
-			playerGlowInd = 6;
-		}
-	}
-	else if(miscSelect != -1)
-	{
-		playerGlowInd = 5;
-		if(miscSelect == Misc.PowerGrip)
-		{
-			playerGlowInd = 3;
-		}
-		if(miscSelect == Misc.ScrewAttack)
+		var index = string_digits(ability);
+		
+		if(string_pos("Suit",ability) != 0)
 		{
 			playerGlowInd = 0;
 		}
-	}
-	else if(suitSelect != -1)
-	{
-		playerGlowInd = 0;
+		else if(string_pos("Beam",ability) != 0)
+		{
+			playerGlowInd = 2;
+		}
+		else if(string_pos("Item",ability) != 0)
+		{
+			playerGlowInd = 2;
+			if(index == Item.PBomb)
+			{
+				playerGlowInd = 5;
+			}
+			if(index = Item.XRay)
+			{
+				playerGlowInd = 10;
+			}
+		}
+		else if(string_pos("Misc",ability) != 0)
+		{
+			playerGlowInd = 5;
+			if(index == Misc.PowerGrip)
+			{
+				playerGlowInd = 3;
+			}
+			if(index == Misc.ScrewAttack)
+			{
+				playerGlowInd = 0;
+			}
+		}
+		else if(string_pos("Boots",ability) != 0)
+		{
+			yDest = -20;
+			playerGlowInd = 0;
+			if(index == Boots.HiJump)
+			{
+				playerGlowInd = 8;
+			}
+			if(index == Boots.SpaceJump)
+			{
+				playerGlowInd = 6;
+			}
+			if(index == Boots.Dodge)
+			{
+				playerGlowInd = 5;
+				playerGlowInd2 = 6;
+			}
+		}
 	}
 
 	if(playerOffsetY > yDest)
@@ -308,7 +393,7 @@ function DrawInventoryPlayer()
 		{
 			surface_set_target(playerGlowSurf);
 			draw_clear_alpha(c_black,0);
-		
+			
 			if(playerGlowInd == 0)
 			{
 				draw_sprite(sprt_Sub_Samus_GlowMask,P.suit[Suit.Varia],xx,yy);
@@ -345,7 +430,23 @@ function DrawInventoryPlayer()
 			{
 				draw_sprite(sprt_Sub_Samus_GlowMask,playerGlowInd,xx,yy);
 			}
-		
+			
+			if(playerGlowInd2 != -1)
+			{
+				if(playerGlowInd2 == 6)
+				{
+					draw_sprite(sprt_Sub_Samus_GlowMask,6+P.boots[Boots.SpaceJump],xx,yy);
+					if(P.boots[Boots.HiJump])
+					{
+						draw_sprite(sprt_Sub_Samus_GlowMask,9,xx,yy);
+					}
+				}
+				else
+				{
+					draw_sprite(sprt_Sub_Samus_GlowMask,playerGlowInd2,xx,yy);
+				}
+			}
+			
 			surface_reset_target();
 		}
 	

@@ -1,0 +1,3 @@
+/// @description Initialize
+
+active = false;

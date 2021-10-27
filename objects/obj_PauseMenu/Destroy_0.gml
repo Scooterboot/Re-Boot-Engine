@@ -15,7 +15,15 @@ if(surface_exists(pauseSurf))
 {
     surface_free(pauseSurf);
 }
-if(surface_exists(mapSurf))
+if(ds_exists(invListL,ds_type_list))
 {
-    surface_free(mapSurf);
+	ds_list_destroy(invListL);
+}
+if(ds_exists(invListR,ds_type_list))
+{
+	ds_list_destroy(invListR);
+}
+if(surface_exists(textSurface))
+{
+    surface_free(textSurface);
 }

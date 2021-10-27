@@ -79,6 +79,7 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"ed9cfe0e-0905-45e0-a0e0-7497d065b32c","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
     "name": "WaveBeam",
     "path": "folders/Sprites/Weapons/Beams/WaveBeam.yy",

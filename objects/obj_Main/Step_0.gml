@@ -3,6 +3,7 @@
 //discord_update_image("brinstarelevator", "smallicon", "Derp", "Made by Scooterboot");
 
 //discord_update();
+global.currentItemPercent = (ds_list_size(global.collectedItemList) / global.totalItems) * 100;
 
 
 if(global.widescreenEnabled)
@@ -26,8 +27,16 @@ view_set_wport(0,global.resWidth);
 view_set_hport(0,global.resHeight);
 camera_set_view_size(view_camera[0],global.resWidth,global.resHeight);
 
-global.screenX = (window_get_width() - (surface_get_width(application_surface)*screenScale)) / 2;
-global.screenY = (window_get_height() - (surface_get_height(application_surface)*screenScale)) / 2;
+if(global.upscale == 7)
+{
+	global.screenX = (window_get_width() - surface_get_width(application_surface)) / 2;
+	global.screenY = (window_get_height() - surface_get_height(application_surface)) / 2;
+}
+else
+{
+	global.screenX = (window_get_width() - (surface_get_width(application_surface)*screenScale)) / 2;
+	global.screenY = (window_get_height() - (surface_get_height(application_surface)*screenScale)) / 2;
+}
 
 if(display_get_width() >= global.resWidth*(global.maxScreenScale+1) && display_get_height() >= global.resHeight*(global.maxScreenScale+1))
 {
@@ -83,6 +92,11 @@ if(room == rm_MainMenu)
 else if(!global.gamePaused)
 {
 	global.currentPlayTime += (1 / room_speed) * (oldDelta / delta_time);
+	
+	/*if(keyboard_check(vk_shift))
+	{
+		global.currentPlayTime += 3600;
+	}*/
 }
 
 if(keyboard_check(vk_shift))
@@ -101,98 +115,24 @@ if(keyboard_check_pressed(vk_f12))
 
 if(room == rm_MainMenu)
 {
-	// main menu music something something
-	
-	audio_stop_sound(global.musPrev);
-	audio_stop_sound(global.musCurrent);
-	audio_stop_sound(global.musNext);
-	audio_stop_sound(global.rmMusic);
+	for(var i = 0; i < array_length(sndPauseArray); i++)
+	{
+		audio_stop_sound(sndPauseArray[i]);
+	}
+}
+else if(global.gamePaused)
+{
+	for(var i = 0; i < array_length(sndPauseArray); i++)
+	{
+		audio_pause_sound(sndPauseArray[i]);
+	}
 }
 else
 {
-	if(global.musicVolume > 0)
+	for(var i = 0; i < array_length(sndPauseArray); i++)
 	{
-		global.musNext = global.rmMusic;
-		
-		if(global.musCurrent != global.musNext)
-		{
-			if(global.musCurrent != noone)
-			{
-				audio_sound_gain(global.musCurrent,0,225);
-			}
-			if(!global.roomTrans)
-			{
-				if(global.musNext != noone)
-				{
-					audio_play_sound(global.musNext,1,true);
-					audio_sound_gain(global.musNext,global.musicVolume,0);
-				}
-				global.musPrev = global.musCurrent;
-				global.musCurrent = global.musNext;
-			}
-		}
-		
-		if(global.musCurrent != noone && !audio_is_playing(global.musCurrent))
-		{
-			audio_play_sound(global.musCurrent,1,true);
-			audio_sound_gain(global.musCurrent,global.musicVolume,0);
-		}
+		audio_resume_sound(sndPauseArray[i]);
 	}
-	else
-	{
-		audio_stop_sound(global.musPrev);
-		audio_stop_sound(global.musCurrent);
-		audio_stop_sound(global.musNext);
-		audio_stop_sound(global.rmMusic);
-	}
-}
-
-if(audio_is_playing(global.musPrev) && audio_sound_get_gain(global.musPrev) <= 0)
-{
-	audio_stop_sound(global.musPrev);
-}
-
-if(global.gamePaused)
-{
-	audio_pause_sound(snd_Somersault);
-	audio_pause_sound(snd_Somersault_Loop);
-	audio_pause_sound(snd_Somersault_SJ);
-	audio_pause_sound(snd_ScrewAttack);
-	audio_pause_sound(snd_ScrewAttack_Loop);
-	audio_pause_sound(snd_Charge);
-	audio_pause_sound(snd_Charge_Loop);
-	audio_pause_sound(snd_SpeedBooster);
-	audio_pause_sound(snd_SpeedBooster_Loop);
-	audio_pause_sound(snd_ShineSpark);
-	audio_pause_sound(snd_ShineSpark_Charge);
-	audio_pause_sound(snd_PowerBombExplode);
-	audio_pause_sound(snd_SpiderLoop);
-	audio_pause_sound(snd_GrappleBeam_Loop);
-	audio_pause_sound(snd_Elevator);
-	audio_pause_sound(snd_LavaLoop);
-	audio_pause_sound(snd_LavaDamageLoop);
-	audio_pause_sound(snd_HeatDamageLoop);
-}
-else
-{
-	audio_resume_sound(snd_Somersault);
-	audio_resume_sound(snd_Somersault_Loop);
-	audio_resume_sound(snd_Somersault_SJ);
-	audio_resume_sound(snd_ScrewAttack);
-	audio_resume_sound(snd_ScrewAttack_Loop);
-	audio_resume_sound(snd_Charge);
-	audio_resume_sound(snd_Charge_Loop);
-	audio_resume_sound(snd_SpeedBooster);
-	audio_resume_sound(snd_SpeedBooster_Loop);
-	audio_resume_sound(snd_ShineSpark);
-	audio_resume_sound(snd_ShineSpark_Charge);
-	audio_resume_sound(snd_PowerBombExplode);
-	audio_resume_sound(snd_SpiderLoop);
-	audio_resume_sound(snd_GrappleBeam_Loop);
-	audio_resume_sound(snd_Elevator);
-	audio_resume_sound(snd_LavaLoop);
-	audio_resume_sound(snd_LavaDamageLoop);
-	audio_resume_sound(snd_HeatDamageLoop);
 }
 
 global.breakSndCounter = max(global.breakSndCounter-1,0);

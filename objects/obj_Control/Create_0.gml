@@ -1,5 +1,27 @@
 /// @description Initialize
 // --- Keyboard ---
+enum KeyboardButton
+{
+	Up,
+	Down,
+	Left,
+	Right,
+	Jump,
+	Shoot,
+	Dash,
+	AngleUp,
+	AngleDown,
+	AimLock,
+	QuickMorph,
+	ItemSelect,
+	ItemCancel
+}
+enum KeyboardButton_Menu
+{
+	Start,
+	Select,
+	Cancel
+}
 
 //Samus controls
 kRight = false;
@@ -28,6 +50,24 @@ kMCancel = false;
 kStart = false;
 
 // --- Gamepad ---
+enum GamepadButton
+{
+	Jump,
+	Shoot,
+	Dash,
+	AngleUp,
+	AngleDown,
+	AimLock,
+	QuickMorph,
+	ItemSelect,
+	ItemCancel
+}
+enum GamepadButton_Menu
+{
+	Start,
+	Select,
+	Cancel
+}
 
 //Samus controls
 gRight = false;
@@ -87,3 +127,14 @@ start = false;
 scr_LoadGamePadID();
 
 usingGamePad = (global.gpSlot != -1);
+
+leftClick = false;
+rightClick = false;
+
+
+
+cursorActive = false;
+cursorActiveTimer = 0;
+
+mousePrevX = mouse_x;
+mousePrevY = mouse_y;

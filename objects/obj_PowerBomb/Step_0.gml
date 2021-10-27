@@ -16,24 +16,23 @@ else
 }
 if(bombTimer <= 0)
 {
-	if(instance_exists(obj_Player))
+	mask_index = sprt_MBBombExplosion;
+	var player = collision_circle(x,y,(bbox_right-bbox_left)/3,obj_Player,false,true);
+	if(instance_exists(player))
 	{
-		if(place_meeting(x,y,obj_Player) && (!obj_Player.cDown || forceJump))
+		if(!player.cDown || forceJump)
 		{
-			var num = obj_Player.x - x;
-			if(abs(num) > 1)
+			var num = player.x - x;
+			if(abs(num) > 2)
 			{
-				obj_Player.bombJumpX = obj_Player.velX + (sign(num) * min(abs(num*1.5),2.75));
-				if(obj_Player.liquidState > 0)
+				player.bombJumpX = player.velX + (sign(num) * min(abs(num*1.5),2.75));
+				if(player.liquidState > 0)
 				{
-					obj_Player.bombJumpX /= 3;
+					player.bombJumpX /= 3;
 				}
 			}
-			obj_Player.bombJump = obj_Player.bombJumpMax[obj_Player.liquidState];
-			with(obj_Player)
-			{
-				//scr_SpiderEnable(false);
-			}
+			player.bombJump = player.bombJumpMax[player.liquidState];
+			player.SpiderEnable(false);
 		}
 	}
 	audio_play_sound(snd_PowerBombExplode,0,false);

@@ -71,6 +71,7 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"f77f7f3c-cd69-4092-bfcd-10a5dda01c64","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
     "name": "SpecialTiles",
     "path": "folders/Sprites/SpecialTiles.yy",

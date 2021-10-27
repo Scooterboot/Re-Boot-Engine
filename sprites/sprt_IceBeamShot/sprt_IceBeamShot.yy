@@ -67,6 +67,7 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"636d2cd9-f0e7-4401-b04a-21c5b6587c06","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
     "name": "IceBeam",
     "path": "folders/Sprites/Weapons/Beams/IceBeam.yy",

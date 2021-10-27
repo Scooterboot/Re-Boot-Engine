@@ -60,6 +60,25 @@ function scr_DrawHUD_Energy() {
 			draw_sprite_ext(sprt_HETank,(statEnergyTanks > i),floor(eX),floor(eY),1,1,0,c_white,1);
 		}
 	}
-
-
+	
+	if(boots[Boots.Dodge])
+	{
+		for(var i = 0; i < 2; i += 1)
+		{
+			draw_sprite_ext(sprt_DodgeMeter,0,xx+14*i,yy+22,1,1,0,c_white,1);
+		
+			var recharge = clamp((dodgeRecharge / (dodgeRechargeMax/2)) - i,0,1);
+			var width = sprite_get_width(sprt_DodgeMeter)*recharge;
+			var height = sprite_get_height(sprt_DodgeMeter);
+			var imgInd = 1 + (canDodge && recharge >= 1);
+			for(var j = 0; j < height; j++)
+			{
+				var rw = min(width-j+1,width);
+				if(rw > 0)
+				{
+					draw_sprite_part_ext(sprt_DodgeMeter,imgInd,0,j,rw,1,xx+14*i,yy+22+j,1,1,c_white,1);
+				}
+			}
+		}
+	}
 }

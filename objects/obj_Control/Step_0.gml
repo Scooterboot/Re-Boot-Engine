@@ -113,3 +113,17 @@ if(gamepad_button_check(global.gpSlot,gp_anybutton()) || gamepad_axis_value(glob
 {
 	usingGamePad = true;
 }
+
+leftClick = (mouse_button == mb_left);
+rightClick = (mouse_button == mb_right);
+
+cursorActive = (cursorActiveTimer > 0);
+if(mouse_button == mb_any || mouse_x != mousePrevX || mouse_y != mousePrevY)
+{
+	cursorActiveTimer = 300;
+}
+
+cursorActiveTimer = max(cursorActiveTimer - 1, 0);
+
+mousePrevX = mouse_x;
+mousePrevY = mouse_y;

@@ -95,6 +95,7 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"db96ecdd-cc5e-495a-b7fe-00f24bc1cb4d","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
     "name": "Subscreens",
     "path": "folders/Sprites/UI/Subscreens.yy",

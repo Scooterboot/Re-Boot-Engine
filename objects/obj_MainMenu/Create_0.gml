@@ -1,5 +1,5 @@
 /// @description Initialize
-
+event_inherited();
 enum MainScreen
 {
 	TitleIntro,
@@ -38,11 +38,13 @@ option = array(
 
 subOption = array(
 "START GAME",
+"COPY FILE",
 "DELETE FILE");
 
 noDataText = "NO DATA";
 energyText = "ENERGY";
 timeText = "TIME";
+itemsText = "ITEMS";
 
 fileEnergyMax[0] = -1;
 fileEnergyMax[1] = -1;
@@ -67,6 +69,11 @@ buttonTip = array(
 "Select",
 "Back",
 "Cancel");
+
+buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1]+"   ${menuCancelButton} - "+buttonTip[2];
+buttonTipScrib = scribble(buttonTipString);
+buttonTipScrib.starting_format("fnt_GUI_Small2",c_white);
+buttonTipScrib.align(fa_center,fa_middle);
 
 cRight = false;
 cLeft = false;

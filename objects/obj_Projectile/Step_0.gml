@@ -62,14 +62,14 @@ if(!isMissile)
 	{
 		
 	}*/
-	//scr_OpenDoor(x,y);
-	//scr_BreakBlock(x,y,0);
+	scr_OpenDoor(x,y,0);
+	scr_BreakBlock(x,y,0);
 	if(impact > 0)
 	{
-		//scr_OpenDoor(x+sign(xspeed),y+sign(yspeed));
-		//scr_BreakBlock(x+sign(xspeed),y+sign(yspeed),0);
-		//scr_OpenDoor(x-xspeed,y-yspeed);
-		//scr_BreakBlock(x-xspeed,y-yspeed,0);
+		scr_OpenDoor(x+sign(xspeed),y+sign(yspeed),0);
+		scr_BreakBlock(x+sign(xspeed),y+sign(yspeed),0);
+		scr_OpenDoor(x-xspeed,y-yspeed,0);
+		scr_BreakBlock(x-xspeed,y-yspeed,0);
 	}
 	if(sprite_width > sprite_height)
 	{
@@ -79,10 +79,10 @@ if(!isMissile)
 		{
 			if(i > 0)
 			{
-				//var xw = x-lengthdir_x(numw*i,direction),
-				//	yw = y-lengthdir_y(numw*i,direction);
-				//scr_OpenDoor(xw,yw);
-				//scr_BreakBlock(xw,yw,0);
+				var xw = x-lengthdir_x(numw*i,direction),
+					yw = y-lengthdir_y(numw*i,direction);
+				scr_OpenDoor(xw,yw,0);
+				scr_BreakBlock(xw,yw,0);
 			}
 		}
 	}
@@ -161,7 +161,7 @@ if(isIce)
     freezeType = 1 + isCharge;
 }
 
-if(!global.gamePaused)
+if(!global.gamePaused && damage > 0)
 {
     if(!hostile)
     {

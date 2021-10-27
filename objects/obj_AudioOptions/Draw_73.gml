@@ -17,11 +17,12 @@ if(surface_exists(surf))
 	surface_set_target(surf);
 	draw_clear_alpha(c_black,1);
 
-	draw_sprite_tiled_ext(bg_Menu2,0,ww/2-global.ogResWidth/2,0,1,1,c_white,1);
+	//draw_sprite_tiled_ext(bg_Menu2,0,ww/2-global.ogResWidth/2,0,1,1,c_white,1);
+	draw_sprite_ext(bg_Menu2,0,ww/2,hh/2,3,3,0,c_white,1);
 
 	var space = 16;
 
-	draw_set_font(GUIFont);
+	draw_set_font(fnt_GUI);
 	draw_set_color(c_white);
 	draw_set_alpha(1);
 	draw_set_halign(fa_left);
@@ -103,7 +104,7 @@ if(surface_exists(surf))
 
 	if(tipStrg != "")
 	{
-		draw_set_font(GUIFontSmall);
+		draw_set_font(fnt_GUI_Small);
 		draw_set_halign(fa_middle);
 		draw_set_valign(fa_bottom);
 		var height = string_height_ext(tipStrg,9,ww);
@@ -121,18 +122,23 @@ if(surface_exists(surf))
 		gpu_set_blendmode(bm_normal);
 	
 		draw_set_color(c_black);
-		draw_text_ext((ww/2)+1,-1+hh+1,tipStrg,9,ww);
+		draw_text_ext((ww/2)+1,hh,tipStrg,9,ww);
 		draw_set_color(c_white);
-		draw_text_ext((ww/2),-1+hh,tipStrg,9,ww);
+		draw_text_ext((ww/2),hh-1,tipStrg,9,ww);
 	
-		draw_set_font(GUIFont);
+		draw_set_font(fnt_GUI);
 		draw_set_halign(fa_left);
 		draw_set_valign(fa_top);
 	}
 	draw_set_alpha(1);
 	draw_set_color(c_black);
 	
-	draw_surface_ext(application_surface,0,0,1,1,0,c_white,1-alpha);
+	var appSurfScale = 1;
+	if(global.upscale == 7)
+	{
+		appSurfScale = 1/obj_Main.screenScale;
+	}
+	draw_surface_ext(application_surface,0,0,appSurfScale,appSurfScale,0,c_white,1-alpha);
 	
 	surface_reset_target();
 	

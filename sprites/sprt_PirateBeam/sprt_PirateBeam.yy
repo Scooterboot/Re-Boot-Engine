@@ -71,6 +71,7 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"e20afd0f-a3a4-4d9c-8ea8-d465f7462180","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
     "name": "NPC_Projectiles",
     "path": "folders/Sprites/NPCs/NPC_Projectiles.yy",

@@ -13,10 +13,16 @@ if (global.waterDistortion)
 	
 	if(surface_exists(Distortion))
 	{
+		var appSurfScale = 1;
+		if(global.upscale == 7)
+		{
+			appSurfScale = 1/obj_Main.screenScale;
+		}
+		
 		surface_resize(Distortion,global.resWidth,global.resHeight);
 		surface_set_target(Distortion);
 		draw_clear_alpha(c_black,1);
-		draw_surface(application_surface,0,0);
+		draw_surface_ext(application_surface,0,0,appSurfScale,appSurfScale,0,c_white,1);
 		surface_reset_target();
 	}
 	else

@@ -117,7 +117,7 @@ else
 {
 	image_speed = 0.5;
 }
-if(bombTimer <= 5)
+/*if(bombTimer <= 5)
 {
 	if(instance_exists(obj_Player) && !exploded)
 	{
@@ -133,10 +133,7 @@ if(bombTimer <= 5)
 				}
 			}
 			obj_Player.bombJump = obj_Player.bombJumpMax[obj_Player.liquidState];
-			with(obj_Player)
-			{
-				//scr_SpiderEnable(false);
-			}
+			obj_Player.SpiderEnable(false);
 			exploded = true;
 		}
 	}
@@ -144,4 +141,28 @@ if(bombTimer <= 5)
 	{
 		instance_destroy();
 	}
+}*/
+
+if(bombTimer <= 0)
+{
+	mask_index = sprt_MBBombExplosion;
+	var player = collision_circle(x,y,(bbox_right-bbox_left)/3,obj_Player,false,true);
+	if(instance_exists(player))
+	{
+		if(!player.cDown || forceJump)
+		{
+			var num = player.x - x;
+			if(abs(num) > 2)
+			{
+				player.bombJumpX = player.velX + (sign(num) * min(abs(num*1.5),2.75));
+				if(player.liquidState > 0)
+				{
+					player.bombJumpX /= 3;
+				}
+			}
+			player.bombJump = player.bombJumpMax[player.liquidState];
+			player.SpiderEnable(false);
+		}
+	}
+	instance_destroy();
 }

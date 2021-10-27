@@ -11,7 +11,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_Climb",
-  "duration": 0.264637,
+  "duration": 0.259637,
   "parent": {
     "name": "Player",
     "path": "folders/Sounds/Player.yy",

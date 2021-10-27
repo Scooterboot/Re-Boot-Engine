@@ -574,7 +574,7 @@ if(!friendly && damage > 0 && !frozen && !dead)
     var player = instance_place(x,y,obj_Player);
     if(instance_exists(player))
     {
-        if (player.immuneTime <= 0 && !player.isChargeSomersaulting && !player.isScrewAttacking && !player.isSpeedBoosting)
+        if (player.immuneTime <= 0 && !player.immune)//!player.isChargeSomersaulting && !player.isScrewAttacking && !player.isSpeedBoosting)
         {
             //var ang = point_direction(x,y,obj_Samus.x,obj_Samus.y);
             var ang = 45;

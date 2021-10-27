@@ -12,7 +12,7 @@ function scr_Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex)
 			var gain = 0;
 			if(asset_get_index(audio_get_name(global.prevShotSndIndex)) != SoundIndex)
 			{
-				gain = audio_sound_get_gain(global.prevShotSndIndex)*0.5;
+				gain = audio_sound_get_gain(global.prevShotSndIndex);//*0.5;
 			}
 			audio_sound_gain(global.prevShotSndIndex,gain,25);
 		}

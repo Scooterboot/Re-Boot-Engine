@@ -116,6 +116,7 @@ controlKey = array(
 "AIM LOCK","QUICK MORPH",
 "WEAPON SELECT","WEAPON CANCEL",
 "MENU - START","MENU - SELECT","MENU - CANCEL",
+"RESET TO DEFAULTS",
 "BACK");
 
 for(var i = 0; i < array_length(global.key); i++)
@@ -133,6 +134,7 @@ controlButton = array(
 "AIM LOCK","QUICK MORPH",
 "WEAPON SELECT","WEAPON CANCEL",
 "MENU - START","MENU - SELECT","MENU - CANCEL",
+"RESET TO DEFAULTS",
 "BACK");
 
 currentControlButton = array(global.gp_usePad,global.gp_useStick,global.gp_deadZone);

@@ -40,10 +40,10 @@ if(screenFade >= 1 && !menuClosing)
 		movePrev = move;
 		audio_play_sound(snd_MenuTick,0,false);
 	}
-	optionPos = scr_wrap(optionPos,0,array_length_1d(option)-1);
-	if(select || (moveX != 0 && optionPos < array_length_1d(option)-1))
+	optionPos = scr_wrap(optionPos,0,array_length(option)-1);
+	if(select || (moveX != 0 && optionPos < array_length(option)-1))
 	{
-		if(optionPos >= array_length_1d(option)-1)
+		if(optionPos >= array_length(option)-1)
 		{
 			audio_play_sound(snd_MenuBoop,0,false);
 		}
@@ -75,14 +75,16 @@ if(screenFade >= 1 && !menuClosing)
 				if(instance_exists(obj_Camera))
 				{
 					var camMoveX = (global.wideResWidth-global.ogResWidth)/2;
+					var rWidth = global.ogResWidth;
 					if(global.widescreenEnabled)
 					{
 						camMoveX = -camMoveX;
+						rWidth = global.wideResWidth;
 					}
-					obj_Camera.x += camMoveX;
+					obj_Camera.x = clamp(obj_Camera.x+camMoveX,0,room_width-rWidth);
 					camera_set_view_pos(view_camera[0],
-					camera_get_view_x(view_camera[0])+camMoveX,
-					camera_get_view_y(view_camera[0]));
+					clamp(camera_get_view_x(view_camera[0])+camMoveX,0,room_width-rWidth),
+					clamp(camera_get_view_y(view_camera[0]),0,room_height-global.resHeight));
 				}
 				var winMoveX = (global.wideResWidth*obj_Main.screenScale - global.ogResWidth*obj_Main.screenScale)/2;
 				if(global.widescreenEnabled)
@@ -109,7 +111,7 @@ if(screenFade >= 1 && !menuClosing)
 			case 4:
 			{
 				//Upscale mode
-				global.upscale = scr_wrap(global.upscale+select+moveX,0,6);
+				global.upscale = scr_wrap(global.upscale+select+moveX,0,7);//6);
 				break;
 			}
 			case 5:

@@ -1,4 +1,5 @@
 /// @description Initialize
+clampCam = true;
 
 camLimitMax = 16;//32;
 camLimitX = camLimitMax;
@@ -27,5 +28,5 @@ prevPlayerY = playerY;
 
 function camera_collide(colX, colY, dsList)
 {
-	return collision_rectangle_list(x+colX, y+colY, x+colX+global.resWidth-1, y+colY+global.resHeight-1,obj_CamTile,false,true,dsList,false);
+	return collision_rectangle_list(x+colX, y+colY, x+colX+global.resWidth-1, y+colY+global.resHeight-1,obj_CamTile,false,true,dsList,true);
 }

@@ -104,6 +104,9 @@ function scr_SaveGame() {
 	ds_list_mark_as_map(_root_list,ds_list_size(_root_list)-1);
 
 	ds_map_add(_worldFlags_map,"currentPlayTime",global.currentPlayTime);
+	
+	ds_map_add(_worldFlags_map,"openHatchList",ds_list_write(global.openHatchList));
+	ds_map_add(_worldFlags_map,"collectedItemList",ds_list_write(global.collectedItemList));
 
 
 	var _wrapper = ds_map_create();

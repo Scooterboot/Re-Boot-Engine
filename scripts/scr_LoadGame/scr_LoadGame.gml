@@ -88,10 +88,15 @@ function scr_LoadGame() {
 			}
 	
 			var _map_map = _list[| 1];
+			ds_grid_clear(global.mapReveal_Debug,false);
 			ds_grid_read(global.mapReveal_Debug, _map_map[? "mapReveal_Debug"]);
 	
 			var _worldFlags_map = _list[| 2];
 			global.currentPlayTime = _worldFlags_map[? "currentPlayTime"];
+			ds_list_clear(global.openHatchList);
+			ds_list_read(global.openHatchList, _worldFlags_map[? "openHatchList"]);
+			ds_list_clear(global.collectedItemList);
+			ds_list_read(global.collectedItemList, _worldFlags_map[? "collectedItemList"]);
 	
 	
 			ds_map_destroy(_wrapper);
@@ -122,6 +127,11 @@ function scr_LoadGame() {
 		instance_create_layer(sx,sy,"Player",obj_Player);
 		instance_create_layer(sx-(global.resWidth/2),sy-(global.resHeight/2),"Camera",obj_Camera);
 		
-		ds_grid_clear(global.mapReveal_Debug,false);
+		//ds_grid_clear(global.mapReveal_Debug,false);
+		ds_grid_destroy(global.mapReveal_Debug);
+		global.mapReveal_Debug = obj_Map.CreateMapRevealGrid(sprt_Map_DebugRooms);
+		global.currentPlayTime = 0;
+		ds_list_clear(global.openHatchList);
+		ds_list_clear(global.collectedItemList);
 	}
 }

@@ -23,18 +23,55 @@ function scr_DrawMiniMap() {
 	draw_sprite_ext(sprt_HMapBase,0,mapX,mapY,1,1,0,c_white,1);
 	if(global.rmMapSprt != noone)
 	{
-		if(!instance_exists(obj_Transition) || obj_Transition.transitionComplete)
-		{
+		//if(!instance_exists(obj_Transition) || obj_Transition.transitionComplete)
+		//{
 		    currentMap = global.rmMapSprt;
-			playerMapX = (scr_floor(x/global.rmMapSize) + global.rmMapX) * 8;
-			playerMapY = (scr_floor(y/global.rmMapSize) + global.rmMapY) * 8;
+			//playerMapX = (scr_floor(x/global.rmMapSize) + global.rmMapX) * 8;
+			//playerMapY = (scr_floor(y/global.rmMapSize) + global.rmMapY) * 8;
+			playerMapX = obj_Map.playerMapX * 8;
+			playerMapY = obj_Map.playerMapY * 8;
+			
+			if(instance_exists(obj_MainMenu))
+			{
+				prevPlayerMapX = playerMapX;
+				prevPlayerMapY = playerMapY;
+			}
+			
+			if(playerMapX != prevPlayerMapX)
+			{
+				//pMapOffsetX = -8*sign(playerMapX-prevPlayerMapX);
+			}
+			if(playerMapY != prevPlayerMapY)
+			{
+				//pMapOffsetY = -8*sign(playerMapY-prevPlayerMapY);
+			}
+			
+			prevPlayerMapX = playerMapX;
+			prevPlayerMapY = playerMapY;
+		//}
+		obj_Map.DrawMap(currentMap,mapX,mapY,playerMapX-16+pMapOffsetX,playerMapY-8+pMapOffsetY,40,24);
+		
+		if(pMapOffsetX > 0)
+		{
+			pMapOffsetX = max((pMapOffsetX - 0.75)*0.9,0);
 		}
-		scr_DrawMap(currentMap,mapX,mapY,playerMapX-16,playerMapY-8,40,24);
+		if(pMapOffsetX < 0)
+		{
+			pMapOffsetX = min((pMapOffsetX + 0.75)*0.9,0);
+		}
+		if(pMapOffsetY > 0)
+		{
+			pMapOffsetY = max((pMapOffsetY - 0.75)*0.9,0);
+		}
+		if(pMapOffsetY < 0)
+		{
+			pMapOffsetY = min((pMapOffsetY + 0.75)*0.9,0);
+		}
 	}
     
 	draw_set_color(c_white);
 	draw_set_alpha(hudMapFlashAlpha);
-	draw_rectangle(mapX+16,mapY+8,mapX+23,mapY+15,false);
+	draw_rectangle(mapX+16-pMapOffsetX,mapY+8-pMapOffsetY,mapX+23-pMapOffsetX,mapY+15-pMapOffsetY,false);
 	draw_set_alpha(1);
     
 	if(hudMapFlashAlpha <= 0)

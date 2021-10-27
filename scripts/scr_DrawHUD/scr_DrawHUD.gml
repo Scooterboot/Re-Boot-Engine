@@ -99,6 +99,8 @@ function scr_DrawHUD() {
 		{
 			draw_set_color(c_white);
 	        draw_set_font(MenuFont);
+			draw_set_halign(fa_left);
+			draw_set_valign(fa_top);
 			var strg = itemName[itemHighlighted[1]],
 	        tX = 123 - scr_round(string_width(strg) / 2);
 	        draw_text_transformed(vX+tX,vY+21,itemName[itemHighlighted[1]],1,1,0);

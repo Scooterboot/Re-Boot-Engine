@@ -27,24 +27,28 @@
     {"compositeImage":{"FrameId":{"name":"e9f8c8be-0249-43a7-a7d8-8f0b57eda177","path":"sprites/sprt_Slope/sprt_Slope.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
         {"FrameId":{"name":"e9f8c8be-0249-43a7-a7d8-8f0b57eda177","path":"sprites/sprt_Slope/sprt_Slope.yy",},"LayerId":{"name":"b0b27094-ea2f-44f4-8a38-5d345a675c1b","path":"sprites/sprt_Slope/sprt_Slope.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
       ],"parent":{"name":"sprt_Slope","path":"sprites/sprt_Slope/sprt_Slope.yy",},"resourceVersion":"1.0","name":"e9f8c8be-0249-43a7-a7d8-8f0b57eda177","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"41947646-87f4-456c-ba15-7ba8385b1870","path":"sprites/sprt_Slope/sprt_Slope.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"41947646-87f4-456c-ba15-7ba8385b1870","path":"sprites/sprt_Slope/sprt_Slope.yy",},"LayerId":{"name":"b0b27094-ea2f-44f4-8a38-5d345a675c1b","path":"sprites/sprt_Slope/sprt_Slope.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"sprt_Slope","path":"sprites/sprt_Slope/sprt_Slope.yy",},"resourceVersion":"1.0","name":"41947646-87f4-456c-ba15-7ba8385b1870","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "sequence": {
     "spriteId": {"name":"sprt_Slope","path":"sprites/sprt_Slope/sprt_Slope.yy",},
     "timeUnits": 1,
     "playback": 1,
-    "playbackSpeed": 1.0,
+    "playbackSpeed": 0.0,
     "playbackSpeedType": 1,
     "autoRecord": true,
     "volume": 1.0,
-    "length": 1.0,
+    "length": 2.0,
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
       {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"6fc6eb82-d5fc-4595-b307-51b44ebabad5","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"e9f8c8be-0249-43a7-a7d8-8f0b57eda177","path":"sprites/sprt_Slope/sprt_Slope.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"4b3b80ee-c7e6-4d2a-8c6a-d3ccea206f02","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"41947646-87f4-456c-ba15-7ba8385b1870","path":"sprites/sprt_Slope/sprt_Slope.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"modifiers":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack",},
     ],
-    "visibleRange": {"x":0.0,"y":0.0,},
+    "visibleRange": null,
     "lockOrigin": false,
     "showBackdrop": true,
     "showBackdropImage": false,
@@ -67,6 +71,31 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"b0b27094-ea2f-44f4-8a38-5d345a675c1b","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": {
+    "left": 0,
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "guideColour": [
+      4294902015,
+      4294902015,
+      4294902015,
+      4294902015,
+    ],
+    "highlightColour": 1728023040,
+    "highlightStyle": 0,
+    "enabled": false,
+    "tileMode": [
+      0,
+      0,
+      0,
+      0,
+      0,
+    ],
+    "resourceVersion": "1.0",
+    "loadedVersion": null,
+    "resourceType": "GMNineSliceData",
+  },
   "parent": {
     "name": "CollisionTiles",
     "path": "folders/Sprites/CollisionTiles.yy",

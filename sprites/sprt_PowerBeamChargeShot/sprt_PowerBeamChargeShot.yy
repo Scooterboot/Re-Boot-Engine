@@ -71,6 +71,7 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"ee9fb8ac-05b9-45f7-a6ce-7b853c0b8fea","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
     "name": "PowerBeam",
     "path": "folders/Sprites/Weapons/Beams/PowerBeam.yy",

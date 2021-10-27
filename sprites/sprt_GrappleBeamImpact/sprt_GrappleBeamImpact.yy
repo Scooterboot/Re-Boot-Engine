@@ -79,6 +79,7 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"64657c46-d0d7-4c9a-836d-27c0e67904cd","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
     "name": "GrappleBeam",
     "path": "folders/Sprites/Weapons/GrappleBeam.yy",

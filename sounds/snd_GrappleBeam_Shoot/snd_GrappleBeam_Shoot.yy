@@ -11,7 +11,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_GrappleBeam_Shoot",
-  "duration": 0.191259,
+  "duration": 0.186259,
   "parent": {
     "name": "Misc",
     "path": "folders/Sounds/Weapons/Misc.yy",

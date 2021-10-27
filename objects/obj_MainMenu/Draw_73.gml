@@ -18,20 +18,36 @@ if(currentScreen == MainScreen.Title)
 		var stX = xx+(ww/2),
 			stY = yy+hh-40;
 	
-		draw_set_font(GUIFont);
+		draw_set_font(fnt_GUI);
 		draw_set_halign(fa_center);
 		draw_set_valign(fa_center);
-		var col3 = c_yellow;
-		if(pressStartAnim%2 != 0)
+		//var col3 = c_yellow;
+		//if(pressStartAnim%2 != 0)
+		if(pressStartAnim%6 >= 3)
 		{
-			col3 = c_black;
+			//col3 = c_white;
+			//draw_set_color(c_white);
+			//draw_set_alpha(titleFade*0.5);
+			draw_set_color(c_ltgray);
+			draw_set_alpha(titleFade);
+			for(var i = 0; i < 8; i++)
+			{
+				draw_text(scr_round(stX+lengthdir_x(1.1,45*i)),scr_round(stY+lengthdir_y(1.1,45*i)),startString);
+			}
+			draw_set_color(c_yellow);
+			draw_set_alpha(titleFade*0.75);
+			draw_text(scr_round(stX),scr_round(stY),startString);
 		}
-		scr_DrawOptionText(stX,stY,startString,col3,titleFade,0,c_black,0);
+		else
+		{
+			scr_DrawOptionText(stX,stY,startString,c_yellow,titleFade,0,c_black,0);
+		}
 	}
 }
 if(currentScreen == MainScreen.FileSelect)
 {
-	draw_sprite_tiled_ext(bg_Menu2,0,scr_round(xx)+ww/2-global.ogResWidth/2,scr_round(yy),1,1,c_white,1);
+	//draw_sprite_tiled_ext(bg_Menu2,0,scr_round(xx)+ww/2-global.ogResWidth/2,scr_round(yy),1,1,c_white,1);
+	draw_sprite_ext(bg_Menu2,0,scr_round(xx+ww/2),scr_round(yy+hh/2),3,3,0,c_white,1);
 	
 	cursorFrameCounter++;
 	if(cursorFrameCounter > 5)
@@ -46,7 +62,7 @@ if(currentScreen == MainScreen.FileSelect)
 				
 	var space = 14;
 				
-	draw_set_font(GUIFont);
+	draw_set_font(fnt_GUI);
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
 	var oX = scr_round(ww/2 - 96),
@@ -71,14 +87,14 @@ if(currentScreen == MainScreen.FileSelect)
 	}
 	
 	//oX = 18;
-	oX = ww/2 - 110;
+	oX = ww/2 - 128;//110;
 	var oX2 = 18;
 	oY = 48;
-	space = 32;
+	space = 40;//32;
 	
 	for(var i = 0; i < 3; i++)
 	{
-		draw_set_font(GUIFont);
+		draw_set_font(fnt_GUI);
 		
 		var oY2 = oY + (i*space);
 					
@@ -99,48 +115,65 @@ if(currentScreen == MainScreen.FileSelect)
 		
 		draw_set_alpha(alph);
 		draw_set_color(col);
-		draw_roundrect(oX-3,oY2-10,ww-oX+1,oY2+string_height(option[i])+8,false);
+		draw_roundrect(oX-3,oY2-14,ww-oX+1,oY2+string_height(option[i])+12,false);
 		
-		draw_sprite_ext(sprt_FileIcon,frame,oX+string_width(option[i])+12,oY2+(string_height(option[i])/2),1,1,0,c_white,1);
+		draw_set_font(fnt_Menu);
+		draw_sprite_ext(sprt_FileIcon,frame,oX+string_width(option[i])+8,oY2+(string_height(option[i])/2),1,1,0,c_white,1);
 		
-		draw_set_font(MenuFont);
-		scr_DrawOptionText(oX,oY2,option[i],c_white,1,0,c_black,0);
+		scr_DrawOptionText(oX+2,oY2,option[i],c_white,1,0,c_black,0);
 		
-		draw_set_font(GUIFontSmall);
-		scr_DrawOptionText(ww-oX-string_width(timeText)-8,oY2-string_height(timeText)+2,timeText,c_white,1,0,c_black,0);
 		if(fileTime[i] >= 0)
 		{
+			draw_set_font(fnt_GUI_Small2);
+			scr_DrawOptionText(ww-oX-string_width(timeText)-12,oY2-string_height(timeText)+4,timeText,c_white,1,0,c_black,0);
 			var minute = scr_floor(fileTime[i] / 60);
 			var hour = scr_floor(minute / 60);
+			while(minute >= 60)
+			{
+				minute -= 60;
+			}
 			var tStr = string_format(hour,2,0)+":"+string_format(minute,2,0);
 			tStr = string_replace_all(tStr," ","0");
 			
-			draw_set_font(MenuFont);
-			scr_DrawOptionText(scr_round(ww-oX-(string_width(tStr)/2)-18),scr_round(oY2+(string_height(tStr)/2)),tStr,c_white,1,0,c_black,0);
+			draw_set_font(fnt_Menu2);
+			scr_DrawOptionText(scr_round(ww-oX-(string_width(tStr)/2)-22),scr_round(oY2+(string_height(tStr)/2)),tStr,c_white,1,0,c_black,0);
+		}
+		if(filePercent[i] >= 0)
+		{
+			var px = ww/2+66;
+				
+			draw_set_font(fnt_GUI_Small2);
+			scr_DrawOptionText(px-string_width(itemsText)/2-2,oY2-string_height(itemsText)+4,itemsText,c_white,1,0,c_black,0);
+			var percent = scr_floor(filePercent[i]);
+			var pStr = string_format(percent,2,0)+"%";
+			pStr = string_replace_all(pStr," ","0");
+			
+			draw_set_font(fnt_Menu2);
+			scr_DrawOptionText(scr_round(px-(string_width(pStr)/2)-2),scr_round(oY2+(string_height(pStr)/2)),pStr,c_white,1,0,c_black,0);
 		}
 		
 		if(selectedFile != i)
 		{
 			if(fileEnergy[i] < 0)
 			{
-				draw_set_font(GUIFont);
+				draw_set_font(fnt_GUI);
 				scr_DrawOptionText(oX2+(ww/2)-(string_width(noDataText)/2),oY2,noDataText,c_white,1,0,c_black,0);
 			}
 			else
 			{
-				draw_set_font(GUIFontSmall);
-				scr_DrawOptionText(oX2+(ww/2)-string_width(energyText)-2,oY2-string_height(timeText)+4,energyText,c_white,1,0,c_black,0);
+				var tx = ww/2-10,
+					ty = oY2-4;
+				draw_set_font(fnt_GUI_Small2);
+				scr_DrawOptionText(tx-string_width(energyText)-2,oY2-string_height(timeText)+4,energyText,c_white,1,0,c_black,0);
 				
-				draw_set_font(MenuFont);
+				draw_set_font(fnt_Menu);
 				var str = string(fileEnergy[i]);
 				str = string_char_at(str,string_length(str)-1)+string_char_at(str,string_length(str));
-				scr_DrawOptionText(oX2+(ww/2)-(string_width(str)/2)-20,oY2+2,str,c_white,1,0,c_black,0);
+				scr_DrawOptionText(tx-(string_width(str)/2)-16,oY2+2,str,c_white,1,0,c_black,0);
 				
 				
 				var energyTanks = floor(fileEnergyMax[i] / 100),
 					statEnergyTanks = floor(fileEnergy[i] / 100);
-				var tx = oX2+(ww/2),
-					ty = oY2-4;
 				if(energyTanks > 0)
 				{
 					for(var j = 0; j < energyTanks; j++)
@@ -163,17 +196,18 @@ if(currentScreen == MainScreen.FileSelect)
 		}
 		else if(selectedFile == i)
 		{
-			draw_set_font(GUIFont);
+			draw_set_font(fnt_GUI);
 			var exists = file_exists(scr_GetFileName(i));
-			for(var j = 0; j < 2; j++)
+			for(var j = 0; j < 3; j++)
 			{
 				if(j <= 0 || exists)
 				{
-					var sx = scr_ceil(oX2+(ww/2)-(string_width(subOption[j])/2)+10),
+					var sx = scr_ceil(oX2+(ww/2)-(string_width(subOption[0])/2)-10),
 						sy = oY2;
 					if(exists)
 					{
-						sy = oY2-5 + 10*j;
+						sx -= 10;
+						sy = oY2-10 + 10*j;
 					}
 					
 					var col2 = make_color_rgb(26,108,0),
@@ -181,6 +215,7 @@ if(currentScreen == MainScreen.FileSelect)
 					if(optionSubPos == j)
 					{
 						alph2 = 0.5;
+						sx += 4;
 			
 						draw_sprite_ext(sprt_SelectCursor,cursorFrame,sx-4,sy+string_height(subOption[j])/2,1,1,0,c_white,1);
 					}
@@ -191,7 +226,7 @@ if(currentScreen == MainScreen.FileSelect)
 		}
 	}
 	
-	var bTip = buttonTip[2];
+	/*var bTip = buttonTip[2];
 	if(selectedFile != -1)
 	{
 		bTip = buttonTip[3];
@@ -207,8 +242,9 @@ if(currentScreen == MainScreen.FileSelect)
 
 	var tipStrg = moveKeys+" - "+buttonTip[0]+"   "+acceptKey+" - "+buttonTip[1]+"   "+cancelKey+" - "+bTip;
 
-	draw_set_font(GUIFontSmall);
-	draw_set_valign(fa_bottom);
+	draw_set_font(fnt_GUI_Small);
+	//draw_set_valign(fa_bottom);
+	draw_set_valign(fa_middle);
 	var height = string_height_ext(tipStrg,9,ww);
 
 	draw_set_alpha(0.75);
@@ -226,7 +262,7 @@ if(currentScreen == MainScreen.FileSelect)
 	if(obj_Control.usingGamePad)
 	{
 		var tipx = xx+(ww/2),
-			tipy = yy+hh,
+			tipy = yy+hh-4,
 			mText = " - "+buttonTip[0]+"   ",
 			aText = " - "+buttonTip[1]+"   ",
 			cText = " - "+bTip,
@@ -238,17 +274,17 @@ if(currentScreen == MainScreen.FileSelect)
 		
 		draw_set_halign(fa_left);
 		
-		draw_sprite_ext(dSprt,0,scr_round(tipx+sprite_get_width(dSprt)/2),scr_round(tipy-sprite_get_height(dSprt)+1),1,1,0,c_white,1);
+		draw_sprite_ext(dSprt,0,scr_round(tipx+sprite_get_width(dSprt)/2),scr_round(tipy-1),1,1,0,c_white,1);
 		tipx += sprite_get_width(dSprt);
 		scr_DrawOptionText(scr_round(tipx),scr_round(tipy),mText,c_white,1,0,c_black,0);
 		tipx += string_width(mText);
 		
-		draw_sprite_ext(bSprt,scr_GetButtonSprtIndexXB(global.gp_m[1]),scr_round(tipx+sprite_get_width(bSprt)/2),scr_round(tipy-sprite_get_height(bSprt)+1),1,1,0,c_white,1);
+		draw_sprite_ext(bSprt,scr_GetButtonSprtIndexXB(global.gp_m[1]),scr_round(tipx+sprite_get_width(bSprt)/2),scr_round(tipy-1),1,1,0,c_white,1);
 		tipx += sprite_get_width(bSprt);
 		scr_DrawOptionText(scr_round(tipx),scr_round(tipy),aText,c_white,1,0,c_black,0);
 		tipx += string_width(aText);
 		
-		draw_sprite_ext(bSprt,scr_GetButtonSprtIndexXB(global.gp_m[2]),scr_round(tipx+sprite_get_width(bSprt)/2),scr_round(tipy-sprite_get_height(bSprt)+1),1,1,0,c_white,1);
+		draw_sprite_ext(bSprt,scr_GetButtonSprtIndexXB(global.gp_m[2]),scr_round(tipx+sprite_get_width(bSprt)/2),scr_round(tipy-1),1,1,0,c_white,1);
 		tipx += sprite_get_width(bSprt);
 		scr_DrawOptionText(scr_round(tipx),scr_round(tipy),cText,c_white,1,0,c_black,0);
 		
@@ -257,12 +293,45 @@ if(currentScreen == MainScreen.FileSelect)
 	{
 		draw_set_halign(fa_middle);
 		draw_set_color(c_black);
-		draw_text_ext(scr_round(xx+(ww/2)+1),scr_round(yy-1+hh+1),tipStrg,9,ww);
+		draw_text_ext(scr_round(xx+(ww/2)+1),scr_round(yy-4+hh+1),tipStrg,9,ww);
 		draw_set_color(c_white);
-		draw_text_ext(scr_round(xx+(ww/2)),scr_round(yy-1+hh),tipStrg,9,ww);
+		draw_text_ext(scr_round(xx+(ww/2)),scr_round(yy-4+hh),tipStrg,9,ww);
+	}*/
+	var bTip = buttonTip[2];
+	if(selectedFile != -1)
+	{
+		bTip = buttonTip[3];
 	}
+	buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1]+"   ${menuCancelButton} - "+bTip;
+	var str = InsertIconsIntoString(buttonTipString);
+	if(buttonTipScrib.text != str)
+	{
+		buttonTipScrib.overwrite(str);
+	}
+	
+	var height = buttonTipScrib.get_height();
 
-	draw_set_font(GUIFont);
+	draw_set_alpha(0.75);
+	draw_set_color(c_black);
+	draw_rectangle(xx-32,yy+hh-height,xx+ww+31,yy+hh,false);
+	draw_set_alpha(1);
+	draw_set_color(c_white);
+
+	var col2 = make_color_rgb(26,108,0);
+	gpu_set_blendmode(bm_add);
+	draw_rectangle_color(xx-32,yy+hh-height,xx+(ww/2)-1,yy+hh,c_black,col2,col2,c_black,false);
+	draw_rectangle_color(xx+(ww/2),yy+hh-height,xx+ww+31,yy+hh,col2,c_black,c_black,col2,false);
+	gpu_set_blendmode(bm_normal);
+	
+	var tipx = scr_round(xx+(ww/2)),
+		tipy = scr_round(yy+hh-4);
+	
+	buttonTipScrib.blend(c_black,1);
+	buttonTipScrib.draw(tipx+1,tipy+1);
+	buttonTipScrib.blend(c_white,1);
+	buttonTipScrib.draw(tipx,tipy);
+
+	draw_set_font(fnt_GUI);
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
 

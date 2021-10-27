@@ -67,7 +67,7 @@ if(screenFade >= 1 && !menuClosing)
 		{
 			optionPos += movePrev;
 		}
-		optionPos = scr_wrap(optionPos,0,array_length_1d(option)-1);
+		optionPos = scr_wrap(optionPos,0,array_length(option)-1);
 		if(select || (moveX != 0 && optionPos < 4))
 		{
 			if(optionPos >= 4)
@@ -169,7 +169,7 @@ if(screenFade >= 1 && !menuClosing)
 	
 	if(screen == 1)
 	{
-		optionPos = scr_wrap(optionPos,0,array_length_1d(advOption)-1);
+		optionPos = scr_wrap(optionPos,0,array_length(advOption)-1);
 		if(select || (moveX != 0 && optionPos < 3))
 		{
 			if(optionPos >= 3)
@@ -228,16 +228,45 @@ if(screenFade >= 1 && !menuClosing)
 		{
 			optionPos += movePrev;
 		}
-		optionPos = scr_wrap(optionPos,0,array_length_1d(controlKey)-1);
+		optionPos = scr_wrap(optionPos,0,array_length(controlKey)-1);
 		if(select)
 		{
-			if(optionPos < array_length_1d(controlKey)-1)
+			if(optionPos < array_length(controlKey)-2)
 			{
 				if(selectedKey == -1)
 				{
 					selectedKey = optionPos;
 					keySelectDelay = 5;
 				}
+			}
+			else if(optionPos < array_length(controlKey)-1)
+			{
+				global.key[0] = vk_up;
+				global.key[1] = vk_down;
+				global.key[2] = vk_left;
+				global.key[3] = vk_right;
+				global.key[4] = ord("Z");
+				global.key[5] = ord("X");
+				global.key[6] = ord("C");
+				global.key[7] = ord("S");
+				global.key[8] = ord("A");
+				global.key[9] = ord("D");
+				global.key[10] = ord("V");
+				global.key[11] = ord("Q");
+				global.key[12] = ord("W");
+				global.key_m[0] = vk_enter;
+				global.key_m[1] = ord("Z");
+				global.key_m[2] = ord("X");
+				scr_SaveKeyboard(global.key[0],0);
+				for(var i = 0; i < array_length(global.key); i++)
+				{
+					currentControlKey[i] = global.key[i];
+				}
+				for(var i = 0; i < array_length(global.key_m); i++)
+				{
+					currentControlKey[i+array_length(global.key)] = global.key_m[i];
+				}
+				audio_play_sound(snd_MenuBoop,0,false);
 			}
 			else
 			{
@@ -258,13 +287,13 @@ if(screenFade >= 1 && !menuClosing)
 					{
 						scr_SaveKeyboard(newKey,selectedKey);
 						
-						for(var i = 0; i < array_length_1d(global.key); i++)
+						for(var i = 0; i < array_length(global.key); i++)
 						{
 							currentControlKey[i] = global.key[i];
 						}
-						for(var i = 0; i < array_length_1d(global.key_m); i++)
+						for(var i = 0; i < array_length(global.key_m); i++)
 						{
-							currentControlKey[i+array_length_1d(global.key)] = global.key_m[i];
+							currentControlKey[i+array_length(global.key)] = global.key_m[i];
 						}
 					}
 					selectedKey = -1;
@@ -284,10 +313,10 @@ if(screenFade >= 1 && !menuClosing)
 		{
 			optionPos += movePrev;
 		}
-		optionPos = scr_wrap(optionPos,0,array_length_1d(controlButton)-1);
+		optionPos = scr_wrap(optionPos,0,array_length(controlButton)-1);
 		if(select || (moveX != 0 && optionPos <= 2))
 		{
-			if(optionPos < array_length_1d(controlButton)-1)
+			if(optionPos < array_length(controlButton)-2)
 			{
 				if(selectedKey == -1)
 				{
@@ -337,6 +366,36 @@ if(screenFade >= 1 && !menuClosing)
 					}
 				}
 			}
+			else if(optionPos < array_length(controlButton)-1)
+			{
+				global.gp_usePad = true;
+				global.gp_useStick = true;
+				global.gp_deadZone = 0.5;
+
+				global.gp[0] = gp_face1;
+				global.gp[1] = gp_face3;
+				global.gp[2] = gp_face2;
+				global.gp[3] = gp_shoulderrb;
+				global.gp[4] = gp_shoulderlb;
+				global.gp[5] = gp_shoulderl;
+				global.gp[6] = gp_shoulderr;
+				global.gp[7] = gp_select;
+				global.gp[8] = gp_face4;
+
+				global.gp_m[0] = gp_start;
+				global.gp_m[1] = gp_face1;
+				global.gp_m[2] = gp_face2;
+				scr_SaveGamepad(global.gp[0],0);
+				for(var i = 0; i < array_length(global.gp); i++)
+				{
+					currentControlButton[i+3] = global.gp[i];
+				}
+				for(var i = 0; i < array_length(global.gp_m); i++)
+				{
+					currentControlButton[i+3+array_length(global.gp)] = global.gp_m[i];
+						}
+				audio_play_sound(snd_MenuBoop,0,false);
+			}
 			else
 			{
 				optionPos = prevOptionPos;
@@ -358,13 +417,13 @@ if(screenFade >= 1 && !menuClosing)
 					{
 						scr_SaveGamepad(newButton,selectedKey);
 						
-						for(var i = 0; i < array_length_1d(global.gp); i++)
+						for(var i = 0; i < array_length(global.gp); i++)
 						{
 							currentControlButton[i+3] = global.gp[i];
 						}
-						for(var i = 0; i < array_length_1d(global.gp_m); i++)
+						for(var i = 0; i < array_length(global.gp_m); i++)
 						{
-							currentControlButton[i+3+array_length_1d(global.gp)] = global.gp_m[i];
+							currentControlButton[i+3+array_length(global.gp)] = global.gp_m[i];
 						}
 					}
 					selectedKey = -1;

@@ -2,4 +2,4 @@
 
 Size = 1;
 Timer = 2;
-Turned = 0;
+//Turned = 0;

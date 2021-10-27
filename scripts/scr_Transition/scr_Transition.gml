@@ -1,5 +1,6 @@
 ///scr_Transition(goal, currentID, targetID, difX, difY, spawnDist)
-function scr_Transition(argument0, argument1, argument2, argument3, argument4, argument5) {
+function scr_Transition(argument0, argument1, argument2, argument3, argument4, argument5)
+{
 	global.gamePaused = true;
 	var fade = instance_create_depth(0,0,0,obj_Transition);
 	fade.goal = argument0;
@@ -8,6 +9,4 @@ function scr_Transition(argument0, argument1, argument2, argument3, argument4, a
 	fade.difX = argument3;
 	fade.difY = argument4;
 	fade.spawnDist = argument5;
-
-
 }

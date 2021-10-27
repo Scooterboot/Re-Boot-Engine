@@ -11,7 +11,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_Door_Open",
-  "duration": 0.405063,
+  "duration": 0.400062,
   "parent": {
     "name": "Tiles",
     "path": "folders/Sounds/Tiles.yy",

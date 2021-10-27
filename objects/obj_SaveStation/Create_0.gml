@@ -8,3 +8,5 @@ beginSave = 0;
 saving = 0;
 maxSave = 180;
 saveCooldown = 0;
+
+gameSavedText = "GAME SAVED";

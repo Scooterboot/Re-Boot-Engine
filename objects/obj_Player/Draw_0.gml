@@ -89,7 +89,7 @@ else
 		}
 		else
 		{
-			if(statCharge >= maxCharge || (shineCharge > 0 && state != State.Spark))
+			if(statCharge >= maxCharge || (state == State.Dodge && statCharge < maxCharge) || (shineCharge > 0 && state != State.Spark))
 			{
 				if(!global.gamePaused)
 				{
@@ -99,7 +99,7 @@ else
 				{
 					if(statCharge >= maxCharge)
 					{
-						if(state == State.Somersault)
+						if(state == State.Somersault || state == State.Dodge)
 						{
 							palIndex2 = beamPalIndex;
 							palDif = 1;
@@ -110,13 +110,18 @@ else
 							palDif = 0.125;
 						}
 					}
+					else if(state == State.Dodge)
+					{
+						palIndex2 = 5;
+						palDif = 0.375;
+					}
 					else if(shineCharge > 0)
 					{
 						palIndex2 = 4;
 						palDif = 0.35;
 					}
 				}
-				else if(state == State.Somersault && statCharge >= maxCharge)
+				else if((state == State.Somersault || state == State.Dodge) && statCharge >= maxCharge)
 				{
 					palIndex2 = beamPalIndex;
 					palDif = 0.375;
@@ -228,9 +233,15 @@ else
 	gravGlowAlpha = max(gravGlowAlpha - 0.05*(!global.gamePaused),0);
 	gravGlowNum = 10;
 }
-if(gravGlowAlpha > 0)
+if(gravGlowAlpha > 0)// || state == State.Dodge)
 {
-	var col = c_fuchsia;
+	var col = c_fuchsia,
+		alp = gravGlowAlpha;
+	/*if(state == State.Dodge)
+	{
+		col = c_lime;
+		alp = 1;
+	}*/
 	gpu_set_fog(true,col,0,0);
 	gpu_set_blendmode(bm_add);
 	for(var i = 0; i < 360; i += 45)
@@ -239,7 +250,7 @@ if(gravGlowAlpha > 0)
 		{
 			var gx = x+scr_ceil(lengthdir_x(1,i)*j),
 			gy = y+scr_ceil(lengthdir_y(1,i)*j);
-			DrawPlayer(gx,gy,rotation,gravGlowAlpha*(0.5*(1/6)));//,false);
+			DrawPlayer(gx,gy,rotation,alp*(0.5*(1/6)));//,false);
 		}
 	}
 	gpu_set_blendmode(bm_normal);

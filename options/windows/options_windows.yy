@@ -1,7 +1,7 @@
 {
   "option_windows_display_name": "Metroid: Re-Boot Engine",
   "option_windows_executable_name": "${project_name}",
-  "option_windows_version": "4.0.0.0",
+  "option_windows_version": "4.1.0.0",
   "option_windows_company_info": "YoYo Games Ltd",
   "option_windows_product_info": "Made in GameMaker Studio 2",
   "option_windows_copyright_info": "(c) 2018 CompanyName",
