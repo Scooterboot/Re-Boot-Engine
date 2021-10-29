@@ -17,7 +17,7 @@
   ],
   "layers": [
     {"instances":[
-        {"properties":[],"isDnd":false,"objectId":{"name":"obj_Item_PlasmaBeam","path":"objects/obj_Item_PlasmaBeam/obj_Item_PlasmaBeam.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":128.0,"y":480.0,"resourceVersion":"1.0","name":"inst_5054CEC4","tags":[],"resourceType":"GMRInstance",},
+        {"properties":[],"isDnd":false,"objectId":{"name":"obj_Item_Spazer","path":"objects/obj_Item_Spazer/obj_Item_Spazer.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":96.0,"y":480.0,"resourceVersion":"1.0","name":"inst_661DEA97","tags":[],"resourceType":"GMRInstance",},
       ],"visible":true,"depth":0,"userdefinedDepth":false,"inheritLayerDepth":true,"inheritLayerSettings":false,"gridX":16,"gridY":16,"layers":[],"hierarchyFrozen":false,"resourceVersion":"1.0","name":"Camera","tags":[],"resourceType":"GMRInstanceLayer",},
     {"instances":[
         {"properties":[],"isDnd":false,"objectId":{"name":"obj_Door","path":"objects/obj_Door/obj_Door.yy",},"inheritCode":false,"hasCreationCode":true,"colour":4294967295,"rotation":180.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":1024.0,"y":80.0,"resourceVersion":"1.0","name":"inst_5151B623","tags":[],"resourceType":"GMRInstance",},
@@ -272,7 +272,7 @@
     {"name":"inst_3D84B17C","path":"rooms/rm_debug05/rm_debug05.yy",},
     {"name":"inst_77F43E8C","path":"rooms/rm_debug05/rm_debug05.yy",},
     {"name":"inst_6A3C345A","path":"rooms/rm_debug05/rm_debug05.yy",},
-    {"name":"inst_5054CEC4","path":"rooms/rm_debug05/rm_debug05.yy",},
+    {"name":"inst_661DEA97","path":"rooms/rm_debug05/rm_debug05.yy",},
   ],
   "inheritCreationOrder": true,
   "sequenceId": null,
@@ -296,8 +296,8 @@
     "PhysicsWorldPixToMetres": 0.1,
   },
   "parent": {
-    "name": "Rooms",
-    "path": "folders/Rooms.yy",
+    "name": "debug rooms",
+    "path": "folders/Rooms/debug rooms.yy",
   },
   "resourceVersion": "1.0",
   "name": "rm_debug05",

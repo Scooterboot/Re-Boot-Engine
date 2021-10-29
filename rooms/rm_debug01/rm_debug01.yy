@@ -153,6 +153,7 @@
         {"properties":[],"isDnd":false,"objectId":{"name":"obj_Item_HiJumpBoots","path":"objects/obj_Item_HiJumpBoots/obj_Item_HiJumpBoots.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":1360.0,"y":432.0,"resourceVersion":"1.0","name":"inst_5738533D","tags":[],"resourceType":"GMRInstance",},
         {"properties":[],"isDnd":false,"objectId":{"name":"obj_Item_SpringBall","path":"objects/obj_Item_SpringBall/obj_Item_SpringBall.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":1776.0,"y":432.0,"resourceVersion":"1.0","name":"inst_6C068352","tags":[],"resourceType":"GMRInstance",},
         {"properties":[],"isDnd":false,"objectId":{"name":"obj_EnergyStation","path":"objects/obj_EnergyStation/obj_EnergyStation.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":1200.0,"y":480.0,"resourceVersion":"1.0","name":"inst_C046661","tags":[],"resourceType":"GMRInstance",},
+        {"properties":[],"isDnd":false,"objectId":{"name":"obj_MissileStation","path":"objects/obj_MissileStation/obj_MissileStation.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":1168.0,"y":480.0,"resourceVersion":"1.0","name":"inst_710C3E1","tags":[],"resourceType":"GMRInstance",},
       ],"visible":true,"depth":900,"userdefinedDepth":false,"inheritLayerDepth":true,"inheritLayerSettings":false,"gridX":16,"gridY":16,"layers":[],"hierarchyFrozen":false,"resourceVersion":"1.0","name":"BTS_Tiles","tags":[],"resourceType":"GMRInstanceLayer",},
     {"tilesetId":{"name":"ts_BrinstarRed","path":"tilesets/ts_BrinstarRed/ts_BrinstarRed.yy",},"x":0,"y":0,"tiles":{"SerialiseWidth":128,"SerialiseHeight":48,"TileSerialiseData":[
 536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870950,536870947,50,51,
@@ -457,6 +458,7 @@
     {"name":"inst_5738533D","path":"rooms/rm_debug01/rm_debug01.yy",},
     {"name":"inst_6C068352","path":"rooms/rm_debug01/rm_debug01.yy",},
     {"name":"inst_C046661","path":"rooms/rm_debug01/rm_debug01.yy",},
+    {"name":"inst_710C3E1","path":"rooms/rm_debug01/rm_debug01.yy",},
   ],
   "inheritCreationOrder": true,
   "sequenceId": null,
@@ -480,8 +482,8 @@
     "PhysicsWorldPixToMetres": 0.1,
   },
   "parent": {
-    "name": "Rooms",
-    "path": "folders/Rooms.yy",
+    "name": "debug rooms",
+    "path": "folders/Rooms/debug rooms.yy",
   },
   "resourceVersion": "1.0",
   "name": "rm_debug01",

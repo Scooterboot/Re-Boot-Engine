@@ -1,18 +1,12 @@
 {
-  "spriteId": {
-    "name": "sprt_MissileStation",
-    "path": "sprites/sprt_MissileStation/sprt_MissileStation.yy",
-  },
+  "spriteId": null,
   "solid": false,
   "visible": true,
-  "spriteMaskId": {
-    "name": "mask_RechargeStation",
-    "path": "sprites/mask_RechargeStation/mask_RechargeStation.yy",
-  },
+  "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
-    "name": "obj_InteractStation",
-    "path": "objects/obj_InteractStation/obj_InteractStation.yy",
+    "name": "obj_Tile",
+    "path": "objects/obj_Tile/obj_Tile.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,
@@ -28,6 +22,8 @@
   "physicsShapePoints": [],
   "eventList": [
     {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"isDnD":false,"eventNum":0,"eventType":3,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"isDnD":false,"eventNum":0,"eventType":8,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
   ],
   "properties": [],
   "overriddenProperties": [],
@@ -36,7 +32,7 @@
     "path": "folders/Objects/SpecialTiles.yy",
   },
   "resourceVersion": "1.0",
-  "name": "obj_MissileStation",
+  "name": "obj_InteractStation",
   "tags": [],
   "resourceType": "GMObject",
 }

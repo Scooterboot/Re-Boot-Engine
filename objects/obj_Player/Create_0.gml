@@ -297,10 +297,10 @@ jumpSpeed[2,1] = 1.25;//0.25;	// Wall Jump
 jumpSpeed[3,1] = 2.25;//0.5;	// Hi Wall Jump
 jumpSpeed[4,1] = 0.5;			// Dodge
 // In lava/acid
-jumpSpeed[0,2] = 2.75;	// Normal Jump
-jumpSpeed[1,2] = 3.5;	// Hi Jump
-jumpSpeed[2,2] = 2.625;	// Wall Jump
-jumpSpeed[3,2] = 3.5;	// Hi Wall Jump
+jumpSpeed[0,2] = 2;//2.75;	// Normal Jump
+jumpSpeed[1,2] = 2.75;//3.5;	// Hi Jump
+jumpSpeed[2,2] = 1.5;//2.625;	// Wall Jump
+jumpSpeed[3,2] = 2.5;//3.5;	// Hi Wall Jump
 jumpSpeed[4,2] = 0.5;	// Dodge
 
 // Out of water
@@ -1644,6 +1644,30 @@ function Set_Beams()
 		// Spazer
 		beamDmg *= (2/3);
 	}
+}
+#endregion
+
+#region ConstantDamage
+function ConstantDamage(damage,delay)
+{
+	// heat 0.25 dmg per frame
+	// lava 0.5 dmg per frame
+	// acid 1.5 dmg per frame
+	
+	if(constantDamageDelay <= 0)
+	{
+		if(damage >= energy)
+		{
+			energy = max(energy - damage, 0);
+			state = State.Death;
+		}
+		else
+		{
+			energy = max(energy - damage, 0);
+		}
+		constantDamageDelay = delay;
+	}
+	constantDamageDelay = max(constantDamageDelay - 1,0);
 }
 #endregion
 

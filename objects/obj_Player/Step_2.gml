@@ -4,6 +4,8 @@ var xRayActive = instance_exists(XRay);
 
 Set_Beams();
 
+var sndFlag = false;
+
 if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans) && !obj_PauseMenu.pause && !pauseSelect))
 {
 	// ----- X-Ray -----
@@ -1404,10 +1406,10 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 						{
 							gripAimFrame = min(gripAimFrame + aimSpeed, gripAimTarget);
 						}
-						if(abs(gripAimTarget - gripAimFrame) < 3)
-						{
+						//if(abs(gripAimTarget - gripAimFrame) < 3)
+						//{
 							gripFrame = min(gripFrame + aimSpeed, 3);
-						}
+						//}
 					}
 					else
 					{
@@ -2304,9 +2306,61 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 		if(global.rmHeated && !suit[Suit.Varia])
 		{
 			//scr_ConstantDamageSamus(1, 4 + (2 * suit[Suit.Gravity]));
+			ConstantDamage(1, 4 + (2 * suit[Suit.Gravity]));
 		}
-	
-	
+		
+		if(instance_exists(obj_Lava) && bbox_bottom > obj_Lava.y && !suit[Suit.Gravity])
+	    {
+	        ConstantDamage(1, 2 + (1 * (suit[Suit.Varia])));
+        
+	        if(!audio_is_playing(snd_LavaDamageLoop))
+	        {
+	            var snd = audio_play_sound(snd_LavaDamageLoop,0,true);
+	            audio_sound_gain(snd,0.8*global.soundVolume,0);
+	        }
+	        if(!audio_is_playing(snd_HeatDamageLoop))
+	        {
+	            var snd = audio_play_sound(snd_HeatDamageLoop,0,true);
+	            audio_sound_gain(snd,0.7*global.soundVolume,0);
+	        }
+        
+	        heatDmgPalCounter += 1;
+	    }
+	    else
+	    {
+	        audio_stop_sound(snd_LavaDamageLoop);
+
+	        if(global.rmHeated && !suit[Suit.Varia])
+	        {
+	            if(!audio_is_playing(snd_HeatDamageLoop))
+	            {
+	                var snd = audio_play_sound(snd_HeatDamageLoop,0,true);
+	                audio_sound_gain(snd,0.7*global.soundVolume,0);
+	            }
+            
+	            heatDmgPalCounter += 1;
+	        }
+	        else
+	        {
+	            audio_stop_sound(snd_HeatDamageLoop);
+            
+	            heatDmgPalCounter = 0;
+	        }
+	    }
 		#endregion
 	}
+	else
+	{
+		sndFlag = true;
+	}
+}
+else
+{
+	sndFlag = true;
+}
+
+if(sndFlag)
+{
+	audio_stop_sound(snd_HeatDamageLoop);
+    audio_stop_sound(snd_LavaDamageLoop);
 }

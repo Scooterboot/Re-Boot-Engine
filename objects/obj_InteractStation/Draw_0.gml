@@ -9,7 +9,7 @@ if(activeDir != 0)
 		aFrame = 4;
 	}
 	draw_sprite_ext(sprite_index,aFrame,x,y,image_xscale,image_yscale,image_angle,c_white,image_alpha);
-	animSpeed = 5;
+	animSpeed = 3;
 }
 
 if(!global.gamePaused)

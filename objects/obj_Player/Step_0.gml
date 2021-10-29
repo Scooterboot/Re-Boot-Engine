@@ -524,7 +524,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		//if((sign(velX) != dir || move != dir) && state != State.Grapple && grounded && (aimAngle > -2 || !cJump) && (state != State.Morph || (state == State.Morph && abs(velX) < 1) || grounded) && morphFrame <= 0)
 		if(state != State.Grapple && stopBoosting)// && landFrame <= 0)
 		{
-			if(state == State.Stand && /*abs(velX) >= minBoostSpeed &&*/ abs(fVelX) > 0 && !cDown && !brake)
+			if(state == State.Stand && abs(velX) >= minBoostSpeed-fFrict && abs(fVelX) > 0 && !cDown && !brake)
 			{
 				brake = true;
 				brakeFrame = 10;
@@ -2708,7 +2708,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			}
 			shineCharge = 0;
 			
-			/* // -- shine spark tuning control --
+			/*
 			var moveY = (cDown-cUp);
 			moveY = clamp(moveY+(aDown-aUp),-1,1);
 			var shineAng = 90;
@@ -2747,6 +2747,37 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				velY = lengthdir_y(shineSparkSpeed,shineAng);
 			}
 			*/
+			
+			var shineAng = 90;
+			var shineSpeedX = shineSparkSpeed;
+			switch(abs(shineDir))
+			{
+				case 1:
+				{
+					shineAng = 45;
+					shineSpeedX *= sign(shineDir);
+					break;
+				}
+				case 2:
+				{
+					shineAng = 0;
+					shineSpeedX *= sign(shineDir);
+					break;
+				}
+				case 3:
+				{
+					shineAng = -45;
+					shineSpeedX *= sign(shineDir);
+					break;
+				}
+				case 4:
+				{
+					shineAng = -90;
+					break;
+				}
+			}
+			velX = lengthdir_x(shineSpeedX,shineAng);
+			velY = lengthdir_y(shineSparkSpeed,shineAng);
         
 			if(cJump && rJump)
 			{

@@ -131,7 +131,8 @@ else
 			{
 				shaderFlash = shaderFlashMax/2;
 				
-				if(instance_exists(obj_Heat))
+				//if(instance_exists(obj_Heat))
+				if(global.rmHeated)
 				{
 					palIndex2 = 3;
 					if(speedFXCounter <= 0)
