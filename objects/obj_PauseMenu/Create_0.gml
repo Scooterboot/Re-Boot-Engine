@@ -27,6 +27,8 @@ cursorGlowSurf = surface_create(11,15);
 mapX = 0;
 mapY = 0;
 mapMove = 0;
+mapMoveVelX = 0;
+mapMoveVelY = 0;
 mapSurf = surface_create(8,8);
 pMapIconFrame = 0;
 pMapIconFrameCounter = 0;
@@ -70,6 +72,7 @@ playerFlashAlpha = 1;
 playerGlowInd = -1;
 playerGlowIndPrev = -1;
 
+moveCounter = 0;
 
 optionPos = 0;
 
@@ -144,16 +147,17 @@ rSelect = !cSelect;
 rCancel = !cCancel;
 rStart = !cStart;
 
-footerText[0] = "${itemSelectButton} -World Map\n"+
-				"${menuSelectButton} -Place Marker\n"+
-				"${menuCancelButton} -Menu Select";
-footerText[1] = "${itemSelectButton} -Ability Info\n"+
-				"${menuSelectButton} -Toggle Ability\n"+
-				"${menuCancelButton} -Menu Select";
-footerText[2] = "${menuSelectButton} -Choose Option\n"+
-				"${menuCancelButton} -Menu Select";
-footerText[3] = "${menuSelectButton} -Open Log\n"+
-				"${menuCancelButton} -Menu Select";
+footerText[0] = "${itemSelectButton} - World Map\n"+
+				"${menuSelectButton} - Place Marker\n"+
+				"${menuCancelButton} - Menu Select";
+footerText[1] = "${itemSelectButton} - Ability Info\n"+
+				"${menuSelectButton} - Toggle Ability\n"+
+				"${menuCancelButton} - Menu Select";
+footerText[2] = "${menuSelectButton} - Choose Option\n"+
+				"${menuCancelButton} - Menu Select";
+footerText[3] = "${menuSelectButton} - Open Log\n"+
+				"${menuCancelButton} - Menu Select";
+footerText[4] = "${controlPad} - Choose Menu";
 
 footerScrib = scribble(footerText[0]);
 footerScrib.align(fa_center,fa_middle);

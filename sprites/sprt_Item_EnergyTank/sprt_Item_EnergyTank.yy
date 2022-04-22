@@ -63,7 +63,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Item_EnergyTank","path":"sprites/sprt_Item_EnergyTank/sprt_Item_EnergyTank.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Item_EnergyTank",
     "tags": [],
     "resourceType": "GMSequence",
@@ -74,7 +74,7 @@
   "nineSlice": null,
   "parent": {
     "name": "ItemPickups",
-    "path": "folders/Sprites/ItemPickups.yy",
+    "path": "folders/Sprites/Room Elements/ItemPickups.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_Item_EnergyTank",

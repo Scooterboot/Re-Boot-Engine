@@ -84,7 +84,7 @@ if (surface_exists(Surface))
         Alpha = 1;
         if(i > 16)
         {
-            Alpha = max(1 - 0.25*((i-16)/min(max(1,i)*6,32)), 0.125);
+            Alpha = max(1 - 0.25*((i-16)/min(max(1,i)*6,32)), 0.25);
         }
         
         draw_vertex_texture_color(Spread-32,floor(y+i),0,i/surface_get_height(Surface),c_white,image_alpha*Alpha);
@@ -119,7 +119,7 @@ if (surface_exists(SurfaceRefract))
         Alpha = 1;
         if(i > 16)
         {
-            Alpha = max(1 - 0.25*((i-16)/min(max(1,i)*6,32)), 0.125);
+            Alpha = max(1 - 0.25*((i-16)/min(max(1,i)*6,32)), 0.25);
         }
         
         draw_vertex_texture_color(Spread-32,floor(y+i),0,i/surface_get_height(SurfaceRefract), c_white, Alpha);

@@ -16,6 +16,10 @@ if(room != goal)
 
         samusX = obj_Player.x - camera_get_view_x(view_camera[0]);
         samusY = obj_Player.y - camera_get_view_y(view_camera[0]);
+		if(obj_Player.state == State.Stand && obj_Player.stateFrame == State.Stand)
+		{
+			obj_Player.stateFrame = State.Run;
+		}
 
         transSprtDraw = true;
         screenPosX = (obj_Camera.x+(global.resWidth/2)) - door.x;

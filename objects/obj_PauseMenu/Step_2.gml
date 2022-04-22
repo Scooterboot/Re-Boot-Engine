@@ -190,19 +190,50 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 			var mapMoveX = (cRight) - (cLeft),
 				mapMoveY = (cDown) - (cUp);
 			
-			if(mapMoveX != 0 || mapMoveY != 0)
+			/*if(mapMoveX != 0 || mapMoveY != 0)
 			{
-				mapMove = min(mapMove + 0.1, 1);
+				mapMove = min(mapMove + 0.1, 2);
 			}
 			else
 			{
-				mapMove = 0;
+				mapMove = max(mapMove - 0.1, 0);
 			}
 			
 			if(global.rmMapSprt != noone)
 			{
 				mapX = clamp(mapX+mapMoveX*mapMove,16,sprite_get_width(global.rmMapSprt)-16);
 				mapY = clamp(mapY+mapMoveY*mapMove,16,sprite_get_height(global.rmMapSprt)-16);
+			}*/
+			
+			if(mapMoveX != 0 || mapMoveY != 0)
+			{
+				mapMoveVelX = clamp(mapMoveVelX+0.1*mapMoveX*(1+(sign(mapMoveVelX) != mapMoveX)),-2,2);
+				mapMoveVelY = clamp(mapMoveVelY+0.1*mapMoveY*(1+(sign(mapMoveVelY) != mapMoveY)),-2,2);
+			}
+			else
+			{
+				if(mapMoveVelX > 0)
+				{
+					mapMoveVelX = max(mapMoveVelX-0.1,0);
+				}
+				else
+				{
+					mapMoveVelX = min(mapMoveVelX+0.1,0);
+				}
+				if(mapMoveVelY > 0)
+				{
+					mapMoveVelY = max(mapMoveVelY-0.1,0);
+				}
+				else
+				{
+					mapMoveVelY = min(mapMoveVelY+0.1,0);
+				}
+			}
+			
+			if(global.rmMapSprt != noone)
+			{
+				mapX = clamp(mapX+mapMoveVelX,16,sprite_get_width(global.rmMapSprt)-16);
+				mapY = clamp(mapY+mapMoveVelY,16,sprite_get_height(global.rmMapSprt)-16);
 			}
 		}
 		else
@@ -296,12 +327,13 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 						}
 						if(string_pos("Item",ability) != 0)
 						{
-							toggleItem = false;
+							//toggleItem = false;
+							P.item[index] = !P.item[index];
 						}
-						else
-						{
+						//else
+						//{
 							audio_play_sound(snd_MenuBoop,0,false);
-						}
+						//}
 					}
 				}
 				else if(invPosX == 1)
@@ -376,7 +408,21 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 			{
 				var move = (cDown && rDown) - (cUp && rUp),
 					select = (cSelect && rSelect);
-			
+				
+				if(cDown || cUp)
+				{
+					moveCounter = min(moveCounter + 1, 30);
+				}
+				else
+				{
+					moveCounter = 0;
+				}
+				if(moveCounter >= 30)
+				{
+					move = cDown - cUp;
+					moveCounter -= 5;
+				}
+				
 				if(move != 0)
 				{
 					optionPos = scr_wrap(optionPos+move,0,array_length(option)-1);
@@ -487,6 +533,7 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 		else
 		{
 			optionPos = 0;
+			moveCounter = 0;
 		}
 		#endregion
 	}

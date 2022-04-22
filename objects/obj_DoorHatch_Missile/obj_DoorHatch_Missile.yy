@@ -30,7 +30,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "SpecialTiles",
-    "path": "folders/Objects/SpecialTiles.yy",
+    "path": "folders/Objects/Room Elements/SpecialTiles.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_DoorHatch_Missile",

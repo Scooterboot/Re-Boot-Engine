@@ -17,7 +17,7 @@ function scr_DrawHUD_Energy() {
 	if(energyTanks > 0)
 	{
 		yDiff = 7;
-		if(energyTanks > 7)
+		if(energyTanks > 1)//7)
 		{
 			yDiff = 14;
 		}
@@ -29,7 +29,28 @@ function scr_DrawHUD_Energy() {
 	var x2 = xx-1,
 		y2 = yy-1;
 
-	draw_rectangle(x2,y2,x2+ww,y2+hh+yDiff,false);
+	//draw_rectangle(x2,y2,x2+ww,y2+hh+yDiff,false);
+	if(energyTanks <= 14)
+	{
+		var ww2 = 0;
+		if(energyTanks > 0)
+		{
+			ww2 = 7 * scr_ceil(energyTanks/2);
+			draw_rectangle(x2,y2,x2+ww2,y2+hh+yDiff,false);
+		
+			ww2 += 1;
+		}
+		draw_rectangle(x2+ww2,y2+yDiff,x2+ww,y2+hh+yDiff,false);
+	}
+	else
+	{
+		if(energyTanks > 0)
+		{
+			var ww2 = 7 * scr_ceil(energyTanks/2);
+			draw_rectangle(x2,y2,x2+ww2,y2+yDiff,false);
+		}
+		draw_rectangle(x2,y2+yDiff+1,x2+ww,y2+hh+yDiff,false);
+	}
 
 	draw_set_color(c_white);
 	draw_set_alpha(1);
@@ -44,7 +65,7 @@ function scr_DrawHUD_Energy() {
 
 	if(energyTanks > 0)
 	{
-		for(var i = 0; i < energyTanks; i++)
+		/*for(var i = 0; i < energyTanks; i++)
 		{
 			var eX = xx + (7*i),
 			eY = yy;
@@ -56,6 +77,17 @@ function scr_DrawHUD_Energy() {
 			{
 				eX = xx + (7*(i-7));
 				eY = yy;
+			}
+			draw_sprite_ext(sprt_HETank,(statEnergyTanks > i),floor(eX),floor(eY),1,1,0,c_white,1);
+		}*/
+		for(var i = 0; i < energyTanks; i++)
+		{
+			var eX = xx + (7*i)/2,
+				eY = yy;
+			if(i%2 != 0)
+			{
+				eX = xx + (7*(i-1))/2;
+				eY = yy+7;
 			}
 			draw_sprite_ext(sprt_HETank,(statEnergyTanks > i),floor(eX),floor(eY),1,1,0,c_white,1);
 		}

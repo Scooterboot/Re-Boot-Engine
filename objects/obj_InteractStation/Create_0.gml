@@ -1,5 +1,5 @@
 /// @description Initialize
-
+event_inherited();
 activeDir = 0;
 activeTime = 0;
 activeTimeMax = 90;

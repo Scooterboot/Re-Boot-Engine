@@ -9,7 +9,7 @@ grapBlock = noone;
 grapBlockPosX = 0;
 grapBlockPosY = 0;
 grapSpeed = 0;
-grapSpeedMax = 16;
+grapSpeedMax = 28;//16;
 
 drawGrapEffect = false;
 grapFrame = 0;

@@ -99,7 +99,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Sub_Samus_GlowMask","path":"sprites/sprt_Sub_Samus_GlowMask/sprt_Sub_Samus_GlowMask.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "",
     "tags": [],
     "resourceType": "GMSequence",

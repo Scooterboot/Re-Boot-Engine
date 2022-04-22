@@ -67,7 +67,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Font_gpControl","path":"sprites/sprt_Font_gpControl/sprt_Font_gpControl.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Font_gpControl",
     "tags": [],
     "resourceType": "GMSequence",

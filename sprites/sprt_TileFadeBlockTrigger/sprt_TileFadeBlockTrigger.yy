@@ -46,7 +46,7 @@
       {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"b9d95359-b74e-428b-9f32-160155e064a7","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"b9c6e95f-700e-47d9-b26f-d23162d84f93","path":"sprites/sprt_TileFadeBlockTrigger/sprt_TileFadeBlockTrigger.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"30b89712-000b-493e-bfb9-b44f3465eade","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"1a655dd3-ffc0-4565-a905-2f414df027e8","path":"sprites/sprt_TileFadeBlockTrigger/sprt_TileFadeBlockTrigger.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"modifiers":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack",},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -63,7 +63,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_TileFadeBlockTrigger","path":"sprites/sprt_TileFadeBlockTrigger/sprt_TileFadeBlockTrigger.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_TileFadeBlockTrigger",
     "tags": [],
     "resourceType": "GMSequence",
@@ -98,7 +98,7 @@
   },
   "parent": {
     "name": "SpecialTiles",
-    "path": "folders/Sprites/SpecialTiles.yy",
+    "path": "folders/Sprites/Room Elements/SpecialTiles.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_TileFadeBlockTrigger",

@@ -95,7 +95,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Sub_ItemName_Beam","path":"sprites/sprt_Sub_ItemName_Beam/sprt_Sub_ItemName_Beam.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "",
     "tags": [],
     "resourceType": "GMSequence",

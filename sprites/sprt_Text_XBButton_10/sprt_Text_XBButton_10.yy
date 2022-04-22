@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Text_XBButton_10","path":"sprites/sprt_Text_XBButton_10/sprt_Text_XBButton_10.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Text_XBButton_10",
     "tags": [],
     "resourceType": "GMSequence",

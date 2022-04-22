@@ -951,7 +951,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Font_Menu","path":"sprites/sprt_Font_Menu/sprt_Font_Menu.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Font_Menu",
     "tags": [],
     "resourceType": "GMSequence",

@@ -30,7 +30,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "ItemPickups",
-    "path": "folders/Objects/ItemPickups.yy",
+    "path": "folders/Objects/Room Elements/ItemPickups.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_Item_Missile",

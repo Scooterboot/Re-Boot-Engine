@@ -28,7 +28,7 @@ if(surface_exists(surf))
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
 
-	var oX = scr_round((ww/2) - 96),
+	var oX = scr_round((ww/2) - 128),
 		oY = scr_round((hh/2) - 96);
 
 	var dest = space*(optionPos+1);
@@ -84,7 +84,7 @@ if(surface_exists(surf))
 			var oYY = oY + (space*i) + yOff;
 
 			gpu_set_blendmode(bm_add);
-			draw_rectangle_colour(oX - 2,oYY - space - 1,oX + 192,oYY - space + sh,col,c_black,c_black,col,false);
+			draw_rectangle_colour(oX - 2,oYY - space - 1,oX + 256,oYY - space + sh,col,c_black,c_black,col,false);
 			gpu_set_blendmode(bm_normal);
 			draw_set_color(c_black);
 			draw_text(oX + 1,oYY - space + 1,str);
@@ -122,9 +122,9 @@ if(surface_exists(surf))
 				cOpt = currentOptionName[i,currentOption[i]];
 			}
 		
-			scr_DrawOptionText(oX+192-string_width(cOpt),oYY,cOpt,c_white,1,string_width(cOpt),bC,bA);
+			scr_DrawOptionText(oX+256-string_width(cOpt),oYY,cOpt,c_white,1,string_width(cOpt),bC,bA);
 		
-			bW = 185 - string_width(cOpt) - indent;
+			bW = 249 - string_width(cOpt) - indent;
 		}
 	
 		scr_DrawOptionText(oX+indent,oYY,option[i],c_white,1,bW,bC,bA);

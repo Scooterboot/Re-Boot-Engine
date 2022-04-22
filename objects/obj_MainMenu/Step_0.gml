@@ -94,6 +94,20 @@ if(room == rm_MainMenu)
 			var move = (cDown && rDown) - (cUp && rUp),
 				select = (cSelect && rSelect);
 			
+			if(cDown || cUp)
+			{
+				moveCounter = min(moveCounter + 1, 30);
+			}
+			else
+			{
+				moveCounter = 0;
+			}
+			if(moveCounter >= 30)
+			{
+				move = cDown - cUp;
+				moveCounter -= 5;
+			}
+			
 			if(selectedFile == -1)
 			{
 				if(cCancel && rCancel)

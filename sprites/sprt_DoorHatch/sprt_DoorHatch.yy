@@ -39,6 +39,9 @@
     {"compositeImage":{"FrameId":{"name":"f4ae169f-561a-4799-8729-0b4f8b58e5c1","path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
         {"FrameId":{"name":"f4ae169f-561a-4799-8729-0b4f8b58e5c1","path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",},"LayerId":{"name":"34abd61a-a308-4560-83b6-515049a8b61b","path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
       ],"parent":{"name":"sprt_DoorHatch","path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",},"resourceVersion":"1.0","name":"f4ae169f-561a-4799-8729-0b4f8b58e5c1","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"d94faeae-61b3-4e94-9885-228dcf7b3bea","path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"d94faeae-61b3-4e94-9885-228dcf7b3bea","path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",},"LayerId":{"name":"34abd61a-a308-4560-83b6-515049a8b61b","path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"sprt_DoorHatch","path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",},"resourceVersion":"1.0","name":"d94faeae-61b3-4e94-9885-228dcf7b3bea","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "sequence": {
     "spriteId": {"name":"sprt_DoorHatch","path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",},
@@ -48,7 +51,7 @@
     "playbackSpeedType": 1,
     "autoRecord": true,
     "volume": 1.0,
-    "length": 5.0,
+    "length": 6.0,
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
@@ -58,6 +61,7 @@
             {"id":"333edfc8-e270-4da3-a0d2-059a015a7ae7","Key":2.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"ef0b03f8-046e-43ca-9792-4b7d89ada241","path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"dde8d739-4437-4b44-b4a2-83286c251032","Key":3.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"5f95eafe-fd05-4cdf-9f5f-37a4573b8b6f","path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"13d7168e-c33b-4f1d-8e4a-28ce317d23f8","Key":4.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"f4ae169f-561a-4799-8729-0b4f8b58e5c1","path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"9d3caaf0-53c0-4a57-a042-437b9192c110","Key":5.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"d94faeae-61b3-4e94-9885-228dcf7b3bea","path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
     "visibleRange": null,
@@ -75,7 +79,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_DoorHatch","path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_DoorHatch",
     "tags": [],
     "resourceType": "GMSequence",
@@ -86,7 +90,7 @@
   "nineSlice": null,
   "parent": {
     "name": "SpecialTiles",
-    "path": "folders/Sprites/SpecialTiles.yy",
+    "path": "folders/Sprites/Room Elements/SpecialTiles.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_DoorHatch",

@@ -1,4 +1,5 @@
 /// @description Initialize
+event_inherited();
 hatchID = -1;
 hatchID_Global = -1;
 //idCheck = false;

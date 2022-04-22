@@ -93,4 +93,17 @@ function scr_MainInitialize()
 	instance_create_depth(0,0,0,obj_Progression);
 	
 	instance_create_depth(0,0,0,obj_TileFadeHandler);
+	
+	
+	lhc_init();
+
+	lhc_create_interface("ISolid");
+	lhc_create_interface("IPlatform");
+	lhc_create_interface("IGrapplePoint");
+	lhc_create_interface("IBreakable");
+
+	lhc_assign_interface("ISolid", obj_Tile);
+	lhc_assign_interface("IPlatform", obj_Platform);
+	lhc_assign_interface("IGrapplePoint", obj_GrappleBlock, obj_GrappleBlockCracked);
+	lhc_assign_interface("IBreakable", obj_Breakable);
 }

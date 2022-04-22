@@ -1,6 +1,6 @@
 {
-  "bboxMode": 1,
-  "collisionKind": 4,
+  "bboxMode": 2,
+  "collisionKind": 5,
   "type": 0,
   "origin": 3,
   "preMultiplyAlpha": false,
@@ -46,7 +46,7 @@
       {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"ba7a0a47-1422-4466-9337-70e80e1f57d6","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"19724209-c894-4d5e-a714-c3ce16eb7eb2","path":"sprites/sprt_Door/sprt_Door.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"b3a67bad-99e2-4301-ad5a-a605e6facb20","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"35c3ab27-7ec7-4a56-8567-347631f894a7","path":"sprites/sprt_Door/sprt_Door.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"modifiers":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack",},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -63,7 +63,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Door","path":"sprites/sprt_Door/sprt_Door.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "",
     "tags": [],
     "resourceType": "GMSequence",
@@ -98,7 +98,7 @@
   },
   "parent": {
     "name": "SpecialTiles",
-    "path": "folders/Sprites/SpecialTiles.yy",
+    "path": "folders/Sprites/Room Elements/SpecialTiles.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_Door",

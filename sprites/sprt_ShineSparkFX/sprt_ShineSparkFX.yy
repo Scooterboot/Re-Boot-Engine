@@ -87,7 +87,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_ShineSparkFX","path":"sprites/sprt_ShineSparkFX/sprt_ShineSparkFX.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_ShineSparkFX",
     "tags": [],
     "resourceType": "GMSequence",

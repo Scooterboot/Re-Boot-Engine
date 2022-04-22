@@ -6,9 +6,7 @@ lifeMax = 10;
 damage = 5;
 dmgMult[4] = 1;
 
-mSpeed = 0.75;
-tileCollide = true;
-slopeMovement = false;
+mSpeed = 0.75;//4;
 
 image_angle = 0;
 

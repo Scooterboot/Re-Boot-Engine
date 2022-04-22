@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_MessageBox","path":"sprites/sprt_MessageBox/sprt_MessageBox.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_MessageBox",
     "tags": [],
     "resourceType": "GMSequence",

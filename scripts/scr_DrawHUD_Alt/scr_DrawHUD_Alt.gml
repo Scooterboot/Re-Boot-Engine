@@ -85,7 +85,7 @@ function scr_DrawHUD_Alt() {
 	    if(selecting)
 	    {
 	        draw_set_color(c_white);
-	        draw_set_font(MenuFont);
+	        draw_set_font(fnt_Menu2);
 			draw_set_halign(fa_left);
 			draw_set_valign(fa_top);
 	        var tX = 0,

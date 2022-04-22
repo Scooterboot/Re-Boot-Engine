@@ -30,7 +30,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "BeamItems",
-    "path": "folders/Objects/ItemPickups/BeamItems.yy",
+    "path": "folders/Objects/Room Elements/ItemPickups/BeamItems.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_Item_WaveBeam",

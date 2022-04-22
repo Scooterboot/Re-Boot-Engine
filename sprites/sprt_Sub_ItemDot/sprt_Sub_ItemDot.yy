@@ -63,7 +63,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Sub_ItemDot","path":"sprites/sprt_Sub_ItemDot/sprt_Sub_ItemDot.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Sub_ItemDot",
     "tags": [],
     "resourceType": "GMSequence",

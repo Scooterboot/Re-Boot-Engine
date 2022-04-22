@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Dab","path":"sprites/sprt_Dab/sprt_Dab.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Dab",
     "tags": [],
     "resourceType": "GMSequence",

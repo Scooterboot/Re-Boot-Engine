@@ -119,7 +119,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Font_gpButton","path":"sprites/sprt_Font_gpButton/sprt_Font_gpButton.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Font_gpButton",
     "tags": [],
     "resourceType": "GMSequence",

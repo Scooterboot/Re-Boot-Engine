@@ -26,7 +26,7 @@ if(!global.gamePaused)
 
     if(!audio_is_playing(snd_LavaLoop))
     {
-        var loopSnd = audio_play_sound(snd_LavaLoop,0,true);
-        audio_sound_gain(loopSnd,0.9*global.soundVolume,0);
+        //var loopSnd = audio_play_sound(snd_LavaLoop,0,true);
+        //audio_sound_gain(loopSnd,0.9*global.soundVolume,0);
     }
 }

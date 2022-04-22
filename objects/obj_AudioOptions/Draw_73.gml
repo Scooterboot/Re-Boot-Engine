@@ -28,7 +28,7 @@ if(surface_exists(surf))
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
 
-	var oX = scr_round((ww/2) - 96),
+	var oX = scr_round((ww/2) - 128),
 		oY = scr_round((hh/2) - 32);
 
 	var str = header,
@@ -36,7 +36,7 @@ if(surface_exists(surf))
 		col = make_color_rgb(72,168,56);
 
 	gpu_set_blendmode(bm_add);
-	draw_rectangle_colour(oX - 2,oY - space - 1,oX + 192,oY - space + sh,col,c_black,c_black,col,false);
+	draw_rectangle_colour(oX - 2,oY - space - 1,oX + 256,oY - space + sh,col,c_black,c_black,col,false);
 	gpu_set_blendmode(bm_normal);
 	draw_set_color(c_black);
 	draw_text(oX + 1,oY - space + 1,str);
@@ -79,10 +79,10 @@ if(surface_exists(surf))
 		var bW = string_width(option[i]);
 		if(i < array_length(currentOption))
 		{
-			bW = 121 - indent;
+			bW = 153 - indent;
 		
-			var bX = oX+128,
-				bW2 = 64;
+			var bX = oX+160,
+				bW2 = 96;
 			draw_set_color(bC);
 			draw_set_alpha(bA);
 			draw_rectangle(bX-2,oYY-1,bX+bW2-1,oYY+sh,false);

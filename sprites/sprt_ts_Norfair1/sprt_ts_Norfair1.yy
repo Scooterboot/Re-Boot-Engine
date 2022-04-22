@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_ts_Norfair1","path":"sprites/sprt_ts_Norfair1/sprt_ts_Norfair1.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_ts_Norfair1",
     "tags": [],
     "resourceType": "GMSequence",

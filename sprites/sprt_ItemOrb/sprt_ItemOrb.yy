@@ -71,7 +71,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_ItemOrb","path":"sprites/sprt_ItemOrb/sprt_ItemOrb.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "",
     "tags": [],
     "resourceType": "GMSequence",
@@ -82,7 +82,7 @@
   "nineSlice": null,
   "parent": {
     "name": "ItemPickups",
-    "path": "folders/Sprites/ItemPickups.yy",
+    "path": "folders/Sprites/Room Elements/ItemPickups.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_ItemOrb",

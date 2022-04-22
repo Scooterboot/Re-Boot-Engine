@@ -25,7 +25,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "CollisionTiles",
-    "path": "folders/Objects/CollisionTiles.yy",
+    "path": "folders/Objects/Room Elements/CollisionTiles.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_Platform",

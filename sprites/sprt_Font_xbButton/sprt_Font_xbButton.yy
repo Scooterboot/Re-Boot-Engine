@@ -103,7 +103,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Font_xbButton","path":"sprites/sprt_Font_xbButton/sprt_Font_xbButton.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Font_xbButton",
     "tags": [],
     "resourceType": "GMSequence",

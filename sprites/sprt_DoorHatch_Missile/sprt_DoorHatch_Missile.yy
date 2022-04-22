@@ -39,6 +39,9 @@
     {"compositeImage":{"FrameId":{"name":"a6bcd98b-e021-4cbc-8c21-4d004fdebd25","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
         {"FrameId":{"name":"a6bcd98b-e021-4cbc-8c21-4d004fdebd25","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"LayerId":{"name":"34abd61a-a308-4560-83b6-515049a8b61b","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
       ],"parent":{"name":"sprt_DoorHatch_Missile","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceVersion":"1.0","name":"a6bcd98b-e021-4cbc-8c21-4d004fdebd25","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"52809f19-7850-4867-9624-7e1604560511","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"52809f19-7850-4867-9624-7e1604560511","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"LayerId":{"name":"34abd61a-a308-4560-83b6-515049a8b61b","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"sprt_DoorHatch_Missile","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceVersion":"1.0","name":"52809f19-7850-4867-9624-7e1604560511","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "sequence": {
     "spriteId": {"name":"sprt_DoorHatch_Missile","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},
@@ -48,7 +51,7 @@
     "playbackSpeedType": 1,
     "autoRecord": true,
     "volume": 1.0,
-    "length": 5.0,
+    "length": 6.0,
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
@@ -58,6 +61,7 @@
             {"id":"ee21c63c-ae59-48df-b6fd-e066372d3c4e","Key":2.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"5d0c9bc3-60f1-47c0-9fa0-717c1ddba374","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"c814247f-090b-41d6-9a59-8525a0e67b50","Key":3.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"a1bd85f0-299b-4cb3-88b5-985570bfbd0b","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"5a939b74-bb3c-4d39-bad1-bfcf34bad787","Key":4.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"a6bcd98b-e021-4cbc-8c21-4d004fdebd25","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"ab561327-706e-43ad-99cc-87ec0970e56c","Key":5.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"52809f19-7850-4867-9624-7e1604560511","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
     "visibleRange": null,
@@ -75,7 +79,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_DoorHatch_Missile","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_DoorHatch_Missile",
     "tags": [],
     "resourceType": "GMSequence",
@@ -86,7 +90,7 @@
   "nineSlice": null,
   "parent": {
     "name": "SpecialTiles",
-    "path": "folders/Sprites/SpecialTiles.yy",
+    "path": "folders/Sprites/Room Elements/SpecialTiles.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_DoorHatch_Missile",

@@ -63,7 +63,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Item_VariaSuit","path":"sprites/sprt_Item_VariaSuit/sprt_Item_VariaSuit.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Item_VariaSuit",
     "tags": [],
     "resourceType": "GMSequence",
@@ -74,7 +74,7 @@
   "nineSlice": null,
   "parent": {
     "name": "SuitItems",
-    "path": "folders/Sprites/ItemPickups/SuitItems.yy",
+    "path": "folders/Sprites/Room Elements/ItemPickups/SuitItems.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_Item_VariaSuit",

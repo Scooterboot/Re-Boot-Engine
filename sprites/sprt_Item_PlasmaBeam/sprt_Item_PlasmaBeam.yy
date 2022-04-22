@@ -63,7 +63,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Item_PlasmaBeam","path":"sprites/sprt_Item_PlasmaBeam/sprt_Item_PlasmaBeam.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Item_PlasmaBeam",
     "tags": [],
     "resourceType": "GMSequence",
@@ -74,7 +74,7 @@
   "nineSlice": null,
   "parent": {
     "name": "BeamItems",
-    "path": "folders/Sprites/ItemPickups/BeamItems.yy",
+    "path": "folders/Sprites/Room Elements/ItemPickups/BeamItems.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_Item_PlasmaBeam",

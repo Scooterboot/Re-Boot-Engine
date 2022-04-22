@@ -21,8 +21,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "NPCs",
-    "path": "folders/Objects/NPCs.yy",
+    "name": "Crawlers",
+    "path": "folders/Objects/NPCs/Crawlers.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_Zeela",

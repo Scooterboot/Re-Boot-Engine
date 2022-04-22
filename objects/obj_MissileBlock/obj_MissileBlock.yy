@@ -30,7 +30,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "BTSTiles",
-    "path": "folders/Objects/BTSTiles.yy",
+    "path": "folders/Objects/Room Elements/BTSTiles.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_MissileBlock",

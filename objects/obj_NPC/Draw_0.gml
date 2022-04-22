@@ -9,7 +9,7 @@ else if(frozen > 120 || (frozen&2))
     shader_set(shd_Frozen);
 }
 
-var rot = scr_round(rotation/2.5)*2.5;
+var rot = rotation; //scr_round(rotation/5.625)*5.625;
 
 var xx = x + lengthdir_x(offsetX,rot) + lengthdir_x(offsetY,rot-90);
 var yy = y + lengthdir_y(offsetX,rot) + lengthdir_y(offsetY,rot-90);

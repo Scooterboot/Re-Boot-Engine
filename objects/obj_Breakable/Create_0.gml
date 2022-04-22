@@ -1,4 +1,5 @@
 /// @description Initialize
+event_inherited();
 respawnTime = 300;
 image_speed = 0;
 image_index = 1;
@@ -14,11 +15,14 @@ for(var i = 0; i < 4; i++)
 	if(layer_exists(lay))
 	{
 		var map_id = layer_tilemap_get_id(lay);
-		var data = tilemap_get_at_pixel(map_id,x,y) & tile_index_mask;
-		if(!tile_get_empty(data))
+		if(layer_tilemap_exists(lay,map_id))
 		{
-			visible = false;
-			break;
+			var data = tilemap_get_at_pixel(map_id,x,y) & tile_index_mask;
+			if(!tile_get_empty(data))
+			{
+				visible = false;
+				break;
+			}
 		}
 	}
 }

@@ -13,6 +13,10 @@ if(room != rm_MainMenu && (global.roomTrans || !global.gamePaused || !obj_PauseM
 	menuClosing = true;
 }
 
+var resText = "("+string(global.resWidth*obj_Main.screenScale)+"x"+string(global.resHeight*obj_Main.screenScale)+")";
+currentOptionName[1,0] = "STRETCH "+resText;
+currentOptionName[1,1] = string(global.screenScale)+"x "+resText;
+
 if(screenFade >= 1 && !menuClosing)
 {
 	var move = (cDown && rDown) - (cUp && rUp),
@@ -158,8 +162,6 @@ if(screenFade >= 1 && !menuClosing)
 		ini_write_real("Display", "hud map", global.hudMap);
 		ini_write_real("Display", "water distortion", global.waterDistortion);
 		ini_close();
-		
-		currentOptionName[1,1] = string(global.screenScale)+"x";
 	}
 	if(cancel)
 	{

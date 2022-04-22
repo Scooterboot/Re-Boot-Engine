@@ -36,7 +36,7 @@ function GetMapGrid(mapSprt)
 	return grid;
 }
 #endregion
-prevGrid = GetMapGrid();
+prevGrid = GetMapGrid(noone);
 #region DrawMap()
 function DrawMap(mapSprt,posX,posY,mapX,mapY,mapWidth,mapHeight)
 {

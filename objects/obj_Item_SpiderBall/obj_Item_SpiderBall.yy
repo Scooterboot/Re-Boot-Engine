@@ -31,7 +31,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "MiscItems",
-    "path": "folders/Objects/ItemPickups/MiscItems.yy",
+    "path": "folders/Objects/Room Elements/ItemPickups/MiscItems.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_Item_SpiderBall",

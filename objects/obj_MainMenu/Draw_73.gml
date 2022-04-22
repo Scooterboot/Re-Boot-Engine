@@ -176,7 +176,7 @@ if(currentScreen == MainScreen.FileSelect)
 					statEnergyTanks = floor(fileEnergy[i] / 100);
 				if(energyTanks > 0)
 				{
-					for(var j = 0; j < energyTanks; j++)
+					/*for(var j = 0; j < energyTanks; j++)
 					{
 						var eX = tx + (7*j),
 						eY = ty;
@@ -188,6 +188,17 @@ if(currentScreen == MainScreen.FileSelect)
 						{
 							eX = tx + (7*(j-7));
 							eY = ty;
+						}
+						draw_sprite_ext(sprt_HETank,(statEnergyTanks > j),floor(eX),floor(eY),1,1,0,c_white,1);
+					}*/
+					for(var j = 0; j < energyTanks; j++)
+					{
+						var eX = tx + (7*j)/2,
+							eY = ty;
+						if(j%2 != 0)
+						{
+							eX = tx + (7*(j-1))/2;
+							eY = ty+7;
 						}
 						draw_sprite_ext(sprt_HETank,(statEnergyTanks > j),floor(eX),floor(eY),1,1,0,c_white,1);
 					}

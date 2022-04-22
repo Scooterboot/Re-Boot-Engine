@@ -49,7 +49,7 @@ currentOptionName[4,2] = "HQ4X";
 currentOptionName[4,3] = "5XBR A";
 currentOptionName[4,4] = "5XBR B";
 currentOptionName[4,5] = "5XBR C";
-currentOptionName[4,6] = "SCANLINES";
+currentOptionName[4,6] = "CRT-LIKE";
 currentOptionName[4,7] = "SUB-PIXEL";
 
 currentOptionName[5,0] = "HIDE";

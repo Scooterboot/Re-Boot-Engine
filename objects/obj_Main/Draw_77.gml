@@ -26,9 +26,9 @@ else
 	{
 		shader_set(shd_Scanlines);
 		shader_set_uniform_f(shader_get_uniform(shd_Scanlines, "u_crt_sizes"), global.resWidth,global.resHeight, global.resWidth*screenScale,global.resHeight*screenScale);
-		shader_set_uniform_f(shader_get_uniform(shd_Scanlines, "distort"), false);
-		shader_set_uniform_f(shader_get_uniform(shd_Scanlines, "distortion"), 0.12);
-		shader_set_uniform_f(shader_get_uniform(shd_Scanlines, "border"), false);
+		shader_set_uniform_f(shader_get_uniform(shd_Scanlines, "distort"), true);//false);
+		shader_set_uniform_f(shader_get_uniform(shd_Scanlines, "distortion"), 0.18);//0.12);
+		shader_set_uniform_f(shader_get_uniform(shd_Scanlines, "border"), true);//false);
 		draw_surface_ext(application_surface,scr_round(global.screenX),scr_round(global.screenY),screenScale,screenScale,0,c_white,1);
 		shader_reset();
 	}

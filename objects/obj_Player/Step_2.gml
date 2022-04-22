@@ -346,6 +346,15 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 	}
 	
 	var aimFrameTarget = aimAngle*2;
+	if(xRayActive)
+	{
+		aimFrameTarget = 0;
+	}
+	if(abs(aimFrameTarget-aimFrame) >= 4 && stateFrame == State.Grip)
+	{
+		aimSpeed *= 2;
+	}
+	
 	if(aimFrame > aimFrameTarget)
 	{
 		aimFrame = max(aimFrame - aimSpeed, aimFrameTarget);
@@ -362,7 +371,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 	
 	finalArmFrame = aimFrame + 4;
 	
-	if(((cShoot && rShoot) || (!cShoot && !rShoot && statCharge >= 20)) && shotDelayTime <= 0 && 
+	if(((cShoot && rShoot) || (!cShoot && !rShoot && statCharge >= 20)) && shotDelayTime <= 0 && !instance_exists(grapple) &&
 	(itemSelected == 0 || (itemSelected == 1 && (itemHighlighted[1] != 0 || missileStat > 0) && (itemHighlighted[1] != 1 || superMissileStat > 0))))
 	{
 		recoilCounter = 4 + (statCharge >= maxCharge) + liquidMovement;
@@ -488,6 +497,11 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 			legs = sprt_TurnLeg;
 			if(stateFrame == State.Crouch || stateFrame == State.Jump || !grounded)
 			{
+				legs = sprt_TurnCrouchLeg;
+			}
+			if(stateFrame == State.Stand && crouchFrame < 5)
+			{
+				sprtOffsetY = 11;
 				legs = sprt_TurnCrouchLeg;
 			}
 			bodyFrame = 3 + dirFrameF;
@@ -668,7 +682,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 					}
 					else
 					{
-						frame[7] = scr_wrap(frame[7]+1,1,12);
+						//frame[7] = scr_wrap(frame[7]+1,1,12);
+						frame[7] = scr_wrap(frame[7]-move2*dir,1,12);
 					}
 					frameCounter[7] = 0;
 				}
@@ -801,8 +816,10 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 					frameCounter[1] = 0;
 				}
 				
+				var shootFrame2 = (shootFrame || cAimLock);
+				
 				runYOffset = -rOffset[frame[1]];
-				if(aimFrame != 0 || shootFrame)
+				if(aimFrame != 0 || shootFrame2)
 				{
 					runYOffset = -rOffset2[frame[1]];
 				}
@@ -827,7 +844,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 				{
 					if(aimFrame == 0)
 					{
-						if(shootFrame)
+						if(shootFrame2)
 						{
 							torsoR = sprt_RunAimRight;
 							torsoL = sprt_RunAimLeft;
@@ -850,8 +867,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 						{
 							ArmPos(22*dir,-2);
 						}
-						runToStandFrame[shootFrame] = 2;
-						runToStandFrame[!shootFrame] = 0;
+						runToStandFrame[shootFrame2] = 2;
+						runToStandFrame[!shootFrame2] = 0;
 						bodyFrame = frame[1];
 					}
 					else
@@ -1165,7 +1182,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 					}
 					frameCounter[i] = 0;
 				}
-				if(shootFrame || /*gunReady2 ||*/ aimFrame != 0 || recoilCounter > 0)
+				if(shootFrame || cAimLock || aimFrame != 0 || recoilCounter > 0)
 				{
 					aimAnimTweak = 2;
 				}
@@ -1248,7 +1265,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 							else
 							{
 								//frame[5] = min(frame[5] + max(0.5/max((frame[5]-3),1),0.125), 8);
-								frame[5] = min(frame[5] + (0.25/(1+liquidMovement)), 9);
+								frame[5] = clamp(frame[5] + (0.25/(1+liquidMovement)), 4, 9);
 								frame[4] = 6;
 							}
 						}
@@ -1930,7 +1947,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 	spaceJump = max(spaceJump - 1, 0);
 	morphFrame = max(morphFrame - animSpeed, 0);
 	
-	if((velX == 0 && move == 0) || landFrame > 0 || !grounded)
+	//if((velX == 0 && move == 0) || lhc_place_collide(move,0) || landFrame > 0 || !grounded)
+	if(stateFrame == State.Stand)
 	{
 		runToStandFrame[0] = max(runToStandFrame[0] - animSpeed, 0);
 		runToStandFrame[1] = max(runToStandFrame[1] - animSpeed, 0);
@@ -2136,8 +2154,21 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 		}
 		else
 		{
-			instance_destroy(grapple);
-			grappleDist = 0;
+			if(instance_exists(grapple))
+			{
+				if(grapple.grappled)
+				{
+					instance_destroy(grapple);
+				}
+				else
+				{
+					grapple.impact = max(grapple.impact,1);
+				}
+			}
+			else
+			{
+				grappleDist = 0;
+			}
 		
 			if(statCharge <= 0)
 			{

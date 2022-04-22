@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Sub_SamusText","path":"sprites/sprt_Sub_SamusText/sprt_Sub_SamusText.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Sub_SamusText",
     "tags": [],
     "resourceType": "GMSequence",

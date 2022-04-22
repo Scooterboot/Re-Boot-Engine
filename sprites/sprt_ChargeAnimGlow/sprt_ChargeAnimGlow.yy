@@ -79,7 +79,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_ChargeAnimGlow","path":"sprites/sprt_ChargeAnimGlow/sprt_ChargeAnimGlow.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_ChargeAnimGlow",
     "tags": [],
     "resourceType": "GMSequence",

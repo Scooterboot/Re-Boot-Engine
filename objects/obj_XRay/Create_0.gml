@@ -103,10 +103,14 @@ function xray_redraw_alpha()
 
 	with (obj_Tile)
 	{
-		if(!object_is_ancestor(object_index,obj_Breakable))
+		if(!object_is_ancestor(object_index,obj_Breakable) && !object_is_ancestor(object_index,obj_DoorHatch))
 		{
 			draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
 		}
+	}
+	with (obj_DoorHatch)
+	{
+		draw_sprite_ext(sprite_index,5,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
 	}
 	with (obj_Door)
 	{
@@ -125,6 +129,10 @@ function xray_redraw_break()
 	with (obj_Breakable)
 	{
 	    draw_sprite_ext(sprite_index,1,x-camera_get_view_x(view_camera[0]),y-camera_get_view_y(view_camera[0]),1,1,0,c_white,1);
+	}
+	with (obj_Pickup)
+	{
+		draw_sprite_ext(sprite_index,image_index,x-camera_get_view_x(view_camera[0]),y-camera_get_view_y(view_camera[0]),image_xscale,image_yscale,image_angle,c_white,1);
 	}
 
 	surface_reset_target();

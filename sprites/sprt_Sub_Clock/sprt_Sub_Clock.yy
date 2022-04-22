@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Sub_Clock","path":"sprites/sprt_Sub_Clock/sprt_Sub_Clock.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Sub_Clock",
     "tags": [],
     "resourceType": "GMSequence",

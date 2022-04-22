@@ -27,6 +27,8 @@ function scr_LoadGame() {
 				x = _map[? "x"];
 				y = _map[? "y"];
 				
+				lhc_activate();
+				
 				water_init(0);
 			
 				energyMax = _map[? "energyMax"];
@@ -124,7 +126,14 @@ function scr_LoadGame() {
 		room_goto(rm_debug01);
 		var sx = 80,
 			sy = 694;
-		instance_create_layer(sx,sy,"Player",obj_Player);
+		//instance_create_layer(sx,sy,"Player",obj_Player);
+		with(instance_create_layer(0,0,"Player",obj_Player))
+		{
+			x = sx;
+			y = sy;
+			
+			lhc_activate();
+		}
 		instance_create_layer(sx-(global.resWidth/2),sy-(global.resHeight/2),"Camera",obj_Camera);
 		
 		//ds_grid_clear(global.mapReveal_Debug,false);

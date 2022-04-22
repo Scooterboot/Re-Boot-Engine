@@ -64,6 +64,8 @@ fileTime[2] = -1;
 cursorFrame = 0;
 cursorFrameCounter = 0;
 
+moveCounter = 0;
+
 buttonTip = array(
 "Move",
 "Select",

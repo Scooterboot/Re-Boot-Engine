@@ -386,6 +386,10 @@ if(screenFade >= 1 && !menuClosing)
 				global.gp_m[1] = gp_face1;
 				global.gp_m[2] = gp_face2;
 				scr_SaveGamepad(global.gp[0],0);
+				
+				currentControlButton[0] = global.gp_usePad;
+				currentControlButton[1] = global.gp_useStick;
+				currentControlButton[2] = global.gp_deadZone;
 				for(var i = 0; i < array_length(global.gp); i++)
 				{
 					currentControlButton[i+3] = global.gp[i];
@@ -393,7 +397,7 @@ if(screenFade >= 1 && !menuClosing)
 				for(var i = 0; i < array_length(global.gp_m); i++)
 				{
 					currentControlButton[i+3+array_length(global.gp)] = global.gp_m[i];
-						}
+				}
 				audio_play_sound(snd_MenuBoop,0,false);
 			}
 			else

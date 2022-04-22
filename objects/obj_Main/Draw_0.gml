@@ -35,7 +35,7 @@ if (camX < 0 || camX+camW > room_width ||
 #endregion
 
 #region Debug
-var debug = false;
+var debug = false;//true;
 if(debug)
 {
     if(instance_exists(obj_Tile))
@@ -64,7 +64,8 @@ if(debug)
         //draw_rectangle(x+6*dir,y-21,x+19*dir,y-8,0);
         //draw_rectangle(x+6*dir,y-37,x+19*dir,y-24,0);
         
-        draw_rectangle(scr_round(bbox_left),scr_round(bbox_top),scr_round(bbox_right),scr_round(bbox_bottom),0);
+        //draw_rectangle(scr_round(bbox_left),scr_round(bbox_top),scr_round(bbox_right),scr_round(bbox_bottom),0);
+		draw_rectangle(bbox_left,bbox_top,bbox_right,bbox_bottom,0);
 		
 		draw_set_color(c_fuchsia);
 		if(instance_exists(obj_Projectile))
@@ -100,31 +101,59 @@ if(debug)
         draw_set_alpha(1);
 		draw_set_halign(fa_left);
 		draw_set_valign(fa_top);
-        draw_set_font(fnt_Menu2);
+        //draw_set_font(fnt_Menu2);
+		draw_set_font(fnt_GUI);
 		
 		var xx = camera_get_view_x(view_camera[0]),
-			yy = camera_get_view_y(view_camera[0]);
-        draw_text(xx+10,yy+40,"state: "+string(state));
-        draw_text(xx+10,yy+50,"stateFrame: "+string(stateFrame));
-        draw_text(xx+10,yy+60,"lastState: "+string(lastState));
-        draw_text(xx+10,yy+70,"velX: "+string(velX));
-        draw_text(xx+10,yy+80,"velY: "+string(velY));
-        draw_text(xx+10,yy+90,"X pos: "+string(x));
-        draw_text(xx+10,yy+100,"Y pos: "+string(y));
+			yy = camera_get_view_y(view_camera[0]),
+			marginX = 10,
+			marginY = 10;
+        draw_text(xx+marginX,yy+30+marginY,"state: "+string(state));
+        draw_text(xx+marginX,yy+30+marginY*2,"stateFrame: "+string(stateFrame));
+        draw_text(xx+marginX,yy+30+marginY*3,"lastState: "+string(lastState));
+        draw_text(xx+marginX,yy+30+marginY*4,"velX: "+string(velX));
+        draw_text(xx+marginX,yy+30+marginY*5,"velY: "+string(velY));
+        draw_text(xx+marginX,yy+30+marginY*6,"fVelX: "+string(fVelX));
+        draw_text(xx+marginX,yy+30+marginY*7,"fVelY: "+string(fVelY));
+        draw_text(xx+marginX,yy+30+marginY*8,"X pos: "+string(x));
+        draw_text(xx+marginX,yy+30+marginY*9,"Y pos: "+string(y));
 		
-        draw_text(xx+10,yy+110,"obj_Camera.y: "+string(obj_Camera.y));
-        draw_text(xx+10,yy+120,"camera[0] y: "+string(camera_get_view_y(view_camera[0])));
+       /* draw_text(xx+10,yy+130,"obj_Camera.y: "+string(obj_Camera.y));
+        draw_text(xx+10,yy+140,"camera[0] y: "+string(camera_get_view_y(view_camera[0])));
 		
-		draw_text(xx+10,yy+130,"speedBoost: "+string(speedBoost));
-        draw_text(xx+10,yy+140,"speedCounter: "+string(speedCounter));
-        draw_text(xx+10,yy+150,"speedBoostWJCounter: "+string(speedBoostWJCounter));
+		draw_text(xx+10,yy+150,"speedBoost: "+string(speedBoost));
+        draw_text(xx+10,yy+160,"speedCounter: "+string(speedCounter));
+        draw_text(xx+10,yy+170,"speedBoostWJCounter: "+string(speedBoostWJCounter));*/
 		
 		/*for(var i = 0; i < ds_list_size(global.openHatchList); i++)
 		{
 			draw_text(xx+10,yy+40+10*i,global.openHatchList[| i]);
 		}*/
     }
+	
+	with(obj_NPC)
+	{
+		draw_set_color(c_red);
+        draw_set_alpha(0.75);
+        
+        //draw_rectangle(scr_round(bbox_left),scr_round(bbox_top),scr_round(bbox_right),scr_round(bbox_bottom),0);
+		draw_rectangle(bbox_left,bbox_top,bbox_right,bbox_bottom,0);
+		
+		draw_set_color(c_white);
+        draw_set_alpha(1);
+	}
 
 	show_debug_message("delta_time: "+string(delta_time));
 }
+
+if(instance_exists(obj_Player) && obj_Player.godmode)
+{
+	draw_set_color(c_white);
+    draw_set_alpha(1);
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
+	draw_set_font(fnt_GUI);
+	draw_text(camera_get_view_x(view_camera[0])+7,camera_get_view_y(view_camera[0])+30,"godmode enabled");
+}
+
 #endregion

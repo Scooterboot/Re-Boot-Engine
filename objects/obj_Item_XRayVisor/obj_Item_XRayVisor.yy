@@ -30,7 +30,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "GearItems",
-    "path": "folders/Objects/ItemPickups/GearItems.yy",
+    "path": "folders/Objects/Room Elements/ItemPickups/GearItems.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_Item_XRayVisor",

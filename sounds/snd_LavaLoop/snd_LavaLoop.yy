@@ -11,7 +11,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_LavaLoop",
-  "duration": 3.131375,
+  "duration": 3.126375,
   "parent": {
     "name": "Liquid",
     "path": "folders/Sounds/Liquid.yy",

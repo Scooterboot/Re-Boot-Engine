@@ -2,8 +2,52 @@
 image_speed = 0;
 image_index = 0;
 
+#region Gameplay Tweaks
 
-// ----- Main -----
+// enable/disable debug controls
+debug = true;
+// press 0 to refill health & ammo
+// press 9 to face toward screen / activate elevator pose
+// press 8 to set health to 10
+// press 7 to acquire all abilities
+// press 6 to acquire a random ability
+// no clip controls: press numpad 8,5,4,6 to move up,down,left,right
+// press 5 to enable/disable godmode
+godmode = false;
+
+
+// "Arm Pumping" is a classic SM speedrunning tech
+//Tapping any aim button will shift the player forward one pixel during grounded movement.
+//(Default is false)
+armPumping = false;
+
+// Global speed modifier for grounded movement. Does not affect jumping/overall momentum.
+//Set to 0.5 as an alternative to 60fps frame-perfect Arm Pumping.
+//(Default is 0)
+globalSpeedMod = 0;
+
+// Continue speed boosting after landing
+speedKeep = 0;
+// 0 = disabled
+// 1 = enabled always
+// 2 = enabled, but disabled during underwater movement
+
+// Wall jump during speed booster
+speedBoostWallJump = true;
+
+// Cancel Shine Spark mid-flight by pressing jump
+shineSparkCancel = true;
+
+// Low-level Shine Spark flight control
+//press directions or angle buttons to slightly change flight direction
+shineSparkFlightAdjust = false;
+
+// High-level Shine Spark flight control when Accel Dash is enabled
+//activated by holding a direction and pressing Run during flight (consumes Dash charge)
+shineSparkRedirect = false;
+
+#endregion
+
 #region Main
 
 enum State
@@ -65,7 +109,10 @@ speedCounterMax = 80;//120;
 speedBoost = false;
 speedFXCounter = 0;
 speedCatchCounter = 0;
+speedKill = 0;
+speedKillMax = 6;
 
+speedBoostWJ = false;
 speedBoostWJCounter = 0;
 
 shineCharge = 0;
@@ -229,7 +276,6 @@ grappleVelY = 0;
 grapWJCounter = 0;
 
 #endregion
-// ----- Physics Vars -----
 #region Physics Vars
 
 // Out of water
@@ -272,12 +318,15 @@ maxSpeed[10,2] = 3.25;	// Dodge
 // Out of water
 moveSpeed[0,0] = 0.1875;	// Normal
 moveSpeed[1,0] = 0.1;		// Morph
+moveSpeed[2,0] = 0.0625;	// speedboost?
 // Underwater
 moveSpeed[0,1] = 0.015625;	// Normal
 moveSpeed[1,1] = 0.02;		// Morph
+moveSpeed[2,1] = 0.015625;	// speedboost?
 // In lava/acid
 moveSpeed[0,2] = 0.015625;	// Normal
 moveSpeed[1,2] = 0.02;		// Morph
+moveSpeed[2,2] = 0.015625;	// speedboost?
 
 frict[0] = 0.5;		// Out of water
 frict[1] = 0.5;		// Underwater
@@ -319,6 +368,7 @@ grav[2] = 0.03515625;	// In lava/acid
 
 fallSpeedMax = 5; // Maximum fall speed - soft cap
 
+// (f)inalized variables
 fMaxSpeed = maxSpeed[0,0];
 fMoveSpeed = moveSpeed[0,0];
 fFrict = frict[0];
@@ -330,6 +380,9 @@ jump = 0;
 jumping = false;
 jumpStart = false;
 jumpStop = !jumpStart;
+
+bunnyJumpMax = 3;
+bunnyJump = bunnyJumpMax;
 
 morphSpinJump = false;
 
@@ -358,7 +411,6 @@ cosX = lengthdir_x(abs(velX),sAngle);
 sinX = lengthdir_y(abs(velX),sAngle);
 
 #endregion
-// ----- Animation -----
 #region Animation
 
 stateFrame = State.Stand;
@@ -571,7 +623,6 @@ gravGlowAlpha = 0;
 gravGlowNum = 10;
 
 #endregion
-// ----- Audio -----
 #region Audio
 
 chargeSoundPlayed = false;
@@ -584,7 +635,6 @@ speedSoundPlayed = false;
 screwSoundPlayed = false;
 
 #endregion
-// ----- Item Vars -----
 #region Item Vars
 
 /*energyTanks = 14;
@@ -717,7 +767,6 @@ beamChargeAmt = 1;
 beamIconIndex = 0;
 
 #endregion
-// ----- HUD ------
 #region HUD
 
 cHSelect = false;
@@ -768,7 +817,6 @@ itemName[3] = "GRAPPLE BEAM";
 itemName[4] = "X-RAY VISOR";
 
 #endregion
-// ----- Palette -----
 #region Palette
 
 chargeReleaseFlash = 0;
@@ -796,7 +844,6 @@ screwPal = 0;
 screwPalNum = 1;
 
 #endregion
-// ----- After Image -----
 #region After Image
 
 afterImageNum = 10;
@@ -807,7 +854,168 @@ afterImgAlphaMult = 0.625;
 
 #endregion
 
-// ----- Functions -----
+
+#region Collision
+
+lhc_activate();
+
+/*lhc_add("IBreakable", function()
+{
+	var block = lhc_colliding();
+	if(isSpeedBoosting || isScrewAttacking)
+	{
+		if(block.object_index == obj_ShotBlock || block.object_index == obj_BombBlock ||
+		(isSpeedBoosting && block.object_index == obj_SpeedBlock) ||
+		(isScrewAttacking && block.object_index == obj_ScrewBlock))
+		{
+			instance_destroy(block);
+		}
+	}
+});
+
+lhc_add("ISolid", function()
+{
+	var grounded2 = (lhc_place_collide(0,1) || (bbox_bottom+1) >= room_height);
+	
+	// X Collision
+	if(lhc_collision_horizontal())
+	{
+		var ycheck = 3;
+		if(isSpeedBoosting)
+		{
+			scr_BreakBlock(x,y-(ycheck+1),5);
+			scr_BreakBlock(x+2*sign(fVelX),y-(ycheck+1),5);
+		}
+		if(isScrewAttacking)
+		{
+			scr_BreakBlock(x,y-(ycheck+1),6);
+			scr_BreakBlock(x+2*sign(fVelX),y-(ycheck+1),6);
+		}
+		
+		var walkUpSlope = (!lhc_place_collide(sign(fVelX),-ycheck) && (velY >= 0 || jumping || ((state == State.Spark || state == State.BallSpark) && abs(shineDir) == 1) || state == State.Dodge));
+		
+		if(lhc_place_collide(sign(fVelX),-ycheck) || !walkUpSlope || (state == State.Grip && stateFrame != State.Morph) || !grounded2)
+		{
+			lhc_stop_x();
+			
+			if(!speedBoost || speedCounter <= 0)
+			{
+				velX = 0;
+			}
+			else if(!speedBoostWJ)
+			{
+				speedCounter = max(speedCounter-(speedCounterMax/5),0);
+			}
+			else if(speedBoost && speedBoostWJ)
+			{
+				speedCounter = speedCounterMax;
+			}
+			//move = 0;
+			fVelX = 0;
+			bombJumpX = 0;
+			if((state == State.Spark || state == State.BallSpark) && shineStart <= 0)
+			{
+				if(boots[Boots.ChainSpark])
+				{
+					shineRestart = true;
+					audio_play_sound(snd_ShineSpark_Charge,0,false);
+				}
+				else if(shineEnd <= 0)
+				{
+					audio_play_sound(snd_Hurt,0,false);
+				}
+				shineEnd = shineEndMax;
+			}
+		}
+		else if(grounded2)
+		{
+			if((state == State.Spark || state == State.BallSpark) && abs(shineDir) == 2 && shineStart <= 0)
+			{
+				shineEnd = 0;
+				shineDir = 0;
+				if(state == State.BallSpark)
+				{
+					state = State.Morph;
+					mockBall = true;
+				}
+				else
+				{
+					stateFrame = State.Stand;
+					mask_index = mask_Stand;
+					y -= 3;
+					state = State.Stand;
+				}
+				speedFXCounter = 1;
+				speedCounter = speedCounterMax;
+				speedCatchCounter = 6;
+				audio_stop_sound(snd_ShineSpark);
+			}
+			for(var i = 0; i <= ycheck && lhc_place_collide(0,1); i++)
+			{
+				y--;
+			}
+		}
+	}
+	
+	// Y Collision
+	if(lhc_collision_vertical())
+	{
+		lhc_stop_y();
+		if((state == State.Spark || state == State.BallSpark) && shineStart <= 0)
+		{
+			if((abs(shineDir) == 2 || abs(shineDir) == 3) && fVelY >= 0 && !lhc_place_collide(sign(fVelX),0))
+			{
+				shineEnd = 0;
+				shineDir = 0;
+				if(state == State.BallSpark)
+				{
+					state = State.Morph;
+					mockBall = true;
+				}
+				else
+				{
+					stateFrame = State.Stand;
+					mask_index = mask_Stand;
+					y -= 3;
+					state = State.Stand;
+				}
+				speedFXCounter = 0;
+				speedCounter = speedCounterMax;
+				speedCatchCounter = 6;
+				audio_stop_sound(snd_ShineSpark);
+			}
+			else
+			{
+				if(shineEnd <= 0)
+				{
+					audio_play_sound(snd_Hurt,0,false);
+				}
+				shineEnd = shineEndMax;
+			}
+		}
+		fVelY = 0;
+		velY = 0;
+	}
+});
+
+lhc_add("IPlatform", function()
+{
+	if(lhc_collision_down())
+	{
+		if(!lhc_place_meeting(x,y,"IPlatform") && fVelY >= 0 && state != State.Spark && state != State.BallSpark)
+		{
+			lhc_stop_y();
+		
+			fVelY = 0;
+			velY = 0;
+			jump = 0;
+		}
+	}
+});*/
+
+#endregion
+
+
 #region PlayerGrounded
 function PlayerGrounded()
 {
@@ -817,8 +1025,8 @@ function PlayerGrounded()
 	{
 		ydiff = argument[0];
 	}
-	var bottomCollision = (collision_line(bbox_left+xdiff,bbox_bottom+ydiff,bbox_right+xdiff,bbox_bottom+ydiff,obj_Tile,true,true) || 
-						(collision_line(bbox_left+xdiff,bbox_bottom+ydiff,bbox_right+xdiff,bbox_bottom+ydiff,obj_Platform,true,true) && !place_meeting(x,y,obj_Platform)) || 
+	var bottomCollision = (lhc_collision_line(bbox_left+xdiff,bbox_bottom+ydiff,bbox_right+xdiff,bbox_bottom+ydiff,"ISolid",true,true) || 
+						(lhc_collision_line(bbox_left+xdiff,bbox_bottom+ydiff,bbox_right+xdiff,bbox_bottom+ydiff,"IPlatform",true,true) && !lhc_place_meeting(x,y,"IPlatform")) || 
 						(y+ydiff) >= room_height);
 	
 	return (((bottomCollision && velY >= 0 && velY <= fGrav) || (spiderBall && spiderEdge != Edge.None)) && jump <= 0);
@@ -827,7 +1035,7 @@ function PlayerGrounded()
 #region PlayerOnPlatform
 function PlayerOnPlatform()
 {
-	return (place_meeting(x,y+1,obj_Platform) && !place_meeting(x,y,obj_Platform) && 
+	return (lhc_place_meeting(x,y+1,"IPlatform") && !lhc_place_meeting(x,y,"IPlatform") && 
 			fVelY >= 0 && state != State.Spark && state != State.BallSpark);
 }
 #endregion

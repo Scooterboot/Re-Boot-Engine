@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_StandSuitAnimZS","path":"sprites/sprt_StandSuitAnimZS/sprt_StandSuitAnimZS.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_StandSuitAnimZS",
     "tags": [],
     "resourceType": "GMSequence",

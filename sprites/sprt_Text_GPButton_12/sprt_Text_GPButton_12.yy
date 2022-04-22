@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Text_GPButton_12","path":"sprites/sprt_Text_GPButton_12/sprt_Text_GPButton_12.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Text_GPButton_12",
     "tags": [],
     "resourceType": "GMSequence",

@@ -1095,7 +1095,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Font_GUISmall","path":"sprites/sprt_Font_GUISmall/sprt_Font_GUISmall.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Font_GUISmall",
     "tags": [],
     "resourceType": "GMSequence",

@@ -75,7 +75,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Sub_ItemIcons","path":"sprites/sprt_Sub_ItemIcons/sprt_Sub_ItemIcons.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Sub_ItemIcons",
     "tags": [],
     "resourceType": "GMSequence",

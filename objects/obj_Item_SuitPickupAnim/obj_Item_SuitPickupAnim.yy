@@ -29,7 +29,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "SuitItems",
-    "path": "folders/Objects/ItemPickups/SuitItems.yy",
+    "path": "folders/Objects/Room Elements/ItemPickups/SuitItems.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_Item_SuitPickupAnim",

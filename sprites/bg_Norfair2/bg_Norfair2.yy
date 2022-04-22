@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"bg_Norfair2","path":"sprites/bg_Norfair2/bg_Norfair2.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "bg_Norfair2",
     "tags": [],
     "resourceType": "GMSequence",

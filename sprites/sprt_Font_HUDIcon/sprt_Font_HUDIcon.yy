@@ -75,7 +75,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Font_HUDIcon","path":"sprites/sprt_Font_HUDIcon/sprt_Font_HUDIcon.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Font_HUDIcon",
     "tags": [],
     "resourceType": "GMSequence",

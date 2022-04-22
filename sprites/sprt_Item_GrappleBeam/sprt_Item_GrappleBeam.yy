@@ -63,7 +63,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Item_GrappleBeam","path":"sprites/sprt_Item_GrappleBeam/sprt_Item_GrappleBeam.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Item_GrappleBeam",
     "tags": [],
     "resourceType": "GMSequence",
@@ -74,7 +74,7 @@
   "nineSlice": null,
   "parent": {
     "name": "GearItems",
-    "path": "folders/Sprites/ItemPickups/GearItems.yy",
+    "path": "folders/Sprites/Room Elements/ItemPickups/GearItems.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_Item_GrappleBeam",

@@ -20,7 +20,7 @@ Spr = sprite_index;
 if (Watery && instance_exists(obj_Lava))
 {
     //Spr = asset_get_index(sprite_get_name(Spr) + "Lava");
-    //Spr = scr_ConvertToLavaSprite(sprite_index);
+    Spr = scr_ConvertToLavaSprite(sprite_index);
     image_blend = make_color_rgb(255,255,80);
 }
 

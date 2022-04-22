@@ -39,6 +39,9 @@
     {"compositeImage":{"FrameId":{"name":"c8fd9fb4-4719-4d48-a278-9c96f99aecad","path":"sprites/sprt_DoorHatch_Power/sprt_DoorHatch_Power.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
         {"FrameId":{"name":"c8fd9fb4-4719-4d48-a278-9c96f99aecad","path":"sprites/sprt_DoorHatch_Power/sprt_DoorHatch_Power.yy",},"LayerId":{"name":"34abd61a-a308-4560-83b6-515049a8b61b","path":"sprites/sprt_DoorHatch_Power/sprt_DoorHatch_Power.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
       ],"parent":{"name":"sprt_DoorHatch_Power","path":"sprites/sprt_DoorHatch_Power/sprt_DoorHatch_Power.yy",},"resourceVersion":"1.0","name":"c8fd9fb4-4719-4d48-a278-9c96f99aecad","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"61183142-e00e-4d8c-8758-d1f5fe2e8bf4","path":"sprites/sprt_DoorHatch_Power/sprt_DoorHatch_Power.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"61183142-e00e-4d8c-8758-d1f5fe2e8bf4","path":"sprites/sprt_DoorHatch_Power/sprt_DoorHatch_Power.yy",},"LayerId":{"name":"34abd61a-a308-4560-83b6-515049a8b61b","path":"sprites/sprt_DoorHatch_Power/sprt_DoorHatch_Power.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"sprt_DoorHatch_Power","path":"sprites/sprt_DoorHatch_Power/sprt_DoorHatch_Power.yy",},"resourceVersion":"1.0","name":"61183142-e00e-4d8c-8758-d1f5fe2e8bf4","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "sequence": {
     "spriteId": {"name":"sprt_DoorHatch_Power","path":"sprites/sprt_DoorHatch_Power/sprt_DoorHatch_Power.yy",},
@@ -48,7 +51,7 @@
     "playbackSpeedType": 1,
     "autoRecord": true,
     "volume": 1.0,
-    "length": 5.0,
+    "length": 6.0,
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
@@ -58,6 +61,7 @@
             {"id":"8aa2e3ed-f6f8-4be4-997d-0737001b03fa","Key":2.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"e6af7bd2-a10d-47d6-a3a1-377249a21118","path":"sprites/sprt_DoorHatch_Power/sprt_DoorHatch_Power.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"5cec16c1-f250-4c93-b91b-7a15bb2d8005","Key":3.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"cda16d01-0c1c-4cb9-a3fb-7e88b1a13701","path":"sprites/sprt_DoorHatch_Power/sprt_DoorHatch_Power.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"8b1b49c0-24d1-4d51-8aaa-0183ba3965c3","Key":4.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"c8fd9fb4-4719-4d48-a278-9c96f99aecad","path":"sprites/sprt_DoorHatch_Power/sprt_DoorHatch_Power.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"c3e690a3-972a-4ac0-81e0-a2138ae83e7e","Key":5.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"61183142-e00e-4d8c-8758-d1f5fe2e8bf4","path":"sprites/sprt_DoorHatch_Power/sprt_DoorHatch_Power.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
     "visibleRange": null,
@@ -75,7 +79,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_DoorHatch_Power","path":"sprites/sprt_DoorHatch_Power/sprt_DoorHatch_Power.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_DoorHatch_Power",
     "tags": [],
     "resourceType": "GMSequence",
@@ -86,7 +90,7 @@
   "nineSlice": null,
   "parent": {
     "name": "SpecialTiles",
-    "path": "folders/Sprites/SpecialTiles.yy",
+    "path": "folders/Sprites/Room Elements/SpecialTiles.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_DoorHatch_Power",

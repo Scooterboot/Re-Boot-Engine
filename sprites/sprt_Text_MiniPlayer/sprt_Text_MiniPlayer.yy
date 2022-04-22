@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Text_MiniPlayer","path":"sprites/sprt_Text_MiniPlayer/sprt_Text_MiniPlayer.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Text_MiniPlayer",
     "tags": [],
     "resourceType": "GMSequence",

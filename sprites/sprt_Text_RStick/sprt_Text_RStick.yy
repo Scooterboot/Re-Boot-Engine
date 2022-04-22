@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Text_RStick","path":"sprites/sprt_Text_RStick/sprt_Text_RStick.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Text_RStick",
     "tags": [],
     "resourceType": "GMSequence",

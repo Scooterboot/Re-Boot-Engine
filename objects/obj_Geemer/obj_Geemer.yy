@@ -8,8 +8,8 @@
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
-    "name": "obj_NPC",
-    "path": "objects/obj_NPC/obj_NPC.yy",
+    "name": "obj_NPC_Crawler",
+    "path": "objects/obj_NPC_Crawler/obj_NPC_Crawler.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,
@@ -30,8 +30,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "NPCs",
-    "path": "folders/Objects/NPCs.yy",
+    "name": "Crawlers",
+    "path": "folders/Objects/NPCs/Crawlers.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_Geemer",

@@ -63,7 +63,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Item_ChainSpark","path":"sprites/sprt_Item_ChainSpark/sprt_Item_ChainSpark.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Item_ChainSpark",
     "tags": [],
     "resourceType": "GMSequence",
@@ -74,7 +74,7 @@
   "nineSlice": null,
   "parent": {
     "name": "BootsItems",
-    "path": "folders/Sprites/ItemPickups/BootsItems.yy",
+    "path": "folders/Sprites/Room Elements/ItemPickups/BootsItems.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_Item_ChainSpark",

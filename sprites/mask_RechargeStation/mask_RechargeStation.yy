@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"mask_RechargeStation","path":"sprites/mask_RechargeStation/mask_RechargeStation.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "mask_RechargeStation",
     "tags": [],
     "resourceType": "GMSequence",
@@ -70,7 +70,7 @@
   "nineSlice": null,
   "parent": {
     "name": "SpecialTiles",
-    "path": "folders/Sprites/SpecialTiles.yy",
+    "path": "folders/Sprites/Room Elements/SpecialTiles.yy",
   },
   "resourceVersion": "1.0",
   "name": "mask_RechargeStation",

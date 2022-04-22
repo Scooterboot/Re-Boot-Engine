@@ -28,7 +28,8 @@ if(surface_exists(surf))
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
 
-	var oX = scr_round((ww/2) - 96),
+	//var oX = scr_round((ww/2) - 96),
+	var oX = scr_round((ww/2) - 128),
 		oY = scr_round((hh/2) - 64);
 	if(screen == 1)
 	{
@@ -67,7 +68,7 @@ if(surface_exists(surf))
 		col = make_color_rgb(72,168,56);
 
 	gpu_set_blendmode(bm_add);
-	draw_rectangle_colour(oX - 2,oY - space - 1,oX + 192,oY - space + sh,col,c_black,c_black,col,false);
+	draw_rectangle_colour(oX - 2,oY - space - 1,oX + 256/*192*/,oY - space + sh,col,c_black,c_black,col,false);
 	gpu_set_blendmode(bm_normal);
 	draw_set_color(c_black);
 	draw_text(oX + 1,oY - space + 1,str);
@@ -111,7 +112,8 @@ if(surface_exists(surf))
 			var bW = string_width(option[i])+1;
 			if(i < 4)
 			{
-				bW = 185 - string_width(currentOptionName[i,currentOption[i]]) - indent;
+				//bW = 185 - string_width(currentOptionName[i,currentOption[i]]) - indent;
+				bW = 249 - string_width(currentOptionName[i,currentOption[i]]) - indent;
 			}
 			var col3 = c_white;
 			if(i == 6 && global.gpSlot <= -1)
@@ -132,7 +134,7 @@ if(surface_exists(surf))
 				bC = tcol2;
 				bA = talph2;
 			}
-			scr_DrawOptionText(oX+192-string_width(cOpt),oY+(i*space),cOpt,c_white,alpha,string_width(cOpt),bC,bA);
+			scr_DrawOptionText(oX+256/*192*/-string_width(cOpt),oY+(i*space),cOpt,c_white,alpha,string_width(cOpt),bC,bA);
 		}
 	
 		tipStrg = optionTip[optionPos,0];
@@ -162,7 +164,8 @@ if(surface_exists(surf))
 			if(i < 3)
 			{
 				//bW = 137;
-				bW = 185 - string_width(advCurrentOptionName[i,advCurrentOption[i]]) - indent;
+				//bW = 185 - string_width(advCurrentOptionName[i,advCurrentOption[i]]) - indent;
+				bW = 249 - string_width(advCurrentOptionName[i,advCurrentOption[i]]) - indent;
 			}
 			scr_DrawOptionText(oX+indent,oYY,advOption[i],c_white,alpha,bW,bC,bA);
 		}
@@ -178,7 +181,7 @@ if(surface_exists(surf))
 				bC = tcol2;
 				bA = talph2;
 			}
-			scr_DrawOptionText(oX+192-string_width(cOpt),oY+(i*space),cOpt,c_white,alpha,string_width(cOpt),bC,bA);
+			scr_DrawOptionText(oX+256/*192*/-string_width(cOpt),oY+(i*space),cOpt,c_white,alpha,string_width(cOpt),bC,bA);
 		}
 	
 		tipStrg = advOptionTip[optionPos,0];
@@ -215,7 +218,8 @@ if(surface_exists(surf))
 					{
 						cKeyString = textInputKey;
 					}
-					bW = 185 - string_width(cKeyString) - indent;
+					//bW = 185 - string_width(cKeyString) - indent;
+					bW = 249 - string_width(cKeyString) - indent;
 				}
 				scr_DrawOptionText(oX+indent,oYY,controlKey[i],c_white,alpha,bW,bC,bA);
 			}
@@ -246,7 +250,7 @@ if(surface_exists(surf))
 			
 				var oYY = oY+(i*space)+yOff;
 			
-				scr_DrawOptionText(oX+192-string_width(cKeyString),oYY,cKeyString,c_white,alpha,string_width(cKeyString),bC,bA);
+				scr_DrawOptionText(oX+256/*192*/-string_width(cKeyString),oYY,cKeyString,c_white,alpha,string_width(cKeyString),bC,bA);
 			}
 			else
 			{
@@ -290,11 +294,13 @@ if(surface_exists(surf))
 					{
 						cButtonString = textInputButton;
 					}
-					bW = 185 - string_width(cButtonString) - indent;
+					//bW = 185 - string_width(cButtonString) - indent;
+					bW = 249 - string_width(cButtonString) - indent;
 				}
 				if(i == 2)
 				{
-					bW = 137;
+					//bW = 137;
+					bW = 197;
 				}
 				scr_DrawOptionText(oX+indent,oYY,controlButton[i],c_white,alpha,bW,bC,bA);
 			}
@@ -318,7 +324,8 @@ if(surface_exists(surf))
 			
 				if(i == 2)
 				{
-					var bX = oX+144,
+					//var bX = oX+144,
+					var bX = oX+208,
 						bY = oY+(i*space),
 						bW = 48;
 					draw_set_color(bC);
@@ -355,7 +362,7 @@ if(surface_exists(surf))
 			
 					var oYY = oY+(i*space)+yOff;
 			
-					scr_DrawOptionText(oX+192-string_width(cButtonString),oYY,cButtonString,c_white,alpha,string_width(cButtonString),bC,bA);
+					scr_DrawOptionText(oX+256/*192*/-string_width(cButtonString),oYY,cButtonString,c_white,alpha,string_width(cButtonString),bC,bA);
 				}
 			}
 			else

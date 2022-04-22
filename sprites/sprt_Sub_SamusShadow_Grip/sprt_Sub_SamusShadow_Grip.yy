@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Sub_SamusShadow_Grip","path":"sprites/sprt_Sub_SamusShadow_Grip/sprt_Sub_SamusShadow_Grip.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "",
     "tags": [],
     "resourceType": "GMSequence",

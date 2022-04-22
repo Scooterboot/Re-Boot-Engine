@@ -22,7 +22,7 @@ function scr_DrawHUD() {
 	        draw_set_alpha(1);
 	    }
 
-	    for(var i = 0; i < array_length_1d(item); i++)
+	    for(var i = 0; i < array_length(item); i++)
 	    {
 	        if(item[i])
 	        {
@@ -98,7 +98,7 @@ function scr_DrawHUD() {
 		if(selecting)
 		{
 			draw_set_color(c_white);
-	        draw_set_font(MenuFont);
+	        draw_set_font(fnt_Menu2);
 			draw_set_halign(fa_left);
 			draw_set_valign(fa_top);
 			var strg = itemName[itemHighlighted[1]],
@@ -106,7 +106,7 @@ function scr_DrawHUD() {
 	        draw_text_transformed(vX+tX,vY+21,itemName[itemHighlighted[1]],1,1,0);
 			var xx = 69,
 				yy = 38;
-			for(var i = 0; i < array_length_1d(item); i++)
+			for(var i = 0; i < array_length(item); i++)
 			{
 				xx = 50 + 36*i;
 				if(item[i])

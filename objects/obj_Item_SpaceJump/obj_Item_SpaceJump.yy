@@ -30,7 +30,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "BootsItems",
-    "path": "folders/Objects/ItemPickups/BootsItems.yy",
+    "path": "folders/Objects/Room Elements/ItemPickups/BootsItems.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_Item_SpaceJump",

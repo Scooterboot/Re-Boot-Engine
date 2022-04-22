@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Text_HUDIcon_4","path":"sprites/sprt_Text_HUDIcon_4/sprt_Text_HUDIcon_4.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Text_HUDIcon_4",
     "tags": [],
     "resourceType": "GMSequence",

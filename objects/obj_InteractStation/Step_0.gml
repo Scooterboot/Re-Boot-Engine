@@ -30,12 +30,13 @@ if(instance_exists(obj_Player))
 			audio_play_sound(snd_InteractLoop,0,true);
 		}
 		
+		var offset = 14;
 		p.state = State.Recharge;
 		p.dir = -activeDir;
-		var xPos = bbox_right+12;
+		var xPos = bbox_right+offset;
 		if(activeDir == -1)
 		{
-			xPos = bbox_left-12;
+			xPos = bbox_left-offset;
 		}
 		if(p.x > xPos)
 	    {

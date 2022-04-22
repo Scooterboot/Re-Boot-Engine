@@ -560,15 +560,36 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			draw_text(ww/2+118,30,"ITEMS: "+pStr);
 			#endregion
 			#region Draw Footer
-			draw_sprite(sprt_Sub_Footer,currentScreen,global.resWidth/2,global.resHeight-36);
+			//draw_sprite(sprt_Sub_Footer,currentScreen,global.resWidth/2,global.resHeight-36);
 			
-			var str = InsertIconsIntoString(footerText[currentScreen]),
-				strX = scr_round(global.resWidth/2),
-				strY = scr_round(global.resHeight-36+sprite_get_height(sprt_Sub_Footer)/2);
+			var fText = footerText[currentScreen];
+			if(screenSelect)
+			{
+				fText = footerText[4];
+			}
+			var str = InsertIconsIntoString(fText),
+				strX = scr_round(ww/2),
+				strY = scr_round(hh-20);//scr_round(global.resHeight-36+sprite_get_height(sprt_Sub_Footer)/2);
 			if(footerScrib.text != str)
 			{
 				footerScrib.overwrite(str);
 			}
+			
+			var footerSprt = sprt_Sub_Footer;
+			var footerW = sprite_get_width(footerSprt),
+				footerH = sprite_get_height(footerSprt),
+				strW = footerScrib.get_width(),
+				strH = footerScrib.get_height();
+			var roundMarginX = footerW/2,
+				roundMarginY = footerH/2;
+				
+			var footerScaleX = max(scr_round(roundMarginX*(footerW+strW-2)/footerW)/roundMarginX,4),
+				footerScaleY = max(scr_round(roundMarginY*(footerH+strH-16)/footerH)/roundMarginY,1.2);
+			draw_sprite_ext(sprt_Sub_Footer,1,strX,strY,footerScaleX,footerScaleY,0,c_white,0.5);
+			draw_sprite_ext(sprt_Sub_Footer,0,strX,strY,footerScaleX,footerScaleY,0,c_white,1);
+			
+			footerScrib.blend(c_black,1);
+			footerScrib.draw(strX+1,strY+1);
 			footerScrib.blend(c_white,1);
 			footerScrib.draw(strX,strY);
 			#endregion

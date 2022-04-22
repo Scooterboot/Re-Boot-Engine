@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Text_DPad","path":"sprites/sprt_Text_DPad/sprt_Text_DPad.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Text_DPad",
     "tags": [],
     "resourceType": "GMSequence",

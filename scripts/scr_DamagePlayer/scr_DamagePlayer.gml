@@ -10,7 +10,7 @@ function scr_DamagePlayer() {
 	        hurtSY = argument[3],
 	        immune = argument[4];
     
-	    if(!global.gamePaused)
+	    if(!global.gamePaused && !godmode)
 	    {
 	        if(dmg >= energy)
 	        {

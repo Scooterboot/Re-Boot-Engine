@@ -63,7 +63,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Item_Bomb","path":"sprites/sprt_Item_Bomb/sprt_Item_Bomb.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Item_Bomb",
     "tags": [],
     "resourceType": "GMSequence",
@@ -74,7 +74,7 @@
   "nineSlice": null,
   "parent": {
     "name": "MiscItems",
-    "path": "folders/Sprites/ItemPickups/MiscItems.yy",
+    "path": "folders/Sprites/Room Elements/ItemPickups/MiscItems.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_Item_Bomb",

@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sprt_Text_Arrow","path":"sprites/sprt_Text_Arrow/sprt_Text_Arrow.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sprt_Text_Arrow",
     "tags": [],
     "resourceType": "GMSequence",
