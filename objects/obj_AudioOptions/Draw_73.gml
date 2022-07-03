@@ -18,7 +18,7 @@ if(surface_exists(surf))
 	draw_clear_alpha(c_black,1);
 
 	//draw_sprite_tiled_ext(bg_Menu2,0,ww/2-global.ogResWidth/2,0,1,1,c_white,1);
-	draw_sprite_ext(bg_Menu2,0,ww/2,hh/2,3,3,0,c_white,1);
+	draw_sprite_ext(bg_Zebes,0,ww/2,hh/2,1,1,0,c_white,1);
 
 	var space = 16;
 

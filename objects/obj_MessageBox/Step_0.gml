@@ -60,7 +60,10 @@ switch (messageType)
 			messageAlpha = max(messageAlpha-0.1,0);
 			kill = true;
 		}
-		messageDuration++;
+		//if(!global.gamePaused)
+		//{
+			messageDuration++;
+		//}
 		break;
 	}
 	case Message.Simple:
@@ -74,10 +77,10 @@ switch (messageType)
 			messageAlpha = max(messageAlpha-0.05,0);
 			kill = true;
 		}
-		if(!global.gamePaused)
-		{
+		//if(!global.gamePaused)
+		//{
 			messageDuration++;
-		}
+		//}
 		break;
 	}
 }

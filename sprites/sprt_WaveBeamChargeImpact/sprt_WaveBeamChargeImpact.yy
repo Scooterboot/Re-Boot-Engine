@@ -82,7 +82,7 @@
   "nineSlice": null,
   "parent": {
     "name": "WaveBeam",
-    "path": "folders/Sprites/Weapons/Beams/WaveBeam.yy",
+    "path": "folders/Sprites/Projectiles/Beams/WaveBeam.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_WaveBeamChargeImpact",

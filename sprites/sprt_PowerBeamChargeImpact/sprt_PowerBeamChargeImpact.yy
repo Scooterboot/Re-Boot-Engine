@@ -82,7 +82,7 @@
   "nineSlice": null,
   "parent": {
     "name": "PowerBeam",
-    "path": "folders/Sprites/Weapons/Beams/PowerBeam.yy",
+    "path": "folders/Sprites/Projectiles/Beams/PowerBeam.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_PowerBeamChargeImpact",

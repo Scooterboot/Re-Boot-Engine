@@ -25,23 +25,39 @@ switch (messageType)
 			var str2W = descScrib.get_width(),//string_width(str2),
 				boxW = sprite_get_width(sprt_MessageBox),
 				boxW2 = 190,
-				boxScaleX = 1;
-			if(str2W > boxW2)
-			{
-				boxScaleX = (boxW + (str2W-boxW2)) / boxW;
-			}
+				str2H = descScrib.get_height(),
+				boxH = sprite_get_height(sprt_MessageBox),
+				boxH2 = 34;
+			//	boxScaleX = 1;
+			//if(str2W > boxW2)
+			//{
+			//	boxScaleX = (boxW + (str2W-boxW2)) / boxW;
+			//}
 			
-			draw_sprite_ext(sprt_MessageBox,0,xx+(ww/2),yy+(hh/2),boxScaleX,lerp(0.42,1,messageAlpha),0,c_white,messageAlpha);
+			//draw_sprite_ext(sprt_MessageBox,0,xx+(ww/2),yy+(hh/2),boxScaleX,lerp(0.42,1,messageAlpha),0,c_white,messageAlpha);
+			
+			var fWidth = max(boxW,str2W+56),
+				scaleW = fWidth/boxW,
+				offX = sprite_get_xoffset(sprt_MessageBox) * scaleW,
+				fHeight = lerp(boxH2,max(boxH,str2H+20),messageAlpha),
+				fHeight2 = max(boxH,str2H+20)/2,
+				scaleH = fHeight/boxH,
+				offY = sprite_get_yoffset(sprt_MessageBox) * scaleH;
+			
+			draw_sprite_stretched_ext(sprt_MessageBox,0,xx+(ww/2)-offX,yy+(hh/2)-offY,fWidth,fHeight,c_white,messageAlpha)
 			
 			draw_set_font(fnt_Menu2);
-			scr_DrawOptionText(xx+(ww/2),yy+(hh/2)-string_height(str)-4,str,c_yellow,messageAlpha,0,c_black,0);
+			//scr_DrawOptionText(xx+(ww/2),yy+(hh/2)-string_height(str)-4,str,c_yellow,messageAlpha,0,c_black,0);
+			scr_DrawOptionText(xx+(ww/2),yy+(hh/2)-fHeight2+4,str,c_yellow,messageAlpha,0,c_black,0);
 			
 			//draw_set_font(GUIFontSmall);
 			//scr_DrawOptionText(xx+(ww/2),yy+(hh/2),str2,c_white,messageAlpha,0,c_black,0);
+			var descX = xx+(ww/2),
+				descY = yy+(hh/2)+fHeight2-4-str2H;
 			descScrib.blend(c_black,messageAlpha);
-			descScrib.draw(xx+(ww/2)+1,yy+(hh/2)+1);
+			descScrib.draw(descX+1,descY+1);
 			descScrib.blend(c_white,messageAlpha);
-			descScrib.draw(xx+(ww/2),yy+(hh/2));
+			descScrib.draw(descX,descY);
 		}
 		break;
 	}

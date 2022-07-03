@@ -2,50 +2,53 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function scr_BreakBlock(xx,yy,type)
 {
-	scr_DestroyObject(xx,yy,obj_ShotBlock);
+	if(place_meeting(xx,yy,obj_Breakable) && type > -1)
+	{
+		scr_DestroyObject(xx,yy,obj_ShotBlock);
 	
-	/*if(place_meeting(xx,yy,obj_BombBlock) && type == 0 && object_is_ancestor(object_index,obj_Projectile) && object_index.isBeam)
-	{
-	    var b = instance_place(xx,yy,obj_BombBlock);
-	    if(!b.visible)
-	    {
-	        b.revealTile = true;
-	    }
-	}*/
+		/*if(place_meeting(xx,yy,obj_BombBlock) && type == 0 && object_is_ancestor(object_index,obj_Projectile) && object_index.isBeam)
+		{
+		    var b = instance_place(xx,yy,obj_BombBlock);
+		    if(!b.visible)
+		    {
+		        b.revealTile = true;
+		    }
+		}*/
 	
-	if(type == 1 || type >= 4)
-	{
-	    scr_DestroyObject(xx,yy,obj_BombBlock);
+		if(type == 1 || type >= 4)
+		{
+		    scr_DestroyObject(xx,yy,obj_BombBlock);
 
-	    if(type == 1)
-	    {
-	        scr_DestroyObject(xx,yy,obj_ChainBlock);
-	    }
-	}
+		    if(type == 1 || type == 7)
+		    {
+		        scr_DestroyObject(xx,yy,obj_ChainBlock);
+		    }
+		}
 
-	if(type == 2 || type == 3)
-	{
-	    scr_DestroyObject(xx,yy,obj_MissileBlock);
-	}
+		if(type == 2 || type == 3 || type == 7)
+		{
+		    scr_DestroyObject(xx,yy,obj_MissileBlock);
+		}
 
-	if(type == 3)
-	{
-	    scr_DestroyObject(xx,yy,obj_SuperMissileBlock);
-	}
+		if(type == 3 || type == 7)
+		{
+		    scr_DestroyObject(xx,yy,obj_SuperMissileBlock);
+		}
 
-	if(type == 4)
-	{
-	    scr_DestroyObject(xx,yy,obj_PowerBombBlock);
-	}
+		if(type == 4 || type == 7)
+		{
+		    scr_DestroyObject(xx,yy,obj_PowerBombBlock);
+		}
 
-	if(type == 5)
-	{
-	    scr_DestroyObject(xx,yy,obj_SpeedBlock);
-	}
+		if(type == 5 || type == 7)
+		{
+		    scr_DestroyObject(xx,yy,obj_SpeedBlock);
+		}
 
-	if(type == 6)
-	{
-	    scr_DestroyObject(xx,yy,obj_ScrewBlock);
+		if(type == 6 || type == 7)
+		{
+		    scr_DestroyObject(xx,yy,obj_ScrewBlock);
+		}
 	}
 }
 function scr_DestroyObject(xx,yy,objIndex)

@@ -1,4 +1,5 @@
 {
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": false,
@@ -11,7 +12,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_Dodge.wav",
-  "duration": 0.383771,
+  "duration": 0.378771,
   "parent": {
     "name": "Player",
     "path": "folders/Sounds/Player.yy",

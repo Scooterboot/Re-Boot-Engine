@@ -44,10 +44,10 @@ if(currentScreen == MainScreen.Title)
 		}
 	}
 }
-if(currentScreen == MainScreen.FileSelect)
+if(currentScreen == MainScreen.FileSelect || currentScreen == MainScreen.FileCopy)
 {
 	//draw_sprite_tiled_ext(bg_Menu2,0,scr_round(xx)+ww/2-global.ogResWidth/2,scr_round(yy),1,1,c_white,1);
-	draw_sprite_ext(bg_Menu2,0,scr_round(xx+ww/2),scr_round(yy+hh/2),3,3,0,c_white,1);
+	draw_sprite_ext(bg_Zebes,0,scr_round(xx+ww/2),scr_round(yy+hh/2),1,1,0,c_white,1);
 	
 	cursorFrameCounter++;
 	if(cursorFrameCounter > 5)
@@ -67,23 +67,81 @@ if(currentScreen == MainScreen.FileSelect)
 	draw_set_valign(fa_top);
 	var oX = scr_round(ww/2 - 96),
 		oY = scr_round(hh/2);
-				
-	for(var o = 3; o < array_length(option); o++)
+	
+	var fOption = option;
+	if(currentScreen == MainScreen.FileCopy)
 	{
-		var oY2 = oY + (o*space);
-					
-		var col = c_black,
-			alph = 0.5,
-			indent = 0;
-		if(optionPos == o)
+		fOption = copyOption;
+	}
+	
+	if(!confirmQuitDT && !confirmCopy && !confirmDelete)
+	{
+		for(var o = 3; o < array_length(fOption); o++)
 		{
-			col = c_white;
-			alph = 0.15;
-			indent = 4;
+			var oY2 = oY + (o*space);
+					
+			var col = c_black,
+				alph = 0.5,
+				indent = 0;
+			if(optionPos == o)
+			{
+				col = c_white;
+				alph = 0.15;
+				indent = 4;
 			
-			draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX+indent-4,oY2+string_height(option[o])/2,1,1,0,c_white,1);
+				draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX+indent-4,oY2+string_height(fOption[o])/2,1,1,0,c_white,1);
+			}
+			scr_DrawOptionText(oX+indent,oY2,fOption[o],c_white,1,string_width(fOption[o])+1,col,alph);
 		}
-		scr_DrawOptionText(oX+indent,oY2,option[o],c_white,1,string_width(option[o])+1,col,alph);
+	}
+	else 
+	{
+		draw_set_font(fnt_GUI);
+		
+		/*draw_set_color(c_black);
+		draw_set_alpha(0.75);
+		draw_rectangle(xx-2,yy-2,xx+ww+2,yy+hh+2,false);
+		draw_set_alpha(1);*/
+		
+		//space = 16;
+		
+		//var oX = scr_round(ww/2),
+		//	oY = scr_round(hh/2 - space*2);
+		oX = scr_round(ww/2);
+		oY = scr_round(hh/2) + (space*2.5);
+		
+		var text = option[optionPos];
+		if(confirmCopy && selectedFile != -1)
+		{
+			text = confirmCopyText[0] + " " + copyOption[selectedFile] + " " + confirmCopyText[1] + " " + copyOption[copyFile];
+		}
+		if(confirmDelete && selectedFile != -1)
+		{
+			text = confirmDeleteText + " " + option[selectedFile];
+		}
+		scr_DrawOptionText(scr_round(oX-string_width(text)/2),oY,text,c_white,1,string_width(text)+1,c_black,0.5);
+		text = confirmText[0];
+		scr_DrawOptionText(scr_round(oX-string_width(text)/2),oY+space,text,c_white,1,string_width(text)+1,c_black,0.5);
+		
+		var oY2 = oY + space*2;
+		for(var i = 0; i < 2; i++)
+		{
+			text = confirmText[1+i];
+			
+			var oX2 = scr_round((oX + space*1.5 - i*space*3) - string_width(text)/2),
+				col = c_black,
+				alph = 0.5,
+				indent = 0;
+			if(confirmPos == i)
+			{
+				col = c_white;
+				alph = 0.15;
+				indent = 4;
+				
+				draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX2-4,oY2+string_height(text)/2,1,1,0,c_white,1);
+			}
+			scr_DrawOptionText(oX2,oY2,text,c_white,1,string_width(text)+1,col,alph);
+		}
 	}
 	
 	//oX = 18;
@@ -109,18 +167,24 @@ if(currentScreen == MainScreen.FileSelect)
 			
 			if(selectedFile != i)
 			{
-				draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX-4,oY2+string_height(option[i])/2,1,1,0,c_white,1);
+				draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX-4,oY2+string_height(fOption[i])/2,1,1,0,c_white,1);
 			}
+		}
+		
+		if(currentScreen == MainScreen.FileCopy && selectedFile == i)
+		{
+			col = c_yellow;
+			alph = 0.4;
 		}
 		
 		draw_set_alpha(alph);
 		draw_set_color(col);
-		draw_roundrect(oX-3,oY2-14,ww-oX+1,oY2+string_height(option[i])+12,false);
+		draw_roundrect(oX-3,oY2-14,ww-oX+1,oY2+string_height(fOption[i])+12,false);
 		
 		draw_set_font(fnt_Menu);
-		draw_sprite_ext(sprt_FileIcon,frame,oX+string_width(option[i])+8,oY2+(string_height(option[i])/2),1,1,0,c_white,1);
+		draw_sprite_ext(sprt_FileIcon,frame,oX+string_width(fOption[i])+8,oY2+(string_height(fOption[i])/2),1,1,0,c_white,1);
 		
-		scr_DrawOptionText(oX+2,oY2,option[i],c_white,1,0,c_black,0);
+		scr_DrawOptionText(oX+2,oY2,fOption[i],c_white,1,0,c_black,0);
 		
 		if(fileTime[i] >= 0)
 		{
@@ -152,7 +216,7 @@ if(currentScreen == MainScreen.FileSelect)
 			scr_DrawOptionText(scr_round(px-(string_width(pStr)/2)-2),scr_round(oY2+(string_height(pStr)/2)),pStr,c_white,1,0,c_black,0);
 		}
 		
-		if(selectedFile != i)
+		if(selectedFile != i || currentScreen == MainScreen.FileCopy)
 		{
 			if(fileEnergy[i] < 0)
 			{
@@ -237,79 +301,8 @@ if(currentScreen == MainScreen.FileSelect)
 		}
 	}
 	
-	/*var bTip = buttonTip[2];
-	if(selectedFile != -1)
-	{
-		bTip = buttonTip[3];
-	}
-
-	var moveKeys = scr_CorrectKeyboardString(global.key[0])+","+scr_CorrectKeyboardString(global.key[2])+","+scr_CorrectKeyboardString(global.key[1])+","+scr_CorrectKeyboardString(global.key[3]);
-	if(global.key[0] == vk_up && global.key[1] == vk_down && global.key[2] == vk_left && global.key[3] == vk_right)
-	{
-		moveKeys = "Arrow keys";
-	}
-	var acceptKey = scr_CorrectKeyboardString(global.key_m[1]),
-		cancelKey = scr_CorrectKeyboardString(global.key_m[2]);
-
-	var tipStrg = moveKeys+" - "+buttonTip[0]+"   "+acceptKey+" - "+buttonTip[1]+"   "+cancelKey+" - "+bTip;
-
-	draw_set_font(fnt_GUI_Small);
-	//draw_set_valign(fa_bottom);
-	draw_set_valign(fa_middle);
-	var height = string_height_ext(tipStrg,9,ww);
-
-	draw_set_alpha(0.75);
-	draw_set_color(c_black);
-	draw_rectangle(xx-32,yy+hh-height,xx+ww+31,yy+hh,false);
-	draw_set_alpha(1);
-	draw_set_color(c_white);
-
-	var col2 = make_color_rgb(26,108,0);
-	gpu_set_blendmode(bm_add);
-	draw_rectangle_color(xx-32,yy+hh-height,xx+(ww/2)-1,yy+hh,c_black,col2,col2,c_black,false);
-	draw_rectangle_color(xx+(ww/2),yy+hh-height,xx+ww+31,yy+hh,col2,c_black,c_black,col2,false);
-	gpu_set_blendmode(bm_normal);
-
-	if(obj_Control.usingGamePad)
-	{
-		var tipx = xx+(ww/2),
-			tipy = yy+hh-4,
-			mText = " - "+buttonTip[0]+"   ",
-			aText = " - "+buttonTip[1]+"   ",
-			cText = " - "+bTip,
-			dSprt = sprt_DPad,
-			bSprt = sprt_xbButton;
-		
-		var totalWidth = sprite_get_width(dSprt)+string_width(mText)+sprite_get_width(bSprt)+string_width(aText)+sprite_get_width(bSprt)+string_width(cText);
-		tipx = tipx-totalWidth/2;
-		
-		draw_set_halign(fa_left);
-		
-		draw_sprite_ext(dSprt,0,scr_round(tipx+sprite_get_width(dSprt)/2),scr_round(tipy-1),1,1,0,c_white,1);
-		tipx += sprite_get_width(dSprt);
-		scr_DrawOptionText(scr_round(tipx),scr_round(tipy),mText,c_white,1,0,c_black,0);
-		tipx += string_width(mText);
-		
-		draw_sprite_ext(bSprt,scr_GetButtonSprtIndexXB(global.gp_m[1]),scr_round(tipx+sprite_get_width(bSprt)/2),scr_round(tipy-1),1,1,0,c_white,1);
-		tipx += sprite_get_width(bSprt);
-		scr_DrawOptionText(scr_round(tipx),scr_round(tipy),aText,c_white,1,0,c_black,0);
-		tipx += string_width(aText);
-		
-		draw_sprite_ext(bSprt,scr_GetButtonSprtIndexXB(global.gp_m[2]),scr_round(tipx+sprite_get_width(bSprt)/2),scr_round(tipy-1),1,1,0,c_white,1);
-		tipx += sprite_get_width(bSprt);
-		scr_DrawOptionText(scr_round(tipx),scr_round(tipy),cText,c_white,1,0,c_black,0);
-		
-	}
-	else
-	{
-		draw_set_halign(fa_middle);
-		draw_set_color(c_black);
-		draw_text_ext(scr_round(xx+(ww/2)+1),scr_round(yy-4+hh+1),tipStrg,9,ww);
-		draw_set_color(c_white);
-		draw_text_ext(scr_round(xx+(ww/2)),scr_round(yy-4+hh),tipStrg,9,ww);
-	}*/
 	var bTip = buttonTip[2];
-	if(selectedFile != -1)
+	if(selectedFile != -1 || confirmQuitDT || confirmCopy || confirmDelete)
 	{
 		bTip = buttonTip[3];
 	}

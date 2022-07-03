@@ -5,6 +5,7 @@
   },
   "solid": false,
   "visible": true,
+  "managed": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
@@ -28,7 +29,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Wave Beam",
-    "path": "folders/Objects/Projectiles/Beams/Wave Beam.yy",
+    "path": "folders/Objects/Entities/Projectiles/Beams/Wave Beam.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_WaveBeamChargeShot",

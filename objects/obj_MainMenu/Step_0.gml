@@ -94,7 +94,7 @@ if(room == rm_MainMenu)
 			var move = (cDown && rDown) - (cUp && rUp),
 				select = (cSelect && rSelect);
 			
-			if(cDown || cUp)
+			if((cDown || cUp) && !confirmQuitDT)
 			{
 				moveCounter = min(moveCounter + 1, 30);
 			}
@@ -110,122 +110,314 @@ if(room == rm_MainMenu)
 			
 			if(selectedFile == -1)
 			{
-				if(cCancel && rCancel)
+				if(!confirmQuitDT)
 				{
-					targetScreen = MainScreen.Title;
-				}
-				
-				if(move != 0)
-				{
-					optionPos = scr_wrap(optionPos+move,0,array_length(option)-1);
-					audio_play_sound(snd_MenuTick,0,false);
-				}
-				
-				if(select)
-				{
-					select = false;
-					switch(optionPos)
+					if(cCancel && rCancel)
 					{
-						case 0:
+						targetScreen = MainScreen.Title;
+					}
+				
+					if(move != 0)
+					{
+						optionPos = scr_wrap(optionPos+move,0,array_length(option));
+						audio_play_sound(snd_MenuTick,0,false);
+					}
+				
+					if(select)
+					{
+						select = false;
+						switch(optionPos)
 						{
-							selectedFile = 0;
-							audio_play_sound(snd_MenuTick,0,false);
-							break;
+							case 0:
+							{
+								selectedFile = 0;
+								audio_play_sound(snd_MenuTick,0,false);
+								break;
+							}
+							case 1:
+							{
+								selectedFile = 1;
+								audio_play_sound(snd_MenuTick,0,false);
+								break;
+							}
+							case 2:
+							{
+								selectedFile = 2;
+								audio_play_sound(snd_MenuTick,0,false);
+								break;
+							}
+							case 3:
+							{
+								instance_create_depth(0,0,-1,obj_DisplayOptions);
+								audio_play_sound(snd_MenuBoop,0,false);
+								break;
+							}
+							case 4:
+							{
+								instance_create_depth(0,0,-1,obj_AudioOptions);
+								audio_play_sound(snd_MenuBoop,0,false);
+								break;
+							}
+							case 5:
+							{
+								instance_create_depth(0,0,-1,obj_ControlOptions);
+								audio_play_sound(snd_MenuBoop,0,false);
+								break;
+							}
+							case 6:
+							{
+								//game_end();
+								confirmQuitDT = true;
+								break;
+							}
 						}
-						case 1:
-						{
-							selectedFile = 1;
-							audio_play_sound(snd_MenuTick,0,false);
-							break;
-						}
-						case 2:
-						{
-							selectedFile = 2;
-							audio_play_sound(snd_MenuTick,0,false);
-							break;
-						}
-						case 3:
-						{
-							instance_create_depth(0,0,-1,obj_DisplayOptions);
-							audio_play_sound(snd_MenuBoop,0,false);
-							break;
-						}
-						case 4:
-						{
-							instance_create_depth(0,0,-1,obj_AudioOptions);
-							audio_play_sound(snd_MenuBoop,0,false);
-							break;
-						}
-						case 5:
-						{
-							instance_create_depth(0,0,-1,obj_ControlOptions);
-							audio_play_sound(snd_MenuBoop,0,false);
-							break;
-						}
-						case 6:
+					}
+					optionSubPos = 0;
+					confirmPos = 0;
+				}
+				else
+				{
+					move = (cRight && rRight) - (cLeft && rLeft);
+				
+					if(move != 0)
+					{
+						confirmPos = scr_wrap(confirmPos+move,0,2);
+						audio_play_sound(snd_MenuTick,0,false);
+					}
+				
+					if(cCancel && rCancel)
+					{
+						confirmPos = 0;
+						confirmQuitDT = false;
+						audio_play_sound(snd_MenuTick,0,false);
+					}
+					else if(select)
+					{
+						if(confirmPos == 1)
 						{
 							game_end();
-							break;
+						}
+						else
+						{
+							confirmQuitDT = false;
+							audio_play_sound(snd_MenuTick,0,false);
 						}
 					}
 				}
-				optionSubPos = 0;
+				confirmDelete = false;
 			}
-			else
+			else if(selectedFile != -1)
 			{
-				if(cCancel && rCancel)
+				if(!confirmDelete)
 				{
-					selectedFile = -1;
-				}
-				
-				if(move != 0 && selectedFile >= 0 && file_exists(scr_GetFileName(selectedFile)))
-				{
-					optionSubPos = scr_wrap(optionSubPos+move,0,array_length(subOption)-1);
-					audio_play_sound(snd_MenuTick,0,false);
-				}
-				
-				if(select)
-				{
-					select = false;
-					switch(optionSubPos)
+					if(cCancel && rCancel)
 					{
-						case 0:
+						selectedFile = -1;
+					}
+				
+					if(move != 0 && selectedFile >= 0 && file_exists(scr_GetFileName(selectedFile)))
+					{
+						optionSubPos = scr_wrap(optionSubPos+move,0,array_length(subOption));
+						audio_play_sound(snd_MenuTick,0,false);
+					}
+				
+					if(select)
+					{
+						select = false;
+						switch(optionSubPos)
 						{
-							//load and start game
-							if(targetScreen != MainScreen.LoadGame)
+							case 0:
 							{
-								targetScreen = MainScreen.LoadGame;
-								audio_play_sound(snd_MenuShwsh,0,false);
+								//load and start game
+								if(targetScreen != MainScreen.LoadGame)
+								{
+									targetScreen = MainScreen.LoadGame;
+									audio_play_sound(snd_MenuShwsh,0,false);
+								}
+								break;
 							}
-							break;
+							case 1:
+							{
+								//copy file
+								currentScreen = MainScreen.FileCopy;
+								targetScreen = MainScreen.FileCopy;
+								optionPos = 0;
+								if(selectedFile == 0)
+								{
+									optionPos = 1;
+								}
+								audio_play_sound(snd_MenuTick,0,false);
+								break;
+							}
+							case 2:
+							{
+								//delete file
+								confirmDelete = true;
+								audio_play_sound(snd_MenuTick,0,false);
+								//scr_DeleteGame(selectedFile);
+								//fileEnergyMax[selectedFile] = -1;
+								//audio_play_sound(snd_MenuBoop,0,false);
+								//selectedFile = -1;
+								break;
+							}
 						}
-						case 1:
+					}
+					confirmPos = 0;
+				}
+				else
+				{
+					move = (cRight && rRight) - (cLeft && rLeft);
+					
+					if(move != 0)
+					{
+						confirmPos = scr_wrap(confirmPos+move,0,2);
+						audio_play_sound(snd_MenuTick,0,false);
+					}
+					
+					if(cCancel && rCancel)
+					{
+						confirmPos = 0;
+						confirmDelete = false;
+						audio_play_sound(snd_MenuTick,0,false);
+					}
+					else if(select)
+					{
+						if(confirmPos == 1)
 						{
-							//copy file
-							
-							audio_play_sound(snd_MenuTick,0,false);
-							break;
-						}
-						case 2:
-						{
-							//delete file
 							scr_DeleteGame(selectedFile);
 							fileEnergyMax[selectedFile] = -1;
 							audio_play_sound(snd_MenuBoop,0,false);
 							selectedFile = -1;
-							break;
 						}
+						else
+						{
+							audio_play_sound(snd_MenuTick,0,false);
+						}
+						confirmDelete = false;
 					}
 				}
 			}
+			copyFile = -1;
+			confirmCopy = false;
+		}
+		else if(currentScreen == MainScreen.FileCopy)
+		{
+			if(!confirmCopy)
+			{
+				var move = (cDown && rDown) - (cUp && rUp),
+					select = (cSelect && rSelect),
+					cancel = (cCancel && rCancel);
+			
+				if(cDown || cUp)
+				{
+					moveCounter = min(moveCounter + 1, 30);
+				}
+				else
+				{
+					moveCounter = 0;
+				}
+				if(moveCounter >= 30)
+				{
+					move = cDown - cUp;
+					moveCounter -= 5;
+				}
+				
+				var m = 1;
+				if(move != 0)
+				{
+					m = move;
+					audio_play_sound(snd_MenuTick,0,false);
+					optionPos = scr_wrap(optionPos+m,0,array_length(copyOption));
+				}
+				if(optionPos == selectedFile)
+				{
+					optionPos = scr_wrap(optionPos+m,0,array_length(copyOption));
+				}
+				
+				if(cancel)
+				{
+					currentScreen = MainScreen.FileSelect;
+					targetScreen = MainScreen.FileSelect;
+					optionPos = selectedFile;
+					audio_play_sound(snd_MenuTick,0,false);
+				}
+				else if(select)
+				{
+					if(optionPos < 3)
+					{
+						copyFile = optionPos;
+						confirmCopy = true;
+					}
+					else
+					{
+						currentScreen = MainScreen.FileSelect;
+						targetScreen = MainScreen.FileSelect;
+						optionPos = selectedFile;
+					}
+					audio_play_sound(snd_MenuTick,0,false);
+				}
+				
+				confirmPos = 0;
+			}
+			else if(copyFile != -1)
+			{
+				var move = (cRight && rRight) - (cLeft && rLeft),
+					select = (cSelect && rSelect),
+					cancel = (cCancel && rCancel);
+				
+				if(move != 0)
+				{
+					confirmPos = scr_wrap(confirmPos+move,0,2);
+					audio_play_sound(snd_MenuTick,0,false);
+				}
+				
+				if(cancel)
+				{
+					confirmPos = 0;
+					confirmCopy = false;
+					copyFile = -1;
+					audio_play_sound(snd_MenuTick,0,false);
+				}
+				else if(select)
+				{
+					if(confirmPos == 1)
+					{
+						scr_DeleteGame(copyFile);
+						file_copy(scr_GetFileName(selectedFile),scr_GetFileName(copyFile));
+						audio_play_sound(snd_MenuBoop,0,false);
+						
+						fileEnergyMax[copyFile] = -1;
+						
+						currentScreen = MainScreen.FileSelect;
+						targetScreen = MainScreen.FileSelect;
+						selectedFile = -1;
+					}
+					else
+					{
+						audio_play_sound(snd_MenuTick,0,false);
+					}
+					copyFile = -1;
+					confirmCopy = false;
+				}
+			}
+			
+			confirmQuitDT = false;
+			confirmDelete = false;
 		}
 		else
 		{
 			optionPos = 0;
 			optionSubPos = 0;
+			
+			confirmPos = 0;
+			confirmQuitDT = false;
+			confirmCopy = false;
+			confirmDelete = false;
+			
+			copyFile = -1;
 		}
 	}
-	if(currentScreen == MainScreen.FileSelect)
+	if(currentScreen == MainScreen.FileSelect || currentScreen == MainScreen.FileCopy)
 	{
 		for(var i = 0; i < array_length(fileEnergyMax); i++)
 		{
@@ -289,38 +481,6 @@ if(room == rm_MainMenu)
 	{
 		scr_LoadGame(selectedFile);
 	}
-	
-	if(global.musicVolume > 0)
-	{
-		if(!audio_is_playing(titleMusic))
-		{
-			titleMusic = audio_play_sound(mus_Title,0,true);
-		}
-		else
-		{
-			if(skipIntro)
-			{
-				if(audio_sound_get_track_position(titleMusic) < 24.753)
-				{
-					audio_sound_set_track_position(titleMusic,24.753);
-				}
-			}
-			else if(audio_sound_get_track_position(titleMusic) > 25)
-			{
-				skipIntro = true;
-			}
-			
-			var trackPos = audio_sound_get_track_position(titleMusic);
-			if(trackPos >= 90.858)
-			{
-				audio_sound_set_track_position(titleMusic,trackPos-32.768);
-			}
-		}
-	}
-	else
-	{
-		audio_stop_sound(titleMusic);
-	}
 }
 else
 {
@@ -330,14 +490,6 @@ else
 		instance_destroy();
 	}
 	
-	if(audio_is_playing(titleMusic))
-	{
-		audio_sound_gain(titleMusic,0,225);
-		if(audio_sound_get_gain(titleMusic) <= 0)
-		{
-			audio_stop_sound(titleMusic);
-		}
-	}
 	skipIntro = false;
 }
 

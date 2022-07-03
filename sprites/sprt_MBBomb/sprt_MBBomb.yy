@@ -1,6 +1,6 @@
 {
-  "bboxMode": 0,
-  "collisionKind": 1,
+  "bboxMode": 2,
+  "collisionKind": 2,
   "type": 0,
   "origin": 4,
   "preMultiplyAlpha": false,
@@ -56,7 +56,7 @@
             {"id":"e7111609-8e42-4140-b886-7037a73c8db6","Key":3.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"b03f7956-2e4c-4701-a23b-5d88f6597921","path":"sprites/sprt_MBBomb/sprt_MBBomb.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
-    "visibleRange": {"x":0.0,"y":0.0,},
+    "visibleRange": null,
     "lockOrigin": false,
     "showBackdrop": true,
     "showBackdropImage": false,
@@ -82,7 +82,7 @@
   "nineSlice": null,
   "parent": {
     "name": "Explosives",
-    "path": "folders/Sprites/Weapons/Explosives.yy",
+    "path": "folders/Sprites/Projectiles/Explosives.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_MBBomb",

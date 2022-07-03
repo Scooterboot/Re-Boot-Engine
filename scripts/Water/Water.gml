@@ -329,7 +329,7 @@ function water_splash(Mass,xVel,yVel,Into)
 	    Splash.image_yscale *= .5;
 	    Splash.Speed = .333;
     
-	    if (VelocityY == 0 or (object_is_ancestor(object_index,obj_Projectile) && isBeam))
+	    if (VelocityY == 0 or (object_is_ancestor(object_index,obj_Projectile) && type == ProjType.Beam))//isBeam))
 	    {
 	        Splash.image_xscale *= .6;
 	        Splash.image_yscale *= .35;
@@ -346,7 +346,7 @@ function water_splash(Mass,xVel,yVel,Into)
 	    Splash.image_yscale *= .5;
 	    Splash.Speed = .333;
     
-	    if (VelocityY == 0 or (object_is_ancestor(object_index,obj_Projectile) && isBeam))
+	    if (VelocityY == 0 or (object_is_ancestor(object_index,obj_Projectile) && type == ProjType.Beam))//isBeam))
 	    {
 	        Splash.image_xscale *= .6;
 	        Splash.image_yscale *= .35;
@@ -372,7 +372,7 @@ function water_splash(Mass,xVel,yVel,Into)
  
 		if (Sound)
 		{
-			if (Into && (!object_is_ancestor(object_index,obj_Projectile) || (object_is_ancestor(object_index,obj_Projectile) && !isBeam)))//object_index != oBeam && object_index != oPebble)
+			if (Into && (!object_is_ancestor(object_index,obj_Projectile) || (object_is_ancestor(object_index,obj_Projectile) && type != ProjType.Beam)))//!isBeam)))//object_index != oBeam && object_index != oPebble)
 			{
 				//sound_play_pos(sndSplashSmall,x,y);
 				//audio_stop_sound(snd_SplashSmall);
@@ -392,7 +392,7 @@ function water_splash(Mass,xVel,yVel,Into)
 
 		// -- A few drops spraying about
  
-		if (VelocityY != 0 && (!object_is_ancestor(object_index,obj_Projectile) || (object_is_ancestor(object_index,obj_Projectile) && !isBeam)))// && object_index != oPebble)
+		if (VelocityY != 0 && (!object_is_ancestor(object_index,obj_Projectile) || (object_is_ancestor(object_index,obj_Projectile) && type != ProjType.Beam)))//!isBeam)))// && object_index != oPebble)
 		{
 			repeat (4)
 			{
@@ -412,7 +412,7 @@ function water_splash(Mass,xVel,yVel,Into)
 		Splash.image_xscale = 1;
 		Splash.Size = .5; 
  
-		if (VelocityY == 0 or (object_is_ancestor(object_index,obj_Projectile) && isBeam))
+		if (VelocityY == 0 or (object_is_ancestor(object_index,obj_Projectile) && type == ProjType.Beam))//isBeam))
 		{
 			Splash.Size = .25;
 		}
@@ -424,7 +424,7 @@ function water_splash(Mass,xVel,yVel,Into)
 		Splash.image_xscale = -1;
 		Splash.Size = .5; 
  
-		if (VelocityY == 0 or (object_is_ancestor(object_index,obj_Projectile) && isBeam))
+		if (VelocityY == 0 or (object_is_ancestor(object_index,obj_Projectile) && type == ProjType.Beam))//isBeam))
 		{
 			Splash.Size = .25;
 		} 
@@ -442,7 +442,7 @@ function water_splash(Mass,xVel,yVel,Into)
 		Splash.image_xscale *= .7;
 		Splash.image_yscale *= .7;
  
-		if (VelocityY == 0 or (object_is_ancestor(object_index,obj_Projectile) && isBeam))
+		if (VelocityY == 0 or (object_is_ancestor(object_index,obj_Projectile) && type == ProjType.Beam))//isBeam))
 		{
 			Splash.image_xscale *= .8;
 			Splash.image_yscale *= .7;
@@ -459,7 +459,7 @@ function water_splash(Mass,xVel,yVel,Into)
 		Splash.image_yscale *= .5;
 		Splash.Speed = .333;
 
-		if (VelocityY == 0 or (object_is_ancestor(object_index,obj_Projectile) && isBeam))
+		if (VelocityY == 0 or (object_is_ancestor(object_index,obj_Projectile) && type == ProjType.Beam))//isBeam))
 		{
 			Splash.image_xscale *= .6;
 			Splash.image_yscale *= .35;
@@ -476,7 +476,7 @@ function water_splash(Mass,xVel,yVel,Into)
 		Splash.image_yscale *= .5;
 		Splash.Speed = .333;
 
-		if (VelocityY == 0 or (object_is_ancestor(object_index,obj_Projectile) && isBeam))
+		if (VelocityY == 0 or (object_is_ancestor(object_index,obj_Projectile) && type == ProjType.Beam))//isBeam))
 		{
 			Splash.image_xscale *= .6;
 			Splash.image_yscale *= .35;
@@ -505,7 +505,7 @@ function water_update(Mass,xVel,yVel)
 			EnteredWater = (Mass+1)*30;
 		}
 		else
-		if (!object_is_ancestor(object_index,obj_Projectile) || (object_is_ancestor(object_index,obj_Projectile) && !object_index.isBeam))
+		if (!object_is_ancestor(object_index,obj_Projectile) || (object_is_ancestor(object_index,obj_Projectile) && type != ProjType.Beam))//!object_index.isBeam))
 		{
 			water_splash(Mass,xVel,0,0);
 			LeftWater = (Mass+1)*15;
@@ -516,7 +516,7 @@ function water_update(Mass,xVel,yVel)
 	{
 		InWaterTopPrev = InWaterTop;
  
-		if (!InWaterTop) && (!object_is_ancestor(object_index,obj_Projectile) || (object_is_ancestor(object_index,obj_Projectile) && !object_index.isMissile))
+		if (!InWaterTop) && (!object_is_ancestor(object_index,obj_Projectile) || (object_is_ancestor(object_index,obj_Projectile) && type != ProjType.Missile))//!object_index.isMissile))
 		{
 			water_splash(Mass,xVel,yVel,0);
 			LeftWaterTop = (Mass+1)*25;

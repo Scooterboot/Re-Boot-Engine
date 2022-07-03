@@ -56,7 +56,7 @@
             {"id":"0464276e-b7f0-44a4-a8c3-4aa8fe0ff063","Key":3.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"67c16537-b330-4115-926e-9030c6e5f30d","path":"sprites/sprt_WaveBeamTrail/sprt_WaveBeamTrail.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
-    "visibleRange": {"x":0.0,"y":0.0,},
+    "visibleRange": null,
     "lockOrigin": false,
     "showBackdrop": true,
     "showBackdropImage": false,
@@ -82,7 +82,7 @@
   "nineSlice": null,
   "parent": {
     "name": "WaveBeam",
-    "path": "folders/Sprites/Weapons/Beams/WaveBeam.yy",
+    "path": "folders/Sprites/Projectiles/Beams/WaveBeam.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_WaveBeamTrail",

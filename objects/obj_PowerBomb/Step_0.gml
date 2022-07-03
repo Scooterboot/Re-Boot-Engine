@@ -32,7 +32,7 @@ if(bombTimer <= 0)
 				}
 			}
 			player.bombJump = player.bombJumpMax[player.liquidState];
-			player.SpiderEnable(false);
+			//player.SpiderEnable(false);
 		}
 	}
 	audio_play_sound(snd_PowerBombExplode,0,false);

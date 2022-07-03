@@ -11,3 +11,7 @@ image_alpha = pAlpha*alpha2;
 
 multiHit = true;
 isBomb = true;
+
+damageType = 2;
+damageSubType[3] = true;
+damageSubType[4] = true;

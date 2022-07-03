@@ -74,7 +74,7 @@
   "nineSlice": null,
   "parent": {
     "name": "PlasmaBeam",
-    "path": "folders/Sprites/Weapons/Beams/PlasmaBeam.yy",
+    "path": "folders/Sprites/Projectiles/Beams/PlasmaBeam.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_PlasmaBeamStartParticle",

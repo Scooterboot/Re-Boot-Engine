@@ -1,4 +1,5 @@
 {
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,7 +12,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_SplashLarge",
-  "duration": 2.34825,
+  "duration": 2.34325,
   "parent": {
     "name": "Liquid",
     "path": "folders/Sounds/Liquid.yy",

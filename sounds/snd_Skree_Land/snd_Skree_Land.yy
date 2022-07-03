@@ -1,4 +1,5 @@
 {
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,7 +12,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_Skree_Land",
-  "duration": 0.430102,
+  "duration": 0.425102,
   "parent": {
     "name": "Skree",
     "path": "folders/Sounds/NPCs/Skree.yy",

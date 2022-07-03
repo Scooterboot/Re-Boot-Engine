@@ -1,7 +1,7 @@
 /// @description Parallax
 
-var camx = camera_get_view_x(view_camera[0]),
-	camy = camera_get_view_y(view_camera[0]),
+var camx = obj_Camera.x,//camera_get_view_x(view_camera[0]),
+	camy = obj_Camera.y,//camera_get_view_y(view_camera[0]),
 	camw = global.resWidth,
 	camh = global.resHeight;
 

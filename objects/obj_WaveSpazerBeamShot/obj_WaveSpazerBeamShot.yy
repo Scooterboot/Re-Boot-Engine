@@ -5,6 +5,7 @@
   },
   "solid": false,
   "visible": true,
+  "managed": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
@@ -28,7 +29,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Wave",
-    "path": "folders/Objects/Projectiles/Beams/Spazer/Wave.yy",
+    "path": "folders/Objects/Entities/Projectiles/Beams/Spazer/Wave.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_WaveSpazerBeamShot",

@@ -1,4 +1,5 @@
 {
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,7 +12,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_KillNPC",
-  "duration": 0.42534,
+  "duration": 0.42034,
   "parent": {
     "name": "NPCs",
     "path": "folders/Sounds/NPCs.yy",

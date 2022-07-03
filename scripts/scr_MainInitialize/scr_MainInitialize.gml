@@ -65,11 +65,11 @@ function scr_MainInitialize()
 	global.breakSndCounter = 0;
 
 	//initialize music variables
-	global.rmMusic = noone;
+	//global.rmMusic = noone;
 
-	global.musPrev = noone;
-	global.musCurrent = noone;
-	global.musNext = noone;
+	//global.musPrev = noone;
+	//global.musCurrent = noone;
+	//global.musNext = noone;
 
 
 	audio_group_load(audio_music);		//load music audio group
@@ -82,9 +82,6 @@ function scr_MainInitialize()
 
 	randomize(); //randomize seed for various random numbers
 
-	room_goto(rm_MainMenu); //go to the main menu
-
-	instance_create_depth(0,0,0,obj_MainMenu);
 	instance_create_depth(0,0,0,obj_PauseMenu);
 	instance_create_depth(0,0,0,obj_Particles);
 	instance_create_depth(0,0,0,obj_Control);
@@ -93,6 +90,9 @@ function scr_MainInitialize()
 	instance_create_depth(0,0,0,obj_Progression);
 	
 	instance_create_depth(0,0,0,obj_TileFadeHandler);
+
+	room_goto(rm_MainMenu); //go to the main menu
+	instance_create_depth(0,0,0,obj_MainMenu);
 	
 	
 	lhc_init();
@@ -101,9 +101,13 @@ function scr_MainInitialize()
 	lhc_create_interface("IPlatform");
 	lhc_create_interface("IGrapplePoint");
 	lhc_create_interface("IBreakable");
+	lhc_create_interface("ISpeedBlock");
+	lhc_create_interface("IScrewBlock");
 
 	lhc_assign_interface("ISolid", obj_Tile);
 	lhc_assign_interface("IPlatform", obj_Platform);
 	lhc_assign_interface("IGrapplePoint", obj_GrappleBlock, obj_GrappleBlockCracked);
 	lhc_assign_interface("IBreakable", obj_Breakable);
+	lhc_assign_interface("ISpeedBlock", obj_ShotBlock, obj_BombBlock, obj_SpeedBlock);
+	lhc_assign_interface("IScrewBlock", obj_ShotBlock, obj_BombBlock, obj_ScrewBlock);
 }

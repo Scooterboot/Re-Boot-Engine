@@ -1,5 +1,8 @@
 event_inherited();
-damageType = 4;
+
+damageType = 3;
+damageSubType[1] = true;
+
 particleType = 1;
 
 grappleDist = 0;
@@ -22,4 +25,4 @@ drawGrapDelay = 1;
 
 //timeLeft = 8;
 
-isGrapple = true;
+//isGrapple = true;

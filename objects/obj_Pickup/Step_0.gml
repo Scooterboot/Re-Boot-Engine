@@ -11,23 +11,28 @@ else
 
 if(!collected)
 {
-	if(place_meeting(x,y,obj_Player))
+	if(instance_exists(obj_Player))
 	{
-		CollectItem();
-		if(!isExpansion)
+		var P = obj_Player;
+		if(place_meeting(x-P.fVelX-P.move2,y-P.fVelY,P))
+		//if(place_meeting(x,y,obj_Player))
 		{
-			obj_UI.CreateMessageBox(itemHeader,itemDesc,Message.Item);
-			obj_Music.playItemFanfare = true;
-			global.gamePaused = true;
+			CollectItem();
+			if(!isExpansion)
+			{
+				obj_UI.CreateMessageBox(itemHeader,itemDesc,Message.Item);
+				obj_Music.playItemFanfare = true;
+				global.gamePaused = true;
+			}
+			else
+			{
+				obj_UI.CreateMessageBox(expanHeader,expanDesc,Message.Expansion);
+				audio_stop_sound(snd_ExpansionGet);
+				audio_play_sound(snd_ExpansionGet,0,false);
+			}
+			collected = true;
+			//global.gamePaused = true;
 		}
-		else
-		{
-			obj_UI.CreateMessageBox(expanHeader,expanDesc,Message.Expansion);
-			audio_stop_sound(snd_ExpansionGet);
-			audio_play_sound(snd_ExpansionGet,0,false);
-		}
-		collected = true;
-		//global.gamePaused = true;
 	}
 }
 else

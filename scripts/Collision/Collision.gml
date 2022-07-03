@@ -9,9 +9,27 @@ function position_collide(offsetX, offsetY)
 	return position_meeting(x+offsetX,y+offsetY,obj_Tile);
 }
 
-function lhc_place_collide(offsetX, offsetY)
+function lhc_place_collide()
 {
-	return lhc_place_meeting(x+offsetX,y+offsetY,"ISolid");
+	/// @description lhc_place_collide
+	/// @param offsetX
+	/// @param offsetY
+	/// @param baseX=x
+	/// @param baseY=y
+	
+	var offsetX = argument[0],
+		offsetY = argument[1],
+		xx = x,
+		yy = y;
+	if(argument_count > 2)
+	{
+		xx = argument[2];
+		if(argument_count > 3)
+		{
+			yy = argument[3];
+		}
+	}
+	return lhc_place_meeting(xx+offsetX,yy+offsetY,"ISolid");
 }
 
 function lhc_position_collide(offsetX, offsetY)

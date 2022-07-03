@@ -12,7 +12,9 @@ spreadSpeed = 0;
 spreadDir = 0;
 spreadFrict = 4;
 
-damageType = 1;
 isBomb = true;
 
 forceJump = false;
+
+damageType = 2;
+damageSubType[3] = true;

@@ -113,7 +113,7 @@ if(keyboard_check_pressed(vk_f12))
     screen_save_part("screenshot.png",global.screenX,global.screenY,global.resWidth*screenScale,global.resHeight*screenScale);
 }
 
-if(room == rm_MainMenu)
+if(room == rm_MainMenu || room == rm_GameOver)
 {
 	for(var i = 0; i < array_length(sndPauseArray); i++)
 	{
@@ -138,3 +138,5 @@ else
 global.breakSndCounter = max(global.breakSndCounter-1,0);
 
 oldDelta = delta_time;
+
+hyperRainbowCycle = scr_wrap(hyperRainbowCycle+0.5,0,10);

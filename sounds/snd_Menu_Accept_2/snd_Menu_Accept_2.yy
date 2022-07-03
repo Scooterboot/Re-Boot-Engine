@@ -1,4 +1,5 @@
 {
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,7 +12,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_Menu_Accept_2",
-  "duration": 0.327676,
+  "duration": 0.322676,
   "parent": {
     "name": "Menu",
     "path": "folders/Sounds/Menu.yy",

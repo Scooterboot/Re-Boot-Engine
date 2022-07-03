@@ -52,7 +52,7 @@
             {"id":"d10a5b22-d6f7-472c-8494-1f3d71c258b8","Key":2.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"d3c6ddc2-b77d-496d-b4a2-60b6c55cfaf9","path":"sprites/sprt_PowerBomb/sprt_PowerBomb.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
-    "visibleRange": {"x":0.0,"y":0.0,},
+    "visibleRange": null,
     "lockOrigin": false,
     "showBackdrop": true,
     "showBackdropImage": false,
@@ -78,7 +78,7 @@
   "nineSlice": null,
   "parent": {
     "name": "Explosives",
-    "path": "folders/Sprites/Weapons/Explosives.yy",
+    "path": "folders/Sprites/Projectiles/Explosives.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_PowerBomb",

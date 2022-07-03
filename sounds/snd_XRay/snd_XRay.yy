@@ -1,4 +1,5 @@
 {
+  "conversionMode": 0,
   "compression": 0,
   "volume": 0.81,
   "preload": true,
@@ -11,7 +12,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_XRay",
-  "duration": 1.039875,
+  "duration": 1.034875,
   "parent": {
     "name": "Player",
     "path": "folders/Sounds/Player.yy",

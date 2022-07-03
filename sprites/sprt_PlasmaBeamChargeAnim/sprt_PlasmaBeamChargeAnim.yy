@@ -64,7 +64,7 @@
             {"id":"888af2a3-d72a-463d-b084-3145ccdfb8c8","Key":5.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"89925ab5-4f27-4785-aeb8-3ccc2940d6aa","path":"sprites/sprt_PlasmaBeamChargeAnim/sprt_PlasmaBeamChargeAnim.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
-    "visibleRange": {"x":0.0,"y":0.0,},
+    "visibleRange": null,
     "lockOrigin": false,
     "showBackdrop": true,
     "showBackdropImage": false,
@@ -90,7 +90,7 @@
   "nineSlice": null,
   "parent": {
     "name": "PlasmaBeam",
-    "path": "folders/Sprites/Weapons/Beams/PlasmaBeam.yy",
+    "path": "folders/Sprites/Projectiles/Beams/PlasmaBeam.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_PlasmaBeamChargeAnim",

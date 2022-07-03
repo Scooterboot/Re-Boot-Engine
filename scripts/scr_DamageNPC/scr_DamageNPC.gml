@@ -1,13 +1,11 @@
 ///scr_DamageNPC(x,y,damage,dmgType,freezeType,deathType,immuneTime)
-function scr_DamageNPC() {
-
-	var xx = argument[0],
-	    yy = argument[1],
-	    dmg = argument[2],
-	    dmgType = argument[3],
-	    freeze = argument[4],
-	    dType = argument[5],
-	    immune = argument[6];
+function scr_DamageNPC(posX,posY,dmg,dmgType,dmgSubType,freezeType,deathType,immuneTime)
+{
+	var xx = posX,
+		yy = posY,
+		freeze = freezeType,
+		dType = deathType,
+		immune = immuneTime;
 
 	var freezeMax = 500;
 
@@ -20,11 +18,21 @@ function scr_DamageNPC() {
 	        {
 	            if(place_meeting(xx,yy,npc))
 	            {
-	                dmg *= npc.dmgMult[dmgType];
+	                //dmg *= npc.dmgMult[dmgType];
+					var dmgMult = 0;
+					var arrLength = min(array_length(npc.dmgMult[dmgType]),array_length(dmgSubType));
+					for(var d = 0; d < arrLength; d++)
+					{
+						if(dmgSubType[d])
+						{
+							dmgMult += npc.dmgMult[dmgType][d];
+						}
+					}
+					dmg *= dmgMult;
                 
 	                if(dmg > 0)
 	                {
-	                    if(!object_is_ancestor(object_index,obj_Projectile) || npcImmuneTime[i] <= 0)
+	                    if(!object_is_ancestor(object_index,obj_Projectile) || (npcImmuneTime[i] <= 0 && impacted <= 0))
 	                    {
 	                        var lifeEnd = 0;
 	                        if(!npc.freezeImmune && ((freeze == 1 && npc.life <= (dmg*2)) || freeze == 2))
@@ -57,6 +65,8 @@ function scr_DamageNPC() {
 	                            {
 	                                audio_play_sound(npc.hurtSound,0,false);
 	                            }
+								
+								npc.OnDamageTaken(dmg);
         
 	                            if(npc.life <= 0)
 	                            {
@@ -94,10 +104,11 @@ function scr_DamageNPC() {
 	                    else
 	                    {
 	                        reflected = true;
-	                        if(!audio_is_playing(snd_Reflect))
-	                        {
+	                        //if(!audio_is_playing(snd_Reflect))
+	                        //{
+	                            audio_stop_sound(snd_Reflect);
 	                            audio_play_sound(snd_Reflect,0,false);
-	                        }
+	                        //}
 	                        part_particles_create(obj_Particles.partSystemA,xx,yy,obj_Particles.partDeflect,42);
 	                    }
                     
@@ -117,7 +128,9 @@ function scr_DamageNPC() {
 	                {
 	                    if(!multiHit)
 	                    {
-	                        instance_destroy();
+	                        //instance_destroy();
+							impacted = max(impacted,1);
+							//damage = 0;
 	                        break;
 	                    }
 	                    else if(dmg > 0 && npcImmuneTime[i] <= 0)
@@ -136,6 +149,4 @@ function scr_DamageNPC() {
 	        }
 	    }
 	}
-
-
 }

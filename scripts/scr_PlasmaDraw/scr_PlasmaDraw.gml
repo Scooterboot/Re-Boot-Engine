@@ -23,7 +23,12 @@ function scr_PlasmaDraw() {
 
 	var width = sprite_width,
 	    height = sprite_height;
-	var dist = clamp((point_distance(x1,y1,xstart,ystart) + 2 + 6*isMissile)/width,0,1);
+	var d = 2;
+	if(type == ProjType.Missile)
+	{
+		d = 8;
+	}
+	var dist = clamp((point_distance(x1,y1,xstart,ystart) + d)/width,0,1);
 	if(dist < 1 && argument_count >= 7 && argument[6])
 	{
 	    for(var i = 0; i < 11; i++)
@@ -39,12 +44,13 @@ function scr_PlasmaDraw() {
 	var w = floor(width*dist);
 
 	var xoff = sprite_xoffset - (width-w),
-	    yoff = sprite_yoffset + (dir == 1 && sprite_yoffset != scr_round(height/2) && !isMissile);
+	    yoff = sprite_yoffset;// + (dir == 1 && sprite_yoffset != scr_round(height/2) && !isMissile);
 	var x2 = scr_round(x1) - (dcos(rot)*xoff + dsin(rot)*yoff)*xscale,
 	    y2 = scr_round(y1) - (dcos(rot)*yoff - dsin(rot)*xoff)*yscale;
 
 	var c = c_white;
-	if(dist < 1 && !isMissile)
+	//if(dist < 1 && !isMissile)
+	if(dist < 1 && type != ProjType.Missile)
 	{
 	    draw_sprite_general(sprite_index,image_index,0,0,4,height,x2-lengthdir_x(4,rot),y2-lengthdir_y(4,rot),xscale,yscale,rot,c,c,c,c,alpha);
 	}

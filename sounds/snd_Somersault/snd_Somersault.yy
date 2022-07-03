@@ -1,4 +1,5 @@
 {
+  "conversionMode": 0,
   "compression": 0,
   "volume": 0.49,
   "preload": true,
@@ -11,7 +12,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_Somersault",
-  "duration": 1.106043,
+  "duration": 1.101043,
   "parent": {
     "name": "Somersault",
     "path": "folders/Sounds/Player/Somersault.yy",

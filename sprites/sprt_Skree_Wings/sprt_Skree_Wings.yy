@@ -102,7 +102,7 @@
   "nineSlice": null,
   "parent": {
     "name": "Skree",
-    "path": "folders/Sprites/NPCs/Skree.yy",
+    "path": "folders/Sprites/NPCs/Enemies/Skree.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_Skree_Wings",

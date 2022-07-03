@@ -52,7 +52,7 @@ if(grappled)
 }
 else
 {
-	var fx = x+lengthdir_x(grapSpeedMax,obj_Player.shootDir),
+	/*var fx = x+lengthdir_x(grapSpeedMax,obj_Player.shootDir),
 		fy = y+lengthdir_y(grapSpeedMax,obj_Player.shootDir);
 	var gPoint = collision_rectangle(fx-1,fy-1,fx+1,fy+1,obj_GrappleBlock,false,false);
 	var gPoint2 = collision_rectangle(fx-1,fy-1,fx+1,fy+1,obj_GrappleBlockCracked,false,false);
@@ -133,10 +133,101 @@ else
 	else if(impact >= 2)
 	{
 		instance_destroy();
+	}*/
+	
+	if(impacted < 2)
+	{
+		var gPoint = noone;
+		
+		if(impacted == 0)
+		{
+			while(grapSpeed > 0 && !lhc_collision_line(xprevious,yprevious,x+grapSignX,y+grapSignY,"ISolid",true,false))
+		    {
+		        grappleDist += 1;
+				x = obj_Player.shootPosX+lengthdir_x(grappleDist,obj_Player.shootDir);
+				y = obj_Player.shootPosY+lengthdir_y(grappleDist,obj_Player.shootDir);
+		        grapSpeed -= 1;
+		    }
+			
+			var col = collision_line(xprevious,yprevious,x+grapSignX,y+grapSignY,obj_Tile,true,false);
+			if(instance_exists(col))
+			{
+				if(col.object_index == obj_GrappleBlock || col.object_index == obj_GrappleBlockCracked)
+				{
+					gPoint = col;
+				}
+				else
+				{
+					scr_OpenDoor(x+grapSignX,y+grapSignY,0);
+			        scr_BreakBlock(x+grapSignX,y+grapSignY,0);
+			        audio_stop_sound(snd_BeamImpact);
+			        audio_play_sound(snd_BeamImpact,0,false);
+			        part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.gTrail,7);
+			        part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.gImpact,1);
+			        impacted = 1;
+				}
+			}
+			else if(point_distance(obj_Player.x, obj_Player.y, x, y) > obj_Player.grappleMaxDist-(grapSpeedMax/2))
+		    {
+		        impacted = 1;
+		    }
+		}
+		else
+		{
+			grappleDist = max(grappleDist - grapSpeedMax, 0);
+			x = obj_Player.shootPosX+lengthdir_x(grappleDist,obj_Player.shootDir);
+		    y = obj_Player.shootPosY+lengthdir_y(grappleDist,obj_Player.shootDir);
+			if(grappleDist <= 0)
+			{
+				impacted = 2;
+			}
+		}
+		
+		if(!instance_exists(gPoint))
+		{
+			for(var i = 0; i < point_distance(obj_Player.shootPosX,obj_Player.shootPosY,x,y); i++)
+			{
+				var ang = obj_Player.shootDir;
+				var xx = obj_Player.shootPosX+lengthdir_x(i,ang),
+					yy = obj_Player.shootPosY+lengthdir_y(i,ang);
+				var gp = collision_rectangle(xx-4,yy-4,xx+4,yy+4,obj_GrappleBlock,false,true);
+				var gp2 = collision_rectangle(xx-4,yy-4,xx+4,yy+4,obj_GrappleBlockCracked,false,true);
+				if(instance_exists(gp2))
+				{
+					gp = gp2;
+				}
+				if(instance_exists(gp))
+				{
+					gPoint = gp;
+					x = xx;
+					y = yy;
+					break;
+				}
+			}
+		}
+	    if(instance_exists(gPoint))
+	    {
+	        audio_play_sound(snd_GrappleBeam_Latch,0,false);
+	        grapBlock = gPoint;
+			grapBlockPosX = scr_floor(clamp(x,grapBlock.bbox_left,grapBlock.bbox_right-1)/16)*16;
+			grapBlockPosY = scr_floor(clamp(y,grapBlock.bbox_top,grapBlock.bbox_bottom-1)/16)*16;
+	        grappled = true;
+	    }
+	}
+	else
+	{
+		instance_destroy();
 	}
 }
 
 if(damage > 0)
 {
-	scr_DamageNPC(x,y,damage,damageType,0,-1,4);
+	//scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,4);
+	
+	for(var j = 0; j < grappleDist; j += 8)
+	{
+		var xw = x-lengthdir_x(j,obj_Player.shootDir),
+			yw = y-lengthdir_y(j,obj_Player.shootDir);
+		scr_DamageNPC(xw,yw,damage,damageType,damageSubType,0,-1,10);
+	}
 }

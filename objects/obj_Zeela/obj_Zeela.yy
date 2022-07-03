@@ -1,10 +1,20 @@
 {
-  "spriteId": null,
+  "spriteId": {
+    "name": "sprt_Zeela",
+    "path": "sprites/sprt_Zeela/sprt_Zeela.yy",
+  },
   "solid": false,
   "visible": true,
-  "spriteMaskId": null,
+  "managed": true,
+  "spriteMaskId": {
+    "name": "mask_NPC_Crawler",
+    "path": "sprites/mask_NPC_Crawler/mask_NPC_Crawler.yy",
+  },
   "persistent": false,
-  "parentObjectId": null,
+  "parentObjectId": {
+    "name": "obj_NPC_Crawler",
+    "path": "objects/obj_NPC_Crawler/obj_NPC_Crawler.yy",
+  },
   "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,
@@ -17,12 +27,15 @@
   "physicsStartAwake": true,
   "physicsKinematic": false,
   "physicsShapePoints": [],
-  "eventList": [],
+  "eventList": [
+    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"isDnD":false,"eventNum":0,"eventType":3,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+  ],
   "properties": [],
   "overriddenProperties": [],
   "parent": {
     "name": "Crawlers",
-    "path": "folders/Objects/NPCs/Crawlers.yy",
+    "path": "folders/Objects/Entities/NPCs/Enemies/Crawlers.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_Zeela",

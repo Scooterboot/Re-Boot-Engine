@@ -2,9 +2,13 @@
   "spriteId": null,
   "solid": false,
   "visible": false,
+  "managed": true,
   "spriteMaskId": null,
   "persistent": false,
-  "parentObjectId": null,
+  "parentObjectId": {
+    "name": "obj_Entity",
+    "path": "objects/obj_Entity/obj_Entity.yy",
+  },
   "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,
@@ -25,7 +29,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Projectiles",
-    "path": "folders/Objects/Projectiles.yy",
+    "path": "folders/Objects/Entities/Projectiles.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_Projectile",

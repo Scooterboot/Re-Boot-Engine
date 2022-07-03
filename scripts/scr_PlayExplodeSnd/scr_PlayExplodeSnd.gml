@@ -1,11 +1,11 @@
 ///scr_PlayExplodeSnd(priority,loops)
-function scr_PlayExplodeSnd(argument0, argument1) {
+function scr_PlayExplodeSnd(priority, loops) {
 
 	if(audio_is_playing(global.prevExplodeSnd))
 	{
 	    audio_sound_gain(global.prevExplodeSnd,0,25);
 	}
-	var snd = audio_play_sound(snd_Explode,argument0,argument1);
+	var snd = audio_play_sound(snd_Explode,priority,loops);
 	audio_sound_gain(snd,global.soundVolume,0);
 	global.prevExplodeSnd = snd;
 

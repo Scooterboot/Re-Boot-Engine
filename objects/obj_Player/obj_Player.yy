@@ -5,12 +5,16 @@
   },
   "solid": false,
   "visible": true,
+  "managed": true,
   "spriteMaskId": {
     "name": "mask_Stand",
     "path": "sprites/mask_Stand/mask_Stand.yy",
   },
   "persistent": true,
-  "parentObjectId": null,
+  "parentObjectId": {
+    "name": "obj_Entity",
+    "path": "objects/obj_Entity/obj_Entity.yy",
+  },
   "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,
@@ -35,8 +39,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Objects",
-    "path": "folders/Objects.yy",
+    "name": "Entities",
+    "path": "folders/Objects/Entities.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_Player",

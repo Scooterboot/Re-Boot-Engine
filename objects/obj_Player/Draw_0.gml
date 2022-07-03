@@ -30,6 +30,15 @@ palIndex = 1;
 palIndex2 = 1;
 palDif = 0;
 
+if(introAnimState != -1)
+{
+	if(introAnimCounter < 245)
+	{
+		var introPal = lerp(1,0.5, clamp((introAnimCounter-200)/35,0,1));
+		palIndex = 1 + introPal * power(abs(scr_wrap(introAnimCounter,-4,4) / 4), 2);
+	}
+}
+
 if(speedFXCounter > 0)
 {
 	palIndex = 1+speedFXCounter;
@@ -49,7 +58,21 @@ if(morphPal > 0)
 	palDif = morphPal;
 }
 
-if(chargeReleaseFlash > 0)
+if(hyperFired > 0)
+{
+	hyperPal = min(hyperPal+0.25,1);
+}
+else
+{
+	hyperPal = max(hyperPal-0.1,0);
+}
+
+if(hyperPal > 0)
+{
+	palIndex2 = 13 + obj_Main.hyperRainbowCycle;
+	palDif = hyperPal;
+}
+else if(chargeReleaseFlash > 0)
 {
 	palIndex2 = beamPalIndex;
 	palDif = 1;
@@ -197,6 +220,24 @@ if(heatDmgPal > 0)
 if(shaderFlash >= shaderFlashMax)
 {
 	shaderFlash = 0;
+}
+
+if(cFlashPal > 0)
+{
+	//if(stateFrame == State.CrystalFlash && frame[Frame.CFlash] >= 5)
+	if(stateFrame == State.CrystalFlash && torsoR == sprt_CrystalFlash)
+	{
+		palShader = pal_CrystalFlash;
+		
+		palIndex = clamp(cFlashPal2+1.25,1,3);
+		palIndex2 = 3;
+		palDif = cFlashPalDiff;
+	}
+	else
+	{
+		palIndex2 = 6;
+		palDif = cFlashPal;
+	}
 }
 
 AfterImage(drawAfterImage,rotation,afterImgDelay,afterImageNum,afterImgAlphaMult);

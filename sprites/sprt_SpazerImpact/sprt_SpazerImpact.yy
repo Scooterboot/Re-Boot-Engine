@@ -82,7 +82,7 @@
   "nineSlice": null,
   "parent": {
     "name": "Spazer",
-    "path": "folders/Sprites/Weapons/Beams/Spazer.yy",
+    "path": "folders/Sprites/Projectiles/Beams/Spazer.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_SpazerImpact",

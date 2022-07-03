@@ -5,7 +5,11 @@
   },
   "solid": false,
   "visible": true,
-  "spriteMaskId": null,
+  "managed": true,
+  "spriteMaskId": {
+    "name": "mask_NPC_Crawler",
+    "path": "sprites/mask_NPC_Crawler/mask_NPC_Crawler.yy",
+  },
   "persistent": false,
   "parentObjectId": {
     "name": "obj_NPC_Crawler",
@@ -31,7 +35,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Crawlers",
-    "path": "folders/Objects/NPCs/Crawlers.yy",
+    "path": "folders/Objects/Entities/NPCs/Enemies/Crawlers.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_Geemer",

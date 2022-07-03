@@ -1,182 +1,57 @@
-/// @description AI Behavior
-
+/// @description 
 if(global.gamePaused)
 {
 	exit;
 }
 
-if(setOldPoses == 0)
-{
-	for(var i = 0; i < 10; i++)
-	{
-		oldPosX[i] = x;
-		oldPosY[i] = y;
-	}
-	setOldPoses = 1;
-}
+#region Freeze timer & platform
 
-if(frozen <= 0)
+if(frozen > 0 && !dead)
 {
-	grounded = ((collision_line(bbox_left,bbox_bottom+1,bbox_right,bbox_bottom+1,obj_Tile,true,true) || 
-	(collision_line(bbox_left,bbox_bottom+1,bbox_right,bbox_bottom+1,obj_Platform,true,true) && !place_meeting(x,y,obj_Platform)) || 
-	(bbox_bottom+1) >= room_height) && velY >= 0 && velY <= fGrav);
-
-	if(tileCollide)
+	if(!instance_exists(freezePlatform))
 	{
-		#region Collision
-	
-		var ynum = max(ceil(abs(velX)),1);
-		var grounded2 = (lhc_place_collide(0,ynum) || (bbox_bottom+ynum) >= room_height);
-	
-		var ynum2 = max(ceil(abs(velX)),8);
-		var grounded3 = (lhc_place_collide(0,ynum2) || (bbox_bottom+ynum2) >= room_height);
-	
-		// Slope Speed Adjustment
-		if(slopeMovement)
-		{
-			var sAngle = 90 - 90*sign(velX);
-			if(abs(velX) >= 1 && grounded)
-			{
-				var slope = instance_place(x+velX,y,obj_Slope);
-				if(instance_exists(slope) && slope.image_yscale > 0 && (slope.image_yscale <= 1 || abs(velX) < 1.5) && sign(slope.image_xscale) == -sign(velX))
-				{
-					sAngle += scr_GetSlopeAngle(slope);
-				}
-				else
-				{
-					slope = instance_place(x,y+abs(velX),obj_Slope);
-					if(instance_exists(slope) && slope.image_yscale > 0 && (slope.image_yscale <= 1 || abs(velX) < 1.5) && sign(slope.image_xscale) == sign(velX) &&
-					((slope.image_xscale > 0 && bbox_left >= slope.bbox_left-2) || (slope.image_xscale < 0 && bbox_right <= slope.bbox_right+2)))
-					{
-						sAngle += scr_GetSlopeAngle(slope);
-					}
-				}
-			}
-	
-			cosX = lengthdir_x(abs(velX),sAngle);
-			sinX = lengthdir_y(abs(velX),sAngle);
-	
-			fVelX = cosX;
-		}
-		else
-		{
-			fVelX = velX;
-		}
-	
-		collideX = false;
-	
-		var yplusMax = max(ceil(abs(velX)),4);
-	
-		// X Collision
-		var colR = lhc_collision_line(bbox_right+fVelX,bbox_top,bbox_right+fVelX,bbox_bottom,"ISolid",true,true),
-			colL = lhc_collision_line(bbox_left+fVelX,bbox_top,bbox_left+fVelX,bbox_bottom,"ISolid",true,true);
-		var xspeed = abs(fVelX);
-		if(lhc_place_collide(max(abs(fVelX),1)*sign(fVelX),0) && (!lhc_place_collide(0,0) || (fVelX > 0 && colR) || (fVelX < 0 && colL)))
-		{
-			var yplus = 0;
-			while(lhc_place_collide(fVelX,-yplus) && yplus <= yplusMax && grounded2)
-			{
-				yplus++;
-			}
-		
-			var xnum = 0;
-			while(!lhc_place_collide(xnum*sign(fVelX),0) && xnum <= xspeed)
-			{
-				xnum++;
-			}
-		
-			var walkUpSlope = (!lhc_place_collide(xnum*sign(fVelX),-3));
-		
-			if(lhc_place_collide(fVelX,-yplus) || !walkUpSlope || !grounded2 || !slopeMovement)
-			{
-				if(fVelX > 0)
-				{
-					x = scr_floor(x);
-				}
-				if(fVelX < 0)
-				{
-					x = scr_ceil(x);
-				}
-				var xnum2 = xspeed+2;
-				while(!lhc_place_collide(sign(fVelX),0) && xnum2 > 0)
-				{
-					x += sign(fVelX);
-					xnum2--;
-				}
-			
-				velX = 0;
-				fVelX = 0;
-				collideX = true;
-			}
-			else if(grounded2)
-			{
-				y = scr_round(y - yplus);
-			}
-		}
-		else if(!lhc_place_collide(0,0) && slopeMovement)
-		{
-			var xnum3 = 0;
-			while(lhc_place_collide(xnum3*sign(fVelX),1) && xnum3 <= xspeed)
-			{
-				xnum3++;
-			}
-		
-			var walkDownSlope = (lhc_place_collide(xnum3*sign(fVelX),3));
-		
-			if(walkDownSlope && grounded3 && velY >= 0 && velY <= fGrav)
-			{
-				var yplus2 = 0;
-				while(!lhc_place_collide(fVelX,1+yplus2) && yplus2 <= yplusMax)
-				{
-					yplus2++;
-				}
-			
-				if(!lhc_place_collide(fVelX,yplus2))
-				{
-					if(lhc_place_collide(fVelX,yplus2+1))// && jump <= 0)
-					{
-						y += yplus2;
-					}
-				}
-			}
-		}
-	
-		x += fVelX;
-	
-		fVelY = velY;
-	
-		collideY = false;
-	
-		// Y Collision
-		var colB = lhc_collision_line(bbox_left,bbox_bottom+fVelY,bbox_right,bbox_bottom+fVelY,"ISolid",true,true),
-			colT = lhc_collision_line(bbox_left,bbox_top+fVelY,bbox_right,bbox_top+fVelY,"ISolid",true,true);
-		if(lhc_place_collide(0,max(abs(fVelY),1)*sign(fVelY)) && (!lhc_place_collide(0,0) || (fVelY > 0 && colB) || (fVelY < 0 && colT)))
-		{
-			if(fVelY > 0)
-			{
-				y = scr_floor(y);
-			}
-			if(fVelY < 0)
-			{
-				y = scr_ceil(y);
-			}
-			var yspeed = abs(fVelY)+2;
-			while(!lhc_place_collide(0,sign(fVelY)) && yspeed > 0)
-			{
-				y += sign(fVelY);
-				yspeed--;
-			}
-		
-			fVelY = 0;
-			velY = 0;
-			collideY = true;
-		}
-	
-		y += fVelY;
-	
-		x = clamp(x,x-bbox_left,room_width-(bbox_right-x));
-		y = clamp(y,y-bbox_top,room_height-(bbox_bottom-y));
-	
-		#endregion
+	    freezePlatform = instance_create_layer(bbox_left,bbox_top,layer_get_id("Collision"),obj_Platform);
+	    freezePlatform.image_xscale = (bbox_right-bbox_left)/16;
+	    freezePlatform.image_yscale = (bbox_bottom-bbox_top)/16;
 	}
 }
+else if(instance_exists(freezePlatform))
+{
+	instance_destroy(freezePlatform);
+}
+
+frozenImmuneTime = max(frozenImmuneTime-1,0);
+frozen = max(frozen - 1, 0);
+
+#endregion
+
+#region Damage to Player
+if(!friendly && damage > 0 && !frozen && !dead)
+{
+    var player = instance_place(x,y,obj_Player);
+    if(instance_exists(player))
+    {
+        if (player.immuneTime <= 0 && !player.immune)//!player.isChargeSomersaulting && !player.isScrewAttacking && !player.isSpeedBoosting)
+        {
+            //var ang = point_direction(x,y,obj_Samus.x,obj_Samus.y);
+            var ang = 45;
+            if(player.bbox_bottom > bbox_bottom)
+            {
+                ang = 315;
+            }
+            if(player.x < x)
+            {
+                ang = 135;
+                if(player.bbox_bottom > bbox_bottom)
+                {
+                    ang = 225;
+                }
+            }
+            var knockX = lengthdir_x(knockBackSpeed,ang),
+                knockY = lengthdir_y(knockBackSpeed,ang);
+            scr_DamagePlayer(damage,knockBack,knockX,knockY,damageImmuneTime);
+        }
+    }
+}
+#endregion
+

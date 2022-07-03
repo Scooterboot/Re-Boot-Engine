@@ -1,0 +1,31 @@
+/// @description Free surfaces
+event_inherited();
+
+if(surface_exists(playerInvSurf))
+{
+    surface_free(playerInvSurf);
+}
+if(surface_exists(playerGlowSurf))
+{
+    surface_free(playerGlowSurf);
+}
+if(surface_exists(playerGlowSurf2))
+{
+    surface_free(playerGlowSurf2);
+}
+if(surface_exists(pauseSurf))
+{
+    surface_free(pauseSurf);
+}
+if(ds_exists(invListL,ds_type_list))
+{
+	ds_list_destroy(invListL);
+}
+if(ds_exists(invListR,ds_type_list))
+{
+	ds_list_destroy(invListR);
+}
+if(surface_exists(textSurface))
+{
+    surface_free(textSurface);
+}

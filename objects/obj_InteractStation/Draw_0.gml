@@ -17,7 +17,7 @@ if(!global.gamePaused)
 	frameCounter++;
 	if(frameCounter > animSpeed)
 	{
-		frame = scr_wrap(frame+1,0,2);
+		frame = scr_wrap(frame+1,0,3);
 		frameCounter = 0;
 	}
 }

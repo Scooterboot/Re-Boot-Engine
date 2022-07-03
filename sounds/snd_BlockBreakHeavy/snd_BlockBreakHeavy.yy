@@ -1,4 +1,5 @@
 {
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,7 +12,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_BlockBreakHeavy",
-  "duration": 0.259376,
+  "duration": 0.254376,
   "parent": {
     "name": "Tiles",
     "path": "folders/Sounds/Tiles.yy",

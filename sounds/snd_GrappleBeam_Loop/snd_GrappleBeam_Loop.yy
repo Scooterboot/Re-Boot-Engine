@@ -1,4 +1,5 @@
 {
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,7 +12,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_GrappleBeam_Loop",
-  "duration": 0.721961,
+  "duration": 0.716961,
   "parent": {
     "name": "Misc",
     "path": "folders/Sounds/Weapons/Misc.yy",

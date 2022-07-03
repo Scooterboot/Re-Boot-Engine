@@ -86,9 +86,9 @@ option = array(
 
 confirmPos = 0;
 confirmText = array("ARE YOU SURE?", "NO", "YES");
-confirmRestart = -1;
-confirmQuitMM = -1;
-confirmQuitDT = -1;
+confirmRestart = false;//-1;
+confirmQuitMM = false;//-1;
+confirmQuitDT = false;//-1;
 
 headerText = array(
 "ZEBES",

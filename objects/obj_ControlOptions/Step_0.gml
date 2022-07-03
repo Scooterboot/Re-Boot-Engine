@@ -67,7 +67,7 @@ if(screenFade >= 1 && !menuClosing)
 		{
 			optionPos += movePrev;
 		}
-		optionPos = scr_wrap(optionPos,0,array_length(option)-1);
+		optionPos = scr_wrap(optionPos,0,array_length(option));
 		if(select || (moveX != 0 && optionPos < 4))
 		{
 			if(optionPos >= 4)
@@ -84,13 +84,13 @@ if(screenFade >= 1 && !menuClosing)
 				case 0:
 				{
 					//HUD Style
-					global.HUD = scr_wrap(global.HUD+moveX+select,0,2);
+					global.HUD = scr_wrap(global.HUD+moveX+select,0,3);
 					break;
 				}
 				case 1:
 				{
 					//Aim Style
-					global.aimStyle = scr_wrap(global.aimStyle+moveX+select,0,2);
+					global.aimStyle = scr_wrap(global.aimStyle+moveX+select,0,3);
 					break;
 				}
 				case 2:
@@ -169,7 +169,7 @@ if(screenFade >= 1 && !menuClosing)
 	
 	if(screen == 1)
 	{
-		optionPos = scr_wrap(optionPos,0,array_length(advOption)-1);
+		optionPos = scr_wrap(optionPos,0,array_length(advOption));
 		if(select || (moveX != 0 && optionPos < 3))
 		{
 			if(optionPos >= 3)
@@ -186,19 +186,19 @@ if(screenFade >= 1 && !menuClosing)
 				case 0:
 				{
 					//Grip climb style
-					global.gripStyle = scr_wrap(global.gripStyle+moveX+select,0,2);
+					global.gripStyle = scr_wrap(global.gripStyle+moveX+select,0,3);
 					break;
 				}
 				case 1:
 				{
 					//Grapple reel style
-					global.grappleStyle = scr_wrap(global.grappleStyle+moveX+select,0,1);
+					global.grappleStyle = scr_wrap(global.grappleStyle+moveX+select,0,2);
 					break;
 				}
 				case 2:
 				{
 					//Spider ball control
-					global.spiderBallStyle = scr_wrap(global.spiderBallStyle+moveX+select,0,2);
+					global.spiderBallStyle = scr_wrap(global.spiderBallStyle+moveX+select,0,3);
 					break;
 				}
 				case 3:
@@ -228,7 +228,7 @@ if(screenFade >= 1 && !menuClosing)
 		{
 			optionPos += movePrev;
 		}
-		optionPos = scr_wrap(optionPos,0,array_length(controlKey)-1);
+		optionPos = scr_wrap(optionPos,0,array_length(controlKey));
 		if(select)
 		{
 			if(optionPos < array_length(controlKey)-2)
@@ -313,7 +313,7 @@ if(screenFade >= 1 && !menuClosing)
 		{
 			optionPos += movePrev;
 		}
-		optionPos = scr_wrap(optionPos,0,array_length(controlButton)-1);
+		optionPos = scr_wrap(optionPos,0,array_length(controlButton));
 		if(select || (moveX != 0 && optionPos <= 2))
 		{
 			if(optionPos < array_length(controlButton)-2)

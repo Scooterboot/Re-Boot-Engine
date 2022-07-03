@@ -86,7 +86,7 @@
   "nineSlice": null,
   "parent": {
     "name": "Explosives",
-    "path": "folders/Sprites/Weapons/Explosives.yy",
+    "path": "folders/Sprites/Projectiles/Explosives.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_MBBombExplosion",

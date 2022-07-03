@@ -1,7 +1,6 @@
 /// @description scr_Shoot(shotIndex, damage, speed, cooldown, shotAmt, soundIndex)
 function scr_Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex)
 {
-
 	var spawnX = shootPosX,
 		spawnY = shootPosY;
 

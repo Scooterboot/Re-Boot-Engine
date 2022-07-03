@@ -5,6 +5,7 @@
   },
   "solid": false,
   "visible": false,
+  "managed": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
@@ -31,7 +32,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Explosives",
-    "path": "folders/Objects/Projectiles/Explosives.yy",
+    "path": "folders/Objects/Entities/Projectiles/Explosives.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_SuperMissileExplosion",

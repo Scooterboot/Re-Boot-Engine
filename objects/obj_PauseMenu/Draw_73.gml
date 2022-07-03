@@ -421,7 +421,8 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				draw_set_halign(fa_left);
 				draw_set_valign(fa_top);
 				
-				if(confirmRestart == -1 && confirmQuitMM == -1 && confirmQuitDT == -1)
+				//if(confirmRestart == -1 && confirmQuitMM == -1 && confirmQuitDT == -1)
+				if(!confirmRestart && !confirmQuitMM && !confirmQuitDT)
 				{
 					var oX = scr_round(ww/2 - 96),
 						oY = scr_round(hh/2 - 48);
@@ -569,7 +570,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			}
 			var str = InsertIconsIntoString(fText),
 				strX = scr_round(ww/2),
-				strY = scr_round(hh-20);//scr_round(global.resHeight-36+sprite_get_height(sprt_Sub_Footer)/2);
+				strY = scr_round(hh-23);//scr_round(global.resHeight-36+sprite_get_height(sprt_Sub_Footer)/2);
 			if(footerScrib.text != str)
 			{
 				footerScrib.overwrite(str);

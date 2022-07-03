@@ -1,4 +1,29 @@
 
+var rFrame = 0;
+
+image_angle = direction+180;
+if((direction-45)%90 == 0 && rotFrame > 0)
+{
+	rFrame = rotFrame;
+	image_angle = direction+225;
+}
+if((image_number-rotFrame) > 1)
+{
+	frame = scr_wrap(frame+1,0,image_number-rotFrame);
+}
+image_index = rFrame+frame;
+
+var dist = 0;
+if(projLength > 0)
+{
+	if(!global.gamePaused)
+	{
+	    xstart += speed_x;
+	    ystart += speed_y;
+	}
+	dist = clamp((point_distance(x,y,xstart,ystart) + 4 + sprite_xoffset)/projLength,0,1);
+}
+
 //if(!isSpazer || isPlasma)
 if(!isSpazer && !isPlasma)
 {
@@ -33,67 +58,54 @@ if(!isSpazer && !isPlasma)
 		{
 			i = -1;
 		}
-		rot += rotspeed*dir*i*(!global.gamePaused);
-		image_angle = -rot;
-	}
-        
-	if(!global.gamePaused)
-	{
-		if(!oldPositionsSet)
-		{
-			for(var i = 0; i < 11; i++)
-			{
-				oldPosX[i] = x;
-				oldPosY[i] = y;
-			}
-			for(var i = 0; i < 11; i++)
-			{
-				oldRot[i] = image_angle;
-			}
-			oldPositionsSet = true;
-		}
-    
-		for(var i = 10; i > 0; i--)
-		{
-			oldPosX[i] = oldPosX[i - 1];
-			oldPosY[i] = oldPosY[i - 1];
-		}
-		oldPosX[0] = x;
-		oldPosY[0] = y;
-            
-		for(var i = 10; i > 0; i--)
-		{
-			oldRot[i] = oldRot[i - 1];
-		}
-		oldRot[0] = image_angle;
+		rotation += rotspeed*dir*i*(!global.gamePaused);
+		image_angle = -rotation;
 	}
     
 	if(isCharge)// || isPlasma)
 	{
-		for(var i = 1; i < 5; i++)
+		for(var i = 0; i < 5; i++)
 		{
-			scale = lerp(1, 0.25, i/5);
-			alpha = (5 - i) / 5;
+			var i2 = i+1;
+			var scale = lerp(1, 0.25, i2/5),
+			alpha = (5 - i2) / 5;
 			var xx = oldPosX[i],
 			yy = oldPosY[i];
-			if(sprite_xoffset > 15)
+			//if(sprite_xoffset > 15)
+			if(projLength > 0)
 			{
+				//scale = 1;
+				//scr_PlasmaDraw(xx,yy,scale,scale,oldRot[i],alpha);
 				scale = 1;
-				scr_PlasmaDraw(xx,yy,scale,scale,oldRot[i],alpha);
+				image_xscale = dist;
+				if(rFrame != 0)
+				{
+					dist = clamp((lengthdir_x(point_distance(x,y,xstart,ystart) + 4,45) + sprite_xoffset)/projLength,0,1);
+					image_xscale = dist;
+					image_yscale = dist;
+				}
 			}
-			else
-			{
-				draw_sprite_ext(sprite_index,image_index,scr_round(xx),scr_round(yy),scale,scale,oldRot[i],c_white,alpha);
-			}
+			//else
+			//{
+				draw_sprite_ext(sprite_index,image_index,scr_round(xx),scr_round(yy),image_xscale*scale,image_yscale*scale,oldRot[i],c_white,alpha);
+			//}
 		}
 	}
 }
     
-if(sprite_xoffset >= 15)
+//if(sprite_xoffset >= 15)
+if(projLength > 0)
 {
-	scr_PlasmaDraw(x,y,1,1,image_angle,image_alpha,true);
+	//scr_PlasmaDraw(x,y,1,1,image_angle,image_alpha,true);
+	image_xscale = dist;
+	if(rFrame != 0)
+	{
+		dist = clamp((lengthdir_x(point_distance(x,y,xstart,ystart) + 4,45) + sprite_xoffset)/projLength,0,1);
+		image_xscale = dist;
+		image_yscale = dist;
+	}
 }
-else
-{
-	draw_sprite_ext(sprite_index,image_index,scr_round(x),scr_round(y),1,1,image_angle,c_white,image_alpha);
-}
+//else
+//{
+	draw_sprite_ext(sprite_index,image_index,scr_round(x),scr_round(y),image_xscale,image_yscale,image_angle,c_white,image_alpha);
+//}

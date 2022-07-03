@@ -52,8 +52,8 @@ if(screenFade >= 1 && !menuClosing)
 		movePrev = move;
 		audio_play_sound(snd_MenuTick,0,false);
 	}
-	var backPos = array_length_1d(option)-1;
-	optionPos = scr_wrap(optionPos,0,backPos);
+	var backPos = array_length(option)-1;
+	optionPos = scr_wrap(optionPos,0,backPos+1);
 	if((select && optionPos == backPos) || (moveX != 0 && optionPos < backPos))
 	{
 		if(optionPos >= backPos)

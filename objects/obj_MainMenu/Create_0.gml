@@ -5,6 +5,7 @@ enum MainScreen
 	TitleIntro,
 	Title,
 	FileSelect,
+	FileCopy,
 	LoadGame
 }
 currentScreen = MainScreen.TitleIntro;
@@ -18,11 +19,10 @@ titleFade = 0;
 pressStartAnim = 0;
 startString = "PRESS START";
 
-titleMusic = noone;
-
 optionPos = 0;
 optionSubPos = 0;
 selectedFile = -1;
+copyFile = -1;
 
 fileIconFrame = 0;
 fileIconFrameCounter = 0;
@@ -35,6 +35,20 @@ option = array(
 "AUDIO OPTIONS",
 "CONTROL OPTIONS",
 "QUIT TO DESKTOP");
+
+copyOption = array(
+"FILE A",
+"FILE B",
+"FILE C",
+"CANCEL");
+
+confirmPos = 0;
+confirmText = array("ARE YOU SURE?", "NO", "YES");
+confirmQuitDT = false;
+confirmCopy = false;
+confirmCopyText = array("COPY","TO");
+confirmDelete = false;
+confirmDeleteText = "DELETE";
 
 subOption = array(
 "START GAME",

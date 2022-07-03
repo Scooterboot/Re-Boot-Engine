@@ -44,7 +44,7 @@ if(screenFade >= 1 && !menuClosing)
 		movePrev = move;
 		audio_play_sound(snd_MenuTick,0,false);
 	}
-	optionPos = scr_wrap(optionPos,0,array_length(option)-1);
+	optionPos = scr_wrap(optionPos,0,array_length(option));
 	if(select || (moveX != 0 && optionPos < array_length(option)-1))
 	{
 		if(optionPos >= array_length(option)-1)
@@ -68,7 +68,7 @@ if(screenFade >= 1 && !menuClosing)
 			case 1:
 			{
 				//Display Scale
-				global.screenScale = scr_wrap(global.screenScale+select+moveX,0,global.maxScreenScale);
+				global.screenScale = scr_wrap(global.screenScale+select+moveX,0,global.maxScreenScale+1);
 				break;
 			}
 			case 2:
@@ -115,7 +115,7 @@ if(screenFade >= 1 && !menuClosing)
 			case 4:
 			{
 				//Upscale mode
-				global.upscale = scr_wrap(global.upscale+select+moveX,0,7);//6);
+				global.upscale = scr_wrap(global.upscale+select+moveX,0,8);//6);
 				break;
 			}
 			case 5:

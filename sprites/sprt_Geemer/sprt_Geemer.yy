@@ -85,8 +85,8 @@
   ],
   "nineSlice": null,
   "parent": {
-    "name": "NPCs",
-    "path": "folders/Sprites/NPCs.yy",
+    "name": "Crawlers",
+    "path": "folders/Sprites/NPCs/Enemies/Crawlers.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_Geemer",

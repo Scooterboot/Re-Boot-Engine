@@ -78,7 +78,7 @@
   "nineSlice": null,
   "parent": {
     "name": "SpacePirate",
-    "path": "folders/Sprites/NPCs/SpacePirate.yy",
+    "path": "folders/Sprites/NPCs/Enemies/SpacePirate.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_PirateTurn",

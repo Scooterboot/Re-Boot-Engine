@@ -1,4 +1,5 @@
 {
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,7 +12,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_SpiderStart",
-  "duration": 0.309422,
+  "duration": 0.304422,
   "parent": {
     "name": "Player",
     "path": "folders/Sounds/Player.yy",

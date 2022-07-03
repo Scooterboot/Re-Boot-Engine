@@ -5,6 +5,7 @@
   },
   "solid": false,
   "visible": true,
+  "managed": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
@@ -28,7 +29,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Wave",
-    "path": "folders/Objects/Projectiles/Beams/Plasma Beam/Wave.yy",
+    "path": "folders/Objects/Entities/Projectiles/Beams/Plasma Beam/Wave.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_WavePlasmaBeamShot",

@@ -5,6 +5,8 @@ scr_MainInitialize();
 
 depth = 0;
 
+debug = false;
+
 screenScale = 1;
 if(global.screenScale > 0)
 {
@@ -44,6 +46,8 @@ windowResizeTimer = 0;
 
 oldDelta = delta_time;
 
+hyperRainbowCycle = 0;
+
 
 sndPauseArray = array(
 snd_Somersault,
@@ -63,4 +67,31 @@ snd_GrappleBeam_Loop,
 snd_Elevator,
 snd_LavaLoop,
 snd_LavaDamageLoop,
-snd_HeatDamageLoop);
+snd_HeatDamageLoop,
+snd_LowHealthAlarm);
+
+stateText[0] = "Stand";
+stateText[1] = "Elevator";
+stateText[2] = "Recharge";
+stateText[3] = "Crouch";
+stateText[4] = "Walk";
+stateText[5] = "Run";
+stateText[6] = "Brake";
+stateText[7] = "Morph";
+stateText[8] = "Jump";
+stateText[9] = "Somersault";
+stateText[10] = "Grip";
+stateText[11] = "Spark";
+stateText[12] = "BallSpark";
+stateText[13] = "Grapple";
+stateText[14] = "Hurt";
+stateText[15] = "DmgBoost";
+stateText[16] = "Death";
+stateText[17] = "Dodge";
+stateText[18] = "CrystalFlash";
+
+edgeText[0] = "None";
+edgeText[1] = "Bottom";
+edgeText[2] = "Top";
+edgeText[3] = "Left";
+edgeText[4] = "Right";

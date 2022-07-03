@@ -7,8 +7,20 @@ cSelect = obj_Control.mSelect;
 cCancel = obj_Control.mCancel;
 cStart = obj_Control.start;
 
-var canPause = (room != rm_MainMenu && instance_exists(obj_Player) && obj_Player.state != State.Elevator && !instance_exists(obj_Transition) && 
-(!instance_exists(obj_MessageBox) || obj_MessageBox.messageType == Message.Simple || obj_MessageBox.kill));
+var canPause = (room != rm_MainMenu && instance_exists(obj_Player) && obj_Player.state != State.Elevator && obj_Player.introAnimState == -1 && !instance_exists(obj_Transition));// && 
+//(!instance_exists(obj_MessageBox) || obj_MessageBox.messageType == Message.Expansion || obj_MessageBox.messageType == Message.Simple || obj_MessageBox.kill));
+if(instance_exists(obj_MessageBox))
+{
+	for(var i = 0; i < instance_number(obj_MessageBox); i++)
+	{
+		var mbox = instance_find(obj_MessageBox,i);
+		if(mbox.messageType == Message.Item && !mbox.kill)
+		{
+			canPause = false;
+			break;
+		}
+	}
+}
 
 #region Pause Logic
 if(canPause)
@@ -179,7 +191,8 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 	
 	if(screenSelectAnim <= 0 && !instance_exists(obj_DisplayOptions) && !instance_exists(obj_AudioOptions) && !instance_exists(obj_ControlOptions))
 	{
-		if(cCancel && rCancel && confirmRestart == -1 && confirmQuitMM == -1 && confirmQuitDT == -1)
+		//if(cCancel && rCancel && confirmRestart == -1 && confirmQuitMM == -1 && confirmQuitDT == -1)
+		if(cCancel && rCancel && !confirmRestart && !confirmQuitMM && !confirmQuitDT)
 		{
 			screenSelect = true;
 		}
@@ -207,26 +220,28 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 			
 			if(mapMoveX != 0 || mapMoveY != 0)
 			{
-				mapMoveVelX = clamp(mapMoveVelX+0.1*mapMoveX*(1+(sign(mapMoveVelX) != mapMoveX)),-2,2);
-				mapMoveVelY = clamp(mapMoveVelY+0.1*mapMoveY*(1+(sign(mapMoveVelY) != mapMoveY)),-2,2);
+				var spd = 0.1;
+				mapMoveVelX = clamp(mapMoveVelX+spd*mapMoveX*(1+(sign(mapMoveVelX) != mapMoveX)),-2,2);
+				mapMoveVelY = clamp(mapMoveVelY+spd*mapMoveY*(1+(sign(mapMoveVelY) != mapMoveY)),-2,2);
 			}
 			else
 			{
+				var fct = 0.2;
 				if(mapMoveVelX > 0)
 				{
-					mapMoveVelX = max(mapMoveVelX-0.1,0);
+					mapMoveVelX = max(mapMoveVelX-fct,0);
 				}
 				else
 				{
-					mapMoveVelX = min(mapMoveVelX+0.1,0);
+					mapMoveVelX = min(mapMoveVelX+fct,0);
 				}
 				if(mapMoveVelY > 0)
 				{
-					mapMoveVelY = max(mapMoveVelY-0.1,0);
+					mapMoveVelY = max(mapMoveVelY-fct,0);
 				}
 				else
 				{
-					mapMoveVelY = min(mapMoveVelY+0.1,0);
+					mapMoveVelY = min(mapMoveVelY+fct,0);
 				}
 			}
 			
@@ -283,7 +298,7 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 					}
 					if(limit > 1)
 					{
-						invPos = scr_wrap(invPos+invMove,0,limit-1);
+						invPos = scr_wrap(invPos+invMove,0,limit);
 						audio_play_sound(snd_MenuTick,0,false);
 					}
 				}
@@ -404,7 +419,8 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 		#region Options Screen
 		if(currentScreen = Screen.Options)
 		{
-			if(confirmRestart == -1 && confirmQuitMM == -1 && confirmQuitDT == -1)
+			//if(confirmRestart == -1 && confirmQuitMM == -1 && confirmQuitDT == -1)
+			if(!confirmRestart && !confirmQuitMM && !confirmQuitDT)
 			{
 				var move = (cDown && rDown) - (cUp && rUp),
 					select = (cSelect && rSelect);
@@ -425,7 +441,7 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 				
 				if(move != 0)
 				{
-					optionPos = scr_wrap(optionPos+move,0,array_length(option)-1);
+					optionPos = scr_wrap(optionPos+move,0,array_length(option));
 					audio_play_sound(snd_MenuTick,0,false);
 				}
 			
@@ -461,20 +477,20 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 						{
 							//global.rmMusic = noone;
 							//loadGame = true;
-							confirmRestart = 0;
+							confirmRestart = true;//0;
 							break;
 						}
 						case 4:
 						{
 							//global.rmMusic = noone;
 							//gameEnd = true;
-							confirmQuitMM = 0;
+							confirmQuitMM = true;//0;
 							break;
 						}
 						case 5:
 						{
 							//game_end();
-							confirmQuitDT = 0;
+							confirmQuitDT = true;//0;
 							break;
 						}
 					}
@@ -488,16 +504,16 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 				
 				if(move != 0)
 				{
-					confirmPos = scr_wrap(confirmPos+move,0,1);
+					confirmPos = scr_wrap(confirmPos+move,0,2);
 					audio_play_sound(snd_MenuTick,0,false);
 				}
 				
 				if(cancel)
 				{
 					confirmPos = 0;
-					confirmRestart = -1;
-					confirmQuitMM = -1;
-					confirmQuitDT = -1;
+					confirmRestart = false;//-1;
+					confirmQuitMM = false;//-1;
+					confirmQuitDT = false;//-1;
 					audio_play_sound(snd_MenuTick,0,false);
 				}
 				else if(select)
@@ -505,26 +521,26 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 					if(confirmPos == 1)
 					{
 						audio_play_sound(snd_MenuBoop,0,false);
-						if(confirmRestart >= 0)
+						if(confirmRestart)// >= 0)
 						{
-							global.rmMusic = noone;
+							global.SilenceMusic();
 							loadGame = true;
 						}
-						if(confirmQuitMM >= 0)
+						if(confirmQuitMM)// >= 0)
 						{
-							global.rmMusic = noone;
+							global.SilenceMusic();
 							gameEnd = true;
 						}
-						if(confirmQuitDT >= 0)
+						if(confirmQuitDT)// >= 0)
 						{
 							game_end();
 						}
 					}
 					else
 					{
-						confirmRestart = -1;
-						confirmQuitMM = -1;
-						confirmQuitDT = -1;
+						confirmRestart = false;//-1;
+						confirmQuitMM = false;//-1;
+						confirmQuitDT = false;//-1;
 						audio_play_sound(snd_MenuTick,0,false);
 					}
 				}
@@ -625,9 +641,9 @@ else
 		optionPos = 0;
 		
 		confirmPos = 0;
-		confirmRestart = -1;
-		confirmQuitMM = -1;
-		confirmQuitDT = -1;
+		confirmRestart = false;//-1;
+		confirmQuitMM = false;//-1;
+		confirmQuitDT = false;//-1;
 	}
 }
 

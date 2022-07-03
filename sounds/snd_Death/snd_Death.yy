@@ -1,4 +1,5 @@
 {
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,7 +12,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_Death",
-  "duration": 3.43812513,
+  "duration": 3.433125,
   "parent": {
     "name": "Player",
     "path": "folders/Sounds/Player.yy",

@@ -35,7 +35,7 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 				}
 				
 				var numH = 5;
-				while(!itemAmmo[scr_wrap(itemHighlighted[1], 0, 4)] && numH > 0)
+				while(!itemAmmo[scr_wrap(itemHighlighted[1], 0, 5)] && numH > 0)
 				{
 					itemHighlighted[1]++;
 				}
@@ -50,7 +50,7 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 			}
 			else if(itemSelected == 1)
 			{
-				if(!itemAmmo[scr_wrap(itemHighlighted[1], 0, 4)])
+				if(!itemAmmo[scr_wrap(itemHighlighted[1], 0, 5)])
 				{
 					if(itemHighlighted[1] == Item.Missile && itemAmmo[Item.SMissile])
 					{
@@ -142,7 +142,7 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 	{
 		if(cHCancel && rHCancel && itemNum > 0)
 		{
-			itemSelected = scr_wrap(itemSelected + 1, 0, 1);
+			itemSelected = scr_wrap(itemSelected + 1, 0, 2);
 			audio_play_sound(snd_MenuTick,0,false);
 		}
 		if(cHSelect)
@@ -165,7 +165,7 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 				}
 				itemHighlighted[itemSelected] += moveH;
 			}
-			var itemHighlighted2 = scr_wrap(itemHighlighted[0], 1, 4);
+			var itemHighlighted2 = scr_wrap(itemHighlighted[0], 1, 5);
 			if(itemSelected == 0 && itemHighlighted[0] != 0)
 			{
 				if(cHToggle && rHToggle && hasBeam[itemHighlighted2])
@@ -184,7 +184,7 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 }
 
 var numH = 5;
-while(!hasBeam[scr_wrap(itemHighlighted[0], 1, 4)] && itemHighlighted[0] != 0 && numH > 0)
+while(!hasBeam[scr_wrap(itemHighlighted[0], 1, 5)] && itemHighlighted[0] != 0 && numH > 0)
 {
 	itemHighlighted[0] += moveHPrev;
 	hudBOffsetX += 28*moveHPrev;
@@ -192,7 +192,7 @@ while(!hasBeam[scr_wrap(itemHighlighted[0], 1, 4)] && itemHighlighted[0] != 0 &&
 	numH--;
 }
 numH = 5;
-while(!item[scr_wrap(itemHighlighted[1], 0, 4)] && numH > 0)
+while(!item[scr_wrap(itemHighlighted[1], 0, 5)] && numH > 0)
 {
 	itemHighlighted[1] += moveHPrev;
 	hudBOffsetX += 28*moveHPrev;
@@ -201,7 +201,7 @@ while(!item[scr_wrap(itemHighlighted[1], 0, 4)] && numH > 0)
 }
 for(var i = 0; i < array_length(itemHighlighted); i++)
 {
-	itemHighlighted[i] = scr_wrap(itemHighlighted[i], 0, 4);
+	itemHighlighted[i] = scr_wrap(itemHighlighted[i], 0, 5);
 }
 
 rHSelect = !cHSelect;

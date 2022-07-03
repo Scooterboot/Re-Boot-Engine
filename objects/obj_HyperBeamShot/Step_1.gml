@@ -1,0 +1,13 @@
+/// @description 
+
+if(setWave)
+{
+	//isWave = creator.beam[Beam.Wave];
+	isWave = creator.beamIsWave;
+	tileCollide = !isWave;
+	setWave = false;
+}
+else
+{
+	layer = layer_get_id("WorldObjects");
+}

@@ -10,6 +10,13 @@ function scr_DrawHUD_Alt() {
 
 	if(global.hudDisplay || selecting)
 	{
+		var eOffX = 0;
+		var energyTanks = floor(energyMax / 100);
+		if(energyTanks > 14)
+		{
+			eOffX = 7*scr_floor((energyTanks-13)/2);
+		}
+		var vX2 = vX+eOffX;
 
 	    var itemNum = (item[Item.Missile]+item[Item.SMissile]+item[Item.PBomb]+item[Item.Grapple]+item[Item.XRay]);
     
@@ -30,7 +37,7 @@ function scr_DrawHUD_Alt() {
 	        yy = 0,
 	        ww = 26,
 	        hh = 18;
-	    draw_roundrect_ext(vX+xx,vY+yy,vX+ww+xx,vY+hh+yy,8,8,false);
+	    draw_roundrect_ext(vX2+xx,vY+yy,vX2+ww+xx,vY+hh+yy,8,8,false);
     
 	    if(itemNum > 0)
 	    {
@@ -38,7 +45,7 @@ function scr_DrawHUD_Alt() {
 	            yy = 0,
 	            ww = 26,
 	            hh = 18;
-	        draw_roundrect_ext(vX+xx,vY+yy,vX+ww+xx,vY+hh+yy,8,8,false);
+	        draw_roundrect_ext(vX2+xx,vY+yy,vX2+ww+xx,vY+hh+yy,8,8,false);
 	    }
     
 	    if(item[0])
@@ -47,7 +54,7 @@ function scr_DrawHUD_Alt() {
 	            yy = 2,
 	            ww = 38,
 	            hh = 10;
-	        draw_roundrect_ext(vX+xx,vY+yy,vX+ww+xx,vY+hh+yy,4,4,false);
+	        draw_roundrect_ext(vX2+xx,vY+yy,vX2+ww+xx,vY+hh+yy,4,4,false);
 	    }
 	    if(item[1])
 	    {
@@ -55,7 +62,7 @@ function scr_DrawHUD_Alt() {
 	            yy = 2,
 	            ww = 32,
 	            hh = 10;
-	        draw_roundrect_ext(vX+xx,vY+yy,vX+ww+xx,vY+hh+yy,4,4,false);
+	        draw_roundrect_ext(vX2+xx,vY+yy,vX2+ww+xx,vY+hh+yy,4,4,false);
 	    }
 	    if(item[2])
 	    {
@@ -63,23 +70,23 @@ function scr_DrawHUD_Alt() {
 	            yy = 2,
 	            ww = 26,
 	            hh = 10;
-	        draw_roundrect_ext(vX+xx,vY+yy,vX+ww+xx,vY+hh+yy,4,4,false);
+	        draw_roundrect_ext(vX2+xx,vY+yy,vX2+ww+xx,vY+hh+yy,4,4,false);
 	    }
 	    draw_set_color(c_white);
 	    draw_set_alpha(1);
     
-	    draw_sprite_ext(sprt_HWepSlot,(itemSelected == 0),floor(vX+66),floor(vY+10),1,1,0,c_white,1);
-	    draw_sprite_ext(sprt_HBeamIcon,beamIconIndex,floor(vX+66),floor(vY+10),1,1,0,c_white,1);
+	    draw_sprite_ext(sprt_HWepSlot,(itemSelected == 0),floor(vX2+66),floor(vY+10),1,1,0,c_white,1);
+	    draw_sprite_ext(sprt_HBeamIcon,beamIconIndex,floor(vX2+66),floor(vY+10),1,1,0,c_white,1);
     
 	    if(itemNum > 0)
 	    {
-	        draw_sprite_ext(sprt_HWepSlot,(itemSelected == 1),floor(vX+94),floor(vY+10),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HWepSlot,(itemSelected == 1),floor(vX2+94),floor(vY+10),1,1,0,c_white,1);
 	        var iconIndex = itemHighlighted[1];
 	        if(stateFrame == State.Morph && item[2])
 	        {
 	            iconIndex = 2;
 	        }
-	        draw_sprite_ext(sprt_HItemIcon,iconIndex,floor(vX+94),floor(vY+10),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HItemIcon,iconIndex,floor(vX2+94),floor(vY+10),1,1,0,c_white,1);
 	    }
     
 	    if(selecting)
@@ -109,11 +116,11 @@ function scr_DrawHUD_Alt() {
 	                    {
 	                        draw_sprite_ext(sprt_HItemBeam,i+5+(5*(beam[j] && i != 0)),vX+xBPos,vY+yBPos,1,1,0,c_white,1);
 	                    }
-	                    if(i == scr_wrap(itemHighlighted[0]-1, 0, 4))
+	                    if(i == scr_wrap(itemHighlighted[0]-1, 0, 5))
 	                    {
 	                        draw_sprite_ext(sprt_HItemBeam,i+comboNum,vX+(xBPos-xBOffset),vY+yBPos,1,1,0,c_white,1);
 	                    }
-	                    if(i == scr_wrap(itemHighlighted[0]-2, 0, 4))
+	                    if(i == scr_wrap(itemHighlighted[0]-2, 0, 5))
 	                    {
 	                        var a = 1;
 	                        if(hudBOffsetX < 0)
@@ -122,16 +129,16 @@ function scr_DrawHUD_Alt() {
 	                        }
 	                        draw_sprite_ext(sprt_HItemBeam,i+comboNum,vX+(xBPos-xBOffset*2),vY+yBPos,1,1,0,c_white,a);
 	                    }
-	                    if(i == scr_wrap(itemHighlighted[0]-3, 0, 4) && hudBOffsetX > 0)
+	                    if(i == scr_wrap(itemHighlighted[0]-3, 0, 5) && hudBOffsetX > 0)
 	                    {
 	                        var a = clamp(abs(hudBOffsetX)/xBOffset,0,1);
 	                        draw_sprite_ext(sprt_HItemBeam,i+comboNum,vX+(xBPos-xBOffset*3),vY+yBPos,1,1,0,c_white,a);
 	                    }
-	                    if(i == scr_wrap(itemHighlighted[0]+1, 0, 4))
+	                    if(i == scr_wrap(itemHighlighted[0]+1, 0, 5))
 	                    {
 	                        draw_sprite_ext(sprt_HItemBeam,i+comboNum,vX+(xBPos+xBOffset),vY+yBPos,1,1,0,c_white,1);
 	                    }
-	                    if(i == scr_wrap(itemHighlighted[0]+2, 0, 4))
+	                    if(i == scr_wrap(itemHighlighted[0]+2, 0, 5))
 	                    {
 	                        var a = 1;
 	                        if(hudBOffsetX > 0)
@@ -140,7 +147,7 @@ function scr_DrawHUD_Alt() {
 	                        }
 	                        draw_sprite_ext(sprt_HItemBeam,i+comboNum,vX+(xBPos+xBOffset*2),vY+yBPos,1,1,0,c_white,a);
 	                    }
-	                    if(i == scr_wrap(itemHighlighted[0]+3, 0, 4) && hudBOffsetX < 0)
+	                    if(i == scr_wrap(itemHighlighted[0]+3, 0, 5) && hudBOffsetX < 0)
 	                    {
 	                        var a = clamp(abs(hudBOffsetX)/xBOffset,0,1);
 	                        draw_sprite_ext(sprt_HItemBeam,i+comboNum,vX+(xBPos+xBOffset*3),vY+yBPos,1,1,0,c_white,a);
@@ -174,11 +181,11 @@ function scr_DrawHUD_Alt() {
 	                    {
 	                        draw_sprite_ext(sprt_HItemMisc,i+5,vX+xIPos,vY+yIPos,1,1,0,c_white,1);
 	                    }
-	                    if(i == scr_wrap(itemHighlighted[1]-1, 0, 4))
+	                    if(i == scr_wrap(itemHighlighted[1]-1, 0, 5))
 	                    {
 	                        draw_sprite_ext(sprt_HItemMisc,i,vX+(xIPos-xIOffset),vY+yIPos,1,1,0,c_white,1);
 	                    }
-	                    if(i == scr_wrap(itemHighlighted[1]-2, 0, 4))
+	                    if(i == scr_wrap(itemHighlighted[1]-2, 0, 5))
 	                    {
 	                        var a = 1;
 	                        if(hudIOffsetX < 0)
@@ -187,16 +194,16 @@ function scr_DrawHUD_Alt() {
 	                        }
 	                        draw_sprite_ext(sprt_HItemMisc,i,vX+(xIPos-xIOffset*2),vY+yIPos,1,1,0,c_white,a);
 	                    }
-	                    if(i == scr_wrap(itemHighlighted[1]-3, 0, 4) && hudIOffsetX > 0)
+	                    if(i == scr_wrap(itemHighlighted[1]-3, 0, 5) && hudIOffsetX > 0)
 	                    {
 	                        var a = clamp(abs(hudIOffsetX)/xIOffset,0,1);
 	                        draw_sprite_ext(sprt_HItemMisc,i,vX+(xIPos-xIOffset*3),vY+yIPos,1,1,0,c_white,a);
 	                    }
-	                    if(i == scr_wrap(itemHighlighted[1]+1, 0, 4))
+	                    if(i == scr_wrap(itemHighlighted[1]+1, 0, 5))
 	                    {
 	                        draw_sprite_ext(sprt_HItemMisc,i,vX+(xIPos+xIOffset),vY+yIPos,1,1,0,c_white,1);
 	                    }
-	                    if(i == scr_wrap(itemHighlighted[1]+2, 0, 4))
+	                    if(i == scr_wrap(itemHighlighted[1]+2, 0, 5))
 	                    {
 	                        var a = 1;
 	                        if(hudIOffsetX > 0)
@@ -205,7 +212,7 @@ function scr_DrawHUD_Alt() {
 	                        }
 	                        draw_sprite_ext(sprt_HItemMisc,i,vX+(xIPos+xIOffset*2),vY+yIPos,1,1,0,c_white,a);
 	                    }
-	                    if(i == scr_wrap(itemHighlighted[1]+3, 0, 4) && hudIOffsetX < 0)
+	                    if(i == scr_wrap(itemHighlighted[1]+3, 0, 5) && hudIOffsetX < 0)
 	                    {
 	                        var a = clamp(abs(hudIOffsetX)/xIOffset,0,1);
 	                        draw_sprite_ext(sprt_HItemMisc,i,vX+(xIPos+xIOffset*3),vY+yIPos,1,1,0,c_white,a);
@@ -231,29 +238,29 @@ function scr_DrawHUD_Alt() {
     
 	    if(item[0])
 	    {
-	        draw_sprite_ext(sprt_HAmmoIcon,(itemSelected == 1 && itemHighlighted[1] == 0 && stateFrame != State.Morph),floor(vX+110),floor(vY+4),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HAmmoIcon,(itemSelected == 1 && itemHighlighted[1] == 0 && stateFrame != State.Morph),floor(vX2+110),floor(vY+4),1,1,0,c_white,1);
     
-	        draw_sprite_ext(sprt_HNumFont2,missileStat,floor(vX+137),floor(vY+5),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HNumFont2,missileStat,floor(vX2+137),floor(vY+5),1,1,0,c_white,1);
 	        var missileNum = floor(missileStat/10);
-	        draw_sprite_ext(sprt_HNumFont2,missileNum,floor(vX+131),floor(vY+5),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HNumFont2,missileNum,floor(vX2+131),floor(vY+5),1,1,0,c_white,1);
 	        var missileNum2 = floor(missileStat/100);
-	        draw_sprite_ext(sprt_HNumFont2,missileNum2,floor(vX+125),floor(vY+5),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HNumFont2,missileNum2,floor(vX2+125),floor(vY+5),1,1,0,c_white,1);
 	    }
 	    if(item[1])
 	    {
-	        draw_sprite_ext(sprt_HAmmoIcon,2+(itemSelected == 1 && itemHighlighted[1] == 1 && stateFrame != State.Morph),floor(vX+150),floor(vY+4),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HAmmoIcon,2+(itemSelected == 1 && itemHighlighted[1] == 1 && stateFrame != State.Morph),floor(vX2+150),floor(vY+4),1,1,0,c_white,1);
     
-	        draw_sprite_ext(sprt_HNumFont2,superMissileStat,floor(vX+171),floor(vY+5),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HNumFont2,superMissileStat,floor(vX2+171),floor(vY+5),1,1,0,c_white,1);
 	        var superMissileNum = floor(superMissileStat/10);
-	        draw_sprite_ext(sprt_HNumFont2,superMissileNum,floor(vX+165),floor(vY+5),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HNumFont2,superMissileNum,floor(vX2+165),floor(vY+5),1,1,0,c_white,1);
 	    }
 	    if(item[2])
 	    {
-	        draw_sprite_ext(sprt_HAmmoIcon,4+(itemSelected == 1 && (itemHighlighted[1] == 2 || stateFrame == State.Morph)),floor(vX+184),floor(vY+4),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HAmmoIcon,4+(itemSelected == 1 && (itemHighlighted[1] == 2 || stateFrame == State.Morph)),floor(vX2+184),floor(vY+4),1,1,0,c_white,1);
     
-	        draw_sprite_ext(sprt_HNumFont2,powerBombStat,floor(vX+199),floor(vY+5),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HNumFont2,powerBombStat,floor(vX2+199),floor(vY+5),1,1,0,c_white,1);
 	        var powerBombNum = floor(powerBombStat/10);
-	        draw_sprite_ext(sprt_HNumFont2,powerBombNum,floor(vX+193),floor(vY+5),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HNumFont2,powerBombNum,floor(vX2+193),floor(vY+5),1,1,0,c_white,1);
 	    }
 	}
 

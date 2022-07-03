@@ -29,6 +29,14 @@ function scr_DrawHUD() {
 	            draw_set_color(col);
 	            draw_set_alpha(alpha);
 				
+				var eOffX = 0;
+				var energyTanks = floor(energyMax / 100);
+				if(energyTanks > 14)
+				{
+					eOffX = 7*scr_floor((energyTanks-13)/2);
+				}
+				var vX2 = vX+eOffX;
+				
 				var xx = 57,
 					yy = 4,
 					ww = 39,
@@ -65,32 +73,32 @@ function scr_DrawHUD() {
 					}
 				}
 				var x2 = xx-2, y2 = yy-2;
-				draw_roundrect_ext(vX+x2,vY+y2,vX+x2+ww,vY+y2+hh,8,8,false);
+				draw_roundrect_ext(vX2+x2,vY+y2,vX2+x2+ww,vY+y2+hh,8,8,false);
 				
 				draw_set_alpha(1);
 	            draw_set_color(c_white);
 				
-				draw_sprite_ext(sprt_HItem,index+3*i,floor(vX+xx),floor(vY+yy),1,1,0,c_white,1);
+				draw_sprite_ext(sprt_HItem,index+3*i,floor(vX2+xx),floor(vY+yy),1,1,0,c_white,1);
 				
 				if(i == 0)
 				{
-					draw_sprite_ext(sprt_HNumFont2,missileStat,floor(vX+85),floor(vY+7),1,1,0,c_white,1);
+					draw_sprite_ext(sprt_HNumFont2,missileStat,floor(vX2+85),floor(vY+7),1,1,0,c_white,1);
 	                var missileNum = floor(missileStat/10);
-	                draw_sprite_ext(sprt_HNumFont2,missileNum,floor(vX+79),floor(vY+7),1,1,0,c_white,1);
+	                draw_sprite_ext(sprt_HNumFont2,missileNum,floor(vX2+79),floor(vY+7),1,1,0,c_white,1);
 	                missileNum = floor(missileStat/100);
-	                draw_sprite_ext(sprt_HNumFont2,missileNum,floor(vX+73),floor(vY+7),1,1,0,c_white,1);
+	                draw_sprite_ext(sprt_HNumFont2,missileNum,floor(vX2+73),floor(vY+7),1,1,0,c_white,1);
 				}
 				if(i == 1)
 				{
-					draw_sprite_ext(sprt_HNumFont2,superMissileStat,floor(vX+123),floor(vY+7),1,1,0,c_white,1);
+					draw_sprite_ext(sprt_HNumFont2,superMissileStat,floor(vX2+123),floor(vY+7),1,1,0,c_white,1);
 	                var superMissileNum = floor(superMissileStat/10);
-	                draw_sprite_ext(sprt_HNumFont2,superMissileNum,floor(vX+117),floor(vY+7),1,1,0,c_white,1);
+	                draw_sprite_ext(sprt_HNumFont2,superMissileNum,floor(vX2+117),floor(vY+7),1,1,0,c_white,1);
 				}
 				if(i == 2)
 				{
-					draw_sprite_ext(sprt_HNumFont2,powerBombStat,floor(vX+158),floor(vY+7),1,1,0,c_white,1);
+					draw_sprite_ext(sprt_HNumFont2,powerBombStat,floor(vX2+158),floor(vY+7),1,1,0,c_white,1);
 	                var powerBombNum = floor(powerBombStat/10);
-	                draw_sprite_ext(sprt_HNumFont2,powerBombNum,floor(vX+152),floor(vY+7),1,1,0,c_white,1);
+	                draw_sprite_ext(sprt_HNumFont2,powerBombNum,floor(vX2+152),floor(vY+7),1,1,0,c_white,1);
 				}
 	        }
 	    }

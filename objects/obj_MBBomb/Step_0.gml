@@ -106,7 +106,7 @@ if(spreadType != -1)
 	}
 }
 
-//scr_DamageNPC(x,y,damage,damageType,0,-1,4);
+scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,4);
 
 bombTimer--;
 if(bombTimer >= 20)
@@ -143,7 +143,7 @@ else
 	}
 }*/
 
-if(bombTimer <= 0)
+if(bombTimer <= 0 || impacted > 0)
 {
 	mask_index = sprt_MBBombExplosion;
 	var player = collision_circle(x,y,(bbox_right-bbox_left)/3,obj_Player,false,true);
@@ -161,7 +161,7 @@ if(bombTimer <= 0)
 				}
 			}
 			player.bombJump = player.bombJumpMax[player.liquidState];
-			player.SpiderEnable(false);
+			//player.SpiderEnable(false);
 		}
 	}
 	instance_destroy();

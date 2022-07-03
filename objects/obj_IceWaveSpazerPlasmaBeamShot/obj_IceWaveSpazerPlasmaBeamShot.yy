@@ -5,6 +5,7 @@
   },
   "solid": false,
   "visible": true,
+  "managed": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
@@ -28,7 +29,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Ice Wave Spazer",
-    "path": "folders/Objects/Projectiles/Beams/Plasma Beam/Ice Wave Spazer.yy",
+    "path": "folders/Objects/Entities/Projectiles/Beams/Plasma Beam/Ice Wave Spazer.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_IceWaveSpazerPlasmaBeamShot",

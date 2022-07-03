@@ -9,7 +9,8 @@ if(!visible && !revealTile)
 	if(place_meeting(x,y,obj_Projectile) && (object_index == obj_BombBlock || object_index == obj_ChainBlock))
 	{
 		var shot = instance_place(x,y,obj_Projectile);
-		if(shot.isBeam)
+		//if(shot.isBeam)
+		if(shot.type == ProjType.Beam)
 		{
 			revealTile = true;
 		}
@@ -26,11 +27,14 @@ if(revealTile)
 			if(layer_exists(lay))
 			{
 				var map_id = layer_tilemap_get_id(lay);
-				var data = tilemap_get_at_pixel(map_id,x,y) & tile_index_mask;
-				if(!tile_get_empty(data))
+				if(layer_tilemap_exists(lay,map_id))
 				{
-					data = tile_set_empty(data);
-					tilemap_set_at_pixel(map_id,data,x,y);
+					var data = tilemap_get_at_pixel(map_id,x,y) & tile_index_mask;
+					if(!tile_get_empty(data))
+					{
+						data = tile_set_empty(data);
+						tilemap_set_at_pixel(map_id,data,x,y);
+					}
 				}
 			}
 		}

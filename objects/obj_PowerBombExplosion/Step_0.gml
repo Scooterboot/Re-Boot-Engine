@@ -27,7 +27,7 @@ if(scaleTimer >= 60)
 scr_OpenDoor(x,y,3);
 scr_BreakBlock(x,y,4);
 
-scr_DamageNPC(x,y,damage,damageType,0,-1,0);
+scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,0);
 
 if(scaleTimer >= 75)
 {
@@ -36,4 +36,4 @@ if(scaleTimer >= 75)
 scale = 0.05*scaleTimer;
 image_xscale = scale;
 image_yscale = scale;
-image_alpha = pAlpha*alpha2;
+image_alpha = pAlpha*alpha2 * 0.5;

@@ -7,7 +7,7 @@ var x1 = bbox_left-x,
 
 draw_set_color(c_yellow);
 
-draw_set_alpha(image_alpha*0.5);
+draw_set_alpha(image_alpha*0.75);
 draw_ellipse(x+x1*0.75,y+y1,x+x2*0.75,y+y2,false);
 draw_set_alpha(image_alpha);
 

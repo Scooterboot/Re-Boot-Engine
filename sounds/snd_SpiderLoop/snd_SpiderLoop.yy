@@ -1,4 +1,5 @@
 {
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,7 +12,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_SpiderLoop",
-  "duration": 2.84271,
+  "duration": 2.83771,
   "parent": {
     "name": "Player",
     "path": "folders/Sounds/Player.yy",

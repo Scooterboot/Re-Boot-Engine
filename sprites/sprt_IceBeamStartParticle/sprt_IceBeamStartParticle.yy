@@ -74,7 +74,7 @@
   "nineSlice": null,
   "parent": {
     "name": "IceBeam",
-    "path": "folders/Sprites/Weapons/Beams/IceBeam.yy",
+    "path": "folders/Sprites/Projectiles/Beams/IceBeam.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_IceBeamStartParticle",

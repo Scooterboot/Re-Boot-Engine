@@ -56,7 +56,7 @@
             {"id":"7f124188-886e-47af-8e6e-22af9d81d1b7","Key":3.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"f0532b35-d194-41fb-9c96-046baedd6895","path":"sprites/sprt_GrappleBeamChain/sprt_GrappleBeamChain.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
     ],
-    "visibleRange": {"x":0.0,"y":0.0,},
+    "visibleRange": null,
     "lockOrigin": false,
     "showBackdrop": true,
     "showBackdropImage": false,
@@ -82,7 +82,7 @@
   "nineSlice": null,
   "parent": {
     "name": "GrappleBeam",
-    "path": "folders/Sprites/Weapons/GrappleBeam.yy",
+    "path": "folders/Sprites/Projectiles/GrappleBeam.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprt_GrappleBeamChain",

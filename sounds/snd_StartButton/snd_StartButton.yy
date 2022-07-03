@@ -1,4 +1,5 @@
 {
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": false,
@@ -11,7 +12,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_StartButton",
-  "duration": 1.19284606,
+  "duration": 1.187846,
   "parent": {
     "name": "Menu",
     "path": "folders/Sounds/Menu.yy",
