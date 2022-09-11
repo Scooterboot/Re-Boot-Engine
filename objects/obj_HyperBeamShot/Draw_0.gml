@@ -90,7 +90,7 @@ if(fired < 4)
 		}
 	//}
 	
-	var hObj = self;
+	var hObj = id;//self;
 	
 	with(obj_Player)
 	{

@@ -239,28 +239,46 @@ function scr_DrawHUD_Alt() {
 	    if(item[0])
 	    {
 	        draw_sprite_ext(sprt_HAmmoIcon,(itemSelected == 1 && itemHighlighted[1] == 0 && stateFrame != State.Morph),floor(vX2+110),floor(vY+4),1,1,0,c_white,1);
+			
+			var col2 = c_white;
+			if(missileStat >= missileMax)
+			{
+				col2 = c_lime;
+			}
     
-	        draw_sprite_ext(sprt_HNumFont2,missileStat,floor(vX2+137),floor(vY+5),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HNumFont2,missileStat,floor(vX2+137),floor(vY+5),1,1,0,col2,1);
 	        var missileNum = floor(missileStat/10);
-	        draw_sprite_ext(sprt_HNumFont2,missileNum,floor(vX2+131),floor(vY+5),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HNumFont2,missileNum,floor(vX2+131),floor(vY+5),1,1,0,col2,1);
 	        var missileNum2 = floor(missileStat/100);
-	        draw_sprite_ext(sprt_HNumFont2,missileNum2,floor(vX2+125),floor(vY+5),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HNumFont2,missileNum2,floor(vX2+125),floor(vY+5),1,1,0,col2,1);
 	    }
 	    if(item[1])
 	    {
 	        draw_sprite_ext(sprt_HAmmoIcon,2+(itemSelected == 1 && itemHighlighted[1] == 1 && stateFrame != State.Morph),floor(vX2+150),floor(vY+4),1,1,0,c_white,1);
     
-	        draw_sprite_ext(sprt_HNumFont2,superMissileStat,floor(vX2+171),floor(vY+5),1,1,0,c_white,1);
+	        var col2 = c_white;
+			if(superMissileStat >= superMissileMax)
+			{
+				col2 = c_lime;
+			}
+			
+			draw_sprite_ext(sprt_HNumFont2,superMissileStat,floor(vX2+171),floor(vY+5),1,1,0,col2,1);
 	        var superMissileNum = floor(superMissileStat/10);
-	        draw_sprite_ext(sprt_HNumFont2,superMissileNum,floor(vX2+165),floor(vY+5),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HNumFont2,superMissileNum,floor(vX2+165),floor(vY+5),1,1,0,col2,1);
 	    }
 	    if(item[2])
 	    {
 	        draw_sprite_ext(sprt_HAmmoIcon,4+(itemSelected == 1 && (itemHighlighted[1] == 2 || stateFrame == State.Morph)),floor(vX2+184),floor(vY+4),1,1,0,c_white,1);
     
-	        draw_sprite_ext(sprt_HNumFont2,powerBombStat,floor(vX2+199),floor(vY+5),1,1,0,c_white,1);
+			var col2 = c_white;
+			if(powerBombStat >= powerBombMax)
+			{
+				col2 = c_lime;
+			}
+			
+	        draw_sprite_ext(sprt_HNumFont2,powerBombStat,floor(vX2+199),floor(vY+5),1,1,0,col2,1);
 	        var powerBombNum = floor(powerBombStat/10);
-	        draw_sprite_ext(sprt_HNumFont2,powerBombNum,floor(vX2+193),floor(vY+5),1,1,0,c_white,1);
+	        draw_sprite_ext(sprt_HNumFont2,powerBombNum,floor(vX2+193),floor(vY+5),1,1,0,col2,1);
 	    }
 	}
 

@@ -1,4 +1,5 @@
 {
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,7 +12,7 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_Missile_Shot",
-  "duration": 1.014656,
+  "duration": 1.009656,
   "parent": {
     "name": "Explosives",
     "path": "folders/Sounds/Weapons/Explosives.yy",

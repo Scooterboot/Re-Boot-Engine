@@ -48,15 +48,14 @@ if(debug)
 		draw_set_color(c_red);
         draw_set_alpha(0.75);
         
-		/*if(object_is_ancestor(object_index,obj_NPC_Crawler))
+		if(mask_index != sprite_index && sprite_exists(mask_index))
 		{
-			draw_ellipse(bbox_left-1,bbox_top-1,bbox_right-1,bbox_bottom-1,0);
+			draw_sprite_ext(mask_index,0,x,y,image_xscale,image_yscale,direction,c_white,1);
 		}
 		else
-		{*/
-	        //draw_rectangle(scr_round(bbox_left),scr_round(bbox_top),scr_round(bbox_right),scr_round(bbox_bottom),0);
-			draw_rectangle(bbox_left,bbox_top,bbox_right,bbox_bottom,0);
-		//}
+		{
+	        draw_rectangle(bbox_left,bbox_top,bbox_right,bbox_bottom,0);
+		}
 		
 		draw_set_color(c_white);
         draw_set_alpha(1);
@@ -64,10 +63,18 @@ if(debug)
 	
     with(obj_Tile)
 	{
-		if(!visible)
-		{
-			draw_self();
-		}
+		//if(!visible)
+		//{
+			if(object_is_ancestor(object_index,obj_Breakable))
+			{
+				//DrawBreakable(x,y,0);
+				draw_sprite_ext(sprite_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,1);
+			}
+			else if(!visible)
+			{
+				draw_self();
+			}
+		//}
 	}
 	with(obj_Platform)
 	{
@@ -105,27 +112,30 @@ if(debug)
 		{
 			with(instance_find(obj_Projectile,i))
 			{
-				draw_set_color(c_fuchsia);
-				draw_set_alpha(0.75);
-				if(projLength > 0)
-			    {
-			        var numw = max(projWidth,1),//sprite_xoffset*2,//abs(bbox_right - bbox_left),
-				        numd = clamp(point_distance(x,y,xstart,ystart),1,projLength);
-					for(var j = -numw; j < numd; j += numw)
-			        {
-			            //if(j > 0)
-			            //{
-			                var xw = x-lengthdir_x(j,direction),
-			                    yw = y-lengthdir_y(j,direction);
-			                var bleft = bbox_left-x+xw,
-								btop = bbox_top-y+yw,
-								bright = bbox_right-x+xw,
-								bbottom = bbox_bottom-y+yw;
-							draw_rectangle(scr_round(bleft),scr_round(btop),scr_round(bright),scr_round(bbottom),0);
-			            //}
-			        }
-			    }
-				draw_rectangle(scr_round(bbox_left),scr_round(bbox_top),scr_round(bbox_right),scr_round(bbox_bottom),0);
+				if(object_index != obj_PlayerEcho)
+				{
+					draw_set_color(c_fuchsia);
+					draw_set_alpha(0.75);
+					if(projLength > 0)
+				    {
+				        var numw = max(projWidth,1),//sprite_xoffset*2,//abs(bbox_right - bbox_left),
+					        numd = clamp(point_distance(x,y,xstart,ystart),1,projLength);
+						for(var j = -numw; j < numd; j += numw)
+				        {
+				            //if(j > 0)
+				            //{
+				                var xw = x-lengthdir_x(j,direction),
+				                    yw = y-lengthdir_y(j,direction);
+				                var bleft = bbox_left-x+xw,
+									btop = bbox_top-y+yw,
+									bright = bbox_right-x+xw,
+									bbottom = bbox_bottom-y+yw;
+								draw_rectangle(scr_round(bleft),scr_round(btop),scr_round(bright),scr_round(bbottom),0);
+				            //}
+				        }
+				    }
+					draw_rectangle(scr_round(bbox_left),scr_round(bbox_top),scr_round(bbox_right),scr_round(bbox_bottom),0);
+				}
 			}
 		}
 	}

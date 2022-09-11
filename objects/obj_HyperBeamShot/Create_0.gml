@@ -19,8 +19,12 @@ firedFrameCounter = 0;
 
 setWave = true;
 
-damageType = 3;
+damageType = DmgType.Misc;
+damageSubType[1] = false;
+damageSubType[2] = false;
+damageSubType[3] = false;
 damageSubType[4] = true;
+damageSubType[5] = false;
 
 blockDestroyType = 7;
 doorOpenType = 4;

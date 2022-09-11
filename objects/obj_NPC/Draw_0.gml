@@ -1,6 +1,6 @@
 /// @description 
 
-if(dmgFlash > 2)
+if(dmgFlash > 4)
 {
     shader_set(shd_WhiteFlash);
 }

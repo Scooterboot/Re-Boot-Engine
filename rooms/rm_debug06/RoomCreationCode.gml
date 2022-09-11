@@ -1,1 +1,0 @@
-scr_InitRoom(sprt_Map_DebugRooms,22,4,global.music_ItemRoom);

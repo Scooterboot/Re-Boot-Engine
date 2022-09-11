@@ -27,10 +27,11 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 	targetY = playerY;
 	velX = 0;
 	velY = 0;
+	camKey = player.cAimLock;
+	
 	var angle = player.aimAngle,
-		speedX = player.fVelX,
-		speedY = player.fVelY,
-		camKey = player.cAimLock;
+		speedX = player.x - player.xprevious,//player.fVelX,
+		speedY = player.fVelY;
 	
 	if(player.state == State.Hurt)
 	{
@@ -85,6 +86,22 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 		camLimitX = min(camLimitX + 1,camLimitMax);
 		camLimitY = min(camLimitY + 1,camLimitMax);
 	}
+	
+	var bossNum = instance_number(obj_NPC_Boss);
+	if(bossNum > 0)
+	{
+		for(var i = 0; i < bossNum; i++)
+		{
+			var boss = instance_find(obj_NPC_Boss,i);
+			if(instance_exists(boss) && !boss.dead && boss.boss && scr_WithinCamRange(boss.camPosX,boss.camPosX))
+			{
+				boss.CameraLogic();
+				
+				break;
+			}
+		}
+	}
+	
 	var speedMult = 2,
 		speedMax = 3,
 		distX = abs(targetX - xx),
@@ -130,7 +147,19 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 		velY = camSpeedY;
 	}
 	
+	var camSnap = false;
+	if(global.roomTrans || obj_Player.introAnimState == 0)
+	{
+		camSnap = true;
+	}
+	
 	fVelX = velX;
+	
+	var scroll = noone;
+	with(player)
+	{
+		scroll = instance_place(x,y,obj_CamScroll);
+	}
 	
 	var _list = ds_list_create();
 	var _num = camera_collide(0,0,_list);
@@ -146,19 +175,21 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 				wDiff = abs(global.resWidth - global.ogResWidth)/2;
 				resWidth = global.ogResWidth;
 			}
-			if(instance_exists(col) && CamTileFacing_Right(col) && playerX > col.x+16)
+			//if(instance_exists(col) && CamTileFacing_Right(col) && playerX > col.x+16)
+			if(instance_exists(col) && col.active && col.facing == CamTileFacing.Right)
 			{
 				fVelX = min(col.x+16 - x+wDiff, 1+abs(playerX-prevPlayerX));
-				if(global.roomTrans)
+				if(camSnap)
 				{
 					fVelX = col.x+16 - x+wDiff;
 				}
 				break;
 			}
-			else if(instance_exists(col) && CamTileFacing_Left(col) && playerX < col.x-16)
+			//else if(instance_exists(col) && CamTileFacing_Left(col) && playerX < col.x-16)
+			else if(instance_exists(col) && col.active && col.facing == CamTileFacing.Left)
 			{
 				fVelX = max(col.x-16 - (x+wDiff+resWidth), -(1+abs(playerX-prevPlayerX)));
-				if(global.roomTrans)
+				if(camSnap)
 				{
 					fVelX = col.x-16 - (x+wDiff+resWidth);
 				}
@@ -203,8 +234,10 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 				wDiff = abs(global.resWidth - global.ogResWidth)/2;
 				resWidth = global.ogResWidth;
 			}
-			if ((fVelX < 0 && CamTileFacing_Right(colX) && playerX > colX.x+16) ||
-				(fVelX > 0 && CamTileFacing_Left(colX) && playerX < colX.x-16))
+			//if ((fVelX < 0 && CamTileFacing_Right(colX) && playerX > colX.x+16) ||
+			//	(fVelX > 0 && CamTileFacing_Left(colX) && playerX < colX.x-16))
+			if ((fVelX < 0 && colX.active && colX.facing == CamTileFacing.Right) ||
+				(fVelX > 0 && colX.active && colX.facing == CamTileFacing.Left))
 			{
 				if(fVelX > 0)
 				{
@@ -252,19 +285,21 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 		for(var i = 0; i < _num; i++)
 		{
 			col = _list[| i];
-			if(instance_exists(col) && CamTileFacing_Down(col) && playerY > col.y+16)
+			//if(instance_exists(col) && CamTileFacing_Down(col) && playerY > col.y+16)
+			if(instance_exists(col) && col.active && col.facing == CamTileFacing.Down)
 			{
 				fVelY = min(col.y+16 - y, 1+abs(playerY-prevPlayerY));
-				if(global.roomTrans)
+				if(camSnap)
 				{
 					fVelY = col.y+16 - y;
 				}
 				break;
 			}
-			else if(instance_exists(col) && CamTileFacing_Up(col) && playerY < col.y-16)
+			//else if(instance_exists(col) && CamTileFacing_Up(col) && playerY < col.y-16)
+			else if(instance_exists(col) && col.active && col.facing == CamTileFacing.Up)
 			{
 				fVelY = max(col.y-16 - (y+global.resHeight), -(1+abs(playerY-prevPlayerY)));
-				if(global.roomTrans)
+				if(camSnap)
 				{
 					fVelY = col.y-16 - (y+global.resHeight);
 				}
@@ -309,8 +344,10 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 				wDiff = abs(global.resWidth - global.ogResWidth)/2;
 				resWidth = global.ogResWidth;
 			}
-			if ((fVelY < 0 && CamTileFacing_Down(colY) && playerY > colY.y+16) ||
-				(fVelY > 0 && CamTileFacing_Up(colY) && playerY < colY.y-16))
+			//if ((fVelY < 0 && CamTileFacing_Down(colY) && playerY > colY.y+16) ||
+			//	(fVelY > 0 && CamTileFacing_Up(colY) && playerY < colY.y-16))
+			if ((fVelY < 0 && colY.active && colY.facing == CamTileFacing.Down) ||
+				(fVelY > 0 && colY.active && colY.facing == CamTileFacing.Up))
 			{
 				if(fVelY > 0)
 				{
@@ -362,7 +399,7 @@ if(clampCam)
 
 var shakeX = 0,
 	shakeY = 0;
-if(instance_exists(obj_ScreenShaker))
+if(instance_exists(obj_ScreenShaker) && obj_ScreenShaker.active && !global.gamePaused)
 {
 	shakeX += obj_ScreenShaker.shakeX;
 	shakeY += obj_ScreenShaker.shakeY;

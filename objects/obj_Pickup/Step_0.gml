@@ -9,6 +9,8 @@ else
 	image_speed = imSpeed;
 }
 
+visible = !place_meeting(x,y,obj_Breakable);
+
 if(!collected)
 {
 	if(instance_exists(obj_Player))

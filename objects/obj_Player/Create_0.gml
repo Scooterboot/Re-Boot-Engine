@@ -125,7 +125,7 @@ shineCharge = 0;
 shineDir = 0;
 shineStart = 0;
 shineEnd = 0;
-shineEndMax = 30;
+shineEndMax = 40;//30;
 shineSparkSpeed = 13;
 shineFXCounter = 0;
 shineRampFix = 0;
@@ -431,6 +431,9 @@ fVelY = 0;
 //cosX = lengthdir_x(abs(velX),sAngle);
 //sinX = lengthdir_y(abs(velX),sAngle);
 
+carryVelX = 0;
+carryVelY = 0;
+
 #endregion
 #region Animation
 
@@ -477,9 +480,11 @@ frameCounter[14] = 0;
 idleNum = array(32,8,8,8,16,6,6,6);
 idleSequence = array(0,1,2,3,4,3,2,1);
 
-//idleNum_Low = array(10,4,4,8,3,3);
-idleNum_Low = array(12,6,6,10,6,6);
-idleSequence_Low = array(0,2,4,5,3,1);
+//idleNum_Low = array(12,6,6,10,6,6);
+//idleSequence_Low = array(0,2,4,5,3,1);
+
+idleNum_Low = array(12,4,4,4,10,4,4,4);
+idleSequence_Low = array(0,2,4,4,5,3,3,1);
 
 wjFrame = 0;
 wjSequence = array(3,3,3,2,2,1,1,1,0);
@@ -700,6 +705,8 @@ energyMax = 99;//1499;//99 + (100 * energyTanks);
 energy = energyMax;
 lowEnergyThresh = 30;
 
+damageReduct = 1;
+
 missileMax = 0;//250;//5 * missileTanks;
 missileStat = missileMax;
 
@@ -825,6 +832,8 @@ beamIconIndex = 0;
 
 beamIsWave = false;
 beamWaveStyleOffset = 1;
+
+beamFlare = sprt_PowerBeamChargeFlare;
 
 #endregion
 #region HUD
@@ -959,14 +968,17 @@ function entity_place_collide()
 	
 	if(isSpeedBoosting || isScrewAttacking)
 	{
-		var xdiff = xx-x,
-			ydiff = yy-y;
 		var bl_list = ds_list_create();
-		var bl = collision_rectangle_list(bbox_left+xdiff+offsetX-2,bbox_top+ydiff+offsetY-2,bbox_right+xdiff+offsetX+2,bbox_bottom+ydiff+offsetY+2,obj_Tile,true,true,bl_list,true);
+		var bl = instance_place_list(xx+offsetX,yy+offsetY,all,bl_list,true);
 		if(bl > 0)
 		{
 			for(var i = 0; i < bl; i++)
 			{
+				if(!asset_has_any_tag(bl_list[| i].object_index,"ISolid",asset_object))
+				{
+					continue;
+				}
+				
 				var block = bl_list[| i];
 				
 				var sp = (!asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting),
@@ -1003,18 +1015,24 @@ function entityPlatformCheck()
 		}
 	}
 	
-	var left = x-bbox_left,
-		right = bbox_right-x,
-		top = y-bbox_top,
-		bottom = bbox_bottom-y;
+	//var left = x-bbox_left,
+	//	right = bbox_right-x,
+	//	top = y-bbox_top,
+	//	bottom = bbox_bottom-y;
 	var pl_list = ds_list_create();
-	var pl = collision_rectangle_list(xx-left+offsetX,yy-top+offsetY,xx+right+offsetX,yy+bottom+offsetY,obj_Platform,true,true,pl_list,true);
+	//var pl = collision_rectangle_list(xx-left+offsetX,yy-top+offsetY,xx+right+offsetX,yy+bottom+offsetY,all,true,true,pl_list,true);
+	var pl = instance_place_list(xx+offsetX,yy+offsetY,all,pl_list,true);
 	if(pl > 0)
 	{
 		for(var i = 0; i < pl; i++)
 		{
+			if(!asset_has_any_tag(pl_list[| i].object_index,"IPlatform",asset_object))
+			{
+				continue;
+			}
+			
 			var platform = pl_list[| i];
-			if(place_meeting(xx+offsetX,yy+offsetY,platform) && !place_meeting(xx,yy,platform) && offsetY > 0)
+			if(place_meeting(xx+offsetX,yy+offsetY,platform) && !place_meeting(xx,yy,platform) && bbox_bottom < platform.bbox_top)//offsetY > 0)
 			{
 				return true;
 			}
@@ -1033,16 +1051,12 @@ function ModifyFinalVelY(fVY)
 	{
 		justFell = shouldForceDown;
 	}
-	else if(!grounded && !onPlatform)//if(!PlayerGrounded(2))
+	else
 	{
 		if(justFell && ledgeFall && fVY >= 0 && fVY <= fGrav && state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Dodge)
 		{
 			fVY += fellVel;
 		}
-		justFell = false;
-	}
-	else
-	{
 		justFell = false;
 	}
 	return fVY;
@@ -1173,7 +1187,7 @@ function OnSlopeXCollision_Bottom(fVX)
 }
 function CanMoveDownSlope_Bottom()
 {
-	return (state != State.Spark && state != State.BallSpark && grounded && ballBounce <= 0 && velY >= 0 && velY <= fGrav && jump <= 0 && bombJump <= 0);
+	return (state != State.Hurt && state != State.DmgBoost && state != State.Spark && state != State.BallSpark && grounded && ballBounce <= 0 && velY >= 0 && velY <= fGrav && jump <= 0 && bombJump <= 0);
 }
 
 function CanMoveUpSlope_Top()
@@ -1189,7 +1203,12 @@ function CanMoveDownSlope_Top() { return false; }
 
 function OnBottomCollision(fVY)
 {
+	grounded = true;
 	
+	if(entityPlatformCheck(0,fVY))
+	{
+		onPlatform = true;
+	}
 }
 function OnTopCollision(fVY)
 {
@@ -1197,16 +1216,6 @@ function OnTopCollision(fVY)
 }
 function OnYCollision(fVY)
 {
-	if(fVY > 0)
-	{
-		grounded = true;
-		
-		if(entityPlatformCheck(0,fVY))
-		{
-			onPlatform = true;
-		}
-	}
-	
 	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0)
 	{
 		if(abs(shineDir) >= 2 && abs(shineDir) != 4 && !entity_place_collide(2*sign(velX),0))
@@ -1966,14 +1975,11 @@ function Shoot()
 function PlayerGrounded()
 {
 	var xdiff = 0,
-		ydiff = 1;
+		ydiff = 2;
 	if(argument_count > 0)
 	{
 		ydiff = argument[0];
 	}
-	//var bottomCollision = (lhc_collision_line(bbox_left+xdiff,bbox_bottom+ydiff,bbox_right+xdiff,bbox_bottom+ydiff,"ISolid",true,true) || 
-	//					(lhc_collision_line(bbox_left+xdiff,bbox_bottom+ydiff,bbox_right+xdiff,bbox_bottom+ydiff,"IPlatform",true,true) && !entity_place_meeting(x,y,"IPlatform")) || 
-	//					(y+ydiff) >= room_height);
 	
 	var bottomCollision = (entity_place_collide(xdiff,ydiff) || (y+ydiff) >= room_height);
 	
@@ -1983,15 +1989,14 @@ function PlayerGrounded()
 #region PlayerOnPlatform
 function PlayerOnPlatform()
 {
-	//return (entity_place_meeting(x,y+1,"IPlatform") && !entity_place_meeting(x,y,"IPlatform") && 
-	//		fVelY >= 0 && state != State.Spark && state != State.BallSpark);
-	return (entityPlatformCheck(0,1) && fVelY >= 0 && state != State.Spark && state != State.BallSpark);
+	return (entityPlatformCheck(0,3) && fVelY >= 0 && state != State.Spark && state != State.BallSpark);
 }
 #endregion
 #region AfterImage
 function AfterImage(draw, rotation, delay, num, alpha)
 {
-
+	var echo = noone;
+	
 	if(draw)
 	{
 		if(!global.gamePaused)
@@ -2000,7 +2005,7 @@ function AfterImage(draw, rotation, delay, num, alpha)
 		}
 		if(afterImgCounter > delay)
 		{
-			var echo = instance_create_layer(scr_round(x),scr_round(y),"Player",obj_PlayerEcho);
+			echo = instance_create_layer(scr_round(x),scr_round(y),"Player",obj_PlayerEcho);
 			echo.surfW = surfW;
 			echo.surfH = surfH;
 			echo.mask_index = mask_index;
@@ -2043,12 +2048,12 @@ function AfterImage(draw, rotation, delay, num, alpha)
 			echo.liquidState = liquidState;
 			echo.dmgFlash = dmgFlash;
 			echo.immuneTime = immuneTime;
-			echo.velX = x-xprevious;
-			echo.velY = y-yprevious;
-			if((state == "stand" || state == "crouch") && prevState != state)
-			{
-				echo.velY = 0;
-			}
+			//echo.velX = x-xprevious;
+			//echo.velY = y-yprevious;
+			//if((state == "stand" || state == "crouch") && prevState != state)
+			//{
+			//	echo.velY = 0;
+			//}
 			afterImgCounter = 0;
 		}
 	}
@@ -2056,6 +2061,8 @@ function AfterImage(draw, rotation, delay, num, alpha)
 	{
 		afterImgCounter = 0;
 	}
+	
+	return echo;
 }
 #endregion
 
@@ -2641,6 +2648,7 @@ function Set_Beams()
 	beamAmt = 1;
 	beamChargeAmt = 1;
 	beamIconIndex = 0;
+	beamFlare = sprt_PowerBeamChargeFlare;
 	
 	beamIsWave = false;
 	beamWaveStyleOffset = 1;
@@ -2663,6 +2671,7 @@ function Set_Beams()
 		beamAmt = 3;
 		beamChargeAmt = 3;
 		beamIconIndex = 4;
+		beamFlare = sprt_SpazerChargeFlare;
 		
 		beamWaveStyleOffset = 0;
 		if(beam[Beam.Ice])
@@ -2674,6 +2683,7 @@ function Set_Beams()
 			beamSound = snd_IceComboShot;
 			beamChargeSound = snd_IceBeam_ChargeShot;
 			beamIconIndex = 5;
+			beamFlare = sprt_IceBeamChargeFlare;
 			if(beam[Beam.Wave])
 			{
 				// Ice Wave Spazer
@@ -2703,6 +2713,7 @@ function Set_Beams()
 			beamCharge = obj_WaveSpazerBeamChargeShot;
 			beamChargeAnim = sprt_WaveBeamChargeAnim;
 			beamIconIndex = 6;
+			beamFlare = sprt_WaveBeamChargeFlare;
 			if(beam[Beam.Plasma])
 			{
 				// Wave Spazer Plasma
@@ -2712,6 +2723,7 @@ function Set_Beams()
 				beamSound = snd_PlasmaBeam_Shot;
 				beamChargeSound = snd_PlasmaBeam_ChargeShot;
 				beamIconIndex = 14;
+				beamFlare = sprt_PlasmaBeamChargeFlare;
 			}
 		}
 		else if(beam[Beam.Plasma])
@@ -2723,6 +2735,7 @@ function Set_Beams()
 			beamSound = snd_PlasmaBeam_Shot;
 			beamChargeSound = snd_PlasmaBeam_ChargeShot;
 			beamIconIndex = 12;
+			beamFlare = sprt_PlasmaBeamChargeFlare;
 		}
 	}
 	else if(beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1))
@@ -2734,6 +2747,7 @@ function Set_Beams()
 		beamSound = snd_IceBeam_Shot;
 		beamChargeSound = snd_IceBeam_ChargeShot;
 		beamIconIndex = 1;
+		beamFlare = sprt_IceBeamChargeFlare;
 		if(beam[Beam.Wave])
 		{
 			// Ice Wave
@@ -2769,6 +2783,7 @@ function Set_Beams()
 		beamChargeSound = snd_WaveBeam_ChargeShot;
 		beamChargeAmt = 2;
 		beamIconIndex = 2;
+		beamFlare = sprt_WaveBeamChargeFlare;
 		if(beam[Beam.Plasma])
 		{
 			// Wave Plasma
@@ -2778,6 +2793,7 @@ function Set_Beams()
 			beamSound = snd_PlasmaBeam_Shot;
 			beamChargeSound = snd_PlasmaBeam_ChargeShot;
 			beamIconIndex = 10;
+			beamFlare = sprt_PlasmaBeamChargeFlare;
 		}
 	}
 	else if(beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4))
@@ -2789,6 +2805,7 @@ function Set_Beams()
 		beamSound = snd_PlasmaBeam_Shot;
 		beamChargeSound = snd_PlasmaBeam_ChargeShot;
 		beamIconIndex = 8;
+		beamFlare = sprt_PlasmaBeamChargeFlare;
 	}
 	
 	beamDmg = 20;
@@ -3061,8 +3078,8 @@ function SetArmPosTrans()
 	}
 }
 #endregion
-#region SetArmPosGrip
-function SetArmPosGrip()
+#region SetArmPosGrip (old)
+/*function SetArmPosGrip()
 {
 	switch scr_round(gripAimFrame)
 	{
@@ -3154,6 +3171,126 @@ function SetArmPosGrip()
 	        armOffsetY -= (recoilCounter > 0 && gripFrame >= 3);
 	        break;
 	    }
+	}
+}*/
+#endregion
+#region SetArmPosGrip
+function SetArmPosGrip()
+{
+	if(gripFrame < 3)
+	{
+		switch scr_round(gripFrame)
+		{
+			case 0:
+			{
+				ArmPos(-1*dir,9);
+				break;
+			}
+			case 1:
+			{
+				ArmPos(-5*dir,12);
+				break;
+			}
+			case 2:
+			{
+				ArmPos(-6*dir,12);
+				break;
+			}
+		}
+	}
+	else
+	{
+		switch scr_round(gripAimFrame)
+		{
+		    default:
+		    {
+		        ArmPos(-11, 17);
+		        if(dir == -1)
+		        {
+		            ArmPos(10, 18);
+		        }
+		        armOffsetY -= (recoilCounter > 0);
+		        break;
+		    }
+		    case 1:
+		    {
+		        ArmPos(-21, 14);
+		        if(dir == -1)
+		        {
+		            ArmPos(18, 15);
+		        }
+		        break;
+		    }
+		    case 2:
+		    {
+		        ArmPos(-27, 9);
+		        if(dir == -1)
+		        {
+		            ArmPos(25,10);
+		        }
+		        armOffsetX += (recoilCounter > 0)*dir;
+		        armOffsetY -= (recoilCounter > 0);
+		        break;
+		    }
+		    case 3:
+		    {
+		        ArmPos(-30, 1);
+		        if(dir == -1)
+		        {
+		            ArmPos(29, 1);
+		        }
+		        break;
+		    }
+		    case 4:
+		    {
+		        ArmPos(-30,-6);
+		        if(dir == -1)
+		        {
+		            ArmPos(32,-8);
+		        }
+		        armOffsetX += (recoilCounter > 0)*dir;
+		        break;
+		    }
+		    case 5:
+		    {
+		        ArmPos(-30, -16);
+		        if(dir == -1)
+		        {
+		            ArmPos(30, -18);
+		        }
+		        break;
+		    }
+		    case 6:
+		    {
+		        ArmPos(-27, -21);
+		        if(dir == -1)
+		        {
+		            ArmPos(26, -21);
+		        }
+		        armOffsetX += (recoilCounter > 0)*dir;
+		        armOffsetY += (recoilCounter > 0);
+		        break;
+		    }
+		    case 7:
+		    {
+		        ArmPos(-23,-28);
+		        if(dir == -1)
+		        {
+		            ArmPos(23,-28);
+		        }
+		        break;
+		    }
+		    case 8:
+		    {
+		        ArmPos(-12, -31);
+		        if(dir == -1)
+		        {
+		            ArmPos(12, -31);
+		        }
+		        armOffsetY += (recoilCounter > 0);
+		        break;
+		    }
+		}
 	}
 }
 #endregion

@@ -299,6 +299,24 @@ if(gravGlowAlpha > 0)// || state == State.Dodge)
 	gpu_set_fog(false,0,0,0);
 }
 
+if((state == State.Spark || state == State.BallSpark) && shineEnd > 0)
+{
+	var sEnd = abs(shineEnd-shineEndMax),
+		sEndMax = shineEndMax-7;
+	var dist = abs(scr_wrap(sEnd/sEndMax,-0.5,0.5)) * 20;
+	if(dist > 0 && sEnd < sEndMax)
+	{
+		for(var i = 0; i < 2; i++)
+		{
+			var edir = -45*shineDir + (sEnd/sEndMax * 360) + 180*i;
+		
+			pal_swap_set(palShader,palIndex,palIndex2,palDif,false);
+			DrawPlayer(x+lengthdir_x(dist,edir),y+lengthdir_y(dist,edir),rotation,0.5);
+			shader_reset();
+		}
+	}
+}
+
 pal_swap_set(palShader,palIndex,palIndex2,palDif,false);
 DrawPlayer(x,y,rotation,1);
 shader_reset();

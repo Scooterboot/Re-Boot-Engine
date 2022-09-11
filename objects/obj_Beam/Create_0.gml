@@ -17,9 +17,10 @@ frameCounter = 0;
 //isBeam = true;
 type = ProjType.Beam;
 
+damageType = DmgType.Beam;
 if(isCharge)
 {
-	damageType = 1;
+	damageType = DmgType.Charge;
 }
 damageSubType[1] = true;
 damageSubType[2] = isIce;

@@ -93,3 +93,5 @@ global.music_CrateriaMain = new LoopedSong(mus_CrateriaMain, 28.602, 238.914);
 global.music_BrinstarGreen = new LoopedSong(mus_BrinstarGreen, 64.806, 166.750);
 global.music_BrinstarRed = new LoopedSong(mus_BrinstarRed, 106.264, 218.838);
 global.music_UpperNorfair = new LoopedSong(mus_UpperNorfair, 49.169, 107.423);
+global.music_BossTension = new LoopedSong(mus_BossTension,0.027,62.945);
+global.music_Boss1 = new LoopedSong(mus_Boss1,13.712,39.692);

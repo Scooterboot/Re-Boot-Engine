@@ -1,6 +1,8 @@
 /// @description Initialize
 event_inherited();
 
+npcID = -1;
+
 image_index = 0;
 image_speed = 0;
 
@@ -24,9 +26,11 @@ life = 0;
 lifeMax = 0;
 
 damage = 0;
-knockBack = 5;
-knockBackSpeed = 7;
+knockBack = 10;//5;
+knockBackSpeed = 3.5; //7;
 damageImmuneTime = 96;
+
+boss = false;
 
 justHit = false;
 dmgFlash = 0;
@@ -34,6 +38,7 @@ dead = false;
 //deathPersistant = false;
 deathType = 0;
 friendly = false;
+immune = false;
 
 enum DmgType
 {
@@ -45,36 +50,39 @@ enum DmgType
 
 // beams
 dmgMult[DmgType.Beam][0] = 1; // all
-dmgMult[DmgType.Beam][1] = 0; // power beam
-dmgMult[DmgType.Beam][2] = 0; // ice beam
-dmgMult[DmgType.Beam][3] = 0; // wave beam
-dmgMult[DmgType.Beam][4] = 0; // spazer
-dmgMult[DmgType.Beam][5] = 0; // plasma beam
+dmgMult[DmgType.Beam][1] = 1; // power beam
+dmgMult[DmgType.Beam][2] = 1; // ice beam
+dmgMult[DmgType.Beam][3] = 1; // wave beam
+dmgMult[DmgType.Beam][4] = 1; // spazer
+dmgMult[DmgType.Beam][5] = 1; // plasma beam
 
 // charge shot / psuedo screw attack
 dmgMult[DmgType.Charge][0] = 1; // all
-dmgMult[DmgType.Charge][1] = 0; // power beam
-dmgMult[DmgType.Charge][2] = 0; // ice beam
-dmgMult[DmgType.Charge][3] = 0; // wave beam
-dmgMult[DmgType.Charge][4] = 0; // spazer
-dmgMult[DmgType.Charge][5] = 0; // plasma beam
+dmgMult[DmgType.Charge][1] = 1; // power beam
+dmgMult[DmgType.Charge][2] = 1; // ice beam
+dmgMult[DmgType.Charge][3] = 1; // wave beam
+dmgMult[DmgType.Charge][4] = 1; // spazer
+dmgMult[DmgType.Charge][5] = 1; // plasma beam
 
 // explosives
 dmgMult[DmgType.Explosive][0] = 1; // all
-dmgMult[DmgType.Explosive][1] = 0; // missile
-dmgMult[DmgType.Explosive][2] = 0; // super missile
-dmgMult[DmgType.Explosive][3] = 0; // bomb
-dmgMult[DmgType.Explosive][4] = 0; // power bomb
-dmgMult[DmgType.Explosive][5] = 0; // unused
+dmgMult[DmgType.Explosive][1] = 1; // missile
+dmgMult[DmgType.Explosive][2] = 1; // super missile
+dmgMult[DmgType.Explosive][3] = 1; // bomb
+dmgMult[DmgType.Explosive][4] = 1; // power bomb
+dmgMult[DmgType.Explosive][5] = 1; // splash damage
 
 // misc
 dmgMult[DmgType.Misc][0] = 1; // all
-dmgMult[DmgType.Misc][1] = -1; // grapple beam
-dmgMult[DmgType.Misc][2] = 0; // speed booster / shine spark
-dmgMult[DmgType.Misc][3] = 0; // screw attack
-dmgMult[DmgType.Misc][4] = 0; // hyper beam
+dmgMult[DmgType.Misc][1] = 0; // grapple beam
+dmgMult[DmgType.Misc][2] = 1; // speed booster / shine spark
+dmgMult[DmgType.Misc][3] = 1; // screw attack
+dmgMult[DmgType.Misc][4] = 1; // hyper beam
 dmgMult[DmgType.Misc][5] = 0; // unused
 
+dmgAbsorb = false;
+
+realLife = noone;
 
 freezeImmune = false;
 frozenImmuneTime = 0;
@@ -104,7 +112,69 @@ function PauseAI()
 
 lhc_activate();
 
-function OnDamageTaken(damage)
+function DmgCollide(posX,posY,object,isProjectile)
+{
+	var npc = id;
+	with(object)
+	{
+		return place_meeting(posX,posY,npc);
+	}
+	return false;
+}
+function StrikeNPC(damage, lifeEnd = 0, dethType = -1)
+{
+	if(instance_exists(realLife))
+	{
+		realLife.life = max(realLife.life - damage, lifeEnd);
+		life = realLife.life;
+		lifeMax = realLife.lifeMax;
+		
+		realLife.dmgFlash = 8;
+		realLife.justHit = true;
+		
+		if(realLife.life <= 0)
+		{
+		    if(dethType >= 0)
+		    {
+		        realLife.deathType = dethType;
+		    }
+		    realLife.dead = true;
+		}
+		dead = realLife.dead;
+	}
+	else
+	{
+		life = max(life - damage, lifeEnd);
+		
+		if(life <= 0)
+		{
+		    if(dethType >= 0)
+		    {
+		        deathType = dethType;
+		    }
+		    dead = true;
+		}
+	}
+	
+	dmgFlash = 8;
+	justHit = true;
+
+	if(hurtSound != noone)
+	{
+		audio_stop_sound(hurtSound);
+		audio_play_sound(hurtSound,0,false);
+	}
+}
+
+function ModifyDamageTaken(damage,object,isProjectile)
+{
+	return damage;
+}
+function OnDamageTaken(damage, object, isProjectile)
+{
+	
+}
+function OnDamageAbsorbed(damage, object, isProjectile)
 {
 	
 }

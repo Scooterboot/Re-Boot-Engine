@@ -1,18 +1,24 @@
 /// @description Initialize
 
-for(var i = 0; i < 4; i++)
+/*for(var i = 0; i < 4; i++)
 {
 	var lay = layer_get_id("Tiles_fade"+string(i));
 	if(layer_exists(lay))
 	{
 		layer_set_visible(lay,false);
 	}
+}*/
+tileLayers = scr_GetLayersFromString("Tiles_fade");
+for(var i = 0; i < array_length(tileLayers); i++)
+{
+	layer_set_visible(tileLayers[i],false);
 }
 
 var appWidth = surface_get_width(application_surface),
 	appHeight = surface_get_height(application_surface);
 FadeTileSurface = surface_create(appWidth,appHeight);
 FadeTileSurfaceTemp = surface_create(appWidth,appHeight);
+FadeTileSurfaceTemp2 = surface_create(appWidth,appHeight);
 AlphaMask = surface_create(appWidth,appHeight);
 
 
@@ -25,12 +31,20 @@ function redraw_fade_layer()
 	surface_set_target(FadeTileSurface);
 	draw_clear_alpha(0,0);
 	
-	for(var i = 3; i >= 0; i--)
+	/*for(var i = 3; i >= 0; i--)
 	{
 		var lay = layer_get_id("Tiles_fade"+string(i));
 		if(layer_exists(lay))
 		{
 			var TilesFade = layer_tilemap_get_id(lay);
+			draw_tilemap(TilesFade,-camx,-camy);
+		}
+	}*/
+	for(var i = array_length(tileLayers)-1; i >= 0; i--)
+	{
+		var TilesFade = layer_tilemap_get_id(tileLayers[i]);
+		if(layer_tilemap_exists(tileLayers[i],TilesFade))
+		{
 			draw_tilemap(TilesFade,-camx,-camy);
 		}
 	}

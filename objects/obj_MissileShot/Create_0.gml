@@ -6,7 +6,7 @@ impactSnd = -1;
 //isMissile = true;
 type = ProjType.Missile;
 
-damageType = 2;
+damageType = DmgType.Explosive;
 damageSubType[1] = true;
 
 blockDestroyType = -1;//2;

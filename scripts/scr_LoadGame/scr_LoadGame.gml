@@ -90,8 +90,11 @@ function scr_LoadGame() {
 			}
 	
 			var _map_map = _list[| 1];
+			var dsWidth = ds_grid_width(global.mapReveal_Debug),
+				dsHeight = ds_grid_height(global.mapReveal_Debug);
 			ds_grid_clear(global.mapReveal_Debug,false);
 			ds_grid_read(global.mapReveal_Debug, _map_map[? "mapReveal_Debug"]);
+			ds_grid_resize(global.mapReveal_Debug,dsWidth,dsHeight);
 	
 			var _worldFlags_map = _list[| 2];
 			global.currentPlayTime = _worldFlags_map[? "currentPlayTime"];
@@ -99,6 +102,8 @@ function scr_LoadGame() {
 			ds_list_read(global.openHatchList, _worldFlags_map[? "openHatchList"]);
 			ds_list_clear(global.collectedItemList);
 			ds_list_read(global.collectedItemList, _worldFlags_map[? "collectedItemList"]);
+			ds_list_clear(global.npcKillList);
+			ds_list_read(global.npcKillList, _worldFlags_map[? "npcKillList"]);
 	
 	
 			ds_map_destroy(_wrapper);
@@ -114,7 +119,7 @@ function scr_LoadGame() {
 		}
 		/*finally
 		{
-			room_goto(rm_debug01);
+			room_goto(rm_debug01_Start);
 			var sx = 80,
 				sy = 694;
 			instance_create_layer(sx,sy,"Player",obj_Player);
@@ -123,7 +128,7 @@ function scr_LoadGame() {
 	}
 	else
 	{
-		room_goto(rm_debug01);
+		room_goto(rm_debug01_Start);
 		var sx = 80,
 			sy = 694;
 		//instance_create_layer(sx,sy,"Player",obj_Player);

@@ -9,4 +9,4 @@ velX = mSpeed*dir;
 
 fVelX = velX;
 fVelY = velY;
-Collision_Normal(fVelX,fVelY,16,16,false,false);
+Collision_Normal(fVelX,fVelY,16,16,false);

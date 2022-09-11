@@ -43,8 +43,6 @@ function scr_MainInitialize()
 	global.wideResWidth = 426;//400;
 	global.ogResWidth = 320;//256;
 
-	pal_swap_init_system(shd_pal_swapper); //initialize palette swapper system (Created by PixelatedPope)
-
 	global.roomTrans = false;	//variable that checks whether the player is transitioning from room to room
 	global.gamePaused = false;	//variable that checks if the game is paused
 
@@ -90,6 +88,7 @@ function scr_MainInitialize()
 	instance_create_depth(0,0,0,obj_Progression);
 	
 	instance_create_depth(0,0,0,obj_TileFadeHandler);
+	instance_create_depth(0,0,0,obj_ScreenShaker);
 
 	room_goto(rm_MainMenu); //go to the main menu
 	instance_create_depth(0,0,0,obj_MainMenu);
@@ -105,9 +104,13 @@ function scr_MainInitialize()
 	lhc_create_interface("IScrewBlock");
 
 	lhc_assign_interface("ISolid", obj_Tile);
-	lhc_assign_interface("IPlatform", obj_Platform);
+	lhc_assign_interface("IPlatform", obj_Platform);//, obj_NPC_MovingPlatform);
 	lhc_assign_interface("IGrapplePoint", obj_GrappleBlock, obj_GrappleBlockCracked);
 	lhc_assign_interface("IBreakable", obj_Breakable);
 	lhc_assign_interface("ISpeedBlock", obj_ShotBlock, obj_BombBlock, obj_SpeedBlock);
 	lhc_assign_interface("IScrewBlock", obj_ShotBlock, obj_BombBlock, obj_ScrewBlock);
+	
+	pal_swap_init_system(shd_pal_swapper); //initialize palette swapper system (Created by PixelatedPope)
+	
+	chameleon_init();
 }

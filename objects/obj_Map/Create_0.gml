@@ -10,6 +10,9 @@ global.rmMapSprt = noone;
 global.rmMapX = 0;
 global.rmMapY = 0;
 
+global.rmMapPixX = 0;
+global.rmMapPixY = 0;
+
 #region CreateMapRevealGrid()
 function CreateMapRevealGrid(mapSprt)
 {
@@ -37,6 +40,7 @@ function GetMapGrid(mapSprt)
 }
 #endregion
 prevGrid = GetMapGrid(noone);
+
 #region DrawMap()
 function DrawMap(mapSprt,posX,posY,mapX,mapY,mapWidth,mapHeight)
 {

@@ -6,3 +6,8 @@ frame = 0;
 
 hatchID = -1;
 hatchID_Global = -1;
+
+function UnlockCondition()
+{
+	return false;
+}

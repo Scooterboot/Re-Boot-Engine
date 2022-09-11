@@ -4,7 +4,7 @@ function scr_DrawMiniMap() {
 		vY = camera_get_view_y(view_camera[0]),
 		vW = global.resWidth;
 
-	var col = c_black, alpha = 0.4;
+	var col = c_black, alpha = 0.25;//0.4;
 
 	var mapX = floor(vX+vW-42),
 	    mapY = floor(vY+2);
@@ -20,7 +20,7 @@ function scr_DrawMiniMap() {
 	draw_set_color(c_white);
 	draw_set_alpha(1);
     
-	draw_sprite_ext(sprt_HMapBase,0,mapX,mapY,1,1,0,c_white,1);
+	draw_sprite_ext(sprt_HMapBase,0,mapX,mapY,1,1,0,c_white,0.5);
 	if(global.rmMapSprt != noone)
 	{
 		//if(!instance_exists(obj_Transition) || obj_Transition.transitionComplete)

@@ -17,11 +17,22 @@ hitPoints = 1;
 
 hitAnim = 0;
 
+immune = false;
 function Damage(_dmg)
 {
-	hitPoints -= _dmg;
-	if(hitPoints > 0)
+	if(!immune)
 	{
-		hitAnim = 8;
+		hitPoints -= _dmg;
+		if(hitPoints > 0)
+		{
+			hitAnim = 8;
+		}
 	}
+}
+
+unlocked = true;
+unlockAnim = 0;
+function UnlockCondition()
+{
+	return true;
 }

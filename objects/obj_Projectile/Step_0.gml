@@ -296,7 +296,7 @@ if(tileCollide && impacted == 0)
 		speed_y = 0;
 		fVelX = 0;
 		fVelY = 0;
-		if(audio_is_playing(impactSnd))
+		/*if(audio_is_playing(impactSnd))
 		{
 			audio_stop_sound(impactSnd);
 		}
@@ -312,7 +312,7 @@ if(tileCollide && impacted == 0)
 			{
 				part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.impact[particleType],1);
 			}
-		}
+		}*/
 		impacted = 1;
 	}
 		
@@ -414,7 +414,7 @@ if(aiStyle == 1 || aiStyle == 2)
 
 #region Damage to enemies & tiles
 
-var deathType = -1,
+var deathType = npcDeathType,
     immuneTime = 10;//4;
 
 if(impacted > 0)
@@ -493,7 +493,7 @@ if(damage > 0)
 		}
 		if(instance_exists(player))
         {
-            if (player.immuneTime <= 0 && !player.isScrewAttacking && !player.isSpeedBoosting)
+            if (player.immuneTime <= 0 && !player.immune)
             {
                 //var ang = point_direction(x,y,obj_Player.x,obj_Player.y);
                 var ang = 45;
@@ -533,6 +533,27 @@ for(var i = 0; i < array_length(npcImmuneTime); i++)
 }
 #endregion
 
+if(impacted == 1)
+{
+	if(audio_is_playing(impactSnd))
+	{
+		audio_stop_sound(impactSnd);
+	}
+	audio_play_sound(impactSnd,0,false);
+	if(particleType != -1 && particleType <= 4)
+	{
+		part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.bTrails[particleType],7*(1+isCharge));
+		if(isCharge)
+		{
+			part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.cImpact[particleType],1);
+		}
+		else
+		{
+			part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.impact[particleType],1);
+		}
+	}
+}
+
 if(impacted > 0)
 {
 	if(impacted > 1)
@@ -542,7 +563,7 @@ if(impacted > 0)
 	impacted += 1;
 }
 
-if(!scr_WithinCamRange())
+if(!scr_WithinCamRange() && !ignoreCamera)
 {
 	instance_destroy();
 }

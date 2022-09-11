@@ -12,6 +12,7 @@ camSpeedX = 0;
 camSpeedY = 0;
 xDir = 0;
 yDir = 0;
+camKey = false;
 playerX = x + (global.resWidth/2);
 playerY = y + (global.resHeight/2);
 targetX = playerX;

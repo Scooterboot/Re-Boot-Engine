@@ -2,6 +2,7 @@
   "spriteId": null,
   "solid": false,
   "visible": false,
+  "managed": true,
   "spriteMaskId": {
     "name": "mask_Stand",
     "path": "sprites/mask_Stand/mask_Stand.yy",

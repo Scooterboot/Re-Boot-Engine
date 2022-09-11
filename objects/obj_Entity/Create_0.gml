@@ -588,28 +588,8 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		
 		#endregion
 		
-		#region Platform Collision
-		
-		/*if(entity_place_meeting(x,y+max(abs(fVY),1)*sign(fVY),"IPlatform") && !entity_place_meeting(x,y,"IPlatform") && fVY >= 0 && platformCol)
-		{
-			if(fVY > 0)
-			{
-				y = scr_floor(y);
-			}
-			var yspeed = abs(fVY)+2;
-			while(!entity_place_meeting(x,y+sign(fVY),"IPlatform") && yspeed > 0)
-			{
-				y += sign(fVY);
-				yspeed--;
-			}
-			OnPlatformCollision(fVY);
-			fVY = 0;
-			maxSpeedY = 0;
-		}*/
-		
-		#endregion
-		
 		y += fVY;
+		
 		
 		maxSpeedX = max(maxSpeedX-vStepX,0);
 		maxSpeedY = max(maxSpeedY-vStepY,0);

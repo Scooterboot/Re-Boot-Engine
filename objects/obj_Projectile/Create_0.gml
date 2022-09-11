@@ -10,6 +10,8 @@ hostile = false;
 tileCollide = true;
 multiHit = false;
 
+isCharge = false;
+
 damage = 0;
 damageType = 0;
 damageSubType[0] = true;
@@ -21,11 +23,14 @@ damageSubType[5] = false;
 
 freezeType = 0;
 
-knockBack = 5;
-knockBackSpeed = 7;
+knockBack = 10;//5;
+knockBackSpeed = 3.5;//7;
 damageImmuneTime = 96;
 
+ignoreCamera = false;
+
 npcImmuneTime[instance_number(obj_NPC)] = 0;
+npcDeathType = -1;
 
 creator = noone;
 

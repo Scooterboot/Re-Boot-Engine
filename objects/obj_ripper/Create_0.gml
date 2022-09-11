@@ -5,11 +5,12 @@ life = 10;
 lifeMax = 10;
 damage = 5;
 
-dmgMult[DmgType.Beam][0] = 0;
-dmgMult[DmgType.Charge][0] = 0;
-dmgMult[DmgType.Explosive][0] = 0;
-dmgMult[DmgType.Explosive][2] = 1;
-dmgMult[DmgType.Explosive][4] = 1;
+dmgMult[DmgType.Beam][0] = 0; // all
+dmgMult[DmgType.Charge][0] = 0; // all
+dmgMult[DmgType.Explosive][1] = 0; // missile
+dmgMult[DmgType.Explosive][2] = 1; // super missile
+dmgMult[DmgType.Explosive][3] = 0; // bomb
+dmgMult[DmgType.Explosive][4] = 1; // power bomb
 
 mSpeed2 = 1;
 mSpeed = mSpeed2;

@@ -1,6 +1,6 @@
 /// @description Reveal logic
 
-if(!visible && !revealTile)
+if(!visible && !revealTile && object_index != obj_Spikes && object_index != obj_NPCBlock)
 {
     if(place_meeting(x,y,obj_MBBombExplosion) || place_meeting(x,y,obj_PowerBombExplosion) || place_meeting(x,y,obj_MissileExplosion) || place_meeting(x,y,obj_SuperMissileExplosion))
     {
@@ -21,23 +21,7 @@ if(revealTile)
 {
     if(!visible)
     {
-        for(var i = 0; i < 4; i++)
-		{
-			var lay = layer_get_id("Tiles_fg"+string(i));
-			if(layer_exists(lay))
-			{
-				var map_id = layer_tilemap_get_id(lay);
-				if(layer_tilemap_exists(lay,map_id))
-				{
-					var data = tilemap_get_at_pixel(map_id,x,y) & tile_index_mask;
-					if(!tile_get_empty(data))
-					{
-						data = tile_set_empty(data);
-						tilemap_set_at_pixel(map_id,data,x,y);
-					}
-				}
-			}
-		}
+        RevealTile();
         visible = true;
     }
     //revealTile = false;

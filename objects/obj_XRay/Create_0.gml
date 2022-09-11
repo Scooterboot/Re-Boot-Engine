@@ -16,18 +16,23 @@ DarkAlpha = 0;
 
 RefreshThisFrame = 0;
 
-for(var i = 0; i < 4; i++)
+//for(var i = 0; i < 4; i++)
+//{
+//	var lay = layer_get_id("Tiles_fg"+string(i));
+//	if(layer_exists(lay))
+//	{
+//		layer_set_visible(lay,false);
+//	}
+//	/*lay = layer_get_id("Tiles_bg"+string(i));
+//	if(layer_exists(lay))
+//	{
+//		layer_set_visible(lay,false);
+//	}*/
+//}
+tileLayers = scr_GetLayersFromString("Tiles_fg");
+for(var i = 0; i < array_length(tileLayers); i++)
 {
-	var lay = layer_get_id("Tiles_fg"+string(i));
-	if(layer_exists(lay))
-	{
-		layer_set_visible(lay,false);
-	}
-	/*lay = layer_get_id("Tiles_bg"+string(i));
-	if(layer_exists(lay))
-	{
-		layer_set_visible(lay,false);
-	}*/
+	layer_set_visible(tileLayers[i],false);
 }
 
 xRaySoundPlayed = false;
@@ -43,6 +48,8 @@ AlphaMask = surface_create(Width,Height);
 AlphaMaskTemp = surface_create(Width,Height);
 BreakMask = surface_create(Width,Height);
 BreakMaskTemp = surface_create(Width,Height);
+
+FinalSurface = surface_create(Width,Height);
 
 #region xray_refresh()
 function xray_refresh()
@@ -60,12 +67,23 @@ function xray_redraw_front()
 	surface_set_target(SurfaceFront);
 	draw_clear_alpha(0,0);
 
-	for(var i = 3; i >= 0; i--)
+	/*for(var i = 3; i >= 0; i--)
 	{
 		var lay = layer_get_id("Tiles_fg"+string(i));
 		if(layer_exists(lay))
 		{
 			var TilesFront = layer_tilemap_get_id(lay);
+			if(layer_tilemap_exists(lay,TilesFront))
+			{
+				draw_tilemap(TilesFront,-camera_get_view_x(view_camera[0]),-camera_get_view_y(view_camera[0]));
+			}
+		}
+	}*/
+	for(var i = array_length(tileLayers)-1; i >= 0; i--)
+	{
+		var TilesFront = layer_tilemap_get_id(tileLayers[i]);
+		if(layer_tilemap_exists(tileLayers[i],TilesFront))
+		{
 			draw_tilemap(TilesFront,-camera_get_view_x(view_camera[0]),-camera_get_view_y(view_camera[0]));
 		}
 	}
@@ -79,7 +97,7 @@ function xray_redraw_back()
 	surface_set_target(SurfaceBack);
 	draw_clear_alpha(0,0);
 
-	for(var i = 3; i >= 0; i--)
+	/*for(var i = 3; i >= 0; i--)
 	{
 		var lay = layer_get_id("Tiles_bg"+string(i));
 		if(layer_exists(lay))
@@ -87,7 +105,7 @@ function xray_redraw_back()
 			var TilesFront = layer_tilemap_get_id(lay);
 			draw_tilemap(TilesFront,-camera_get_view_x(view_camera[0]),-camera_get_view_y(view_camera[0]));
 		}
-	}
+	}*/
 
 	surface_reset_target();
 }
@@ -101,11 +119,20 @@ function xray_redraw_alpha()
 	surface_set_target(AlphaMask);
 	draw_clear_alpha(c_black,0);
 
+	//gpu_set_blendenable(false);
+	//gpu_set_colorwriteenable(0,0,0,1);
+	
 	with (obj_Tile)
 	{
-		if(!object_is_ancestor(object_index,obj_Breakable) && !object_is_ancestor(object_index,obj_DoorHatch))
+		if((!object_is_ancestor(object_index,obj_Breakable) && !object_is_ancestor(object_index,obj_DoorHatch)) ||
+			object_index == obj_NPCBlock || object_index == obj_Spikes)
 		{
-			draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
+			var alpha = 1;
+			/*if(object_index == obj_Spikes)
+			{
+				alpha = 0.5;
+			}*/
+			draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,alpha);
 		}
 	}
 	with (obj_DoorHatch)
@@ -116,6 +143,9 @@ function xray_redraw_alpha()
 	{
 	    draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
 	}
+	
+	//gpu_set_colorwriteenable(1,1,1,1);
+	//gpu_set_blendenable(true);
 
 	surface_reset_target();
 }
@@ -128,7 +158,11 @@ function xray_redraw_break()
 
 	with (obj_Breakable)
 	{
-	    draw_sprite_ext(sprite_index,1,x-camera_get_view_x(view_camera[0]),y-camera_get_view_y(view_camera[0]),1,1,0,c_white,1);
+		if(object_index != obj_Spikes && object_index != obj_NPCBlock)
+		{
+			//draw_sprite_ext(sprite_index,1,x-camera_get_view_x(view_camera[0]),y-camera_get_view_y(view_camera[0]),1,1,0,c_white,1);
+			DrawBreakable(x-camera_get_view_x(view_camera[0]),y-camera_get_view_y(view_camera[0]),image_index);
+		}
 	}
 	with (obj_Pickup)
 	{

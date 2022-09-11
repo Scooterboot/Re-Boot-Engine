@@ -16,5 +16,5 @@ isBomb = true;
 
 forceJump = false;
 
-damageType = 2;
+damageType = DmgType.Explosive;
 damageSubType[3] = true;

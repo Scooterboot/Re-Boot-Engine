@@ -71,6 +71,11 @@ if !(surface_exists(BreakMaskTemp))
     BreakMaskTemp = surface_create(Width,Height);
 }
 
+if !(surface_exists(FinalSurface))
+{
+	FinalSurface = surface_create(Width,Height);
+}
+
 // -- AlphaMask Figureout
 
 surface_set_target(AlphaMaskTemp);
@@ -131,6 +136,22 @@ surface_reset_target();
 
 draw_surface(SurfaceFrontTemp,camx,camy);
 draw_surface(BreakMaskTemp,camx,camy);
+/*surface_set_target(FinalSurface);
+draw_clear_alpha(c_black,0);
+
+gpu_set_blendmode(bm_add);
+draw_surface(SurfaceFrontTemp,0,0);
+draw_surface(BreakMaskTemp,0,0);
+gpu_set_blendmode(bm_normal);
+
+gpu_set_colorwriteenable(1,1,1,0);
+draw_surface(SurfaceFrontTemp,0,0);
+draw_surface(BreakMaskTemp,0,0);
+gpu_set_colorwriteenable(1,1,1,1);
+
+surface_reset_target();
+
+draw_surface(FinalSurface,camx,camy);*/
 
 // -- Draw Dark Cover
 

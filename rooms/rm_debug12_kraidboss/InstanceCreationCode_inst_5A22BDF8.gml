@@ -1,0 +1,1 @@
+UnlockCondition = Condition_KraidDefeated;

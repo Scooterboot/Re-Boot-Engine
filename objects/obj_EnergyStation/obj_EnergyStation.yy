@@ -5,6 +5,7 @@
   },
   "solid": false,
   "visible": true,
+  "managed": true,
   "spriteMaskId": {
     "name": "mask_RechargeStation",
     "path": "sprites/mask_RechargeStation/mask_RechargeStation.yy",

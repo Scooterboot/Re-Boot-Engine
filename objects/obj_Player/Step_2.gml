@@ -1481,7 +1481,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 				{
 					torsoR = sprt_GripRight;
 					torsoL = sprt_GripLeft;
-					if(gripGunReady)
+					/*if(gripGunReady)
 					{
 						if(gripAimFrame > gripAimTarget)
 						{
@@ -1516,6 +1516,53 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 					armDir = -fDir;
 					drawMissileArm = true;
 					bodyFrame = scr_round(gripFrame) + (4 * scr_round(gripAimFrame));
+					if(recoilCounter > 0 && gripAimFrame == (scr_round(gripAimFrame/2)*2) && gripFrame >= 3)
+					{
+						torsoR = sprt_GripFireRight;
+						torsoL = sprt_GripFireLeft;
+						bodyFrame = scr_round(gripAimFrame/2);
+					}*/
+					var gSpeed = 1/(1+liquidMovement);
+					if(recoilCounter > 0)
+					{
+						gripAimFrame = clamp(gripAimFrame, gripAimTarget-3,gripAimTarget+3);
+						gripGunReady = true;
+						gSpeed *= 2;
+					}
+					if(gripGunReady)
+					{
+						gripFrame = min(gripFrame + gSpeed, 3);
+						
+						if(gripAimFrame > gripAimTarget)
+						{
+							gripAimFrame = max(gripAimFrame - aimSpeed, gripAimTarget);
+						}
+						else
+						{
+							gripAimFrame = min(gripAimFrame + aimSpeed, gripAimTarget);
+						}
+					}
+					else
+					{
+						gripAimFrame = 0;
+						gripFrame = max(gripFrame - gSpeed, 0);
+					}
+					SetArmPosGrip();
+					if(gripFrame <= 2)
+					{
+						finalArmFrame = 2-(gripFrame > 0);
+					}
+					else
+					{
+						armDir = -fDir;
+						finalArmFrame = gripAimFrame;
+					}
+					drawMissileArm = true;
+					bodyFrame = scr_round(gripFrame);
+					if(gripFrame >= 3)
+					{
+						bodyFrame += scr_round(gripAimFrame);
+					}
 					if(recoilCounter > 0 && gripAimFrame == (scr_round(gripAimFrame/2)*2) && gripFrame >= 3)
 					{
 						torsoR = sprt_GripFireRight;
@@ -2185,6 +2232,16 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 			walkToStandFrame = max(walkToStandFrame - (1/(1+(walkToStandFrame < 2)))/animDiv, 0);
 		}
 	}
+	else if(stateFrame != State.Run && stateFrame != State.Walk)
+	{
+		runToStandFrame[0] = 2;
+		if(stateFrame == State.Crouch)
+		{
+			runToStandFrame[0] = 0;
+		}
+		runToStandFrame[1] = 0;
+		walkToStandFrame = 0;
+	}
 	
 	if(stateFrame != State.Brake)
 	{
@@ -2229,6 +2286,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 
 	if(!global.roomTrans)
 	{
+		var noBeamsActive = (beam[Beam.Ice]+beam[Beam.Wave]+beam[Beam.Spazer]+beam[Beam.Plasma] <= 0);
+		
 		var canShoot = (!startClimb && !brake && state != State.Somersault && state != State.Spark && state != State.BallSpark && 
 						state != State.Hurt && (stateFrame != State.DmgBoost || dBoostFrame >= 19) && state != State.Dodge && state != State.Death);
 		
@@ -2252,7 +2311,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 			if(itemHighlighted[1] == 0 && missileStat > 0 && item[Item.Missile])
 			{
 				shotIndex = obj_MissileShot;
-				damage = 50 / 2;
+				damage = 100;
 				delay = 9;
 				amount = 1;
 				sound = snd_Missile_Shot;
@@ -2261,7 +2320,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 			if(itemHighlighted[1] == 1 && superMissileStat > 0 && item[Item.SMissile])
 			{
 				shotIndex = obj_SuperMissileShot;
-				damage = 250 / 2;
+				damage = 300;
 				sSpeed = shootSpeed/3;
 				delay = 19;
 				amount = 1;
@@ -2465,6 +2524,23 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 					{
 						if(statCharge >= maxCharge)
 						{
+							var flareDir = shootDir;
+							if(dir == -1)
+							{
+								flareDir = angle_difference(shootDir,180);
+							}
+							var flare = instance_create_layer(shootPosX,shootPosY,layer_get_id("Projectiles_fg"),obj_ChargeFlare);
+							flare.damage = (damage*chargeMult*beamChargeAmt);// / 2;
+							flare.sprite_index = beamFlare;
+							flare.damageSubType[2] = (beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1));
+							flare.damageSubType[3] = (beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2));
+							flare.damageSubType[4] = (beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3));
+							flare.damageSubType[5] = (beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4));
+							flare.direction = flareDir;
+							flare.image_angle = flareDir;
+							flare.image_xscale = dir;
+							flare.creator = object_index;
+							
 							chargeReleaseFlash = 4;
 							Shoot(beamCharge,damage*chargeMult,sSpeed,beamChargeDelay,beamChargeAmt,beamChargeSound,beamIsWave,beamWaveStyleOffset);
 							recoil = true;
@@ -2571,12 +2647,12 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 			dmgST[2] = isSpeedBoosting;
 			dmgST[3] = isScrewAttacking;
 			dmgST[4] = false;
-		    scr_DamageNPC(x,y,2000,3,dmgST,0,3,0);
+			dmgST[5] = false;
+		    scr_DamageNPC(x,y,2000,DmgType.Misc,dmgST,0,3,0);
 		}
 		else if(isChargeSomersaulting)
 		{
 		    var psDmg = beamDmg*chargeMult;
-			var noBeamsActive = (beam[Beam.Ice]+beam[Beam.Wave]+beam[Beam.Spazer]+beam[Beam.Plasma] <= 0);
 		    if(beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3))
 		    {
 		        psDmg *= 2;
@@ -2588,7 +2664,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 			dmgST[3] = (beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2));
 			dmgST[4] = (beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3));
 			dmgST[5] = (beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4));
-		    scr_DamageNPC(x,y,psDmg,1,dmgST,0,3,0);
+		    scr_DamageNPC(x,y,psDmg,DmgType.Charge,dmgST,0,3,0);
 		}
 	
 		if(aimAngle != 0 || velX == 0 || notGrounded || abs(dirFrame) < 4 || state == State.Morph)
@@ -2632,10 +2708,25 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 	
 		// ----- Environmental Damage -----
 		#region Environmental Damage
+		
+		var palFlag = false;
+		
 		if(global.rmHeated && !suit[Suit.Varia])
 		{
 			//scr_ConstantDamageSamus(1, 4 + (2 * suit[Suit.Gravity]));
 			ConstantDamage(1, 4 + (2 * suit[Suit.Gravity]));
+			
+			if(!audio_is_playing(snd_HeatDamageLoop))
+	        {
+	            var snd = audio_play_sound(snd_HeatDamageLoop,0,true);
+	            audio_sound_gain(snd,0.7*global.soundVolume,0);
+	        }
+			
+			palFlag = true;
+		}
+		else
+		{
+			audio_stop_sound(snd_HeatDamageLoop);
 		}
 		
 		if(instance_exists(obj_Lava) && bbox_bottom > obj_Lava.y && !suit[Suit.Gravity])
@@ -2647,35 +2738,23 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 	            var snd = audio_play_sound(snd_LavaDamageLoop,0,true);
 	            audio_sound_gain(snd,0.8*global.soundVolume,0);
 	        }
-	        if(!audio_is_playing(snd_HeatDamageLoop))
-	        {
-	            var snd = audio_play_sound(snd_HeatDamageLoop,0,true);
-	            audio_sound_gain(snd,0.7*global.soundVolume,0);
-	        }
         
-	        heatDmgPalCounter += 1;
+	        palFlag = true;
 	    }
 	    else
 	    {
 	        audio_stop_sound(snd_LavaDamageLoop);
-
-	        if(global.rmHeated && !suit[Suit.Varia])
-	        {
-	            if(!audio_is_playing(snd_HeatDamageLoop))
-	            {
-	                var snd = audio_play_sound(snd_HeatDamageLoop,0,true);
-	                audio_sound_gain(snd,0.7*global.soundVolume,0);
-	            }
-            
-	            heatDmgPalCounter += 1;
-	        }
-	        else
-	        {
-	            audio_stop_sound(snd_HeatDamageLoop);
-            
-	            heatDmgPalCounter = 0;
-	        }
 	    }
+		
+		if(palFlag)
+		{
+			heatDmgPalCounter += 1;
+		}
+		else
+		{
+			heatDmgPalCounter = 0;
+		}
+		
 		#endregion
 	}
 	else

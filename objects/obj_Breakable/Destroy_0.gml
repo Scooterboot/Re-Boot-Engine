@@ -1,30 +1,29 @@
 /// @description Create Respawn Object
-if((global.breakSndCounter <= 0) && !audio_is_playing(snd_PowerBombExplode))
-{
-    audio_stop_sound(snd);
-    audio_play_sound(snd,0,false);
-    global.breakSndCounter = 5;
-}
 
-if(!visible)
+if(!hiddenDestroy)
 {
-	for(var i = 0; i < 4; i++)
+	if((global.breakSndCounter <= 0) && !audio_is_playing(snd_PowerBombExplode))
 	{
-		var lay = layer_get_id("Tiles_fg"+string(i));
-		if(layer_exists(lay))
+	    audio_stop_sound(snd);
+	    audio_play_sound(snd,0,false);
+	    global.breakSndCounter = 5;
+	}
+	
+	for(var k = 0; k < image_xscale; k++)
+	{
+		for(var l = 0; l < image_yscale; l++)
 		{
-			var map_id = layer_tilemap_get_id(lay);
-			var data = tilemap_get_at_pixel(map_id,x,y) & tile_index_mask;
-			if(!tile_get_empty(data))
-			{
-				data = tile_set_empty(data);
-				tilemap_set_at_pixel(map_id,data,x,y);
-			}
+			var ix = x+16*k,
+				iy = y+16*l;
+			part_particles_create(obj_Particles.partSystemD,ix,iy,obj_Particles.blockBreak[breakType],1);
 		}
 	}
 }
 
-part_particles_create(obj_Particles.partSystemD,x,y,obj_Particles.blockBreak[breakType],1);
+if(!visible)
+{
+	RevealTile();
+}
 
 if(respawnTime > 0)
 {

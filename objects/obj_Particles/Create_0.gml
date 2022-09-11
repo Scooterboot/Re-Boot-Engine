@@ -17,7 +17,7 @@ part_system_automatic_update(partSystemC,false);
 //Basic dust
 bDust = part_type_create();
 part_type_sprite(bDust,sprt_BasicDust,true,true,false);
-part_type_life(bDust,16,16);
+part_type_life(bDust,8,16);
 part_type_direction(bDust,85,95,0,0);
 part_type_speed(bDust,0.5,0.75,0.025,0);
 
@@ -274,6 +274,10 @@ part_type_sprite(partDeflect,sprt_ParticlePixel,0,1,0);
 part_type_size(partDeflect,.9,1.2,-.039,0);
 part_type_speed(partDeflect,.7,1,-.015,0);
 part_type_scale(partDeflect,1,1);
+
+partAbsorb = part_type_create();
+part_type_sprite(partAbsorb,sprt_ProjAbsorbed,true,true,false);
+part_type_life(partAbsorb,12,12);
 
 //Enemy Freeze
 partFreeze = part_type_create();

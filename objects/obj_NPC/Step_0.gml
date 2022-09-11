@@ -11,8 +11,8 @@ if(frozen > 0 && !dead)
 	if(!instance_exists(freezePlatform))
 	{
 	    freezePlatform = instance_create_layer(bbox_left,bbox_top,layer_get_id("Collision"),obj_Platform);
-	    freezePlatform.image_xscale = (bbox_right-bbox_left)/16;
-	    freezePlatform.image_yscale = (bbox_bottom-bbox_top)/16;
+	    freezePlatform.image_xscale = (bbox_right-bbox_left+1)/16;
+	    freezePlatform.image_yscale = (bbox_bottom-bbox_top+1)/16;
 	}
 }
 else if(instance_exists(freezePlatform))

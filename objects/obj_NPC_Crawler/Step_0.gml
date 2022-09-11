@@ -12,7 +12,7 @@ var xcheck = max(abs(velX),1),
 var collideAny = (lhc_place_collide(xcheck,0) || lhc_place_collide(-xcheck,0) || lhc_place_collide(0,ycheck) || lhc_place_collide(0,-ycheck) ||
 				lhc_place_collide(xcheck,ycheck) || lhc_place_collide(-xcheck,ycheck) || lhc_place_collide(xcheck,-ycheck) || lhc_place_collide(-xcheck,-ycheck));
 
-if(instance_exists(obj_ScreenShaker) && colEdge != Edge.Bottom && !lhc_place_collide(0,ycheck))
+if(instance_exists(obj_ScreenShaker) && obj_ScreenShaker.active && colEdge != Edge.Bottom && !lhc_place_collide(0,ycheck))
 {
 	collideAny = false;
 }

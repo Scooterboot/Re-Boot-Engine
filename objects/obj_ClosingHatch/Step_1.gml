@@ -10,5 +10,6 @@ if(!place_meeting(x,y,obj_Player) && doorRespawnObj != noone)
     htc.frame = frame;
 	htc.hatchID = hatchID;
 	htc.hatchID_Global = hatchID_Global;
+	htc.UnlockCondition = UnlockCondition;
     instance_destroy();
 }

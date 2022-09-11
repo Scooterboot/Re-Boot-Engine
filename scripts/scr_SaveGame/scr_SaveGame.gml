@@ -107,6 +107,7 @@ function scr_SaveGame() {
 	
 	ds_map_add(_worldFlags_map,"openHatchList",ds_list_write(global.openHatchList));
 	ds_map_add(_worldFlags_map,"collectedItemList",ds_list_write(global.collectedItemList));
+	ds_map_add(_worldFlags_map,"npcKillList",ds_list_write(global.npcKillList));
 
 
 	var _wrapper = ds_map_create();

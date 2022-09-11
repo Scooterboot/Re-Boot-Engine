@@ -1,5 +1,23 @@
-/// @description Insert description here
-// You can write your code in this editor
+/// @description Initialize
+event_inherited();
+
+damage = 0;
+damageType = DmgType.Misc;
+damageSubType[0] = true;
+damageSubType[1] = false;
+damageSubType[2] = true;
+damageSubType[3] = false;
+damageSubType[4] = false;
+damageSubType[5] = false;
+
+tileCollide = false;
+multiHit = true;
+
+doorOpenType = -1;
+blockDestroyType = -1;
+
+spark = false;
+
 alpha = 1;
 surfW = 80;
 surfH = 80;

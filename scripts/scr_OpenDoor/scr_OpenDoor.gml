@@ -5,9 +5,10 @@ function scr_OpenDoor(_x,_y,_type)
 	if(place_meeting(_x,_y,obj_DoorHatch) && _type > -1)
 	{
 		var door = instance_place(_x,_y,obj_DoorHatch);
-		if(instance_exists(door) && door.object_index == obj_DoorHatch)
+		if(instance_exists(door) && (door.object_index == obj_DoorHatch || (door.object_index == obj_DoorHatch_Locked && door.unlocked)))
 		{
-			door.hitPoints -= 1;
+			//door.hitPoints -= 1;
+			scr_DamageDoor(_x,_y,obj_DoorHatch,1);
 		}
 		if(_type == 1 || _type == 2 || _type == 4)
 		{

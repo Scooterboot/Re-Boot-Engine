@@ -82,23 +82,41 @@ function scr_DrawHUD() {
 				
 				if(i == 0)
 				{
-					draw_sprite_ext(sprt_HNumFont2,missileStat,floor(vX2+85),floor(vY+7),1,1,0,c_white,1);
+					var col2 = c_white;
+					if(missileStat >= missileMax)
+					{
+						col2 = c_lime;
+					}
+					
+					draw_sprite_ext(sprt_HNumFont2,missileStat,floor(vX2+85),floor(vY+7),1,1,0,col2,1);
 	                var missileNum = floor(missileStat/10);
-	                draw_sprite_ext(sprt_HNumFont2,missileNum,floor(vX2+79),floor(vY+7),1,1,0,c_white,1);
+	                draw_sprite_ext(sprt_HNumFont2,missileNum,floor(vX2+79),floor(vY+7),1,1,0,col2,1);
 	                missileNum = floor(missileStat/100);
-	                draw_sprite_ext(sprt_HNumFont2,missileNum,floor(vX2+73),floor(vY+7),1,1,0,c_white,1);
+	                draw_sprite_ext(sprt_HNumFont2,missileNum,floor(vX2+73),floor(vY+7),1,1,0,col2,1);
 				}
 				if(i == 1)
 				{
-					draw_sprite_ext(sprt_HNumFont2,superMissileStat,floor(vX2+123),floor(vY+7),1,1,0,c_white,1);
+					var col2 = c_white;
+					if(superMissileStat >= superMissileMax)
+					{
+						col2 = c_lime;
+					}
+					
+					draw_sprite_ext(sprt_HNumFont2,superMissileStat,floor(vX2+123),floor(vY+7),1,1,0,col2,1);
 	                var superMissileNum = floor(superMissileStat/10);
-	                draw_sprite_ext(sprt_HNumFont2,superMissileNum,floor(vX2+117),floor(vY+7),1,1,0,c_white,1);
+	                draw_sprite_ext(sprt_HNumFont2,superMissileNum,floor(vX2+117),floor(vY+7),1,1,0,col2,1);
 				}
 				if(i == 2)
 				{
-					draw_sprite_ext(sprt_HNumFont2,powerBombStat,floor(vX2+158),floor(vY+7),1,1,0,c_white,1);
+					var col2 = c_white;
+					if(powerBombStat >= powerBombMax)
+					{
+						col2 = c_lime;
+					}
+					
+					draw_sprite_ext(sprt_HNumFont2,powerBombStat,floor(vX2+158),floor(vY+7),1,1,0,col2,1);
 	                var powerBombNum = floor(powerBombStat/10);
-	                draw_sprite_ext(sprt_HNumFont2,powerBombNum,floor(vX2+152),floor(vY+7),1,1,0,c_white,1);
+	                draw_sprite_ext(sprt_HNumFont2,powerBombNum,floor(vX2+152),floor(vY+7),1,1,0,col2,1);
 				}
 	        }
 	    }

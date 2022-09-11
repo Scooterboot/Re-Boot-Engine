@@ -3,6 +3,7 @@
   "glyphOperations": 0,
   "interpreter": 0,
   "pointRounding": 0,
+  "applyKerning": 0,
   "fontName": "Droid Sans Mono",
   "styleName": "Regular",
   "size": 11.0,
@@ -20,6 +21,7 @@
     "path": "texturegroups/Default",
   },
   "ascenderOffset": 0,
+  "ascender": 0,
   "glyphs": {
     "32": {"x":2,"y":2,"w":9,"h":19,"character":32,"shift":9,"offset":0,},
     "33": {"x":139,"y":44,"w":3,"h":19,"character":33,"shift":9,"offset":3,},
@@ -128,7 +130,7 @@
   "maintainGms1Font": false,
   "parent": {
     "name": "(System - don't call these functions)",
-    "path": "folders/Scribble/(System - don't call these functions).yy",
+    "path": "folders/Extensions/Scribble/(System - don't call these functions).yy",
   },
   "resourceVersion": "1.0",
   "name": "scribble_fallback_font",

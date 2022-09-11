@@ -3,7 +3,8 @@ function scr_DamagePlayer(damage,knockTime,knockSpeedX,knockSpeedY,immune_time)
 {
 	with(obj_Player)
 	{
-	    var dmg = scr_round(damage * (1-(0.5*suit[0])) * (1-(0.5*suit[1]))),
+	    //var dmg = scr_round(damage * (1-(0.5*suit[0])) * (1-(0.5*suit[1]))),
+	    var dmg = scr_round(damage * damageReduct),
 	        hurtT = knockTime,
 	        hurtSX = knockSpeedX,
 	        hurtSY = knockSpeedY,
@@ -16,7 +17,7 @@ function scr_DamagePlayer(damage,knockTime,knockSpeedX,knockSpeedY,immune_time)
 	            energy = max(energy - dmg,0);
 	            state = State.Death;
 	        }
-	        else if(dmg > 0)
+	        else
 	        {
 	            energy = max(energy - dmg,0);
 	            if(hurtT > 0 && dir != 0 && state != State.Hurt && state != State.Grapple)
