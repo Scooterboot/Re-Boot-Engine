@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSound",
+  "resourceVersion": "1.0",
+  "name": "snd_Missile_Shot",
   "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
@@ -11,14 +14,10 @@
     "name": "audio_sound",
     "path": "audiogroups/audio_sound",
   },
-  "soundFile": "snd_Missile_Shot",
-  "duration": 1.009656,
+  "soundFile": "snd_Missile_Shot.wav",
+  "duration": 0.915396,
   "parent": {
     "name": "Explosives",
     "path": "folders/Sounds/Weapons/Explosives.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "snd_Missile_Shot",
-  "tags": [],
-  "resourceType": "GMSound",
 }

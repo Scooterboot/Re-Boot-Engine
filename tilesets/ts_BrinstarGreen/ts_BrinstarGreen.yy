@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMTileSet",
+  "resourceVersion": "1.0",
+  "name": "ts_BrinstarGreen",
   "spriteId": {
     "name": "sprt_ts_BrinstarGreen",
     "path": "sprites/sprt_ts_BrinstarGreen/sprt_ts_BrinstarGreen.yy",
@@ -596,8 +599,4 @@
     "name": "Tile Sets",
     "path": "folders/Tile Sets.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "ts_BrinstarGreen",
-  "tags": [],
-  "resourceType": "GMTileSet",
 }

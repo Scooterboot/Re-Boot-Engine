@@ -23,9 +23,11 @@ damageSubType[5] = false;
 
 freezeType = 0;
 
-knockBack = 10;//5;
-knockBackSpeed = 3.5;//7;
+knockBack = 9;//5;
+knockBackSpeed = 4;//7;
 damageImmuneTime = 96;
+
+dmgDelay = 0;
 
 ignoreCamera = false;
 
@@ -105,11 +107,19 @@ blockDestroyType = 0;
 doorOpenType = 0;
 
 projLength = 0;
-projWidth = abs(bbox_right - bbox_left);
 rotFrame = 0;
 
 //frame = 0;
 //frameCounter = 0;
+
+#endregion
+
+#region Damage
+
+function CanDamageNPC(damage,npc)
+{
+	return true;
+}
 
 #endregion
 

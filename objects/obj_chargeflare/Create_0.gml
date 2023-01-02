@@ -4,6 +4,8 @@ event_inherited();
 damageType = DmgType.Charge;
 freezeType = 0;
 
+dmgDelay = 0;
+
 isCharge = true;
 isWave = true;
 isPlasma = true;

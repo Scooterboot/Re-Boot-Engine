@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_TileFadeBlock",
   "bboxMode": 0,
   "collisionKind": 1,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 16,
   "height": 16,
   "textureGroupId": {
@@ -24,15 +28,13 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"b9c6e95f-700e-47d9-b26f-d23162d84f93","path":"sprites/sprt_TileFadeBlock/sprt_TileFadeBlock.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"b9c6e95f-700e-47d9-b26f-d23162d84f93","path":"sprites/sprt_TileFadeBlock/sprt_TileFadeBlock.yy",},"LayerId":{"name":"17b4a4fe-cad3-4a9f-bb73-95f03a71a4c0","path":"sprites/sprt_TileFadeBlock/sprt_TileFadeBlock.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_TileFadeBlock","path":"sprites/sprt_TileFadeBlock/sprt_TileFadeBlock.yy",},"resourceVersion":"1.0","name":"b9c6e95f-700e-47d9-b26f-d23162d84f93","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"1a655dd3-ffc0-4565-a905-2f414df027e8","path":"sprites/sprt_TileFadeBlock/sprt_TileFadeBlock.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"1a655dd3-ffc0-4565-a905-2f414df027e8","path":"sprites/sprt_TileFadeBlock/sprt_TileFadeBlock.yy",},"LayerId":{"name":"17b4a4fe-cad3-4a9f-bb73-95f03a71a4c0","path":"sprites/sprt_TileFadeBlock/sprt_TileFadeBlock.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_TileFadeBlock","path":"sprites/sprt_TileFadeBlock/sprt_TileFadeBlock.yy",},"resourceVersion":"1.0","name":"1a655dd3-ffc0-4565-a905-2f414df027e8","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"b9c6e95f-700e-47d9-b26f-d23162d84f93",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"1a655dd3-ffc0-4565-a905-2f414df027e8",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_TileFadeBlock","path":"sprites/sprt_TileFadeBlock/sprt_TileFadeBlock.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "sprt_TileFadeBlock",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 0.0,
@@ -43,10 +45,10 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"a74a70e7-4c33-40f0-923f-43b2e7df7c75","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"b9c6e95f-700e-47d9-b26f-d23162d84f93","path":"sprites/sprt_TileFadeBlock/sprt_TileFadeBlock.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"c1c20074-7c43-4d6e-bda9-33dfb1b1e58a","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"1a655dd3-ffc0-4565-a905-2f414df027e8","path":"sprites/sprt_TileFadeBlock/sprt_TileFadeBlock.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -62,14 +64,9 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_TileFadeBlock","path":"sprites/sprt_TileFadeBlock/sprt_TileFadeBlock.yy",},
-    "resourceVersion": "1.4",
-    "name": "sprt_TileFadeBlock",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"17b4a4fe-cad3-4a9f-bb73-95f03a71a4c0","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"17b4a4fe-cad3-4a9f-bb73-95f03a71a4c0","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": {
     "left": 1,
@@ -100,8 +97,4 @@
     "name": "SpecialTiles",
     "path": "folders/Sprites/Room Elements/SpecialTiles.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_TileFadeBlock",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

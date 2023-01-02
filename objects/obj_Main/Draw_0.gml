@@ -1,6 +1,7 @@
-/// @description Draw Debug (when enabled) & black outside room
+/// @description Debug (when enabled) & black outside room
 
 #region Draw black outside room
+
 var camX = camera_get_view_x(view_camera[0]),
 	camY = camera_get_view_y(view_camera[0]),
 	camW = global.resWidth,
@@ -32,6 +33,7 @@ if (camX < 0 || camX+camW > room_width ||
 	
 	draw_set_color(c_white);
 }
+
 #endregion
 
 #region Debug
@@ -50,7 +52,9 @@ if(debug)
         
 		if(mask_index != sprite_index && sprite_exists(mask_index))
 		{
-			draw_sprite_ext(mask_index,0,x,y,image_xscale,image_yscale,direction,c_white,1);
+			gpu_set_fog(true,c_red,0,0);
+			draw_sprite_ext(mask_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,0.75);
+			gpu_set_fog(false,0,0,0);
 		}
 		else
 		{
@@ -108,41 +112,53 @@ if(debug)
 	
 	if(instance_exists(obj_Projectile))
 	{
-		for(var i = 0; i < instance_number(obj_Projectile); i++)
+		with(obj_Projectile)
 		{
-			with(instance_find(obj_Projectile,i))
+			draw_set_color(c_fuchsia);
+			draw_set_alpha(0.75);
+			
+			if(projLength > 0)
 			{
-				if(object_index != obj_PlayerEcho)
+				var numw = max(abs(bbox_right - bbox_left),1),
+			        numd = clamp(point_distance(x,y,xstart,ystart),1,projLength);
+				for(var j = 0; j < numd; j += numw)
 				{
-					draw_set_color(c_fuchsia);
-					draw_set_alpha(0.75);
-					if(projLength > 0)
-				    {
-				        var numw = max(projWidth,1),//sprite_xoffset*2,//abs(bbox_right - bbox_left),
-					        numd = clamp(point_distance(x,y,xstart,ystart),1,projLength);
-						for(var j = -numw; j < numd; j += numw)
-				        {
-				            //if(j > 0)
-				            //{
-				                var xw = x-lengthdir_x(j,direction),
-				                    yw = y-lengthdir_y(j,direction);
-				                var bleft = bbox_left-x+xw,
-									btop = bbox_top-y+yw,
-									bright = bbox_right-x+xw,
-									bbottom = bbox_bottom-y+yw;
-								draw_rectangle(scr_round(bleft),scr_round(btop),scr_round(bright),scr_round(bbottom),0);
-				            //}
-				        }
-				    }
-					draw_rectangle(scr_round(bbox_left),scr_round(bbox_top),scr_round(bbox_right),scr_round(bbox_bottom),0);
+					var xw = x-lengthdir_x(j,direction),
+						yw = y-lengthdir_y(j,direction);
+					
+					if(mask_index != sprite_index && sprite_exists(mask_index))
+					{
+						gpu_set_fog(true,c_fuchsia,0,0);
+						draw_sprite_ext(mask_index,0,xw,yw,image_xscale,image_yscale,image_angle,c_white,0.75);
+						gpu_set_fog(false,0,0,0);
+					}
+					else
+					{
+					    var bleft = bbox_left-x+xw,
+							btop = bbox_top-y+yw,
+							bright = bbox_right-x+xw,
+							bbottom = bbox_bottom-y+yw;
+						draw_rectangle(bleft,btop,bright,bbottom,0);
+					}
 				}
+			}
+			
+			if(mask_index != sprite_index && sprite_exists(mask_index))
+			{
+				gpu_set_fog(true,c_fuchsia,0,0);
+				draw_sprite_ext(mask_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,0.75);
+				gpu_set_fog(false,0,0,0);
+			}
+			else
+			{
+				draw_rectangle(bbox_left,bbox_top,bbox_right,bbox_bottom,0);
 			}
 		}
 	}
 	
     with(obj_Player)
     {
-        draw_set_color(c_red);
+        draw_set_color(c_aqua);
         draw_set_alpha(0.75);
         
         //draw_rectangle(x+6*dir,y+11,x+19*dir,y+24,0);

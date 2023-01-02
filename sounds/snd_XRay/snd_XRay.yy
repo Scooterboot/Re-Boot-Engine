@@ -1,7 +1,10 @@
 {
+  "resourceType": "GMSound",
+  "resourceVersion": "1.0",
+  "name": "snd_XRay",
   "conversionMode": 0,
   "compression": 0,
-  "volume": 0.81,
+  "volume": 1.0,
   "preload": true,
   "bitRate": 128,
   "sampleRate": 44100,
@@ -17,8 +20,4 @@
     "name": "Player",
     "path": "folders/Sounds/Player.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "snd_XRay",
-  "tags": [],
-  "resourceType": "GMSound",
 }

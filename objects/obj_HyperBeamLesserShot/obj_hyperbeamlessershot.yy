@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "obj_HyperBeamLesserShot",
   "spriteId": {
     "name": "sprt_HyperBeamLesserShot",
     "path": "sprites/sprt_HyperBeamLesserShot/sprt_HyperBeamLesserShot.yy",
@@ -6,7 +9,10 @@
   "solid": false,
   "visible": true,
   "managed": true,
-  "spriteMaskId": null,
+  "spriteMaskId": {
+    "name": "mask_BeamShot",
+    "path": "sprites/mask_BeamShot/mask_BeamShot.yy",
+  },
   "persistent": false,
   "parentObjectId": {
     "name": "obj_HyperBeamShot",
@@ -25,8 +31,8 @@
   "physicsKinematic": false,
   "physicsShapePoints": [],
   "eventList": [
-    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-    {"isDnD":false,"eventNum":1,"eventType":3,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,},
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","isDnD":false,"eventNum":1,"eventType":3,"collisionObjectId":null,},
   ],
   "properties": [],
   "overriddenProperties": [],
@@ -34,8 +40,4 @@
     "name": "Beams",
     "path": "folders/Objects/Entities/Projectiles/Beams.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "obj_HyperBeamLesserShot",
-  "tags": [],
-  "resourceType": "GMObject",
 }

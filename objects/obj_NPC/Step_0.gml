@@ -13,6 +13,7 @@ if(frozen > 0 && !dead)
 	    freezePlatform = instance_create_layer(bbox_left,bbox_top,layer_get_id("Collision"),obj_Platform);
 	    freezePlatform.image_xscale = (bbox_right-bbox_left+1)/16;
 	    freezePlatform.image_yscale = (bbox_bottom-bbox_top+1)/16;
+		freezePlatform.XRayHide = true;
 	}
 }
 else if(instance_exists(freezePlatform))
@@ -31,7 +32,7 @@ if(!friendly && damage > 0 && !frozen && !dead)
     var player = instance_place(x,y,obj_Player);
     if(instance_exists(player))
     {
-        if (player.immuneTime <= 0 && !player.immune)//!player.isChargeSomersaulting && !player.isScrewAttacking && !player.isSpeedBoosting)
+        if (player.immuneTime <= 0 && (!player.immune || ignorePlayerImmunity))//!player.isChargeSomersaulting && !player.isScrewAttacking && !player.isSpeedBoosting)
         {
             //var ang = point_direction(x,y,obj_Samus.x,obj_Samus.y);
             var ang = 45;

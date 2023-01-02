@@ -4,6 +4,7 @@ event_inherited();
 platform = instance_create_layer(bbox_left,bbox_top,layer_get_id("Collision"),obj_Platform);
 platform.image_xscale = (bbox_right-bbox_left+1)/16;
 platform.image_yscale = (bbox_bottom-bbox_top+1)/16;
+platform.XRayHide = true;
 oldPlatX = platform.x;
 oldPlatY = platform.y;
 

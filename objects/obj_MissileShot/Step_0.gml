@@ -1,8 +1,11 @@
 /// @description Trail
 event_inherited();
-water_update(0,x-xprevious,y-yprevious);
+
 if(!global.gamePaused)
 {
+	velX = min(abs(velX) * 1.05, abs(lengthdir_x(10,direction)))*sign(velX);
+	velY = min(abs(velY) * 1.05, abs(lengthdir_y(10,direction)))*sign(velY);
+	
     particleDelay = max(particleDelay - 1, 0);
     if(particleDelay <= 0)
     {

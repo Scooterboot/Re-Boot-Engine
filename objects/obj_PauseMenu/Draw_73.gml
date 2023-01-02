@@ -72,6 +72,11 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				{
 					var mx = ww/2 - mapX,
 						my = hh/2 - mapY;
+					
+					var bgx = -8 + scr_wrap(scr_round(mx),0,8),
+						bgy = -8 + scr_wrap(scr_round(my),0,8);
+					draw_sprite_stretched_ext(sprt_HMapBase,0,bgx,bgy,ww+16,hh+16,c_white,0.25);
+					
 					obj_Map.DrawMap(global.rmMapSprt,scr_round(mx),scr_round(my),0,0,sprite_get_width(global.rmMapSprt),sprite_get_height(global.rmMapSprt));
 					
 					//var pX = mx + (scr_floor(P.x/global.rmMapSize) + global.rmMapX) * 8,
@@ -80,23 +85,13 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 						pY = my + obj_Map.playerMapY * 8;
 					
 					pMapIconFrameCounter++;
-					if(pMapIconFrameCounter > 4)
+					if(pMapIconFrameCounter > pMapIconNumSeq[pMapIconFrame])
 					{
-						pMapIconFrame += pMapIconFrameNum;
+						pMapIconFrame = scr_wrap(pMapIconFrame+1,0,array_length(pMapIconSeq));
 						pMapIconFrameCounter = 0;
 					}
-					if(pMapIconFrame < 0)
-					{
-						pMapIconFrame = 0;
-						pMapIconFrameNum = 1;
-					}
-					if(pMapIconFrame >= 2)
-					{
-						pMapIconFrame = 2;
-						pMapIconFrameNum = -1;
-					}
 					
-					draw_sprite_ext(sprt_PlayerMapIcon,pMapIconFrame,scr_round(pX+4),scr_round(pY+4),1,1,0,c_white,0.6);
+					draw_sprite_ext(sprt_PlayerMapIcon,pMapIconSeq[pMapIconFrame],scr_round(pX+4),scr_round(pY+4),1,1,0,c_white,1);
 				}
 			}
 			#endregion

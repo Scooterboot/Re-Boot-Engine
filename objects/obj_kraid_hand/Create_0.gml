@@ -13,9 +13,11 @@ dmgMult[DmgType.Explosive][0] = 0; // all
 dmgMult[DmgType.Misc][2] = 0; // speed booster / shine spark
 dmgMult[DmgType.Misc][3] = 0; // screw attack
 
-dmgAbsorb = true;
+//dmgAbsorb = true;
 
 damage = 20;
+
+ignorePlayerImmunity = true;
 
 /*function OnDamageAbsorbed(damage, object, isProjectile)
 {

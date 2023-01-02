@@ -164,5 +164,9 @@ if(bombTimer <= 0 || impacted > 0)
 			//player.SpiderEnable(false);
 		}
 	}
+	if(spreadType == 2)
+	{
+		audio_stop_sound(snd_Explode);
+	}
 	instance_destroy();
 }

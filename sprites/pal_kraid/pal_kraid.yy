@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "pal_Kraid",
   "bboxMode": 0,
   "collisionKind": 1,
   "type": 0,
@@ -8,13 +11,14 @@
   "collisionTolerance": 0,
   "swfPrecision": 2.525,
   "bbox_left": 0,
-  "bbox_right": 4,
+  "bbox_right": 9,
   "bbox_top": 0,
   "bbox_bottom": 12,
   "HTile": false,
   "VTile": false,
   "For3D": false,
-  "width": 5,
+  "DynamicTexturePage": false,
+  "width": 10,
   "height": 13,
   "textureGroupId": {
     "name": "Default",
@@ -24,12 +28,12 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"b981fcf6-55c4-4510-93d4-b4f96a94bf2d","path":"sprites/pal_Kraid/pal_Kraid.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"b981fcf6-55c4-4510-93d4-b4f96a94bf2d","path":"sprites/pal_Kraid/pal_Kraid.yy",},"LayerId":{"name":"e48bac6d-08dc-4504-a1cf-1d39d101276c","path":"sprites/pal_Kraid/pal_Kraid.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"pal_Kraid","path":"sprites/pal_Kraid/pal_Kraid.yy",},"resourceVersion":"1.0","name":"b981fcf6-55c4-4510-93d4-b4f96a94bf2d","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"edd7c368-5822-46a1-8bf7-aa741faeea1f",},
   ],
   "sequence": {
-    "spriteId": {"name":"pal_Kraid","path":"sprites/pal_Kraid/pal_Kraid.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "pal_Kraid",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -37,12 +41,12 @@
     "autoRecord": true,
     "volume": 1.0,
     "length": 1.0,
-    "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore`1","elementType":"MessageEventKeyframe",},
-    "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore`1","elementType":"MomentsEventKeyframe",},
+    "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
+    "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
-            {"id":"86201d1d-490a-429b-b9fe-0549bbf3c25e","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"b981fcf6-55c4-4510-93d4-b4f96a94bf2d","path":"sprites/pal_Kraid/pal_Kraid.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe`1","elementType":"SpriteFrameKeyframe",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore`1","elementType":"SpriteFrameKeyframe",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+            {"id":"4672d074-b51a-45e8-a0e7-cfda1d653f1f","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"edd7c368-5822-46a1-8bf7-aa741faeea1f","path":"sprites/pal_Kraid/pal_Kraid.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -58,22 +62,13 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"pal_Kraid","path":"sprites/pal_Kraid/pal_Kraid.yy",},
-    "resourceVersion": "1.4",
-    "name": "pal_Kraid",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"e48bac6d-08dc-4504-a1cf-1d39d101276c","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"87410ee4-2645-419d-94ac-b3bd08e8f584","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "Kraid",
     "path": "folders/Sprites/NPCs/Bosses/Kraid.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "pal_Kraid",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

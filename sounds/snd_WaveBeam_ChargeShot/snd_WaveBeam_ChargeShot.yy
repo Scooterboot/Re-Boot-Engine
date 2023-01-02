@@ -1,4 +1,8 @@
 {
+  "resourceType": "GMSound",
+  "resourceVersion": "1.0",
+  "name": "snd_WaveBeam_ChargeShot",
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,13 +15,9 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_WaveBeam_ChargeShot",
-  "duration": 0.575363,
+  "duration": 0.570363,
   "parent": {
     "name": "Beams",
     "path": "folders/Sounds/Weapons/Beams.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "snd_WaveBeam_ChargeShot",
-  "tags": [],
-  "resourceType": "GMSound",
 }

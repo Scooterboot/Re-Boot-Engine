@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_Text_GPButton_10",
   "bboxMode": 0,
   "collisionKind": 1,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 10,
   "height": 7,
   "textureGroupId": {
@@ -24,12 +28,12 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"59167e7c-9dee-4b06-8632-30a594bfa152","path":"sprites/sprt_Text_GPButton_10/sprt_Text_GPButton_10.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"59167e7c-9dee-4b06-8632-30a594bfa152","path":"sprites/sprt_Text_GPButton_10/sprt_Text_GPButton_10.yy",},"LayerId":{"name":"6e4489a2-9775-442e-b6f4-a83c1259db2d","path":"sprites/sprt_Text_GPButton_10/sprt_Text_GPButton_10.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_Text_GPButton_10","path":"sprites/sprt_Text_GPButton_10/sprt_Text_GPButton_10.yy",},"resourceVersion":"1.0","name":"59167e7c-9dee-4b06-8632-30a594bfa152","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"59167e7c-9dee-4b06-8632-30a594bfa152",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_Text_GPButton_10","path":"sprites/sprt_Text_GPButton_10/sprt_Text_GPButton_10.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "sprt_Text_GPButton_10",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -40,9 +44,9 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"d9d347a0-949d-4b8c-967b-bd82cb924499","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"59167e7c-9dee-4b06-8632-30a594bfa152","path":"sprites/sprt_Text_GPButton_10/sprt_Text_GPButton_10.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -58,22 +62,13 @@
     "yorigin": 4,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_Text_GPButton_10","path":"sprites/sprt_Text_GPButton_10/sprt_Text_GPButton_10.yy",},
-    "resourceVersion": "1.4",
-    "name": "sprt_Text_GPButton_10",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"6e4489a2-9775-442e-b6f4-a83c1259db2d","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"6e4489a2-9775-442e-b6f4-a83c1259db2d","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "GPButtonTextImages",
     "path": "folders/Sprites/UI/TextImages/GPButtonTextImages.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_Text_GPButton_10",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

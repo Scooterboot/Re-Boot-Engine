@@ -105,7 +105,7 @@ function scr_MainInitialize()
 
 	lhc_assign_interface("ISolid", obj_Tile);
 	lhc_assign_interface("IPlatform", obj_Platform);//, obj_NPC_MovingPlatform);
-	lhc_assign_interface("IGrapplePoint", obj_GrappleBlock, obj_GrappleBlockCracked);
+	lhc_assign_interface("IGrapplePoint", obj_GrappleBlock, obj_GrappleBlockCracked, obj_GrappleRipper);
 	lhc_assign_interface("IBreakable", obj_Breakable);
 	lhc_assign_interface("ISpeedBlock", obj_ShotBlock, obj_BombBlock, obj_SpeedBlock);
 	lhc_assign_interface("IScrewBlock", obj_ShotBlock, obj_BombBlock, obj_ScrewBlock);

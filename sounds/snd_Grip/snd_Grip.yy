@@ -1,4 +1,8 @@
 {
+  "resourceType": "GMSound",
+  "resourceVersion": "1.0",
+  "name": "snd_Grip",
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,13 +15,9 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_Grip",
-  "duration": 0.118923,
+  "duration": 0.113923,
   "parent": {
     "name": "Player",
     "path": "folders/Sounds/Player.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "snd_Grip",
-  "tags": [],
-  "resourceType": "GMSound",
 }

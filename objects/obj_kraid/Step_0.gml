@@ -76,7 +76,7 @@ if(phase == 1) // first phase
 		
 	}
 	
-	if(life <= lifeMax*0.8 && !mouthOpen && headFrame <= 2)
+	if(life <= lifeMax*0.75 && !mouthOpen && headFrame <= 2)
 	{
 		ai[0] = 0;
 		ai[1] = 0;
@@ -225,7 +225,7 @@ if(instance_exists(head))
 	head.x = HeadBone.position.X;
 	head.y = HeadBone.position.Y;
 
-	head.image_angle = HeadBone.rotation*dir - (45 - 27 * clamp(headFrame-2,0,3)) * dir;
+	head.image_angle = (HeadBone.rotation - (45 - 25 * clamp(headFrame-2,0,3))) * dir;
 }
 
 if(instance_exists(rHand))
@@ -236,4 +236,20 @@ if(instance_exists(rHand))
 	rHand.image_angle = RArmBone[2].rotation * dir;
 
 	rHand.image_xscale = lerp(2/3, 1, clamp(rHandFrame-3,0,5) / 5) * dir;
+}
+
+if(phase < 4)
+{
+	var kbody = id,
+		khead = head;
+	with(player)
+	{
+		var num = 0;
+		while(num < 32 && (place_meeting(x+shiftX,y,kbody) || place_meeting(x+shiftX,y,khead) ||
+			(kbody.dir == 1 && x+shiftX < kbody.bbox_left+32) || (kbody.dir == -1 && x+shiftX > kbody.bbox_right-32)))
+		{
+			shiftX += 1*kbody.dir;
+			num++;
+		}
+	}
 }

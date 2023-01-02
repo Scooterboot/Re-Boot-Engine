@@ -74,7 +74,7 @@ else
             }
         }
         
-        if(nextDoor.hatch != noone)
+        if(instance_exists(nextDoor.hatch))
         {
             nextDoor.hatch.frame = 4;
         }

@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "mask_NPC_Crawler",
   "bboxMode": 0,
   "collisionKind": 0,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 14,
   "height": 14,
   "textureGroupId": {
@@ -24,12 +28,12 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"3f8fad31-e49f-46cf-b3cc-9e5193660339","path":"sprites/mask_NPC_Crawler/mask_NPC_Crawler.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"3f8fad31-e49f-46cf-b3cc-9e5193660339","path":"sprites/mask_NPC_Crawler/mask_NPC_Crawler.yy",},"LayerId":{"name":"12f30ad7-0628-474d-921e-25e500f32fcf","path":"sprites/mask_NPC_Crawler/mask_NPC_Crawler.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"mask_NPC_Crawler","path":"sprites/mask_NPC_Crawler/mask_NPC_Crawler.yy",},"resourceVersion":"1.0","name":"3f8fad31-e49f-46cf-b3cc-9e5193660339","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"3f8fad31-e49f-46cf-b3cc-9e5193660339",},
   ],
   "sequence": {
-    "spriteId": {"name":"mask_NPC_Crawler","path":"sprites/mask_NPC_Crawler/mask_NPC_Crawler.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "mask_NPC_Crawler",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -40,9 +44,9 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"03983ffc-69e8-4fa2-8340-c05a576d522e","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"3f8fad31-e49f-46cf-b3cc-9e5193660339","path":"sprites/mask_NPC_Crawler/mask_NPC_Crawler.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -58,22 +62,13 @@
     "yorigin": 7,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"mask_NPC_Crawler","path":"sprites/mask_NPC_Crawler/mask_NPC_Crawler.yy",},
-    "resourceVersion": "1.4",
-    "name": "mask_NPC_Crawler",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"12f30ad7-0628-474d-921e-25e500f32fcf","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"12f30ad7-0628-474d-921e-25e500f32fcf","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "Crawlers",
     "path": "folders/Sprites/NPCs/Enemies/Crawlers.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "mask_NPC_Crawler",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

@@ -1,4 +1,8 @@
 {
+  "resourceType": "GMSound",
+  "resourceVersion": "1.0",
+  "name": "snd_Save",
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": false,
@@ -10,14 +14,10 @@
     "name": "audio_sound",
     "path": "audiogroups/audio_sound",
   },
-  "soundFile": "snd_Save",
-  "duration": 2.85424,
+  "soundFile": "snd_Save.wav",
+  "duration": 2.830354,
   "parent": {
-    "name": "Misc",
-    "path": "folders/Sounds/Misc.yy",
+    "name": "Tiles",
+    "path": "folders/Sounds/Tiles.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "snd_Save",
-  "tags": [],
-  "resourceType": "GMSound",
 }

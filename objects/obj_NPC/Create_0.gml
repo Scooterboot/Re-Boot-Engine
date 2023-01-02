@@ -26,9 +26,13 @@ life = 0;
 lifeMax = 0;
 
 damage = 0;
-knockBack = 10;//5;
-knockBackSpeed = 3.5; //7;
+knockBack = 9;//5;
+knockBackSpeed = 4; //7;
 damageImmuneTime = 96;
+
+// damage player through things like speed booster and screw attack
+// does not affect i-frames
+ignorePlayerImmunity = false;
 
 boss = false;
 

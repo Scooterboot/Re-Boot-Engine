@@ -1,4 +1,8 @@
 {
+  "resourceType": "GMSound",
+  "resourceVersion": "1.0",
+  "name": "snd_BeamImpact",
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,13 +15,9 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_BeamImpact",
-  "duration": 0.24575,
+  "duration": 0.24075,
   "parent": {
     "name": "Beams",
     "path": "folders/Sounds/Weapons/Beams.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "snd_BeamImpact",
-  "tags": [],
-  "resourceType": "GMSound",
 }

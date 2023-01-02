@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_StandSuitAnimZS",
   "bboxMode": 0,
   "collisionKind": 1,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 25,
   "height": 48,
   "textureGroupId": {
@@ -24,12 +28,12 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"671ed460-0ca3-4c3e-ae30-99de6a150238","path":"sprites/sprt_StandSuitAnimZS/sprt_StandSuitAnimZS.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"671ed460-0ca3-4c3e-ae30-99de6a150238","path":"sprites/sprt_StandSuitAnimZS/sprt_StandSuitAnimZS.yy",},"LayerId":{"name":"4a886f28-74fa-4929-b361-20ab689df2ef","path":"sprites/sprt_StandSuitAnimZS/sprt_StandSuitAnimZS.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_StandSuitAnimZS","path":"sprites/sprt_StandSuitAnimZS/sprt_StandSuitAnimZS.yy",},"resourceVersion":"1.0","name":"671ed460-0ca3-4c3e-ae30-99de6a150238","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"671ed460-0ca3-4c3e-ae30-99de6a150238",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_StandSuitAnimZS","path":"sprites/sprt_StandSuitAnimZS/sprt_StandSuitAnimZS.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "sprt_StandSuitAnimZS",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -40,9 +44,9 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"b7fe5ad4-4fdf-4df6-bddb-8111e57c1f34","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"671ed460-0ca3-4c3e-ae30-99de6a150238","path":"sprites/sprt_StandSuitAnimZS/sprt_StandSuitAnimZS.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -58,22 +62,13 @@
     "yorigin": 21,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_StandSuitAnimZS","path":"sprites/sprt_StandSuitAnimZS/sprt_StandSuitAnimZS.yy",},
-    "resourceVersion": "1.4",
-    "name": "sprt_StandSuitAnimZS",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"4a886f28-74fa-4929-b361-20ab689df2ef","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"4a886f28-74fa-4929-b361-20ab689df2ef","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "StandCrouch",
     "path": "folders/Sprites/Player/StandCrouch.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_StandSuitAnimZS",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

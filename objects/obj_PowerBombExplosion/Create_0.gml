@@ -10,9 +10,9 @@ alpha2 = 1;
 image_alpha = pAlpha*alpha2;
 
 multiHit = true;
-isBomb = true;
 
-damageType = DmgType.Explosive;
+type = ProjType.Bomb;
+
 damageSubType[3] = true;
 damageSubType[4] = true;
 damageSubType[5] = true;

@@ -30,6 +30,9 @@ frame = 0;
 frameCounter = 0;
 frameSeq = array(0,1,2,1);
 
+deathOffsetX = 0;
+deathOffsetY = 8;
+
 function OnXCollision(fVX)
 {
 	dir = -sign(fVX);

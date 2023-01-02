@@ -1,4 +1,8 @@
 {
+  "resourceType": "GMSound",
+  "resourceVersion": "1.0",
+  "name": "snd_Brake",
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,13 +15,9 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_Brake",
-  "duration": 0.440375,
+  "duration": 0.435375,
   "parent": {
     "name": "SpeedBooster",
     "path": "folders/Sounds/Player/SpeedBooster.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "snd_Brake",
-  "tags": [],
-  "resourceType": "GMSound",
 }

@@ -466,7 +466,7 @@ if(projLength > 0)
 			}
 		}
 			
-		if(damage > 0)
+		if(damage > 0 && dmgDelay <= 0)
 		{
 			if(hostile)
 			{
@@ -483,48 +483,55 @@ if(projLength > 0)
 	}
 }
 
-if(damage > 0)
+if(dmgDelay <= 0)
 {
-	if(hostile)
+	if(damage > 0)
 	{
-		if(!instance_exists(player) && place_meeting(x,y,obj_Player))
+		if(hostile)
 		{
-			player = instance_place(x,y,obj_Player);
+			if(!instance_exists(player) && place_meeting(x,y,obj_Player))
+			{
+				player = instance_place(x,y,obj_Player);
+			}
+			if(instance_exists(player))
+	        {
+	            if (player.immuneTime <= 0 && !player.immune)
+	            {
+	                //var ang = point_direction(x,y,obj_Player.x,obj_Player.y);
+	                var ang = 45;
+	                if(player.y > y)
+	                {
+	                    ang = 315;
+	                }
+	                if(player.x < x)
+	                {
+	                    ang = 135;
+	                    if(player.y > y)
+	                    {
+	                        ang = 225;
+	                    }
+	                }
+	                var knockX = lengthdir_x(knockBackSpeed,ang),
+	                    knockY = lengthdir_y(knockBackSpeed,ang);
+	                scr_DamagePlayer(damage,knockBack,knockX,knockY,damageImmuneTime);
+	                if(!multiHit)
+	                {
+	                    //instance_destroy();
+						impacted = 1;
+						damage = 0;
+	                }
+	            }
+	        }
 		}
-		if(instance_exists(player))
-        {
-            if (player.immuneTime <= 0 && !player.immune)
-            {
-                //var ang = point_direction(x,y,obj_Player.x,obj_Player.y);
-                var ang = 45;
-                if(player.y > y)
-                {
-                    ang = 315;
-                }
-                if(player.x < x)
-                {
-                    ang = 135;
-                    if(player.y > y)
-                    {
-                        ang = 225;
-                    }
-                }
-                var knockX = lengthdir_x(knockBackSpeed,ang),
-                    knockY = lengthdir_y(knockBackSpeed,ang);
-                scr_DamagePlayer(damage,knockBack,knockX,knockY,damageImmuneTime);
-                if(!multiHit)
-                {
-                    //instance_destroy();
-					impacted = 1;
-					damage = 0;
-                }
-            }
-        }
+		else
+		{
+			scr_DamageNPC(x,y,damage,damageType,damageSubType,freezeType,deathType,immuneTime);
+		}
 	}
-	else
-	{
-		scr_DamageNPC(x,y,damage,damageType,damageSubType,freezeType,deathType,immuneTime);
-	}
+}
+else
+{
+	dmgDelay--;
 }
 
 for(var i = 0; i < array_length(npcImmuneTime); i++)

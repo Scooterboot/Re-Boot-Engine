@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_Item_SuperMissile",
   "bboxMode": 0,
   "collisionKind": 1,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 16,
   "height": 16,
   "textureGroupId": {
@@ -24,15 +28,13 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"adda65f5-a940-466a-897e-f4c88bbf6941","path":"sprites/sprt_Item_SuperMissile/sprt_Item_SuperMissile.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"adda65f5-a940-466a-897e-f4c88bbf6941","path":"sprites/sprt_Item_SuperMissile/sprt_Item_SuperMissile.yy",},"LayerId":{"name":"405b8128-4d54-4001-8dac-e09249ba565c","path":"sprites/sprt_Item_SuperMissile/sprt_Item_SuperMissile.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_Item_SuperMissile","path":"sprites/sprt_Item_SuperMissile/sprt_Item_SuperMissile.yy",},"resourceVersion":"1.0","name":"adda65f5-a940-466a-897e-f4c88bbf6941","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"bd9e4c44-8b69-436d-bfcc-e24e205297c2","path":"sprites/sprt_Item_SuperMissile/sprt_Item_SuperMissile.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"bd9e4c44-8b69-436d-bfcc-e24e205297c2","path":"sprites/sprt_Item_SuperMissile/sprt_Item_SuperMissile.yy",},"LayerId":{"name":"405b8128-4d54-4001-8dac-e09249ba565c","path":"sprites/sprt_Item_SuperMissile/sprt_Item_SuperMissile.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_Item_SuperMissile","path":"sprites/sprt_Item_SuperMissile/sprt_Item_SuperMissile.yy",},"resourceVersion":"1.0","name":"bd9e4c44-8b69-436d-bfcc-e24e205297c2","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"adda65f5-a940-466a-897e-f4c88bbf6941",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"bd9e4c44-8b69-436d-bfcc-e24e205297c2",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_Item_SuperMissile","path":"sprites/sprt_Item_SuperMissile/sprt_Item_SuperMissile.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "sprt_Item_SuperMissile",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 10.0,
@@ -43,10 +45,10 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"86bd59d1-107d-4af7-ab3f-2cf342fd1680","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"adda65f5-a940-466a-897e-f4c88bbf6941","path":"sprites/sprt_Item_SuperMissile/sprt_Item_SuperMissile.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"e6a1eca1-0606-485f-924d-a403226aceb3","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"bd9e4c44-8b69-436d-bfcc-e24e205297c2","path":"sprites/sprt_Item_SuperMissile/sprt_Item_SuperMissile.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -62,22 +64,13 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_Item_SuperMissile","path":"sprites/sprt_Item_SuperMissile/sprt_Item_SuperMissile.yy",},
-    "resourceVersion": "1.4",
-    "name": "sprt_Item_SuperMissile",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"405b8128-4d54-4001-8dac-e09249ba565c","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"405b8128-4d54-4001-8dac-e09249ba565c","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "ItemPickups",
     "path": "folders/Sprites/Room Elements/ItemPickups.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_Item_SuperMissile",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

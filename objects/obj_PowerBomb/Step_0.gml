@@ -35,9 +35,6 @@ if(bombTimer <= 0)
 			//player.SpiderEnable(false);
 		}
 	}
-	audio_play_sound(snd_PowerBombExplode,0,false);
-	var bomb = instance_create_layer(x,y+11,"Projectiles_fg",obj_PowerBombExplosion);
-	bomb.damage = damage;
-	bomb.damageType = damageType;
+	
 	instance_destroy();
 }

@@ -198,7 +198,7 @@ if(screenFade >= 1 && !menuClosing)
 				case 2:
 				{
 					//Spider ball control
-					global.spiderBallStyle = scr_wrap(global.spiderBallStyle+moveX+select,0,3);
+					global.spiderBallStyle = scr_wrap(global.spiderBallStyle+moveX+select,0,2);//3);
 					break;
 				}
 				case 3:

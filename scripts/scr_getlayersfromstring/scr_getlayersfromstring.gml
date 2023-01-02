@@ -2,7 +2,7 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function scr_GetLayersFromString()
 {
-	/// @description scr_GetLayersFromStringArray
+	/// @description scr_GetLayersFromString
 	/// @param subString
 	
 	var _lay = layer_get_all(),

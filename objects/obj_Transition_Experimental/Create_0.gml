@@ -16,3 +16,5 @@ transSurf = noone;
 nextDoor = noone;
 
 transitionComplete = false;
+
+active = true;

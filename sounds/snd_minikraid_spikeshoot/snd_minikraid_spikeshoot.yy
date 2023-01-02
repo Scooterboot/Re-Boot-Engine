@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSound",
+  "resourceVersion": "1.0",
+  "name": "snd_MiniKraid_SpikeShoot",
   "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
@@ -12,13 +15,9 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_minikraid_spikeshoot.wav",
-  "duration": 0.288073,
+  "duration": 0.186508,
   "parent": {
     "name": "MiniKraid",
     "path": "folders/Sounds/NPCs/MiniKraid.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "snd_MiniKraid_SpikeShoot",
-  "tags": [],
-  "resourceType": "GMSound",
 }

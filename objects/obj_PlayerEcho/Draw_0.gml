@@ -1,10 +1,7 @@
 
-if(!spark)
+if(!global.gamePaused || instance_exists(obj_XRay))
 {
-	if(!global.gamePaused || instance_exists(obj_XRay))
-	{
-		alpha = max(alpha - fadeRate, 0);
-	}
+	alpha = max(alpha - fadeRate, 0);
 }
 if(alpha <= 0)
 {

@@ -1,22 +1,4 @@
 /// @description Initialize
-event_inherited();
-
-damage = 0;
-damageType = DmgType.Misc;
-damageSubType[0] = true;
-damageSubType[1] = false;
-damageSubType[2] = true;
-damageSubType[3] = false;
-damageSubType[4] = false;
-damageSubType[5] = false;
-
-tileCollide = false;
-multiHit = true;
-
-doorOpenType = -1;
-blockDestroyType = -1;
-
-spark = false;
 
 alpha = 1;
 surfW = 80;
@@ -47,12 +29,14 @@ function DrawEcho(posX, posY, rotation, alpha)
 		if(stateFrame == State.Morph)
 		{
 			var ballSprtIndex = sprt_MorphBall;
-			if(misc[Misc.Spring])
+			//if(misc[Misc.Spring])
+			if(misc[Misc.Spider])
 			{
 				ballSprtIndex = sprt_SpringBall;
 			}
 			draw_sprite_ext(ballSprtIndex,ballFrame,scr_round(surfW/2),scr_round(surfH/2),1,1,0,c_white,morphAlpha);
-			if(misc[Misc.Spring])
+			//if(misc[Misc.Spring])
+			if(misc[Misc.Spider])
 			{
 				draw_sprite_ext(sprt_SpringBall_Shine,0,scr_round(surfW/2),scr_round(surfH/2),1,1,0,c_white,morphAlpha);
 			}

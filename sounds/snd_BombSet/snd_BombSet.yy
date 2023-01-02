@@ -1,4 +1,8 @@
 {
+  "resourceType": "GMSound",
+  "resourceVersion": "1.0",
+  "name": "snd_BombSet",
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,13 +15,9 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_BombSet",
-  "duration": 0.046315,
+  "duration": 0.041315,
   "parent": {
     "name": "Explosives",
     "path": "folders/Sounds/Weapons/Explosives.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "snd_BombSet",
-  "tags": [],
-  "resourceType": "GMSound",
 }

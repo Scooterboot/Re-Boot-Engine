@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "obj_CamScroll",
   "spriteId": {
     "name": "sprt_CamScroll",
     "path": "sprites/sprt_CamScroll/sprt_CamScroll.yy",
@@ -28,8 +31,4 @@
     "name": "Camera",
     "path": "folders/Objects/Camera.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "obj_CamScroll",
-  "tags": [],
-  "resourceType": "GMObject",
 }

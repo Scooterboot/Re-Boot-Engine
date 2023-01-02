@@ -40,7 +40,7 @@ if(state == 2) // dive
     }
     velY = 7;
 	
-	Collision_Normal(velX,velY,16,16,false,false);
+	Collision_Normal(velX,velY,16,16,false);
 }
 if(state == 3) // dig
 {

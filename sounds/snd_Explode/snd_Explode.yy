@@ -1,4 +1,8 @@
 {
+  "resourceType": "GMSound",
+  "resourceVersion": "1.0",
+  "name": "snd_Explode",
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,13 +15,9 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_Explode.wav",
-  "duration": 0.773719,
+  "duration": 0.771188,
   "parent": {
     "name": "Explosives",
     "path": "folders/Sounds/Weapons/Explosives.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "snd_Explode",
-  "tags": [],
-  "resourceType": "GMSound",
 }

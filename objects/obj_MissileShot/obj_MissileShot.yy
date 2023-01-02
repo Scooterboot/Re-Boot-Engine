@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "obj_MissileShot",
   "spriteId": {
     "name": "sprt_MissileShot",
     "path": "sprites/sprt_MissileShot/sprt_MissileShot.yy",
@@ -6,11 +9,14 @@
   "solid": false,
   "visible": true,
   "managed": true,
-  "spriteMaskId": null,
+  "spriteMaskId": {
+    "name": "mask_Missile",
+    "path": "sprites/mask_Missile/mask_Missile.yy",
+  },
   "persistent": false,
   "parentObjectId": {
-    "name": "obj_Projectile",
-    "path": "objects/obj_Projectile/obj_Projectile.yy",
+    "name": "obj_Explosive",
+    "path": "objects/obj_Explosive/obj_Explosive.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,
@@ -25,10 +31,9 @@
   "physicsKinematic": false,
   "physicsShapePoints": [],
   "eventList": [
-    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-    {"isDnD":false,"eventNum":0,"eventType":1,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-    {"isDnD":false,"eventNum":0,"eventType":3,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-    {"isDnD":false,"eventNum":0,"eventType":8,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,},
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","isDnD":false,"eventNum":0,"eventType":3,"collisionObjectId":null,},
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","isDnD":false,"eventNum":0,"eventType":8,"collisionObjectId":null,},
   ],
   "properties": [],
   "overriddenProperties": [],
@@ -36,8 +41,4 @@
     "name": "Explosives",
     "path": "folders/Objects/Entities/Projectiles/Explosives.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "obj_MissileShot",
-  "tags": [],
-  "resourceType": "GMObject",
 }

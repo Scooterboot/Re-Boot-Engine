@@ -9,8 +9,8 @@ grappleDist = 0;
 grappled = false;
 //grappled2 = false;
 grapBlock = noone;
-grapBlockPosX = 0;
-grapBlockPosY = 0;
+grapBlockPosX = -1;//0;
+grapBlockPosY = -1;//0;
 grapSpeed = 0;
 grapSpeedMax = 28;//16;
 
@@ -26,3 +26,12 @@ drawGrapDelay = 1;
 //timeLeft = 8;
 
 //isGrapple = true;
+
+function CanDamageNPC(damage,npc)
+{
+	if(asset_has_any_tag(npc.object_index,"IGrapplePoint",asset_object))
+	{
+		return false;
+	}
+	return true;
+}

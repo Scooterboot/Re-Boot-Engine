@@ -1,4 +1,8 @@
 {
+  "resourceType": "GMSound",
+  "resourceVersion": "1.0",
+  "name": "snd_Elevator",
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -13,11 +17,7 @@
   "soundFile": "snd_Elevator",
   "duration": 1.033333,
   "parent": {
-    "name": "Misc",
-    "path": "folders/Sounds/Misc.yy",
+    "name": "Tiles",
+    "path": "folders/Sounds/Tiles.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "snd_Elevator",
-  "tags": [],
-  "resourceType": "GMSound",
 }

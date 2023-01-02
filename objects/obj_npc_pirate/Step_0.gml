@@ -168,10 +168,10 @@ if(state == PirateState.Shoot)
 			var shot = instance_create_depth(x+sX[i],y+sY[i],dpth,obj_PirateBeam);
 	        shot.damage = damage;
 	        shot.velX = 4*dir;
-	        shot.image_angle = 0;
+	        shot.direction = 0;
 	        if(dir == -1)
 	        {
-	            shot.image_angle = 180;
+	            shot.direction = 180;
 	        }
 	        shot.creator = object_index;
 			shot.xstart = shot.x;

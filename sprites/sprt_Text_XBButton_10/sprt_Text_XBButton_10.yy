@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_Text_XBButton_10",
   "bboxMode": 0,
   "collisionKind": 1,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 9,
   "height": 7,
   "textureGroupId": {
@@ -24,12 +28,12 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"99054ada-7f87-4057-94bc-17a445c0459d","path":"sprites/sprt_Text_XBButton_10/sprt_Text_XBButton_10.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"99054ada-7f87-4057-94bc-17a445c0459d","path":"sprites/sprt_Text_XBButton_10/sprt_Text_XBButton_10.yy",},"LayerId":{"name":"e51698e2-ce2d-4472-b742-2648f1bf3b50","path":"sprites/sprt_Text_XBButton_10/sprt_Text_XBButton_10.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_Text_XBButton_10","path":"sprites/sprt_Text_XBButton_10/sprt_Text_XBButton_10.yy",},"resourceVersion":"1.0","name":"99054ada-7f87-4057-94bc-17a445c0459d","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"99054ada-7f87-4057-94bc-17a445c0459d",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_Text_XBButton_10","path":"sprites/sprt_Text_XBButton_10/sprt_Text_XBButton_10.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "sprt_Text_XBButton_10",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -40,9 +44,9 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"23ad4158-d4e9-4769-9703-9f7a0dd2a2f9","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"99054ada-7f87-4057-94bc-17a445c0459d","path":"sprites/sprt_Text_XBButton_10/sprt_Text_XBButton_10.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -58,22 +62,13 @@
     "yorigin": 4,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_Text_XBButton_10","path":"sprites/sprt_Text_XBButton_10/sprt_Text_XBButton_10.yy",},
-    "resourceVersion": "1.4",
-    "name": "sprt_Text_XBButton_10",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"e51698e2-ce2d-4472-b742-2648f1bf3b50","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"e51698e2-ce2d-4472-b742-2648f1bf3b50","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "XBButtonTextImages",
     "path": "folders/Sprites/UI/TextImages/XBButtonTextImages.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_Text_XBButton_10",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

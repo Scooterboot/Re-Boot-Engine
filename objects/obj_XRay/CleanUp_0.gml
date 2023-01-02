@@ -11,10 +11,12 @@ surface_free(AlphaMaskTemp);
 surface_free(BreakMask);
 surface_free(BreakMaskTemp);
 
+surface_free(OutlineSurf);
+surface_free(OutlineSurf2);
+surface_free(OutlineSurfTemp);
+
 //surface_free(SurfaceFade);
 //surface_free(SurfaceFadeTemp);
-
-surface_free(FinalSurface);
 
 /*for(var i = 0; i < 4; i++)
 {
@@ -38,14 +40,15 @@ for(var i = 0; i < array_length(tileLayers); i++)
 {
 	layer_set_visible(tileLayers[i],true);
 }
+for(var i = 0; i < array_length(bgTileLayers); i++)
+{
+	layer_set_visible(bgTileLayers[i],true);
+}
 
 audio_stop_sound(snd_XRay);
 audio_stop_sound(snd_XRay_Loop);
 
-/*with (BackDraw)
-{
- instance_destroy();
-}*/
+instance_destroy(BackDraw);
 
 /*with (oDoor)
 {

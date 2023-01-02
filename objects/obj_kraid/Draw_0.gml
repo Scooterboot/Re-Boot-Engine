@@ -1,29 +1,46 @@
 /// @description 
 
 palIndex = 0;
-if(life <= lifeMax*0.8)
+if(life <= lifeMax*0.875)
 {
 	palIndex = 1;
 }
-if(life <= lifeMax*0.5)
+if(life <= lifeMax*0.75)
 {
 	palIndex = 2;
 }
-if(life <= lifeMax*0.3)
+if(life <= lifeMax*0.625)
 {
 	palIndex = 3;
 }
+if(life <= lifeMax*0.5)
+{
+	palIndex = 4;
+}
+if(life <= lifeMax*0.375)
+{
+	palIndex = 5;
+}
+if(life <= lifeMax*0.25)
+{
+	palIndex = 6;
+}
+if(life <= lifeMax*0.125)
+{
+	palIndex = 7;
+}
+
 palIndex_Eyes = palIndex+1;
 
-palIndex2_Eyes = 5;
+palIndex2_Eyes = 11;//5;
 palDif_Eyes = eyeGlow;
 
 if(dmgFlash > 4)
 {
-	palIndex = 4;
+	palIndex = 8;//4;
 	palDif = 0;
 	
-	palIndex_Eyes = 6;
+	palIndex_Eyes = 9;//6;
 	palDif_Eyes = 0;
 }
 

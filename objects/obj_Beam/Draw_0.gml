@@ -1,11 +1,12 @@
 
 var rFrame = 0;
 
-image_angle = direction+180;
+image_angle = 0;//direction+180;
+var angle = direction+180;
 if((direction-45)%90 == 0 && rotFrame > 0)
 {
 	rFrame = rotFrame;
-	image_angle = direction+225;
+	angle = direction+225;
 }
 if((image_number-rotFrame) > 1)
 {
@@ -48,7 +49,7 @@ if(!isSpazer && !isPlasma)
 	}
 	else*/ if(isWave && !isIce && !isCharge)
 	{
-		image_angle = 0;
+		angle = 0;
 	}
 	else if((isIce || isCharge))
 	{
@@ -59,7 +60,7 @@ if(!isSpazer && !isPlasma)
 			i = -1;
 		}
 		rotation += rotspeed*dir*i*(!global.gamePaused);
-		image_angle = -rotation;
+		angle = -rotation;
 	}
     
 	if(isCharge)// || isPlasma)
@@ -107,5 +108,5 @@ if(projLength > 0)
 }
 //else
 //{
-	draw_sprite_ext(sprite_index,image_index,scr_round(x),scr_round(y),image_xscale,image_yscale,image_angle,c_white,image_alpha);
+	draw_sprite_ext(sprite_index,image_index,scr_round(x),scr_round(y),image_xscale,image_yscale,angle,c_white,image_alpha);
 //}

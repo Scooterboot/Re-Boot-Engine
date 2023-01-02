@@ -1,4 +1,8 @@
 {
+  "resourceType": "GMSound",
+  "resourceVersion": "1.0",
+  "name": "snd_IceBeam_Shot",
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,13 +15,9 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_IceBeam_Shot",
-  "duration": 0.58119,
+  "duration": 0.57619,
   "parent": {
     "name": "Beams",
     "path": "folders/Sounds/Weapons/Beams.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "snd_IceBeam_Shot",
-  "tags": [],
-  "resourceType": "GMSound",
 }

@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "obj_PowerBeamShot",
   "spriteId": {
     "name": "sprt_PowerBeamShot",
     "path": "sprites/sprt_PowerBeamShot/sprt_PowerBeamShot.yy",
@@ -31,8 +34,4 @@
     "name": "Power Beam",
     "path": "folders/Objects/Entities/Projectiles/Beams/Power Beam.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "obj_PowerBeamShot",
-  "tags": [],
-  "resourceType": "GMObject",
 }

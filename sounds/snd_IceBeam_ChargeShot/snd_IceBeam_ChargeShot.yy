@@ -1,4 +1,8 @@
 {
+  "resourceType": "GMSound",
+  "resourceVersion": "1.0",
+  "name": "snd_IceBeam_ChargeShot",
+  "conversionMode": 0,
   "compression": 0,
   "volume": 1.0,
   "preload": true,
@@ -11,13 +15,9 @@
     "path": "audiogroups/audio_sound",
   },
   "soundFile": "snd_IceBeam_ChargeShot",
-  "duration": 0.609966,
+  "duration": 0.604966,
   "parent": {
     "name": "Beams",
     "path": "folders/Sounds/Weapons/Beams.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "snd_IceBeam_ChargeShot",
-  "tags": [],
-  "resourceType": "GMSound",
 }

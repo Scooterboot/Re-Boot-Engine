@@ -24,7 +24,7 @@ switch (messageType)
 			//draw_set_font(GUIFontSmall);
 			var str2W = descScrib.get_width(),//string_width(str2),
 				boxW = sprite_get_width(sprt_MessageBox),
-				boxW2 = 190,
+				//boxW2 = 190,
 				str2H = descScrib.get_height(),
 				boxH = sprite_get_height(sprt_MessageBox),
 				boxH2 = 34;

@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_Item_Dodge",
   "bboxMode": 0,
   "collisionKind": 1,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 16,
   "height": 16,
   "textureGroupId": {
@@ -24,15 +28,13 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"c7ac4bde-d54d-4ce6-93dd-b2875d562fb7","path":"sprites/sprt_Item_Dodge/sprt_Item_Dodge.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"c7ac4bde-d54d-4ce6-93dd-b2875d562fb7","path":"sprites/sprt_Item_Dodge/sprt_Item_Dodge.yy",},"LayerId":{"name":"3d9b8fbc-9f96-481f-aa8e-3fe192688cb6","path":"sprites/sprt_Item_Dodge/sprt_Item_Dodge.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_Item_Dodge","path":"sprites/sprt_Item_Dodge/sprt_Item_Dodge.yy",},"resourceVersion":"1.0","name":"c7ac4bde-d54d-4ce6-93dd-b2875d562fb7","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"596645f4-1125-4374-bf48-9f235e718ce8","path":"sprites/sprt_Item_Dodge/sprt_Item_Dodge.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"596645f4-1125-4374-bf48-9f235e718ce8","path":"sprites/sprt_Item_Dodge/sprt_Item_Dodge.yy",},"LayerId":{"name":"3d9b8fbc-9f96-481f-aa8e-3fe192688cb6","path":"sprites/sprt_Item_Dodge/sprt_Item_Dodge.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_Item_Dodge","path":"sprites/sprt_Item_Dodge/sprt_Item_Dodge.yy",},"resourceVersion":"1.0","name":"596645f4-1125-4374-bf48-9f235e718ce8","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"c7ac4bde-d54d-4ce6-93dd-b2875d562fb7",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"596645f4-1125-4374-bf48-9f235e718ce8",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_Item_Dodge","path":"sprites/sprt_Item_Dodge/sprt_Item_Dodge.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "sprt_Item_Dodge",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 10.0,
@@ -43,10 +45,10 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"49de1180-6f93-4d41-ae61-2b54271330e8","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"c7ac4bde-d54d-4ce6-93dd-b2875d562fb7","path":"sprites/sprt_Item_Dodge/sprt_Item_Dodge.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"bfa0af72-6d83-432e-8f7e-dfee72918bf9","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"596645f4-1125-4374-bf48-9f235e718ce8","path":"sprites/sprt_Item_Dodge/sprt_Item_Dodge.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -62,22 +64,13 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_Item_Dodge","path":"sprites/sprt_Item_Dodge/sprt_Item_Dodge.yy",},
-    "resourceVersion": "1.4",
-    "name": "sprt_Item_Dodge",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"3d9b8fbc-9f96-481f-aa8e-3fe192688cb6","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"3d9b8fbc-9f96-481f-aa8e-3fe192688cb6","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "BootsItems",
     "path": "folders/Sprites/Room Elements/ItemPickups/BootsItems.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_Item_Dodge",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

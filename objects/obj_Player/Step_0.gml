@@ -6,7 +6,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 {
 	grappleActive = instance_exists(grapple);
 	
-	#region Appearance Fanfare Anim
+	#region Appearance Fanfare Anim & Save Anim
 	if(introAnimState == 0)
 	{
 		if(introAnimCounter == 0)
@@ -42,8 +42,17 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		introAnimCounter = 0;
 	}
+	
+	if(saveAnimCounter > 0)
+	{
+		saveAnimCounter--;
+	}
 	#endregion
 	
+	if(instance_exists(obj_Main))
+	{
+		debug = obj_Main.debug;
+	}
 	if(debug)
 	{
 		//debug keys
@@ -316,6 +325,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		#endregion
 		
 		#endregion
+	}
+	else
+	{
+		godmode = false;
 	}
 	
 	afterImageNum = 10;
@@ -961,7 +974,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 	canMorphBounce = true;
 	
-	var isJumping = (cJump && dir != 0 && climbIndex <= 0 && quickClimbTarget <= 0 && state != State.Spark && state != State.BallSpark && 
+	var isJumping = (cJump && dir != 0 && climbIndex <= 0 && state != State.Spark && state != State.BallSpark && 
 	state != State.Hurt && /*(!spiderBall || spiderEdge == Edge.None) &&*/ !xRayActive && (state != State.Grapple || grapWJCounter > 0));// && state != State.Dodge);
 	if(isJumping)
 	{
@@ -1028,19 +1041,19 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					ChangeState(State.Spark,State.Spark,mask_Jump,false);
 				}
 			}
-			else if((rJump || (state == State.Morph && !spiderBall && rMorphJump)) && !jumping && //!spiderBall &&
+			else if((rJump || (state == State.Morph && !spiderBall && rMorphJump) || bufferJump > 0) && !jumping && quickClimbTarget <= 0 && //!spiderBall &&
 			//(state != State.Crouch || !place_collide(0,-11) || place_collide(0,0) || state == State.Morph) && 
 			(state != State.Morph || misc[Misc.Spring] || (cDash && !entity_place_collide(0,-28))) && morphFrame <= 0 && state != State.DmgBoost)
 			{
 				if(grounded || bunnyJump > 0 || canWallJump || speedBoostWJ || (state == State.Grip && (move != dir || climbTarget == 0) && !cDown) || 
-				(boots[Boots.SpaceJump] && velY >= (2-InWaterTop) && state == State.Somersault && !liquidMovement))
+				(boots[Boots.SpaceJump] && velY >= (2-InWaterTop) && state == State.Somersault && !liquidMovement && rJump))
 				{
 					if(!grounded && !canWallJump && !speedBoostWJ && boots[Boots.SpaceJump] && velY >= (2-InWaterTop))
 					{
 						spaceJump = 8;
 						//frame[Frame.Somersault] = 0;
 					}
-					if((!grounded || grapWJCounter > 0) && (canWallJump || speedBoostWJ))
+					if((!grounded || grapWJCounter > 0) && (canWallJump || speedBoostWJ) && rJump)
 					{
 						grapWJCounter = 0;
 						instance_destroy(grapple);
@@ -1120,18 +1133,19 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					{
 						jump += 6;
 					}
-					if(rJump && state != State.Morph && state != State.Grip)
+					if((rJump || bufferJump > 0) && state != State.Morph && state != State.Grip)
 					{
 						if(((abs(velX) > 0 && sign(velX) == dir) || (move != 0 && move == dir) || !grounded || (state == State.Crouch && entity_place_collide(0,-8))) && !grappleActive)
 						{
 							ChangeState(State.Somersault,State.Somersault,mask_Crouch,false);
 						}
 					}
-					if(rJump && state == State.Morph && cDash)
+					if((rJump || bufferJump > 0) && state == State.Morph && cDash)
 					{
 						morphSpinJump = true;
 					}
 					bunnyJump = 0;
+					bufferJump = 0;
 				}
 				else if(rJump)
 				{
@@ -1160,6 +1174,12 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			//velY = min(velY,-fJumpSpeed*0.9);
 			velY = max(velY*2,-fJumpSpeed*0.9);
 		}
+		
+		bufferJump = max(bufferJump-1,0);
+	}
+	else
+	{
+		bufferJump = bufferJumpMax;
 	}
 	
 	if(bombJump > 0 && (!entity_place_collide(0,-11) || ((state != State.Crouch || !grounded) && morphFrame <= 0)))
@@ -1346,19 +1366,23 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		    }
 		    if(spiderMove == 0)
 		    {
-		        if(spiderEdge == Edge.Bottom)
+		        //if(spiderEdge == Edge.Bottom)
+				if(entity_place_collide(0,1) && moveX != 0)
 		        {
 		            spiderMove = moveX;
 		        }
-		        if(spiderEdge == Edge.Top)
+		        //if(spiderEdge == Edge.Top)
+				if(entity_place_collide(0,-1) && moveX != 0)
 		        {
 		            spiderMove = -moveX;
 		        }
-		        if(spiderEdge == Edge.Left)
+		        //if(spiderEdge == Edge.Left)
+				if(entity_place_collide(-1,0) && moveY != 0)
 		        {
 		            spiderMove = moveY;
 		        }
-		        if(spiderEdge == Edge.Right)
+		        //if(spiderEdge == Edge.Right)
+				if(entity_place_collide(1,0) && moveY != 0)
 		        {
 		            spiderMove = -moveY;
 		        }
@@ -1548,14 +1572,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				fVelX = hurtSpeedX;
 			}
 			
-			if(isSpeedBoosting)
-			{
-				scr_BreakBlock(x+fVelX,y,5);
-			}
-			if(isScrewAttacking)
-			{
-				scr_BreakBlock(x+fVelX,y,6);
-			}
+			DestroyBlock(x+fVelX,y);
 		}
 		else
 		{
@@ -1576,14 +1593,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				fVelY = hurtSpeedY;
 			}
 			
-			if(isSpeedBoosting)
-			{
-				scr_BreakBlock(x,y+fVelY,5);
-			}
-			if(isScrewAttacking)
-			{
-				scr_BreakBlock(x,y+fVelY,6);
-			}
+			DestroyBlock(x,y+fVelY);
 		}
 		else
 		{
@@ -1597,6 +1607,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 	
 	speedKill = false;
+	
+	fVelX += shiftX;
+	fVelY += shiftY;
 	
 	//var vstepx = (bbox_right-bbox_left)/2 - 1,
 	//	vstepy = (bbox_bottom-bbox_top)/2 - 1;
@@ -1613,6 +1626,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		Collision_Normal(fVelX,fVelY,vstepx,vstepy,true);
 	}
 	
+	shiftX = 0;
+	shiftY = 0;
+	
 	if(!grounded && velY == 0 && PlayerGrounded())
 	{
 		grounded = true;
@@ -1622,7 +1638,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		onPlatform = true;
 	}
 	
-	var downSlopeFlag = ((!entity_place_collide(1,2) && entity_place_collide(2,5)) || (!entity_place_collide(-1,2) && entity_place_collide(-2,5)));
+	//var downSlopeFlag = ((!entity_place_collide(1,2,scr_round(x),scr_round(y)) && entity_place_collide(2,5,scr_round(x),scr_round(y))) || 
+	//					(!entity_place_collide(-1,2,scr_round(x),scr_round(y)) && entity_place_collide(-2,5,scr_round(x),scr_round(y))));
+	var downSlope = GetEdgeSlope(Edge.Bottom);
+	var downSlopeFlag = (place_meeting(x,y+2,downSlope) && downSlope.image_yscale > 1 && 
+						((downSlope.image_xscale > 0 && bbox_left > downSlope.bbox_left) || (downSlope.image_xscale < 0 && bbox_right < downSlope.bbox_right)));
 	if((!PlayerGrounded() || (downSlopeFlag && !speedBoost)) && !PlayerOnPlatform())// && !place_meeting(x,y+4,obj_NPC_MovingPlatform))
 	{
 		grounded = false;
@@ -1730,6 +1750,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				
 				ChangeState(State.Grip,State.Grip,mask_Jump,false);
 				dir = move2;
+				
+				instance_destroy(grapple);
 			}
 		}
 	}
@@ -1739,130 +1761,118 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 #region Quick Climb
 	if(global.quickClimb && state != State.Grip && state != State.Morph && morphFrame <= 0 && grounded && abs(dirFrame) >= 4 && entity_place_collide(move2,0))
 	{
-		quickClimbHeight = 0;
-		
-		if(state == State.Stand)
+		var qcHeight = 0;
+		var bbottom = scr_round(bbox_bottom);
+		var heightMax = 50;
+		if(state == State.Crouch)
 		{
-			var tile0 = collide_rect(x, (bbox_top+17)-4, x+6*dir, (bbox_bottom-11)-4),
-				tile1 = collide_rect(x, (bbox_top+17)-6, x+6*dir, (bbox_bottom-11)-7),
+			heightMax = 34;
+		}
+		if(state == State.Stand || (state == State.Crouch && crouchFrame <= 0))
+		{
+			// using a for loop to cut down on duplicate code like this is probably pretty stupid.
+			// then again, 'if it looks stupid, but works, it isn't stupid.'
+			for(var i = 0; i < 2; i++)
+			{
+				if(i == 0 && lhc_collision_rectangle(x,bbottom-8,x+6*dir,bbottom-5,"ISolid",true,true))
+				{
+					while(qcHeight > -heightMax && lhc_collision_line(x,bbottom+qcHeight,x+6*dir,bbottom+qcHeight,"ISolid",true,true))
+					{
+						qcHeight--;
+					}
+					qcHeight += 1;
+				}
+				else if(i == 1)
+				{
+					qcHeight = -heightMax;
+					while(qcHeight < -5 && !lhc_collision_line(x,bbottom+qcHeight,x+6*dir,bbottom+qcHeight,"ISolid",true,true))
+					{
+						qcHeight++;
+					}
+				}
 				
-				tile2 = collide_rect(x, (bbox_top+17)-20, x+6*dir, (bbox_bottom-11)-20),
-				tile3 = collide_rect(x, (bbox_top+17)-22, x+6*dir, (bbox_bottom-11)-23),
-				
-				tile4 = collide_rect(x, (bbox_top+17)-36, x+6*dir, (bbox_bottom-11)-36),
-				tile5 = collide_rect(x, (bbox_top+17)-38, x+6*dir, (bbox_bottom-11)-39);
+				quickClimbTarget = 0;
+				if(qcHeight <= -7)
+				{
+					var yHeight = bbottom+qcHeight;
 			
-			if(tile0 && !tile1)
-			{
-				quickClimbHeight = 1;
-			}
-			else if(tile2 && !tile3)
-			{
-				quickClimbHeight = 2;
-			}
-			else if(tile4 && !tile5)
-			{
-				quickClimbHeight = 3;
+					var slopeOffset = 0;
+					while(slopeOffset > -16 && collision_rectangle(x+6*dir,yHeight+slopeOffset-8,x+16*dir,yHeight+slopeOffset,obj_Slope,true,true))
+					{
+						var slopeCol = collision_rectangle(x+6*dir,yHeight+slopeOffset-8,x+16*dir,yHeight+slopeOffset,obj_Slope,true,true);
+						if(slopeCol != noone && slopeCol.image_yscale > 0 && slopeCol.image_yscale <= 1 && sign(slopeCol.image_xscale) == -dir)
+						{
+							slopeOffset -= 1;
+						}
+						else
+						{
+							break;
+						}
+					}
+			
+					yHeight += slopeOffset;
+			
+					if(!lhc_collision_rectangle(x+6*dir,yHeight-15,x+16*dir,yHeight-2,"ISolid",true,true))
+					{
+						if(!lhc_collision_rectangle(x+6*dir,yHeight-31,x+16*dir,yHeight-2,"ISolid",true,true))
+						{
+							quickClimbTarget = 2;
+						}
+						else if(misc[Misc.Morph])
+						{
+							quickClimbTarget = 1;
+						}
+					}
+				}
+				if(quickClimbTarget > 0)
+				{
+					break;
+				}
 			}
 		}
-		else if(state == State.Crouch && crouchFrame <= 0)
-		{
-			var tile0 = collide_rect(x, (bbox_top+17)-15, x+6*dir, bbox_bottom-15),
-				tile1 = collide_rect(x, (bbox_top+17)-17, x+6*dir, bbox_bottom-18),
-				
-				tile2 = collide_rect(x, (bbox_top+17)-31, x+6*dir, bbox_bottom-31),
-				tile3 = collide_rect(x, (bbox_top+17)-33, x+6*dir, bbox_bottom-34);
 			
-			if(tile0 && !tile1)
-			{
-				quickClimbHeight = 1;
-			}
-			else if(tile2 && !tile3)
-			{
-				quickClimbHeight = 2;
-			}
-		}
-		
-		quickClimbTarget = 0;
-		if(quickClimbHeight > 0)
+		if(qcHeight <= -7 && quickClimbTarget > 0 && move2 == dir && cJump && rJump)
 		{
-			var ch = quickClimbHeight*16,
-				slopeOffset = 0,
-				slopeCol = collision_rectangle(x+6*dir,y+11-ch,x+14*dir,y+25-ch,obj_Slope,true,true);
-			if(slopeCol != noone && slopeCol.image_yscale > 0 && slopeCol.image_yscale <= 1)
-			{
-				slopeOffset = -16;
-			}
-			var crOffset = 0;
+			jump = 0;
+			fVelY = 0;
+			velY = 0;
+			
+			stateFrame = State.Grip;
+			mask_index = mask_Crouch;
+			
+			audio_play_sound(snd_Climb,0,false);
+			gripGunReady = false;
+			gripGunCounter = 0;
+			startClimb = true;
+			
+			var _h = 0;
 			if(state == State.Stand)
 			{
-				crOffset = 11;
+				_h = -11;
 			}
-			if(!collide_rect(bbox_left+13*dir,(bbox_top+17+crOffset)+slopeOffset-ch,bbox_right+13*dir,bbox_bottom+slopeOffset-ch))
+			for(var i = 8; i > 0; i--)
 			{
-				if(!collide_rect(bbox_left+13*dir,(bbox_top+crOffset)+slopeOffset-ch,bbox_right+13*dir,bbox_bottom+slopeOffset-ch))
+				_h -= climbY[i];
+				if(_h <= qcHeight)
 				{
-					quickClimbTarget = 2;
-				}
-				else if(misc[Misc.Morph])
-				{
-					quickClimbTarget = 1;
+					climbIndex = i+1;
+					break;
 				}
 			}
+			y -= (abs(qcHeight) - abs(_h));
 			
-			if(quickClimbTarget > 0 && move2 == dir && cJump && rJump)
-			{
-				jump = 0;
-				fVelY = 0;
-				velY = 0;
-				
-				stateFrame = State.Grip;
-				mask_index = mask_Crouch;
-				
-				audio_play_sound(snd_Climb,0,false);
-				gripGunReady = false;
-				gripGunCounter = 0;
-				startClimb = true;
-				if(quickClimbHeight == 3)
-				{
-					y -= 5;
-				}
-				if(quickClimbHeight == 2)
-				{
-					if(state != State.Crouch)
-					{
-						y -= 1;
-						climbIndex = 4;
-						climbFrame = 2;
-					}
-				}
-				if(quickClimbHeight == 1)
-				{
-					if(state == State.Crouch)
-					{
-						y -= 1;
-						climbIndex = 5;
-						climbFrame = 3;
-					}
-					else
-					{
-						y -= 1;
-						x += 1*dir;
-						climbIndex = 7;
-						climbFrame = 5;
-					}
-				}
-				climbTarget = quickClimbTarget;
-				
-				state = State.Grip;
-				dir = move2;
-			}
+			climbTarget = quickClimbTarget;
+			
+			state = State.Grip;
+			climbFrame = climbSequence[climbIndex];
+			dir = move2;
+			
+			instance_destroy(grapple);
 		}
 	}
 	else
 	{
 		quickClimbTarget = 0;
-		quickClimbHeight = 0;
 	}
 #endregion
 
@@ -2080,12 +2090,23 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			}
 		}
 		
-		if(((cUp && rUp) || (cJump && rJump && (!misc[Misc.Spring] || morphSpinJump)) || (cMorph && rMorph)) && !entity_place_collide(0,-17) && !unmorphing && morphFrame <= 0 && !spiderBall)
+		if(((cUp && rUp) || (cJump && rJump && (!misc[Misc.Spring] || morphSpinJump)) || (cMorph && rMorph)) && !unmorphing && morphFrame <= 0 && !spiderBall)
 		{
-			audio_play_sound(snd_Morph,0,false);
-			unmorphing = true;
-			morphFrame = 8;
-			aimUpDelay = 10;
+			if(!entity_place_collide(0,-17))
+			{
+				audio_play_sound(snd_Morph,0,false);
+				unmorphing = true;
+				morphFrame = 8;
+				aimUpDelay = 10;
+			}
+			else
+			{
+				morphPal = 0.75;
+				if(!audio_is_playing(snd_MorphLocked))
+				{
+					audio_play_sound(snd_MorphLocked,0,false);
+				}
+			}
 		}
 		if(unmorphing)
 		{
@@ -2115,6 +2136,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 			}
 		}
+		else
+		{
+			morphSpinJump = false;
+		}
 		
 		var pBombSelected = (itemSelected == 1 && (itemHighlighted[1] == 2 || global.HUD > 0) && powerBombStat > 0 && item[Item.PBomb]);
 		var ammo = missileStat+superMissileStat+powerBombStat;
@@ -2140,7 +2165,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		cFlashStartCounter = 0;
 	}
 	
-	if((state == State.Morph || state == State.BallSpark) && misc[Misc.Spider])// && bombJump <= 0)
+	if((state == State.Morph || state == State.BallSpark) && misc[Misc.Spider] && !unmorphing)// && bombJump <= 0)
 	{
 		if(global.spiderBallStyle == 0)
 		{
@@ -2519,15 +2544,24 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				gripGunReady = true;
 			}
 			climbTarget = 0;
-			slopeOffset = 0;
-			var slopeCol = collision_rectangle(x+6*dir,y-32,x+19*dir,y-18,obj_Slope,true,true);
-			if(slopeCol != noone && slopeCol.image_yscale > 0 && slopeCol.image_yscale <= 1)
+			
+			var slopeOffset = 0;
+			while(slopeOffset > -16 && collision_rectangle(x+6*dir,y-32+slopeOffset,x+16*dir,y-18+slopeOffset,obj_Slope,true,true))
 			{
-				slopeOffset = -16;
+				var slopeCol = collision_rectangle(x+6*dir,y-32+slopeOffset,x+16*dir,y-18+slopeOffset,obj_Slope,true,true);
+				if(slopeCol != noone && slopeCol.image_yscale > 0 && slopeCol.image_yscale <= 1 && sign(slopeCol.image_xscale) == -dir)
+				{
+					slopeOffset -= 1;
+				}
+				else
+				{
+					break;
+				}
 			}
-			if(!lhc_collision_rectangle(x+6*dir,y-30+slopeOffset,x+19*dir,y-18+slopeOffset,"ISolid",true,true))
+			
+			if(!lhc_collision_rectangle(x+6*dir,y-30+slopeOffset,x+16*dir,y-18+slopeOffset,"ISolid",true,true))
 			{
-				if(!lhc_collision_rectangle(x+6*dir,y-46+slopeOffset,x+19*dir,y-34+slopeOffset,"ISolid",true,true))
+				if(!lhc_collision_rectangle(x+6*dir,y-46+slopeOffset,x+16*dir,y-34+slopeOffset,"ISolid",true,true))
 				{
 					climbTarget = 2;
 				}
@@ -2737,13 +2771,23 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				{
 					for(var i = 0; i < 2; i++)
 					{
-						var edir = -45*shineDir + 180*i;
+						/*var edir = -45*shineDir + 180*i;
 						var echo = AfterImage(true,rotation,0,0,0.5);
 						echo.damage = 2000;
 						echo.spark = true;
 						echo.velX = lengthdir_x(12,edir);
-						echo.velY = lengthdir_y(12,edir);
+						echo.velY = lengthdir_y(12,edir);*/
+						
+						var sdir = -45*shineDir + 180*i;
+						var swave = instance_create_layer(x+sprtOffsetX,y+sprtOffsetY,layer_get_id("Projectiles"),obj_SparkShockwave);
+						swave.damage = 2000;
+						swave.velX = lengthdir_x(3,sdir);
+						swave.velY = lengthdir_y(3,sdir);
+						swave.direction = sdir;
+						swave.image_angle = sdir;
+						swave.creator = id;
 					}
+					audio_play_sound(snd_SparkShockwave,0,false);
 				}
 				
 				if(state == State.BallSpark)
@@ -2932,7 +2976,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		{
 			stateFrame = State.Somersault;
 			state = State.Somersault;
-			var signx = sign(x - xprevious);
+			var signx = (move2 != 0) ? move2 : sign(x - xprevious);
 			if(signx != 0)
 			{
 				dir = signx;
@@ -2945,7 +2989,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		else
 		{
-			if(abs(x - grapple.x) > 11 && abs(x - grapple.x) < 25 && ((entity_place_collide(10,0) && x < grapple.x) || (entity_place_collide(-10,0) && x > grapple.x)) && (grapAngle <= 45 || grapAngle >= 315) && grappleDist <= 47)
+			if(velX == 0 && grappleVelX == 0 && abs(x - grapple.x) > 11 && abs(x - grapple.x) < 25 && ((entity_place_collide(10,0) && x < grapple.x) || (entity_place_collide(-10,0) && x > grapple.x)) && (grapAngle <= 45 || grapAngle >= 315) && grappleDist <= 47)
 			{
 			    if(sign(x-grapple.x) != 0)
 			    {
@@ -3085,8 +3129,16 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 							{
 								partLen = 25;
 							}
-							var partX = x+lengthdir_x(partLen,grapAngle-90)-velX,
-								partY = y+lengthdir_y(partLen,grapAngle-90)-velY;
+							var gAngle = grapAngle-90,
+								gnum = 45;
+							while(gnum > 0 && entity_position_collide(lengthdir_x(partLen,gAngle)-velX,y+lengthdir_y(partLen,gAngle)-velY))
+							{
+								gAngle -= dir;
+								gnum--;
+							}
+							
+							var partX = x+lengthdir_x(partLen,gAngle)-velX,
+								partY = y+lengthdir_y(partLen,gAngle)-velY;
 							part_particles_create(obj_Particles.partSystemB,partX,partY,obj_Particles.bDust,3);
 						}
 			        }

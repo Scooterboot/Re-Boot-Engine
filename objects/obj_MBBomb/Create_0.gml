@@ -1,6 +1,6 @@
 /// @description Initialize
-
 event_inherited();
+
 image_speed = 0.25;
 bombTimer = 55;//60;
 //exploded = false;
@@ -12,9 +12,11 @@ spreadSpeed = 0;
 spreadDir = 0;
 spreadFrict = 4;
 
-isBomb = true;
-
 forceJump = false;
 
-damageType = DmgType.Explosive;
+type = ProjType.Bomb;
+
 damageSubType[3] = true;
+
+exploProj = obj_MBBombExplosion;
+exploDmgMult = 1;

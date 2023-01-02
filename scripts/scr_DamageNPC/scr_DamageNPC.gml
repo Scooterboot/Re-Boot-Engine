@@ -39,7 +39,7 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 		{
 			arrLength = 4;
 		}
-		for(var d = 1; d < arrLength; d++)
+		for(var d = 1; d <= arrLength; d++)
 		{
 			if(dmgSubType[d])
 			{
@@ -55,6 +55,11 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 		dmg *= dmgMult;
 					
 		dmg = npc.ModifyDamageTaken(dmg,id,isProjectile);
+		
+		if(isProjectile && !CanDamageNPC(dmg,npc))
+		{
+			continue;
+		}
                 
 	    if(dmg > 0)
 	    {
@@ -66,6 +71,7 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 	                if(npc.frozen <= 0)
 	                {
 	                    lifeEnd = 1;
+	                    audio_stop_sound(snd_FreezeNPC);
 	                    audio_play_sound(snd_FreezeNPC,0,false);
 	                }
 	                npc.frozen = freezeMax;
@@ -101,6 +107,7 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 	        {
 	            if(npc.frozen <= 0)
 	            {
+	                audio_stop_sound(snd_FreezeNPC);
 	                audio_play_sound(snd_FreezeNPC,0,false);
 	            }
 	            npc.frozen = freezeMax;
@@ -111,16 +118,20 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 	        {
 				if(npc.dmgAbsorb)
 				{
-					npc.OnDamageAbsorbed(_damage,id,isProjectile);
-					
-					audio_stop_sound(snd_ProjAbsorbed);
-					audio_play_sound(snd_ProjAbsorbed,0,false);
-				
-					part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.partAbsorb,1);
-					
-					if(!multiHit)
+					if(impacted <= 0)
 					{
-						instance_destroy();
+						npc.OnDamageAbsorbed(_damage,id,isProjectile);
+					
+						audio_stop_sound(snd_ProjAbsorbed);
+						audio_play_sound(snd_ProjAbsorbed,0,false);
+				
+						part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.partAbsorb,1);
+					
+						if(!multiHit)
+						{
+							//instance_destroy();
+							impacted = max(impacted,1);
+						}
 					}
 				}
 				else if(!reflected || multiHit)

@@ -9,6 +9,10 @@ function scr_LoadGame() {
 	// destroy these just in case
 	instance_destroy(obj_Player);
 	instance_destroy(obj_Camera);
+	if(instance_exists(obj_ScreenShaker))
+	{
+		obj_ScreenShaker.active = false;
+	}
 
 	if(file_exists(scr_GetFileName(file)))
 	{

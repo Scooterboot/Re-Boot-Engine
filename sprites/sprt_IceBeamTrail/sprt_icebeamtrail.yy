@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_IceBeamTrail",
   "bboxMode": 0,
   "collisionKind": 1,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 8,
   "height": 8,
   "textureGroupId": {
@@ -24,18 +28,14 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"4b599d03-7831-4664-837a-fde8604c7d29","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"4b599d03-7831-4664-837a-fde8604c7d29","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},"LayerId":{"name":"2e922d21-b258-45db-a453-8b2b78d9dab3","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_IceBeamTrail","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},"resourceVersion":"1.0","name":"4b599d03-7831-4664-837a-fde8604c7d29","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"58793e8d-1254-4611-a0d9-813f0fc143c5","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"58793e8d-1254-4611-a0d9-813f0fc143c5","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},"LayerId":{"name":"2e922d21-b258-45db-a453-8b2b78d9dab3","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_IceBeamTrail","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},"resourceVersion":"1.0","name":"58793e8d-1254-4611-a0d9-813f0fc143c5","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"932a2fca-32e2-4f1e-9dd3-a7b064f4d5db","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"932a2fca-32e2-4f1e-9dd3-a7b064f4d5db","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},"LayerId":{"name":"2e922d21-b258-45db-a453-8b2b78d9dab3","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_IceBeamTrail","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},"resourceVersion":"1.0","name":"932a2fca-32e2-4f1e-9dd3-a7b064f4d5db","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"4b599d03-7831-4664-837a-fde8604c7d29",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"58793e8d-1254-4611-a0d9-813f0fc143c5",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"932a2fca-32e2-4f1e-9dd3-a7b064f4d5db",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_IceBeamTrail","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "sprt_IceBeamTrail",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 1.0,
@@ -46,11 +46,11 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"7adefc8a-dee2-4a5a-b76b-c72c5a270eaa","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"4b599d03-7831-4664-837a-fde8604c7d29","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"17ef22f9-ea46-4656-9da1-aece654d5ee2","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"58793e8d-1254-4611-a0d9-813f0fc143c5","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"b8cdcdaf-a7bf-451e-aab5-a52f2c53ff89","Key":2.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"932a2fca-32e2-4f1e-9dd3-a7b064f4d5db","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -66,22 +66,13 @@
     "yorigin": 4,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_IceBeamTrail","path":"sprites/sprt_IceBeamTrail/sprt_IceBeamTrail.yy",},
-    "resourceVersion": "1.4",
-    "name": "sprt_IceBeamTrail",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"2e922d21-b258-45db-a453-8b2b78d9dab3","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"2e922d21-b258-45db-a453-8b2b78d9dab3","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "IceBeam",
     "path": "folders/Sprites/Projectiles/Beams/IceBeam.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_IceBeamTrail",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

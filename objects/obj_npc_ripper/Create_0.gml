@@ -10,3 +10,6 @@ function OnXCollision(fVX)
 	velX = 0;
 	fVelX = 0;
 }
+
+function CanMoveUpSlope_Bottom() { return false; }
+function CanMoveDownSlope_Bottom() { return false; }

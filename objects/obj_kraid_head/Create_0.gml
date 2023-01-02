@@ -19,6 +19,8 @@ dmgAbsorb = true;
 
 damage = 20;
 
+ignorePlayerImmunity = true;
+
 /*function DmgCollide(posX,posY,object,isProjectile)
 {
 	var npc = id;

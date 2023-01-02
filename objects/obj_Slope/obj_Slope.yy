@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "obj_Slope",
   "spriteId": {
     "name": "sprt_Slope",
     "path": "sprites/sprt_Slope/sprt_Slope.yy",
@@ -31,8 +34,4 @@
     "name": "CollisionTiles",
     "path": "folders/Objects/Room Elements/CollisionTiles.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "obj_Slope",
-  "tags": [],
-  "resourceType": "GMObject",
 }

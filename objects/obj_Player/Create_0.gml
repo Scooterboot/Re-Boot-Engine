@@ -6,8 +6,8 @@ image_index = 0;
 
 #region Gameplay Tweaks
 
-// enable/disable debug controls
-debug = true;
+// enable/disable debug controls - synced with obj_Main's debug variable
+debug = false;
 // press 0 to refill health & ammo
 // press 9 to face toward screen / activate elevator pose
 // press 8 to set health to 10
@@ -175,7 +175,6 @@ climbX = array(0,0,0,0,0,1,2,2,2,2,2,1,1,0,0,0,0,0,0);
 climbY = array(0,6,6,5,5,4,4,2,0,0,0,0,0,0,0,0,0,0,0);
 
 quickClimbTarget = 0;
-quickClimbHeight = 0;
 
 immuneTime = 0;
 //96 default, 60 spikes
@@ -403,6 +402,8 @@ jumpStop = !jumpStart;
 
 bunnyJumpMax = 3;
 bunnyJump = bunnyJumpMax;
+bufferJumpMax = 7;//5;
+bufferJump = bufferJumpMax;
 
 morphSpinJump = false;
 
@@ -422,8 +423,8 @@ bombJumpX = 0;
 velX = 0;
 velY = 0;
 
-//shiftX = 0;
-//shiftY = 0;
+shiftX = 0;
+shiftY = 0;
 
 fVelX = 0;
 fVelY = 0;
@@ -675,6 +676,10 @@ introAnimState = 0;
 introAnimCounter = 0;
 introAnimFrame = 0;
 introAnimFrameCounter = 0;
+
+saveAnimCounter = 0;
+saveAnimFrame = 0;
+saveAnimFrameCounter = 0;
 
 cBubbleScale = 0;
 cFlashFrameSequence = array(0,1,2,1);
@@ -985,6 +990,7 @@ function entity_place_collide()
 					sc = (!asset_has_any_tag(block.object_index, "IScrewBlock", asset_object) && isScrewAttacking);
 				if(place_meeting(xx+offsetX,yy+offsetY,block) && (sp || sc))
 				{
+					ds_list_destroy(bl_list);
 					return true;
 				}
 			}
@@ -1032,8 +1038,32 @@ function entityPlatformCheck()
 			}
 			
 			var platform = pl_list[| i];
-			if(place_meeting(xx+offsetX,yy+offsetY,platform) && !place_meeting(xx,yy,platform) && bbox_bottom < platform.bbox_top)//offsetY > 0)
+			var flag = (bbox_bottom < platform.bbox_top);
+			if(platform.object_index == obj_PlatformSlope)
 			{
+				var baseX = bbox_left,
+					baseY = bbox_bottom;
+				if(platform.image_xscale < 0)
+				{
+					baseX = bbox_right;
+				}
+				
+				var platWidth = abs(platform.bbox_right-platform.bbox_left),
+					platHeight = abs(platform.bbox_bottom-platform.bbox_top);
+				
+				var baseX2 = baseX-platform.bbox_left;
+				var h = 1 - (baseX2/platWidth);
+				if(platform.image_xscale < 0)
+				{
+					h = (baseX2/platWidth);
+				}
+				
+				flag = (baseY < scr_ceil(platform.bbox_bottom - platHeight*h));
+			}
+			
+			if(place_meeting(xx+offsetX,yy+offsetY,platform) && !place_meeting(xx,yy,platform) && flag)//offsetY > 0)
+			{
+				ds_list_destroy(pl_list);
 				return true;
 			}
 		}
@@ -1042,7 +1072,14 @@ function entityPlatformCheck()
 	return false;
 }
 
-function ModifyFinalVelX(fVX) { return fVX; }
+function ModifyFinalVelX(fVX)
+{
+	if(entity_place_collide(move2,0,xprevious,yprevious) && fVX == 0 && !grounded && state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Dodge)
+	{
+		fVX += 0.5 * move2;
+	}
+	return fVX;
+}
 function ModifyFinalVelY(fVY)
 {
 	var fellVel = 1;
@@ -1053,7 +1090,7 @@ function ModifyFinalVelY(fVY)
 	}
 	else
 	{
-		if(justFell && ledgeFall && fVY >= 0 && fVY <= fGrav && state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Dodge)
+		if(justFell && ledgeFall && fVY >= 0 && fVY <= fGrav)// && state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Dodge)
 		{
 			fVY += fellVel;
 		}
@@ -1939,13 +1976,13 @@ function Shoot()
 				shot.velX = lengthdir_x(Speed,shootDir);
 				shot.velY = lengthdir_y(Speed,shootDir);
 				shot.direction = shootDir;
-				shot.image_angle = shootDir+180;
+				//shot.image_angle = shootDir+180;
 				shot.speed_x = extraSpeed_x;
 				shot.speed_y = extraSpeed_y;
 				shot.waveStyle = i + WaveStyleOffset;
 				shot.dir = dir2;
 				shot.waveDir = waveDir;
-				shot.creator = object_index;
+				shot.creator = id;
 			//}
 		}
 		if(instance_exists(shot))
@@ -3602,6 +3639,30 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		introAnimFrame = 0;
 		introAnimFrameCounter = 0;
 	}
+	
+	if(saveAnimCounter > 0)
+	{
+		saveAnimFrameCounter++;
+		if(saveAnimFrameCounter > 3+(saveAnimCounter <= 45))
+		{
+			if(saveAnimCounter > 45)
+			{
+				saveAnimFrame = scr_wrap(saveAnimFrame+1,0,3);
+			}
+			else
+			{
+				saveAnimFrame = clamp(saveAnimFrame+1,3,10);
+			}
+			saveAnimFrameCounter = 0;
+		}
+		
+		if(saveAnimFrameCounter < 2)
+		{
+			gpu_set_blendmode(bm_add);
+			draw_sprite_ext(sprt_IntroFX,saveAnimFrame,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,0,make_color_rgb(0,255,114),alph);
+			gpu_set_blendmode(bm_normal);
+		}
+	}
 
 	//if(misc[Misc.Spring] && stateFrame == State.Morph)
 	if(misc[Misc.Spider] && stateFrame == State.Morph)
@@ -3719,7 +3780,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		shineFrameCounter += 1*(!global.gamePaused);
 		if(shineFrameCounter >= 2+(shineFrame == 0))
 		{
-			shineFrame = scr_wrap(shineFrame+1,0,3);
+			shineFrame = scr_wrap(shineFrame+1,0,4);
 			shineFrameCounter = 0;
 		}
 		var sFrame = shineFrame;
@@ -3751,7 +3812,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		screwFrameCounter += 1*(!global.gamePaused);
 		if(screwFrameCounter >= 2)
 		{
-			screwFrame = scr_wrap(screwFrame+1,0,3);
+			screwFrame = scr_wrap(screwFrame+1,0,4);
 			screwFrameCounter = 0;
 		}
 		var a = 0.9;

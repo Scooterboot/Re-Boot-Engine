@@ -11,7 +11,7 @@ counter = array_create(2,0);
 camTile1 = collision_rectangle(0,256,16,256+16,obj_CamTile,false,true);
 camTile2 = collision_rectangle(320,272,320+16,272+16,obj_CamTile_NonWScreen,false,true);
 
-solidTile = collision_rectangle(288,320,288+16,320+16,obj_Tile,false,true);
+//solidTile = collision_rectangle(288,320,288+16,320+16,obj_Tile,false,true);
 
 phase2Blocks[0] = collision_rectangle(320,288,320+16,288+16,obj_NPCBlock,false,true);
 phase2Blocks[1] = collision_rectangle(208,288,208+16,288+16,obj_NPCBlock,false,true);

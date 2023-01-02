@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_GrappleBeamEnd",
   "bboxMode": 2,
   "collisionKind": 2,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 8,
   "height": 8,
   "textureGroupId": {
@@ -24,15 +28,13 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"ed6a0ad8-3131-4e9b-a31c-95894a864ebb","path":"sprites/sprt_GrappleBeamEnd/sprt_GrappleBeamEnd.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"ed6a0ad8-3131-4e9b-a31c-95894a864ebb","path":"sprites/sprt_GrappleBeamEnd/sprt_GrappleBeamEnd.yy",},"LayerId":{"name":"caa3d79d-26db-4d89-92d3-de49b25d4c72","path":"sprites/sprt_GrappleBeamEnd/sprt_GrappleBeamEnd.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_GrappleBeamEnd","path":"sprites/sprt_GrappleBeamEnd/sprt_GrappleBeamEnd.yy",},"resourceVersion":"1.0","name":"ed6a0ad8-3131-4e9b-a31c-95894a864ebb","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"aad6a71a-a1f3-4849-99bf-d944196b5d08","path":"sprites/sprt_GrappleBeamEnd/sprt_GrappleBeamEnd.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"aad6a71a-a1f3-4849-99bf-d944196b5d08","path":"sprites/sprt_GrappleBeamEnd/sprt_GrappleBeamEnd.yy",},"LayerId":{"name":"caa3d79d-26db-4d89-92d3-de49b25d4c72","path":"sprites/sprt_GrappleBeamEnd/sprt_GrappleBeamEnd.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_GrappleBeamEnd","path":"sprites/sprt_GrappleBeamEnd/sprt_GrappleBeamEnd.yy",},"resourceVersion":"1.0","name":"aad6a71a-a1f3-4849-99bf-d944196b5d08","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"ed6a0ad8-3131-4e9b-a31c-95894a864ebb",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"aad6a71a-a1f3-4849-99bf-d944196b5d08",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_GrappleBeamEnd","path":"sprites/sprt_GrappleBeamEnd/sprt_GrappleBeamEnd.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 1.0,
@@ -43,10 +45,10 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"647259ee-f881-4a16-be23-7076561e89cc","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"ed6a0ad8-3131-4e9b-a31c-95894a864ebb","path":"sprites/sprt_GrappleBeamEnd/sprt_GrappleBeamEnd.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"5364975d-8da0-42a7-87fd-91c1b8c7c7d8","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"aad6a71a-a1f3-4849-99bf-d944196b5d08","path":"sprites/sprt_GrappleBeamEnd/sprt_GrappleBeamEnd.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -62,22 +64,13 @@
     "yorigin": 4,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_GrappleBeamEnd","path":"sprites/sprt_GrappleBeamEnd/sprt_GrappleBeamEnd.yy",},
-    "resourceVersion": "1.4",
-    "name": "",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"caa3d79d-26db-4d89-92d3-de49b25d4c72","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"caa3d79d-26db-4d89-92d3-de49b25d4c72","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "GrappleBeam",
     "path": "folders/Sprites/Projectiles/GrappleBeam.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_GrappleBeamEnd",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

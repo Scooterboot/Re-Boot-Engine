@@ -6,7 +6,7 @@ Set_Beams();
 
 var sndFlag = false;
 
-if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans) && !obj_PauseMenu.pause && !pauseSelect))
+if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTrans && stateFrame != State.Grapple)) && !obj_PauseMenu.pause && !pauseSelect))
 {
 	// ----- X-Ray -----
 	#region X-Ray
@@ -50,7 +50,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
         }
         else
         {
-			var xrayDepth = layer_get_depth(layer_get_id("BTS_Tiles")) - 1;
+			//var xrayDepth = layer_get_depth(layer_get_id("BTS_Tiles")) - 1;
+			var xrayDepth = layer_get_depth(layer_get_id("Tiles_fade0")) - 1;
             XRay = instance_create_depth(x+3*dir,y-12,xrayDepth,obj_XRay);
             XRay.Die = 0;
             XRay.ConeDir = 90-(dir*90);
@@ -337,6 +338,13 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 	//rotation = 0;
 	if(rotation != 0 && rotReAlignStep > 0)
 	{
+		if(oldDir != dir)
+		{
+			var rcos = dcos(scr_wrap(rotation, 0, 360)),
+				rsin = dsin(scr_wrap(rotation, 0, 360));
+			//rotation = darctan2(rsin,rcos*dir);
+		}
+		
 		if(stateFrame == State.Somersault)
 		{
 			var step = (360 - scr_wrap(rotation, 0, 360)) / rotReAlignStep;
@@ -353,6 +361,10 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 		}
 		
 		rotReAlignStep = max(rotReAlignStep-1,0);
+	}
+	else if(rotation != 0)
+	{
+		rotation = 0;
 	}
 	
 	var liquidMovement = (liquidState > 0);
@@ -1793,7 +1805,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 					
 					ArmPos(lengthdir_x(armL,armR+rotation),lengthdir_y(armL,armR+rotation));
 				}
-	            else
+	            else if(instance_exists(grapple))
 	            {
 	                torsoR = sprt_GrappleRight;
 	                torsoL = sprt_GrappleLeft;
@@ -1814,7 +1826,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 					rotReAlignStep = 4;
 
 	                ArmPos(lengthdir_x(31, rotation + 90),lengthdir_y(31, rotation + 90));
-	                if((grappleDist-grappleOldDist) < 0 && grapWallBounceFrame <= 0)
+	                //if((grappleDist-grappleOldDist) < 0 && grapWallBounceFrame <= 0)
+	                if(grapDisVel <= -1 && grapWallBounceFrame <= 0)
 	                {
 	                    grapFrame = max(grapFrame-(0.34-(0.09*liquidMovement)),0);
 	                }
@@ -1832,11 +1845,11 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 						var grapAngVel = angle_difference(point_direction(x+velX,y+velY,grapple.x,grapple.y),point_direction(x,y,grapple.x,grapple.y));
 						
 						var gFrameDest = 0;
-	                    if(grapDisVel > 0)
+	                    if(grapDisVel >= 1)
 	                    {
 	                        gFrameDest = 2*dir;
 	                    }
-	                    else if(instance_exists(grapple))
+	                    else
 						{
 							if(move != 0 && move == sign(grapAngVel))
 							{
@@ -1923,6 +1936,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 					frameCounter[i] = 0;
 				}
 				frame[Frame.JAim] = 6;
+				
 				torsoR = sprt_HurtRight;
 				torsoL = sprt_HurtLeft;
 				bodyFrame = floor(hurtFrame);
@@ -1932,6 +1946,19 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 				{
 					ArmPos(-2,-14);
 				}
+				
+				/*torsoR = sprt_DamageRight;
+				torsoL = sprt_DamageLeft;
+				if(hurtTime <= 2)
+				{
+					bodyFrame = 2;
+				}
+				else
+				{
+					bodyFrame = floor(hurtFrame);
+					hurtFrame = min(hurtFrame + 0.34, 1);
+				}*/
+				
 				break;
 			}
 			#endregion
@@ -2069,6 +2096,10 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 				else
 				{
 					frame[Frame.Dodge] = max(frame[Frame.Dodge]-(1/(1+liquidMovement)),0);
+					//if(dodgeDir != dir)
+					//{
+						//frame[Frame.Dodge] = max(frame[Frame.Dodge],1);
+					//}
 				}
 				bodyFrame = scr_floor(frame[Frame.Dodge]);
 				
@@ -2312,6 +2343,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 			{
 				shotIndex = obj_MissileShot;
 				damage = 100;
+				sSpeed = shootSpeed/2;
 				delay = 9;
 				amount = 1;
 				sound = snd_Missile_Shot;
@@ -2432,6 +2464,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 					bombDelayTime = 30;
 					powerBombStat--;
 					cFlashStartCounter++;
+					audio_play_sound(snd_PowerBombSet,0,false);
 				}
 				else if(misc[Misc.Bomb] && instance_number(obj_MBBomb) < 3)
 				{
@@ -2445,6 +2478,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 					var mbBomb = instance_create_layer(bombposx,bombposy,"Projectiles_fg",obj_MBBomb);
 					mbBomb.damage = 50 / 2;
 					bombDelayTime = 8;
+					audio_play_sound(snd_BombSet,0,false);
 				}
 			}
 		
@@ -2529,7 +2563,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 							{
 								flareDir = angle_difference(shootDir,180);
 							}
-							var flare = instance_create_layer(shootPosX,shootPosY,layer_get_id("Projectiles_fg"),obj_ChargeFlare);
+							var flare = instance_create_layer(shootPosX+lengthdir_x(5,shootDir),shootPosY+lengthdir_y(5,shootDir),layer_get_id("Projectiles_fg"),obj_ChargeFlare);
 							flare.damage = (damage*chargeMult*beamChargeAmt);// / 2;
 							flare.sprite_index = beamFlare;
 							flare.damageSubType[2] = (beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1));
@@ -2587,6 +2621,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 						bomb.bombTimer = bombTime[i];
 					}
 					bombDelayTime = 60;
+					audio_play_sound(snd_BombSet,0,false);
 				}
 				else
 				{
@@ -2625,6 +2660,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || global.roomTrans
 						bomb.bombTimer = 55 + (10 + (5*spreadType))*i;
 					}
 					bombDelayTime = 120 + (30*spreadType);
+					audio_play_sound(snd_BombSet,0,false);
 				}
 				bombCharge = 0;
 				statCharge = 0;

@@ -10,7 +10,8 @@ if(!audio_is_playing(snd_XRay_Loop))
     }
     else if(!audio_is_playing(snd_XRay))
     {
-        audio_play_sound(snd_XRay_Loop,0,true);
+        xRaySound = audio_play_sound(snd_XRay_Loop,0,true,global.soundVolume);
+		audio_sound_gain(xRaySound,global.soundVolume*0.5,1000);
     }
 }
 

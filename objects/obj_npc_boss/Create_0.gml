@@ -123,6 +123,17 @@ function DrawLimb(_name, _sprt, _bone, _bone2 = noone) constructor
 	bone = _bone;
 	bone2 = _bone2;
 	
+	surfW = sprite_get_width(sprt);
+	surfH = sprite_get_height(sprt);
+	limbSurf = surface_create(surfW,surfH);
+	function Clean()
+	{
+		if(surface_exists(limbSurf))
+		{
+			surface_free(limbSurf);
+		}
+	}
+	
 	function Draw(frame = 0, dir = 1)
 	{
 		var b = bone;
@@ -131,7 +142,37 @@ function DrawLimb(_name, _sprt, _bone, _bone2 = noone) constructor
 			b = bone2;
 		}
 		var rot = scr_round(b.rotation) * dir;//scr_round(b.rotation/2.8125)*2.8125;
-		draw_sprite_ext(sprt,frame,scr_round(b.position.X),scr_round(b.position.Y),b.scale.X*dir,b.scale.Y,rot,b.color,b.alpha);
+		var scaleX = b.scale.X*dir,
+			scaleY = b.scale.Y;
+		var xOffset = sprite_get_xoffset(sprt),
+			yOffset = sprite_get_yoffset(sprt);
+		
+		//draw_sprite_ext(sprt,frame,scr_round(b.position.X),scr_round(b.position.Y),b.scale.X*dir,b.scale.Y,rot,b.color,b.alpha);
+		
+		if(surface_exists(limbSurf))
+		{
+			surface_set_target(limbSurf);
+			draw_clear_alpha(c_black,0);
+			
+			draw_sprite_ext(sprt,frame,xOffset,yOffset,1,1,0,c_white,1);
+			
+			surface_reset_target();
+			
+			var sc = dcos(rot),
+			ss = dsin(rot),
+			sx = xOffset * scaleX,
+			sy = yOffset * scaleY;
+			var sxx = scr_round(b.position.X)-sc*sx-ss*sy,
+				syy = scr_round(b.position.Y)-sc*sy+ss*sx;
+			draw_surface_ext(limbSurf,sxx,syy,scaleX,scaleY,rot,b.color,b.alpha);
+		}
+		else
+		{
+			limbSurf = surface_create(surfW,surfH);
+			surface_set_target(limbSurf);
+			draw_clear_alpha(c_black,0);
+			surface_reset_target();
+		}
 	}
 }
 #endregion

@@ -17,11 +17,13 @@ dmgMult[DmgType.Explosive][5] = 0; // splash
 dmgMult[DmgType.Misc][2] = 0; // speed booster / shine spark
 dmgMult[DmgType.Misc][3] = 0; // screw attack
 
-dmgAbsorb = true;
+//dmgAbsorb = true;
 
 damage = 20;
 spikeDamage = 10;
 fingerDamage = 10;
+
+ignorePlayerImmunity = true;
 
 enviroHandler = instance_create_depth(0,0,0,obj_Kraid_EnviroHandler);
 
@@ -77,9 +79,9 @@ function CameraLogic()
 		targetY = this.camPosY;
 		
 		xDir = sign(targetX - playerX);
-		yDir = -1;//sign(targetY - playerY);
+		//yDir = -1;//sign(targetY - playerY);
 		
-		camKey = true;
+		//camKey = true;
 	}
 }
 
@@ -110,6 +112,8 @@ headFrameNum = 0;
 
 rHandFrame = 0;
 lHandFrame = 0;
+
+kraidSurf = surface_create(room_width, room_height);
 
 #region Define Bones/Limbs
 

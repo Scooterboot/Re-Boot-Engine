@@ -399,7 +399,7 @@ if(clampCam)
 
 var shakeX = 0,
 	shakeY = 0;
-if(instance_exists(obj_ScreenShaker) && obj_ScreenShaker.active && !global.gamePaused)
+if(instance_exists(obj_ScreenShaker) && obj_ScreenShaker.active)// && !global.gamePaused)
 {
 	shakeX += obj_ScreenShaker.shakeX;
 	shakeY += obj_ScreenShaker.shakeY;

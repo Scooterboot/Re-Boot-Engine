@@ -30,9 +30,12 @@ mapMove = 0;
 mapMoveVelX = 0;
 mapMoveVelY = 0;
 mapSurf = surface_create(8,8);
+
 pMapIconFrame = 0;
 pMapIconFrameCounter = 0;
-pMapIconFrameNum = 1;
+//pMapIconFrameNum = 1;
+pMapIconSeq =		[0,1,2,3,4,3,2,1];
+pMapIconNumSeq =	[12,8,6,4,16,2,3,4];
 
 
 //invMove = 0;

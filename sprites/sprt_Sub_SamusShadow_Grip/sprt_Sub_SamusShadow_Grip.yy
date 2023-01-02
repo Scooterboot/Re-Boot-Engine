@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_Sub_SamusShadow_Grip",
   "bboxMode": 0,
   "collisionKind": 1,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 7,
   "height": 15,
   "textureGroupId": {
@@ -24,12 +28,12 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"1cc51ce7-2a15-45de-b2ad-843f360fceaa","path":"sprites/sprt_Sub_SamusShadow_Grip/sprt_Sub_SamusShadow_Grip.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"1cc51ce7-2a15-45de-b2ad-843f360fceaa","path":"sprites/sprt_Sub_SamusShadow_Grip/sprt_Sub_SamusShadow_Grip.yy",},"LayerId":{"name":"9e5b00c9-f9c9-42e9-a5e3-5fa22a12e8d7","path":"sprites/sprt_Sub_SamusShadow_Grip/sprt_Sub_SamusShadow_Grip.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_Sub_SamusShadow_Grip","path":"sprites/sprt_Sub_SamusShadow_Grip/sprt_Sub_SamusShadow_Grip.yy",},"resourceVersion":"1.0","name":"1cc51ce7-2a15-45de-b2ad-843f360fceaa","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"1cc51ce7-2a15-45de-b2ad-843f360fceaa",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_Sub_SamusShadow_Grip","path":"sprites/sprt_Sub_SamusShadow_Grip/sprt_Sub_SamusShadow_Grip.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 15.0,
@@ -40,9 +44,9 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"76955c7a-8bc1-429a-a9fb-ff9b15718685","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"1cc51ce7-2a15-45de-b2ad-843f360fceaa","path":"sprites/sprt_Sub_SamusShadow_Grip/sprt_Sub_SamusShadow_Grip.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -58,22 +62,13 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_Sub_SamusShadow_Grip","path":"sprites/sprt_Sub_SamusShadow_Grip/sprt_Sub_SamusShadow_Grip.yy",},
-    "resourceVersion": "1.4",
-    "name": "",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"9e5b00c9-f9c9-42e9-a5e3-5fa22a12e8d7","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"9e5b00c9-f9c9-42e9-a5e3-5fa22a12e8d7","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "Samus",
     "path": "folders/Sprites/UI/Subscreens/Samus.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_Sub_SamusShadow_Grip",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

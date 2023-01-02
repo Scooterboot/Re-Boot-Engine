@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_DoorHatch_Super",
   "bboxMode": 1,
   "collisionKind": 1,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 16,
   "height": 64,
   "textureGroupId": {
@@ -24,27 +28,17 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"6c88e323-bb4c-42cd-b604-da53aa360e6a","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"6c88e323-bb4c-42cd-b604-da53aa360e6a","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"LayerId":{"name":"34abd61a-a308-4560-83b6-515049a8b61b","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_DoorHatch_Super","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","name":"6c88e323-bb4c-42cd-b604-da53aa360e6a","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"4f9a3b47-96a7-45da-933d-574d502dee7c","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"4f9a3b47-96a7-45da-933d-574d502dee7c","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"LayerId":{"name":"34abd61a-a308-4560-83b6-515049a8b61b","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_DoorHatch_Super","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","name":"4f9a3b47-96a7-45da-933d-574d502dee7c","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"6438d816-4047-40f1-bea7-af515e19e8ce","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"6438d816-4047-40f1-bea7-af515e19e8ce","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"LayerId":{"name":"34abd61a-a308-4560-83b6-515049a8b61b","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_DoorHatch_Super","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","name":"6438d816-4047-40f1-bea7-af515e19e8ce","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"926ffb34-c330-4f38-b507-d0494cf2c104","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"926ffb34-c330-4f38-b507-d0494cf2c104","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"LayerId":{"name":"34abd61a-a308-4560-83b6-515049a8b61b","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_DoorHatch_Super","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","name":"926ffb34-c330-4f38-b507-d0494cf2c104","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"6769288e-357c-4fdc-b03a-47c0bdb22800","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"6769288e-357c-4fdc-b03a-47c0bdb22800","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"LayerId":{"name":"34abd61a-a308-4560-83b6-515049a8b61b","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_DoorHatch_Super","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","name":"6769288e-357c-4fdc-b03a-47c0bdb22800","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"291bd9c0-5e07-4d00-a0b2-bbbfbe3d3f06","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"291bd9c0-5e07-4d00-a0b2-bbbfbe3d3f06","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"LayerId":{"name":"34abd61a-a308-4560-83b6-515049a8b61b","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_DoorHatch_Super","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","name":"291bd9c0-5e07-4d00-a0b2-bbbfbe3d3f06","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"6c88e323-bb4c-42cd-b604-da53aa360e6a",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"4f9a3b47-96a7-45da-933d-574d502dee7c",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"6438d816-4047-40f1-bea7-af515e19e8ce",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"926ffb34-c330-4f38-b507-d0494cf2c104",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"6769288e-357c-4fdc-b03a-47c0bdb22800",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"291bd9c0-5e07-4d00-a0b2-bbbfbe3d3f06",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_DoorHatch_Super","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "sprt_DoorHatch_Super",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 1.0,
@@ -55,14 +49,14 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"baa272e6-bef4-4b78-92d1-2b0778bd25ab","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"6c88e323-bb4c-42cd-b604-da53aa360e6a","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"5062e896-9dce-442c-b61e-f18787bb8721","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"4f9a3b47-96a7-45da-933d-574d502dee7c","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"9d51cb9c-0d5b-45a9-8bbe-8dbb1818e8e7","Key":2.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"6438d816-4047-40f1-bea7-af515e19e8ce","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"cfe41839-a829-4ab6-9a4d-2247fabc23c3","Key":3.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"926ffb34-c330-4f38-b507-d0494cf2c104","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"dd026170-deb5-467b-bf5a-9f6b84bdcb33","Key":4.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"6769288e-357c-4fdc-b03a-47c0bdb22800","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"912c2899-43b8-4a9a-b11f-b2b36a1e60c3","Key":5.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"291bd9c0-5e07-4d00-a0b2-bbbfbe3d3f06","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -78,22 +72,13 @@
     "yorigin": 32,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_DoorHatch_Super","path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",},
-    "resourceVersion": "1.4",
-    "name": "sprt_DoorHatch_Super",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"34abd61a-a308-4560-83b6-515049a8b61b","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"34abd61a-a308-4560-83b6-515049a8b61b","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "SpecialTiles",
     "path": "folders/Sprites/Room Elements/SpecialTiles.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_DoorHatch_Super",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

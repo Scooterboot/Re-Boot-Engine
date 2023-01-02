@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_SuperMissileTrail",
   "bboxMode": 2,
   "collisionKind": 1,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 16,
   "height": 16,
   "textureGroupId": {
@@ -24,36 +28,20 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"f2a74952-4028-4c47-a87a-2301b41c0f06","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"f2a74952-4028-4c47-a87a-2301b41c0f06","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":{"name":"874e2ab6-f452-450e-90b1-af9dc5e4389f","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_SuperMissileTrail","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"f2a74952-4028-4c47-a87a-2301b41c0f06","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"afd1500d-6488-4e4d-b964-db8396a2e411","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"afd1500d-6488-4e4d-b964-db8396a2e411","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":{"name":"874e2ab6-f452-450e-90b1-af9dc5e4389f","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_SuperMissileTrail","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"afd1500d-6488-4e4d-b964-db8396a2e411","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"877a3bf7-5018-47d5-a092-8b61c4ad1c6d","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"877a3bf7-5018-47d5-a092-8b61c4ad1c6d","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":{"name":"874e2ab6-f452-450e-90b1-af9dc5e4389f","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_SuperMissileTrail","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"877a3bf7-5018-47d5-a092-8b61c4ad1c6d","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"fcdbad95-2ebf-4331-b6c8-1febdc9730a8","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"fcdbad95-2ebf-4331-b6c8-1febdc9730a8","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":{"name":"874e2ab6-f452-450e-90b1-af9dc5e4389f","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_SuperMissileTrail","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"fcdbad95-2ebf-4331-b6c8-1febdc9730a8","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"8aec6d00-3013-4e6a-a7a6-20e754e5b189","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"8aec6d00-3013-4e6a-a7a6-20e754e5b189","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":{"name":"874e2ab6-f452-450e-90b1-af9dc5e4389f","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_SuperMissileTrail","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"8aec6d00-3013-4e6a-a7a6-20e754e5b189","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"d2782ea8-4d76-4069-9d57-31b1ad8c99a5","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"d2782ea8-4d76-4069-9d57-31b1ad8c99a5","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":{"name":"874e2ab6-f452-450e-90b1-af9dc5e4389f","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_SuperMissileTrail","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"d2782ea8-4d76-4069-9d57-31b1ad8c99a5","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"adb19fd1-2e01-4844-8388-8596cf2e360c","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"adb19fd1-2e01-4844-8388-8596cf2e360c","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":{"name":"874e2ab6-f452-450e-90b1-af9dc5e4389f","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_SuperMissileTrail","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"adb19fd1-2e01-4844-8388-8596cf2e360c","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"e1516dbb-e7fe-4aea-9d4f-5d39e378e00f","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"e1516dbb-e7fe-4aea-9d4f-5d39e378e00f","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":{"name":"874e2ab6-f452-450e-90b1-af9dc5e4389f","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_SuperMissileTrail","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"e1516dbb-e7fe-4aea-9d4f-5d39e378e00f","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"9172b1f9-544f-472a-8818-ab28c92fa0d3","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"9172b1f9-544f-472a-8818-ab28c92fa0d3","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"LayerId":{"name":"874e2ab6-f452-450e-90b1-af9dc5e4389f","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_SuperMissileTrail","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","name":"9172b1f9-544f-472a-8818-ab28c92fa0d3","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"f2a74952-4028-4c47-a87a-2301b41c0f06",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"afd1500d-6488-4e4d-b964-db8396a2e411",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"877a3bf7-5018-47d5-a092-8b61c4ad1c6d",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"fcdbad95-2ebf-4331-b6c8-1febdc9730a8",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"8aec6d00-3013-4e6a-a7a6-20e754e5b189",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"d2782ea8-4d76-4069-9d57-31b1ad8c99a5",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"adb19fd1-2e01-4844-8388-8596cf2e360c",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"e1516dbb-e7fe-4aea-9d4f-5d39e378e00f",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"9172b1f9-544f-472a-8818-ab28c92fa0d3",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_SuperMissileTrail","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 1.0,
@@ -64,7 +52,7 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"be6ac851-90c1-4e31-b760-4102e8822fb6","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"f2a74952-4028-4c47-a87a-2301b41c0f06","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"ff9d3ef8-8254-411f-8a7f-eda8d4428206","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"afd1500d-6488-4e4d-b964-db8396a2e411","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"76d173b6-fcb7-493e-afc7-1e2e3e475c83","Key":2.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"877a3bf7-5018-47d5-a092-8b61c4ad1c6d","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
@@ -74,7 +62,7 @@
             {"id":"1519638a-8619-4b53-9302-ce8c246da9a5","Key":6.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"adb19fd1-2e01-4844-8388-8596cf2e360c","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"28c6fc76-44c9-4355-acf4-f6967f96ea0f","Key":7.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"e1516dbb-e7fe-4aea-9d4f-5d39e378e00f","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"f0ecc0da-76d7-4650-bf3b-7f4699a6fed2","Key":8.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"9172b1f9-544f-472a-8818-ab28c92fa0d3","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -90,22 +78,13 @@
     "yorigin": 8,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_SuperMissileTrail","path":"sprites/sprt_SuperMissileTrail/sprt_SuperMissileTrail.yy",},
-    "resourceVersion": "1.4",
-    "name": "",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"874e2ab6-f452-450e-90b1-af9dc5e4389f","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"874e2ab6-f452-450e-90b1-af9dc5e4389f","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "Explosives",
     "path": "folders/Sprites/Projectiles/Explosives.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_SuperMissileTrail",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

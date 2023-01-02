@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_CamTile_NonWScreen",
   "bboxMode": 0,
   "collisionKind": 1,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 16,
   "height": 16,
   "textureGroupId": {
@@ -24,12 +28,12 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"3ff13581-0888-445e-9ede-7ec0ff75cf08","path":"sprites/sprt_CamTile_NonWScreen/sprt_CamTile_NonWScreen.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"3ff13581-0888-445e-9ede-7ec0ff75cf08","path":"sprites/sprt_CamTile_NonWScreen/sprt_CamTile_NonWScreen.yy",},"LayerId":{"name":"8d0aaf0f-0d55-48fb-9f50-b91fb23b83a2","path":"sprites/sprt_CamTile_NonWScreen/sprt_CamTile_NonWScreen.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_CamTile_NonWScreen","path":"sprites/sprt_CamTile_NonWScreen/sprt_CamTile_NonWScreen.yy",},"resourceVersion":"1.0","name":"3ff13581-0888-445e-9ede-7ec0ff75cf08","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"3ff13581-0888-445e-9ede-7ec0ff75cf08",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_CamTile_NonWScreen","path":"sprites/sprt_CamTile_NonWScreen/sprt_CamTile_NonWScreen.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "sprt_CamTile_NonWScreen",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 15.0,
@@ -40,9 +44,9 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"233bc355-bd8b-440c-bb10-92887514f37c","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"3ff13581-0888-445e-9ede-7ec0ff75cf08","path":"sprites/sprt_CamTile_NonWScreen/sprt_CamTile_NonWScreen.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -58,14 +62,9 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_CamTile_NonWScreen","path":"sprites/sprt_CamTile_NonWScreen/sprt_CamTile_NonWScreen.yy",},
-    "resourceVersion": "1.4",
-    "name": "sprt_CamTile_NonWScreen",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"8d0aaf0f-0d55-48fb-9f50-b91fb23b83a2","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"8d0aaf0f-0d55-48fb-9f50-b91fb23b83a2","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": {
     "left": 2,
@@ -96,8 +95,4 @@
     "name": "Camera",
     "path": "folders/Sprites/Camera.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_CamTile_NonWScreen",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

@@ -18,7 +18,7 @@ hitPoints = 1;
 hitAnim = 0;
 
 immune = false;
-function Damage(_dmg)
+function DamageHatch(_dmg)
 {
 	if(!immune)
 	{

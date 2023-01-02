@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_Kraid_Bicep_Back",
   "bboxMode": 2,
   "collisionKind": 2,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 43,
   "height": 77,
   "textureGroupId": {
@@ -24,12 +28,12 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"cdb80c6c-a173-4fec-9cda-75f0dd94fbfc","path":"sprites/sprt_Kraid_Bicep_Back/sprt_Kraid_Bicep_Back.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"cdb80c6c-a173-4fec-9cda-75f0dd94fbfc","path":"sprites/sprt_Kraid_Bicep_Back/sprt_Kraid_Bicep_Back.yy",},"LayerId":{"name":"a8bd52e3-03ec-4aa0-850b-713d4a42e548","path":"sprites/sprt_Kraid_Bicep_Back/sprt_Kraid_Bicep_Back.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_Kraid_Bicep_Back","path":"sprites/sprt_Kraid_Bicep_Back/sprt_Kraid_Bicep_Back.yy",},"resourceVersion":"1.0","name":"cdb80c6c-a173-4fec-9cda-75f0dd94fbfc","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"cdb80c6c-a173-4fec-9cda-75f0dd94fbfc",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_Kraid_Bicep_Back","path":"sprites/sprt_Kraid_Bicep_Back/sprt_Kraid_Bicep_Back.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "sprt_Kraid_Bicep_Back",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -37,12 +41,12 @@
     "autoRecord": true,
     "volume": 1.0,
     "length": 1.0,
-    "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore`1","elementType":"MessageEventKeyframe",},
-    "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore`1","elementType":"MomentsEventKeyframe",},
+    "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
+    "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
-            {"id":"25fb687e-9448-4ab7-a0ad-7a71c4c1dbf2","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"cdb80c6c-a173-4fec-9cda-75f0dd94fbfc","path":"sprites/sprt_Kraid_Bicep_Back/sprt_Kraid_Bicep_Back.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe`1","elementType":"SpriteFrameKeyframe",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore`1","elementType":"SpriteFrameKeyframe",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+            {"id":"25fb687e-9448-4ab7-a0ad-7a71c4c1dbf2","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"cdb80c6c-a173-4fec-9cda-75f0dd94fbfc","path":"sprites/sprt_Kraid_Bicep_Back/sprt_Kraid_Bicep_Back.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -58,22 +62,13 @@
     "yorigin": 19,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_Kraid_Bicep_Back","path":"sprites/sprt_Kraid_Bicep_Back/sprt_Kraid_Bicep_Back.yy",},
-    "resourceVersion": "1.4",
-    "name": "sprt_Kraid_Bicep_Back",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"a8bd52e3-03ec-4aa0-850b-713d4a42e548","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"a8bd52e3-03ec-4aa0-850b-713d4a42e548","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "Kraid",
     "path": "folders/Sprites/NPCs/Bosses/Kraid.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_Kraid_Bicep_Back",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

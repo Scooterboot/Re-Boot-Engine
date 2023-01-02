@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "obj_ChargeFlare",
   "spriteId": {
     "name": "sprt_PowerBeamChargeFlare",
     "path": "sprites/sprt_PowerBeamChargeFlare/sprt_PowerBeamChargeFlare.yy",
@@ -6,7 +9,10 @@
   "solid": false,
   "visible": true,
   "managed": true,
-  "spriteMaskId": null,
+  "spriteMaskId": {
+    "name": "mask_ChargeFlare",
+    "path": "sprites/mask_ChargeFlare/mask_ChargeFlare.yy",
+  },
   "persistent": false,
   "parentObjectId": {
     "name": "obj_Beam",
@@ -25,9 +31,9 @@
   "physicsKinematic": false,
   "physicsShapePoints": [],
   "eventList": [
-    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-    {"isDnD":false,"eventNum":0,"eventType":3,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
-    {"isDnD":false,"eventNum":0,"eventType":8,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,},
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","isDnD":false,"eventNum":0,"eventType":3,"collisionObjectId":null,},
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","isDnD":false,"eventNum":0,"eventType":8,"collisionObjectId":null,},
   ],
   "properties": [],
   "overriddenProperties": [],
@@ -35,8 +41,4 @@
     "name": "Beams",
     "path": "folders/Objects/Entities/Projectiles/Beams.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "obj_ChargeFlare",
-  "tags": [],
-  "resourceType": "GMObject",
 }

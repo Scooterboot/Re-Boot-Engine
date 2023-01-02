@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "obj_Tile",
   "spriteId": {
     "name": "sprt_Tile",
     "path": "sprites/sprt_Tile/sprt_Tile.yy",
@@ -22,7 +25,7 @@
   "physicsKinematic": false,
   "physicsShapePoints": [],
   "eventList": [
-    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,},
   ],
   "properties": [],
   "overriddenProperties": [],
@@ -30,8 +33,4 @@
     "name": "CollisionTiles",
     "path": "folders/Objects/Room Elements/CollisionTiles.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "obj_Tile",
-  "tags": [],
-  "resourceType": "GMObject",
 }

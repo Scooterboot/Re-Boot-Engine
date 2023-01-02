@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_NPCBlock",
   "bboxMode": 0,
   "collisionKind": 1,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 16,
   "height": 16,
   "textureGroupId": {
@@ -24,15 +28,13 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"b7f93c5e-919d-4368-8eba-a06d83ad13ed","path":"sprites/sprt_NPCBlock/sprt_NPCBlock.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"b7f93c5e-919d-4368-8eba-a06d83ad13ed","path":"sprites/sprt_NPCBlock/sprt_NPCBlock.yy",},"LayerId":{"name":"3af69955-da0c-4d69-8b5c-421f70f1b310","path":"sprites/sprt_NPCBlock/sprt_NPCBlock.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_NPCBlock","path":"sprites/sprt_NPCBlock/sprt_NPCBlock.yy",},"resourceVersion":"1.0","name":"b7f93c5e-919d-4368-8eba-a06d83ad13ed","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"feb045ef-aa23-4fb6-bd32-05b9e547aa7e","path":"sprites/sprt_NPCBlock/sprt_NPCBlock.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"feb045ef-aa23-4fb6-bd32-05b9e547aa7e","path":"sprites/sprt_NPCBlock/sprt_NPCBlock.yy",},"LayerId":{"name":"3af69955-da0c-4d69-8b5c-421f70f1b310","path":"sprites/sprt_NPCBlock/sprt_NPCBlock.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_NPCBlock","path":"sprites/sprt_NPCBlock/sprt_NPCBlock.yy",},"resourceVersion":"1.0","name":"feb045ef-aa23-4fb6-bd32-05b9e547aa7e","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"b7f93c5e-919d-4368-8eba-a06d83ad13ed",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"feb045ef-aa23-4fb6-bd32-05b9e547aa7e",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_NPCBlock","path":"sprites/sprt_NPCBlock/sprt_NPCBlock.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "sprt_NPCBlock",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -40,13 +42,13 @@
     "autoRecord": true,
     "volume": 1.0,
     "length": 2.0,
-    "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore`1","elementType":"MessageEventKeyframe",},
-    "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore`1","elementType":"MomentsEventKeyframe",},
+    "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
+    "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
-            {"id":"e948df41-67a5-4441-b6c7-c928d9524e7b","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"b7f93c5e-919d-4368-8eba-a06d83ad13ed","path":"sprites/sprt_NPCBlock/sprt_NPCBlock.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe`1","elementType":"SpriteFrameKeyframe",},
-            {"id":"d1ef5df9-d1af-4fd5-862d-63a7f81b947b","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"feb045ef-aa23-4fb6-bd32-05b9e547aa7e","path":"sprites/sprt_NPCBlock/sprt_NPCBlock.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe`1","elementType":"SpriteFrameKeyframe",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore`1","elementType":"SpriteFrameKeyframe",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+            {"id":"e948df41-67a5-4441-b6c7-c928d9524e7b","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"b7f93c5e-919d-4368-8eba-a06d83ad13ed","path":"sprites/sprt_NPCBlock/sprt_NPCBlock.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"d1ef5df9-d1af-4fd5-862d-63a7f81b947b","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"feb045ef-aa23-4fb6-bd32-05b9e547aa7e","path":"sprites/sprt_NPCBlock/sprt_NPCBlock.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -62,14 +64,9 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_NPCBlock","path":"sprites/sprt_NPCBlock/sprt_NPCBlock.yy",},
-    "resourceVersion": "1.4",
-    "name": "sprt_NPCBlock",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"3af69955-da0c-4d69-8b5c-421f70f1b310","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"3af69955-da0c-4d69-8b5c-421f70f1b310","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": {
     "left": 1,
@@ -100,8 +97,4 @@
     "name": "BTSTiles",
     "path": "folders/Sprites/Room Elements/BTSTiles.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_NPCBlock",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

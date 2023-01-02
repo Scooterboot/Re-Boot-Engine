@@ -33,6 +33,7 @@ if(instance_exists(obj_Player) && place_meeting(x,y,obj_Player) &&
 			if(saving == maxSave)
 			{
 				obj_Player.state = State.Elevator;
+				obj_Player.saveAnimCounter = maxSave;
 				scr_SaveGame(global.currentPlayFile,xx,yy);
 				audio_play_sound(snd_Save,0,false);
 				obj_UI.CreateMessageBox(gameSavedText,"",Message.Simple);

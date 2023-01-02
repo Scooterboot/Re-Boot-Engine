@@ -5,7 +5,7 @@ if(state == 1)
 {
 	instance_destroy(camTile1);
 	instance_destroy(camTile2);
-	instance_destroy(solidTile);
+	//instance_destroy(solidTile);
 	
 	counter[0]++;
 	if(counter[0] > 20 && counter[1] < array_length(phase2Blocks))
@@ -63,6 +63,6 @@ if(state == 4)
 
 if(state >= 1)
 {
-	bgAlpha = min(bgAlpha+0.05,1);
+	bgAlpha = min(bgAlpha+0.025,1);
 }
 layer_background_blend(layer_background_get_id(layer_get_id("Background")),c_white*bgAlpha);

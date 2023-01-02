@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_MissileBlockBreak",
   "bboxMode": 0,
   "collisionKind": 1,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 16,
   "height": 16,
   "textureGroupId": {
@@ -24,18 +28,14 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"1fcba80f-26c6-430e-8053-c67e6f01e7c0","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"1fcba80f-26c6-430e-8053-c67e6f01e7c0","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},"LayerId":{"name":"0cee411a-8422-4799-aaa0-5f3922026d5e","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_MissileBlockBreak","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},"resourceVersion":"1.0","name":"1fcba80f-26c6-430e-8053-c67e6f01e7c0","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"c6951ef5-6ed4-4dbf-914f-6974c3598e39","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"c6951ef5-6ed4-4dbf-914f-6974c3598e39","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},"LayerId":{"name":"0cee411a-8422-4799-aaa0-5f3922026d5e","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_MissileBlockBreak","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},"resourceVersion":"1.0","name":"c6951ef5-6ed4-4dbf-914f-6974c3598e39","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"4e4c854f-f735-499a-97af-df0631d1f1fb","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"4e4c854f-f735-499a-97af-df0631d1f1fb","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},"LayerId":{"name":"0cee411a-8422-4799-aaa0-5f3922026d5e","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_MissileBlockBreak","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},"resourceVersion":"1.0","name":"4e4c854f-f735-499a-97af-df0631d1f1fb","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"1fcba80f-26c6-430e-8053-c67e6f01e7c0",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"c6951ef5-6ed4-4dbf-914f-6974c3598e39",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"4e4c854f-f735-499a-97af-df0631d1f1fb",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_MissileBlockBreak","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 1.0,
@@ -46,11 +46,11 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"a41c04f6-ec15-42fb-b224-d2c16d2c963c","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"1fcba80f-26c6-430e-8053-c67e6f01e7c0","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"e3f6c764-141c-4509-8143-cc48c5706cbc","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"c6951ef5-6ed4-4dbf-914f-6974c3598e39","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"dd5547f1-f33e-420d-a29f-b50c4b0b6821","Key":2.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"4e4c854f-f735-499a-97af-df0631d1f1fb","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -66,14 +66,9 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_MissileBlockBreak","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},
-    "resourceVersion": "1.4",
-    "name": "",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"0cee411a-8422-4799-aaa0-5f3922026d5e","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"0cee411a-8422-4799-aaa0-5f3922026d5e","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": {
     "left": 0,
@@ -104,8 +99,4 @@
     "name": "BTSTiles",
     "path": "folders/Sprites/Room Elements/BTSTiles.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_MissileBlockBreak",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

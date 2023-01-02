@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_MoonWalkRight",
   "bboxMode": 0,
   "collisionKind": 1,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 27,
   "height": 20,
   "textureGroupId": {
@@ -24,15 +28,13 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"1a08dfa3-f8db-40dd-b2c0-2c504ec9fcff","path":"sprites/sprt_MoonWalkRight/sprt_MoonWalkRight.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"1a08dfa3-f8db-40dd-b2c0-2c504ec9fcff","path":"sprites/sprt_MoonWalkRight/sprt_MoonWalkRight.yy",},"LayerId":{"name":"488832f5-31a6-4f5a-abb4-1899ff943e0d","path":"sprites/sprt_MoonWalkRight/sprt_MoonWalkRight.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_MoonWalkRight","path":"sprites/sprt_MoonWalkRight/sprt_MoonWalkRight.yy",},"resourceVersion":"1.0","name":"1a08dfa3-f8db-40dd-b2c0-2c504ec9fcff","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"2c235e71-8fb0-4780-84a5-cdd75c37a79a","path":"sprites/sprt_MoonWalkRight/sprt_MoonWalkRight.yy",},"LayerId":null,"resourceVersion":"1.0","name":"composite","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"2c235e71-8fb0-4780-84a5-cdd75c37a79a","path":"sprites/sprt_MoonWalkRight/sprt_MoonWalkRight.yy",},"LayerId":{"name":"488832f5-31a6-4f5a-abb4-1899ff943e0d","path":"sprites/sprt_MoonWalkRight/sprt_MoonWalkRight.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_MoonWalkRight","path":"sprites/sprt_MoonWalkRight/sprt_MoonWalkRight.yy",},"resourceVersion":"1.0","name":"2c235e71-8fb0-4780-84a5-cdd75c37a79a","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"1a08dfa3-f8db-40dd-b2c0-2c504ec9fcff",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"2c235e71-8fb0-4780-84a5-cdd75c37a79a",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_MoonWalkRight","path":"sprites/sprt_MoonWalkRight/sprt_MoonWalkRight.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 1.0,
@@ -43,10 +45,10 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"32edd133-8433-4e28-978b-980173d134e5","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"1a08dfa3-f8db-40dd-b2c0-2c504ec9fcff","path":"sprites/sprt_MoonWalkRight/sprt_MoonWalkRight.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"24878cf8-26a3-4822-bfec-e6ec1987f20d","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"2c235e71-8fb0-4780-84a5-cdd75c37a79a","path":"sprites/sprt_MoonWalkRight/sprt_MoonWalkRight.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -62,22 +64,13 @@
     "yorigin": 16,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_MoonWalkRight","path":"sprites/sprt_MoonWalkRight/sprt_MoonWalkRight.yy",},
-    "resourceVersion": "1.4",
-    "name": "",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"488832f5-31a6-4f5a-abb4-1899ff943e0d","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"488832f5-31a6-4f5a-abb4-1899ff943e0d","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "WalkRun",
     "path": "folders/Sprites/Player/WalkRun.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_MoonWalkRight",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

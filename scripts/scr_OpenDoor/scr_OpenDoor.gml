@@ -39,7 +39,7 @@ function scr_DamageDoor(_x,_y,_objIndex,_dmg)
 	{
 		for(var i = 0; i < _num; i++)
 		{
-			_list[| i].Damage(_dmg);
+			_list[| i].DamageHatch(_dmg);
 		}
 	}
 	ds_list_destroy(_list);

@@ -11,6 +11,19 @@ isSpazer = (string_count("Spazer",object_get_name(object_index)) > 0);
 isPlasma = (string_count("Plasma",object_get_name(object_index)) > 0);
 isGrapple = (object_index == obj_GrappleBeamShot);
 
+if(string_count("Beam",object_get_name(object_index)) > 0 && (sprite_index == mask_index || !sprite_exists(mask_index)))
+{
+	mask_index = mask_BeamShot;
+	if(isCharge)
+	{
+		mask_index = mask_BeamChargeShot;
+		if(isSpazer || isPlasma)
+		{
+			mask_index = mask_BeamChargeShot_Plasma;
+		}
+	}
+}
+
 frame = 0;
 frameCounter = 0;
 
@@ -21,6 +34,7 @@ damageType = DmgType.Beam;
 if(isCharge)
 {
 	damageType = DmgType.Charge;
+	dmgDelay = 1;
 }
 damageSubType[1] = true;
 damageSubType[2] = isIce;

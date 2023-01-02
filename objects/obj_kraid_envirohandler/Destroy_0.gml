@@ -2,7 +2,7 @@
 
 instance_destroy(camTile1);
 instance_destroy(camTile2);
-instance_destroy(solidTile);
+//instance_destroy(solidTile);
 
 for(var i = 0; i < array_length(phase2Blocks); i++)
 {

@@ -38,6 +38,11 @@ if(introAnimState != -1)
 		palIndex = 1 + introPal * power(abs(scr_wrap(introAnimCounter,-4,4) / 4), 2);
 	}
 }
+if(saveAnimCounter > 0)
+{
+	var savePal = 1;//lerp(1,0.5, clamp((saveAnimCounter-200)/35,0,1));
+	palIndex = 1 + savePal * power(abs(scr_wrap(saveAnimCounter,-4,4) / 4), 2);
+}
 
 if(speedFXCounter > 0)
 {
@@ -250,7 +255,7 @@ if(instance_exists(obj_PlayerEcho))
 		with(echo)
 		{
 			pal_swap_set(palShader,palIndex,palIndex2,palDif,false);
-			DrawEcho(x,y,rotation,clamp(alpha*alpha2,0,1));//,false);
+			DrawEcho(x,y,rotation,clamp(alpha*alpha2,0,1));
 			shader_reset();
 		}
 	}
@@ -275,15 +280,10 @@ else
 	gravGlowAlpha = max(gravGlowAlpha - 0.05*(!global.gamePaused),0);
 	gravGlowNum = 10;
 }
-if(gravGlowAlpha > 0)// || state == State.Dodge)
+if(gravGlowAlpha > 0)
 {
 	var col = c_fuchsia,
 		alp = gravGlowAlpha;
-	/*if(state == State.Dodge)
-	{
-		col = c_lime;
-		alp = 1;
-	}*/
 	gpu_set_fog(true,col,0,0);
 	gpu_set_blendmode(bm_add);
 	for(var i = 0; i < 360; i += 45)
@@ -292,7 +292,7 @@ if(gravGlowAlpha > 0)// || state == State.Dodge)
 		{
 			var gx = x+scr_ceil(lengthdir_x(1,i)*j),
 			gy = y+scr_ceil(lengthdir_y(1,i)*j);
-			DrawPlayer(gx,gy,rotation,alp*(0.5*(1/6)));//,false);
+			DrawPlayer(gx,gy,rotation,alp*(0.5*(1/6)));
 		}
 	}
 	gpu_set_blendmode(bm_normal);

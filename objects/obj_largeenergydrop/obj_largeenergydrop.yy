@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "obj_LargeEnergyDrop",
   "spriteId": {
     "name": "sprt_LargeEnergyDrop",
     "path": "sprites/sprt_LargeEnergyDrop/sprt_LargeEnergyDrop.yy",
@@ -25,7 +28,7 @@
   "physicsKinematic": false,
   "physicsShapePoints": [],
   "eventList": [
-    {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,},
   ],
   "properties": [],
   "overriddenProperties": [],
@@ -33,8 +36,4 @@
     "name": "ItemDrops",
     "path": "folders/Objects/Misc/ItemDrops.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "obj_LargeEnergyDrop",
-  "tags": [],
-  "resourceType": "GMObject",
 }

@@ -1,10 +1,14 @@
 {
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "obj_DoorHatch_Power",
   "spriteId": {
     "name": "sprt_DoorHatch_Power",
     "path": "sprites/sprt_DoorHatch_Power/sprt_DoorHatch_Power.yy",
   },
   "solid": false,
   "visible": true,
+  "managed": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
@@ -30,8 +34,4 @@
     "name": "SpecialTiles",
     "path": "folders/Objects/Room Elements/SpecialTiles.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "obj_DoorHatch_Power",
-  "tags": [],
-  "resourceType": "GMObject",
 }

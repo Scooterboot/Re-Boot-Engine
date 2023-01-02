@@ -5,18 +5,19 @@ if !(Die)
 {
     //ConeSpread = min(ConeSpread + 1, 15);
 	ConeSpread = min(ConeSpread + 2, 30);
-    Alpha = min(Alpha + .066667, 1);
+    //Alpha = min(Alpha + .066667, 1);
 }
 else
 {
     ConeSpread = max(ConeSpread - 2, 0);
-    Alpha = max(Alpha - .13334, 0);
+    //Alpha = max(Alpha - .13334, 0);
     
     if (ConeSpread <= 0)
     {
         instance_destroy();
     }
 }
+Alpha = clamp(ConeSpread/20,0,1);
 DarkAlpha = Alpha*0.55;
 
 VisorX = x - camx;
@@ -54,6 +55,26 @@ else if (RefreshThisFrame)
     xray_redraw_break();
 }
 
+if !(surface_exists(OutlineSurf))
+{
+    OutlineSurf = surface_create(Width,Height);
+    xray_redraw_outline();
+}
+else if (RefreshThisFrame)
+{
+    xray_redraw_outline();
+}
+
+if !(surface_exists(OutlineSurf2))
+{
+    OutlineSurf2 = surface_create(Width,Height);
+    xray_redraw_outline2();
+}
+else //if (RefreshThisFrame)
+{
+    xray_redraw_outline2();
+}
+
 RefreshThisFrame = 0;
 
 if !(surface_exists(AlphaMaskTemp))
@@ -71,10 +92,11 @@ if !(surface_exists(BreakMaskTemp))
     BreakMaskTemp = surface_create(Width,Height);
 }
 
-if !(surface_exists(FinalSurface))
+if !(surface_exists(OutlineSurfTemp))
 {
-	FinalSurface = surface_create(Width,Height);
+    OutlineSurfTemp = surface_create(Width,Height);
 }
+
 
 // -- AlphaMask Figureout
 
@@ -131,27 +153,68 @@ draw_primitive_end();
 gpu_set_blendmode(bm_normal);
 surface_reset_target();
 
+// -- Third, outlines
+
+surface_set_target(OutlineSurfTemp);
+draw_clear_alpha(0,0);
+
+
+gpu_set_colorwriteenable(0,0,0,1);
+
+var radius = 25;
+var totRadius = Width+(radius*2);
+outlineFlash = scr_wrap(outlineFlash + 1.25, 0, totRadius);
+
+for(var i = -radius; i < radius; i += 0.75)
+{
+	var rad = scr_wrap(outlineFlash + i, 0, totRadius);
+	
+	draw_set_color(c_white);
+	//draw_set_alpha(lerp(1,0.25,(abs(i)/radius)));
+	var alph = clamp(lerp(1, 0, (abs(i)/radius)), 0, 1);
+	draw_set_alpha(alph);
+	
+	var num = 4;
+	for(var j = 0; j < num; j++)
+	{
+		var rad2 = scr_wrap(rad + scr_floor(totRadius/num)*j,0,totRadius);
+		draw_circle(VisorX,VisorY,rad2,true);
+	}
+	
+	draw_set_alpha(1);
+}
+
+gpu_set_colorwriteenable(1,1,1,0);
+draw_surface(OutlineSurf2,0,0);
+gpu_set_colorwriteenable(1,1,1,1);
+
+gpu_set_blendmode_ext(bm_dest_alpha, bm_src_alpha);
+
+draw_primitive_begin(pr_trianglestrip);
+for(var i = 0; i < 360-(ConeSpread*2); i = min(i+45,360-(ConeSpread*2)))
+{
+    var Dar = ConeDir + ConeSpread + i;
+    draw_vertex_colour(VisorX,VisorY,0,0);
+    draw_vertex_colour(VisorX+lengthdir_x(500,Dar),VisorY+lengthdir_y(500,Dar),0,0);
+}
+draw_vertex_colour(VisorX,VisorY,0,0);
+draw_vertex_colour(VisorX+lengthdir_x(500,ConeDir - ConeSpread),VisorY+lengthdir_y(500,ConeDir - ConeSpread),0,0);
+draw_primitive_end();
+
+gpu_set_blendmode(bm_normal);
+surface_reset_target();
+
 
 // -- Draw surfaces. Finally.
 
 draw_surface(SurfaceFrontTemp,camx,camy);
 draw_surface(BreakMaskTemp,camx,camy);
-/*surface_set_target(FinalSurface);
-draw_clear_alpha(c_black,0);
 
+//oColorHue = scr_wrap(oColorHue+0.5,0,256);
+//var cOutline = make_color_hsv(oColorHue,255,255);
 gpu_set_blendmode(bm_add);
-draw_surface(SurfaceFrontTemp,0,0);
-draw_surface(BreakMaskTemp,0,0);
+draw_surface_ext(OutlineSurfTemp,camx,camy,1,1,0,c_ltgray,DarkAlpha);
 gpu_set_blendmode(bm_normal);
-
-gpu_set_colorwriteenable(1,1,1,0);
-draw_surface(SurfaceFrontTemp,0,0);
-draw_surface(BreakMaskTemp,0,0);
-gpu_set_colorwriteenable(1,1,1,1);
-
-surface_reset_target();
-
-draw_surface(FinalSurface,camx,camy);*/
 
 // -- Draw Dark Cover
 

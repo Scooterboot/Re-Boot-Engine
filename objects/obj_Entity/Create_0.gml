@@ -113,8 +113,6 @@ function GetEdgeSlope()
 	/// @param margin=0
 	var edge = argument[0];
 	
-	var slopeResult = noone;
-	
 	var xcheck = 0,
 		ycheck = 2;
 	switch (edge)
@@ -151,25 +149,28 @@ function GetEdgeSlope()
 		
 	var dlist = ds_list_create();
 	var col = instance_place_list(x+xcheck,y+ycheck,obj_Slope,dlist,true);
-	for(var i = 0; i < col; i++)
+	if(col > 0)
 	{
-		var slope = dlist[| i];
-		if(instance_exists(slope))
+		for(var i = 0; i < col; i++)
 		{
-			var withinX = (slope.image_xscale > 0 && bbox_left >= slope.bbox_left-margin) || (slope.image_xscale < 0 && bbox_right <= slope.bbox_right+margin),
-				withinY = (slope.image_yscale > 0 && bbox_bottom <= slope.bbox_bottom+margin) || (slope.image_yscale < 0 && bbox_top >= slope.bbox_top-margin);
-			var checkHor = ((edge == Edge.Bottom && slope.image_yscale > 0) || (edge == Edge.Top && slope.image_yscale < 0)) && withinX,
-				checkVer = ((edge == Edge.Left && slope.image_xscale > 0) || (edge == Edge.Right && slope.image_xscale < 0)) && withinY;
-			if(checkHor || checkVer)
+			var slope = dlist[| i];
+			if(instance_exists(slope))
 			{
-				slopeResult = slope;
-				break;
+				var withinX = (slope.image_xscale > 0 && bbox_left >= slope.bbox_left-margin) || (slope.image_xscale < 0 && bbox_right <= slope.bbox_right+margin),
+					withinY = (slope.image_yscale > 0 && bbox_bottom <= slope.bbox_bottom+margin) || (slope.image_yscale < 0 && bbox_top >= slope.bbox_top-margin);
+				var checkHor = ((edge == Edge.Bottom && slope.image_yscale > 0) || (edge == Edge.Top && slope.image_yscale < 0)) && withinX,
+					checkVer = ((edge == Edge.Left && slope.image_xscale > 0) || (edge == Edge.Right && slope.image_xscale < 0)) && withinY;
+				if(checkHor || checkVer)
+				{
+					ds_list_destroy(dlist);
+					return slope;
+				}
 			}
 		}
 	}
 	ds_list_destroy(dlist);
 	
-	return slopeResult;
+	return noone;
 }
 #endregion
 
@@ -435,7 +436,29 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		
 		var vY2 = min(maxSpeedY,vStepY)*sign(vY);
 		
-		var fVY = vY2;//lengthdir_x(vY2,sAngle);
+		var left_rot = 270,
+			right_rot = 90;
+		
+		var sAngle2 = 0;
+		slope = GetEdgeSlope(Edge.Right);
+		if(!instance_exists(slope))
+		{
+			slope = GetEdgeSlope(Edge.Left);
+		}
+		if(instance_exists(slope) && slopeSpeedAdjust)
+		{
+			sAngle = left_rot;
+			if(slope.image_xscale < 0)
+			{
+				sAngle = right_rot;
+			}
+			if(Crawler_SlopeCheck(slope))
+			{
+				sAngle2 = angle_difference(GetSlopeAngle(slope),sAngle);
+			}
+		}
+		
+		var fVY = lengthdir_x(vY2,sAngle2);
 		fVY = ModifyFinalVelY(fVY);
 		
 		#region Y Collision

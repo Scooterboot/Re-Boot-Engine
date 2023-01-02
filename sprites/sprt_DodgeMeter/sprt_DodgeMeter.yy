@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "sprt_DodgeMeter",
   "bboxMode": 0,
   "collisionKind": 1,
   "type": 0,
@@ -14,6 +17,7 @@
   "HTile": false,
   "VTile": false,
   "For3D": false,
+  "DynamicTexturePage": false,
   "width": 15,
   "height": 5,
   "textureGroupId": {
@@ -24,18 +28,14 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"39f5770c-79b4-44be-a56d-7c6fbb05f459","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"39f5770c-79b4-44be-a56d-7c6fbb05f459","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},"LayerId":{"name":"a924beb0-82a5-48ee-82c9-b4c2622e5bf6","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_DodgeMeter","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},"resourceVersion":"1.0","name":"39f5770c-79b4-44be-a56d-7c6fbb05f459","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"b05bad9b-aee5-4c02-b68a-a0d9bcf3a78b","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"b05bad9b-aee5-4c02-b68a-a0d9bcf3a78b","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},"LayerId":{"name":"a924beb0-82a5-48ee-82c9-b4c2622e5bf6","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_DodgeMeter","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},"resourceVersion":"1.0","name":"b05bad9b-aee5-4c02-b68a-a0d9bcf3a78b","tags":[],"resourceType":"GMSpriteFrame",},
-    {"compositeImage":{"FrameId":{"name":"fc14e125-d185-46c2-a9eb-da59fcb8a3e8","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"fc14e125-d185-46c2-a9eb-da59fcb8a3e8","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},"LayerId":{"name":"a924beb0-82a5-48ee-82c9-b4c2622e5bf6","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"sprt_DodgeMeter","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},"resourceVersion":"1.0","name":"fc14e125-d185-46c2-a9eb-da59fcb8a3e8","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"39f5770c-79b4-44be-a56d-7c6fbb05f459",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"b05bad9b-aee5-4c02-b68a-a0d9bcf3a78b",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"fc14e125-d185-46c2-a9eb-da59fcb8a3e8",},
   ],
   "sequence": {
-    "spriteId": {"name":"sprt_DodgeMeter","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "sprt_DodgeMeter",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -46,11 +46,11 @@
     "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
             {"id":"733f31f7-ec79-4490-82e6-b5d52dbb52ad","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"39f5770c-79b4-44be-a56d-7c6fbb05f459","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"116fa50f-1f50-4f72-9497-b0ad30e58d04","Key":1.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"b05bad9b-aee5-4c02-b68a-a0d9bcf3a78b","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
             {"id":"6eb6ffc4-12ac-40d6-ac71-76e561330117","Key":2.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"fc14e125-d185-46c2-a9eb-da59fcb8a3e8","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -66,22 +66,13 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"sprt_DodgeMeter","path":"sprites/sprt_DodgeMeter/sprt_DodgeMeter.yy",},
-    "resourceVersion": "1.4",
-    "name": "sprt_DodgeMeter",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"a924beb0-82a5-48ee-82c9-b4c2622e5bf6","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"a924beb0-82a5-48ee-82c9-b4c2622e5bf6","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "Base",
     "path": "folders/Sprites/UI/HUD/Base.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "sprt_DodgeMeter",
-  "tags": [],
-  "resourceType": "GMSprite",
 }
