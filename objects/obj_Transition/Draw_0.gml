@@ -9,7 +9,7 @@ if(surface_exists(transSurf))
 			var sx = scr_round(obj_Transition.samusX),
 				sy = scr_round(obj_Transition.samusY);
 			
-            PreDrawPlayer(sx,sy,0,1);
+            //PreDrawPlayer(sx,sy,0,1);
 			
 			var col = c_lime;
 			gpu_set_fog(true,col,0,0);

@@ -5,7 +5,8 @@ scr_MainInitialize();
 
 depth = 0;
 
-debug = false;
+debug = 0;
+toggleFastForward = false;
 
 screenScale = 1;
 if(global.screenScale > 0)
@@ -41,34 +42,19 @@ global.screenY = (window_get_height() - (surface_get_height(application_surface)
 window_set_fullscreen(global.fullScreen);
 display_reset(0, global.vsync);
 window_set_size(global.resWidth*screenScale,global.resHeight*screenScale);
-window_center();
 windowResizeTimer = 0;
+window_center(); // <- this stopped working for some reason. had to fix it with the code below \/
+
+/*
+var winMoveX = (global.ogResWidth - global.resWidth*screenScale) / 2,
+	winMoveY = (global.resHeight - global.resHeight*screenScale) / 2;
+window_set_position(window_get_x()+winMoveX,window_get_y()+winMoveY);
+*/
 
 oldDelta = delta_time;
 
 hyperRainbowCycle = 0;
 
-
-sndPauseArray = array(
-snd_Somersault,
-snd_Somersault_Loop,
-snd_Somersault_SJ,
-snd_ScrewAttack,
-snd_ScrewAttack_Loop,
-snd_Charge,
-snd_Charge_Loop,
-snd_SpeedBooster,
-snd_SpeedBooster_Loop,
-snd_ShineSpark,
-snd_ShineSpark_Charge,
-snd_PowerBombExplode,
-snd_SpiderLoop,
-snd_GrappleBeam_Loop,
-snd_Elevator,
-snd_LavaLoop,
-snd_LavaDamageLoop,
-snd_HeatDamageLoop,
-snd_LowHealthAlarm);
 
 stateText[0] = "Stand";
 stateText[1] = "Elevator";

@@ -5,8 +5,8 @@ itemName = "speedBooster";
 itemID = 0;
 
 itemHeader = "SPEED BOOSTER";
-itemDesc = "Hold ${dashButton} while moving to build up speed and activate\n" +
-"Crouch while active to charge a shine spark";
+itemDesc = "Hold ${dashButton} while moving to run extremely fast.\n" +
+"Crouch during Speed Boost to charge a Shine Spark.";
 
 CollectItem = function()
 {

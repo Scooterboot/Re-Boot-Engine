@@ -127,7 +127,7 @@ function LerpArray(arr, amount, loop = false)
 }
 function LerpArrayVector2(arr, amount, loop = false)
 {
-	var result = arr[0];
+	var result = new Vector2(arr[0].X,arr[0].Y);
 	var amt = amount;
 	
 	if(loop)
@@ -138,9 +138,13 @@ function LerpArrayVector2(arr, amount, loop = false)
 		}
 		if(amt >= array_length(arr)-1)
 		{
-			var value1 = arr[array_length(arr)-1],
-				value2 = arr[0],
+			var value1 = new Vector2(),
+				value2 = new Vector2(),
 				amt2 = amt-(array_length(arr)-1);
+			
+			value1.Equals(arr[array_length(arr)-1]);
+			value2.Equals(arr[0]);
+			
 			var vf = new Vector2(value1.X,value1.Y);
 			vf.Lerp(value2,amt2);
 			return vf;
@@ -151,9 +155,13 @@ function LerpArrayVector2(arr, amount, loop = false)
 	{
 		if((i+1) >= amt)
 		{
-			var value1 = arr[i],
-				value2 = arr[i+1],
+			var value1 = new Vector2(),
+				value2 = new Vector2(),
 				amt2 = amt-i;
+			
+			value1.Equals(arr[i]);
+			value2.Equals(arr[i+1]);
+			
 			var vf = new Vector2(value1.X,value1.Y);
 			vf.Lerp(value2,amt2);
 			result = vf;

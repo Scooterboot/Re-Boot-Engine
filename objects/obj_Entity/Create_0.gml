@@ -75,6 +75,11 @@ function entity_position_meeting(_x,_y,_interface)
 	return lhc_position_meeting(_x,_y,_interface);
 }
 
+function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
+{
+	return lhc_collision_line(x1,y1,x2,y2,"ISolid",prec,notme);
+}
+
 function GetSlopeAngle(slope)
 {
 	var ang = 315;
@@ -104,6 +109,8 @@ function GetSlopeAngle(slope)
 }
 
 #endregion
+
+edgeSlope = ds_list_create();
 
 #region GetEdgeSlope
 function GetEdgeSlope()
@@ -147,13 +154,16 @@ function GetEdgeSlope()
 		margin = argument[1];
 	}
 		
-	var dlist = ds_list_create();
-	var col = instance_place_list(x+xcheck,y+ycheck,obj_Slope,dlist,true);
+	var col = instance_place_list(x+xcheck,y+ycheck,all,edgeSlope,true);
 	if(col > 0)
 	{
 		for(var i = 0; i < col; i++)
 		{
-			var slope = dlist[| i];
+			if(!instance_exists(edgeSlope[| i]) || !asset_has_any_tag(edgeSlope[| i].object_index,"ISolid",asset_object) || !asset_has_any_tag(edgeSlope[| i].object_index,"ISlope",asset_object))
+			{
+				continue;
+			}
+			var slope = edgeSlope[| i];
 			if(instance_exists(slope))
 			{
 				var withinX = (slope.image_xscale > 0 && bbox_left >= slope.bbox_left-margin) || (slope.image_xscale < 0 && bbox_right <= slope.bbox_right+margin),
@@ -162,13 +172,13 @@ function GetEdgeSlope()
 					checkVer = ((edge == Edge.Left && slope.image_xscale > 0) || (edge == Edge.Right && slope.image_xscale < 0)) && withinY;
 				if(checkHor || checkVer)
 				{
-					ds_list_destroy(dlist);
+					ds_list_clear(edgeSlope);
 					return slope;
 				}
 			}
 		}
 	}
-	ds_list_destroy(dlist);
+	ds_list_clear(edgeSlope);
 	
 	return noone;
 }
@@ -288,8 +298,8 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		
 		var yplusMax = vStepX+1;
 		
-		var colR = lhc_collision_line(bbox_right+fVX,bbox_top,bbox_right+fVX,bbox_bottom,"ISolid",true,true),
-			colL = lhc_collision_line(bbox_left+fVX,bbox_top,bbox_left+fVX,bbox_bottom,"ISolid",true,true);
+		var colR = entity_collision_line(bbox_right+fVX,bbox_top,bbox_right+fVX,bbox_bottom),
+			colL = entity_collision_line(bbox_left+fVX,bbox_top,bbox_left+fVX,bbox_bottom);
 		var xspeed = abs(fVX);
 		if(entity_place_collide(max(abs(fVX),1)*sign(fVX),0) && (!entity_place_collide(0,0) || (fVX > 0 && colR) || (fVX < 0 && colL)))
 		{
@@ -467,8 +477,8 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		
 		var xplusMax = vStepY+1;
 		
-		var colB = lhc_collision_line(bbox_left,bbox_bottom+fVY,bbox_right,bbox_bottom+fVY,"ISolid",true,true),
-			colT = lhc_collision_line(bbox_left,bbox_top+fVY,bbox_right,bbox_top+fVY,"ISolid",true,true);
+		var colB = entity_collision_line(bbox_left,bbox_bottom+fVY,bbox_right,bbox_bottom+fVY),
+			colT = entity_collision_line(bbox_left,bbox_top+fVY,bbox_right,bbox_top+fVY);
 		var yspeed = abs(fVY);
 		if(entity_place_collide(0,max(abs(fVY),1)*sign(fVY)) && (!entity_place_collide(0,0) || (fVY > 0 && colB) || (fVY < 0 && colT)))
 		{
@@ -805,8 +815,8 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCo
 		
 		var yplusMax = vStepX+1;
 		
-		var colR = lhc_collision_line(bbox_right+fVX,bbox_top,bbox_right+fVX,bbox_bottom,"ISolid",true,true),
-			colL = lhc_collision_line(bbox_left+fVX,bbox_top,bbox_left+fVX,bbox_bottom,"ISolid",true,true);
+		var colR = entity_collision_line(bbox_right+fVX,bbox_top,bbox_right+fVX,bbox_bottom),
+			colL = entity_collision_line(bbox_left+fVX,bbox_top,bbox_left+fVX,bbox_bottom);
 		var xspeed = abs(fVX);
 		if(entity_place_collide(max(abs(fVX),1)*sign(fVX),0) && (!entity_place_collide(0,0) || (fVX > 0 && colR) || (fVX < 0 && colL)))
 		{
@@ -1027,8 +1037,8 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCo
 		
 		var xplusMax = vStepY+1;
 		
-		var colB = lhc_collision_line(bbox_left,bbox_bottom+fVY,bbox_right,bbox_bottom+fVY,"ISolid",true,true),
-			colT = lhc_collision_line(bbox_left,bbox_top+fVY,bbox_right,bbox_top+fVY,"ISolid",true,true);
+		var colB = entity_collision_line(bbox_left,bbox_bottom+fVY,bbox_right,bbox_bottom+fVY),
+			colT = entity_collision_line(bbox_left,bbox_top+fVY,bbox_right,bbox_top+fVY);
 		var yspeed = abs(fVY);
 		if(entity_place_collide(0,max(abs(fVY),1)*sign(fVY)) && (!entity_place_collide(0,0) || (fVY > 0 && colB) || (fVY < 0 && colT)))
 		{

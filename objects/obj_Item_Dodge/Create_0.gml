@@ -5,7 +5,7 @@ itemName = "dodge";
 itemID = 0;
 
 itemHeader = "ACCEL DASH";
-itemDesc = "Tap ${dashButton} to dash\n" + "Dashing grants invulnerability";
+itemDesc = "Tap ${dashButton} to perform a dash.\n" + "Dashing grants invulnerability.";
 
 CollectItem = function()
 {

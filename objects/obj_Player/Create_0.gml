@@ -10,7 +10,7 @@ image_index = 0;
 debug = false;
 // press 0 to refill health & ammo
 // press 9 to face toward screen / activate elevator pose
-// press 8 to set health to 10
+// press 8 to set health to 1
 // press 7 to acquire all abilities
 // press 6 to acquire a random ability
 // press 5 to enable/disable godmode
@@ -21,19 +21,23 @@ godmode = false;
 
 // "Arm Pumping" is a classic SM speedrunning tech
 //Tapping any aim button will shift the player forward one pixel during grounded movement.
-// (Default is false)
 armPumping = true;
 
 // Global speed modifier for horizontal movement. Acts as a flat addition and does not necessarily affect momentum.
 //Set to 0.5 as an alternative to 60fps frame-perfect Arm Pumping. Note: Unlike arm pumping, this will affect jump and morph movement.
-// (Default is 0)
-globalSpeedMod = 0;
+globalSpeedMod = 0; // default: 0
 
-// Continue speed boosting/keep momentum, after landing (also applies to spider ball)
-speedKeep = 0;
+// Continue speed boosting/keep momentum after landing (also applies to spider ball)
 // 0 = disabled
 // 1 = enabled always
-// 2 = enabled, but disabled during underwater movement
+// 2 = enabled, but disabled during Gravity-less underwater movement
+speedKeep = 0;
+
+// Run animation tweak
+// Set to true (default) to use a smooth run anim speed
+// Set to false to use an anim speed that is much more closely tied to the speed counter
+// The latter is much better at giving feedback for super short charging
+smoothRunAnim = true;
 
 // Wall jump during speed booster
 speedBoostWallJump = true;
@@ -41,13 +45,21 @@ speedBoostWallJump = true;
 // Cancel Shine Spark mid-flight by pressing jump
 shineSparkCancel = true;
 
-// Low-level Shine Spark flight control
+// Shine Spark steering / Low-level Shine Spark flight control
 //press directions or angle buttons to slightly change flight direction
 shineSparkFlightAdjust = false;
 
 // High-level Shine Spark flight control when Accel Dash is enabled
 //activated by holding a direction and pressing Run during flight (consumes Dash charge)
 shineSparkRedirect = true;
+
+// Prime-like trail effect for Morph Ball
+// Disables normal after images for Morph while set to true
+drawBallTrail = true;
+
+// Allow Crystal Flash to clip you through tiles
+// Can easily get you stuck if you don't know what you're doing
+crystalClip = false; // default: false
 
 #endregion
 
@@ -110,7 +122,13 @@ oldDir = dir;
 lastDir = oldDir;
 
 speedCounter = 0;
-speedCounterMax = 80;//120;
+//speedCounterMax = 80;//120;
+speedCounterMax = 4;
+speedBuffer = 0;
+speedBufferMax = 10;
+speedBufferCounter = 0;
+speedBufferCounterMax = [2.5, 3, 2.5, 2, 1.5, 1];
+
 speedBoost = false;
 speedFXCounter = 0;
 speedCatchCounter = 0;
@@ -120,13 +138,16 @@ speedKillMax = 6;
 
 speedBoostWJ = false;
 speedBoostWJCounter = 0;
+speedBoostWJMax = 12;
 
 shineCharge = 0;
 shineDir = 0;
 shineStart = 0;
 shineEnd = 0;
 shineEndMax = 40;//30;
-shineSparkSpeed = 13;
+shineSparkStartSpeed = 10;
+shineSparkSpeed = shineSparkStartSpeed;
+shineSparkSpeedMax = 15;//13;
 shineFXCounter = 0;
 shineRampFix = 0;
 
@@ -146,6 +167,8 @@ spiderJump_SpeedAddY = 0;
 
 spiderGlowAlpha = 0;
 spiderGlowNum = 1;
+
+sparkCancelSpiderJumpTweak = false;
 
 
 isChargeSomersaulting = false;
@@ -297,7 +320,8 @@ cFlashAmmoUse = 0;
 #endregion
 #region Physics Vars
 
-// Out of water
+// -- Horizontal speed values --
+// Out of water (or in water with grav suit)
 maxSpeed[0,0] = 2.75;	// Running
 maxSpeed[1,0] = 4.75;	// Dashing (no speed boost)
 maxSpeed[2,0] = 9.75;	// Speed Boosting
@@ -307,12 +331,13 @@ maxSpeed[5,0] = 3.25;	// Morph Ball
 maxSpeed[6,0] = 5.25;	// Mock Ball
 maxSpeed[7,0] = 1;		// Air Morph
 maxSpeed[8,0] = 1.25;	// Air Spring Ball
-maxSpeed[9,0] = 5;		// Damage Boost
+maxSpeed[9,0] = 5.375;	// Damage Boost
 maxSpeed[10,0] = 7.25;	// Dodge
-// Underwater
+maxSpeed[11,0] = 1.25;	// Moonwalk
+// Underwater (no grav suit)
 maxSpeed[0,1] = 2.75;	// Running
-maxSpeed[1,1] = 4.75;	// Dashing (no speed boost)
-maxSpeed[2,1] = 9.75;	// Speed Boosting
+maxSpeed[1,1] = 3.75;	// Dashing (no speed boost)
+maxSpeed[2,1] = 6.75;	// Speed Boosting
 maxSpeed[3,1] = 1.25;	// Jump
 maxSpeed[4,1] = 1.375;	// Somersault
 maxSpeed[5,1] = 2.75;	// Morph Ball
@@ -321,10 +346,11 @@ maxSpeed[7,1] = 1;		// Air Morph
 maxSpeed[8,1] = 1.25;	// Air Spring Ball
 maxSpeed[9,1] = 3.3;	// Damage Boost
 maxSpeed[10,1] = 3.25;	// Dodge
-// In lava/acid
+maxSpeed[11,1] = 0.75;	// Moonwalk
+// In lava/acid (no grav suit)
 maxSpeed[0,2] = 1.75;	// Running
-maxSpeed[1,2] = 3.75;	// Dashing (no speed boost)
-maxSpeed[2,2] = 8.75;	// Speed Boosting
+maxSpeed[1,2] = 2.75;	// Dashing (no speed boost)
+maxSpeed[2,2] = 5.75;	// Speed Boosting
 maxSpeed[3,2] = 1.25;	// Jump
 maxSpeed[4,2] = 1.375;	// Somersault
 maxSpeed[5,2] = 2.75;	// Morph Ball
@@ -333,25 +359,42 @@ maxSpeed[7,2] = 1;		// Air Morph
 maxSpeed[8,2] = 1.25;	// Air Spring Ball
 maxSpeed[9,2] = 3.3;	// Damage Boost
 maxSpeed[10,2] = 3.25;	// Dodge
+maxSpeed[11,2] = 0.75;	// Moonwalk
 
 // Out of water
 moveSpeed[0,0] = 0.1875;	// Normal
 moveSpeed[1,0] = 0.1;		// Morph
-moveSpeed[2,0] = 0.0625;	// speedboost?
-// Underwater
+moveSpeed[2,0] = 0.0625;	// Dash/Speedboost
+moveSpeed[3,0] = 0.109375;	// Shine Spark
+// Underwater (no grav suit)
 moveSpeed[0,1] = 0.015625;	// Normal
 moveSpeed[1,1] = 0.02;		// Morph
-moveSpeed[2,1] = 0.015625;	// speedboost?
-// In lava/acid
+moveSpeed[2,1] = 0.015625;	// Dash/Speedboost
+moveSpeed[3,1] = 0.03125;	// Shine Spark
+// In lava/acid (no grav suit)
 moveSpeed[0,2] = 0.015625;	// Normal
 moveSpeed[1,2] = 0.02;		// Morph
-moveSpeed[2,2] = 0.015625;	// speedboost?
+moveSpeed[2,2] = 0.015625;	// Dash/Speedboost
+moveSpeed[3,1] = 0.03125;	// Shine Spark
 
 frict[0] = 0.5;		// Out of water
 frict[1] = 0.5;		// Underwater
 frict[2] = 0.25;	// In lava/acid
 
+//bombXSpeedMax[0] = 2.75;		// Out of water
+//bombXSpeedMax[1] = 1;		// Underwater
+//bombXSpeedMax[2] = 1;		// In lava/acid
 
+//bombXSpeed[0] = 0.1875-0.03125;		// Out of water
+//bombXSpeed[1] = 0.0625;		// Underwater
+//bombXSpeed[2] = 0.0625;		// In lava/acid
+
+bombXSpeed[0] = 2.75;		// Out of water
+bombXSpeed[1] = 1.5;		// Underwater
+bombXSpeed[2] = 1.5;		// In lava/acid
+
+
+// -- Vertical speed values --
 // Out of water
 jumpSpeed[0,0] = 4.875;	// Normal Jump
 jumpSpeed[1,0] = 6;		// Hi Jump
@@ -387,7 +430,16 @@ grav[2] = 0.03515625;	// In lava/acid
 
 fallSpeedMax = 5; // Maximum fall speed - soft cap
 
-// (f)inalized variables
+bombJumpMax[0] = 13;	// air
+bombJumpMax[1] = 1;		// underwater
+bombJumpMax[2] = 1;//3;		// under lava/acid
+
+bombJumpSpeed[0] = 2;		// air
+bombJumpSpeed[1] = 1;		// underwater
+bombJumpSpeed[2] = 1;//0.01;	// under lava/acid
+
+
+// -- (f)inalized variables --
 fMaxSpeed = maxSpeed[0,0];
 fMoveSpeed = moveSpeed[0,0];
 fFrict = frict[0];
@@ -395,6 +447,8 @@ fGrav = grav[0];
 fJumpSpeed = jumpSpeed[0,0];
 fJumpHeight = jumpHeight[0,0];
 
+
+// -- other variables --
 jump = 0;
 jumping = false;
 jumpStart = false;
@@ -408,13 +462,6 @@ bufferJump = bufferJumpMax;
 morphSpinJump = false;
 
 bombJump = 0;
-bombJumpMax[0] = 13;	// air
-bombJumpMax[1] = 1;		// underwater
-bombJumpMax[2] = 1;//3;		// under lava/acid
-
-bombJumpSpeed[0] = 2;		// air
-bombJumpSpeed[1] = 1;		// underwater
-bombJumpSpeed[2] = 1;//0.01;	// under lava/acid
 bombJumpX = 0;
 
 
@@ -422,6 +469,8 @@ bombJumpX = 0;
 
 velX = 0;
 velY = 0;
+
+prevVelX = velX; // used for stutter step
 
 shiftX = 0;
 shiftY = 0;
@@ -440,6 +489,8 @@ carryVelY = 0;
 
 stateFrame = State.Stand;
 //stand, crouch, walk, run, brake, morph, jump, somersault, grip, spark, grapple, hurt
+prevStateFrame = stateFrame;
+lastStateFrame = prevStateFrame;
 
 dirFrame = 0;
 
@@ -452,6 +503,8 @@ mOffset = array(0,0,0,0,1,1,1,0,0,0,1,1,1);
 
 runYOffset = 0;
 runAimSequence = array(0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,1,1);
+
+runAnimCounterMax = [3, 2.5, 2, 1.5, 1];
 
 brake = false;
 brakeFrame = 0;
@@ -588,7 +641,8 @@ chargeFrameCounter = 0;
 particleFrame = 0;
 particleFrameMax = 4;
 
-chargeEmit = noone;
+chargeEmitA = part_emitter_create(obj_Particles.partSystemA);
+chargeEmitB = part_emitter_create(obj_Particles.partSystemB);
 
 
 //downV
@@ -938,9 +992,24 @@ afterImgCounter = 0;
 afterImgAlphaMult = 0.625;
 
 #endregion
+#region MB Trail
 
+mbTrailColor_Start = c_lime;
+mbTrailColor_End = c_green;
+
+mbTrailLength = 18;
+mbTrailPosX = array_create(mbTrailLength, noone);
+mbTrailPosY = array_create(mbTrailLength, noone);
+mbTrailDir = array_create(mbTrailLength, noone);
+
+mbTrailSurface = surface_create(global.resWidth,global.resHeight);
+mbTrailAlpha = 0;
+
+#endregion
 
 #region Collision (Normal)
+
+block_list = ds_list_create();
 
 function entity_place_collide()
 {
@@ -971,35 +1040,84 @@ function entity_place_collide()
 		}
 	}
 	
-	if(isSpeedBoosting || isScrewAttacking)
+	if((isSpeedBoosting && shineStart <= 0) || isScrewAttacking)
 	{
-		var bl_list = ds_list_create();
-		var bl = instance_place_list(xx+offsetX,yy+offsetY,all,bl_list,true);
+		var bl = instance_place_list(xx+offsetX,yy+offsetY,all,block_list,true);
 		if(bl > 0)
 		{
 			for(var i = 0; i < bl; i++)
 			{
-				if(!asset_has_any_tag(bl_list[| i].object_index,"ISolid",asset_object))
+				if(!instance_exists(block_list[| i]) || !asset_has_any_tag(block_list[| i].object_index,"ISolid",asset_object))
 				{
 					continue;
 				}
 				
-				var block = bl_list[| i];
+				var block = block_list[| i];
 				
 				var sp = (!asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting),
 					sc = (!asset_has_any_tag(block.object_index, "IScrewBlock", asset_object) && isScrewAttacking);
 				if(place_meeting(xx+offsetX,yy+offsetY,block) && (sp || sc))
 				{
-					ds_list_destroy(bl_list);
+					ds_list_clear(block_list);
 					return true;
 				}
 			}
 		}
-		ds_list_destroy(bl_list);
+		ds_list_clear(block_list);
 		return false;
 	}
 	
 	return entity_place_meeting(xx+offsetX,yy+offsetY,"ISolid");
+}
+function entity_position_collide()
+{
+	/// @description entity_position_collide
+	/// @param offsetX
+	/// @param offsetY
+	/// @param baseX=x
+	/// @param baseY=y
+	
+	var offsetX = argument[0],
+		offsetY = argument[1],
+		xx = x,
+		yy = y;
+	if(argument_count > 2)
+	{
+		xx = argument[2];
+		if(argument_count > 3)
+		{
+			yy = argument[3];
+		}
+	}
+	
+	if(isSpeedBoosting || isScrewAttacking)
+	{
+		var bl = instance_position_list(xx+offsetX,yy+offsetY,all,block_list,true);
+		if(bl > 0)
+		{
+			for(var i = 0; i < bl; i++)
+			{
+				if(!instance_exists(block_list[| i]) || !asset_has_any_tag(block_list[| i].object_index,"ISolid",asset_object))
+				{
+					continue;
+				}
+				
+				var block = block_list[| i];
+				
+				var sp = (!asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting),
+					sc = (!asset_has_any_tag(block.object_index, "IScrewBlock", asset_object) && isScrewAttacking);
+				if(position_meeting(xx+offsetX,yy+offsetY,block) && (sp || sc))
+				{
+					ds_list_clear(block_list);
+					return true;
+				}
+			}
+		}
+		ds_list_clear(block_list);
+		return false;
+	}
+	
+	return entity_position_meeting(xx+offsetX,yy+offsetY,"ISolid");
 }
 function entityPlatformCheck()
 {
@@ -1025,50 +1143,27 @@ function entityPlatformCheck()
 	//	right = bbox_right-x,
 	//	top = y-bbox_top,
 	//	bottom = bbox_bottom-y;
-	var pl_list = ds_list_create();
-	//var pl = collision_rectangle_list(xx-left+offsetX,yy-top+offsetY,xx+right+offsetX,yy+bottom+offsetY,all,true,true,pl_list,true);
-	var pl = instance_place_list(xx+offsetX,yy+offsetY,all,pl_list,true);
+	
+	//var pl = collision_rectangle_list(xx-left+offsetX,yy-top+offsetY,xx+right+offsetX,yy+bottom+offsetY,all,true,true,block_list,true);
+	var pl = instance_place_list(xx+offsetX,yy+offsetY,all,block_list,true);
 	if(pl > 0)
 	{
 		for(var i = 0; i < pl; i++)
 		{
-			if(!asset_has_any_tag(pl_list[| i].object_index,"IPlatform",asset_object))
+			if(!instance_exists(block_list[| i]) || !asset_has_any_tag(block_list[| i].object_index,"IPlatform",asset_object))
 			{
 				continue;
 			}
 			
-			var platform = pl_list[| i];
-			var flag = (bbox_bottom < platform.bbox_top);
-			if(platform.object_index == obj_PlatformSlope)
+			var platform = block_list[| i];
+			if(place_meeting(xx+offsetX,yy+offsetY,platform) && !place_meeting(xx,yy,platform) && bbox_bottom < platform.bbox_top)// && (grounded || !cDown))//offsetY > 0)
 			{
-				var baseX = bbox_left,
-					baseY = bbox_bottom;
-				if(platform.image_xscale < 0)
-				{
-					baseX = bbox_right;
-				}
-				
-				var platWidth = abs(platform.bbox_right-platform.bbox_left),
-					platHeight = abs(platform.bbox_bottom-platform.bbox_top);
-				
-				var baseX2 = baseX-platform.bbox_left;
-				var h = 1 - (baseX2/platWidth);
-				if(platform.image_xscale < 0)
-				{
-					h = (baseX2/platWidth);
-				}
-				
-				flag = (baseY < scr_ceil(platform.bbox_bottom - platHeight*h));
-			}
-			
-			if(place_meeting(xx+offsetX,yy+offsetY,platform) && !place_meeting(xx,yy,platform) && flag)//offsetY > 0)
-			{
-				ds_list_destroy(pl_list);
+				ds_list_clear(block_list);
 				return true;
 			}
 		}
 	}
-	ds_list_destroy(pl_list);
+	ds_list_clear(block_list);
 	return false;
 }
 
@@ -1101,7 +1196,7 @@ function ModifyFinalVelY(fVY)
 
 function ModifySlopeXSteepness_Up(steepness)
 {
-	if((speedBoost && grounded) || ((state == State.Spark || state == State.BallSpark) && abs(shineDir) != 2))
+	if((speedBoost && grounded) || state == State.Grapple || ((state == State.Spark || state == State.BallSpark) && abs(shineDir) != 2))
 	{
 		return 4;
 	}
@@ -1157,7 +1252,17 @@ function OnXCollision(fVX)
 	}
 	else
 	{
-		velX = 0;
+		if(!speedBoost)
+		{
+			speedBufferCounter = 0;
+			speedBuffer = 0;
+			speedCounter = 0;
+		}
+		
+		if(sign(velX) == sign(fVelX))
+		{
+			velX = 0;
+		}
 	}
 	fVelX = 0;
 	//if(entity_place_collide(move,-3))
@@ -1167,7 +1272,7 @@ function OnXCollision(fVX)
 	bombJumpX = 0;
 	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0)
 	{
-		if(boots[Boots.ChainSpark])
+		if(boots[Boots.ChainSpark] && (abs(shineDir) == 2 || (!entity_place_collide(0,3) && abs(shineDir) > 2) || (!entity_place_collide(0,-3) && abs(shineDir) < 2)))
 		{
 			shineRestart = true;
 			audio_stop_sound(snd_ShineSpark_Charge);
@@ -1197,25 +1302,27 @@ function OnSlopeXCollision_Bottom(fVX)
 		onPlatform = true;
 	}
 	
-	if((state == State.Spark || state == State.BallSpark) && abs(shineDir) <= 2 && shineStart <= 0 && move != 0)
+	if((state == State.Spark || state == State.BallSpark) && abs(shineDir) <= 2 && shineStart <= 0 && shineEnd <= 0 && move != 0)
 	{
 		shineEnd = 0;
 		shineDir = 0;
 		if(state == State.BallSpark)
 		{
-			state = State.Morph;
+			//state = State.Morph;
+			ChangeState(State.Morph,State.Morph,mask_Morph,true);
 			mockBall = true;
 		}
 		else
 		{
-			stateFrame = State.Stand;
+			/*stateFrame = State.Stand;
 			mask_index = mask_Stand;
 			y -= 3;
-			state = State.Stand;
+			state = State.Stand;*/
+			ChangeState(State.Stand,State.Stand,mask_Stand,true);
 		}
 		speedBoost = true;
-		speedFXCounter = 1;
 		speedCounter = speedCounterMax;
+		speedFXCounter = 1;
 		speedCatchCounter = 6;
 		audio_stop_sound(snd_ShineSpark);
 		
@@ -1229,7 +1336,7 @@ function CanMoveDownSlope_Bottom()
 
 function CanMoveUpSlope_Top()
 {
-	return (((state == State.Spark || state == State.BallSpark) && abs(shineDir) >= 2) || state == State.Dodge);
+	return (((state == State.Spark || state == State.BallSpark) && abs(shineDir) >= 2) || state == State.Dodge || state == State.Grapple);
 }
 function OnSlopeXCollision_Top(fVX)
 {
@@ -1253,26 +1360,29 @@ function OnTopCollision(fVY)
 }
 function OnYCollision(fVY)
 {
-	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0)
+	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineEnd <= 0)
 	{
-		if(abs(shineDir) >= 2 && abs(shineDir) != 4 && !entity_place_collide(2*sign(velX),0))
+		if(abs(shineDir) >= 2 && abs(shineDir) != 4 && !entity_place_collide(3*sign(velX),0))
 		{
 			shineEnd = 0;
 			shineDir = 0;
 			if(state == State.BallSpark)
 			{
-				state = State.Morph;
+				//state = State.Morph;
+				ChangeState(State.Morph,State.Morph,mask_Morph,true);
 				mockBall = true;
 			}
 			else
 			{
-				stateFrame = State.Stand;
+				/*stateFrame = State.Stand;
 				mask_index = mask_Stand;
 				y -= 3;
-				state = State.Stand;
+				state = State.Stand;*/
+				ChangeState(State.Stand,State.Stand,mask_Stand,true);
 			}
-			speedFXCounter = 0;
+			speedBoost = true;
 			speedCounter = speedCounterMax;
+			speedFXCounter = 1;
 			speedCatchCounter = 6;
 			audio_stop_sound(snd_ShineSpark);
 		}
@@ -1287,7 +1397,7 @@ function OnYCollision(fVY)
 	}
 	
 	// Ball Bounce
-	if(canMorphBounce && velY >= (1.5 + fGrav) && state == State.Morph && morphFrame <= 0 && shineRampFix <= 0)
+	if(canMorphBounce && velY > (2.5 + fGrav) && state == State.Morph && morphFrame <= 0 && shineRampFix <= 0)
 	{
 		audio_stop_sound(snd_Land);
 		audio_play_sound(snd_Land,0,false);
@@ -1301,7 +1411,7 @@ function OnYCollision(fVY)
 		
 		ballBounce = ceil(abs(velY)/fGrav)*(2.1 / (1+(liquidState > 0)));
 	}
-	else
+	else if(sign(velY) == sign(fVelY))
 	{
 		velY = 0;
 	}
@@ -1310,7 +1420,11 @@ function OnYCollision(fVY)
 
 function CanMoveUpSlope_Right()
 {
-	if(!grounded && !onPlatform)
+	/*if(state == State.Grapple)
+	{
+		return true;
+	}
+	else*/ if(!grounded && !onPlatform && state != State.Grapple)
 	{
 		var yspeed = abs(fVelY);
 		var ynum = 0;
@@ -1319,7 +1433,8 @@ function CanMoveUpSlope_Right()
 			ynum++;
 		}
 		
-		return (fVelY >= 0 || (fVelY < 0 && fVelX < 0) || !entity_place_collide(-1,(ynum+1)*sign(fVelY)));
+		var steepFlag = !entity_place_collide(-1,(ynum+1)*sign(fVelY));
+		return ((fVelY >= 0 && steepFlag) || (fVelY < 0 && (fVelX < 0 || steepFlag)));
 	}
 	return false;
 }
@@ -1332,7 +1447,11 @@ function CanMoveDownSlope_Right() { return false; }
 
 function CanMoveUpSlope_Left()
 {
-	if(!grounded && !onPlatform)
+	/*if(state == State.Grapple)
+	{
+		return true;
+	}
+	else*/ if(!grounded && !onPlatform && state != State.Grapple)
 	{
 		var yspeed = abs(fVelY);
 		var ynum = 0;
@@ -1341,7 +1460,8 @@ function CanMoveUpSlope_Left()
 			ynum++;
 		}
 		
-		return (fVelY >= 0 || (fVelY < 0 && fVelX > 0) || !entity_place_collide(1,(ynum+1)*sign(fVelY)));
+		var steepFlag = !entity_place_collide(1,(ynum+1)*sign(fVelY));
+		return ((fVelY >= 0 && steepFlag) || (fVelY < 0 && (fVelX > 0 || steepFlag)));
 	}
 	return false;
 }
@@ -1712,94 +1832,12 @@ function ChangeState(newState,newStateFrame,newMask,isGrounded)
 	
 	if(mask_index != newMask)
 	{
-		var shift = 0;
-		if(mask_index == mask_Stand)
-		{
-			switch(newMask)
-			{
-				case mask_Jump:
-				{
-					shift = 3;
-					break;
-				}
-				case mask_Crouch:
-				{
-					shift = 11;
-					break;
-				}
-				case mask_Morph:
-				{
-					shift = 11;
-					break;
-				}
-			}
-		}
-		else if(mask_index == mask_Jump)
-		{
-			switch(newMask)
-			{
-				case mask_Stand:
-				{
-					shift = -3;
-					break;
-				}
-				case mask_Crouch:
-				{
-					shift = 9;
-					break;
-				}
-				case mask_Morph:
-				{
-					shift = 9;
-					break;
-				}
-			}
-		}
-		else if(mask_index == mask_Crouch)
-		{
-			switch(newMask)
-			{
-				case mask_Stand:
-				{
-					shift = -11;
-					break;
-				}
-				case mask_Jump:
-				{
-					shift = -9;
-					break;
-				}
-				case mask_Morph:
-				{
-					shift = 0;
-					break;
-				}
-			}
-		}
-		else if(mask_index == mask_Morph)
-		{
-			switch(newMask)
-			{
-				case mask_Stand:
-				{
-					shift = -11;
-					break;
-				}
-				case mask_Jump:
-				{
-					shift = -9;
-					break;
-				}
-				case mask_Crouch:
-				{
-					shift = 0;
-					break;
-				}
-			}
-		}
-		
+		var prevHeight = bbox_bottom-bbox_top;
 		mask_index = newMask;
-		//for(var i = 0; i < abs(shift); i++)
+		var newHeight = bbox_bottom-bbox_top;
+		
+		var shift = prevHeight - newHeight;
+		
 		for(var i = abs(shift); i > 0; i--)
 		{
 			if(shift > 0)
@@ -1811,7 +1849,16 @@ function ChangeState(newState,newStateFrame,newMask,isGrounded)
 			}
 			else
 			{
-				if((entity_place_collide(0,0) || (onPlatform && entity_place_meeting(x,y,"IPlatform"))) && !entity_position_collide(0,bbox_top-y-1))
+				var topFlag = false;
+				for(var k = bbox_left; k < bbox_right; k++)
+				{
+					if(entity_position_collide(0,bbox_top-y-1, k))
+					{
+						topFlag = true;
+						break;
+					}
+				}
+				if((entity_place_collide(0,0) || (onPlatform && entity_place_meeting(x,y,"IPlatform"))) && !topFlag)
 				{
 					y -= 1;
 				}
@@ -2027,79 +2074,6 @@ function PlayerGrounded()
 function PlayerOnPlatform()
 {
 	return (entityPlatformCheck(0,3) && fVelY >= 0 && state != State.Spark && state != State.BallSpark);
-}
-#endregion
-#region AfterImage
-function AfterImage(draw, rotation, delay, num, alpha)
-{
-	var echo = noone;
-	
-	if(draw)
-	{
-		if(!global.gamePaused)
-		{
-			afterImgCounter += 1;
-		}
-		if(afterImgCounter > delay)
-		{
-			echo = instance_create_layer(scr_round(x),scr_round(y),"Player",obj_PlayerEcho);
-			echo.surfW = surfW;
-			echo.surfH = surfH;
-			echo.mask_index = mask_index;
-			echo.fadeRate = (1 / max(num,1));
-			echo.state = state;
-			echo.stateFrame = stateFrame;
-			echo.morphFrame = morphFrame;
-			echo.morphAlpha = morphAlpha;
-			echo.unmorphing = unmorphing;
-			echo.dir = dir;
-			echo.fDir = fDir;
-			echo.torsoR = torsoR;
-			echo.torsoL = torsoL;
-			echo.legs = legs;
-			echo.bodyFrame = bodyFrame;
-			echo.legFrame = legFrame;
-			echo.ballFrame = ballFrame;
-			echo.sprtOffsetX = sprtOffsetX;
-			echo.sprtOffsetY = sprtOffsetY;
-			echo.runYOffset = runYOffset;
-			echo.itemSelected = itemSelected;
-			echo.itemHighlighted = itemHighlighted;
-			echo.missileArmFrame = missileArmFrame;
-			echo.drawMissileArm = drawMissileArm;
-			echo.finalArmFrame = finalArmFrame;
-			echo.armDir = armDir;
-			echo.armOffsetX = armOffsetX;
-			echo.armOffsetY = armOffsetY;
-			echo.rotation = rotation;
-			echo.alpha2 = alpha;
-			echo.palShader = palShader;
-			echo.palIndex = palIndex;
-			echo.palIndex2 = palIndex2;
-			echo.palDif = palDif;
-			echo.item = item;
-			echo.misc = misc;
-			echo.climbIndex = climbIndex;
-			echo.gripFrame = gripFrame;
-			echo.gripAimFrame = gripAimFrame;
-			echo.liquidState = liquidState;
-			echo.dmgFlash = dmgFlash;
-			echo.immuneTime = immuneTime;
-			//echo.velX = x-xprevious;
-			//echo.velY = y-yprevious;
-			//if((state == "stand" || state == "crouch") && prevState != state)
-			//{
-			//	echo.velY = 0;
-			//}
-			afterImgCounter = 0;
-		}
-	}
-	else
-	{
-		afterImgCounter = 0;
-	}
-	
-	return echo;
 }
 #endregion
 
@@ -2935,6 +2909,80 @@ function ConstantDamage(damage,delay)
 }
 #endregion
 
+#region AfterImage
+function AfterImage(draw, rotation, delay, num, alpha)
+{
+	var echo = noone;
+	
+	if(draw)
+	{
+		if(!global.gamePaused)
+		{
+			afterImgCounter += 1;
+		}
+		if(afterImgCounter > delay)
+		{
+			echo = instance_create_layer(scr_round(x),scr_round(y),"Player",obj_PlayerEcho);
+			echo.surfW = surfW;
+			echo.surfH = surfH;
+			echo.mask_index = mask_index;
+			echo.fadeRate = (1 / max(num,1));
+			echo.state = state;
+			echo.stateFrame = stateFrame;
+			echo.morphFrame = morphFrame;
+			echo.morphAlpha = morphAlpha;
+			echo.unmorphing = unmorphing;
+			echo.dir = dir;
+			echo.fDir = fDir;
+			echo.torsoR = torsoR;
+			echo.torsoL = torsoL;
+			echo.legs = legs;
+			echo.bodyFrame = bodyFrame;
+			echo.legFrame = legFrame;
+			echo.ballFrame = ballFrame;
+			echo.sprtOffsetX = sprtOffsetX;
+			echo.sprtOffsetY = sprtOffsetY;
+			echo.runYOffset = runYOffset;
+			echo.itemSelected = itemSelected;
+			echo.itemHighlighted = itemHighlighted;
+			echo.missileArmFrame = missileArmFrame;
+			echo.drawMissileArm = drawMissileArm;
+			echo.finalArmFrame = finalArmFrame;
+			echo.armDir = armDir;
+			echo.armOffsetX = armOffsetX;
+			echo.armOffsetY = armOffsetY;
+			echo.rotation = rotation;
+			echo.alpha2 = alpha;
+			echo.palShader = palShader;
+			echo.palIndex = palIndex;
+			echo.palIndex2 = palIndex2;
+			echo.palDif = palDif;
+			echo.item = item;
+			echo.misc = misc;
+			echo.climbIndex = climbIndex;
+			echo.gripFrame = gripFrame;
+			echo.gripAimFrame = gripAimFrame;
+			echo.liquidState = liquidState;
+			echo.dmgFlash = dmgFlash;
+			echo.immuneTime = immuneTime;
+			//echo.velX = x-xprevious;
+			//echo.velY = y-yprevious;
+			//if((state == "stand" || state == "crouch") && prevState != state)
+			//{
+			//	echo.velY = 0;
+			//}
+			afterImgCounter = 0;
+		}
+	}
+	else
+	{
+		afterImgCounter = 0;
+	}
+	
+	return echo;
+}
+#endregion
+
 #region ArmPos
 function ArmPos(px, py)
 {
@@ -3469,6 +3517,104 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 		spiderGlowNum = 2;
 	}*/
 	
+	if(drawBallTrail)
+	{
+		if(stateFrame == State.Morph || mbTrailAlpha > 0)
+		{
+			if(surface_exists(mbTrailSurface) && mbTrailSurface != -1)
+			{
+				surface_set_target(mbTrailSurface);
+				draw_clear_alpha(c_black,1);
+				
+				for(var k = 0; k < 3; k++)
+				{
+					draw_primitive_begin(pr_trianglestrip);
+					
+					for(var i = 0; i < mbTrailLength; i++)
+					{
+						var tRatio = i/mbTrailLength;
+						var tAlpha = tRatio,
+							tColor = mbTrailColor_Start;
+    
+						if(tRatio < 0.5)
+						{
+							tColor = merge_colour(c_black,mbTrailColor_End,tRatio*2);
+							if(k > 0)
+							{
+								tColor = merge_colour(c_black,mbTrailColor_Start,tRatio*2);
+							}
+						}
+						else
+						{
+							tColor = merge_colour(mbTrailColor_End,mbTrailColor_Start,tRatio*2-1);
+							if(k > 0)
+							{
+								tColor = mbTrailColor_Start;
+							}
+						}
+
+						var dist = min(i+1,7);
+						if(mbTrailDir[i] == noone)
+						{
+							dist = 0;
+							tColor = c_black;
+						}
+						if(k > 0)
+						{
+							dist = 7;
+						}
+						
+						if(mbTrailPosX[i] != noone && mbTrailPosY[i] != noone)
+						{
+							var trailX1 = mbTrailPosX[i] + lengthdir_x(dist,mbTrailDir[i]-90),
+								trailY1 = mbTrailPosY[i] + lengthdir_y(dist,mbTrailDir[i]-90),
+								trailX2 = mbTrailPosX[i] + lengthdir_x(dist,mbTrailDir[i]+90),
+								trailY2 = mbTrailPosY[i] + lengthdir_y(dist,mbTrailDir[i]+90);
+						
+							if(k == 1)
+							{
+								trailX1 = mbTrailPosX[i] + lengthdir_x(dist-1,mbTrailDir[i]-90);
+								trailY1 = mbTrailPosY[i] + lengthdir_y(dist-1,mbTrailDir[i]-90);
+								trailX2 = mbTrailPosX[i] + lengthdir_x(dist,mbTrailDir[i]-90);
+								trailY2 = mbTrailPosY[i] + lengthdir_y(dist,mbTrailDir[i]-90);
+							}
+							if(k == 2)
+							{
+								trailX1 = mbTrailPosX[i] + lengthdir_x(dist-1,mbTrailDir[i]+90);
+								trailY1 = mbTrailPosY[i] + lengthdir_y(dist-1,mbTrailDir[i]+90);
+								trailX2 = mbTrailPosX[i] + lengthdir_x(dist,mbTrailDir[i]+90);
+								trailY2 = mbTrailPosY[i] + lengthdir_y(dist,mbTrailDir[i]+90);
+							}
+							if(k == 0 || mbTrailDir[i] != noone)
+							{
+								draw_vertex_colour(surface_get_width(mbTrailSurface)/2 + trailX1-scr_round(x), surface_get_height(mbTrailSurface)/2 + trailY1-scr_round(y), tColor, tAlpha*mbTrailAlpha);
+								draw_vertex_colour(surface_get_width(mbTrailSurface)/2 + trailX2-scr_round(x), surface_get_height(mbTrailSurface)/2 + trailY2-scr_round(y), tColor, tAlpha*mbTrailAlpha);
+							}
+						}
+					}
+					
+					draw_primitive_end();
+				}
+				
+				surface_reset_target();
+   
+				gpu_set_blendmode(bm_add);
+				draw_surface_ext(mbTrailSurface, scr_round(xx)-surface_get_width(mbTrailSurface)/2, scr_round(yy)-surface_get_height(mbTrailSurface)/2, 1, 1, 0, c_white, alpha);
+				gpu_set_blendmode(bm_normal);
+			}
+			else
+			{
+				mbTrailSurface = surface_create(global.wideResWidth,global.resHeight);
+			}
+		}
+		else
+		{
+			array_fill(mbTrailPosX, noone);
+			array_fill(mbTrailPosY, noone);
+			array_fill(mbTrailDir, noone);
+		}
+	}
+	
 	if(cBubbleScale > 0)
 	{
 		if(!global.gamePaused)
@@ -3509,26 +3655,26 @@ function DrawPlayer(posX, posY, rotation, alpha)
 		}
 		if(stateFrame == State.Morph)
 		{
-			if(!global.gamePaused)
+			/*if(!global.gamePaused)
 			{
-				/*if(unmorphing)
+				if(unmorphing)
 				{
 					morphAlpha = max(morphAlpha - 0.175/(1+liquidMovement), 0);
 				}
 				else if(morphFrame < 6)
 				{
 					morphAlpha = min(morphAlpha + 0.075/(1+liquidMovement), 1);
-				}*/
-				if(morphFrame < 4)
+				}
+			}*/
+			if(morphFrame < 4)
+			{
+				if(unmorphing)
 				{
-					if(unmorphing)
-					{
-						morphAlpha = 0;
-					}
-					else
-					{
-						morphAlpha = 1;
-					}
+					morphAlpha = 0;
+				}
+				else
+				{
+					morphAlpha = 1;
 				}
 			}
 			var ballSprtIndex = sprt_MorphBall;
@@ -3963,10 +4109,12 @@ function PostDrawPlayer(posX, posY, rot, alph)
 				isSpazer = (beamChargeAnim == sprt_SpazerChargeAnim),
 				isPlasma = (beamChargeAnim == sprt_PlasmaBeamChargeAnim);
 	
-			var partSys = obj_Particles.partSystemB;
+			var partSys = obj_Particles.partSystemB,
+				emit = chargeEmitB;
 			if(string_count("Wave",object_get_name(beamShot)) > 0)
 			{
 				partSys = obj_Particles.partSystemA;
+				emit = chargeEmitA;
 			}
 			if(particleFrame >= particleFrameMax && !global.roomTrans && !global.gamePaused)
 			{
@@ -4007,15 +4155,10 @@ function PostDrawPlayer(posX, posY, rot, alph)
 					x2 = pX+8,
 					y1 = pY-8,
 					y2 = pY+8;
-				chargeEmit = part_emitter_create(partSys);
-				part_emitter_region(partSys,chargeEmit,x1,x2,y1,y2,ps_shape_ellipse,ps_distr_gaussian);
-				part_emitter_burst(partSys,chargeEmit,obj_Particles.bTrails[partType],2+(statCharge >= maxCharge));
+				part_emitter_region(partSys,emit,x1,x2,y1,y2,ps_shape_ellipse,ps_distr_gaussian);
+				part_emitter_burst(partSys,emit,obj_Particles.bTrails[partType],2+(statCharge >= maxCharge));
 		
 				particleFrame = 0;
-			}
-			else if(part_emitter_exists(partSys,chargeEmit))
-			{
-				part_emitter_destroy(partSys,chargeEmit);
 			}
 			if(stateFrame != State.Morph)
 			{

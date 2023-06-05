@@ -5,7 +5,7 @@ itemName = "powerGrip";
 itemID = 0;
 
 itemHeader = "POWER GRIP";
-itemDesc = "Grab and hang from ledges and corners";
+itemDesc = "Grab and hang from ledges and corners.";
 
 CollectItem = function()
 {

@@ -118,21 +118,30 @@ else
 			}
 		}
 		
-		if(!instance_exists(gPoint))
+		for(var i = 0; i < point_distance(obj_Player.shootPosX,obj_Player.shootPosY,x,y); i++)
 		{
-			for(var i = 0; i < point_distance(obj_Player.shootPosX,obj_Player.shootPosY,x,y); i++)
+			if(!instance_exists(gPoint))
 			{
 				var ang = obj_Player.shootDir;
 				var xx = obj_Player.shootPosX+lengthdir_x(i,ang),
 					yy = obj_Player.shootPosY+lengthdir_y(i,ang);
-				var gp = collision_rectangle(xx-4,yy-4,xx+4,yy+4,all,true,true);
-				if(instance_exists(gp) && asset_has_any_tag(gp.object_index, "IGrapplePoint", asset_object))
+				var gp = collision_rectangle_list(xx-4,yy-4,xx+4,yy+4,all,true,true,gp_list,true);
+				for(var j = 0; j < gp; j++)
 				{
-					gPoint = gp;
-					x = xx;
-					y = yy;
-					break;
+					var point = gp_list[| j];
+					if(instance_exists(point) && asset_has_any_tag(point.object_index, "IGrapplePoint", asset_object))
+					{
+						gPoint = point;
+						x = xx;
+						y = yy;
+						break;
+					}
 				}
+				ds_list_clear(gp_list);
+			}
+			else
+			{
+				break;
 			}
 		}
 		

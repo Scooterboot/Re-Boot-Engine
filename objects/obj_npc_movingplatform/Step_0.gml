@@ -16,7 +16,15 @@ if(PauseAI())
 fVelX = velX;
 fVelY = velY;//scr_round(velY);
 
-Collision_Normal(fVelX,fVelY,16,16,false);
+if(tileCollide)
+{
+	Collision_Normal(fVelX,fVelY,16,16,false);
+}
+else
+{
+	x += fVelX;
+	y += fVelY;
+}
 
 var top = bbox_top-y;
 
@@ -27,9 +35,10 @@ platform.x = scr_round(bbox_left);
 platform.y = scr_round(bbox_top);
 
 var player = obj_Player;
-if (instance_exists(player) && (player.bbox_bottom < bbox_top || player.bbox_bottom < (oldY+top)))
+if (instance_exists(player) && player.state != State.Grip && (player.bbox_bottom < bbox_top || player.bbox_bottom < (oldY+top)))
 {
-	if(place_meeting(x,y-2,player) || place_meeting(oldX,oldY-2,player))
+	//if(place_meeting(x,y-2,player) || place_meeting(oldX,oldY-2,player))
+	if(place_meeting(x,y-2,player) || place_meeting(x,oldY-2,player))
 	{
 		var moveX = platform.x-oldPlatX,
 			moveY = platform.y-oldPlatY;
@@ -45,3 +54,5 @@ oldPlatY = platform.y;
 
 //oldX = x;
 //oldY = y;
+
+DamagePlayer();

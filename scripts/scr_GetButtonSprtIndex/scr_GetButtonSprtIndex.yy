@@ -1,12 +1,11 @@
 {
-  "isDnD": false,
+  "resourceType": "GMScript",
+  "resourceVersion": "1.0",
+  "name": "scr_GetButtonSprtIndex",
   "isCompatibility": false,
+  "isDnD": false,
   "parent": {
     "name": "Main",
     "path": "folders/Scripts/Main.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "scr_GetButtonSprtIndex",
-  "tags": [],
-  "resourceType": "GMScript",
 }

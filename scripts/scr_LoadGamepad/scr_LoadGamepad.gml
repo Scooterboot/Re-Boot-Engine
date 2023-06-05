@@ -1,4 +1,5 @@
-function scr_LoadGamepad() {
+function scr_LoadGamepad()
+{
 	ini_open("settings.ini");
 	global.gp_usePad = ini_read_real("Gamepad", "enable dpad", true);
 	global.gp_useStick = ini_read_real("Gamepad", "enable left stick", true);
@@ -18,7 +19,4 @@ function scr_LoadGamepad() {
 	global.gp_m[1] = ini_read_real("Gamepad", "menu select", gp_face1);
 	global.gp_m[2] = ini_read_real("Gamepad", "menu cancel", gp_face2);
 	ini_close();
-
-
-
 }

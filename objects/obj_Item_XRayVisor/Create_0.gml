@@ -5,7 +5,7 @@ itemName = "xRayVisor";
 itemID = 0;
 
 itemHeader = "X-RAY VISOR";
-itemDesc = "Select ${hudIcon_4} and hold ${dashButton} to use";
+itemDesc = "Select ${hudIcon_4} and hold ${dashButton} to activate." + "\n" + "Reveals destroyable blocks and hidden pathways.";
 
 CollectItem = function()
 {

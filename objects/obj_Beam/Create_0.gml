@@ -45,6 +45,7 @@ damageSubType[5] = isPlasma;
 if(isIce)
 {
     freezeType = 1 + isCharge;
+	freezeKill = isCharge;
 }
 
 particleType = 0;
@@ -68,7 +69,7 @@ else if(isGrapple)
 {
 	particleType = -1;
 }
-emit = noone;
+//emit = noone;
 particleDelay = 0;
 
 impactSnd = snd_BeamImpact;

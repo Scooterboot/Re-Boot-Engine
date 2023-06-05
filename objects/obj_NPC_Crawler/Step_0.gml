@@ -9,10 +9,10 @@ var rot = rotation2;
 
 var xcheck = max(abs(velX),1),
 	ycheck = max(abs(velY),1);
-var collideAny = (lhc_place_collide(xcheck,0) || lhc_place_collide(-xcheck,0) || lhc_place_collide(0,ycheck) || lhc_place_collide(0,-ycheck) ||
-				lhc_place_collide(xcheck,ycheck) || lhc_place_collide(-xcheck,ycheck) || lhc_place_collide(xcheck,-ycheck) || lhc_place_collide(-xcheck,-ycheck));
+var collideAny = (entity_place_collide(xcheck,0) || entity_place_collide(-xcheck,0) || entity_place_collide(0,ycheck) || entity_place_collide(0,-ycheck) ||
+				entity_place_collide(xcheck,ycheck) || entity_place_collide(-xcheck,ycheck) || entity_place_collide(xcheck,-ycheck) || entity_place_collide(-xcheck,-ycheck));
 
-if(instance_exists(obj_ScreenShaker) && obj_ScreenShaker.active && colEdge != Edge.Bottom && !lhc_place_collide(0,ycheck))
+if(instance_exists(obj_ScreenShaker) && obj_ScreenShaker.active && colEdge != Edge.Bottom && !entity_place_collide(0,ycheck))
 {
 	collideAny = false;
 }
@@ -34,34 +34,34 @@ if(colEdge == Edge.None)
 	
 	if(collideAny)
 	{
-		if(lhc_place_collide(0,ycheck))
+		if(entity_place_collide(0,ycheck))
 		{
 			colEdge = Edge.Bottom;
 		}
-		else if(lhc_place_collide(0,-ycheck))
+		else if(entity_place_collide(0,-ycheck))
 		{
 			colEdge = Edge.Top;
 		}
-		else if(lhc_place_collide(xcheck,0))
+		else if(entity_place_collide(xcheck,0))
 		{
 			colEdge = Edge.Right;
 		}
-		else if(lhc_place_collide(-xcheck,0))
+		else if(entity_place_collide(-xcheck,0))
 		{
 			colEdge = Edge.Left;
 		}
 	}
 }
 
-if(lhc_place_collide(0,0))
+if(entity_place_collide(0,0))
 {
 	var flag3 = false;
 	var dirX = 0, dirY = 0;
-	if(!lhc_collision_line(bbox_right+1,bbox_top,bbox_right+1,bbox_bottom,"ISolid",true,true))
+	if(!entity_collision_line(bbox_right+1,bbox_top,bbox_right+1,bbox_bottom))
 	{
 		dirX = 1;
 	}
-	else if(!lhc_collision_line(bbox_left-1,bbox_top,bbox_left-1,bbox_bottom,"ISolid",true,true))
+	else if(!entity_collision_line(bbox_left-1,bbox_top,bbox_left-1,bbox_bottom))
 	{
 		dirX = -1;
 	}
@@ -70,12 +70,12 @@ if(lhc_place_collide(0,0))
 		//dirX *= -1;
 		flag3 = true;
 	}
-			
-	if(!lhc_collision_line(bbox_left,bbox_bottom+1,bbox_right,bbox_bottom+1,"ISolid",true,true))
+	
+	if(!entity_collision_line(bbox_left,bbox_bottom+1,bbox_right,bbox_bottom+1))
 	{
 		dirY = 1;
 	}
-	else if(!lhc_collision_line(bbox_left,bbox_top-1,bbox_right,bbox_top-1,"ISolid",true,true) || flag3)
+	else if(!entity_collision_line(bbox_left,bbox_top-1,bbox_right,bbox_top-1) || flag3)
 	{
 		dirY = -1;
 	}
@@ -141,7 +141,7 @@ else
 var rot2 = scr_round(rotation2);
 rotation2 = scr_wrap(rot,0,360);
 var rot3 = abs(rotation2 - rot2),
-	rotRate = radtodeg(0.2) * mSpeed;
+	rotRate = radtodeg(0.25) * mSpeed;
 if(rotation2 > rot2)
 {
 	if(rot3 > 180)

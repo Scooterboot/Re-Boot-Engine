@@ -27,6 +27,8 @@ drawGrapDelay = 1;
 
 //isGrapple = true;
 
+gp_list = ds_list_create();
+
 function CanDamageNPC(damage,npc)
 {
 	if(asset_has_any_tag(npc.object_index,"IGrapplePoint",asset_object))

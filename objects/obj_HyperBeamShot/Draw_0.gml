@@ -61,36 +61,34 @@ for(var i = 0; i < 5; i++)
 	shader_reset();
 }
 
+var xscale = image_xscale,
+	yscale = image_yscale;
+
 var dist = clamp((point_distance(x,y,xstart,ystart) + 4 + sprite_xoffset)/projLength,0,1);
-image_xscale = dist;
+xscale = dist;
 if(rFrame != 0)
 {
 	dist = clamp((lengthdir_x(point_distance(x,y,xstart,ystart) + 4,45) + sprite_xoffset)/projLength,0,1);
-	image_xscale = dist;
-	image_yscale = dist;
+	xscale = dist;
+	yscale = dist;
 }
 
 pal_swap_set(sprt_HyperBeamPalette,1+obj_Main.hyperRainbowCycle,0,0,false);
-draw_sprite_ext(sprite_index,image_index,scr_round(x),scr_round(y),image_xscale,image_yscale,image_angle,c_white,image_alpha);
+draw_sprite_ext(sprite_index,image_index,scr_round(x),scr_round(y),xscale,yscale,image_angle,c_white,image_alpha);
 shader_reset();
 
-//if(firedFrame <= 5)
 if(fired < 4)
 {
 	var sSprt = sprt_HyperBeamStartParticle;
-	//firedFrameCounter++;
-	//if(firedFrameCounter > 2)
-	//{
-		firedFrame = scr_wrap(firedFrame+1,0,sprite_get_number(sSprt));
-		firedFrameCounter = 0;
-		
-		if(firedFrame == sprite_get_number(sSprt)-1)
-		{
-			fired++;
-		}
-	//}
+	firedFrame = scr_wrap(firedFrame+1,0,sprite_get_number(sSprt));
+	firedFrameCounter = 0;
 	
-	var hObj = id;//self;
+	if(firedFrame == sprite_get_number(sSprt)-1)
+	{
+		fired++;
+	}
+	
+	var hObj = id;
 	
 	with(obj_Player)
 	{

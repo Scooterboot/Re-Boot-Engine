@@ -1,5 +1,10 @@
 /// @description Parallax
 
+if(!instance_exists(obj_Camera))
+{
+	exit;
+}
+
 var camx = obj_Camera.x,//camera_get_view_x(view_camera[0]),
 	camy = obj_Camera.y,//camera_get_view_y(view_camera[0]),
 	camw = global.resWidth,

@@ -149,7 +149,7 @@ function xray_redraw_alpha()
 	{
 		if (!object_is_ancestor(object_index,obj_DoorHatch) && object_index != obj_DoorHatch && 
 			!object_is_ancestor(object_index,obj_InteractStation) &&
-			(!object_is_ancestor(object_index,obj_Breakable) || object_index == obj_NPCBlock || object_index == obj_Spikes))
+			(!object_is_ancestor(object_index,obj_Breakable) || object_index == obj_NPCBreakable || object_index == obj_Spikes))
 		{
 			draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
 		}
@@ -177,7 +177,7 @@ function xray_redraw_break()
 
 	with (obj_Breakable)
 	{
-		if(object_index != obj_Spikes && object_index != obj_NPCBlock)
+		if(object_index != obj_Spikes && object_index != obj_NPCBreakable)
 		{
 			//draw_sprite_ext(sprite_index,1,x-camera_get_view_x(view_camera[0]),y-camera_get_view_y(view_camera[0]),1,1,0,c_white,1);
 			DrawBreakable(x-camera_get_view_x(view_camera[0]),y-camera_get_view_y(view_camera[0]),image_index);
@@ -204,7 +204,7 @@ function xray_redraw_outline()
 	{
 		if (!object_is_ancestor(object_index,obj_DoorHatch) && object_index != obj_DoorHatch && 
 			!object_is_ancestor(object_index,obj_InteractStation) &&
-			(!object_is_ancestor(object_index,obj_Breakable) || object_index == obj_NPCBlock) &&
+			(!object_is_ancestor(object_index,obj_Breakable) || object_index == obj_NPCBreakable) &&
 			object_index != obj_Elevator)
 		{
 			draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
@@ -225,7 +225,10 @@ function xray_redraw_outline()
 	}
 	with(obj_Breakable)
 	{
-		draw_sprite_ext(sprt_Tile,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
+		if(object_index != obj_Spikes)
+		{
+			draw_sprite_ext(sprt_Tile,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
+		}
 	}
 
 	surface_reset_target();
@@ -262,23 +265,11 @@ function xray_redraw_outline2()
 		{
 			draw_set_color(c_white);
 			draw_set_alpha(1);
-			if(object_index == obj_PlatformSlope)
+			
+			draw_line(bbox_left-camx-1,bbox_top-camy,bbox_right-camx,bbox_top-camy);
+			for(var i = bbox_left-camx; i < bbox_right-camx-1; i+= 4)
 			{
-				var psWidth = abs(bbox_right-bbox_left) + 1,
-					psHeight = abs(bbox_bottom-bbox_top) + 1;
-				var x1 = x-camx - 1,
-					y1 = y-camy - 1,
-					x2 = x1+psWidth*image_xscale,
-					y2 = y1+psHeight*image_yscale;
-				draw_line(x1,y1,x2,y2);
-			}
-			else
-			{
-				draw_line(bbox_left-camx-1,bbox_top-camy,bbox_right-camx,bbox_top-camy);
-				for(var i = bbox_left-camx; i < bbox_right-camx-1; i+= 4)
-				{
-					draw_line(i,bbox_top-camy+1,i+2,bbox_top-camy+1);
-				}
+				draw_line(i,bbox_top-camy+1,i+2,bbox_top-camy+1);
 			}
 		}
 	}

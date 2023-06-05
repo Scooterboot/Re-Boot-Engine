@@ -1,4 +1,5 @@
-function scr_LoadKeyboard() {
+function scr_LoadKeyboard()
+{
 	ini_open("settings.ini");
 	global.key[0] = ini_read_real("Keyboard", "up", vk_up);
 	global.key[1] = ini_read_real("Keyboard", "down", vk_down);
@@ -18,7 +19,4 @@ function scr_LoadKeyboard() {
 	global.key_m[1] = ini_read_real("Keyboard", "menu select", ord("Z"));
 	global.key_m[2] = ini_read_real("Keyboard", "menu cancel", ord("X"));
 	ini_close();
-
-
-
 }

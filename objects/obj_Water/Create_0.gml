@@ -34,10 +34,10 @@ function water_redraw(SurfaceID, RefractID)
 	    // -- Final Render Refraction Surface
     
 	    gpu_set_colorwriteenable(1,1,1,0);
-	    draw_surface(SurfaceRefractMask, (RefractX mod 64) - 32, 0);
+	    draw_surface(waterSurfaceRefractMask, (RefractX mod 64) - 32, 0);
     
 	    gpu_set_colorwriteenable(0,0,0,1);
-	    draw_surface(SurfaceRefractGlow, 0, 0);
+	    draw_surface(waterSurfaceRefractGlow, 0, 0);
     
 	    gpu_set_colorwriteenable(1,1,1,1);
 	}
@@ -85,15 +85,15 @@ RefractXSpeed = 0.333;
 
 Time = 0;
 
-Surface = surface_create(room_width + 64, room_height - y + 48);
-SurfaceRefract = surface_create(room_width + 64, room_height - y + 48);
-SurfaceRefractMask = surface_create(room_width + 128, room_height - y + 48);
-SurfaceRefractGlow = surface_create(room_width + 64, room_height - y + 48);
+waterSurface = surface_create(room_width + 64, room_height - y + 48);
+waterSurfaceRefract = surface_create(room_width + 64, room_height - y + 48);
+waterSurfaceRefractMask = surface_create(room_width + 128, room_height - y + 48);
+waterSurfaceRefractGlow = surface_create(room_width + 64, room_height - y + 48);
 
-water_redraw(Surface, 0);
-water_redraw(SurfaceRefract, 1);
-water_redraw(SurfaceRefractMask, 2);
-water_redraw(SurfaceRefractGlow, 3);
+water_redraw(waterSurface, 0);
+water_redraw(waterSurfaceRefract, 1);
+water_redraw(waterSurfaceRefractMask, 2);
+water_redraw(waterSurfaceRefractGlow, 3);
 
 // -- Bobbing variables
 

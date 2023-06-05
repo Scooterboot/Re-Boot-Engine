@@ -6,7 +6,8 @@ function scr_GetLayersFromString()
 	/// @param subString
 	
 	var _lay = layer_get_all(),
-		_list = ds_list_create();
+		//_list = ds_list_create();
+		num = 0;
 	
 	var result = array(0);
 	
@@ -20,18 +21,20 @@ function scr_GetLayersFromString()
 		{
 			if(string_count(argument[j],layer_get_name(_lay[i])) > 0)
 			{
-				ds_list_add(_list,_lay[i]);
+				//ds_list_add(_list,_lay[i]);
+				result[num] = _lay[i];
+				num++;
 				break;
 			}
 		}
 	}
 	
-	for(var i = 0; i < ds_list_size(_list); i++)
+	/*for(var i = 0; i < ds_list_size(_list); i++)
 	{
 		result[i] = ds_list_find_value(_list,i);
 	}
 	
-	ds_list_destroy(_list);
+	ds_list_destroy(_list);*/
 	
 	return result;
 }

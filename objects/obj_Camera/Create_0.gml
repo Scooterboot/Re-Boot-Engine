@@ -1,9 +1,21 @@
 /// @description Initialize
 clampCam = true;
 
-camLimitMax = 16;//32;
-camLimitX = camLimitMax;
-camLimitY = 0;
+camLimitDefault_Left = -32;
+camLimitDefault_Right = 32;
+camLimitDefault_Top = -16;
+camLimitDefault_Bottom = 16;
+
+camLimitMax_Left = camLimitDefault_Left;
+camLimitMax_Right = camLimitDefault_Right;
+camLimitMax_Top = camLimitDefault_Top;
+camLimitMax_Bottom = camLimitDefault_Bottom;
+
+camLimit_Left = camLimitMax_Left;
+camLimit_Right = camLimitMax_Right;
+camLimit_Top = camLimitMax_Top;
+camLimit_Bottom = camLimitMax_Bottom;
+
 velX = 0;
 velY = 0;
 fVelX = velX;
@@ -26,6 +38,8 @@ if(instance_exists(obj_Player))
 }
 prevPlayerX = playerX;
 prevPlayerY = playerY;
+
+colList = ds_list_create();
 
 function camera_collide(colX, colY, dsList)
 {

@@ -17,8 +17,14 @@ else
 
 if(phase == 0) // spawn anim
 {
+	ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
+	
 	if(ai[1] == 0)
 	{
+		immune = true;
+		head.immune = true;
+		rHand.immune = true;
+		
 		var flag = true;
 		with(player)
 		{
@@ -39,11 +45,15 @@ if(phase == 0) // spawn anim
 	}
 	else if(ai[1] == 1)
 	{
+		immune = false;
+		head.immune = false;
+		rHand.immune = false;
+		
 		global.rmMusic = global.music_Boss1;
 		
 		if(ai[0] == 0)
 		{
-			obj_ScreenShaker.Shake(152*2, 2, 2);
+			obj_ScreenShaker.Shake(p1Height*2, 2, 2);
 		}
 		
 		if(ai[0] % 5 == 0)
@@ -52,7 +62,7 @@ if(phase == 0) // spawn anim
 			audio_play_sound(snd_BlockBreakHeavy,0,false);
 		}
 		
-		if(ai[0] < 152)
+		if(ai[0] < p1Height)
 		{
 			ai[0] += 0.5;
 			position.Y -= 0.5;
@@ -69,15 +79,67 @@ if(phase == 1) // first phase
 {
 	if(ai[0] == 0) // idle
 	{
+		ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
 		
+		ai[1]++;
+		if(ai[1] > 300)
+		{
+			ai[0] = 1;
+			ai[1] = 0;
+		}
 	}
 	if(ai[0] == 1) // move and jab
 	{
-		
+		if(ai[1] == 0) // initiate move
+		{
+			moveDir = 1;
+			ai[1] = 1;
+		}
+		if(ai[1] == 1) // ready pose anim
+		{
+			if(ArmPokeTransition >= 1 && moveDir == 0)
+			{
+				ai[1] = 2;
+			}
+			ArmPokeTransition = min(ArmPokeTransition+0.03,1);
+		}
+		if(ai[1] == 2) // jab
+		{
+			if(ArmPokeFrame >= 2)
+			{
+				ai[1] = 3;
+			}
+			ArmPokeFrame = min(ArmPokeFrame+0.1,2);
+		}
+		if(ai[1] >= 3) // recoil and return to idle
+		{
+			ArmIdleFrame = 0;
+			
+			if(ai[1] == 3)
+			{
+				moveDir = -1;
+				ai[1] = 4;
+			}
+			ArmPokeFrame = min(ArmPokeFrame+0.05,4);
+			if(ArmPokeFrame >= 3)
+			{
+				ArmPokeTransition = max(ArmPokeTransition-0.025,0);
+			}
+			if(ArmPokeTransition <= 0)
+			{
+				ai[0] = 0;
+				ai[1] = 0;
+				ArmPokeFrame = 0;
+			}
+		}
 	}
 	
 	if(life <= lifeMax*0.75 && !mouthOpen && headFrame <= 2)
 	{
+		if(ai[0] == 1 && ai[1] > 1 && moveDir == 0)
+		{
+			moveDir = -1;
+		}
 		ai[0] = 0;
 		ai[1] = 0;
 		ai[2] = 0;
@@ -86,8 +148,18 @@ if(phase == 1) // first phase
 		phase = 2;
 	}
 }
+else
+{
+	ArmPokeTransition = max(ArmPokeTransition-0.03,0);
+	if(ArmPokeTransition <= 0)
+	{
+		ArmPokeFrame = 0;
+	}
+}
 if(phase == 2) // phase transition
 {
+	ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
+	
 	if(ai[1] == 0)
 	{
 		ai[0]++;
@@ -101,7 +173,7 @@ if(phase == 2) // phase transition
 	{
 		if(ai[0] == 0)
 		{
-			obj_ScreenShaker.Shake(160*2, 2, 2);
+			obj_ScreenShaker.Shake(p2Height*2, 2, 2);
 			
 			enviroHandler.state = 1;
 		}
@@ -112,43 +184,186 @@ if(phase == 2) // phase transition
 			audio_play_sound(snd_BlockBreakHeavy,0,false);
 		}
 		
-		if(ai[0] < 160)
+		if(ai[0] < p2Height)
 		{
 			ai[0] += 0.5;
 			position.Y -= 0.5;
+			
+			if(moveDir == 0)
+			{
+				if(position.X < spawnPos.X)
+				{
+					moveDir = dir;
+				}
+				if(position.X > spawnPos.X)
+				{
+					moveDir = -dir;
+				}
+			}
 		}
 		else
 		{
-			ai[0] = 0;
+			ai[0] = 120;
 			ai[1] = 0;
 			phase = 3;
+			
+			moveDir = 2*dir;
 		}
 	}
 }
 if(phase == 3) // second phase
 {
+	ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
 	
+	if(moveDir == 0)
+	{
+		if(ai[0] > 0)
+		{
+			ai[0]--;
+		}
+		else
+		{
+			if(irandom(1) == 0)
+			{
+				moveDir = -1 * irandom_range(1,2);
+			}
+			else 
+			{
+				moveDir = 1 * irandom_range(1,2);
+			}
+			
+			if(position.X < p2LeftBound)
+			{
+				moveDir = abs(moveDir) * dir;
+			}
+			if(position.X > p2RightBound)
+			{
+				moveDir = -abs(moveDir) * dir;
+			}
+			
+			ai[0] = irandom_range(60,180);
+		}
+	}
+	
+	ai[1]++;
+	if(ai[1] > 180)
+	{
+		var spikePos = new Vector2(BodyBone.position.X+bellySpikePos[ai[2]].X*dir, BodyBone.position.Y+bellySpikePos[ai[2]].Y);
+		var spike = instance_create_depth(spikePos.X,spikePos.Y,depth+1,obj_Kraid_BellySpike);
+		spike.damage = spikeDamage;
+		spike.realLife = id;
+		spike.dir = dir;
+		spike.image_xscale = dir;
+		spike.posType = ai[2];
+		
+		ai[1] = 0;
+		ai[2] = scr_wrap(ai[2]+1,0,3);
+	}
 }
 if(phase == 4) // death anim
 {
+	ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
 	
+	if(ai[0] == 0)
+	{
+		enviroHandler.state = 3;
+		//obj_ScreenShaker.Shake(320, 2, 2);
+		obj_ScreenShaker.Shake(300, 2, 2);
+	}
+	
+	ai[0]++;
+	position.Y++;
+	
+	var bstep = max(scr_floor(4 + (ai[0]/50)), 5);
+	if(ai[0] % bstep == 0 && ai[0] < 300)
+	{
+		//audio_stop_sound(snd_BlockBreakHeavy);
+		//audio_play_sound(snd_BlockBreakHeavy,0,false);
+		
+		scr_PlayExplodeSnd(0,false);
+		var pX = irandom_range(bbox_left-4,bbox_right+4),
+			pY = irandom_range(bbox_top-38,bbox_bottom+4);
+		part_particles_create(obj_Particles.partSystemA,pX,pY,obj_Particles.npcDeath[choose(0,2)],1);
+	}
+	
+	moveDir = 0;
+	
+	mouthCounter = -1;
+	mouthOpen = false;
+	
+	if (ai[0] < 3 ||
+		(ai[0] >= 40 && ai[0] < 70) ||
+		(ai[0] >= 106 && ai[0] < 166) ||
+		(ai[0] >= 180))// && ai[0] < 240))
+	{
+		mouthOpen = true;
+	}
+	
+	if(ai[0] == 40)
+	{
+		audio_play_sound(snd_Kraid_DyingRoar,0,false);
+	}
+	
+	if(ai[0] > 320)
+	{
+		instance_destroy();
+	}
 }
 
-ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
+
+if(moveDir != 0)
+{
+	var walkAnimSpd = 0.075;
+	
+	WalkFrame = scr_wrap(WalkFrame+walkAnimSpd*sign(moveDir),0,8);
+	
+	//var moveSpd = WalkMoveSpeed[scr_wrap(scr_round(WalkFrame),0,8)] * walkAnimSpd;
+	var moveSpd = LerpArray(WalkMoveSpeed,WalkFrame,true) * walkAnimSpd;
+	position.X += moveSpd * sign(moveDir) * dir;
+	
+	WalkFrame2 += walkAnimSpd;
+	if(WalkFrame2 >= 4)
+	{
+		WalkFrame2 = 0;
+		moveDir -= sign(moveDir);
+		if((position.X < p2LeftBound && moveDir == -dir) || (position.X > p2RightBound && moveDir == dir))
+		{
+			moveDir = 0;
+		}
+		position.X = scr_round(position.X);
+		
+		audio_play_sound(snd_Kraid_Footstep,1,false);
+	}
+}
+
 
 ArmIdleAnim(ArmIdleFrame,ArmIdleTransition);
+ArmPokeAnim(ArmPokeFrame,ArmPokeTransition);
+WalkAnim(WalkFrame,WalkTransition);
 
-BodyBone.UpdateBone(position,dir,scale);
+var bodyOffset = 72 - (max(RLegBone[1].position.Y+18,LLegBone[1].position.Y+18) - BodyBone.position.Y);
+BodyBone.offsetPosition.Y = min(scr_round(bodyOffset),0);
+
+var basePos = new Vector2(scr_round(position.X),scr_round(position.Y));
+BodyBone.UpdateBone(basePos,dir,scale);
 
 camPosX = HeadBone.position.X;
 camPosY = HeadBone.position.Y;
 
-x = position.X;
-y = position.Y;
+x = BodyBone.position.X;
+y = BodyBone.position.Y;
 
 if(mouthCounter >= 0)
 {
 	mouthCounter++;
+	if(mouthCounter < 15)
+	{
+		blinkCounter = blinkCounterMax;
+	}
+	if(mouthCounter == 15)
+	{
+		eyeGlowNum = 1;
+	}
 	if(mouthCounter == 60)
 	{
 		audio_play_sound(snd_Kraid_Roar,0,false);
@@ -167,9 +382,16 @@ if(mouthCounter >= 0)
 if(mouthOpen)
 {
 	headFrameCounter++;
-	if(headFrameCounter > 4)
+	if(headFrameCounter > 2)//4)
 	{
-		headFrame = clamp(headFrame+1,3,6);
+		if(headFrame <= 9)
+		{
+			headFrame = clamp(headFrame+1,3,9);//6);
+		}
+		else
+		{
+			headFrame--;
+		}
 		headFrameCounter = 0;
 	}
 	blinkCounter = 0;
@@ -177,9 +399,14 @@ if(mouthOpen)
 else if(headFrame >= 3)
 {
 	headFrameCounter++;
-	if(headFrameCounter > 4)
+	if(headFrameCounter > 2)//4)
 	{
-		headFrame--;
+		//headFrame--;
+		headFrame++;
+		if(headFrame > 14)
+		{
+			headFrame = 2;
+		}
 		headFrameCounter = 0;
 	}
 	blinkCounter = 0;
@@ -225,7 +452,8 @@ if(instance_exists(head))
 	head.x = HeadBone.position.X;
 	head.y = HeadBone.position.Y;
 
-	head.image_angle = (HeadBone.rotation - (45 - 25 * clamp(headFrame-2,0,3))) * dir;
+	//head.image_angle = (HeadBone.rotation - (45 - 12.5 * clamp(headFrame-2,0,6))) * dir;
+	head.image_angle = (HeadBone.rotation - headBoxRotSeq[headFrame]) * dir;
 }
 
 if(instance_exists(rHand))
@@ -245,7 +473,7 @@ if(phase < 4)
 	with(player)
 	{
 		var num = 0;
-		while(num < 32 && (place_meeting(x+shiftX,y,kbody) || place_meeting(x+shiftX,y,khead) ||
+		while(num < 32 && (place_meeting(x+shiftX+kbody.dir,y,kbody) || place_meeting(x+shiftX+kbody.dir,y,khead) ||
 			(kbody.dir == 1 && x+shiftX < kbody.bbox_left+32) || (kbody.dir == -1 && x+shiftX > kbody.bbox_right-32)))
 		{
 			shiftX += 1*kbody.dir;

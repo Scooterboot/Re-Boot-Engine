@@ -24,23 +24,23 @@ part_type_speed(bDust,0.5,0.75,0.025,0);
 //Muzzle Flare
 mFlare[0] = part_type_create();
 part_type_sprite(mFlare[0],sprt_PowerBeamStartParticle,true,true,false);
-part_type_life(mFlare[0],2,2);
+part_type_life(mFlare[0],2,3);
 
 mFlare[1] = part_type_create();
 part_type_sprite(mFlare[1],sprt_IceBeamStartParticle,true,true,false);
-part_type_life(mFlare[1],2,2);
+part_type_life(mFlare[1],2,3);
 
 mFlare[2] = part_type_create();
 part_type_sprite(mFlare[2],sprt_WaveBeamStartParticle,true,true,false);
-part_type_life(mFlare[2],2,2);
+part_type_life(mFlare[2],2,3);
 
 mFlare[3] = part_type_create();
 part_type_sprite(mFlare[3],sprt_SpazerStartParticle,true,true,false);
-part_type_life(mFlare[3],2,2);
+part_type_life(mFlare[3],2,3);
 
 mFlare[4] = part_type_create();
 part_type_sprite(mFlare[4],sprt_PlasmaBeamStartParticle,true,true,false);
-part_type_life(mFlare[4],2,2);
+part_type_life(mFlare[4],2,3);
 
 
 //Impact (Normal)
@@ -289,6 +289,11 @@ part_type_life(partFreeze,8,10);
 part_type_sprite(partFreeze,sprt_ParticlePixel,0,0,0);
 part_type_speed(partFreeze,.7,1,-.015,0);
 part_type_gravity(partFreeze,.07,270);
+
+//Charge Flare Spark
+partFlareFX = part_type_create();
+part_type_sprite(partFlareFX,sprt_ChargeFlareSparkFX,true,true,false);
+part_type_life(partFlareFX,18,18);
 
 
 //Grapple

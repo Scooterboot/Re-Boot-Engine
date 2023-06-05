@@ -17,7 +17,7 @@ switch (messageType)
 			messageAlpha = min(messageAlpha+0.1,1);
 			if((prSelect || prCancel || prStart) && messageDuration >= 30)
 			{
-				obj_Music.skipItemFanfare = true;
+				obj_Audio.skipItemFanfare = true;
 				messageDuration = 360;
 			}
 			global.gamePaused = true;

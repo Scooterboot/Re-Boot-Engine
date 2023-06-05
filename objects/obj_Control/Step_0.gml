@@ -1,5 +1,22 @@
 /// @description Define & Set
 
+
+// temp code
+if(gamepad_is_supported())
+{
+	for (var i = 0; i < gamepad_get_device_count(); i++)
+	{
+	    if(gamepad_is_connected(i) && gamepad_button_check(i, gp_anybutton(i)))
+	    {
+	        global.gpSlot = i;
+	        global.gpButtonNum = gamepad_button_count(global.gpSlot);
+	        break;
+	    }
+	}
+}
+// temp code
+
+
 ///Define
 kUp = keyboard_check(global.key[0]);
 kDown = keyboard_check(global.key[1]);
@@ -27,6 +44,8 @@ kMCancel = keyboard_check(global.key_m[2]);
 
 if(gamepad_is_connected(global.gpSlot))
 {
+	gamepad_set_axis_deadzone(global.gpSlot, global.gp_deadZone);
+	
     gRight = (gamepad_button_check(global.gpSlot, gp_padr) && global.gp_usePad) || (gamepad_axis_value(global.gpSlot, gp_axislh) > 0 && global.gp_useStick);
     gLeft = (gamepad_button_check(global.gpSlot, gp_padl) && global.gp_usePad) || (gamepad_axis_value(global.gpSlot, gp_axislh) < 0 && global.gp_useStick);
     gUp = (gamepad_button_check(global.gpSlot, gp_padu) && global.gp_usePad) || (gamepad_axis_value(global.gpSlot, gp_axislv) < 0 && global.gp_useStick);

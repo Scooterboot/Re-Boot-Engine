@@ -68,10 +68,10 @@ gpu_set_blendmode(bm_normal);
 
 /// -- Surface 1: Basic Water Layer
 
-if (surface_exists(Surface))
+if (surface_exists(waterSurface))
 {
-    water_redraw(Surface, 0);
-    var Texture = surface_get_texture(Surface);
+    water_redraw(waterSurface, 0);
+    var Texture = surface_get_texture(waterSurface);
     
     gpu_set_blendmode(bm_add); 
     draw_primitive_begin_texture(pr_trianglestrip, Texture);
@@ -87,8 +87,8 @@ if (surface_exists(Surface))
             Alpha = max(1 - 0.25*((i-16)/min(max(1,i)*6,32)), 0.25);
         }
         
-        draw_vertex_texture_color(Spread-32,floor(y+i),0,i/surface_get_height(Surface),c_white,image_alpha*Alpha);
-        draw_vertex_texture_color(Spread+room_width+32,floor(y+i),1,i/surface_get_height(Surface),c_white,image_alpha*Alpha);
+        draw_vertex_texture_color(Spread-32,floor(y+i),0,i/surface_get_height(waterSurface),c_white,image_alpha*Alpha);
+        draw_vertex_texture_color(Spread+room_width+32,floor(y+i),1,i/surface_get_height(waterSurface),c_white,image_alpha*Alpha);
     }
 
     draw_primitive_end();
@@ -97,15 +97,15 @@ if (surface_exists(Surface))
 }
 else
 {
-    Surface = surface_create(room_width + 64, room_height - y + 48);
-    water_redraw(Surface, 0);
+    waterSurface = surface_create(room_width + 64, room_height - y + 48);
+    water_redraw(waterSurface, 0);
 }
 
 /// -- Surface 2: Refraction Layer
 
-if (surface_exists(SurfaceRefract))
+if (surface_exists(waterSurfaceRefract))
 {
-    var Texture = surface_get_texture(SurfaceRefract);
+    var Texture = surface_get_texture(waterSurfaceRefract);
     
     gpu_set_blendmode(bm_add); 
     
@@ -122,8 +122,8 @@ if (surface_exists(SurfaceRefract))
             Alpha = max(1 - 0.25*((i-16)/min(max(1,i)*6,32)), 0.25);
         }
         
-        draw_vertex_texture_color(Spread-32,floor(y+i),0,i/surface_get_height(SurfaceRefract), c_white, Alpha);
-        draw_vertex_texture_color(Spread+room_width+32,floor(y+i),1,i/surface_get_height(SurfaceRefract), c_white, Alpha);
+        draw_vertex_texture_color(Spread-32,floor(y+i),0,i/surface_get_height(waterSurfaceRefract), c_white, Alpha);
+        draw_vertex_texture_color(Spread+room_width+32,floor(y+i),1,i/surface_get_height(waterSurfaceRefract), c_white, Alpha);
     }
     
     draw_primitive_end();
@@ -132,25 +132,25 @@ if (surface_exists(SurfaceRefract))
 }
 else
 {
-    SurfaceRefract = surface_create(room_width + 64, room_height - y + 48);
+    waterSurfaceRefract = surface_create(room_width + 64, room_height - y + 48);
 }
 
 /// -- Refraction Surface failsafes
 
-if !(surface_exists(SurfaceRefractMask))
+if !(surface_exists(waterSurfaceRefractMask))
 {
-    SurfaceRefractMask = surface_create(room_width + 128, room_height - y + 48);
-    water_redraw(SurfaceRefractMask, 2);
+    waterSurfaceRefractMask = surface_create(room_width + 128, room_height - y + 48);
+    water_redraw(waterSurfaceRefractMask, 2);
 }
 
-if !(surface_exists(SurfaceRefractGlow))
+if !(surface_exists(waterSurfaceRefractGlow))
 {
-    SurfaceRefractGlow = surface_create(room_width + 64, room_height - y + 48);
-    //water_redraw(SurfaceRefractGlow, 3);
+    waterSurfaceRefractGlow = surface_create(room_width + 64, room_height - y + 48);
+    //water_redraw(waterSurfaceRefractGlow, 3);
 }
-water_redraw(SurfaceRefractGlow, 3);
+water_redraw(waterSurfaceRefractGlow, 3);
 
 /// -- Refraction Layer always keeps updating
 
-water_redraw(SurfaceRefract, 1);
+water_redraw(waterSurfaceRefract, 1);
 RefractX += RefractXSpeed;

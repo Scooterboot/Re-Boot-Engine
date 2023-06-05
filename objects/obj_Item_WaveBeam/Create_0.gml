@@ -5,7 +5,7 @@ itemName = "waveBeam";
 itemID = 0;
 
 itemHeader = "WAVE BEAM";
-itemDesc = "Your beam now passes through walls";
+itemDesc = "Your beam now passes through walls.";
 
 CollectItem = function()
 {

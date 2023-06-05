@@ -5,7 +5,7 @@ itemName = "morphBall";
 itemID = 0;
 
 itemHeader = "MORPH BALL";
-itemDesc = "Press ${controlPad} down twice to morph";
+itemDesc = "Press ${controlPad} down twice to morph into a ball.";
 
 CollectItem = function()
 {

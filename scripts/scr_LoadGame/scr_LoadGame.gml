@@ -1,7 +1,7 @@
 /// @decription scr_LoadGame
 /// @param savefile
-function scr_LoadGame() {
-
+function scr_LoadGame()
+{
 	var file = argument[0];
 
 	global.currentPlayFile = file;

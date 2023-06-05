@@ -210,7 +210,7 @@ if(room == rm_MainMenu)
 			{
 				if(!confirmDelete)
 				{
-					if(cCancel && rCancel)
+					if(cCancel && rCancel && targetScreen != MainScreen.LoadGame)
 					{
 						selectedFile = -1;
 					}

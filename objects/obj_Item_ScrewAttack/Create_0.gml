@@ -5,7 +5,7 @@ itemName = "screwAttack";
 itemID = 0;
 
 itemHeader = "SCREW ATTACK";
-itemDesc = "Damage enemies during spin jump";
+itemDesc = "Damage enemies during spin jump.";
 
 CollectItem = function()
 {

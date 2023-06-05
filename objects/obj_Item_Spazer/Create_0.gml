@@ -5,7 +5,7 @@ itemName = "spazer";
 itemID = 0;
 
 itemHeader = "SPAZER";
-itemDesc = "Fire 3 beams at once";
+itemDesc = "Fire 3 beams at once.";
 
 CollectItem = function()
 {

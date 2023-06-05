@@ -7,7 +7,7 @@ itemID = 0;
 energyAmount = 100;
 
 itemHeader = "ENERGY TANK";
-itemDesc = "Maximum energy increased by "+string(energyAmount)+" units";
+itemDesc = "Maximum energy increased by "+string(energyAmount)+" units.";
 expanHeader = "ENERGY TANK";
 expanDesc = "+"+string(energyAmount)+" Energy Capacity";
 

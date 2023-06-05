@@ -1,13 +1,13 @@
 /// @description Player pickup logic
 if(global.gamePaused)
 {
-	image_speed = 0;
+	//image_speed = 0;
 	exit;
 }
-else
-{
-	image_speed = imSpeed;
-}
+//else
+//{
+	//image_speed = imSpeed;
+//}
 
 visible = !place_meeting(x,y,obj_Breakable);
 
@@ -23,7 +23,7 @@ if(!collected)
 			if(!isExpansion)
 			{
 				obj_UI.CreateMessageBox(itemHeader,itemDesc,Message.Item);
-				obj_Music.playItemFanfare = true;
+				obj_Audio.playItemFanfare = true;
 				global.gamePaused = true;
 			}
 			else

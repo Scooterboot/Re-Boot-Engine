@@ -5,7 +5,7 @@ itemName = "hiJump";
 itemID = 0;
 
 itemHeader = "HI-JUMP BOOTS";
-itemDesc = "Jump height increased";
+itemDesc = "Jump height increased.";
 
 CollectItem = function()
 {

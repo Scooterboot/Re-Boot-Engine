@@ -1,7 +1,7 @@
 
 var rFrame = 0;
 
-image_angle = 0;//direction+180;
+image_angle = 0;
 var angle = direction+180;
 if((direction-45)%90 == 0 && rotFrame > 0)
 {
@@ -25,29 +25,12 @@ if(projLength > 0)
 	dist = clamp((point_distance(x,y,xstart,ystart) + 4 + sprite_xoffset)/projLength,0,1);
 }
 
-//if(!isSpazer || isPlasma)
+var xscale = image_xscale,
+	yscale = image_yscale;
+
 if(!isSpazer && !isPlasma)
 {
-	/*if(isPlasma)
-	{
-		if(impact <= 0 && !global.gamePaused)
-		{
-			var velAngX = x-(oldPosX[0]+speed_x),
-			velAngY = y-(oldPosY[0]+speed_y),
-			nVelX = lengthdir_x(velocity,direction),
-			nVelY = lengthdir_y(velocity,direction);
-			if(point_distance(x,y,x+velAngX,y+velAngY) < point_distance(x,y,x+nVelX,y+nVelY))
-			{
-				image_angle = direction;
-			}
-			else
-			{
-				image_angle = point_direction(0,0,velAngX,velAngY);
-			}
-		}
-		image_angle = direction;
-	}
-	else*/ if(isWave && !isIce && !isCharge)
+	if(isWave && !isIce && !isCharge)
 	{
 		angle = 0;
 	}
@@ -63,7 +46,7 @@ if(!isSpazer && !isPlasma)
 		angle = -rotation;
 	}
     
-	if(isCharge)// || isPlasma)
+	if(isCharge)
 	{
 		for(var i = 0; i < 5; i++)
 		{
@@ -72,41 +55,32 @@ if(!isSpazer && !isPlasma)
 			alpha = (5 - i2) / 5;
 			var xx = oldPosX[i],
 			yy = oldPosY[i];
-			//if(sprite_xoffset > 15)
 			if(projLength > 0)
 			{
-				//scale = 1;
-				//scr_PlasmaDraw(xx,yy,scale,scale,oldRot[i],alpha);
 				scale = 1;
-				image_xscale = dist;
+				xscale = dist;
 				if(rFrame != 0)
 				{
 					dist = clamp((lengthdir_x(point_distance(x,y,xstart,ystart) + 4,45) + sprite_xoffset)/projLength,0,1);
-					image_xscale = dist;
-					image_yscale = dist;
+					xscale = dist;
+					yscale = dist;
 				}
 			}
-			//else
-			//{
-				draw_sprite_ext(sprite_index,image_index,scr_round(xx),scr_round(yy),image_xscale*scale,image_yscale*scale,oldRot[i],c_white,alpha);
-			//}
+			
+			draw_sprite_ext(sprite_index,image_index,scr_round(xx),scr_round(yy),xscale*scale,yscale*scale,oldRot[i],c_white,alpha);
 		}
 	}
 }
     
-//if(sprite_xoffset >= 15)
 if(projLength > 0)
 {
-	//scr_PlasmaDraw(x,y,1,1,image_angle,image_alpha,true);
-	image_xscale = dist;
+	xscale = dist;
 	if(rFrame != 0)
 	{
 		dist = clamp((lengthdir_x(point_distance(x,y,xstart,ystart) + 4,45) + sprite_xoffset)/projLength,0,1);
-		image_xscale = dist;
-		image_yscale = dist;
+		xscale = dist;
+		yscale = dist;
 	}
 }
-//else
-//{
-	draw_sprite_ext(sprite_index,image_index,scr_round(x),scr_round(y),image_xscale,image_yscale,angle,c_white,image_alpha);
-//}
+
+draw_sprite_ext(sprite_index,image_index,scr_round(x),scr_round(y),xscale,yscale,angle,c_white,image_alpha);

@@ -117,31 +117,6 @@ else
 {
 	image_speed = 0.5;
 }
-/*if(bombTimer <= 5)
-{
-	if(instance_exists(obj_Player) && !exploded)
-	{
-		if(place_meeting(x,y,obj_Player) && (!obj_Player.cDown || forceJump))
-		{
-			var num = obj_Player.x - x;
-			if(abs(num) > 1)
-			{
-				obj_Player.bombJumpX = obj_Player.velX + (sign(num) * min(abs(num*1.5),2.75));
-				if(obj_Player.liquidState > 0)
-				{
-					obj_Player.bombJumpX /= 3;
-				}
-			}
-			obj_Player.bombJump = obj_Player.bombJumpMax[obj_Player.liquidState];
-			obj_Player.SpiderEnable(false);
-			exploded = true;
-		}
-	}
-	if(bombTimer <= 0)
-	{
-		instance_destroy();
-	}
-}*/
 
 if(bombTimer <= 0 || impacted > 0)
 {
@@ -149,19 +124,19 @@ if(bombTimer <= 0 || impacted > 0)
 	var player = collision_circle(x,y,(bbox_right-bbox_left)/3,obj_Player,false,true);
 	if(instance_exists(player))
 	{
-		if(!player.cDown || forceJump)
+		if((!player.cDown || forceJump) && (!player.entity_place_collide(0,-11) || ((player.state != State.Crouch || !player.grounded) && player.morphFrame <= 0)))
 		{
 			var num = player.x - x;
-			if(abs(num) > 2)
+			if(abs(num) > 1)
 			{
-				player.bombJumpX = player.velX + (sign(num) * min(abs(num*1.5),2.75));
+				/*player.bombJumpX = player.velX + (sign(num) * min(abs(num*1.5),2.75));
 				if(player.liquidState > 0)
 				{
 					player.bombJumpX /= 3;
-				}
+				}*/
+				player.bombJumpX = player.bombXSpeed[player.liquidState] * sign(num);
 			}
 			player.bombJump = player.bombJumpMax[player.liquidState];
-			//player.SpiderEnable(false);
 		}
 	}
 	if(spreadType == 2)

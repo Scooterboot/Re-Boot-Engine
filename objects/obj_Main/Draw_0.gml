@@ -40,11 +40,25 @@ if (camX < 0 || camX+camW > room_width ||
 
 if(keyboard_check_pressed(vk_divide))
 {
-	debug = !debug;
+	//debug = !debug;
+	debug = scr_wrap(debug+1,0,3);
 }
 
-if(debug)
+if(debug == 1)
 {
+	for(var i = 0; i < room_width; i += 256)
+	{
+		for(var j = 0; j < room_height; j += 256)
+		{
+			draw_set_color(c_white);
+			draw_set_alpha(0.33);
+			
+			draw_rectangle(i+global.rmMapPixX, j+global.rmMapPixY, i+global.rmMapPixX+255, j+global.rmMapPixY+255, true);
+			
+			draw_set_alpha(1);
+		}
+	}
+	
 	with(obj_NPC)
 	{
 		draw_set_color(c_red);
@@ -79,6 +93,13 @@ if(debug)
 				draw_self();
 			}
 		//}
+	}
+	with(obj_NPCTile)
+	{
+		if(!visible)
+		{
+			draw_self();
+		}
 	}
 	with(obj_Platform)
 	{
@@ -158,6 +179,10 @@ if(debug)
 	
     with(obj_Player)
     {
+		pal_swap_set(palShader,palIndex,palIndex2,palDif,false);
+		DrawPlayer(x,y,rotation,0.5);
+		shader_reset();
+		
         draw_set_color(c_aqua);
         draw_set_alpha(0.75);
         
@@ -188,34 +213,119 @@ if(debug)
         draw_text(xx+marginX,yy+30+marginY*7,"fVelY: "+string(fVelY));
         draw_text(xx+marginX,yy+30+marginY*8,"X pos: "+string(x));
         draw_text(xx+marginX,yy+30+marginY*9,"Y pos: "+string(y));
-        draw_text(xx+marginX,yy+30+marginY*10,"colEdge: "+obj_Main.edgeText[colEdge]);
-        draw_text(xx+marginX,yy+30+marginY*11,"jump: "+string(jump));
+		
+		
+		draw_text(xx+marginX,yy+30+marginY*11,"speedCounter: "+string(speedCounter));
+		
+		var num = speedCounter;
+		if(((cDash || global.autoDash) && speedBuffer > 0) || speedCounter > 0)
+		{
+			num += 1;
+		}
+		var sbStr = string(speedBuffer);
+		/*if(speedBuffer == speedBufferMax-2 && speedBufferCounter >= speedBufferCounterMax[num]-3 && speedBufferCounter < speedBufferCounterMax[num]-1)
+		{
+			sbStr = "-"+sbStr+"-";
+			if(speedBufferCounter >= speedBufferCounterMax[num]-2)
+			{
+				sbStr = "-"+sbStr+"-";
+			}
+		}*/
+		if(speedBuffer == speedBufferMax-1)
+		{
+			sbStr = "-"+sbStr+"-";
+		}
+        draw_text(xx+marginX,yy+30+marginY*12,"speedBuffer: "+sbStr+ " : " +string(speedBufferCounter) + "/" + string(speedBufferCounterMax[num]));
 		
         //draw_text(xx+marginX,yy+30+marginY*10,"cam centerX: "+string(obj_Camera.x+global.resWidth/2));
         //draw_text(xx+marginX,yy+30+marginY*11,"cam centerY: "+string(obj_Camera.y+global.resHeight/2));
 		
-		draw_text(xx+marginX,yy+30+marginY*13,"spiderBall: "+string(spiderBall));
-        draw_text(xx+marginX,yy+30+marginY*14,"spiderEdge: "+string(obj_Main.edgeText[spiderEdge]));
-        //draw_text(xx+marginX,yy+30+marginY*15,"prevSpiderEdge: "+string(obj_Main.edgeText[prevSpiderEdge]));
-        draw_text(xx+marginX,yy+30+marginY*15,"spiderSpeed: "+string(spiderSpeed));
+        draw_text(xx+marginX,yy+30+marginY*14,"colEdge: "+obj_Main.edgeText[colEdge]);
+        draw_text(xx+marginX,yy+30+marginY*15,"spiderEdge: "+string(obj_Main.edgeText[spiderEdge]));
+        draw_text(xx+marginX,yy+30+marginY*16,"prevSpiderEdge: "+string(obj_Main.edgeText[prevSpiderEdge]));
+        draw_text(xx+marginX,yy+30+marginY*17,"spiderSpeed: "+string(spiderSpeed));
 		
 		/*for(var i = 0; i < ds_list_size(global.openHatchList); i++)
 		{
 			draw_text(xx+10,yy+40+10*i,global.openHatchList[| i]);
 		}*/
     }
-
-	show_debug_message("delta_time: "+string(delta_time));
+	
+	with(obj_Camera)
+	{
+		var xx = camera_get_view_x(view_camera[0]) + global.resWidth/2,
+			yy = camera_get_view_y(view_camera[0]) + global.resHeight/2;
+		
+		draw_set_color(c_white);
+        draw_set_alpha(0.5);
+		
+		draw_rectangle(xx-camLimit_Right,yy-camLimit_Bottom,xx-camLimit_Left-1,yy-camLimit_Top-1, true);
+		draw_rectangle(scr_round(playerX),scr_round(playerY),scr_round(playerX)-1,scr_round(playerY)-1,true);
+		
+		draw_set_alpha(1);
+	}
 }
 
-if(instance_exists(obj_Player) && obj_Player.godmode)
+if(debug > 0)
 {
+	var xx = camera_get_view_x(view_camera[0]),
+		yy = camera_get_view_y(view_camera[0]),
+	
+	var dbStr = "debug mode";
+	if(instance_exists(obj_Player) && obj_Player.godmode)
+	{
+		dbStr += " : godmode enabled";
+	}
 	draw_set_color(c_white);
     draw_set_alpha(1);
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
-	draw_set_font(fnt_GUI);
-	draw_text(camera_get_view_x(view_camera[0])+7,camera_get_view_y(view_camera[0])+30,"godmode enabled");
+	draw_set_font(fnt_Menu2);
+	draw_text(xx+7,yy+30,dbStr);
+	
+	var spStr = "";
+	
+	if(instance_exists(obj_Player) && obj_Player.boots[Boots.SpeedBoost])
+	{
+		with(obj_Player)
+		{
+			for(var i = 0; i < speedBufferMax; i++)
+			{
+				if(i < speedBufferMax-1)
+				{
+					if(speedBuffer == i)
+					{
+						spStr += "+";
+					}
+					else
+					{
+						spStr += "-";
+					}
+				}
+				else
+				{
+					if(speedBuffer == i)
+					{
+						spStr += "+";
+					}
+					else
+					{
+						spStr += "X";
+					}
+				}
+			}
+			
+			spStr += "   spc: "+string(speedCounter);
+		}
+		
+		draw_text(xx+60,yy+20,spStr);
+	}
+	
+	draw_set_halign(fa_right);
+	draw_text(xx+global.resWidth-10,yy+30,"fps_real: "+string(fps_real));
+	draw_text(xx+global.resWidth-10,yy+40,"fps: "+string(fps));
+	
+	//show_debug_message("delta_time: "+string(delta_time));
 }
 
 #endregion

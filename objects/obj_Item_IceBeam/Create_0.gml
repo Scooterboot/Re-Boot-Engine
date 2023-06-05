@@ -5,7 +5,7 @@ itemName = "iceBeam";
 itemID = 0;
 
 itemHeader = "ICE BEAM";
-itemDesc = "Your beam now freezes enemies";
+itemDesc = "Your beam can now freeze most enemies.";
 
 CollectItem = function()
 {

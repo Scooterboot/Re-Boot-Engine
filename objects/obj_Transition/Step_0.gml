@@ -72,6 +72,16 @@ else
                 y += 1;
                 gNum -= 1;
             }
+			
+			array_fill(mbTrailPosX, noone);
+			array_fill(mbTrailPosY, noone);
+			array_fill(mbTrailDir, noone);
+			
+			if(drawBallTrail && stateFrame == State.Morph)
+			{
+				//array_fill(mbTrailPosX, scr_round(x) + sprtOffsetX);
+				//array_fill(mbTrailPosY, scr_round(x) + sprtOffsetX);
+			}
         }
         
         if(instance_exists(nextDoor.hatch))

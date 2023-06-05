@@ -28,3 +28,13 @@ damageSubType[5] = false;
 
 blockDestroyType = 7;
 doorOpenType = 4;
+
+impactObj = obj_HyperBeamImpact;
+function OnImpact()
+{
+	if((scr_WithinCamRange() || ignoreCamera) && impactObj != noone)
+	{
+		var explo = instance_create_layer(x,y,"Projectiles_fg",impactObj);
+	    explo.damage = damage;
+	}
+}

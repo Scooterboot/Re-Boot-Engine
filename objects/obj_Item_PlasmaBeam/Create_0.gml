@@ -5,7 +5,7 @@ itemName = "plasmaBeam";
 itemID = 0;
 
 itemHeader = "PLASMA BEAM";
-itemDesc = "Your beam now pierces enemies";
+itemDesc = "Your beam now pierces enemies.";
 
 CollectItem = function()
 {

@@ -17,6 +17,8 @@ fallSpeedMax = 4;
 
 grounded = false;
 
+tileCollide = true;
+
 rotation = 0;
 
 sprtOffsetX = 0;
@@ -26,8 +28,8 @@ life = 0;
 lifeMax = 0;
 
 damage = 0;
-knockBack = 9;//5;
-knockBackSpeed = 4; //7;
+knockBack = 5;//9;
+knockBackSpeed = 5;
 damageImmuneTime = 96;
 
 // damage player through things like speed booster and screw attack
@@ -115,6 +117,41 @@ function PauseAI()
 }*/
 
 lhc_activate();
+
+function DmgColPlayer()
+{
+	return instance_place(x,y,obj_Player);
+}
+function DamagePlayer()
+{
+	if(!friendly && damage > 0 && !frozen && !dead)
+	{
+	    var player = DmgColPlayer();
+	    if(instance_exists(player))
+	    {
+	        if (player.immuneTime <= 0 && (!player.immune || ignorePlayerImmunity))//!player.isChargeSomersaulting && !player.isScrewAttacking && !player.isSpeedBoosting)
+	        {
+	            //var ang = point_direction(x,y,obj_Samus.x,obj_Samus.y);
+	            var ang = 45;
+	            if(player.bbox_bottom > bbox_bottom)
+	            {
+	                ang = 315;
+	            }
+	            if(player.x < x)
+	            {
+	                ang = 135;
+	                if(player.bbox_bottom > bbox_bottom)
+	                {
+	                    ang = 225;
+	                }
+	            }
+	            var knockX = lengthdir_x(knockBackSpeed,ang),
+	                knockY = lengthdir_y(knockBackSpeed,ang);
+	            scr_DamagePlayer(damage,knockBack,knockX,knockY,damageImmuneTime);
+	        }
+	    }
+	}
+}
 
 function DmgCollide(posX,posY,object,isProjectile)
 {
@@ -259,3 +296,138 @@ function NPCLoot(_x,_y)
 		instance_create_layer(_x,_y,layer_get_id("Liquids_fg"),item);
 	}
 }
+
+#region Base Collision Checks
+
+function entity_place_collide()
+{
+	/// @description entity_place_collide
+	/// @param offsetX
+	/// @param offsetY
+	/// @param baseX=x
+	/// @param baseY=y
+	
+	var offsetX = argument[0],
+		offsetY = argument[1],
+		xx = x,
+		yy = y;
+	if(argument_count > 2)
+	{
+		xx = argument[2];
+		if(argument_count > 3)
+		{
+			yy = argument[3];
+		}
+	}
+	return entity_place_meeting(xx+offsetX,yy+offsetY,"ISolid") || entity_place_meeting(xx+offsetX,yy+offsetY,"INPCSolid");
+}
+function entity_place_meeting(_x,_y,_interface)
+{
+	return lhc_place_meeting(_x,_y,_interface);
+}
+
+function entity_position_collide()
+{
+	/// @description entity_position_collide
+	/// @param offsetX
+	/// @param offsetY
+	/// @param baseX=x
+	/// @param baseY=y
+	
+	var offsetX = argument[0],
+		offsetY = argument[1],
+		xx = x,
+		yy = y;
+	if(argument_count > 2)
+	{
+		xx = argument[2];
+		if(argument_count > 3)
+		{
+			yy = argument[3];
+		}
+	}
+	return entity_position_meeting(xx+offsetX,yy+offsetY,"ISolid") || entity_position_meeting(xx+offsetX,yy+offsetY,"INPCSolid");
+}
+function entity_position_meeting(_x,_y,_interface)
+{
+	return lhc_position_meeting(_x,_y,_interface);
+}
+
+function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
+{
+	return lhc_collision_line(x1,y1,x2,y2,"ISolid",prec,notme) || lhc_collision_line(x1,y1,x2,y2,"INPCSolid",prec,notme);
+}
+
+#endregion
+
+#region GetEdgeSlope
+function GetEdgeSlope()
+{
+	/// @description GetEdgeSlope
+	/// @param edge
+	/// @param margin=0
+	var edge = argument[0];
+	
+	var xcheck = 0,
+		ycheck = 2;
+	switch (edge)
+	{
+		case Edge.Top:
+		{
+			xcheck = 0;
+			ycheck = -2;
+			break;
+		}
+		case Edge.Left:
+		{
+			xcheck = -2;
+			ycheck = 0;
+			break;
+		}
+		case Edge.Right:
+		{
+			xcheck = 2;
+			ycheck = 0;
+			break;
+		}
+		default:
+		{
+			break;
+		}
+	}
+	
+	var margin = 0;
+	if(argument_count > 1)
+	{
+		margin = argument[1];
+	}
+		
+	var col = instance_place_list(x+xcheck,y+ycheck,all,edgeSlope,true);
+	if(col > 0)
+	{
+		for(var i = 0; i < col; i++)
+		{
+			if(!instance_exists(edgeSlope[| i]) || (!asset_has_any_tag(edgeSlope[| i].object_index,"ISolid",asset_object) && !asset_has_any_tag(edgeSlope[| i].object_index,"INPCSolid",asset_object)) || !asset_has_any_tag(edgeSlope[| i].object_index,"ISlope",asset_object))
+			{
+				continue;
+			}
+			var slope = edgeSlope[| i];
+			if(instance_exists(slope))
+			{
+				var withinX = (slope.image_xscale > 0 && bbox_left >= slope.bbox_left-margin) || (slope.image_xscale < 0 && bbox_right <= slope.bbox_right+margin),
+					withinY = (slope.image_yscale > 0 && bbox_bottom <= slope.bbox_bottom+margin) || (slope.image_yscale < 0 && bbox_top >= slope.bbox_top-margin);
+				var checkHor = ((edge == Edge.Bottom && slope.image_yscale > 0) || (edge == Edge.Top && slope.image_yscale < 0)) && withinX,
+					checkVer = ((edge == Edge.Left && slope.image_xscale > 0) || (edge == Edge.Right && slope.image_xscale < 0)) && withinY;
+				if(checkHor || checkVer)
+				{
+					ds_list_clear(edgeSlope);
+					return slope;
+				}
+			}
+		}
+	}
+	ds_list_clear(edgeSlope);
+	
+	return noone;
+}
+#endregion

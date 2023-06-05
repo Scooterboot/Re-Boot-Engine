@@ -1,12 +1,11 @@
 {
-  "isDnD": false,
+  "resourceType": "GMScript",
+  "resourceVersion": "1.0",
+  "name": "pal_swap_reset",
   "isCompatibility": false,
+  "isDnD": false,
   "parent": {
     "name": "PaletteSwap",
     "path": "folders/Scripts/PaletteSwap.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "pal_swap_reset",
-  "tags": [],
-  "resourceType": "GMScript",
 }

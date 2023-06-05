@@ -22,9 +22,10 @@ damageSubType[4] = false;
 damageSubType[5] = false;
 
 freezeType = 0;
+freezeKill = false;
 
-knockBack = 9;//5;
-knockBackSpeed = 4;//7;
+knockBack = 4;//9;
+knockBackSpeed = 5;
 damageImmuneTime = 96;
 
 dmgDelay = 0;
@@ -77,7 +78,7 @@ for(var i = 0; i < 11; i++)
 }
 oldPositionsSet = false;
 
-//emit = noone;
+emit = noone;
 
 water_init(0);
 
@@ -120,10 +121,15 @@ function CanDamageNPC(damage,npc)
 {
 	return true;
 }
+function ModifyDamageNPC(damage,npc)
+{
+	return damage;
+}
+function OnDamageNPC(damage,npc) {}
 
 #endregion
 
-#region Collision
+#region Collision (Unused atm)
 
 function entity_place_meeting(_x,_y,_interface)
 {
@@ -198,3 +204,5 @@ function Impact()
 }
 
 #endregion
+
+function OnImpact() {}

@@ -15,6 +15,10 @@ function AnimBone(_defaultX, _defaultY, _parentBone = noone) constructor
 	
 	parent = _parentBone;
 	children = ds_list_create();
+	function Clean()
+	{
+		ds_list_destroy(children);
+	}
 	
 	if(parent != noone)
 	{
@@ -26,10 +30,11 @@ function AnimBone(_defaultX, _defaultY, _parentBone = noone) constructor
 	}
 	
 	position = new Vector2();
-	
 	offsetPosition = new Vector2();
 	
 	rotation = 0;
+	offsetRotation = 0;
+	
 	scale = new Vector2();
 	dir = 1;
 	ignoreParentRot = false;
@@ -99,11 +104,18 @@ function AnimBone(_defaultX, _defaultY, _parentBone = noone) constructor
 				child.UpdateBone(noone,overrideDir,overrideScale);
 			}
 		}
+		
+		rotation = offsetRotation;
+		if(parent != noone)
+		{
+			rotation += parent.rotation;
+		}
 	}
 	
 	function AnimateRotation(rotArray, frame, transition, loop = false)
 	{
-		rotation = lerp(rotation, LerpArray(rotArray,frame,loop), transition);
+		//rotation = lerp(rotation, LerpArray(rotArray,frame,loop), transition);
+		offsetRotation = lerp(offsetRotation, LerpArray(rotArray,frame,loop), transition);
 	}
 	function AnimatePosition(posArray, frame, transition, loop = false)
 	{

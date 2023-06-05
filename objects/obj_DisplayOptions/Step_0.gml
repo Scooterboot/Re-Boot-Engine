@@ -68,7 +68,13 @@ if(screenFade >= 1 && !menuClosing)
 			case 1:
 			{
 				//Display Scale
+				var temp = global.screenScale;
 				global.screenScale = scr_wrap(global.screenScale+select+moveX,0,global.maxScreenScale+1);
+				
+				var winMoveX = (global.resWidth*temp - global.resWidth*global.screenScale) / 2,
+					winMoveY = (global.resHeight*temp - global.resHeight*global.screenScale) / 2;
+				window_set_position(window_get_x()+winMoveX,window_get_y()+winMoveY);
+				
 				break;
 			}
 			case 2:

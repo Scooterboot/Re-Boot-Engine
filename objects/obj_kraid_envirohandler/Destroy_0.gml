@@ -25,12 +25,16 @@ for(var i = 0; i < array_length(remainingBlocks); i++)
 
 if(ds_exists(spikes,ds_type_list))
 {
-	if(spikesNum > 0)
+	if(ds_list_size(spikes) > 0)
 	{
-		for(var i = 0; i < spikesNum; i++)
+		for(var i = 0; i < ds_list_size(spikes); i++)
 		{
-			spikes[| i].hiddenDestroy = true;
-			instance_destroy(spikes[| i]);
+			var spik = spikes[| i];
+			if(instance_exists(spik))
+			{
+				spik.hiddenDestroy = true;
+				instance_destroy(spikes[| i]);
+			}
 		}
 	}
 	ds_list_destroy(spikes);

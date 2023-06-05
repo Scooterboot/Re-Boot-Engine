@@ -36,23 +36,10 @@ if(!global.gamePaused)
 		}
 		if(pType != -1)
 		{
-			//if(sprite_width > sprite_height)
 			if(projLength > 0)
 			{
-				/*var offset = ceil(sprite_yoffset/2),
-					dist = clamp(abs(point_distance(x,y,xstart,ystart))/sprite_width,0,1),
-					len = max(sprite_xoffset-(sprite_width-sprite_xoffset),point_distance(x,y,xprevious,yprevious))*dist,
-					ang = image_angle,
-					x1 = x+lengthdir_x(offset,ang+90), x2 = x-lengthdir_x(len,ang)+lengthdir_x(offset,ang+90),
-					y1 = y+lengthdir_y(offset,ang+90), y2 = y-lengthdir_y(len,ang)+lengthdir_y(offset,ang+90);*/
 				var offset = ceil(sprite_yoffset/2),
-					//dist = clamp(abs(point_distance(x,y,xstart,ystart))/sprite_width,0,1),
 					len = clamp(point_distance(x,y,xstart,ystart),1,projLength),
-					/*ang = image_angle-180;//direction,
-				if((direction-45)%90 == 0 && rotFrame > 0)
-				{
-					ang = image_angle-225;
-				}*/
 					ang = direction;
 				
 				var x1 = x+lengthdir_x(offset,ang+90), x2 = x-lengthdir_x(len,ang)+lengthdir_x(offset,ang+90),
@@ -118,17 +105,6 @@ if(!global.gamePaused)
 	}
 }
 
-/*for(var i = 0; i < instance_number(obj_NPC); i++)
-{
-	if(i >= array_length_1d(npcImmuneTime) && i < instance_number(obj_NPC))
-	{
-		npcImmuneTime[i] = 0;
-	}
-	else
-	{
-		npcImmuneTime[i] = max(npcImmuneTime[i]-1,0);
-	}
-}*/
 #endregion
 
 event_inherited();

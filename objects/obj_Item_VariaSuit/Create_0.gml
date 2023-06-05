@@ -5,7 +5,7 @@ itemName = "variaSuit";
 itemID = 0;
 
 itemHeader = "VARIA SUIT";
-itemDesc = "Traverse heated areas undamaged" + "\n" + "Halves damage taken";
+itemDesc = "Traverse heated areas undamaged." + "\n" + "Halves damage taken.";
 
 CollectItem = function()
 {

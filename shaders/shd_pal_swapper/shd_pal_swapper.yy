@@ -1,11 +1,10 @@
 {
-  "type": 1,
+  "resourceType": "GMShader",
+  "resourceVersion": "1.0",
+  "name": "shd_pal_swapper",
   "parent": {
     "name": "Palette Swapper",
     "path": "folders/Shaders/Palette Swapper.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "shd_pal_swapper",
-  "tags": [],
-  "resourceType": "GMShader",
+  "type": 1,
 }

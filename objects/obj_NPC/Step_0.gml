@@ -26,33 +26,5 @@ frozen = max(frozen - 1, 0);
 
 #endregion
 
-#region Damage to Player
-if(!friendly && damage > 0 && !frozen && !dead)
-{
-    var player = instance_place(x,y,obj_Player);
-    if(instance_exists(player))
-    {
-        if (player.immuneTime <= 0 && (!player.immune || ignorePlayerImmunity))//!player.isChargeSomersaulting && !player.isScrewAttacking && !player.isSpeedBoosting)
-        {
-            //var ang = point_direction(x,y,obj_Samus.x,obj_Samus.y);
-            var ang = 45;
-            if(player.bbox_bottom > bbox_bottom)
-            {
-                ang = 315;
-            }
-            if(player.x < x)
-            {
-                ang = 135;
-                if(player.bbox_bottom > bbox_bottom)
-                {
-                    ang = 225;
-                }
-            }
-            var knockX = lengthdir_x(knockBackSpeed,ang),
-                knockY = lengthdir_y(knockBackSpeed,ang);
-            scr_DamagePlayer(damage,knockBack,knockX,knockY,damageImmuneTime);
-        }
-    }
-}
-#endregion
+DamagePlayer();
 

@@ -523,11 +523,13 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 						audio_play_sound(snd_MenuBoop,0,false);
 						if(confirmRestart)// >= 0)
 						{
+							global.SilenceAudio();
 							global.SilenceMusic();
 							loadGame = true;
 						}
 						if(confirmQuitMM)// >= 0)
 						{
+							global.SilenceAudio();
 							global.SilenceMusic();
 							gameEnd = true;
 						}

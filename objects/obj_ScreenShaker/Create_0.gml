@@ -17,7 +17,7 @@ shakeDirection = 0;
 
 function Shake(_duration, _shakeIntensity = 3, _shakeRate = 3, _useCustomDir = false, _shakeDirection = 0)
 {
-	if(!active)
+	if(!active || _duration > duration)
 	{
 		duration = _duration;
 		shakeIntensity = _shakeIntensity;
@@ -26,6 +26,7 @@ function Shake(_duration, _shakeIntensity = 3, _shakeRate = 3, _useCustomDir = f
 		shakeDirection = _shakeDirection;
 		
 		active = true;
+		timeLeft = 0;
 	}
 	else if((duration-timeLeft) < _duration && 
 			duration == _duration &&

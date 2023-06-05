@@ -5,8 +5,8 @@ itemName = "chainSpark";
 itemID = 0;
 
 itemHeader = "CHAIN SPARK";
-itemDesc = "Wall Jump during Shine Spark\n" +
-"Allows downward Shine Sparking";
+itemDesc = "Allows Wall Jumping during Shine Spark.\n" +
+"Allows downward Shine Sparking.";
 
 CollectItem = function()
 {

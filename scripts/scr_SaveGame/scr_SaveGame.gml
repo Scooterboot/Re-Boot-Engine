@@ -2,8 +2,8 @@
 /// @param savefile
 /// @param overwriteX=x
 /// @param overwriteY=y
-function scr_SaveGame() {
-
+function scr_SaveGame()
+{
 	var file = argument[0];
 
 	var xx = -1,

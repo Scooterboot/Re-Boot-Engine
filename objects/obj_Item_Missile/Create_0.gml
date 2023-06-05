@@ -8,7 +8,7 @@ missileAmount = 5;
 
 itemHeader = "MISSILE";
 //itemDesc = "Select it and press [Shoot]";
-itemDesc = "Select ${hudIcon_0} and press ${shootButton} to fire";
+itemDesc = "Select ${hudIcon_0} and press ${shootButton} to fire a Missile.";
 expanHeader = "MISSILE EXPANSION";
 expanDesc = "+"+string(missileAmount)+" Missile Capacity";
 

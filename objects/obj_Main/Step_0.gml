@@ -72,11 +72,6 @@ else
 	windowResizeTimer = 10;
 }
 
-if(global.gpSlot != -1)
-{
-	gamepad_set_axis_deadzone(global.gpSlot, global.gp_deadZone);
-}
-
 
 if(room == rm_MainMenu)
 {
@@ -99,43 +94,29 @@ else if(!global.gamePaused)
 	}*/
 }
 
-if(keyboard_check(vk_shift))
+var gameSpeed = 60;
+if(debug > 0)
 {
-	room_speed = 2;
+	if(keyboard_check(vk_shift))
+	{
+		gameSpeed = 2;
+	}
+	if(keyboard_check_pressed(vk_control))
+	{
+		toggleFastForward = !toggleFastForward;
+	}
+	if(toggleFastForward)
+	{
+		gameSpeed = 600;
+	}
 }
-else
-{
-	room_speed = 60;
-}
+game_set_speed(gameSpeed, gamespeed_fps);
 
 if(keyboard_check_pressed(vk_f12))
 {
     screen_save_part("screenshot.png",global.screenX,global.screenY,global.resWidth*screenScale,global.resHeight*screenScale);
 }
 
-if(room == rm_MainMenu || room == rm_GameOver)
-{
-	for(var i = 0; i < array_length(sndPauseArray); i++)
-	{
-		audio_stop_sound(sndPauseArray[i]);
-	}
-}
-else if(global.gamePaused)
-{
-	for(var i = 0; i < array_length(sndPauseArray); i++)
-	{
-		audio_pause_sound(sndPauseArray[i]);
-	}
-}
-else
-{
-	for(var i = 0; i < array_length(sndPauseArray); i++)
-	{
-		audio_resume_sound(sndPauseArray[i]);
-	}
-}
-
-global.breakSndCounter = max(global.breakSndCounter-1,0);
 
 oldDelta = delta_time;
 

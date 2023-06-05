@@ -55,10 +55,28 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 		dmg *= dmgMult;
 					
 		dmg = npc.ModifyDamageTaken(dmg,id,isProjectile);
+		if(isProjectile)
+		{
+			dmg = ModifyDamageNPC(dmg,npc);
+		}
 		
 		if(isProjectile && !CanDamageNPC(dmg,npc))
 		{
 			continue;
+		}
+		
+		var partSys = obj_Particles.partSystemA,
+			partX1 = posX+(bbox_left-x)+4,
+			partX2 = posX+(bbox_right-x)-4,
+			partY1 = posY+(bbox_top-y)+4,
+			partY2 = posY+(bbox_bottom-y)-4;
+		if(isProjectile)
+		{
+			if(!part_emitter_exists(partSys,emit))
+			{
+				emit = part_emitter_create(partSys);
+			}
+			part_emitter_region(partSys,emit,partX1,partX2,partY1,partY2,ps_shape_ellipse,ps_distr_linear);
 		}
                 
 	    if(dmg > 0)
@@ -77,7 +95,13 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 	                npc.frozen = freezeMax;
 	                if(isProjectile)
 	                {
-	                    part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.partFreeze,21*(1+isCharge));
+	                    //part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.partFreeze,21*(1+isCharge));
+						part_emitter_burst(partSys,emit,obj_Particles.partFreeze,21*(1+isCharge));
+						
+						if(freezeKill)
+						{
+							lifeEnd = 0;
+						}
 	                }
 	            }
 	            if(npc.frozenImmuneTime <= 0)
@@ -90,15 +114,21 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 					npc.StrikeNPC(dmg, lifeEnd, deathType);
 								
 					npc.OnDamageTaken(dmg,id,isProjectile);
+					if(isProjectile)
+					{
+						OnDamageNPC(dmg,npc);
+					}
 	            }
 	            if(isProjectile && particleType != -1)
 	            {
-	                part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.bTrails[particleType],7*(1+isCharge));
+	                //part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.bTrails[particleType],7*(1+isCharge));
+					part_emitter_burst(partSys,emit,obj_Particles.bTrails[particleType],7*(1+isCharge));
 	            }
 	        }
 	        if(isProjectile && particleType != -1 && multiHit)
 	        {
-	            part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.bTrails[particleType],(1+isCharge));
+	            //part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.bTrails[particleType],(1+isCharge));
+				part_emitter_burst(partSys,emit,obj_Particles.bTrails[particleType],(1+isCharge));
 	        }
 	    }
 	    else if(isProjectile)
@@ -112,7 +142,8 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 	            }
 	            npc.frozen = freezeMax;
                         
-	            part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.partFreeze,21*(1+isCharge));
+	            //part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.partFreeze,21*(1+isCharge));
+				part_emitter_burst(partSys,emit,obj_Particles.partFreeze,21*(1+isCharge));
 	        }
 			else if(dmgType != DmgType.Explosive || !dmgSubType[5])
 	        {
@@ -141,7 +172,8 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 					audio_stop_sound(snd_Reflect);
 		            audio_play_sound(snd_Reflect,0,false);
 					
-		            part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.partDeflect,42);
+		            //part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.partDeflect,42);
+					part_emitter_burst(partSys,emit,obj_Particles.partDeflect,42);
 				}
 	        }
                     
@@ -152,7 +184,8 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 	            {
 	                partAmt = (1+isCharge);
 	            }
-	            part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.bTrails[particleType],partAmt);
+	            //part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.bTrails[particleType],partAmt);
+				part_emitter_burst(partSys,emit,obj_Particles.bTrails[particleType],partAmt);
 	        }
 	    }
 
@@ -161,6 +194,25 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 	        if(dmg > 0 && npcImmuneTime[i] <= 0)
 	        {
 	            npcImmuneTime[i] = immuneTime;
+				
+				for(var j = 0; j < instance_number(obj_NPC); j++)
+				{
+					var rlnpc = instance_find(obj_NPC,j);
+					if(!instance_exists(rlnpc) || rlnpc.dead || rlnpc.immune)
+					{
+						continue;
+					}
+					
+					if(rlnpc.realLife == npc)
+					{
+						npcImmuneTime[j] = immuneTime;
+					}
+					else if(instance_exists(npc.realLife) && rlnpc == npc.realLife)
+					{
+						npcImmuneTime[j] = immuneTime;
+						break;
+					}
+				}
 	        }
 						
 	        if(!multiHit)

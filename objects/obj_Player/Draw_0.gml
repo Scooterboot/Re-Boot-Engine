@@ -49,6 +49,7 @@ if(speedFXCounter > 0)
 	palIndex = 1+speedFXCounter;
 }
 
+
 if(morphFrame > 0)
 {
 	morphPal = min(morphPal + 0.25/(1+liquidMovement),1);
@@ -188,11 +189,29 @@ else
 					heatPal = 0;
 					heatPalNum = 1;
 				}
+				
+				if(debug && boots[Boots.SpeedBoost])
+				{
+					var num = speedCounter;
+					if(((cDash || global.autoDash) && speedBuffer > 0) || speedCounter > 0)
+					{
+						num += 1;
+					}
+					/*if(speedFXCounter <= 0 && speedBuffer == speedBufferMax-2 && speedBufferCounter >= speedBufferCounterMax[num]-3 && speedBufferCounter < speedBufferCounterMax[num])
+					{
+						palIndex = 2;
+					}*/
+					if(speedFXCounter <= 0 && speedBuffer == speedBufferMax-1)
+					{
+						palIndex = 2;
+					}
+				}
 			}
 		}
 	}
 }
 
+var hurtflag = false;
 if(dmgFlash > 0)
 {
 	palIndex2 = 6;
@@ -202,6 +221,7 @@ else if(immuneTime > 0 && (immuneTime&1) && !global.roomTrans)
 {
 	palIndex2 = 7;
 	palDif = 1;
+	hurtflag = true;
 }
 
 if(heatDmgPalCounter > 30)
@@ -280,7 +300,7 @@ else
 	gravGlowAlpha = max(gravGlowAlpha - 0.05*(!global.gamePaused),0);
 	gravGlowNum = 10;
 }
-if(gravGlowAlpha > 0)
+if(gravGlowAlpha > 0 && !hurtflag)
 {
 	var col = c_fuchsia,
 		alp = gravGlowAlpha;
@@ -328,5 +348,3 @@ if(!global.gamePaused)
 	chargeReleaseFlash = max(chargeReleaseFlash - 1, 0);
 }
 dmgFlash = max(dmgFlash - 1, 0);
-
-prevState = state;

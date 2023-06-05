@@ -1,6 +1,15 @@
 /// @description Initialize
 event_inherited();
 
+spawnPos = new Vector2(224,688);
+p1Height = 152;
+p2Height = 160;
+p2LeftBound = 308;
+p2RightBound = 392;
+
+//position = new Vector2(x,y);
+position = new Vector2(spawnPos.X,spawnPos.Y);
+
 npcID = "Kraid";
 
 life = 2000;
@@ -39,6 +48,10 @@ ai = array_create(4,0);
 mouthCounter = -1;
 mouthOpen = false;
 
+bellySpikePos[0] = new Vector2(41,24);
+bellySpikePos[1] = new Vector2(42,-41);
+bellySpikePos[2] = new Vector2(16,-99);
+
 function ModifyDamageTaken(damage,object,isProjectile)
 {
 	//dmgAbsorb = false;
@@ -48,7 +61,7 @@ function ModifyDamageTaken(damage,object,isProjectile)
 		
 		//if(headFrame >= 3 && point_distance(object.x,object.y,HeadBone.position.X,HeadBone.position.Y) <= 32)
 		var col = collision_ellipse(HeadBone.position.X-16*dir,HeadBone.position.Y-16,HeadBone.position.X+32*dir,HeadBone.position.Y+32,object,true,true)
-		if(headFrame >= 3 && col)
+		if(headFrame > 3 && col)
 		{
 			return damage;
 		}
@@ -60,8 +73,8 @@ function OnDamageAbsorbed(damage, object, isProjectile)
 	if(mouthCounter < 0 && (phase == 1 || phase == 3) && object.y <= y-140)
 	{
 		mouthCounter = 0;
-		eyeGlowNum = 1;
-		blinkCounter = blinkCounterMax;
+		//eyeGlowNum = 1;
+		//blinkCounter = blinkCounterMax;
 	}
 }
 
@@ -72,25 +85,22 @@ function PauseAI()
 
 function CameraLogic()
 {
-	var this = id;
+	//var this = id;
 	with(obj_Camera)
 	{
-		targetX = this.camPosX;
-		targetY = this.camPosY;
-		
-		xDir = sign(targetX - playerX);
-		//yDir = -1;//sign(targetY - playerY);
-		
-		//camKey = true;
+		camLimitMax_Left = 16;
+		camLimitMax_Right = 32;
+		//camLimitMax_Top = camLimitDefault_Top;
+		//camLimitMax_Bottom = camLimitDefault_Bottom;
 	}
 }
-
-position = new Vector2(x,y);
 
 dir = sign(image_xscale);
 image_xscale = dir;
 image_yscale = 1;
 scale = new Vector2(1,1);
+
+moveDir = 0;
 
 palIndex = 0;
 palIndex2 = 0;
@@ -109,6 +119,7 @@ blinkCounterMax = 180;
 headFrame = 2;
 headFrameCounter = 0;
 headFrameNum = 0;
+headBoxRotSeq = array(45, 45, 45, 32.5, 20, 7.5, -5, -17.5, -30, -30, -17.5, -5, 7.5, 20, 32.5);
 
 rHandFrame = 0;
 lHandFrame = 0;
@@ -134,6 +145,20 @@ RLegBone[1] = new AnimBone(-2,40,RLegBone[0]);
 
 LLegBone[0] = new AnimBone(-9,27,BodyBone);
 LLegBone[1] = new AnimBone(-2,40,LLegBone[0]);
+
+Bones[0] = BodyBone;
+Bones[1] = HeadBone;
+Bones[2] = TailBone;
+Bones[3] = RArmBone[0];
+Bones[4] = RArmBone[1];
+Bones[5] = RArmBone[2];
+Bones[6] = LArmBone[0];
+Bones[7] = LArmBone[1];
+Bones[8] = LArmBone[2];
+Bones[9] = RLegBone[0];
+Bones[10] = RLegBone[1];
+Bones[11] = LLegBone[0];
+Bones[12] = LLegBone[1];
 
 Limbs[0] = new DrawLimb("Bicep_Back", sprt_Kraid_Bicep_Back, LArmBone[0]);
 Limbs[1] = new DrawLimb("Arm_Back", sprt_Kraid_Forearm_Back, LArmBone[1]);
@@ -164,14 +189,14 @@ Limbs[14] = new DrawLimb("Ear", sprt_Kraid_Ear, HeadBone);
 RArm_Idle = 
 [
 	[-30, -28, -20,  -10,  0,   10,  15,  18,   20, 18, 15,   10,  0,  -10, -20, -28],
-	[-15, -14, -12, -9.5, -7, -4.5,  -2,  -1,    0, -1, -2, -4.5, -7, -9.5, -12, -14],
-	[  0,   2,   8, 15.5, 23, 30.5,  38,  41,   45, 41, 38, 30.5, 23, 15.5,   8,   2]
+	[ 15,  14,   8,  0.5, -7,-14.5, -17, -19,  -20,-19,-17,-14.5, -7,  0.5,   8,  14],
+	[ 15,  16,  20,   25, 30,   35,  40,  42,   45, 42, 40,   35, 30,   25,  20,  16]
 ];
 LArm_Idle = 
 [
-	[20, 18, 15,   10,  0,  -10, -20, -28,   -30, -28, -20,  -10,  0,   10,  15,  18],
-	[ 0, -1, -2, -4.5, -7, -9.5, -12, -14,   -15, -14, -12, -9.5, -7, -4.5,  -2,  -1],
-	[45, 41, 38, 30.5, 23, 15.5,   8,   2,     0,   2,   8, 15.5, 23, 30.5,  38,  41]
+	[ 20, 18, 15,   10,  0,  -10, -20, -28,   -30, -28, -20,  -10,  0,   10,  15,  18],
+	[-20,-19,-17,-14.5, -7,  0.5,   8,  14,    15,  14,   8,  0.5, -7,-14.5, -17, -19],
+	[ 45, 42, 40,   35, 30,   25,  20,  16,    15,  16,  20,   25, 30,   35,  40,  42]
 ];
 RHandAnimSeq = array(0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0);
 LHandAnimSeq = array(8,7,6,5,4,3,2,1,0,1,2,3,4,5,6,7,8);
@@ -189,6 +214,104 @@ function ArmIdleAnim(frame, transition)
 	rHandFrame = RHandAnimSeq[scr_round(frame)];
 	lHandFrame = LHandAnimSeq[scr_round(frame)];
 }
+
+
+// Arm Anim Poke
+RArm_Poke = 
+[
+	[-30, 5,  40, 5, -30],
+	[ 25, 0, -50, 0,  25],
+	[ 20, 0,  10, 0,  20]
+];
+LArm_Poke = 
+[
+	[ 30,    5, -20, -5,  10],
+	[-30, -2.5,  25,  5, -15],
+	[ 45,   20,  -5,  10, 35]
+];
+
+ArmPokeFrame = 0;
+ArmPokeTransition = 0;
+
+function ArmPokeAnim(frame, transition)
+{
+	for(var i = 0; i < 3; i++)
+	{
+		RArmBone[i].AnimateRotation(RArm_Poke[i],frame,transition,true);
+		LArmBone[i].AnimateRotation(LArm_Poke[i],frame,transition,true);
+	}
+	var rhnd = clamp(lerp(0,8,frame), 0, 8),
+		lhnd = clamp(lerp(8,0,frame/2), 0, 8);
+	
+	rHandFrame = lerp(rHandFrame,rhnd,transition);
+	lHandFrame = lerp(lHandFrame,lhnd,transition);
+}
+
+
+// Arm Anim Fling
+RArm_Fling = 
+[
+	[0],
+	[0],
+	[0]
+];
+LArm_Fling = 
+[
+	[0],
+	[0],
+	[0]
+];
+
+ArmFlingFrame = 0;
+ArmFlingTransition = 0;
+
+function ArmFlingAnim(frame, transition)
+{
+	for(var i = 0; i < 3; i++)
+	{
+		RArmBone[i].AnimateRotation(RArm_Fling[i],frame,transition,true);
+		LArmBone[i].AnimateRotation(LArm_Fling[i],frame,transition,true);
+	}
+	
+	rHandFrame = 0;
+	lHandFrame = 0;
+}
+
+
+// Walk Anim
+RLeg_Walk = 
+[
+	[-45, -26.25, -7.5, 11.25,   30, 11.25, -7.5, -26.25],
+	[ 45,  26.25,  7.5,-11.25,  -30,-11.25,  7.5,  26.25]
+];
+LLeg_Walk = 
+[
+	[ 30, 11.25, -7.5, -26.25,  -45, -26.25, -7.5, 11.25],
+	[-30,-11.25,  7.5,  26.25,   45,  26.25,  7.5,-11.25]
+];
+
+RLeg_Walk_Pos = [ new Vector2(0,0),   new Vector2(0,-9),  new Vector2(0,-13),   new Vector2(0,-13), 
+				 new Vector2(0,-9), new Vector2(0,-6.75), new Vector2(0,-4.5), new Vector2(0,-2.25)];
+LLeg_Walk_Pos = [new Vector2(0,-9), new Vector2(0,-6.75), new Vector2(0,-4.5), new Vector2(0,-2.25), 
+				  new Vector2(0,0),   new Vector2(0,-9),  new Vector2(0,-13),   new Vector2(0,-13)];
+
+WalkFrame = 4;
+WalkFrame2 = 0;
+WalkTransition = 1;
+
+function WalkAnim(frame, transition)
+{
+	for(var i = 0; i < 2; i++)
+	{
+		RLegBone[i].AnimateRotation(RLeg_Walk[i],frame,transition,true);
+		LLegBone[i].AnimateRotation(LLeg_Walk[i],frame,transition,true);
+	}
+	
+	RLegBone[0].AnimatePosition(RLeg_Walk_Pos,frame,transition,true);
+	LLegBone[0].AnimatePosition(LLeg_Walk_Pos,frame,transition,true);
+}
+
+WalkMoveSpeed = [7, 14, 14, 7,  7, 14, 14, 7,];
 
 #endregion
 
