@@ -101,6 +101,13 @@ if(debug == 1)
 			draw_self();
 		}
 	}
+	with(obj_MovingTile)
+	{
+		if(!visible)
+		{
+			draw_self();
+		}
+	}
 	with(obj_Platform)
 	{
 		if(!visible)
@@ -244,6 +251,8 @@ if(debug == 1)
         draw_text(xx+marginX,yy+30+marginY*15,"spiderEdge: "+string(obj_Main.edgeText[spiderEdge]));
         draw_text(xx+marginX,yy+30+marginY*16,"prevSpiderEdge: "+string(obj_Main.edgeText[prevSpiderEdge]));
         draw_text(xx+marginX,yy+30+marginY*17,"spiderSpeed: "+string(spiderSpeed));
+		
+		draw_text(xx+marginX,yy+30+marginY*19,"speedBoostWJCounter: "+string(speedBoostWJCounter));
 		
 		/*for(var i = 0; i < ds_list_size(global.openHatchList); i++)
 		{

@@ -238,13 +238,13 @@ function NPCDeath(_x,_y)
     }
     if(deathType == 2) // multi-explosion enemy death (e.g. space pirate)
     {
-        var d = instance_create_layer(_x,_y,layer_get_id("NPCs"),obj_NPC_DeathAnim);
+        var d = instance_create_layer(_x,_y,layer_get_id("Projectiles_fg"),obj_NPC_DeathAnim);
         d.dethType = 1;
 		d.mask_index = mask_index;
     }
     if(deathType == 3) // screw attack/speed booster death
     {
-        var d = instance_create_layer(_x,_y,layer_get_id("NPCs"),obj_NPC_DeathAnim);
+        var d = instance_create_layer(_x,_y,layer_get_id("Projectiles_fg"),obj_NPC_DeathAnim);
         d.dethType = 2;
         audio_stop_sound(snd_InstaKillNPC);
         audio_play_sound(snd_InstaKillNPC,0,false);
@@ -299,6 +299,8 @@ function NPCLoot(_x,_y)
 
 #region Base Collision Checks
 
+block_list = ds_list_create();
+
 function entity_place_collide()
 {
 	/// @description entity_place_collide
@@ -319,11 +321,21 @@ function entity_place_collide()
 			yy = argument[3];
 		}
 	}
-	return entity_place_meeting(xx+offsetX,yy+offsetY,"ISolid") || entity_place_meeting(xx+offsetX,yy+offsetY,"INPCSolid");
-}
-function entity_place_meeting(_x,_y,_interface)
-{
-	return lhc_place_meeting(_x,_y,_interface);
+	//return entity_place_meeting(xx+offsetX,yy+offsetY,"ISolid") || entity_place_meeting(xx+offsetX,yy+offsetY,"INPCSolid");
+	if(lhc_place_meeting(xx+offsetX,yy+offsetY,"ISolid") || lhc_place_meeting(xx+offsetX,yy+offsetY,"INPCSolid"))
+	{
+		var num = instance_place_list(xx+offsetX,yy+offsetY,all,block_list,true);
+		for(var i = 0; i < num; i++)
+		{
+			if(instance_exists(block_list[| i]) && (asset_has_any_tag(block_list[| i].object_index,"ISolid",asset_object) || asset_has_any_tag(block_list[| i].object_index,"INPCSolid",asset_object)) && !asset_has_any_tag(block_list[| i].object_index,"IMovingSolid",asset_object))
+			{
+				ds_list_clear(block_list);
+				return true;
+			}
+		}
+	}
+	ds_list_clear(block_list);
+	return false;
 }
 
 function entity_position_collide()
@@ -346,16 +358,51 @@ function entity_position_collide()
 			yy = argument[3];
 		}
 	}
-	return entity_position_meeting(xx+offsetX,yy+offsetY,"ISolid") || entity_position_meeting(xx+offsetX,yy+offsetY,"INPCSolid");
-}
-function entity_position_meeting(_x,_y,_interface)
-{
-	return lhc_position_meeting(_x,_y,_interface);
+	//return entity_position_meeting(xx+offsetX,yy+offsetY,"ISolid") || entity_position_meeting(xx+offsetX,yy+offsetY,"INPCSolid");
+	if(lhc_position_meeting(xx+offsetX,yy+offsetY,"ISolid") || lhc_position_meeting(xx+offsetX,yy+offsetY,"INPCSolid"))
+	{
+		var num = instance_position_list(xx+offsetX,yy+offsetY,all,block_list,true);
+		for(var i = 0; i < num; i++)
+		{
+			if(instance_exists(block_list[| i]) && (asset_has_any_tag(block_list[| i].object_index,"ISolid",asset_object) || asset_has_any_tag(block_list[| i].object_index,"INPCSolid",asset_object)) && !asset_has_any_tag(block_list[| i].object_index,"IMovingSolid",asset_object))
+			{
+				ds_list_clear(block_list);
+				return true;
+			}
+		}
+	}
+	ds_list_clear(block_list);
+	return false;
 }
 
 function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
 {
-	return lhc_collision_line(x1,y1,x2,y2,"ISolid",prec,notme) || lhc_collision_line(x1,y1,x2,y2,"INPCSolid",prec,notme);
+	//return lhc_collision_line(x1,y1,x2,y2,"ISolid",prec,notme) || lhc_collision_line(x1,y1,x2,y2,"INPCSolid",prec,notme);
+	if(lhc_collision_line(x1,y1,x2,y2,"ISolid",prec,notme) || lhc_collision_line(x1,y1,x2,y2,"INPCSolid",prec,notme))
+	{
+		var num = collision_line_list(x1,y1,x2,y2,all,true,true,block_list,true);
+		for(var i = 0; i < num; i++)
+		{
+			if(instance_exists(block_list[| i]) && (asset_has_any_tag(block_list[| i].object_index,"ISolid",asset_object) || asset_has_any_tag(block_list[| i].object_index,"INPCSolid",asset_object)) && !asset_has_any_tag(block_list[| i].object_index,"IMovingSolid",asset_object))
+			{
+				ds_list_clear(block_list);
+				return true;
+			}
+		}
+	}
+	ds_list_clear(block_list);
+	return false;
+}
+
+function OnXCollision(fVX)
+{
+	velX = 0;
+	fVelX = 0;
+}
+function OnYCollision(fVY)
+{
+	velY = 0;
+	fVelY = 0;
 }
 
 #endregion
@@ -407,7 +454,7 @@ function GetEdgeSlope()
 	{
 		for(var i = 0; i < col; i++)
 		{
-			if(!instance_exists(edgeSlope[| i]) || (!asset_has_any_tag(edgeSlope[| i].object_index,"ISolid",asset_object) && !asset_has_any_tag(edgeSlope[| i].object_index,"INPCSolid",asset_object)) || !asset_has_any_tag(edgeSlope[| i].object_index,"ISlope",asset_object))
+			if(!instance_exists(edgeSlope[| i]) || (!asset_has_any_tag(edgeSlope[| i].object_index,"ISolid",asset_object) && !asset_has_any_tag(edgeSlope[| i].object_index,"INPCSolid",asset_object)) || asset_has_any_tag(edgeSlope[| i].object_index,"IMovingSolid",asset_object) || !asset_has_any_tag(edgeSlope[| i].object_index,"ISlope",asset_object))
 			{
 				continue;
 			}

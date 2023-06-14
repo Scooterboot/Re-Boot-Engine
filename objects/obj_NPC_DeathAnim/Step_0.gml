@@ -24,7 +24,8 @@ if(dethType == 1)
 if(dethType == 2)
 {
     visible = true;
-    image_index = 2 + scr_round(timer/3);
+    //image_index = 2 + scr_round(timer/3);
+    image_index = scr_round(timer/2);
 
     if(timer == 2)
     {

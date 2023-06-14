@@ -101,11 +101,7 @@ if(debug > 0)
 	{
 		gameSpeed = 2;
 	}
-	if(keyboard_check_pressed(vk_control))
-	{
-		toggleFastForward = !toggleFastForward;
-	}
-	if(toggleFastForward)
+	if(keyboard_check(vk_control))
 	{
 		gameSpeed = 600;
 	}

@@ -309,7 +309,10 @@ function DrawInventoryPlayer()
 	}
 
 	playerGlowInd = -1;
-	var playerGlowInd2 = -1;
+	// 0 = full suit, 1 = beam, 2 = grip, 3 = torso
+	// 4 = space jump, 5 = hi-jump, 6 = dash, 7 = x-ray
+	
+	//var playerGlowInd2 = -1;
 	var yDest = 0;
 	
 	if(invPos != -1 && ((invPosX == 0 && !ds_list_empty(invListL)) || (invPosX == 1 && !ds_list_empty(invListR))))
@@ -327,26 +330,26 @@ function DrawInventoryPlayer()
 		}
 		else if(string_pos("Beam",ability) != 0)
 		{
-			playerGlowInd = 2;
+			playerGlowInd = 1;
 		}
 		else if(string_pos("Item",ability) != 0)
 		{
-			playerGlowInd = 2;
+			playerGlowInd = 1;
 			if(index == Item.PBomb)
 			{
-				playerGlowInd = 5;
+				playerGlowInd = 3;
 			}
 			if(index = Item.XRay)
 			{
-				playerGlowInd = 10;
+				playerGlowInd = 7;
 			}
 		}
 		else if(string_pos("Misc",ability) != 0)
 		{
-			playerGlowInd = 5;
+			playerGlowInd = 3;
 			if(index == Misc.PowerGrip)
 			{
-				playerGlowInd = 3;
+				playerGlowInd = 2;
 			}
 			if(index == Misc.ScrewAttack)
 			{
@@ -359,16 +362,15 @@ function DrawInventoryPlayer()
 			playerGlowInd = 0;
 			if(index == Boots.HiJump)
 			{
-				playerGlowInd = 8;
+				playerGlowInd = 5;
 			}
 			if(index == Boots.SpaceJump)
 			{
-				playerGlowInd = 6;
+				playerGlowInd = 4;
 			}
 			if(index == Boots.Dodge)
 			{
-				playerGlowInd = 5;
-				playerGlowInd2 = 6;
+				playerGlowInd = 6;
 			}
 		}
 	}
@@ -402,57 +404,91 @@ function DrawInventoryPlayer()
 			surface_set_target(playerGlowSurf);
 			draw_clear_alpha(c_black,0);
 			
-			if(playerGlowInd == 0)
+			var highlight_Suit = false,
+				highlight_Beam = false,
+				highlight_Grip = false,
+				highlight_Torso = false,
+				highlight_Boots1 = false,
+				highlight_Boots2 = false,
+				highlight_Visor = false;
+			
+			switch(playerGlowInd)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask,P.suit[Suit.Varia],xx,yy);
-				if(P.misc[Misc.PowerGrip])
+				case 0:
 				{
-					draw_sprite(sprt_Sub_Samus_GlowMask,4,xx,yy);
+					highlight_Suit = true;
+					highlight_Grip = true;
+					highlight_Boots1 = true;
+					highlight_Boots2 = true;
+					break;
 				}
-				if(P.boots[Boots.SpaceJump])
+				case 1:
 				{
-					draw_sprite(sprt_Sub_Samus_GlowMask,7,xx,yy);
+					highlight_Beam = true;
+					break;
 				}
-				if(P.boots[Boots.HiJump])
+				case 2:
 				{
-					draw_sprite(sprt_Sub_Samus_GlowMask,9,xx,yy);
+					highlight_Grip = true;
+					break;
+				}
+				case 3:
+				{
+					highlight_Torso = true;
+					break;
+				}
+				case 4:
+				{
+					highlight_Boots1 = true;
+					highlight_Boots2 = true;
+					break;
+				}
+				case 5:
+				{
+					highlight_Boots2 = true;
+					break;
+				}
+				case 6:
+				{
+					highlight_Boots1 = true;
+					highlight_Boots2 = true;
+					highlight_Torso = true;
+					break;
+				}
+				case 7:
+				{
+					highlight_Visor = true;
+					break;
 				}
 			}
-			else if(playerGlowInd == 3)
+			
+			if(highlight_Suit)
+			{
+				draw_sprite(sprt_Sub_Samus_GlowMask,P.suit[Suit.Varia],xx,yy);
+			}
+			if(highlight_Beam)
+			{
+				draw_sprite(sprt_Sub_Samus_GlowMask,2,xx,yy);
+			}
+			if(highlight_Grip)
 			{
 				draw_sprite(sprt_Sub_Samus_GlowMask,3+P.misc[Misc.PowerGrip],xx,yy);
 			}
-			else if(playerGlowInd == 6)
+			if(highlight_Torso)
+			{
+				draw_sprite(sprt_Sub_Samus_GlowMask,5,xx,yy);
+			}
+			if(highlight_Boots1)
 			{
 				draw_sprite(sprt_Sub_Samus_GlowMask,6+P.boots[Boots.SpaceJump],xx,yy);
-				if(P.boots[Boots.HiJump])
-				{
-					draw_sprite(sprt_Sub_Samus_GlowMask,9,xx,yy);
-				}
 			}
-			else if(playerGlowInd == 8)
+			if(highlight_Boots2)
 			{
 				draw_sprite(sprt_Sub_Samus_GlowMask,8+P.boots[Boots.HiJump],xx,yy);
 			}
-			else
+			if(highlight_Visor)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask,playerGlowInd,xx,yy);
-			}
-			
-			if(playerGlowInd2 != -1)
-			{
-				if(playerGlowInd2 == 6)
-				{
-					draw_sprite(sprt_Sub_Samus_GlowMask,6+P.boots[Boots.SpaceJump],xx,yy);
-					if(P.boots[Boots.HiJump])
-					{
-						draw_sprite(sprt_Sub_Samus_GlowMask,9,xx,yy);
-					}
-				}
-				else
-				{
-					draw_sprite(sprt_Sub_Samus_GlowMask,playerGlowInd2,xx,yy);
-				}
+				draw_sprite(sprt_Sub_Samus_GlowMask,10,xx,yy);
 			}
 			
 			surface_reset_target();
@@ -471,24 +507,24 @@ function DrawInventoryPlayer()
 		
 			gpu_set_colorwriteenable(0,0,0,1);
 			var height = 20;
-			var totHeight = sprite_get_height(sprt)+(height*2);
+			var totHeight = sprite_get_height(sprt);
 			playerGlowY = scr_wrap(playerGlowY + 1, 0, totHeight);
 		
 			for(var i = -height; i < height; i++)
 			{
-				var ly = scr_wrap(yy + playerGlowY + i,0,totHeight),
-					lx1 = xx - sprite_get_width(sprt)/2 - 4,
-					lx2 = xx + sprite_get_width(sprt)/2 + 4;
+				var lx1 = xx - sprite_get_width(sprt)/2 - 4,
+					lx2 = xx + sprite_get_width(sprt)/2 + 4,
+					ly = yy + wrap(i,0,totHeight) + playerGlowY;
 			
 				draw_set_color(c_white);
 				draw_set_alpha((1-(abs(i)/height))*0.75);
-				draw_line(lx1,ly,lx2,ly);
-			
-				var ly2 = scr_wrap(ly + scr_floor(totHeight/3),0,totHeight);
-				draw_line(lx1,ly2,lx2,ly2);
-			
-				var ly3 = scr_wrap(ly + scr_floor((totHeight/3)*2),0,totHeight);
-				draw_line(lx1,ly3,lx2,ly3);
+				
+				var num = 3;
+				for(var k = 0; k < num; k++)
+				{
+					var ly2 = scr_wrap(ly + floor(totHeight/num)*k,yy,yy+totHeight);
+					draw_line(lx1,ly2,lx2,ly2);
+				}
 			
 				draw_set_color(c_black);
 				draw_set_alpha(1);
@@ -522,4 +558,333 @@ function DrawInventoryPlayer()
 	draw_set_color(c_black);
 	draw_set_alpha(1);
 }
+#endregion
+
+#region DrawInventoryPlayer_Retro
+
+useRetroPlayer = true;
+
+function DrawInventoryPlayer_Retro()
+{
+	var ww = global.resWidth;//, hh = global.resHeight;
+	var xx = ww/2,
+		yy = 70;
+
+	draw_set_color(c_black)
+	draw_set_alpha(0.5);
+	draw_rectangle(-1,-1,ww+1,global.resHeight+1,false);
+	draw_set_color(c_white);
+	draw_set_alpha(1);
+	gpu_set_blendmode(bm_add);
+	draw_sprite_ext(sprt_Sub_InvBG,0,ww/2,-20,1,1,0,c_white,1);
+	gpu_set_blendmode(bm_normal);
+
+	var P = obj_Player;
+
+	if(!surface_exists(playerInvSurf))
+	{
+		playerInvSurf = surface_create(global.resWidth,global.resHeight);
+	}
+	else
+	{
+		surface_set_target(playerInvSurf);
+		draw_clear_alpha(c_black,0);
+		
+		var i = P.suit[Suit.Varia];
+		if(P.suit[Suit.Gravity])
+		{
+			i = 2+P.suit[Suit.Varia];
+		}
+		
+		var b = 0;
+		if(P.beam[Beam.Charge])
+		{
+			b = 1;
+			if(P.beam[Beam.Spazer])
+			{
+				b = 4;
+			}
+			if(P.beam[Beam.Wave])
+			{
+				b = 3;
+			}
+			if(P.beam[Beam.Plasma])
+			{
+				b = 5;
+			}
+			if(P.beam[Beam.Ice])
+			{
+				b = 2;
+			}
+		}
+		draw_sprite(sprt_Sub_Samus_Gun_Retro,b,xx-30,yy+39);
+		
+		draw_sprite(sprt_Sub_Samus_Retro,i,xx,yy);
+		
+		if(P.misc[Misc.PowerGrip])
+		{
+			draw_sprite(sprt_Sub_Samus_Grip_Retro,min(i,2),xx+4,yy+41);
+		}
+		if(P.boots[Boots.SpaceJump])
+		{
+			draw_sprite(sprt_Sub_Samus_Boots1_Retro,min(i,2),xx,yy+67);
+		}
+		if(P.boots[Boots.HiJump])
+		{
+			draw_sprite(sprt_Sub_Samus_Boots2_Retro,min(i,2),xx,yy+96);
+		}
+		
+		surface_reset_target();
+	
+		draw_surface_ext(playerInvSurf,2,1,1,1,0,c_black,1);
+		draw_surface_ext(playerInvSurf,0,0,1,1,0,c_white,1);
+	}
+	
+	playerGlowInd = -1;
+	// 0 = full suit, 1 = beam, 2 = grip, 3 = torso
+	// 4 = space jump, 5 = hi-jump, 6 = dash, 7 = x-ray
+	
+	if(invPos != -1 && ((invPosX == 0 && !ds_list_empty(invListL)) || (invPosX == 1 && !ds_list_empty(invListR))))
+	{
+		var ability = invListL[| invPos];
+		if(invPosX == 1)
+		{
+			ability = invListR[| invPos];
+		}
+		var index = string_digits(ability);
+		
+		if(string_pos("Suit",ability) != 0)
+		{
+			playerGlowInd = 0;
+		}
+		else if(string_pos("Beam",ability) != 0)
+		{
+			playerGlowInd = 1;
+		}
+		else if(string_pos("Item",ability) != 0)
+		{
+			playerGlowInd = 1;
+			if(index == Item.PBomb)
+			{
+				playerGlowInd = 3;
+			}
+			if(index = Item.XRay)
+			{
+				playerGlowInd = 7;
+			}
+		}
+		else if(string_pos("Misc",ability) != 0)
+		{
+			playerGlowInd = 3;
+			if(index == Misc.PowerGrip)
+			{
+				playerGlowInd = 2;
+			}
+			if(index == Misc.ScrewAttack)
+			{
+				playerGlowInd = 0;
+			}
+		}
+		else if(string_pos("Boots",ability) != 0)
+		{
+			playerGlowInd = 0;
+			if(index == Boots.HiJump)
+			{
+				playerGlowInd = 5;
+			}
+			if(index == Boots.SpaceJump)
+			{
+				playerGlowInd = 4;
+			}
+			if(index == Boots.Dodge)
+			{
+				playerGlowInd = 6;
+			}
+		}
+	}
+	
+	if(playerGlowInd != -1)
+	{
+		if(playerGlowInd != playerGlowIndPrev)
+		{
+			playerFlashAlpha = 0.75;
+		}
+		if(toggleItem)
+		{
+			playerFlashAlpha = 1;
+		}
+	
+		if(!surface_exists(playerGlowSurf))
+		{
+			playerGlowSurf = surface_create(global.resWidth,global.resHeight);
+		}
+		else
+		{
+			surface_set_target(playerGlowSurf);
+			draw_clear_alpha(c_black,0);
+			
+			var highlight_Suit = false,
+				highlight_Beam = false,
+				highlight_Grip = false,
+				highlight_Torso = false,
+				highlight_Boots1 = false,
+				highlight_Boots2 = false,
+				highlight_Visor = false;
+			
+			switch(playerGlowInd)
+			{
+				case 0:
+				{
+					highlight_Suit = true;
+					highlight_Beam = true;
+					highlight_Grip = true;
+					highlight_Boots1 = true;
+					highlight_Boots2 = true;
+					break;
+				}
+				case 1:
+				{
+					highlight_Beam = true;
+					break;
+				}
+				case 2:
+				{
+					highlight_Grip = true;
+					break;
+				}
+				case 3:
+				{
+					highlight_Torso = true;
+					break;
+				}
+				case 4:
+				{
+					highlight_Boots1 = true;
+					highlight_Boots2 = true;
+					break;
+				}
+				case 5:
+				{
+					highlight_Boots2 = true;
+					break;
+				}
+				case 6:
+				{
+					highlight_Boots1 = true;
+					highlight_Boots2 = true;
+					highlight_Torso = true;
+					break;
+				}
+				case 7:
+				{
+					highlight_Visor = true;
+					break;
+				}
+			}
+			
+			if(highlight_Beam)
+			{
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,2+P.beam[Beam.Charge],xx,yy);
+				if(!highlight_Suit)
+				{
+					draw_sprite_ext(sprt_Sub_Samus_GlowMask_Retro,P.suit[Suit.Varia],xx,yy,1,1,0,c_black,1);
+				}
+			}
+			if(highlight_Suit)
+			{
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,P.suit[Suit.Varia],xx,yy);
+			}
+			if(highlight_Grip)
+			{
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,4+P.suit[Suit.Varia],xx,yy);
+				if(P.misc[Misc.PowerGrip])
+				{
+					draw_sprite(sprt_Sub_Samus_GlowMask_Retro,6,xx,yy);
+				}
+			}
+			if(highlight_Torso)
+			{
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,7+P.suit[Suit.Varia],xx,yy);
+			}
+			if(highlight_Boots1)
+			{
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,9+P.boots[Boots.SpaceJump],xx,yy);
+			}
+			if(highlight_Boots2)
+			{
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,11+P.boots[Boots.HiJump],xx,yy);
+			}
+			if(highlight_Visor)
+			{
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,13,xx,yy);
+			}
+			
+			surface_reset_target();
+		}
+	
+		if(!surface_exists(playerGlowSurf2))
+		{
+			playerGlowSurf2 = surface_create(global.resWidth,global.resHeight);
+		}
+		else
+		{
+			surface_set_target(playerGlowSurf2);
+			draw_clear_alpha(c_black,0);
+		
+			var sprt = sprt_Sub_Samus_GlowMask_Retro;
+		
+			gpu_set_colorwriteenable(0,0,0,1);
+			var height = 20;
+			var totHeight = sprite_get_height(sprt);
+			playerGlowY = scr_wrap(playerGlowY + 1, 0, totHeight);
+		
+			for(var i = -height; i < height; i++)
+			{
+				var lx1 = xx - sprite_get_width(sprt)/2 - 4,
+					lx2 = xx + sprite_get_width(sprt)/2 + 4,
+					ly = yy + wrap(i,0,totHeight) + playerGlowY;
+			
+				draw_set_color(c_white);
+				draw_set_alpha((1-(abs(i)/height))*0.75);
+				
+				var num = 2;
+				for(var k = 0; k < num; k++)
+				{
+					var ly2 = scr_wrap(ly + floor(totHeight/num)*k,yy,yy+totHeight);
+					draw_line(lx1,ly2,lx2,ly2);
+				}
+			
+				draw_set_color(c_black);
+				draw_set_alpha(1);
+			}
+			gpu_set_colorwriteenable(1,1,1,0);
+			
+			draw_surface_ext(playerGlowSurf,0,0,1,1,0,make_color_rgb(136,232,16),1);
+			gpu_set_colorwriteenable(1,1,1,1);
+		
+			if(playerFlashAlpha > 0)
+			{
+				draw_surface_ext(playerGlowSurf,0,0,1,1,0,make_color_rgb(136,232,16),playerFlashAlpha);
+			}
+		
+			surface_reset_target();
+		
+			gpu_set_blendmode(bm_add);
+			draw_surface_ext(playerGlowSurf2,0,0,1,1,0,c_white,1);
+			gpu_set_blendmode(bm_normal);
+		}
+	}
+	else
+	{
+		playerGlowY = 0;
+	}
+
+	playerFlashAlpha = max(playerFlashAlpha-0.075,0);
+
+	playerGlowIndPrev = playerGlowInd;
+
+	draw_set_color(c_black);
+	draw_set_alpha(1);
+}
+
 #endregion

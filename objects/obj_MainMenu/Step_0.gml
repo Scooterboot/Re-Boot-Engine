@@ -438,9 +438,9 @@ if(room == rm_MainMenu)
 						var _worldFlags_map = _list[| 2];
 						fileTime[i] = _worldFlags_map[? "currentPlayTime"];
 						
-						var itemList = ds_list_create();
 						ds_list_read(itemList, _worldFlags_map[? "collectedItemList"]);
 						filePercent[i] = (ds_list_size(itemList) / global.totalItems) * 100;
+						ds_list_clear(itemList);
 					}
 					catch(_exception)
 					{

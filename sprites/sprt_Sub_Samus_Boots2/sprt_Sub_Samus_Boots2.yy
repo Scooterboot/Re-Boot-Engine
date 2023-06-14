@@ -61,7 +61,7 @@
             {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"ecd6e02f-5232-4cb2-a61b-5e74cb9e1637","path":"sprites/sprt_Sub_Samus_Boots2/sprt_Sub_Samus_Boots2.yy",},},},"Disabled":false,"id":"d06e93fd-bef6-45af-861a-11c9a4d67b2e","IsCreationKey":false,"Key":2.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
-    "visibleRange": {"x":0.0,"y":0.0,},
+    "visibleRange": null,
     "volume": 1.0,
     "xorigin": 37,
     "yorigin": 0,

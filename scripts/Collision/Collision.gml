@@ -43,7 +43,7 @@ function collide_rect(x1, y1, x2, y2)
 	return (rect != noone);
 }
 
-function scr_GetSlopeAngle(slope)
+/*function scr_GetSlopeAngle(slope)
 {
 	var ang = 315;
 	if(sign(slope.image_yscale) > 0)
@@ -69,4 +69,4 @@ function scr_GetSlopeAngle(slope)
 		}
 	}
 	return ang;
-}
+}*/

@@ -98,7 +98,14 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			#region Draw Inventory Screen
 			if(currentScreen == Screen.Inventory)
 			{
-				DrawInventoryPlayer();
+				if(useRetroPlayer)
+				{
+					DrawInventoryPlayer_Retro();
+				}
+				else
+				{
+					DrawInventoryPlayer();
+				}
 				
 				selectorAlpha = clamp(selectorAlpha + 0.05*sAlphaNum,0,1);
 				if(selectorAlpha <= 0)

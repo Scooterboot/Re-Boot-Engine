@@ -131,12 +131,6 @@ function OnDamageNPC(damage,npc) {}
 
 #region Collision (Unused atm)
 
-function entity_place_meeting(_x,_y,_interface)
-{
-	//return lhc_place_meeting(_x,_y,_interface);
-	return lhc_position_meeting(_x,_y,_interface);
-}
-
 function ModifyFinalVelX(fVX)
 {
 	if(impacted > 0)

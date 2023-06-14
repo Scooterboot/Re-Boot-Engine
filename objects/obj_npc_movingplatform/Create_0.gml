@@ -80,14 +80,4 @@ function playerColCheck()
 	return false;
 }*/
 
-function OnXCollision(fVX)
-{
-	velX = 0;
-	fVelX = 0;
-}
-function OnYCollision(fVY)
-{
-	velY = 0;
-	fVelY = 0;
-}
 function CanMoveDownSlope_Bottom() { return velY >= 0; }

@@ -6,7 +6,6 @@ scr_MainInitialize();
 depth = 0;
 
 debug = 0;
-toggleFastForward = false;
 
 screenScale = 1;
 if(global.screenScale > 0)

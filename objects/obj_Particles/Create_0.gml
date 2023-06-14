@@ -329,29 +329,29 @@ part_type_life(npcDeath[2],15,15);
 
 npcDeath[3] = part_type_create();
 part_type_sprite(npcDeath[3],sprt_EnemyDeath2,true,true,false);
-part_type_life(npcDeath[3],15,15);
-part_type_direction(npcDeath[3],135,135,0,0);
+part_type_life(npcDeath[3],15,18);
+part_type_direction(npcDeath[3],130,140,0,0);
 part_type_orientation(npcDeath[3],0,0,0,0,0);
 part_type_speed(npcDeath[3],4,4,-0.25,0);
 
 npcDeath[4] = part_type_create();
 part_type_sprite(npcDeath[4],sprt_EnemyDeath2,true,true,false);
-part_type_life(npcDeath[4],15,15);
-part_type_direction(npcDeath[4],45,45,0,0);
+part_type_life(npcDeath[4],15,18);
+part_type_direction(npcDeath[4],40,50,0,0);
 part_type_orientation(npcDeath[4],270,270,0,0,0);
 part_type_speed(npcDeath[4],4,4,-0.25,0);
 
 npcDeath[5] = part_type_create();
 part_type_sprite(npcDeath[5],sprt_EnemyDeath2,true,true,false);
-part_type_life(npcDeath[5],15,15);
-part_type_direction(npcDeath[5],225,225,0,0);
+part_type_life(npcDeath[5],15,18);
+part_type_direction(npcDeath[5],220,230,0,0);
 part_type_orientation(npcDeath[5],90,90,0,0,0);
 part_type_speed(npcDeath[5],4,4,-0.25,0);
 
 npcDeath[6] = part_type_create();
 part_type_sprite(npcDeath[6],sprt_EnemyDeath2,true,true,false);
-part_type_life(npcDeath[6],15,15);
-part_type_direction(npcDeath[6],315,315,0,0);
+part_type_life(npcDeath[6],15,18);
+part_type_direction(npcDeath[6],310,320,0,0);
 part_type_orientation(npcDeath[6],180,180,0,0,0);
 part_type_speed(npcDeath[6],4,4,-0.25,0);
 

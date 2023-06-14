@@ -206,7 +206,7 @@ else
 	shotsFired = false;
 }
 
-grounded = (place_collide(0,1) || (bbox_bottom+1) >= room_height);// && velY == 0);
+grounded = (entity_place_collide(0,1) || (bbox_bottom+1) >= room_height);// && velY == 0);
 fGrav = grav[InWater];
 
 if(!grounded)

@@ -130,7 +130,7 @@ else
 	var slope = GetEdgeSlope(colEdge,2);
 	if(instance_exists(slope))
 	{
-		rotation2 = scr_GetSlopeAngle(slope);
+		rotation2 = GetSlopeAngle(slope);
 	}
 	
 	fVelX = velX;

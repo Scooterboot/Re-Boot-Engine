@@ -17,6 +17,8 @@ debug = false;
 godmode = false;
 // press 4 to toggle hyper beam
 //no clip controls: press numpad 8,5,4,6 to move up,down,left,right
+// hold shift to reduce fps to 2
+// hold ctrl to increase fps up to 600 (may not always reach that high)
 
 
 // "Arm Pumping" is a classic SM speedrunning tech
@@ -24,7 +26,7 @@ godmode = false;
 armPumping = true;
 
 // Global speed modifier for horizontal movement. Acts as a flat addition and does not necessarily affect momentum.
-//Set to 0.5 as an alternative to 60fps frame-perfect Arm Pumping. Note: Unlike arm pumping, this will affect jump and morph movement.
+//Set to 0.5 as an alternative to 30hz frame-perfect Arm Pumping. Note: Unlike arm pumping, this will affect jump and morph movement.
 globalSpeedMod = 0; // default: 0
 
 // Continue speed boosting/keep momentum after landing (also applies to spider ball)
@@ -45,13 +47,16 @@ speedBoostWallJump = true;
 // Cancel Shine Spark mid-flight by pressing jump
 shineSparkCancel = true;
 
-// Shine Spark steering / Low-level Shine Spark flight control
+// Low-level Shine Spark flight control / Shine Spark steering
 //press directions or angle buttons to slightly change flight direction
 shineSparkFlightAdjust = false;
 
 // High-level Shine Spark flight control when Accel Dash is enabled
 //activated by holding a direction and pressing Run during flight (consumes Dash charge)
 shineSparkRedirect = true;
+
+// Make diagonal sparks slide up/down walls while Chain Spark is inactive
+diagSparkSlideOnWalls = true;
 
 // Prime-like trail effect for Morph Ball
 // Disables normal after images for Morph while set to true
@@ -1011,6 +1016,8 @@ mbTrailAlpha = 0;
 
 block_list = ds_list_create();
 
+passthroughMovingSolids = false;
+
 function entity_place_collide()
 {
 	/// @description entity_place_collide
@@ -1032,7 +1039,7 @@ function entity_place_collide()
 		}
 	}
 	
-	if(entity_place_meeting(xx+offsetX,yy+offsetY,"IPlatform") && (!spiderBall || spiderEdge == Edge.None || spiderEdge == Edge.Bottom))
+	if(lhc_place_meeting(xx+offsetX,yy+offsetY,"IPlatform") && (!spiderBall || spiderEdge == Edge.None || spiderEdge == Edge.Bottom))
 	{
 		if(entityPlatformCheck(offsetX,offsetY,xx,yy))
 		{
@@ -1040,23 +1047,26 @@ function entity_place_collide()
 		}
 	}
 	
-	if((isSpeedBoosting && shineStart <= 0) || isScrewAttacking)
+	//if((isSpeedBoosting && shineStart <= 0) || isScrewAttacking)
+	//{
+	//	return SpeedAndScrewBlockCheck(instance_place_list(xx+offsetX,yy+offsetY,all,block_list,true));
+	//}
+	
+	//return entity_place_meeting(xx+offsetX,yy+offsetY,"ISolid");
+	if(lhc_place_meeting(xx+offsetX,yy+offsetY,"ISolid"))
 	{
-		var bl = instance_place_list(xx+offsetX,yy+offsetY,all,block_list,true);
-		if(bl > 0)
+		var num = instance_place_list(xx+offsetX,yy+offsetY,all,block_list,true);
+		for(var i = 0; i < num; i++)
 		{
-			for(var i = 0; i < bl; i++)
+			if(instance_exists(block_list[| i]) && asset_has_any_tag(block_list[| i].object_index,"ISolid",asset_object))// && !asset_has_any_tag(block_list[| i].object_index,"IMovingSolid",asset_object))
 			{
-				if(!instance_exists(block_list[| i]) || !asset_has_any_tag(block_list[| i].object_index,"ISolid",asset_object))
-				{
-					continue;
-				}
-				
 				var block = block_list[| i];
+				var isMovingSolid = asset_has_any_tag(block.object_index,"IMovingSolid",asset_object);
 				
-				var sp = (!asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting),
-					sc = (!asset_has_any_tag(block.object_index, "IScrewBlock", asset_object) && isScrewAttacking);
-				if(place_meeting(xx+offsetX,yy+offsetY,block) && (sp || sc))
+				var sp = (asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting && shineStart <= 0),
+					sc = (asset_has_any_tag(block.object_index, "IScrewBlock", asset_object) && isScrewAttacking);
+				
+				if((!isMovingSolid || !passthroughMovingSolids) && !sp && !sc)
 				{
 					ds_list_clear(block_list);
 					return true;
@@ -1064,10 +1074,8 @@ function entity_place_collide()
 			}
 		}
 		ds_list_clear(block_list);
-		return false;
 	}
-	
-	return entity_place_meeting(xx+offsetX,yy+offsetY,"ISolid");
+	return false;
 }
 function entity_position_collide()
 {
@@ -1090,35 +1098,46 @@ function entity_position_collide()
 		}
 	}
 	
-	if(isSpeedBoosting || isScrewAttacking)
+	//if((isSpeedBoosting && shineStart <= 0) || isScrewAttacking)
+	//{
+	//	return SpeedAndScrewBlockCheck(instance_position_list(xx+offsetX,yy+offsetY,all,block_list,true));
+	//}
+	
+	return lhc_position_meeting(xx+offsetX,yy+offsetY,"ISolid");
+}
+function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
+{
+	//if((isSpeedBoosting && shineStart <= 0) || isScrewAttacking)
+	//{
+	//	return SpeedAndScrewBlockCheck(collision_line_list(x1,y1,x2,y2,all,prec,notme,block_list,true));
+	//}
+	return lhc_collision_line(x1,y1,x2,y2,"ISolid",prec,notme);
+}
+/*function SpeedAndScrewBlockCheck(instanceNum)
+{
+	if(instanceNum > 0)
 	{
-		var bl = instance_position_list(xx+offsetX,yy+offsetY,all,block_list,true);
-		if(bl > 0)
+		for(var i = 0; i < instanceNum; i++)
 		{
-			for(var i = 0; i < bl; i++)
+			if(!instance_exists(block_list[| i]) || !asset_has_any_tag(block_list[| i].object_index,"ISolid",asset_object))
 			{
-				if(!instance_exists(block_list[| i]) || !asset_has_any_tag(block_list[| i].object_index,"ISolid",asset_object))
-				{
-					continue;
-				}
-				
-				var block = block_list[| i];
-				
-				var sp = (!asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting),
-					sc = (!asset_has_any_tag(block.object_index, "IScrewBlock", asset_object) && isScrewAttacking);
-				if(position_meeting(xx+offsetX,yy+offsetY,block) && (sp || sc))
-				{
-					ds_list_clear(block_list);
-					return true;
-				}
+				continue;
+			}
+			
+			var block = block_list[| i];
+			
+			var sp = (asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting),
+				sc = (asset_has_any_tag(block.object_index, "IScrewBlock", asset_object) && isScrewAttacking);
+			if(!sp && !sc)
+			{
+				ds_list_clear(block_list);
+				return true;
 			}
 		}
-		ds_list_clear(block_list);
-		return false;
 	}
-	
-	return entity_position_meeting(xx+offsetX,yy+offsetY,"ISolid");
-}
+	ds_list_clear(block_list);
+	return false;
+}*/
 function entityPlatformCheck()
 {
 	/// @description entityPlatformCheck
@@ -1139,31 +1158,23 @@ function entityPlatformCheck()
 		}
 	}
 	
-	//var left = x-bbox_left,
-	//	right = bbox_right-x,
-	//	top = y-bbox_top,
-	//	bottom = bbox_bottom-y;
-	
-	//var pl = collision_rectangle_list(xx-left+offsetX,yy-top+offsetY,xx+right+offsetX,yy+bottom+offsetY,all,true,true,block_list,true);
-	var pl = instance_place_list(xx+offsetX,yy+offsetY,all,block_list,true);
-	if(pl > 0)
+	if(lhc_place_meeting(xx+offsetX,yy+offsetY,"IPlatform"))
 	{
+		var pl = instance_place_list(xx+offsetX,yy+offsetY,all,block_list,true);
 		for(var i = 0; i < pl; i++)
 		{
-			if(!instance_exists(block_list[| i]) || !asset_has_any_tag(block_list[| i].object_index,"IPlatform",asset_object))
+			if(instance_exists(block_list[| i]) && asset_has_any_tag(block_list[| i].object_index,"IPlatform",asset_object))
 			{
-				continue;
-			}
-			
-			var platform = block_list[| i];
-			if(place_meeting(xx+offsetX,yy+offsetY,platform) && !place_meeting(xx,yy,platform) && bbox_bottom < platform.bbox_top)// && (grounded || !cDown))//offsetY > 0)
-			{
-				ds_list_clear(block_list);
-				return true;
+				var platform = block_list[| i];
+				if(place_meeting(xx+offsetX,yy+offsetY,platform) && !place_meeting(xx,yy,platform) && bbox_bottom < platform.bbox_top)// && (grounded || !cDown))//offsetY > 0)
+				{
+					ds_list_clear(block_list);
+					return true;
+				}
 			}
 		}
+		ds_list_clear(block_list);
 	}
-	ds_list_clear(block_list);
 	return false;
 }
 
@@ -1270,7 +1281,9 @@ function OnXCollision(fVX)
 		move = 0;
 	//}
 	bombJumpX = 0;
-	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0)
+	
+	var diagSparkSlide = (diagSparkSlideOnWalls && (abs(shineDir) == 1 || abs(shineDir) == 3) && !boots[Boots.ChainSpark]);
+	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && !diagSparkSlide)
 	{
 		if(boots[Boots.ChainSpark] && (abs(shineDir) == 2 || (!entity_place_collide(0,3) && abs(shineDir) > 2) || (!entity_place_collide(0,-3) && abs(shineDir) < 2)))
 		{
@@ -1420,23 +1433,7 @@ function OnYCollision(fVY)
 
 function CanMoveUpSlope_Right()
 {
-	/*if(state == State.Grapple)
-	{
-		return true;
-	}
-	else*/ if(!grounded && !onPlatform && state != State.Grapple)
-	{
-		var yspeed = abs(fVelY);
-		var ynum = 0;
-		while(!entity_place_collide(0,ynum*sign(fVelY)) && ynum <= yspeed)
-		{
-			ynum++;
-		}
-		
-		var steepFlag = !entity_place_collide(-1,(ynum+1)*sign(fVelY));
-		return ((fVelY >= 0 && steepFlag) || (fVelY < 0 && (fVelX < 0 || steepFlag)));
-	}
-	return false;
+	return CanMoveUpSlope_LeftRight(-1);
 }
 function OnSlopeYCollision_Right(fVY)
 {
@@ -1447,23 +1444,7 @@ function CanMoveDownSlope_Right() { return false; }
 
 function CanMoveUpSlope_Left()
 {
-	/*if(state == State.Grapple)
-	{
-		return true;
-	}
-	else*/ if(!grounded && !onPlatform && state != State.Grapple)
-	{
-		var yspeed = abs(fVelY);
-		var ynum = 0;
-		while(!entity_place_collide(0,ynum*sign(fVelY)) && ynum <= yspeed)
-		{
-			ynum++;
-		}
-		
-		var steepFlag = !entity_place_collide(1,(ynum+1)*sign(fVelY));
-		return ((fVelY >= 0 && steepFlag) || (fVelY < 0 && (fVelX > 0 || steepFlag)));
-	}
-	return false;
+	return CanMoveUpSlope_LeftRight(1);
 }
 function OnSlopeYCollision_Left(fVY)
 {
@@ -1472,35 +1453,22 @@ function OnSlopeYCollision_Left(fVY)
 
 function CanMoveDownSlope_Left() { return false; }
 
-/*function OnPlatformCollision(fVY)
+function CanMoveUpSlope_LeftRight(dir)
 {
-	if(fVY > 0)
+	if(!grounded && !onPlatform && state != State.Grapple)
 	{
-		grounded = true;
-		onPlatform = true;
-	}
-	
-	// Ball Bounce
-	if(canMorphBounce && velY >= (1.5 + fGrav) && state == State.Morph && morphFrame <= 0 && shineRampFix <= 0)
-	{
-		audio_stop_sound(snd_Land);
-		audio_play_sound(snd_Land,0,false);
-			
-		var bounceVelY = -velY*0.25;
-		if(abs(bounceVelY) < fGrav*4)
+		var yspeed = abs(fVelY);
+		var ynum = 0;
+		while(!entity_place_collide(0,ynum*sign(fVelY)) && ynum <= yspeed)
 		{
-			bounceVelY = 0;
+			ynum++;
 		}
-		velY = min(bounceVelY,0);
 		
-		ballBounce = ceil(abs(velY)/fGrav)*(2.1 / (1+(liquidState > 0)));
+		var steepFlag = !entity_place_collide(dir,(ynum+1)*sign(fVelY));
+		return ((fVelY >= 0 && steepFlag) || (fVelY < 0 && (sign(fVelX) == dir || steepFlag)));
 	}
-	else
-	{
-		velY = 0;
-	}
-	fVelY = 0;
-}*/
+	return false;
+}
 
 function DestroyBlock(bx,by)
 {
@@ -1849,16 +1817,7 @@ function ChangeState(newState,newStateFrame,newMask,isGrounded)
 			}
 			else
 			{
-				var topFlag = false;
-				for(var k = bbox_left; k < bbox_right; k++)
-				{
-					if(entity_position_collide(0,bbox_top-y-1, k))
-					{
-						topFlag = true;
-						break;
-					}
-				}
-				if((entity_place_collide(0,0) || (onPlatform && entity_place_meeting(x,y,"IPlatform"))) && !topFlag)
+				if((entity_place_collide(0,0) || (onPlatform && entity_place_meeting(x,y,"IPlatform"))) && !entity_collision_line(bbox_left,bbox_top,bbox_right,bbox_top))
 				{
 					y -= 1;
 				}

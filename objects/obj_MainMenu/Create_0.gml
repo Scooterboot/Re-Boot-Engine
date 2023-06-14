@@ -67,6 +67,8 @@ fileEnergy[0] = -1;
 fileEnergy[1] = -1;
 fileEnergy[2] = -1;
 
+itemList = ds_list_create();
+
 filePercent[0] = -1;
 filePercent[1] = -1;
 filePercent[2] = -1;
