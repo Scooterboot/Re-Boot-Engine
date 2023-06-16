@@ -172,6 +172,7 @@
     {"name":"Map","order":1,"path":"folders/Sprites/UI/Map.yy",},
     {"name":"SpriteFonts-old","order":9,"path":"folders/Sprites/UI/SpriteFonts-old.yy",},
     {"name":"Subscreens","order":3,"path":"folders/Sprites/UI/Subscreens.yy",},
+    {"name":"Samus_Retro","order":7,"path":"folders/Sprites/UI/Subscreens/Samus_Retro.yy",},
     {"name":"Samus","order":6,"path":"folders/Sprites/UI/Subscreens/Samus.yy",},
     {"name":"TextImages","order":7,"path":"folders/Sprites/UI/TextImages.yy",},
     {"name":"GPButtonTextImages","order":3,"path":"folders/Sprites/UI/TextImages/GPButtonTextImages.yy",},
@@ -180,7 +181,6 @@
     {"name":"XBButtonTextImages","order":4,"path":"folders/Sprites/UI/TextImages/XBButtonTextImages.yy",},
     {"name":"Tile Sets","order":4,"path":"folders/Tile Sets.yy",},
     {"name":"Timelines","order":10,"path":"folders/Timelines.yy",},
-    {"name":"Samus_Retro","order":7,"path":"folders/Sprites/UI/Subscreens/Samus_Retro.yy",},
   ],
   "ResourceOrderSettings": [
     {"name":"obj_MiniKraid_Spit","order":4,"path":"objects/obj_MiniKraid_Spit/obj_MiniKraid_Spit.yy",},
@@ -563,7 +563,6 @@
     {"name":"sprt_HNumFont2","order":1,"path":"sprites/sprt_HNumFont2/sprt_HNumFont2.yy",},
     {"name":"sprt_HEnergyText","order":2,"path":"sprites/sprt_HEnergyText/sprt_HEnergyText.yy",},
     {"name":"sprt_HETank","order":3,"path":"sprites/sprt_HETank/sprt_HETank.yy",},
-    {"name":"obj_MovingSolid","order":16,"path":"objects/obj_MovingSolid/obj_MovingSolid.yy",},
     {"name":"sprt_HMapBase","order":4,"path":"sprites/sprt_HMapBase/sprt_HMapBase.yy",},
     {"name":"sprt_Kraid_Bicep","order":10,"path":"sprites/sprt_Kraid_Bicep/sprt_Kraid_Bicep.yy",},
     {"name":"sprt_GrappleRipper","order":1,"path":"sprites/sprt_GrappleRipper/sprt_GrappleRipper.yy",},

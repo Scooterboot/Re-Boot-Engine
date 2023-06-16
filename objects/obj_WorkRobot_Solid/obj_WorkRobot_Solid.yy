@@ -12,10 +12,7 @@
     "name": "MovingSolids",
     "path": "folders/Objects/Entities/NPCs/Enemies/MovingSolids.yy",
   },
-  "parentObjectId": {
-    "name": "obj_MovingSolid",
-    "path": "objects/obj_MovingSolid/obj_MovingSolid.yy",
-  },
+  "parentObjectId": null,
   "persistent": false,
   "physicsAngularDamping": 0.1,
   "physicsDensity": 0.5,

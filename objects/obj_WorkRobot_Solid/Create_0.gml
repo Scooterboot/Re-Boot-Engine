@@ -82,6 +82,7 @@ for(var i = 0; i < 9; i++)
 	mBlocks[i] = instance_create_layer(x+offx,y+offy,layer_get_id("Collision"),type);
 	mBlocks[i].image_xscale = xscale;
 	mBlocks[i].image_yscale = yscale;
+	mBlocks[i].canGrip = false;
 	mBlockOffX[i] = offx;
 	mBlockOffY[i] = offy;
 	

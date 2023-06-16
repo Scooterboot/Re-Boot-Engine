@@ -206,6 +206,7 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Map","folderPath":"folders/Sprites/UI/Map.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"SpriteFonts-old","folderPath":"folders/Sprites/UI/SpriteFonts-old.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Subscreens","folderPath":"folders/Sprites/UI/Subscreens.yy",},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Samus_Retro","folderPath":"folders/Sprites/UI/Subscreens/Samus_Retro.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Samus","folderPath":"folders/Sprites/UI/Subscreens/Samus.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"TextImages","folderPath":"folders/Sprites/UI/TextImages.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"GPButtonTextImages","folderPath":"folders/Sprites/UI/TextImages/GPButtonTextImages.yy",},
@@ -215,7 +216,6 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"XBButtonTextImages","folderPath":"folders/Sprites/UI/TextImages/XBButtonTextImages.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Tile Sets","folderPath":"folders/Tile Sets.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Timelines","folderPath":"folders/Timelines.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Samus_Retro","folderPath":"folders/Sprites/UI/Subscreens/Samus_Retro.yy",},
   ],
   "IncludedFiles": [
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"discord-rpc.dll","CopyToMask":-1,"filePath":"datafiles",},
@@ -669,7 +669,6 @@
     {"id":{"name":"sprt_HNumFont2","path":"sprites/sprt_HNumFont2/sprt_HNumFont2.yy",},},
     {"id":{"name":"sprt_HEnergyText","path":"sprites/sprt_HEnergyText/sprt_HEnergyText.yy",},},
     {"id":{"name":"sprt_HETank","path":"sprites/sprt_HETank/sprt_HETank.yy",},},
-    {"id":{"name":"obj_MovingSolid","path":"objects/obj_MovingSolid/obj_MovingSolid.yy",},},
     {"id":{"name":"sprt_HMapBase","path":"sprites/sprt_HMapBase/sprt_HMapBase.yy",},},
     {"id":{"name":"sprt_Kraid_Bicep","path":"sprites/sprt_Kraid_Bicep/sprt_Kraid_Bicep.yy",},},
     {"id":{"name":"sprt_GrappleRipper","path":"sprites/sprt_GrappleRipper/sprt_GrappleRipper.yy",},},

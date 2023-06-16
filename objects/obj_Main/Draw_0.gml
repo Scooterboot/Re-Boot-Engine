@@ -186,9 +186,9 @@ if(debug == 1)
 	
     with(obj_Player)
     {
-		pal_swap_set(palShader,palIndex,palIndex2,palDif,false);
-		DrawPlayer(x,y,rotation,0.5);
-		shader_reset();
+		//pal_swap_set(palShader,palIndex,palIndex2,palDif,false);
+		//DrawPlayer(x,y,rotation,0.5);
+		//shader_reset();
 		
         draw_set_color(c_aqua);
         draw_set_alpha(0.75);

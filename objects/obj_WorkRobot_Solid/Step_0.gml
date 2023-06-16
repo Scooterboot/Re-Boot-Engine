@@ -10,13 +10,22 @@ if(instance_exists(creator) && creator.object_index == obj_WorkRobot)
 	x += LerpArray(creator.topOffsetX,creator.frame-3,true) * creator.dir;
 	y = creator.y;
 	
-	for(var i = 3; i < array_length(mBlocks); i++)
+	for(var i = 0; i < array_length(mBlocks); i++)
 	{
-		mBlockOffX[i] = mBlockOffX_default[i];
+		mBlocks[i].ignoredEntity = creator;
 		
-		var xdiff = x-creator.x;
+		if(i >= 3)
+		{
+			mBlockOffX[i] = mBlockOffX_default[i];
 		
-		mBlockOffX[i] -= xdiff * ((i-3) / 6);
+			var xdiff = x-creator.x;
+		
+			mBlockOffX[i] -= xdiff * ((i-3) / 6);
+		}
+		
+		var xx = x + mBlockOffX[i],
+			yy = y + mBlockOffY[i];
+		mBlocks[i].UpdatePosition(xx,yy);
 	}
 }
 else
@@ -29,4 +38,4 @@ else
 	exit;
 }
 
-UpdatePositions();
+//UpdatePositions();

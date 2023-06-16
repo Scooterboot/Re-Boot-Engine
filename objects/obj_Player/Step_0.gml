@@ -1744,7 +1744,29 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	carryVelX = 0;
 	carryVelY = 0;
 	
-	passthroughMovingSolids = (lhc_place_meeting(x,y,"IMovingSolid") && (state != State.Grip || !startClimb));
+	var colL = lhc_collision_line(bbox_left,bbox_top,bbox_left,bbox_bottom,"IMovingSolid",true,true),
+		colR = lhc_collision_line(bbox_right,bbox_top,bbox_right,bbox_bottom,"IMovingSolid",true,true),
+		colT = lhc_collision_line(bbox_left,bbox_top,bbox_right,bbox_top,"IMovingSolid",true,true),
+		colB = lhc_collision_line(bbox_left,bbox_bottom,bbox_right,bbox_bottom,"IMovingSolid",true,true);
+	if (lhc_place_meeting(x,y,"IMovingSolid") && (state != State.Grip || !startClimb) && colL+colR+colT+colB >= 3)
+	{
+		passthru = min(passthru+1,passthruMax);
+	}
+	else
+	{
+		passthru = 0;
+	}
+	passthroughMovingSolids = (passthru >= passthruMax);
+	if(passthroughMovingSolids)
+	{
+		array_resize(solids,1);
+		solids[0] = "ISolid";
+	}
+	else
+	{
+		solids[0] = "ISolid";
+		solids[1] = "IMovingSolid";
+	}
 	
 #endregion
 	
@@ -1762,46 +1784,101 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		if(!entity_place_collide(0,-4) && ((state == State.Jump && !entity_place_collide(0,3)) || (state == State.Somersault && !entity_place_collide(0,11))))//19))
 		{
+			/*
 			//var colSlope = collision_line(x+6*move2,y-22,x+10*move2,y-22,obj_Slope,true,true);
 			var colSlope = collision_line(x+6*move2,y-22,x+10*move2,y-22,all,true,true);
-			if(colSlope && !asset_has_any_tag(colSlope.object_index,"ISlope",asset_object) && (!asset_has_any_tag(colSlope.object_index,"ISolid",asset_object) || !asset_has_any_tag(colSlope.object_index,"IMovingSolid",asset_object)))
+			if(colSlope && !asset_has_any_tag(colSlope.object_index,"ISlope",asset_object) && !asset_has_any_tag(colSlope.object_index,solids,asset_object))
 			{
 				colSlope = noone;
 			}
 			if(entity_position_collide(6*move2,-17) && !entity_collision_line(x+6*move2,y-22,x+6*move2,y-26) &&
 			(!colSlope || (colSlope.image_yscale <= 1 && sign(colSlope.image_xscale) == -dir)) && entity_place_collide(move2,0) && dir == move2)
 			{
+				var canGrip = true;
 				var colLine = collision_line(x,bbox_top,x+16*move2,bbox_top,all,true,true);
-				if(colLine && (asset_has_any_tag(colLine.object_index,"ISolid",asset_object) || asset_has_any_tag(colLine.object_index,"IMovingSolid",asset_object)))
+				if(colLine && asset_has_any_tag(colLine.object_index,solids,asset_object))
 				{
-					if(colLine == colSlope && sign(colSlope.image_xscale) == -dir)
+					if (colLine.object_index == obj_Tile || object_is_ancestor(colLine.object_index,obj_Tile) ||
+						colLine.object_index == obj_MovingTile || object_is_ancestor(colLine.object_index,obj_MovingTile))
 					{
-						y = colLine.bbox_bottom+17;
+						canGrip = colLine.canGrip;
 					}
-					else
+					if(canGrip)
 					{
-						y = colLine.bbox_top+17;
+						if(colLine == colSlope && sign(colSlope.image_xscale) == -dir)
+						{
+							y = colLine.bbox_bottom+17;
+						}
+						else
+						{
+							y = colLine.bbox_top+17;
+						}
 					}
 				}
 				
-				for(var i = 10; i > 0; i--)
+				if(canGrip)
 				{
-					if(entity_position_collide(6*move2,-18))
+					for(var i = 10; i > 0; i--)
 					{
-						y -= 1;
+						if(entity_position_collide(6*move2,-18))
+						{
+							y -= 1;
+						}
 					}
+				
+					audio_play_sound(snd_Grip,0,false);
+					jump = 0;
+					fVelY = 0;
+					velY = 0;
+				
+					ChangeState(State.Grip,State.Grip,mask_Jump,false);
+					dir = move2;
+				
+					instance_destroy(grapple);
 				}
-				
-				audio_play_sound(snd_Grip,0,false);
-				jump = 0;
-				fVelY = 0;
-				velY = 0;
-				
-				ChangeState(State.Grip,State.Grip,mask_Jump,false);
-				dir = move2;
-				
-				instance_destroy(grapple);
 			}
+			*/
+			
+			var num = instance_place_list(x+move2,y,all,block_list,true);
+				num += instance_position_list(x+6*move2,y-17,all,block_list,true);
+			for(var i = 0; i < num; i++)
+			{
+				if (instance_exists(block_list[| i]) && asset_has_any_tag(block_list[| i].object_index,solids,asset_object) && 
+					(!asset_has_any_tag(block_list[| i].object_index,"ISlope",asset_object) || sign(block_list[| i].image_xscale) == dir))
+				{
+					var block = block_list[| i];
+					var canGrip = true;
+					if (block.object_index == obj_Tile || object_is_ancestor(block.object_index,obj_Tile) ||
+						block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
+					{
+						canGrip = block.canGrip;
+					}
+					if(canGrip && lhc_position_meeting(x+6*move2,y-17,solids) && !lhc_collision_line(x+6*move2,y-22,x+6*move2,y-26,solids,true,true) && lhc_place_meeting(x+move2,y,solids) && dir == move2)
+					{
+						for(var i = 10; i > 0; i--)
+						{
+							if(lhc_position_meeting(x+6*move2,y-18,solids))
+							{
+								y -= 1;
+							}
+						}
+				
+						audio_play_sound(snd_Grip,0,false);
+						jump = 0;
+						fVelY = 0;
+						velY = 0;
+				
+						ChangeState(State.Grip,State.Grip,mask_Jump,false);
+						dir = move2;
+				
+						instance_destroy(grapple);
+						
+						ds_list_clear(block_list);
+						break;
+					}
+				}
+			}
+			ds_list_clear(block_list);
 		}
 	}
 #endregion
@@ -1823,9 +1900,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			// then again, 'if it looks stupid, but works, it isn't stupid.'
 			for(var i = 0; i < 2; i++)
 			{
-				if(i == 0 && lhc_collision_rectangle(x,bbottom-8,x+6*dir,bbottom-5,"ISolid",true,true))
+				if(i == 0 && lhc_collision_rectangle(x,bbottom-8,x+6*dir,bbottom-5,solids,true,true))
 				{
-					while(qcHeight > -heightMax && lhc_collision_line(x,bbottom+qcHeight,x+6*dir,bbottom+qcHeight,"ISolid",true,true))
+					while(qcHeight > -heightMax && lhc_collision_line(x,bbottom+qcHeight,x+6*dir,bbottom+qcHeight,solids,true,true))
 					{
 						qcHeight--;
 					}
@@ -1834,7 +1911,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				else if(i == 1)
 				{
 					qcHeight = -heightMax;
-					while(qcHeight < -5 && !lhc_collision_line(x,bbottom+qcHeight,x+6*dir,bbottom+qcHeight,"ISolid",true,true))
+					while(qcHeight < -5 && !lhc_collision_line(x,bbottom+qcHeight,x+6*dir,bbottom+qcHeight,solids,true,true))
 					{
 						qcHeight++;
 					}
@@ -1861,9 +1938,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			
 					yHeight += slopeOffset;
 			
-					if(!lhc_collision_rectangle(x+6*dir,yHeight-15,x+16*dir,yHeight-2,"ISolid",true,true))
+					if(!lhc_collision_rectangle(x+6*dir,yHeight-15,x+16*dir,yHeight-2,solids,true,true))
 					{
-						if(!lhc_collision_rectangle(x+6*dir,yHeight-31,x+16*dir,yHeight-2,"ISolid",true,true))
+						if(!lhc_collision_rectangle(x+6*dir,yHeight-31,x+16*dir,yHeight-2,solids,true,true))
 						{
 							quickClimbTarget = 2;
 						}
@@ -2296,7 +2373,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		if ((entity_place_collide(-8*move2,0) && entity_place_collide(-8*move2,8)) || 
 			(lhc_place_meeting(x-8*move2,y,"IPlatform") && lhc_place_meeting(x-8*move2,y+8,"IPlatform")))
 		{
-			if(!lhc_collision_line(x-4*move2,y+9,x-4*move2,y+25,"ISolid",true,true) && wallJumpDelay <= 0 && move2 != 0 && wjFrame <= 0)
+			if(!lhc_collision_line(x-4*move2,y+9,x-4*move2,y+25,solids,true,true) && wallJumpDelay <= 0 && move2 != 0 && wjFrame <= 0)
 			{
 				canWallJump = true;
 			}
@@ -2435,7 +2512,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		if ((entity_place_collide(-8*move2,0) && entity_place_collide(-8*move2,8)) || 
 			(lhc_place_meeting(x-8*move2,y,"IPlatform") && lhc_place_meeting(x-8*move2,y+8,"IPlatform")))
 		{
-			if(!lhc_collision_line(x-4*move2,y+9,x-4*move2,y+25,"ISolid",true,true) && wallJumpDelay <= 0 && move2 != 0 && wjFrame <= 0)
+			if(!lhc_collision_line(x-4*move2,y+9,x-4*move2,y+25,solids,true,true) && wallJumpDelay <= 0 && move2 != 0 && wjFrame <= 0)
 			{
 				canWallJump = true;
 			}
@@ -2627,9 +2704,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 			}
 			
-			if(!lhc_collision_rectangle(x+6*dir,y-30+slopeOffset,x+16*dir,y-18+slopeOffset,"ISolid",true,true))
+			if(!lhc_collision_rectangle(x+6*dir,y-30+slopeOffset,x+16*dir,y-18+slopeOffset,solids,true,true))
 			{
-				if(!lhc_collision_rectangle(x+6*dir,y-46+slopeOffset,x+16*dir,y-34+slopeOffset,"ISolid",true,true))
+				if(!lhc_collision_rectangle(x+6*dir,y-46+slopeOffset,x+16*dir,y-34+slopeOffset,solids,true,true))
 				{
 					climbTarget = 2;
 				}

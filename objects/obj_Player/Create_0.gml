@@ -1017,6 +1017,8 @@ mbTrailAlpha = 0;
 block_list = ds_list_create();
 
 passthroughMovingSolids = false;
+passthru = 0;
+passthruMax = 2;
 
 function entity_place_collide()
 {
@@ -1047,35 +1049,12 @@ function entity_place_collide()
 		}
 	}
 	
-	//if((isSpeedBoosting && shineStart <= 0) || isScrewAttacking)
-	//{
-	//	return SpeedAndScrewBlockCheck(instance_place_list(xx+offsetX,yy+offsetY,all,block_list,true));
-	//}
-	
-	//return entity_place_meeting(xx+offsetX,yy+offsetY,"ISolid");
-	if(lhc_place_meeting(xx+offsetX,yy+offsetY,"ISolid"))
+	if((isSpeedBoosting && shineStart <= 0) || isScrewAttacking)
 	{
-		var num = instance_place_list(xx+offsetX,yy+offsetY,all,block_list,true);
-		for(var i = 0; i < num; i++)
-		{
-			if(instance_exists(block_list[| i]) && asset_has_any_tag(block_list[| i].object_index,"ISolid",asset_object))// && !asset_has_any_tag(block_list[| i].object_index,"IMovingSolid",asset_object))
-			{
-				var block = block_list[| i];
-				var isMovingSolid = asset_has_any_tag(block.object_index,"IMovingSolid",asset_object);
-				
-				var sp = (asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting && shineStart <= 0),
-					sc = (asset_has_any_tag(block.object_index, "IScrewBlock", asset_object) && isScrewAttacking);
-				
-				if((!isMovingSolid || !passthroughMovingSolids) && !sp && !sc)
-				{
-					ds_list_clear(block_list);
-					return true;
-				}
-			}
-		}
-		ds_list_clear(block_list);
+		return SpeedAndScrewBlockCheck(instance_place_list(xx+offsetX,yy+offsetY,all,block_list,true));
 	}
-	return false;
+	
+	return lhc_place_meeting(xx+offsetX,yy+offsetY,solids);
 }
 function entity_position_collide()
 {
@@ -1098,35 +1077,30 @@ function entity_position_collide()
 		}
 	}
 	
-	//if((isSpeedBoosting && shineStart <= 0) || isScrewAttacking)
-	//{
-	//	return SpeedAndScrewBlockCheck(instance_position_list(xx+offsetX,yy+offsetY,all,block_list,true));
-	//}
+	if((isSpeedBoosting && shineStart <= 0) || isScrewAttacking)
+	{
+		return SpeedAndScrewBlockCheck(instance_position_list(xx+offsetX,yy+offsetY,all,block_list,true));
+	}
 	
-	return lhc_position_meeting(xx+offsetX,yy+offsetY,"ISolid");
+	return lhc_position_meeting(xx+offsetX,yy+offsetY,solids);
 }
 function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
 {
-	//if((isSpeedBoosting && shineStart <= 0) || isScrewAttacking)
-	//{
-	//	return SpeedAndScrewBlockCheck(collision_line_list(x1,y1,x2,y2,all,prec,notme,block_list,true));
-	//}
-	return lhc_collision_line(x1,y1,x2,y2,"ISolid",prec,notme);
-}
-/*function SpeedAndScrewBlockCheck(instanceNum)
-{
-	if(instanceNum > 0)
+	if((isSpeedBoosting && shineStart <= 0) || isScrewAttacking)
 	{
-		for(var i = 0; i < instanceNum; i++)
+		return SpeedAndScrewBlockCheck(collision_line_list(x1,y1,x2,y2,all,prec,notme,block_list,true));
+	}
+	return lhc_collision_line(x1,y1,x2,y2,solids,prec,notme);
+}
+function SpeedAndScrewBlockCheck(instanceNum)
+{
+	for(var i = 0; i < instanceNum; i++)
+	{
+		if(instance_exists(block_list[| i]) && asset_has_any_tag(block_list[| i].object_index,solids,asset_object))
 		{
-			if(!instance_exists(block_list[| i]) || !asset_has_any_tag(block_list[| i].object_index,"ISolid",asset_object))
-			{
-				continue;
-			}
-			
 			var block = block_list[| i];
 			
-			var sp = (asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting),
+			var sp = (asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting && shineStart <= 0),
 				sc = (asset_has_any_tag(block.object_index, "IScrewBlock", asset_object) && isScrewAttacking);
 			if(!sp && !sc)
 			{
@@ -1137,7 +1111,7 @@ function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
 	}
 	ds_list_clear(block_list);
 	return false;
-}*/
+}
 function entityPlatformCheck()
 {
 	/// @description entityPlatformCheck

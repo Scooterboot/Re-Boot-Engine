@@ -284,9 +284,9 @@ if(tileCollide && impacted == 0)
 	//Collision_Normal(fVelX,fVelY,16,16,false,false);
 	
 	var counter = abs(fVelX)+abs(fVelY);
-	if(lhc_position_collide(fVelX,fVelY) || lhc_position_collide(0,0) || lhc_collision_line(xprevious-fVelX,yprevious-fVelY,x+fVelX,y+fVelY,"ISolid",true,true))
+	if(lhc_position_collide(fVelX,fVelY) || lhc_position_collide(0,0) || lhc_collision_line(xprevious-fVelX,yprevious-fVelY,x+fVelX,y+fVelY,solids,true,true))
 	{
-		while(!lhc_position_collide(sign(fVelX),sign(fVelY)) && !lhc_position_collide(0,0) && !lhc_collision_line(xprevious-fVelX,yprevious-fVelY,x+sign(fVelX),y+sign(fVelY),"ISolid",true,false) && counter > 0)
+		while(!lhc_position_collide(sign(fVelX),sign(fVelY)) && !lhc_position_collide(0,0) && !lhc_collision_line(xprevious-fVelX,yprevious-fVelY,x+sign(fVelX),y+sign(fVelY),solids,true,false) && counter > 0)
 		{
 			x += sign(fVelX);
 			y += sign(fVelY);

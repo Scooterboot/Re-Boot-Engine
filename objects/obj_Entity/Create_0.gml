@@ -5,6 +5,9 @@ velY = 0; // velocity y
 fVelX = 0; // final velocity x
 fVelY = 0; // final velocity y
 
+shiftedVelX = 0;
+shiftedVelY = 0;
+
 enum Edge
 {
 	None,
@@ -18,6 +21,9 @@ colEdge = Edge.Bottom;
 grounded = false;
 
 lhc_activate();
+
+solids[0] = "ISolid";
+solids[1] = "IMovingSolid";
 
 #region Base Collision Checks
 
@@ -41,7 +47,7 @@ function entity_place_collide()
 			yy = argument[3];
 		}
 	}
-	return lhc_place_meeting(xx+offsetX,yy+offsetY,"ISolid");
+	return lhc_place_meeting(xx+offsetX,yy+offsetY,solids);
 }
 
 function entity_position_collide()
@@ -64,12 +70,12 @@ function entity_position_collide()
 			yy = argument[3];
 		}
 	}
-	return lhc_position_meeting(xx+offsetX,yy+offsetY,"ISolid");
+	return lhc_position_meeting(xx+offsetX,yy+offsetY,solids);
 }
 
 function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
 {
-	return lhc_collision_line(x1,y1,x2,y2,"ISolid",prec,notme);
+	return lhc_collision_line(x1,y1,x2,y2,solids,prec,notme);
 }
 
 function GetSlopeAngle(slope)
@@ -151,7 +157,7 @@ function GetEdgeSlope()
 	{
 		for(var i = 0; i < col; i++)
 		{
-			if(!instance_exists(edgeSlope[| i]) || !asset_has_any_tag(edgeSlope[| i].object_index,"ISolid",asset_object) || !asset_has_any_tag(edgeSlope[| i].object_index,"ISlope",asset_object))
+			if(!instance_exists(edgeSlope[| i]) || !asset_has_any_tag(edgeSlope[| i].object_index,solids,asset_object) || !asset_has_any_tag(edgeSlope[| i].object_index,"ISlope",asset_object))
 			{
 				continue;
 			}
@@ -619,6 +625,9 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		
 		maxSpeedY = max(maxSpeedY-vStepY,0);
 	}
+	
+	shiftedVelX = 0;
+	shiftedVelY = 0;
 }
 #endregion
 
@@ -1209,6 +1218,9 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCo
 		maxSpeedX = max(maxSpeedX-vStepX,0);
 		maxSpeedY = max(maxSpeedY-vStepY,0);
 	}
+	
+	shiftedVelX = 0;
+	shiftedVelY = 0;
 }
 #endregion
 
@@ -1316,8 +1328,8 @@ function Collision_Basic(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, downSlo
 				xnum4++;
 			}
 			
-			var moveDownSlope_Bottom = (entity_place_collide(xnum3*sign(fVX)+sign(fVX),steepness));
-			var moveDownSlope_Top = (entity_place_collide(xnum4*sign(fVX)+sign(fVX),-steepness));
+			var moveDownSlope_Bottom = (entity_place_collide(0,1) && entity_place_collide(xnum3*sign(fVX)+sign(fVX),steepness));
+			var moveDownSlope_Top = (entity_place_collide(0,-1) && entity_place_collide(xnum4*sign(fVX)+sign(fVX),-steepness));
 			
 			if(moveDownSlope_Bottom || moveDownSlope_Top)
 			{
@@ -1465,8 +1477,8 @@ function Collision_Basic(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, downSlo
 				ynum4++;
 			}
 			
-			var moveDownSlope_Right = (entity_place_collide(steepness,ynum3*sign(fVY)+sign(fVY)));
-			var moveDownSlope_Left = (entity_place_collide(-steepness,ynum4*sign(fVY)+sign(fVY)));
+			var moveDownSlope_Right = (entity_place_collide(1,0) && entity_place_collide(steepness,ynum3*sign(fVY)+sign(fVY)));
+			var moveDownSlope_Left = (entity_place_collide(-1,0) && entity_place_collide(-steepness,ynum4*sign(fVY)+sign(fVY)));
 			
 			if(moveDownSlope_Right || moveDownSlope_Left)
 			{
@@ -1519,6 +1531,9 @@ function Collision_Basic(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, downSlo
 		
 		maxSpeedY = max(maxSpeedY-vStepY,0);
 	}
+	
+	shiftedVelX = 0;
+	shiftedVelY = 0;
 }
 
 /*function Collision_Basic(vX, vY, vStepX, vStepY)

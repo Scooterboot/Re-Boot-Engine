@@ -11,10 +11,7 @@
     "name": "CollisionTiles",
     "path": "folders/Objects/Room Elements/CollisionTiles.yy",
   },
-  "parentObjectId": {
-    "name": "obj_Tile",
-    "path": "objects/obj_Tile/obj_Tile.yy",
-  },
+  "parentObjectId": null,
   "persistent": false,
   "physicsAngularDamping": 0.1,
   "physicsDensity": 0.5,
