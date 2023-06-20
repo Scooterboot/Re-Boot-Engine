@@ -26,11 +26,8 @@ function scr_LoadGame()
 			var rm = _map[? "room"];
 			room_goto(asset_get_index(rm));
 		
-			with(instance_create_layer(0,0,"Player",obj_Player))
+			with(instance_create_layer(_map[? "x"],_map[? "y"],"Player",obj_Player))
 			{
-				x = _map[? "x"];
-				y = _map[? "y"];
-				
 				lhc_activate();
 				
 				water_init(0);
@@ -136,11 +133,8 @@ function scr_LoadGame()
 		var sx = 80,
 			sy = 694;
 		//instance_create_layer(sx,sy,"Player",obj_Player);
-		with(instance_create_layer(0,0,"Player",obj_Player))
+		with(instance_create_layer(sx,sy,"Player",obj_Player))
 		{
-			x = sx;
-			y = sy;
-			
 			lhc_activate();
 		}
 		instance_create_layer(sx-(global.resWidth/2),sy-(global.resHeight/2),"Camera",obj_Camera);

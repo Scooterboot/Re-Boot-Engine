@@ -3,6 +3,7 @@
 lhc_inherit_interface("IMovingSolid");
 
 canGrip = true;
+grappleCollision = true;
 
 entityList = ds_list_create();
 
@@ -64,15 +65,15 @@ function UpdatePosition(_x,_y)
 		{
 			var entity = entityList[| i];
 			var tileCollide = true;
-			if(object_is_ancestor(entity,obj_NPC))
+			if(object_is_ancestor(entity.object_index,obj_NPC))
 			{
 				tileCollide = entity.tileCollide;
 			}
-			if(object_is_ancestor(entity,obj_Projectile))
+			if(object_is_ancestor(entity.object_index,obj_Projectile))
 			{
 				tileCollide = false;
 			}
-			if(entity.object_index == obj_Player && entity.passthroughMovingSolids)
+			if(entity.passthroughMovingSolids)
 			{
 				tileCollide = false;
 			}
@@ -96,39 +97,25 @@ function UpdatePosition(_x,_y)
 					edgeBottom = place_meeting(x+bNumX*2,y+bNumY*2,entity),
 					edgeLeft = place_meeting(x+lNumX*2,y+lNumY*2,entity),
 					edgeRight = place_meeting(x+rNumX*2,y+rNumY*2,entity);
-				var entityEdgeBottom = (entity.colEdge == Edge.Bottom),
-					entityEdgeTop = (entity.colEdge == Edge.Top),
-					entityEdgeRight = (entity.colEdge == Edge.Right),
-					entityEdgeLeft = (entity.colEdge == Edge.Left);
-				if(entity.object_index == obj_Player)
-				{
-					entityEdgeBottom = (entity.colEdge == Edge.Bottom);
-					entityEdgeTop = (entity.colEdge == Edge.Top);
-					entityEdgeRight = (entity.colEdge == Edge.Right || (entity.state == State.Grip && entity.dir == 1));
-					entityEdgeLeft = (entity.colEdge == Edge.Left || (entity.state == State.Grip && entity.dir == -1));
-					
-					if(entity.spiderBall)
-					{
-						moveXFlag = true;
-						moveYFlag = true;
-					}
-				}
-				if(object_is_ancestor(entity.object_index,obj_NPC_Crawler))
-				{
-					moveXFlag = true;
-					moveYFlag = true;
-				}
-				if ((edgeTop && entityEdgeBottom) ||
-					(edgeBottom && entityEdgeTop) ||
-					(edgeLeft && (entityEdgeRight || bVelX < 0)) || 
-					(edgeRight && (entityEdgeLeft || bVelX > 0)))
+				var entityEdgeBottomX = entity.MoveStickBottom_X(id),
+					entityEdgeBottomY = entity.MoveStickBottom_Y(id),
+					entityEdgeTopX = entity.MoveStickTop_X(id),
+					entityEdgeTopY = entity.MoveStickTop_Y(id),
+					entityEdgeRightX = entity.MoveStickRight_X(id),
+					entityEdgeRightY = entity.MoveStickRight_Y(id),
+					entityEdgeLeftX = entity.MoveStickLeft_X(id),
+					entityEdgeLeftY = entity.MoveStickLeft_Y(id);
+				if ((edgeTop && entityEdgeBottomX) ||
+					(edgeBottom && entityEdgeTopX) ||
+					(edgeLeft && (entityEdgeRightX || bVelX < 0)) || 
+					(edgeRight && (entityEdgeLeftX || bVelX > 0)))
 				{
 					moveXFlag = true;
 				}
-				if ((edgeTop && (entityEdgeBottom || bVelY < 0)) || 
-					(edgeBottom && (entityEdgeTop || bVelY > 0)) ||
-					(edgeLeft && entityEdgeRight) || 
-					(edgeRight && entityEdgeLeft))
+				if ((edgeTop && (entityEdgeBottomY || bVelY < 0)) || 
+					(edgeBottom && (entityEdgeTopY || bVelY > 0)) ||
+					(edgeLeft && entityEdgeRightY) || 
+					(edgeRight && entityEdgeLeftY))
 				{
 					moveYFlag = true;
 				}

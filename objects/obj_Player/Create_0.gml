@@ -90,7 +90,8 @@ enum State
 	DmgBoost,
 	Death,
 	Dodge,
-	CrystalFlash
+	CrystalFlash,
+	Push
 };
 state = State.Stand; //stand, crouch, morph, jump, somersault, grip, spark, ballSpark, grapple, hurt
 prevState = state;
@@ -224,6 +225,14 @@ canDodge = true;
 dodgeRechargeMax = 20;
 dodgeRecharge = dodgeRechargeMax;
 dodgeRechargeRate = 0.5;
+
+isPushing = false;
+pushBlock = noone;
+//pushMove = array(0,0,1,1,1,0,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,1,1,0,1,0,0,0,0,1,0,1,0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,0,1,0,0,0,0,0,0,0,0,0);
+//pushMove = array(2, 2, 3, 4, 2, 1, 0, 3, 4, 1, 1, 3, 4, 3, 4, 3, 2, 0);
+pushMove = array(2, 2, 3, 4, 2, 1, 0, 0, 1, 1, 3, 4, 3, 4, 3, 2);
+pushSnd = noone;
+pushSndPlayed = false;
 
 liquidState = 0;
 outOfLiquid = (liquidState == 0);
@@ -530,11 +539,12 @@ enum Frame
 	GrappleLeg = 11,
 	Dodge = 12,
 	GrappleBody = 13,
-	CFlash = 14
+	CFlash = 14,
+	Push = 15
 };
 
-frame[14] = 0;
-frameCounter[14] = 0;
+frame[15] = 0;
+frameCounter[15] = 0;
 
 idleNum = array(32,8,8,8,16,6,6,6);
 idleSequence = array(0,1,2,3,4,3,2,1);
@@ -605,6 +615,8 @@ grapPartFrame = 0;
 grapPartCounter = 0;
 
 hurtFrame = 0;
+
+pushFrameSequence = array(0,1,2,3,4,5,5,6,7,8,9,9,10,11,12,13,14,15);
 
 torsoR = sprt_StandCenter;
 torsoL = torsoR;
@@ -1016,10 +1028,6 @@ mbTrailAlpha = 0;
 
 block_list = ds_list_create();
 
-passthroughMovingSolids = false;
-passthru = 0;
-passthruMax = 2;
-
 function entity_place_collide()
 {
 	/// @description entity_place_collide
@@ -1030,8 +1038,8 @@ function entity_place_collide()
 	
 	var offsetX = argument[0],
 		offsetY = argument[1],
-		xx = x,
-		yy = y;
+		xx = scr_round(position.X),
+		yy = scr_round(position.Y);
 	if(argument_count > 2)
 	{
 		xx = argument[2];
@@ -1066,8 +1074,8 @@ function entity_position_collide()
 	
 	var offsetX = argument[0],
 		offsetY = argument[1],
-		xx = x,
-		yy = y;
+		xx = scr_round(position.X),
+		yy = scr_round(position.Y);
 	if(argument_count > 2)
 	{
 		xx = argument[2];
@@ -1121,8 +1129,8 @@ function entityPlatformCheck()
 	/// @param baseY=y
 	var offsetX = argument[0],
 		offsetY = argument[1],
-		xx = x,
-		yy = y;
+		xx = scr_round(position.X),
+		yy = scr_round(position.Y);
 	if(argument_count > 2)
 	{
 		xx = argument[2];
@@ -1224,6 +1232,21 @@ function OnLeftCollision(fVX)
 }
 function OnXCollision(fVX)
 {
+	var pBlock = instance_place(position.X+2*sign(fVX),y,obj_PushBlock);
+	if(instance_exists(pBlock) && (state == State.Dodge || state == State.Spark || state == State.BallSpark))
+	{
+		var vx = 0;
+		if(velX > 0)
+		{
+			vx = max(velX,pBlock.velX);
+		}
+		if(velX < 0)
+		{
+			vx = min(velX,pBlock.velX);
+		}
+		pBlock.velX = vx;
+	}
+	
 	if(speedBoost && speedKillCounter < speedKillMax)
 	{
 		if(speedBoostWJ && speedBoostWallJump)
@@ -1259,7 +1282,7 @@ function OnXCollision(fVX)
 	var diagSparkSlide = (diagSparkSlideOnWalls && (abs(shineDir) == 1 || abs(shineDir) == 3) && !boots[Boots.ChainSpark]);
 	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && !diagSparkSlide)
 	{
-		if(boots[Boots.ChainSpark] && (abs(shineDir) == 2 || (!entity_place_collide(0,3) && abs(shineDir) > 2) || (!entity_place_collide(0,-3) && abs(shineDir) < 2)))
+		if(boots[Boots.ChainSpark] && !instance_exists(pBlock) && (abs(shineDir) == 2 || (!entity_place_collide(0,3) && abs(shineDir) > 2) || (!entity_place_collide(0,-3) && abs(shineDir) < 2)))
 		{
 			shineRestart = true;
 			audio_stop_sound(snd_ShineSpark_Charge);
@@ -1767,6 +1790,46 @@ function Crawler_DestroyBlock(bx,by)
 
 #endregion
 
+#region Moving Tile Stuff
+
+passthru = 0;
+passthruMax = 2;
+
+function MoveStickBottom_X(movingTile)
+{
+	return (colEdge == Edge.Bottom || spiderBall);
+}
+function MoveStickBottom_Y(movingTile)
+{
+	return (colEdge == Edge.Bottom || spiderBall);
+}
+function MoveStickTop_X(movingTile)
+{
+	return (colEdge == Edge.Top || spiderBall);
+}
+function MoveStickTop_Y(movingTile)
+{
+	return (colEdge == Edge.Top || spiderBall);
+}
+function MoveStickRight_X(movingTile)
+{
+	return (colEdge == Edge.Right || spiderBall || (state == State.Grip && dir == 1) || (isPushing && dir == 1)); //(isPushing && movingTile == pushBlock.mBlock && dir == 1));
+}
+function MoveStickRight_Y(movingTile)
+{
+	return (colEdge == Edge.Right || spiderBall || (state == State.Grip && dir == 1));
+}
+function MoveStickLeft_X(movingTile)
+{
+	return (colEdge == Edge.Left || spiderBall || (state == State.Grip && dir == -1) || (isPushing && dir == -1)); //(isPushing && movingTile == pushBlock.mBlock && dir == -1));
+}
+function MoveStickLeft_Y(movingTile)
+{
+	return (colEdge == Edge.Left || spiderBall || (state == State.Grip && dir == -1));
+}
+
+#endregion
+
 #region ChangeState
 function ChangeState(newState,newStateFrame,newMask,isGrounded)
 {
@@ -1786,17 +1849,18 @@ function ChangeState(newState,newStateFrame,newMask,isGrounded)
 			{
 				if(!entity_place_collide(0,1) && isGrounded)
 				{
-					y += 1;
+					position.Y += 1;
 				}
 			}
 			else
 			{
-				if((entity_place_collide(0,0) || (onPlatform && entity_place_meeting(x,y,"IPlatform"))) && !entity_collision_line(bbox_left,bbox_top,bbox_right,bbox_top))
+				if((entity_place_collide(0,0) || (onPlatform && lhc_place_meeting(x,y,"IPlatform"))) && !entity_collision_line(bbox_left,bbox_top,bbox_right,bbox_top))
 				{
-					y -= 1;
+					position.Y -= 1;
 				}
 			}
 		}
+		y = scr_round(position.Y);
 	}
 	state = newState;
 }
@@ -1998,7 +2062,8 @@ function PlayerGrounded()
 		ydiff = argument[0];
 	}
 	
-	var bottomCollision = (entity_place_collide(xdiff,ydiff) || (y+ydiff) >= room_height);
+	//var bottomCollision = (entity_place_collide(xdiff,ydiff) || (y+ydiff) >= room_height);
+	var bottomCollision = (entity_collision_line(bbox_left+xdiff,bbox_bottom+ydiff,bbox_right+xdiff,bbox_bottom+ydiff) || (y+ydiff) >= room_height);
 	
 	return (((bottomCollision && velY >= 0 && velY <= fGrav) || (spiderBall && spiderEdge != Edge.None)) && jump <= 0);
 }

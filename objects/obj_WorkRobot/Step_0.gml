@@ -7,7 +7,7 @@ if(PauseAI())
 }
 
 
-velX = mSpeed*dir;
+//velX = mSpeed*dir;
 
 var fspeed = mSpeed;
 if(frame < 3)
@@ -20,6 +20,28 @@ else
 }
 currentFrame = scr_floor(frame);
 
+if(currentFrame == 11 || currentFrame == 23)
+{
+	if(sndPlayedAt != currentFrame)
+	{
+		audio_play_sound(snd_WorkRobot,0,false);
+		sndPlayedAt = currentFrame;
+	}
+}
+else
+{
+	sndPlayedAt = 0;
+}
+
+if(movedAtFrame != currentFrame)
+{
+	velX = moveXSeq[currentFrame]*dir;
+	movedAtFrame = currentFrame;
+}
+else
+{
+	velX = 0;
+}
 
 grounded = (entity_place_collide(0,1) || (bbox_bottom+1) >= room_height);// && velY == 0);
 fGrav = grav[InWater];

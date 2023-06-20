@@ -5,15 +5,15 @@ if(global.gamePaused)
 	exit;
 }
 
-if(instance_exists(obj_Player) && place_meeting(x,y,obj_Player) && 
-	(obj_Player.state == State.Stand || obj_Player.state == State.Elevator) &&
-	obj_Player.grounded && abs(obj_Player.x - x) < 12)
+var player = instance_place(x,y,obj_Player);
+if (instance_exists(player) && (player.state == State.Stand || player.state == State.Elevator) &&
+	player.grounded && abs(player.x - x) < 12 && !player.grappleActive && !player.isPushing)
 {
 	if(saveCooldown <= 0)
 	{
 		if(saving <= 0)
 		{
-			if(obj_Player.dir == 0)
+			if(player.dir == 0)
 			{
 				saveCooldown = 60;
 			}
@@ -32,28 +32,28 @@ if(instance_exists(obj_Player) && place_meeting(x,y,obj_Player) &&
 				yy = bbox_bottom-41;
 			if(saving == maxSave)
 			{
-				obj_Player.state = State.Elevator;
-				obj_Player.saveAnimCounter = maxSave;
+				player.state = State.Elevator;
+				player.saveAnimCounter = maxSave;
 				scr_SaveGame(global.currentPlayFile,xx,yy);
 				audio_play_sound(snd_Save,0,false);
 				obj_UI.CreateMessageBox(gameSavedText,"",Message.Simple);
 			}
 			
-			if(obj_Player.x < xx)
+			if(player.x < xx)
 			{
-				obj_Player.x = min(obj_Player.x+1,xx);
+				player.x = min(player.x+1,xx);
 			}
 			else
 			{
-				obj_Player.x = max(obj_Player.x-1,xx);
+				player.x = max(player.x-1,xx);
 			}
-			if(obj_Player.y < yy)
+			if(player.y < yy)
 			{
-				obj_Player.y = min(obj_Player.y+1,yy);
+				player.y = min(player.y+1,yy);
 			}
 			else
 			{
-				obj_Player.y = max(obj_Player.y-1,yy);
+				player.y = max(player.y-1,yy);
 			}
 		
 			saving--;

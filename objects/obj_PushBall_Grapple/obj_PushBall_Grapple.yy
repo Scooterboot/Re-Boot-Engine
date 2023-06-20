@@ -1,0 +1,42 @@
+{
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "obj_PushBall_Grapple",
+  "eventList": [
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,},
+  ],
+  "managed": true,
+  "overriddenProperties": [],
+  "parent": {
+    "name": "SpecialTiles",
+    "path": "folders/Objects/Room Elements/SpecialTiles.yy",
+  },
+  "parentObjectId": {
+    "name": "obj_PushBall",
+    "path": "objects/obj_PushBall/obj_PushBall.yy",
+  },
+  "persistent": false,
+  "physicsAngularDamping": 0.1,
+  "physicsDensity": 0.5,
+  "physicsFriction": 0.2,
+  "physicsGroup": 1,
+  "physicsKinematic": false,
+  "physicsLinearDamping": 0.1,
+  "physicsObject": false,
+  "physicsRestitution": 0.1,
+  "physicsSensor": false,
+  "physicsShape": 1,
+  "physicsShapePoints": [],
+  "physicsStartAwake": true,
+  "properties": [],
+  "solid": false,
+  "spriteId": {
+    "name": "sprt_PushBall_Grapple",
+    "path": "sprites/sprt_PushBall_Grapple/sprt_PushBall_Grapple.yy",
+  },
+  "spriteMaskId": {
+    "name": "mask_PushBall",
+    "path": "sprites/mask_PushBall/mask_PushBall.yy",
+  },
+  "visible": true,
+}

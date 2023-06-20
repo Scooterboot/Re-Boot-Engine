@@ -109,6 +109,7 @@
     {"name":"inst_43CE09C2","path":"rooms/rm_debug02_Jungle01/rm_debug02_Jungle01.yy",},
     {"name":"inst_39F5843E","path":"rooms/rm_debug02_Jungle01/rm_debug02_Jungle01.yy",},
     {"name":"inst_38DD4D40","path":"rooms/rm_debug02_Jungle01/rm_debug02_Jungle01.yy",},
+    {"name":"inst_1500907B","path":"rooms/rm_debug02_Jungle01/rm_debug02_Jungle01.yy",},
   ],
   "isDnd": false,
   "layers": [
@@ -254,6 +255,7 @@
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_54FD0133","colour":4294967295,"frozen":false,"hasCreationCode":true,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"obj_DoorHatch_Missile","path":"objects/obj_DoorHatch_Missile/obj_DoorHatch_Missile.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":16.0,"y":688.0,},
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_1FA582A0","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"obj_DoorHatch","path":"objects/obj_DoorHatch/obj_DoorHatch.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":16.0,"y":128.0,},
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_17C6FC26","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"obj_DoorHatch","path":"objects/obj_DoorHatch/obj_DoorHatch.yy",},"properties":[],"rotation":0.0,"scaleX":-1.0,"scaleY":1.0,"x":1008.0,"y":128.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_1500907B","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"obj_PushBlock","path":"objects/obj_PushBlock/obj_PushBlock.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":912.0,"y":352.0,},
       ],"layers":[],"properties":[],"userdefinedDepth":false,"visible":true,},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Player","depth":1600,"effectEnabled":true,"effectType":null,"gridX":16,"gridY":16,"hierarchyFrozen":false,"inheritLayerDepth":true,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[],"layers":[],"properties":[],"userdefinedDepth":false,"visible":true,},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Projectiles","depth":1700,"effectEnabled":true,"effectType":null,"gridX":16,"gridY":16,"hierarchyFrozen":false,"inheritLayerDepth":true,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[],"layers":[],"properties":[],"userdefinedDepth":false,"visible":true,},

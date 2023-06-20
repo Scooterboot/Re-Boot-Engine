@@ -1109,7 +1109,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				{
 					//repeat(3)
 					//{
-						part_particles_create(obj_Particles.partSystemB,x-(8+random(4))*dir,bbox_bottom+random(4),obj_Particles.bDust,1);
+						part_particles_create(obj_Particles.partSystemB,x-(8+random(4))*dir,bbox_bottom+random(4),obj_Particles.bDust[1],1);
 					//}
 				}
 				bodyFrame = clamp(5 - ceil(brakeFrame/2), 0, 4);
@@ -2413,7 +2413,102 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				break;
 			}
 			#endregion
+			#region Push
+			case State.Push:
+			{
+				for(i = 0; i < array_length(frame); i += 1)
+	            {
+	                if(i != Frame.Push)
+	                {
+	                    frame[i] = 0;
+	                    frameCounter[i] = 0;
+	                }
+	            }
+	            aimFrame = 0;
+	            transFrame = 0;
+	            walkToStandFrame = 0;
+	            runToStandFrame[0] = 0;
+	            runToStandFrame[1] = 0;
+
+	            torsoR = sprt_PushRight;
+	            torsoL = sprt_PushLeft;
+
+	            if(grounded && move2 != 0 && instance_exists(pushBlock) && pushBlock.grounded)
+	            {
+					var animSpStart = 0.375 / (1+liquidMovement),
+						animSp = 0.275 / (1+liquidMovement);
+					if(cDash || global.autoDash)
+					{
+						animSpStart = 0.5 / (1+liquidMovement);
+						animSp = 0.375 / (1+liquidMovement);
+					}
+	                if(frame[Frame.Push] < 5)
+					{
+						frame[Frame.Push] += animSpStart
+					}
+					else
+					{
+						frame[Frame.Push] = scr_wrap(frame[Frame.Push] + animSp, 5, 18);
+					}
+					if(scr_floor(frame[Frame.Push]) == 16)
+					{
+						if(stepSndPlayedAt != scr_floor(frame[Frame.Push]))
+						{
+							audio_play_sound(snd_Step,0,false);
+							stepSndPlayedAt = scr_floor(frame[Frame.Push]);
+						}
+					}
+					else
+					{
+						stepSndPlayedAt = 0;
+					}
+					
+					/*if(pushMove[pushFrameSequence[scr_floor(frame[Frame.Push])]] >= 3 && abs(pushBlock.fVelX) > 0)
+					{
+						if(!audio_is_playing(pushSnd) || !pushSndPlayed)
+						{
+							pushSnd = audio_play_sound(snd_PushBlock_Move,0,false);
+							audio_sound_loop(pushSnd,true);
+							audio_sound_loop_start(pushSnd,0);
+							audio_sound_loop_end(pushSnd,0.115);
+							pushSndPlayed = true;
+						}
+					}
+					else
+					{
+						audio_sound_loop(pushSnd,false);
+						pushSndPlayed = false;
+					}
+					
+					if(pushMove[pushFrameSequence[scr_floor(frame[Frame.Push])]] >= 2 && abs(pushBlock.fVelX) > 0 && !pushBlock.InWater)
+					{
+						var dustX = irandom_range(pushBlock.bbox_left-2,pushBlock.x-5);
+						if(dir == -1)
+						{
+							dustX = irandom_range(pushBlock.x+5,pushBlock.bbox_right+2);
+						}
+						if(irandom(1) == 0)
+						{
+							dustX = irandom_range(pushBlock.bbox_left-2,pushBlock.bbox_right+2);
+						}
+						part_particles_create(obj_Particles.partSystemB,dustX,irandom_range(pushBlock.bbox_bottom-2,pushBlock.bbox_bottom+1),obj_Particles.bDust[0],1);
+					}*/
+	            }
+	            else
+	            {
+	                frame[Frame.Push] = clamp(frame[Frame.Push]-0.5,0,3);
+	            }
+	            bodyFrame = pushFrameSequence[scr_floor(frame[Frame.Push])];
+				break;
+			}
+			#endregion
 		}
+	}
+	
+	if(stateFrame != State.Push)
+	{
+		audio_sound_loop(pushSnd,false);
+		pushSndPlayed = false;
 	}
 	
 	if(rotation == 0)
@@ -2632,7 +2727,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	{
 		var noBeamsActive = (beam[Beam.Ice]+beam[Beam.Wave]+beam[Beam.Spazer]+beam[Beam.Plasma] <= 0);
 		
-		var canShoot = (!startClimb && !brake && state != State.Somersault && state != State.Spark && state != State.BallSpark && 
+		var canShoot = (!startClimb && !brake && !isPushing && state != State.Somersault && state != State.Spark && state != State.BallSpark && 
 						state != State.Hurt && (stateFrame != State.DmgBoost || dBoostFrame >= 19) && state != State.Dodge && state != State.Death);
 		
 		if(!canShoot)
@@ -2839,7 +2934,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				}
 			}
 		
-			if(beam[Beam.Charge] && !unchargeable && !enqueShot && //(canShoot || statCharge >= 10) &&
+			if(beam[Beam.Charge] && !unchargeable && !enqueShot && !isPushing && //(canShoot || statCharge >= 10) &&
 			((state != State.Morph && stateFrame != State.Morph) || (statCharge >= 10 && (itemSelected == 0 || (global.HUD <= 0 && itemHighlighted[1] == 4)) && misc[Misc.Bomb])))
 			{
 				statCharge = min(statCharge + 1, maxCharge);
@@ -2886,7 +2981,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		{
 			if(instance_exists(grapple))
 			{
-				if(grapple.grappled)
+				//if(grapple.grappled)
+				if(grapple.grappleState != GrappleState.None)
 				{
 					instance_destroy(grapple);
 				}
@@ -3181,4 +3277,7 @@ if(sndFlag)
 {
 	audio_stop_sound(snd_HeatDamageLoop);
     audio_stop_sound(snd_LavaDamageLoop);
+	
+	audio_sound_loop(pushSnd,false);
+	pushSndPlayed = false;
 }

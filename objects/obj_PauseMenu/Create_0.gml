@@ -566,7 +566,7 @@ useRetroPlayer = true;
 
 function DrawInventoryPlayer_Retro()
 {
-	var ww = global.resWidth;//, hh = global.resHeight;
+	var ww = global.resWidth, hh = global.resHeight;
 	var xx = ww/2,
 		yy = 70;
 
@@ -575,9 +575,10 @@ function DrawInventoryPlayer_Retro()
 	draw_rectangle(-1,-1,ww+1,global.resHeight+1,false);
 	draw_set_color(c_white);
 	draw_set_alpha(1);
-	gpu_set_blendmode(bm_add);
-	draw_sprite_ext(sprt_Sub_InvBG,0,ww/2,-20,1,1,0,c_white,1);
-	gpu_set_blendmode(bm_normal);
+	//gpu_set_blendmode(bm_add);
+	//draw_sprite_ext(sprt_Sub_InvBG,0,ww/2,-20,1,1,0,c_white,1);
+	//draw_sprite_ext(sprt_Sub_InvBG_Retro,0,ww/2,hh/2,1,1,0,c_white,1);
+	//gpu_set_blendmode(bm_normal);
 
 	var P = obj_Player;
 
@@ -636,7 +637,7 @@ function DrawInventoryPlayer_Retro()
 		
 		surface_reset_target();
 	
-		draw_surface_ext(playerInvSurf,2,1,1,1,0,c_black,1);
+		draw_surface_ext(playerInvSurf,1,1,1,1,0,c_black,0.75);
 		draw_surface_ext(playerInvSurf,0,0,1,1,0,c_white,1);
 	}
 	
@@ -707,11 +708,11 @@ function DrawInventoryPlayer_Retro()
 	{
 		if(playerGlowInd != playerGlowIndPrev)
 		{
-			playerFlashAlpha = 0.75;
+			playerFlashAlpha = 0.5;
 		}
 		if(toggleItem)
 		{
-			playerFlashAlpha = 1;
+			playerFlashAlpha = 0.75;
 		}
 	
 		if(!surface_exists(playerGlowSurf))
@@ -784,11 +785,7 @@ function DrawInventoryPlayer_Retro()
 			
 			if(highlight_Beam)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,2+P.beam[Beam.Charge],xx,yy);
-				if(!highlight_Suit)
-				{
-					draw_sprite_ext(sprt_Sub_Samus_GlowMask_Retro,P.suit[Suit.Varia],xx,yy,1,1,0,c_black,1);
-				}
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,2+P.beam[Beam.Charge]+2*P.suit[Suit.Varia],xx,yy);
 			}
 			if(highlight_Suit)
 			{
@@ -796,27 +793,27 @@ function DrawInventoryPlayer_Retro()
 			}
 			if(highlight_Grip)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,4+P.suit[Suit.Varia],xx,yy);
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,6+P.suit[Suit.Varia],xx,yy);
 				if(P.misc[Misc.PowerGrip])
 				{
-					draw_sprite(sprt_Sub_Samus_GlowMask_Retro,6,xx,yy);
+					draw_sprite(sprt_Sub_Samus_GlowMask_Retro,8,xx,yy);
 				}
 			}
 			if(highlight_Torso)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,7+P.suit[Suit.Varia],xx,yy);
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,9+P.suit[Suit.Varia],xx,yy);
 			}
 			if(highlight_Boots1)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,9+P.boots[Boots.SpaceJump],xx,yy);
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,11+P.boots[Boots.SpaceJump],xx,yy);
 			}
 			if(highlight_Boots2)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,11+P.boots[Boots.HiJump],xx,yy);
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,13+P.boots[Boots.HiJump],xx,yy);
 			}
 			if(highlight_Visor)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,13,xx,yy);
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,15,xx,yy);
 			}
 			
 			surface_reset_target();
@@ -864,7 +861,9 @@ function DrawInventoryPlayer_Retro()
 		
 			if(playerFlashAlpha > 0)
 			{
-				draw_surface_ext(playerGlowSurf,0,0,1,1,0,make_color_rgb(136,232,16),playerFlashAlpha);
+				gpu_set_fog(true,make_color_rgb(136,232,16),0,0);
+				draw_surface_ext(playerGlowSurf,0,0,1,1,0,c_white,playerFlashAlpha);
+				gpu_set_fog(false,0,0,0);
 			}
 		
 			surface_reset_target();
@@ -879,7 +878,7 @@ function DrawInventoryPlayer_Retro()
 		playerGlowY = 0;
 	}
 
-	playerFlashAlpha = max(playerFlashAlpha-0.075,0);
+	playerFlashAlpha = max(playerFlashAlpha-0.05,0);
 
 	playerGlowIndPrev = playerGlowInd;
 

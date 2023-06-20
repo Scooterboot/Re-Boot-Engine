@@ -10,6 +10,12 @@ if(instance_exists(obj_Player) && !obj_Player.spiderBall)
     }
 }
 
+var pushBlock = instance_place(x,y-1,obj_PushBlock);
+if(instance_exists(pushBlock) && pushBlock.grounded && pushBlock.fVelY >= 0)
+{
+	crumble = true;
+}
+
 if(crumble)
 {
     if(time >= timeLeft)

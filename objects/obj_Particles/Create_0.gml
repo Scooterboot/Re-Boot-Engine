@@ -6,7 +6,7 @@ part_system_layer(partSystemA,layer_get_id("Projectiles_fg"));
 part_system_automatic_update(partSystemA,false);
 
 partSystemB = part_system_create();
-part_system_layer(partSystemB,layer_get_id("Player"));
+part_system_layer(partSystemB,layer_get_id("WorldObjects"));
 part_system_automatic_update(partSystemB,false);
 
 partSystemC = part_system_create();
@@ -15,11 +15,17 @@ part_system_automatic_update(partSystemC,false);
 
 
 //Basic dust
-bDust = part_type_create();
-part_type_sprite(bDust,sprt_BasicDust,true,true,false);
-part_type_life(bDust,8,16);
-part_type_direction(bDust,85,95,0,0);
-part_type_speed(bDust,0.5,0.75,0.025,0);
+bDust[0] = part_type_create();
+part_type_sprite(bDust[0],sprt_BasicDust,true,true,false);
+part_type_life(bDust[0],8,16);
+part_type_direction(bDust[0],0,180,0,0);
+part_type_speed(bDust[0],0.25,0.375,0,0);
+
+bDust[1] = part_type_create();
+part_type_sprite(bDust[1],sprt_BasicDust,true,true,false);
+part_type_life(bDust[1],8,16);
+part_type_direction(bDust[1],85,95,0,0);
+part_type_speed(bDust[1],0.5,0.75,0.025,0);
 
 //Muzzle Flare
 mFlare[0] = part_type_create();

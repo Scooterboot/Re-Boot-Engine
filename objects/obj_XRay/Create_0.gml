@@ -210,6 +210,10 @@ function xray_redraw_outline()
 			draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
 		}
 	}
+	with (obj_MovingTile)
+	{
+		draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
+	}
 	with (obj_DoorHatch)
 	{
 		draw_sprite_ext(sprite_index,5,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);

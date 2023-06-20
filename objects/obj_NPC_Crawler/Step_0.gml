@@ -53,7 +53,11 @@ if(colEdge == Edge.None)
 	}
 }
 
-if(entity_place_collide(0,0))
+var colL = entity_collision_line(bbox_left,bbox_top,bbox_left,bbox_bottom),
+	colR = entity_collision_line(bbox_right,bbox_top,bbox_right,bbox_bottom),
+	colT = entity_collision_line(bbox_left,bbox_top,bbox_right,bbox_top),
+	colB = entity_collision_line(bbox_left,bbox_bottom,bbox_right,bbox_bottom);
+if(entity_place_collide(0,0) && colL+colR+colT+colB >= 3)
 {
 	var flag3 = false;
 	var dirX = 0, dirY = 0;
@@ -86,8 +90,11 @@ if(entity_place_collide(0,0))
 			
 	velX = mSpeed*dirX;
 	velY = mSpeed*dirY;
-	x += velX;
-	y += velY;
+	position.X += velX;
+	position.Y += velY;
+	
+	x = scr_round(position.X);
+	y = scr_round(position.Y);
 }
 else
 {

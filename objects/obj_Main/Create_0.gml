@@ -74,6 +74,7 @@ stateText[15] = "DmgBoost";
 stateText[16] = "Death";
 stateText[17] = "Dodge";
 stateText[18] = "CrystalFlash";
+stateText[19] = "Push";
 
 edgeText[0] = "None";
 edgeText[1] = "Bottom";

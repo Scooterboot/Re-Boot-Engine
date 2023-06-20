@@ -23,6 +23,9 @@ currentFrame = 0;
 frame = 0;
 frameCounter = 0;
 
+moveXSeq = array(1,1,1,0,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1);
+movedAtFrame = -1;
+
 topOffsetX = array(
  0,-1,-2,-4,
 -7,-2, 0, 2,
@@ -48,6 +51,8 @@ maxGrav = 2;
 justFell = false;
 
 grounded = false;
+
+sndPlayedAt = 0;
 
 water_init(bbox_bottom-y);
 CanSplash = 1;

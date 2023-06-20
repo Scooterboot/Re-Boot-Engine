@@ -60,6 +60,10 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 		speedX = player.fVelX,
 		speedY = player.fVelY;
 	
+	if(player.isPushing)
+	{
+		speedX = player.x - player.xprevious;
+	}
 	if(player.state == State.Hurt)
 	{
 		speedX = 0;

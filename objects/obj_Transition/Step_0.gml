@@ -14,8 +14,8 @@ if(room != goal)
     {
         angle = door.image_angle;
 
-        samusX = obj_Player.x - camera_get_view_x(view_camera[0]);
-        samusY = obj_Player.y - camera_get_view_y(view_camera[0]);
+        samusX = obj_Player.position.X - camera_get_view_x(view_camera[0]);
+        samusY = obj_Player.position.Y - camera_get_view_y(view_camera[0]);
 		if(obj_Player.state == State.Stand && obj_Player.stateFrame == State.Stand)
 		{
 			obj_Player.stateFrame = State.Run;
@@ -62,8 +62,8 @@ else
 				yDiff = scr_round(obj_Camera.y-obj_Camera.playerY);
 			camera_set_view_pos(view_camera[0], scr_round(obj_Camera.playerX)+xDiff, scr_round(obj_Camera.playerY)+yDiff);
 		}
-        obj_Player.x = nextDoor.x + difX + lengthdir_x(spawnDist, nextDoor.image_angle) + lengthdir_x(obj_Player.bbox_right - obj_Player.bbox_left, nextDoor.image_angle);
-        obj_Player.y = nextDoor.y + difY + lengthdir_y(spawnDist, nextDoor.image_angle) + lengthdir_y(obj_Player.bbox_bottom - obj_Player.bbox_top, nextDoor.image_angle);
+        obj_Player.position.X = nextDoor.x + difX + lengthdir_x(spawnDist, nextDoor.image_angle) + lengthdir_x(obj_Player.bbox_right - obj_Player.bbox_left, nextDoor.image_angle);
+        obj_Player.position.Y = nextDoor.y + difY + lengthdir_y(spawnDist, nextDoor.image_angle) + lengthdir_y(obj_Player.bbox_bottom - obj_Player.bbox_top, nextDoor.image_angle);
         with(obj_Player)
         {
             var gNum = 16;
@@ -82,14 +82,17 @@ else
 				//array_fill(mbTrailPosX, scr_round(x) + sprtOffsetX);
 				//array_fill(mbTrailPosY, scr_round(x) + sprtOffsetX);
 			}
+			
+			x = scr_round(position.X);
+			y = scr_round(position.Y);
         }
         
         if(instance_exists(nextDoor.hatch))
         {
             nextDoor.hatch.frame = 4;
         }
-        nSamusX = obj_Player.x - camera_get_view_x(view_camera[0]);
-        nSamusY = obj_Player.y - camera_get_view_y(view_camera[0]);
+        nSamusX = obj_Player.position.X - camera_get_view_x(view_camera[0]);
+        nSamusY = obj_Player.position.Y - camera_get_view_y(view_camera[0]);
         angle = nextDoor.image_angle;
         if(samusX != nSamusX || samusY != nSamusY)
         {
