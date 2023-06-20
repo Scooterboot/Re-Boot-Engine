@@ -1803,6 +1803,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					{
 						canGrip = block.canGrip;
 					}
+					var slope = instance_position(x+8*move2,block.bbox_top-2,all)
+					if(instance_exists(slope) && asset_has_any_tag(slope.object_index,solids,asset_object) && asset_has_any_tag(slope.object_index,"ISlope",asset_object) && slope.image_yscale > 1)
+					{
+						canGrip = false;
+					}
 					if(canGrip && lhc_position_meeting(x+6*move2,y-17,solids) && !lhc_collision_line(x+6*move2,y-22,x+6*move2,y-26,solids,true,true) && lhc_place_meeting(x+move2,y,solids) && dir == move2)
 					{
 						position.Y = scr_round(position.Y);
