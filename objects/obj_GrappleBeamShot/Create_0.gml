@@ -55,8 +55,8 @@ function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
 			}
 			if(flag)
 			{
-				return true;
 				ds_list_clear(gp_list);
+				return true;
 			}
 		}
 	}

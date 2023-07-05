@@ -218,8 +218,8 @@ if(debug == 1)
         draw_text(xx+marginX,yy+30+marginY*5,"velY: "+string(velY));
         draw_text(xx+marginX,yy+30+marginY*6,"fVelX: "+string(fVelX));
         draw_text(xx+marginX,yy+30+marginY*7,"fVelY: "+string(fVelY));
-        draw_text(xx+marginX,yy+30+marginY*8,"X pos: "+string(x));
-        draw_text(xx+marginX,yy+30+marginY*9,"Y pos: "+string(y));
+        draw_text(xx+marginX,yy+30+marginY*8,"real pos (x . y): "+string(x) + " x "+string(y));
+        draw_text(xx+marginX,yy+30+marginY*9,"position (x . y): "+string(position.X) + " x "+string(position.Y));
 		
 		
 		draw_text(xx+marginX,yy+30+marginY*11,"speedCounter: "+string(speedCounter));
@@ -278,7 +278,7 @@ if(debug == 1)
 if(debug > 0)
 {
 	var xx = camera_get_view_x(view_camera[0]),
-		yy = camera_get_view_y(view_camera[0]),
+		yy = camera_get_view_y(view_camera[0]);
 	
 	var dbStr = "debug mode";
 	if(instance_exists(obj_Player) && obj_Player.godmode)

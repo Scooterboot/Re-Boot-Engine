@@ -1,4 +1,13 @@
 /// @description Initialize
+
+audio_group_load(audio_music);
+audio_group_load(audio_sound);
+audio_group_load(audio_ambiance);
+
+audio_group_set_gain(audio_music,global.musicVolume,0);
+audio_group_set_gain(audio_sound,global.soundVolume,0);
+audio_group_set_gain(audio_ambiance,global.ambianceVolume,0);
+
 playItemFanfare = false;
 skipItemFanfare = false;
 fanfare = noone;
@@ -29,7 +38,7 @@ function LoopedSong(_snd, _loopStart, _loopEnd) constructor
 			loops = argument[1];
 		}
 		song = audio_play_sound(songID,priority,loops);
-		audio_sound_gain(song,global.musicVolume,0);
+		audio_sound_gain(song,1,0);
 		
 		audio_sound_loop(song, loops);
 		audio_sound_loop_start(song, loopStart);
@@ -102,6 +111,9 @@ global.music_UpperNorfair = new LoopedSong(mus_UpperNorfair, 22.855, 101.109);
 global.music_BossTension = new LoopedSong(mus_BossTension,0.027,62.945);
 global.music_Boss1 = new LoopedSong(mus_Boss1,13.712,39.692);
 
+global.prevShotSndIndex = noone;
+global.prevExplodeSnd = noone;
+global.breakSndCounter = 0;
 
 sndPauseArray = array(
 snd_Somersault,

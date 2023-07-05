@@ -46,13 +46,13 @@ function Logger(_fname, _path = working_directory) constructor {
 		
 		for (var i = 0; i < argument_count; i++) {
 			// If an array is recieved, converts it into string, else, use the string of the argument.
+			var _substr = "";
 			if (is_array(argument[i])) {
-				var _substr = "";
 				for (var j = 0; j < array_length(argument[i]); j++ ) {
 					_substr += string(argument[i][j]);
 				}
 			} else {
-				var _substr = string(argument[i]);
+				_substr = string(argument[i]);
 			}
 		
 			_msg += _substr;

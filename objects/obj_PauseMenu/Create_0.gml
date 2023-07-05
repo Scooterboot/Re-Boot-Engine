@@ -99,6 +99,13 @@ headerText = array(
 "OPTIONS",
 "LOG BOOK");
 
+itemHeaderText = array(
+"SUIT",
+"BEAM",
+"EQUIP",
+"GEAR",
+"BOOTS");
+
 suitName = array(
 "VARIA SUIT",
 "GRAVITY SUIT");
@@ -575,10 +582,152 @@ function DrawInventoryPlayer_Retro()
 	draw_rectangle(-1,-1,ww+1,global.resHeight+1,false);
 	draw_set_color(c_white);
 	draw_set_alpha(1);
-	//gpu_set_blendmode(bm_add);
-	//draw_sprite_ext(sprt_Sub_InvBG,0,ww/2,-20,1,1,0,c_white,1);
-	//draw_sprite_ext(sprt_Sub_InvBG_Retro,0,ww/2,hh/2,1,1,0,c_white,1);
-	//gpu_set_blendmode(bm_normal);
+	gpu_set_blendmode(bm_add);
+	//draw_sprite_ext(sprt_Sub_InvBG,0,ww/2,hh+45,1,-1,0,c_white,1);
+	draw_sprite_ext(sprt_Sub_InvBG_Retro,0,ww/2,hh/2,1,1,0,c_white,1);
+	gpu_set_blendmode(bm_normal);
+	
+	draw_sprite_ext(sprt_Sub_Lines_Base,0,ww/2,hh/2,1,1,0,c_white,1);
+	var l = -1;
+	if(invPos != -1 && ((invPosX == 0 && !ds_list_empty(invListL)) || (invPosX == 1 && !ds_list_empty(invListR))))
+	{
+		var ability = invListL[| invPos];
+		if(invPosX == 1)
+		{
+			ability = invListR[| invPos];
+		}
+		var index = string_digits(ability);
+		
+		if(string_pos("Suit",ability) != 0)
+		{
+			l = 0;
+		}
+		else if(string_pos("Beam",ability) != 0)
+		{
+			l = 1;
+		}
+		else if(string_pos("Item",ability) != 0)
+		{
+			l = 2;
+			if(index = Item.PBomb || index = Item.XRay)
+			{
+				l = 3;
+			}
+		}
+		else if(string_pos("Misc",ability) != 0)
+		{
+			l = 4;
+			if(index == Misc.PowerGrip)
+			{
+				l = 5;
+			}
+		}
+		else if(string_pos("Boots",ability) != 0)
+		{
+			l = 7;
+			if(index == Boots.HiJump || index == Boots.SpaceJump)
+			{
+				l = 6;
+			}
+		}
+		
+		if(l != -1)
+		{
+			draw_sprite_ext(sprt_Sub_Lines,l,ww/2,hh/2,1,1,0,c_white,1);
+		}
+	}
+	
+	/*var lineX1 = 0,
+		lineY1 = 0,
+		lineX2 = 0,
+		lineY2 = 0,
+		lineX3 = 0,
+		lineY3 = 0;
+	if(invPos != -1 && ((invPosX == 0 && !ds_list_empty(invListL)) || (invPosX == 1 && !ds_list_empty(invListR))))
+	{
+		var ability = invListL[| invPos];
+		if(invPosX == 1)
+		{
+			ability = invListR[| invPos];
+		}
+		var index = string_digits(ability);
+		
+		if(string_pos("Suit",ability) != 0)
+		{
+			lineX1 = -75;
+			lineY1 = -63 + 10*invPos;
+			lineX2 = -28;
+			lineY2 = -43;
+		}
+		else if(string_pos("Beam",ability) != 0)
+		{
+			lineX1 = -75;
+			lineY1 = -25 + 10*(invPos-2);
+			lineX2 = -27;
+			lineY2 = 2;
+		}
+		else if(string_pos("Item",ability) != 0)
+		{
+			lineX1 = -75;
+			lineY1 = 43 + 10*(invPos-7);
+			lineX2 = -27;
+			lineY2 = 2;
+			if(index == Item.XRay)
+			{
+				lineX2 = -28;
+				lineY2 = -43;
+			}
+		}
+		else if(string_pos("Misc",ability) != 0)
+		{
+			lineX1 = 75;
+			lineY1 = -45 + 10*invPos;
+			lineX2 = 28;
+			lineY2 = -30;
+			if(index == Misc.PowerGrip)
+			{
+				lineY2 = -4;
+			}
+		}
+		else if(string_pos("Boots",ability) != 0)
+		{
+			lineX1 = 75;
+			lineY1 = 44 + 10*(invPos-6);
+			lineX2 = 19;
+			lineY2 = 48;
+			if(index == Boots.SpeedBoost || index == Boots.ChainSpark || index == Boots.Dodge)
+			{
+				lineX3 = 28;
+				lineY3 = -30;
+			}
+		}
+		
+		if(lineX1 != 0 && lineY1 != 0 )//&& ((lineX2 != 0 && lineY2 != 0) || (lineX3 != 0 && lineY3 != 0)))
+		{
+			draw_set_alpha(1);
+			for(var i = 0; i < 3; i++)
+			{
+				draw_set_color(make_color_rgb(46,107,0));
+				if(i == 1)
+				{
+					draw_set_color(c_white);
+				}
+				var xoff = ww/2,
+					yoff = hh/2 - 2 + 2*i;
+				//if(lineX1 < 0)
+				//{
+					if(lineX2 != 0 && lineY2 != 0)
+					{
+						draw_line(lineX1+xoff,lineY1+yoff,lineX2+xoff,lineY2+yoff);
+					}
+					if(lineX3 != 0 && lineY3 != 0)
+					{
+						draw_line(lineX1+xoff,lineY1+yoff,lineX3+xoff,lineY3+yoff);
+					}
+				//}
+			}
+		}
+	}*/
 
 	var P = obj_Player;
 
@@ -708,11 +857,11 @@ function DrawInventoryPlayer_Retro()
 	{
 		if(playerGlowInd != playerGlowIndPrev)
 		{
-			playerFlashAlpha = 0.5;
+			playerFlashAlpha = 0.6;//0.5;
 		}
 		if(toggleItem)
 		{
-			playerFlashAlpha = 0.75;
+			playerFlashAlpha = 0.85;//0.75;
 		}
 	
 		if(!surface_exists(playerGlowSurf))
@@ -842,7 +991,7 @@ function DrawInventoryPlayer_Retro()
 					ly = yy + wrap(i,0,totHeight) + playerGlowY;
 			
 				draw_set_color(c_white);
-				draw_set_alpha((1-(abs(i)/height))*0.75);
+				draw_set_alpha((1-(abs(i)/height))*0.85);
 				
 				var num = 2;
 				for(var k = 0; k < num; k++)

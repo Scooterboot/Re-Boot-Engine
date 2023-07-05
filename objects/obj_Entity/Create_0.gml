@@ -27,6 +27,8 @@ lhc_activate();
 solids[0] = "ISolid";
 solids[1] = "IMovingSolid";
 
+blockList = ds_list_create();
+
 #region Base Collision Checks
 
 function entity_place_collide()
@@ -39,8 +41,8 @@ function entity_place_collide()
 	
 	var offsetX = argument[0],
 		offsetY = argument[1],
-		xx = scr_round(position.X),
-		yy = scr_round(position.Y);
+		xx = position.X,
+		yy = position.Y;
 	if(argument_count > 2)
 	{
 		xx = argument[2];
@@ -49,7 +51,8 @@ function entity_place_collide()
 			yy = argument[3];
 		}
 	}
-	return lhc_place_meeting(xx+offsetX,yy+offsetY,solids);
+	//return lhc_place_meeting(xx+offsetX,yy+offsetY,solids);
+	return entity_collision(instance_place_list(xx+offsetX,yy+offsetY,all,blockList,true));
 }
 
 function entity_position_collide()
@@ -62,8 +65,8 @@ function entity_position_collide()
 	
 	var offsetX = argument[0],
 		offsetY = argument[1],
-		xx = scr_round(position.X),
-		yy = scr_round(position.Y);
+		xx = position.X,
+		yy = position.Y;
 	if(argument_count > 2)
 	{
 		xx = argument[2];
@@ -72,12 +75,37 @@ function entity_position_collide()
 			yy = argument[3];
 		}
 	}
-	return lhc_position_meeting(xx+offsetX,yy+offsetY,solids);
+	//return lhc_position_meeting(xx+offsetX,yy+offsetY,solids);
+	return entity_collision(instance_position_list(xx+offsetX,yy+offsetY,all,blockList,true));
 }
 
 function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
 {
-	return lhc_collision_line(x1,y1,x2,y2,solids,prec,notme);
+	//return lhc_collision_line(x1,y1,x2,y2,solids,prec,notme);
+	return entity_collision(collision_line_list(x1,y1,x2,y2,all,prec,notme,blockList,true));
+}
+
+function entity_collision(listNum)
+{
+	for(var i = 0; i < listNum; i++)
+	{
+		if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object))
+		{
+			var block = blockList[| i];
+			var isSolid = true;
+			if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
+			{
+				isSolid = block.isSolid;
+			}
+			if(isSolid)
+			{
+				ds_list_clear(blockList);
+				return true;
+			}
+		}
+	}
+	ds_list_clear(blockList);
+	return false;
 }
 
 function GetSlopeAngle(slope)
@@ -356,21 +384,21 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 			{
 				if(yplus > 0)
 				{
-					OnSlopeXCollision_Top(fVX);
 					position.Y = floor(position.Y + yplus);
 					if(entity_place_collide(fVX,0))
 					{
 						position.Y += 1;
 					}
+					OnSlopeXCollision_Top(fVX);
 				}
 				else
 				{
-					OnSlopeXCollision_Bottom(fVX);
 					position.Y = ceil(position.Y + yplus);
 					if(entity_place_collide(fVX,0))
 					{
 						position.Y -= 1;
 					}
+					OnSlopeXCollision_Bottom(fVX);
 				}
 			}
 		}
@@ -537,21 +565,21 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 			{
 				if(xplus > 0)
 				{
-					OnSlopeYCollision_Left(fVY);
 					position.X = floor(position.X + xplus);
 					if(entity_place_collide(0,fVY))
 					{
 						position.X += 1;
 					}
+					OnSlopeYCollision_Left(fVY);
 				}
 				else
 				{
-					OnSlopeYCollision_Right(fVY);
 					position.X = ceil(position.X + xplus);
 					if(entity_place_collide(0,fVY))
 					{
 						position.X -= 1;
 					}
+					OnSlopeYCollision_Right(fVY);
 				}
 			}
 		}
@@ -894,21 +922,21 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCo
 			{
 				if(yplus > 0)
 				{
-					Crawler_OnSlopeXCollision_Top(fVX);
 					position.Y = floor(position.Y + yplus);
 					if(entity_place_collide(fVX,0))
 					{
 						position.Y += 1;
 					}
+					Crawler_OnSlopeXCollision_Top(fVX);
 				}
 				else
 				{
-					Crawler_OnSlopeXCollision_Bottom(fVX);
 					position.Y = ceil(position.Y + yplus);
 					if(entity_place_collide(fVX,0))
 					{
 						position.Y -= 1;
 					}
+					Crawler_OnSlopeXCollision_Bottom(fVX);
 				}
 			}
 		}
@@ -1099,21 +1127,21 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCo
 			{
 				if(xplus > 0)
 				{
-					Crawler_OnSlopeYCollision_Left(fVY);
 					position.X = floor(position.X + xplus);
 					if(entity_place_collide(0,fVY))
 					{
 						position.X += 1;
 					}
+					Crawler_OnSlopeYCollision_Left(fVY);
 				}
 				else
 				{
-					Crawler_OnSlopeYCollision_Right(fVY);
 					position.X = ceil(position.X + xplus);
 					if(entity_place_collide(0,fVY))
 					{
 						position.X -= 1;
 					}
+					Crawler_OnSlopeYCollision_Right(fVY);
 				}
 			}
 		}
@@ -1232,6 +1260,8 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCo
 }
 #endregion
 
+#region Moving Solid Hooks
+
 passthroughMovingSolids = false;
 
 function MoveStickBottom_X(movingTile) { return (colEdge == Edge.Bottom); }
@@ -1243,9 +1273,21 @@ function MoveStickRight_Y(movingTile) { return (colEdge == Edge.Right); }
 function MoveStickLeft_X(movingTile) { return (colEdge == Edge.Left); }
 function MoveStickLeft_Y(movingTile) { return (colEdge == Edge.Left); }
 
-#region Collision_Basic
+// called on horizontal collision
+function MovingSolid_OnRightCollision(fVX) {} // -->|
+function MovingSolid_OnLeftCollision(fVX) {} // |<--
+function MovingSolid_OnXCollision(fVX) {} // same as both above
 
-function Collision_Basic(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, downSlopeSteepness_X = 5, upSlopeSteepness_Y = 0, downSlopeSteepness_Y = 0)
+// called on vertical collision
+function MovingSolid_OnBottomCollision(fVY) {}
+function MovingSolid_OnTopCollision(fVY) {}
+function MovingSolid_OnYCollision(fVY) {} // same as both above
+
+#endregion
+
+#region Collision_MovingSolid
+
+function Collision_MovingSolid(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, downSlopeSteepness_X = 5, upSlopeSteepness_Y = 5, downSlopeSteepness_Y = 5)
 {
 	var maxSpeedX = abs(vX),
 		maxSpeedY = abs(vY);
@@ -1293,10 +1335,12 @@ function Collision_Basic(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, downSlo
 			{
 				if(fVX > 0)
 				{
+					MovingSolid_OnRightCollision(fVX);
 					position.X = scr_floor(position.X);
 				}
 				if(fVX < 0)
 				{
+					MovingSolid_OnLeftCollision(fVX);
 					position.X = scr_ceil(position.X);
 				}
 				var xnum2 = xspeed+2;
@@ -1305,6 +1349,7 @@ function Collision_Basic(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, downSlo
 					position.X += sign(fVX);
 					xnum2--;
 				}
+				MovingSolid_OnXCollision(fVX);
 				fVX = 0;
 				maxSpeedX = 0;
 			}
@@ -1442,10 +1487,12 @@ function Collision_Basic(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, downSlo
 			{
 				if(fVY > 0)
 				{
+					MovingSolid_OnBottomCollision(fVY);
 					position.Y = scr_floor(position.Y);
 				}
 				if(fVY < 0)
 				{
+					MovingSolid_OnTopCollision(fVY);
 					position.Y = scr_ceil(position.Y);
 				}
 				var ynum2 = yspeed+2;
@@ -1454,6 +1501,7 @@ function Collision_Basic(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, downSlo
 					position.Y += sign(fVY);
 					ynum2--;
 				}
+				MovingSolid_OnYCollision(fVY);
 				fVY = 0;
 				maxSpeedY = 0;
 			}
@@ -1559,12 +1607,12 @@ function Collision_Basic(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, downSlo
 #endregion
 
 
-#region scr_BreakBlock
-function scr_BreakBlock(xx,yy,type)
+#region BreakBlock
+function BreakBlock(xx,yy,type)
 {
 	if(place_meeting(xx,yy,obj_Breakable) && type > -1)
 	{
-		scr_DestroyObject(xx,yy,obj_ShotBlock);
+		DestroyObject(xx,yy,obj_ShotBlock);
 	
 		/*if(place_meeting(xx,yy,obj_BombBlock) && type == 0 && object_is_ancestor(object_index,obj_Projectile) && object_index.isBeam)
 		{
@@ -1577,42 +1625,42 @@ function scr_BreakBlock(xx,yy,type)
 	
 		if(type == 1 || type >= 4)
 		{
-		    scr_DestroyObject(xx,yy,obj_BombBlock);
+		    DestroyObject(xx,yy,obj_BombBlock);
 
 		    if(type == 1 || type == 7)
 		    {
-		        scr_DestroyObject(xx,yy,obj_ChainBlock);
+		        DestroyObject(xx,yy,obj_ChainBlock);
 		    }
 		}
 
 		if(type == 2 || type == 3 || type == 7)
 		{
-		    scr_DestroyObject(xx,yy,obj_MissileBlock);
+		    DestroyObject(xx,yy,obj_MissileBlock);
 		}
 
 		if(type == 3 || type == 7)
 		{
-		    scr_DestroyObject(xx,yy,obj_SuperMissileBlock);
+		    DestroyObject(xx,yy,obj_SuperMissileBlock);
 		}
 
 		if(type == 4 || type == 7)
 		{
-		    scr_DestroyObject(xx,yy,obj_PowerBombBlock);
+		    DestroyObject(xx,yy,obj_PowerBombBlock);
 		}
 
 		if(type == 5 || type == 7)
 		{
-		    scr_DestroyObject(xx,yy,obj_SpeedBlock);
+		    DestroyObject(xx,yy,obj_SpeedBlock);
 		}
 
 		if(type == 6 || type == 7)
 		{
-		    scr_DestroyObject(xx,yy,obj_ScrewBlock);
+		    DestroyObject(xx,yy,obj_ScrewBlock);
 		}
 	}
 }
 breakList = ds_list_create();
-function scr_DestroyObject(xx,yy,objIndex)
+function DestroyObject(xx,yy,objIndex)
 {
 	var _num = instance_place_list(xx,yy,objIndex,breakList,true);
 	if(_num > 0)
@@ -1625,49 +1673,109 @@ function scr_DestroyObject(xx,yy,objIndex)
 	ds_list_clear(breakList);
 }
 #endregion
-#region scr_OpenDoor
-function scr_OpenDoor(_x,_y,_type)
+#region OpenDoor
+function OpenDoor(_x,_y,_type)
 {
 	if(place_meeting(_x,_y,obj_DoorHatch) && _type > -1)
 	{
-		var door = instance_place(_x,_y,obj_DoorHatch);
-		if(instance_exists(door) && (door.object_index == obj_DoorHatch || (door.object_index == obj_DoorHatch_Locked && door.unlocked)))
-		{
-			//door.hitPoints -= 1;
-			scr_DamageDoor(_x,_y,obj_DoorHatch,1);
-		}
+		DamageDoor(_x,_y,obj_DoorHatch,1);
+		DamageDoor(_x,_y,obj_DoorHatch_Locked,1);
+		
 		if(_type == 1 || _type == 2 || _type == 4)
 		{
 			if(_type == 2 || _type == 4)
 			{
-				scr_DamageDoor(_x,_y,obj_DoorHatch_Missile,5);
+				DamageDoor(_x,_y,obj_DoorHatch_Missile,5);
 			}
 			else
 			{
-				scr_DamageDoor(_x,_y,obj_DoorHatch_Missile,1);
+				DamageDoor(_x,_y,obj_DoorHatch_Missile,1);
 			}
 		}
 		if(_type == 2 || _type == 4)
 		{
-			scr_DamageDoor(_x,_y,obj_DoorHatch_Super,1);
+			DamageDoor(_x,_y,obj_DoorHatch_Super,1);
 		}
 		if(_type == 3 || _type == 4)
 		{
-			scr_DamageDoor(_x,_y,obj_DoorHatch_Power,1);
+			DamageDoor(_x,_y,obj_DoorHatch_Power,1);
 		}
 	}
 }
 doorList = ds_list_create();
-function scr_DamageDoor(_x,_y,_objIndex,_dmg)
+function DamageDoor(_x,_y,_objIndex,_dmg)
 {
 	var _num = instance_place_list(_x,_y,_objIndex,doorList,true);
 	if(_num > 0)
 	{
 		for(var i = 0; i < _num; i++)
 		{
-			doorList[| i].DamageHatch(_dmg);
+			if(instance_exists(doorList[| i]) && doorList[| i].object_index == _objIndex && doorList[| i].unlocked)
+			{
+				doorList[| i].DamageHatch(_dmg);
+			}
 		}
 	}
 	ds_list_clear(doorList);
+}
+#endregion
+#region ShutterSwitch
+switchCollide = true;
+function ShutterSwitch(_x,_y,_type)
+{
+	var sSwitch = instance_place(_x,_y,obj_ShutterSwitch);
+	if(instance_exists(sSwitch) && _type > -1)
+	{
+		ToggleSwitch(_x,_y,obj_ShutterSwitch);
+		
+		if(_type == 1 || _type == 2 || _type == 4)
+		{
+			ToggleSwitch(_x,_y,obj_ShutterSwitch_Missile);
+		}
+		if(_type == 2 || _type == 4)
+		{
+			ToggleSwitch(_x,_y,obj_ShutterSwitch_Super);
+		}
+		if(_type == 3 || _type == 4)
+		{
+			ToggleSwitch(_x,_y,obj_ShutterSwitch_Power);
+		}
+	}
+}
+switchList = ds_list_create();
+function ToggleSwitch(_x,_y,_objIndex)
+{
+	var _num = instance_place_list(_x,_y,_objIndex,switchList,true);
+	if(_num > 0)
+	{
+		for(var i = 0; i < _num; i++)
+		{
+			if(instance_exists(switchList[| i]) && switchList[| i].object_index == _objIndex)
+			{
+				var sSwitch = switchList[| i];
+				var flag = true;
+				if(switchCollide)
+				{
+					var entity = id;
+					with(sSwitch)
+					{
+						if(lhc_collision_line(entity.x,entity.y,x+8*image_xscale,y+8*image_yscale,entity.solids,true,true))
+						{
+							flag = false;
+						}
+					}
+				}
+				if(flag)
+				{
+					if(id != sSwitch.lastProj || !object_is_ancestor(sSwitch.lastProj.object_index,obj_Projectile))
+					{
+						sSwitch.Toggle();
+						sSwitch.lastProj = id;
+					}
+				}
+			}
+		}
+	}
+	ds_list_clear(switchList);
 }
 #endregion

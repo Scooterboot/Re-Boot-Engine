@@ -342,7 +342,7 @@ ArmPokeAnim(ArmPokeFrame,ArmPokeTransition);
 WalkAnim(WalkFrame,WalkTransition);
 
 var bodyOffset = 72 - (max(RLegBone[1].position.Y+18,LLegBone[1].position.Y+18) - BodyBone.position.Y);
-BodyBone.offsetPosition.Y = min(scr_round(bodyOffset),0);
+BodyBone.offsetPosition.Y = min(bodyOffset,0);//min(scr_round(bodyOffset),0);
 
 var basePos = new Vector2(scr_round(position.X),scr_round(position.Y));
 BodyBone.UpdateBone(basePos,dir,scale);

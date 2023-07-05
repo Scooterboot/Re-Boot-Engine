@@ -1,6 +1,9 @@
 /// @description Initialize
 event_inherited();
 
+blockDestroyType = 1;
+doorOpenType = 0;
+
 multiHit = true;
 
 type = ProjType.Bomb;

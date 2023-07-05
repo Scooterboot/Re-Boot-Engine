@@ -121,7 +121,7 @@ if(screenFade >= 1 && !menuClosing)
 			case 4:
 			{
 				//Upscale mode
-				global.upscale = scr_wrap(global.upscale+select+moveX,0,8);//6);
+				global.upscale = scr_wrap(global.upscale+select+moveX,0,7);//6);
 				break;
 			}
 			case 5:

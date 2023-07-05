@@ -1,2 +1,6 @@
-/// @description Insert description here
-// You can write your code in this editor
+/// @description 
+
+if(!instance_exists(lastProj))
+{
+	lastProj = noone;
+}

@@ -200,3 +200,10 @@ function Impact()
 #endregion
 
 function OnImpact() {}
+
+function TileInteract(_x,_y)
+{
+	BreakBlock(_x,_y,blockDestroyType);
+	OpenDoor(_x,_y,doorOpenType);
+	ShutterSwitch(_x,_y,doorOpenType);
+}

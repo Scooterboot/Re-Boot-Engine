@@ -1,5 +1,8 @@
 event_inherited();
 
+blockDestroyType = 3;
+doorOpenType = 2;
+
 multiHit = true;
 
 damageSubType[1] = true;

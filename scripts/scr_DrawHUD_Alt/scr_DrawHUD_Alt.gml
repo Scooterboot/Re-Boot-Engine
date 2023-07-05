@@ -41,35 +41,35 @@ function scr_DrawHUD_Alt() {
     
 	    if(itemNum > 0)
 	    {
-	        var xx = 80,
-	            yy = 0,
-	            ww = 26,
-	            hh = 18;
+	        xx = 80;
+	        yy = 0;
+	        ww = 26;
+	        hh = 18;
 	        draw_roundrect_ext(vX2+xx,vY+yy,vX2+ww+xx,vY+hh+yy,8,8,false);
 	    }
     
 	    if(item[0])
 	    {
-	        var xx = 108,
-	            yy = 2,
-	            ww = 38,
-	            hh = 10;
+	        xx = 108;
+	        yy = 2;
+	        ww = 38;
+	        hh = 10;
 	        draw_roundrect_ext(vX2+xx,vY+yy,vX2+ww+xx,vY+hh+yy,4,4,false);
 	    }
 	    if(item[1])
 	    {
-	        var xx = 148,
-	            yy = 2,
-	            ww = 32,
-	            hh = 10;
+	        xx = 148;
+	        yy = 2;
+	        ww = 32;
+	        hh = 10;
 	        draw_roundrect_ext(vX2+xx,vY+yy,vX2+ww+xx,vY+hh+yy,4,4,false);
 	    }
 	    if(item[2])
 	    {
-	        var xx = 182,
-	            yy = 2,
-	            ww = 26,
-	            hh = 10;
+	        xx = 182;
+	        yy = 2;
+	        ww = 26;
+	        hh = 10;
 	        draw_roundrect_ext(vX2+xx,vY+yy,vX2+ww+xx,vY+hh+yy,4,4,false);
 	    }
 	    draw_set_color(c_white);

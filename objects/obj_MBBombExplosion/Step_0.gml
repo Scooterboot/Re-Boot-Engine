@@ -1,6 +1,5 @@
 /// @description Code
-scr_OpenDoor(x,y,0);
-scr_BreakBlock(x,y,1);
+TileInteract(x,y);
 
 scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,4);
 

@@ -116,6 +116,7 @@
   "italic": false,
   "kerningPairs": [],
   "last": 0,
+  "lineHeight": 0,
   "maintainGms1Font": false,
   "parent": {
     "name": "Fonts",
@@ -128,6 +129,7 @@
   ],
   "regenerateBitmap": false,
   "sampleText": "abcdef ABCDEF\r\n0123456789 .,<>\"'&!?\r\nthe quick brown fox jumps over the lazy dog\r\nTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG\r\nDefault character: ▯ (9647)\r\n\r\nGRApple beam @ 1234 %$& Other shit\r\nVaria suit\r\n\r\nasdf",
+  "sdfSpread": 8,
   "size": 4.0,
   "styleName": "Regular",
   "textureGroupId": {
@@ -135,4 +137,5 @@
     "path": "texturegroups/Default",
   },
   "TTFName": "${project_dir}\\fonts\\fnt_GUI_Small2\\fnt_GUI_Small2.png",
+  "usesSDF": false,
 }

@@ -4,9 +4,9 @@
 function scr_SaveGamepad(argument0, argument1) {
 	var newButton = argument0;
 
-	if(argument1 < array_length_1d(global.gp))
+	if(argument1 < array_length(global.gp))
 	{
-	    for(var i = 0; i < array_length_1d(global.gp); i++)
+	    for(var i = 0; i < array_length(global.gp); i++)
 	    {
 	        if(global.gp[i] == newButton)
 	        {
@@ -17,9 +17,9 @@ function scr_SaveGamepad(argument0, argument1) {
 	}
 	else
 	{
-	    var mIndex = argument1-array_length_1d(global.gp);
+	    var mIndex = argument1-array_length(global.gp);
 
-	    for(var i = 0; i < array_length_1d(global.gp_m); i++)
+	    for(var i = 0; i < array_length(global.gp_m); i++)
 	    {
 	        if(global.gp_m[i] == newButton)
 	        {

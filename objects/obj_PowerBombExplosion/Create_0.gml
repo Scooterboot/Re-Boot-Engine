@@ -9,7 +9,12 @@ pAlpha = 1;
 alpha2 = 1;
 image_alpha = pAlpha*alpha2;
 
+blockDestroyType = 4;
+doorOpenType = 3;
+
 multiHit = true;
+
+//switchCollide = false;
 
 type = ProjType.Bomb;
 

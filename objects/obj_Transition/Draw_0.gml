@@ -20,7 +20,7 @@ if(surface_exists(transSurf))
 				{
 					var gx = sx+scr_ceil(lengthdir_x(1,i)*j),
 					gy = sy+scr_ceil(lengthdir_y(1,i)*j);
-					DrawPlayer(gx,gy,rotation,0.5*(1/6));//,false);
+					DrawPlayer(gx,gy,rotation,0.5*(1/6));
 				}
 			}
 			gpu_set_blendmode(bm_normal);

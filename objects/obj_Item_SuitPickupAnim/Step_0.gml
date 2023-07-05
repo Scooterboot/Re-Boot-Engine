@@ -5,29 +5,32 @@ if(global.gamePaused)
 	exit;
 }
 
-if(instance_exists(obj_Player))
+var player = obj_Player;
+if(instance_exists(player))
 {
-	obj_Player.state = State.Elevator;
-	if(obj_Player.x < x)
+	player.state = State.Elevator;
+	if(player.position.X < x)
 	{
-		obj_Player.x = min(obj_Player.x+1,x);
+		player.position.X = min(player.position.X+1,x);
 	}
 	else
 	{
-		obj_Player.x = max(obj_Player.x-1,x);
+		player.position.X = max(player.position.X-1,x);
 	}
-	if(obj_Player.y < y)
+	if(player.position.Y < y)
 	{
-		obj_Player.y = min(obj_Player.y+1,y);
+		player.position.Y = min(player.position.Y+1,y);
 	}
 	else
 	{
-		obj_Player.y = max(obj_Player.y-1,y);
+		player.position.Y = max(player.position.Y-1,y);
 	}
+	player.x = scr_round(player.position.X);
+	player.y = scr_round(player.position.Y);
 	if(animCounter == animCounterMax)
 	{
-		obj_Player.hasSuit[animType] = true;
-		obj_Player.suit[animType] = true;
+		player.hasSuit[animType] = true;
+		player.suit[animType] = true;
 	}
 }
 if(animCounter == 1)

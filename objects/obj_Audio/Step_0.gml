@@ -1,4 +1,4 @@
-/// @description Music Logic
+/// @description 
 
 if(room == rm_MainMenu)
 {
@@ -38,7 +38,7 @@ if(global.musicVolume > 0)
 			if(global.musNext != noone && global.musNext.song != noone)
 			{
 				global.musNext.Play();
-				global.musNext.Gain(global.musicVolume,0);
+				global.musNext.Gain(1,0);
 			}
 			global.musPrev = global.musCurrent;
 			global.musCurrent = global.musNext;
@@ -52,7 +52,7 @@ if(global.musicVolume > 0)
 		}
 		else
 		{
-			global.musCurrent.Gain(global.musicVolume,0);
+			global.musCurrent.Gain(1,0);
 			//global.musCurrent.Loop();
 		}
 	}
@@ -62,7 +62,7 @@ if(global.musicVolume > 0)
 		if(!fanfarePlayed)
 		{
 			fanfare = audio_play_sound(mus_IntroFanfare,1,false);
-			audio_sound_gain(fanfare,global.musicVolume,0);
+			audio_sound_gain(fanfare,1,0);
 			fanfarePlayed = true;
 		}
 		else if(audio_is_playing(fanfare))
@@ -91,7 +91,7 @@ if(global.musicVolume > 0)
 		if(!fanfarePlayed)
 		{
 			fanfare = audio_play_sound(mus_ItemFanfare,1,false);
-			audio_sound_gain(fanfare,global.musicVolume,0);
+			audio_sound_gain(fanfare,1,0);
 			fanfarePlayed = true;
 		}
 		else if(audio_is_playing(fanfare))

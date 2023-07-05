@@ -116,6 +116,7 @@
   "italic": false,
   "kerningPairs": [],
   "last": 0,
+  "lineHeight": 0,
   "maintainGms1Font": false,
   "parent": {
     "name": "Fonts",
@@ -127,6 +128,7 @@
   ],
   "regenerateBitmap": false,
   "sampleText": "abcdef ABCDEF\r\n0123456789 .,<>\"'&!?\r\nthe quick brown fox jumps over the lazy dog\r\nTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG\r\n\r\nDefault Character(9647) ▯ &\r\n\r\n",
+  "sdfSpread": 8,
   "size": 6.0,
   "styleName": "Regular",
   "textureGroupId": {
@@ -134,4 +136,5 @@
     "path": "texturegroups/Default",
   },
   "TTFName": "${project_dir}\\fonts\\GUIFont\\GUIFont.png",
+  "usesSDF": false,
 }

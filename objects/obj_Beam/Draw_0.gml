@@ -37,7 +37,7 @@ if(!isSpazer && !isPlasma)
 	else if((isIce || isCharge))
 	{
 		var rotspeed = 30;
-		i = 1;
+		var i = 1;
 		if(waveStyle == 1)
 		{
 			i = -1;

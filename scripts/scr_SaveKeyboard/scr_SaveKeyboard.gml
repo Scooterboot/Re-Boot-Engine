@@ -4,9 +4,9 @@
 function scr_SaveKeyboard(argument0, argument1) {
 	var newKey = argument0;
 
-	if(argument1 < array_length_1d(global.key))
+	if(argument1 < array_length(global.key))
 	{
-	    for(var i = 0; i < array_length_1d(global.key); i++)
+	    for(var i = 0; i < array_length(global.key); i++)
 	    {
 	        if(global.key[i] == newKey)
 	        {
@@ -17,9 +17,9 @@ function scr_SaveKeyboard(argument0, argument1) {
 	}
 	else
 	{
-	    var mIndex = argument1-array_length_1d(global.key);
+	    var mIndex = argument1-array_length(global.key);
 
-	    for(var i = 0; i < array_length_1d(global.key_m); i++)
+	    for(var i = 0; i < array_length(global.key_m); i++)
 	    {
 	        if(global.key_m[i] == newKey)
 	        {

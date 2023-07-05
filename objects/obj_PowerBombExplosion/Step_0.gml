@@ -24,8 +24,7 @@ if(scaleTimer >= 60)
 	pAlpha = (75 - scaleTimer)/15;
 }
 
-scr_OpenDoor(x,y,3);
-scr_BreakBlock(x,y,4);
+TileInteract(x,y);
 
 scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,0);
 

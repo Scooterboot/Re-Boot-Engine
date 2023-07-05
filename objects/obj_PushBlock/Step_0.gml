@@ -105,7 +105,9 @@ if(!entity_place_collide(0,1) || downSlopeFlag)
 	pushblock_water();
 //}
 
+mBlock.isSolid = false;
 mBlock.UpdatePosition(position.X-16,position.Y-16);
+mBlock.isSolid = true;
 
 var passthruCheck = SkipOwnMovingTile(instance_place_list(scr_round(x),scr_round(y),all,block_list,true),true);
 if (passthruCheck)

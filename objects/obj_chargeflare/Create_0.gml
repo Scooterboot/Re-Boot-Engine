@@ -14,6 +14,12 @@ particleType = -1;
 
 multiHit = true;
 tileCollide = false;
+function TileInteract(_x,_y)
+{
+	BreakBlock(_x,_y,blockDestroyType);
+	OpenDoor(_x,_y,doorOpenType);
+	//ShutterSwitch(_x,_y,doorOpenType);
+}
 
 //npcDeathType = 3;
 

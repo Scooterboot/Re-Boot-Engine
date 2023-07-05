@@ -12,8 +12,8 @@
   "conversionMode": 0,
   "duration": 0.170612,
   "parent": {
-    "name": "Player",
-    "path": "folders/Sounds/Player.yy",
+    "name": "Morph",
+    "path": "folders/Sounds/Player/Morph.yy",
   },
   "preload": false,
   "sampleRate": 44100,

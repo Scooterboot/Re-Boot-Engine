@@ -55,8 +55,8 @@ if(room == rm_GameOver)
 	}
 	else
 	{
-		var oX = scr_round(ww/2),
-			oY = scr_round(hh/2);// - space*2);
+		oX = scr_round(ww/2);
+		oY = scr_round(hh/2);// - space*2);
 					
 		var text = option[optionPos];
 		scr_DrawOptionText(scr_round(oX-string_width(text)/2),oY,text,c_white,1,string_width(text)+1,c_black,0.5);

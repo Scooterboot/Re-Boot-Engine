@@ -12,6 +12,10 @@ if(instance_exists(creator) && creator.object_index == obj_WorkRobot)
 	
 	for(var i = 0; i < array_length(mBlocks); i++)
 	{
+		mBlocks[i].isSolid = false;
+	}
+	for(var i = 0; i < array_length(mBlocks); i++)
+	{
 		mBlocks[i].ignoredEntity = creator;
 		
 		if(i >= 3)
@@ -26,6 +30,10 @@ if(instance_exists(creator) && creator.object_index == obj_WorkRobot)
 		var xx = x + mBlockOffX[i],
 			yy = y + mBlockOffY[i];
 		mBlocks[i].UpdatePosition(xx,yy);
+	}
+	for(var i = 0; i < array_length(mBlocks); i++)
+	{
+		mBlocks[i].isSolid = true;
 	}
 }
 else

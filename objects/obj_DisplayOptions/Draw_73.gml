@@ -96,7 +96,7 @@ if(surface_exists(surf))
 			yOff += space/2;
 		}
 	
-		oYY = oY + (space*i) + yOff;
+		var oYY = oY + (space*i) + yOff;
 	
 		var bC = tcol,
 			bA = talph,

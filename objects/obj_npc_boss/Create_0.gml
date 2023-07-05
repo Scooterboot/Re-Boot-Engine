@@ -9,7 +9,7 @@ function CameraLogic() {}
 
 // making my own sequence code for animation because GM sequences aren't flexible enough -_-
 #region AnimBone
-function AnimBone(_defaultX, _defaultY, _parentBone = noone) constructor
+function AnimBone(_defaultX, _defaultY, _parentBone = pointer_null) constructor
 {
 	defaultPosition = new Vector2(_defaultX,_defaultY);
 	
@@ -20,7 +20,7 @@ function AnimBone(_defaultX, _defaultY, _parentBone = noone) constructor
 		ds_list_destroy(children);
 	}
 	
-	if(parent != noone)
+	if(parent != pointer_null)
 	{
 		if(!ds_exists(parent.children,ds_type_list))
 		{
@@ -42,9 +42,9 @@ function AnimBone(_defaultX, _defaultY, _parentBone = noone) constructor
 	color = c_white;
 	alpha = 1;
 	
-	function UpdateBone(basePos = noone, overrideDir = -2, overrideScale = noone)
+	function UpdateBone(basePos = pointer_null, overrideDir = pointer_null, overrideScale = pointer_null)
 	{
-		if(basePos != noone)
+		if(basePos != pointer_null)
 		{
 			//position = basePos.Add(defaultPosition.Add(offsetPosition).MultiplyVector2(scale));
 			// position = basePos + (defaultPosition + offsetPosition) * scale;
@@ -55,11 +55,12 @@ function AnimBone(_defaultX, _defaultY, _parentBone = noone) constructor
 			position.Equals(basePos);
 			position.Add(pos2);
 		}
-		if(abs(overrideDir) <= 1)
+		//if(abs(overrideDir) <= 1)
+		if(overrideDir != pointer_null)
 		{
 			dir = overrideDir;
 		}
-		if(overrideScale != noone)
+		if(overrideScale != pointer_null)
 		{
 			scale = overrideScale;
 		}
@@ -84,7 +85,7 @@ function AnimBone(_defaultX, _defaultY, _parentBone = noone) constructor
 				//child.position = position.Add(RotationToVector2(AngleFlip(offsetRot, dir)).Multiply(dist)).MultiplyVector2(scale)
 				// child.position = position + RotationToVector2(AngleFlip(offsetRot, dir)) * dist * scale;
 				
-				offsetRot = scr_round(offsetRot);
+				//offsetRot = scr_round(offsetRot);
 				
 				var cpos2 = RotationToVector2(AngleFlip(offsetRot, dir));
 				cpos2.Multiply(dist);
@@ -93,20 +94,21 @@ function AnimBone(_defaultX, _defaultY, _parentBone = noone) constructor
 				child.position.Equals(position);
 				child.position.Add(cpos2);
 				
-				if(overrideDir >= -1 && overrideDir <= 1)
+				//if(overrideDir >= -1 && overrideDir <= 1)
+				if(overrideDir != pointer_null)
 				{
 					child.dir = overrideDir;
 				}
-				if(overrideScale != noone)
+				if(overrideScale != pointer_null)
 				{
 					child.scale = overrideScale;
 				}
-				child.UpdateBone(noone,overrideDir,overrideScale);
+				child.UpdateBone(pointer_null,overrideDir,overrideScale);
 			}
 		}
 		
 		rotation = offsetRotation;
-		if(parent != noone)
+		if(parent != pointer_null)
 		{
 			rotation += parent.rotation;
 		}
@@ -128,7 +130,7 @@ function AnimBone(_defaultX, _defaultY, _parentBone = noone) constructor
 }
 #endregion
 #region DrawLimb
-function DrawLimb(_name, _sprt, _bone, _bone2 = noone) constructor
+function DrawLimb(_name, _sprt, _bone, _bone2 = pointer_null) constructor
 {
 	name = _name;
 	sprt = _sprt;
@@ -138,22 +140,28 @@ function DrawLimb(_name, _sprt, _bone, _bone2 = noone) constructor
 	surfW = sprite_get_width(sprt);
 	surfH = sprite_get_height(sprt);
 	limbSurf = surface_create(surfW,surfH);
+	rotScale = 5;//8;
+	limbSurf2 = surface_create(surfW*rotScale,surfH*rotScale);
 	function Clean()
 	{
 		if(surface_exists(limbSurf))
 		{
 			surface_free(limbSurf);
 		}
+		if(surface_exists(limbSurf2))
+		{
+			surface_free(limbSurf2);
+		}
 	}
 	
 	function Draw(frame = 0, dir = 1)
 	{
 		var b = bone;
-		if(dir == -1 && bone2 != noone)
+		if(dir == -1 && bone2 != pointer_null)
 		{
 			b = bone2;
 		}
-		var rot = scr_round(b.rotation) * dir;//scr_round(b.rotation/2.8125)*2.8125;
+		var rot = scr_round(b.rotation) * dir;
 		var scaleX = b.scale.X*dir,
 			scaleY = b.scale.Y;
 		var xOffset = sprite_get_xoffset(sprt),
@@ -170,18 +178,53 @@ function DrawLimb(_name, _sprt, _bone, _bone2 = noone) constructor
 			
 			surface_reset_target();
 			
-			var sc = dcos(rot),
-			ss = dsin(rot),
-			sx = xOffset * scaleX,
-			sy = yOffset * scaleY;
+			/*var sc = dcos(rot),
+				ss = dsin(rot),
+				sx = xOffset * scaleX,
+				sy = yOffset * scaleY;
 			var sxx = scr_round(b.position.X)-sc*sx-ss*sy,
 				syy = scr_round(b.position.Y)-sc*sy+ss*sx;
-			draw_surface_ext(limbSurf,sxx,syy,scaleX,scaleY,rot,b.color,b.alpha);
+			draw_surface_ext(limbSurf,sxx,syy,scaleX,scaleY,rot,b.color,b.alpha);*/
 		}
 		else
 		{
 			limbSurf = surface_create(surfW,surfH);
 			surface_set_target(limbSurf);
+			draw_clear_alpha(c_black,0);
+			surface_reset_target();
+		}
+		if(surface_exists(limbSurf2))
+		{
+			surface_set_target(limbSurf2);
+			draw_clear_alpha(c_black,0);
+			
+			//shader_set(sh_better_scaling_hq4x);
+		    //shader_set_uniform_f(shader_get_uniform(sh_better_scaling_hq4x, "texel_size"), 1 / surface_get_width(limbSurf), 1 / surface_get_height(limbSurf));
+			
+			var shd = sh_better_scaling_5xbrc;
+			shader_set(shd);
+		    shader_set_uniform_f(shader_get_uniform(shd, "texel_size"), 1 / surface_get_width(limbSurf), 1 / surface_get_height(limbSurf));
+		    shader_set_uniform_f(shader_get_uniform(shd, "texture_size"), surface_get_width(limbSurf), surface_get_height(limbSurf));
+		    shader_set_uniform_f(shader_get_uniform(shd, "color"), 1, 1, 1, 1);
+		    shader_set_uniform_f(shader_get_uniform(shd, "color_to_make_transparent"), 0, 0, 0);
+			
+			draw_surface_ext(limbSurf,0,0,rotScale,rotScale,0,c_white,1);
+			shader_reset();
+			
+			surface_reset_target();
+			
+			var sc = dcos(rot),
+				ss = dsin(rot),
+				sx = xOffset * scaleX,
+				sy = yOffset * scaleY;
+			var sxx = scr_round(b.position.X)-sc*sx-ss*sy,
+				syy = scr_round(b.position.Y)-sc*sy+ss*sx;
+			draw_surface_ext(limbSurf2,sxx,syy,scaleX/rotScale,scaleY/rotScale,rot,b.color,b.alpha);
+		}
+		else
+		{
+			limbSurf2 = surface_create(surfW*rotScale,surfH*rotScale);
+			surface_set_target(limbSurf2);
 			draw_clear_alpha(c_black,0);
 			surface_reset_target();
 		}

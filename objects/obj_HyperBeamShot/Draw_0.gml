@@ -11,7 +11,7 @@ if(impacted <= 0)
 	var velAngX = x-(oldPosX[0]+speed_x),
 		velAngY = y-(oldPosY[0]+speed_y),
 		nVelX = velX,//lengthdir_x(velocity,direction),
-		nVelY = velY,//lengthdir_y(velocity,direction);
+		nVelY = velY;//lengthdir_y(velocity,direction);
 	if(point_distance(x,y,x+velAngX,y+velAngY) >= point_distance(x,y,x+nVelX,y+nVelY))
 	{
 		image_angle = point_direction(0,0,velAngX,velAngY)+180;

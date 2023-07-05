@@ -40,11 +40,13 @@ if(instance_exists(obj_Player))
 		}
 		if(p.x > xPos)
 	    {
-	        p.x = max(p.x-1,xPos);
+	        //p.x = max(p.x-1,xPos);
+			p.shiftX = max(xPos-p.x,-1);
 	    }
 	    if(p.x < xPos)
 	    {
-	        p.x = min(p.x+1,xPos);
+	        //p.x = min(p.x+1,xPos);
+			p.shiftX = min(xPos-p.x,1);
 	    }
 		
 		if(activeTime >= 10)

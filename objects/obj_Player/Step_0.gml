@@ -346,13 +346,13 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		if(!audio_is_playing(lowEnergySnd))
 		{
 			lowEnergySnd = audio_play_sound(snd_LowHealthAlarm,0,true);
-			audio_sound_gain(lowEnergySnd,global.soundVolume,0);
-			audio_sound_gain(lowEnergySnd,0.25*global.soundVolume,3500);
+			audio_sound_gain(lowEnergySnd,1,0);
+			audio_sound_gain(lowEnergySnd,0.25,3500);
 		}
-		else if(state == State.Hurt && audio_sound_get_gain(lowEnergySnd) <= 0.25*global.soundVolume)
+		else if(state == State.Hurt && audio_sound_get_gain(lowEnergySnd) <= 0.25)
 		{
-			audio_sound_gain(lowEnergySnd,global.soundVolume,0);
-			audio_sound_gain(lowEnergySnd,0.25*global.soundVolume,2000);
+			audio_sound_gain(lowEnergySnd,1,0);
+			audio_sound_gain(lowEnergySnd,0.25,2000);
 		}
 	}
 	else
@@ -434,11 +434,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 	//gunReady2 = ((abs(velX) > 0 || move != 0) && !ledgeFall);
 	
-	//grounded = PlayerGrounded();
-	//grounded = PlayerGrounded(2);
-	
-	//onPlatform = PlayerOnPlatform();
-	
 	if(move != 0 && !brake && morphFrame <= 0 && wjFrame <= 0 && state != State.Grip && 
 	(!cAimLock || cDash || state == State.Somersault || state == State.Morph || xRayActive || (global.aimStyle == 2 && cAngleUp)) && 
 	!grappleActive && state != State.Spark && state != State.BallSpark && state != State.Hurt && stateFrame != State.DmgBoost && dmgBoost <= 0 && state != State.Dodge)
@@ -465,14 +460,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		brakeFrame = 0;
 	}
 	
-	/*if(cAimLock && sign(velX) != dir && sign(velX) != 0 && state == State.Stand)
-	{
-		walkState = true;
-	}
-	if(sign(velX) == dir || velX == 0 || state != State.Stand || xRayActive)
-	{
-		walkState = false;
-	}*/
 	walkState = ((cAimLock || grappleActive) && velX != 0 && sign(velX) != dir && state == State.Stand && !xRayActive);
 	
 	if(cMorph && rMorph && morphFrame <= 0 && state != State.Morph && stateFrame != State.Morph && misc[Misc.Morph] && state != State.Spark && state != State.BallSpark && state != State.Grip && !xRayActive)
@@ -676,13 +663,14 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 	fMaxSpeed = maxSpeed[moveState,liquidState];
 	fMoveSpeed = moveSpeed[(state == State.Morph),liquidState];
+	fFrict = frict[liquidState];
 	
 	if(moveState <= 2)
 	{
 		var runMaxSpd = maxSpeed[0,liquidState],
 			dashMaxSpd = maxSpeed[1,liquidState],
 			runMoveSpd = moveSpeed[0,liquidState],
-			dashMoveSpd = moveSpeed[2,liquidState],
+			dashMoveSpd = moveSpeed[2,liquidState];
 
 		if(abs(velX) >= runMaxSpd)
 		{
@@ -696,6 +684,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			}
 		}
 	}
+	
+	#region Momentum Logic
 	
 	if(state == State.Stand)
 	{
@@ -836,6 +826,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 	}
 	
+	#endregion
+	
+	#region Speed Booster Logic
+	
 	if(state == State.Stand && grounded && !liquidMovement && crouchFrame >= 5 && !brake && ((velX != 0 && sign(velX) == dir) || (prevVelX != 0 && sign(prevVelX) == dir)) && !xRayActive)
 	{
 		var num = speedCounter;
@@ -881,7 +875,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 	speedBoostWJ = (sBoostWJFlag && speedBoostWJCounter < speedBoostWJMax && speedBoostWallJump);
 
-	fFrict = frict[liquidState];
 	minBoostSpeed = maxSpeed[1,liquidState] + ((maxSpeed[2,liquidState] - maxSpeed[1,liquidState])*0.75);
 
 	var stopBoosting = !speedBoostWJ && ((sign(velX) != dir && sign(prevVelX) != dir) || speedKillCounter >= speedKillMax || (move != dir && (aimAngle > -2 || !cJump) && ((state != State.Somersault && state != State.Morph) || (state == State.Morph && abs(velX) <= maxSpeed[5,liquidState]) || grounded) && morphFrame <= 0));
@@ -982,6 +975,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		speedBoost = false;
 	}
 	
+	#endregion
+	
 #endregion
 
 // ----- Vertical Movement -----
@@ -1002,6 +997,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 	
 	canMorphBounce = true;
+	
+	#region Jump Logic
 	
 	var isJumping = (cJump && dir != 0 && climbIndex <= 0 && state != State.Spark && state != State.BallSpark && 
 	state != State.Hurt && (!spiderBall || !sparkCancelSpiderJumpTweak) && !xRayActive && (state != State.Grapple || grapWJCounter > 0));// && state != State.Dodge);
@@ -1213,6 +1210,43 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			bufferJump = 0;
 		}
 	}
+	if(grounded)
+	{
+		bunnyJump = bunnyJumpMax;
+	}
+	else if(bunnyJump > 0)
+	{
+		bunnyJump--;
+	}
+	
+	if(bombJump <= 0)
+	{
+		if(!cJump && !rJump)
+		{
+			jumpStop = true;
+		}
+		
+		if(!isJumping)
+		{
+			if(jumping)
+			{
+				if(jumpStop)
+				{
+					if(velY < 0)
+					{
+						velY -= (velY*0.9);
+					}
+					jumpStop = false;
+				}
+				jump = 0;
+				jumping = false;
+			}
+		}
+	}
+	
+	#endregion
+	
+	#region Bomb Jump Logic
 	
 	if(bombJumpX != 0 && (!spiderBall || spiderEdge == Edge.None) && bombJump > 0)
 	{
@@ -1273,42 +1307,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		
 		bombJump--;
 	}
-	else
-	{
-		//bombJump = 0;
-		//bombJumpX = 0;
-		
-		if(!cJump && !rJump)
-		{
-			jumpStop = true;
-		}
-		
-		if(!isJumping)
-		{
-			if(jumping)
-			{
-				if(jumpStop)
-				{
-					if(velY < 0)
-					{
-						velY -= (velY*0.9);
-					}
-					jumpStop = false;
-				}
-				jump = 0;
-				jumping = false;
-			}
-		}
-	}
 	
-	if(grounded)
-	{
-		bunnyJump = bunnyJumpMax;
-	}
-	else if(bunnyJump > 0)
-	{
-		bunnyJump--;
-	}
+	#endregion
 	
 	// Gravity
 	var fallspd = fallSpeedMax;
@@ -1589,7 +1589,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		if(dir != 0 && state != State.CrystalFlash)
 		{
-			fVelX = velX + carryVelX;
+			fVelX = velX;// + carryVelX;
 	
 			if(!SpiderActive())
 			{
@@ -1622,7 +1622,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		
 		if(state != State.Grip)
 		{
-			fVelY = velY + carryVelY;
+			fVelY = velY;// + carryVelY;
 	
 			if(state == State.Grapple)
 			{
@@ -1682,16 +1682,16 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	var downSlope = GetEdgeSlope(Edge.Bottom);
 	var downSlopeFlag = (place_meeting(x,y+2,downSlope) && downSlope.image_yscale > 1 && 
 						((downSlope.image_xscale > 0 && bbox_left > downSlope.bbox_left) || (downSlope.image_xscale < 0 && bbox_right < downSlope.bbox_right)));
-	var downNum = instance_place_list(x,y+2,all,block_list,true);
+	var downNum = instance_place_list(x,y+2,all,blockList,true);
 	for(var i = 0; i < downNum; i++)
 	{
-		if(instance_exists(block_list[| i]) && asset_has_any_tag(block_list[| i].object_index,solids,asset_object) && !asset_has_any_tag(block_list[| i].object_index,"ISlope",asset_object))
+		if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object) && !asset_has_any_tag(blockList[| i].object_index,"ISlope",asset_object))
 		{
 			downSlopeFlag = false;
 			break;
 		}
 	}
-	ds_list_clear(block_list);
+	ds_list_clear(blockList);
 	if((!PlayerGrounded() || (downSlopeFlag && !speedBoost)) && !PlayerOnPlatform())
 	{
 		grounded = false;
@@ -1747,14 +1747,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		jump = 0;
 	}
 	
-	carryVelX = 0;
-	carryVelY = 0;
-	
-	var colL = lhc_collision_line(bbox_left,bbox_top,bbox_left,bbox_bottom,"IMovingSolid",true,true),
-		colR = lhc_collision_line(bbox_right,bbox_top,bbox_right,bbox_bottom,"IMovingSolid",true,true),
-		colT = lhc_collision_line(bbox_left,bbox_top,bbox_right,bbox_top,"IMovingSolid",true,true),
-		colB = lhc_collision_line(bbox_left,bbox_bottom,bbox_right,bbox_bottom,"IMovingSolid",true,true);
-	if (lhc_place_meeting(x,y,"IMovingSolid") && (state != State.Grip || !startClimb) && colL+colR+colT+colB >= 3)
+	var colL = lhc_collision_line(bbox_left+1,bbox_top,bbox_left+1,bbox_bottom,"IMovingSolid",true,true),
+		colR = lhc_collision_line(bbox_right-1,bbox_top,bbox_right-1,bbox_bottom,"IMovingSolid",true,true),
+		colT = lhc_collision_line(bbox_left,bbox_top+1,bbox_right,bbox_top+1,"IMovingSolid",true,true),
+		colB = lhc_collision_line(bbox_left,bbox_bottom-1,bbox_right,bbox_bottom-1,"IMovingSolid",true,true);
+	if (lhc_place_meeting(x,y,"IMovingSolid") && (state != State.Grip || !startClimb) && colL+colR+colT+colB >= 4)
 	{
 		passthru = min(passthru+1,passthruMax);
 	}
@@ -1776,10 +1773,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 #endregion
 	
-	// Update grounded variables
-	//grounded = PlayerGrounded(2);
-	//onPlatform = PlayerOnPlatform();
-	
 	move2 = cRight - cLeft;
 	
 // ----- Grip Collision -----
@@ -1789,14 +1782,14 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		if(!entity_place_collide(0,-4) && ((state == State.Jump && !entity_place_collide(0,3)) || (state == State.Somersault && !entity_place_collide(0,11))))
 		{
-			var num = instance_place_list(x+move2,y,all,block_list,true);
-				num += instance_position_list(x+6*move2,y-17,all,block_list,true);
+			var num = instance_place_list(x+move2,y,all,blockList,true);
+				num += instance_position_list(x+6*move2,y-17,all,blockList,true);
 			for(var i = 0; i < num; i++)
 			{
-				if (instance_exists(block_list[| i]) && asset_has_any_tag(block_list[| i].object_index,solids,asset_object) && 
-					(!asset_has_any_tag(block_list[| i].object_index,"ISlope",asset_object) || sign(block_list[| i].image_xscale) == dir))
+				if (instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object) && 
+					(!asset_has_any_tag(blockList[| i].object_index,"ISlope",asset_object) || sign(blockList[| i].image_xscale) == dir))
 				{
-					var block = block_list[| i];
+					var block = blockList[| i];
 					var canGrip = true;
 					if (block.object_index == obj_Tile || object_is_ancestor(block.object_index,obj_Tile) ||
 						block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
@@ -1810,8 +1803,16 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					}
 					if(canGrip && lhc_position_meeting(x+6*move2,y-17,solids) && !lhc_collision_line(x+6*move2,y-22,x+6*move2,y-26,solids,true,true) && lhc_place_meeting(x+move2,y,solids) && dir == move2)
 					{
-						position.Y = scr_round(position.Y);
-						for(var i = 10; i > 0; i--)
+						audio_play_sound(snd_Grip,0,false);
+						jump = 0;
+						fVelY = 0;
+						velY = 0;
+						dir = move2;
+				
+						ChangeState(State.Grip,State.Grip,mask_Jump,false);
+						
+						position.Y = scr_ceil(position.Y);
+						for(var j = 10; j > 0; j--)
 						{
 							if(lhc_position_meeting(x+6*move2,position.Y-18,solids))
 							{
@@ -1820,22 +1821,14 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 						}
 						y = scr_round(position.Y);
 				
-						audio_play_sound(snd_Grip,0,false);
-						jump = 0;
-						fVelY = 0;
-						velY = 0;
-				
-						ChangeState(State.Grip,State.Grip,mask_Jump,false);
-						dir = move2;
-				
 						instance_destroy(grapple);
 						
-						ds_list_clear(block_list);
+						ds_list_clear(blockList);
 						break;
 					}
 				}
 			}
-			ds_list_clear(block_list);
+			ds_list_clear(blockList);
 		}
 	}
 #endregion
@@ -2015,7 +2008,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		if(!grounded && dir != 0)
 		{
-			ChangeState(State.Jump,State.Jump,mask_Jump,true);
+			ChangeState(State.Jump,State.Jump,mask_Jump,ledgeFall);
 		}
 		
 		isPushing = false;
@@ -2789,20 +2782,20 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			colFlag = false;
 		}*/
 		var colFlag = false;
-		var sColNum = collision_point_list(x+6*dir,y-18,obj_Slope,true,true,block_list,true);
+		var sColNum = collision_point_list(x+6*dir,y-18,obj_Slope,true,true,blockList,true);
 		for(var i = 0; i < sColNum; i++)
 		{
-			if(instance_exists(block_list[| i]) && asset_has_any_tag(block_list[| i].object_index,solids,asset_object) && asset_has_any_tag(block_list[| i].object_index,"ISlope",asset_object))
+			if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object) && asset_has_any_tag(blockList[| i].object_index,"ISlope",asset_object))
 			{
 				colFlag = true;
-				var sCol = block_list[| i];
+				var sCol = blockList[| i];
 				if((sCol.image_yscale > 0 && sCol.image_yscale <= 1) || sCol.image_yscale <= -0.5)
 				{
 					colFlag = false;
 				}
 			}
 		}
-		ds_list_clear(block_list);
+		ds_list_clear(blockList);
 		
 		if((!entity_place_collide(2*dir,0) && !entity_place_collide(2*dir,8)) || (colFlag && !startClimb) || (cDown && cJump && rJump))
 		{
@@ -3758,7 +3751,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			var eMax = min(cFlashLastEnergy+energyPerAmmo, energyMax);
 			if(energy < eMax)
 			{
-				var eMax = min(cFlashLastEnergy+energyPerAmmo, energyMax);
 				energy = min(energy+scr_round(energyPerAmmo/cFlashStep), eMax);
 			}
 			if(energy >= eMax)
@@ -3839,6 +3831,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 #endregion
 
+	x = scr_round(position.X);
+	y = scr_round(position.Y);
+	
 	if(!misc[Misc.ScrewAttack] || state != State.Somersault || liquidMovement)
 	{
 		audio_stop_sound(snd_ScrewAttack);
@@ -3897,9 +3892,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		DestroyBlock(x+xv,y+fVelY);
 	}
-	
-	x = scr_round(position.X);
-	y = scr_round(position.Y);
 }
 else
 {

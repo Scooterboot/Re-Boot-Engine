@@ -39,21 +39,39 @@ if (instance_exists(player) && (player.state == State.Stand || player.state == S
 				obj_UI.CreateMessageBox(gameSavedText,"",Message.Simple);
 			}
 			
-			if(player.x < xx)
+			/*if(player.position.X < xx)
 			{
-				player.x = min(player.x+1,xx);
+				player.position.X = min(player.position.X+1,xx);
 			}
 			else
 			{
-				player.x = max(player.x-1,xx);
+				player.position.X = max(player.position.X-1,xx);
 			}
-			if(player.y < yy)
+			if(player.position.Y < yy)
 			{
-				player.y = min(player.y+1,yy);
+				player.position.Y = min(player.position.Y+1,yy);
 			}
 			else
 			{
-				player.y = max(player.y-1,yy);
+				player.position.Y = max(player.position.Y-1,yy);
+			}
+			player.x = scr_round(player.position.X);
+			player.y = scr_round(player.position.Y);*/
+			if(player.position.X < xx)
+			{
+				player.shiftX = min(xx-player.position.X,1);
+			}
+			else
+			{
+				player.shiftX = max(xx-player.position.X,-1);
+			}
+			if(player.position.Y < yy)
+			{
+				player.shiftY = min(yy-player.position.Y,1);
+			}
+			else
+			{
+				player.shiftY = max(yy-player.position.Y,-1);
 			}
 		
 			saving--;

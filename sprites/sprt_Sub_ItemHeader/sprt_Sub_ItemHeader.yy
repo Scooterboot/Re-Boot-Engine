@@ -13,14 +13,14 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"f5aa38f0-ece6-49de-8241-bcaa195cf7b5",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"dc7e7a42-e127-4712-8460-28fadd3171cc",},
   ],
   "gridX": 0,
   "gridY": 0,
   "height": 17,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"b0acec92-c159-4851-8779-5acb671b950f","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"91c4400c-fb2d-456b-adda-fb1f112d69fe","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": {
     "resourceType": "GMNineSliceData",
@@ -55,7 +55,7 @@
   "sequence": {
     "resourceType": "GMSequence",
     "resourceVersion": "1.4",
-    "name": "",
+    "name": "sprt_Sub_ItemHeader",
     "autoRecord": true,
     "backdropHeight": 1080,
     "backdropImageOpacity": 0.5,
@@ -77,7 +77,7 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"f5aa38f0-ece6-49de-8241-bcaa195cf7b5","path":"sprites/sprt_Sub_ItemHeader/sprt_Sub_ItemHeader.yy",},},},"Disabled":false,"id":"867d205c-869f-4459-9f13-c1d54508bae7","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"dc7e7a42-e127-4712-8460-28fadd3171cc","path":"sprites/sprt_Sub_ItemHeader/sprt_Sub_ItemHeader.yy",},},},"Disabled":false,"id":"d8aa1a3a-33b6-4165-b02f-06027a3df332","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,

@@ -5,8 +5,8 @@ var filter = false,
 	upScale = global.upscale;
 if(global.upscale == 1)
 {
-	filter = true;
-	upScale = 0;
+	//filter = true;
+	//upScale = 0;
 }
 gpu_set_texfilter(filter);
 

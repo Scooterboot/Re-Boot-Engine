@@ -8,7 +8,7 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 	var xsp = player.x - player.xprevious,
 		ysp = player.y - player.yprevious;
 	if(((player.state == State.Stand || player.state == State.Crouch || player.state == State.Dodge || player.state == State.Grip) && player.prevState != player.state)
-		|| (player.prevState == State.Stand && player.state == State.Morph))
+		|| (player.prevState == State.Stand && player.state == State.Morph) || player.stallCamera)
 	{
 		ysp = 0;
 	}
@@ -334,7 +334,7 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 			{
 				for(var i = 0; i < _num; i++)
 				{
-					col = colList[| i];
+					var col = colList[| i];
 					if(instance_exists(col) && col.active && col.facing == CamTileFacing.Down)
 					{
 						fVelY = min(col.y+16 - y, 1+abs(playerY-prevPlayerY));

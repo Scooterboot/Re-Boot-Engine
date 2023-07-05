@@ -135,7 +135,13 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					{
 						itemMax++;
 					}
-					
+				}
+				DrawItemHeader(ww/2 - 152,46,itemHeaderText[0],suitMax,1);
+				DrawItemHeader(ww/2 - 152,84,itemHeaderText[1],beamMax,1);
+				DrawItemHeader(ww/2 - 152,152,itemHeaderText[2],itemMax,1);
+				
+				for(var i = 0; i < ds_list_size(invListL); i++)
+				{
 					var ability = invListL[| i];
 					var index = string_digits(ability);
 					
@@ -224,9 +230,6 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					draw_surface_ext(textSurface,iBoxX+xoffset-1,iBoxY,1,1,0,textBGColor,0.5);
 					draw_text(iBoxX+xoffset,iBoxY+1,subTxt);
 				}
-				DrawItemHeader(ww/2 - 152,46,"SUIT",suitMax,1);
-				DrawItemHeader(ww/2 - 152,84,"BEAM",beamMax,1);
-				DrawItemHeader(ww/2 - 152,152,"GEAR",itemMax,1);
 				
 				var miscMax = 0,
 					bootsMax = 0;
@@ -240,7 +243,12 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					{
 						bootsMax++;
 					}
-					
+				}
+				DrawItemHeader(ww/2 + 152,64,itemHeaderText[3],miscMax,-1);
+				DrawItemHeader(ww/2 + 152,152,itemHeaderText[4],bootsMax,-1);
+				
+				for(var i = 0; i < ds_list_size(invListR); i++)
+				{
 					var ability = invListR[| i];
 					var index = string_digits(ability);
 					
@@ -287,8 +295,6 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					draw_surface_ext(textSurface,iBoxX-66,iBoxY,1,1,0,textBGColor,0.5);
 					draw_text(iBoxX-65,iBoxY+1,subTxt);
 				}
-				DrawItemHeader(ww/2 + 152,64,"MISC",miscMax,-1);
-				DrawItemHeader(ww/2 + 152,152,"BOOTS",bootsMax,-1);
 				
 				/*textAnim = min(textAnim + 1.5, 62);
 				var xL1 = global.resWidth/2 - 121,

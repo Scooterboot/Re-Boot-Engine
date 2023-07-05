@@ -30,11 +30,11 @@ if (global.waterDistortion)
 		Distortion = surface_create(global.resWidth,global.resHeight);
 	}
 	
-    Texture = surface_get_texture(Distortion);
+    var Texture = surface_get_texture(Distortion);
     
     draw_primitive_begin_texture(pr_trianglestrip,Texture);
     
-    for(i = 0; i < room_height + 48 - y; i += 6)
+    for(var i = 0; i < room_height + 48 - y; i += 6)
     {
         Mult = -min(1.5,i/6);
         Spread = Mult * sin(Time+i/4+y/4);

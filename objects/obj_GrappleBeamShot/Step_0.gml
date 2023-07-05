@@ -19,7 +19,7 @@ grapSpeedMax = lerp(28,8, grappleDist/distMax);
 grapSignX = lengthdir_x(1,player.shootDir);
 grapSignY = lengthdir_y(1,player.shootDir);
 
-if(grappleState == GrappleState.Swing)
+if(grappleState != GrappleState.None)
 {
     if(instance_exists(grapBlock))
     {
@@ -42,71 +42,11 @@ if(grappleState == GrappleState.Swing)
 		}
 		
         drawGrapEffect = true;
-        if(player.state != State.Grapple)
-        {
-            if(player.stateFrame == State.Grip)
-            {
-                player.dir *= -1;
-                player.dirFrame = 4*dir;
-            }
-            player.grappleDist = point_distance(player.x, player.y, x, y);
-            player.grapAngle = point_direction(player.x, player.y, x, y) - 90;
-            player.state = State.Grapple;
-            player.stateFrame = State.Grapple;
-        }
-        if(!audio_is_playing(snd_GrappleBeam_Loop) && !audio_is_playing(snd_GrappleBeam_Shoot))
-        {
-            audio_play_sound(snd_GrappleBeam_Loop,0,true);
-        }
-        if(grapBlock.object_index == obj_GrappleBlockCracked)
-        {
-            grapBlock.crumble = true;
-        }
-        //part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.PartBeam[3],1);
-        //part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.PartBeam[2],1);
-        part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.gTrail,1);
-		
-		layer = layer_get_id("Projectiles_fg");
-    }
-    else
-    {
-        instance_destroy();
-		exit;
-    }
-}
-else if(grappleState == GrappleState.PushBlock)
-{
-	if(instance_exists(grapBlock))
-    {
-        if(grapBlockPosX > -1)
+		if(grappleState == GrappleState.Swing)
 		{
-			x = grapBlockPosX;
-		}
-		else
-		{
-			x = scr_round(grapBlock.bbox_left + (grapBlock.bbox_right-grapBlock.bbox_left)/2);
-		}
-		
-		if(grapBlockPosY > -1)
-		{
-			y = grapBlockPosY;
-		}
-		else
-		{
-			y = scr_round(grapBlock.bbox_top + (grapBlock.bbox_bottom-grapBlock.bbox_top)/2);
-		}
-		
-        drawGrapEffect = true;
-		if(player.state != State.Grapple && player.state != State.Stand && player.state != State.Crouch)
-		{
-			if(player.state == State.Morph)
-			{
-				instance_destroy();
-				exit;
-			}
-			else
-			{
-				if(player.stateFrame == State.Grip)
+	        if(player.state != State.Grapple)
+	        {
+	            if(player.stateFrame == State.Grip)
 	            {
 	                player.dir *= -1;
 	                player.dirFrame = 4*dir;
@@ -115,22 +55,55 @@ else if(grappleState == GrappleState.PushBlock)
 	            player.grapAngle = point_direction(player.x, player.y, x, y) - 90;
 	            player.state = State.Grapple;
 	            player.stateFrame = State.Grapple;
+	        }
+			if(grapBlock.object_index == obj_GrappleBlockCracked)
+	        {
+	            grapBlock.crumble = true;
+	        }
+		}
+		if(grappleState == GrappleState.PushBlock)
+		{
+			if(player.state != State.Grapple && player.state != State.Stand && player.state != State.Crouch)
+			{
+				if(player.state == State.Morph)
+				{
+					instance_destroy();
+					exit;
+				}
+				else
+				{
+					if(player.stateFrame == State.Grip)
+		            {
+		                player.dir *= -1;
+		                player.dirFrame = 4*dir;
+		            }
+		            player.grappleDist = point_distance(player.x, player.y, x, y);
+		            player.grapAngle = point_direction(player.x, player.y, x, y) - 90;
+		            player.state = State.Grapple;
+		            player.stateFrame = State.Grapple;
+				}
+			}
+			else if(player.grappleDist <= 0)
+			{
+				player.grappleDist = point_distance(player.x, player.y, x, y);
+			}
+			else if(point_distance(player.x, player.y, x, y) > player.grappleDist+48)
+			{
+				instance_destroy();
+				exit;
 			}
 		}
-        
-		if(!audio_is_playing(snd_GrappleBeam_Loop) && !audio_is_playing(snd_GrappleBeam_Shoot))
+		
+        if(!audio_is_playing(snd_GrappleBeam_Loop) && !audio_is_playing(snd_GrappleBeam_Shoot))
         {
             audio_play_sound(snd_GrappleBeam_Loop,0,true);
         }
+        
+        //part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.PartBeam[3],1);
+        //part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.PartBeam[2],1);
         part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.gTrail,1);
 		
 		layer = layer_get_id("Projectiles_fg");
-		
-		if(point_distance(player.x, player.y, x, y) > player.grappleDist+48)
-		{
-			instance_destroy();
-			exit;
-		}
     }
     else
     {
@@ -157,7 +130,7 @@ else
 		else
 		{
 			grapSpeed = grapSpeedMax;
-			while(grapSpeed > 0 && !entity_collision_line(xprevious,yprevious,x+grapSignX,y+grapSignY))
+			while(grapSpeed > 0 && !entity_collision_line(xprevious-grapSignX,yprevious-grapSignY,x+grapSignX,y+grapSignY))
 		    {
 		        grappleDist += 1;
 				x = player.shootPosX+lengthdir_x(grappleDist,player.shootDir);
@@ -167,7 +140,7 @@ else
 			
 			var impactFlag = false;
 			
-			var num = collision_line_list(xprevious,yprevious,x+grapSignX,y+grapSignY,all,true,true,gp_list,true);
+			var num = collision_line_list(xprevious-grapSignX,yprevious-grapSignY,x+grapSignX,y+grapSignY,all,true,true,gp_list,true);
 			for(var i = 0; i < num; i++)
 			{
 				if(instance_exists(gp_list[| i]) && asset_has_any_tag(gp_list[| i].object_index,solids,asset_object))
@@ -193,8 +166,7 @@ else
 			
 			if(impactFlag)
 			{
-				scr_OpenDoor(x+grapSignX,y+grapSignY,0);
-				scr_BreakBlock(x+grapSignX,y+grapSignY,0);
+				TileInteract(x+grapSignX,y+grapSignY);
 				audio_stop_sound(snd_BeamImpact);
 				audio_play_sound(snd_BeamImpact,0,false);
 				part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.gTrail,7);
@@ -241,7 +213,7 @@ else
 			if(grapBlock.object_index == obj_PushBlock || object_is_ancestor(grapBlock.object_index,obj_PushBlock))
 			{
 				grappleState = GrappleState.PushBlock;
-				player.grappleDist = point_distance(player.x, player.y, x, y);
+				//player.grappleDist = point_distance(player.x, player.y, x, y);
 			}
 			else
 			{

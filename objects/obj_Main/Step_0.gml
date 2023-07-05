@@ -86,7 +86,7 @@ if(room == rm_MainMenu)
 }
 else if(!global.gamePaused)
 {
-	global.currentPlayTime += (1 / room_speed) * (oldDelta / delta_time);
+	global.currentPlayTime += (1 / game_get_speed(gamespeed_fps)) * (oldDelta / delta_time);
 	
 	/*if(keyboard_check(vk_shift))
 	{

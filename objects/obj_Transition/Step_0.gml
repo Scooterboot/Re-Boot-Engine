@@ -41,7 +41,7 @@ else
     }
 	if(nextDoor == noone)
     {
-        for(i = 0; i < instance_number(obj_Door); i += 1)
+        for(var i = 0; i < instance_number(obj_Door); i += 1)
         {
             if(instance_find(obj_Door,i).doorID == targetID)
             {

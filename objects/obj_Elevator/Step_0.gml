@@ -17,13 +17,13 @@ var eleSpeed = 3;
 
 if(activeDir != 0)
 {
-    if(obj_Player.x > x)
+    if(obj_Player.position.X > x)
     {
-        obj_Player.x = max(obj_Player.x-3,x);
+        obj_Player.position.X = max(obj_Player.position.X-3,x);
     }
-    if(obj_Player.x < x)
+    if(obj_Player.position.X < x)
     {
-        obj_Player.x = min(obj_Player.x+3,x);
+        obj_Player.position.X = min(obj_Player.position.X+3,x);
     }
     if(activeDir == dir)
     {
@@ -49,7 +49,10 @@ if(activeDir != 0)
             resetState = true;
         }
     }
-    obj_Player.y = PosY - (obj_Player.bbox_bottom-obj_Player.y);
+    obj_Player.position.Y = PosY - (obj_Player.bbox_bottom-obj_Player.y);
+	
+	obj_Player.x = scr_round(obj_Player.position.X);
+	obj_Player.y = scr_round(obj_Player.position.Y);
 
     frame2Counter++;
     if(frame2Counter > 1)

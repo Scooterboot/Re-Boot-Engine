@@ -53,30 +53,7 @@ function scr_MainInitialize()
 	
 	global.cursorGlow = 0;
 
-	//initialize room variables
-
 	global.rmHeated = false;
-
-	//initialize sound variables
-	global.prevShotSndIndex = noone;
-	global.prevExplodeSnd = noone;
-	global.breakSndCounter = 0;
-
-	//initialize music variables
-	//global.rmMusic = noone;
-
-	//global.musPrev = noone;
-	//global.musCurrent = noone;
-	//global.musNext = noone;
-
-
-	audio_group_load(audio_music);		//load music audio group
-	audio_group_load(audio_sound);		//load sound audio group
-	audio_group_load(audio_ambiance);	//load ambiance audio group
-
-	audio_group_set_gain(audio_music,global.musicVolume,0);		//set default music volume
-	audio_group_set_gain(audio_sound,global.soundVolume,0);		//set default sound volume
-	audio_group_set_gain(audio_ambiance,global.ambianceVolume,0);	//set default sound volume
 
 	randomize(); //randomize seed for various random numbers
 
@@ -122,5 +99,4 @@ function scr_MainInitialize()
 	
 	pal_swap_init_system(shd_pal_swapper); //initialize palette swapper system (Created by PixelatedPope)
 	
-	chameleon_init();
 }

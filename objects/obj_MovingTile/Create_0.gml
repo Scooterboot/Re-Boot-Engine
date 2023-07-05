@@ -2,12 +2,19 @@
 
 lhc_inherit_interface("IMovingSolid");
 
+isSolid = true;
+
 canGrip = true;
 grappleCollision = true;
 
 entityList = ds_list_create();
 
 ignoredEntity = noone;
+
+function IsEntity_Top(entity) { return place_meeting(x,y-1,entity); }
+function IsEntity_Bottom(entity) { return place_meeting(x,y+1,entity); }
+function IsEntity_Left(entity) { return place_meeting(x-1,y,entity); }
+function IsEntity_Right(entity) { return place_meeting(x+1,y,entity); }
 
 function UpdatePosition(_x,_y)
 {
@@ -22,43 +29,21 @@ function UpdatePosition(_x,_y)
 		bVelY = newPosY-y;
 	
 	//isSolid = false;
-	asset_remove_tags(obj_MovingTile,"IMovingSolid",asset_object);
-	asset_remove_tags(obj_MovingSlope,"IMovingSolid",asset_object);
-	asset_remove_tags(obj_MovingSlope_4th,"IMovingSolid",asset_object);
-	
-	var tNumX = 0,
-		tNumY = -1,
-		bNumX = 0,
-		bNumY = 1,
-		lNumX = -1,
-		lNumY = 0,
-		rNumX = 1,
-		rNumY = 0;
-	if(object_index == obj_MovingSlope || object_is_ancestor(object_index,obj_MovingSlope))
-	{
-		if(image_yscale > 0)
-		{
-			tNumX = sign(image_xscale);
-		}
-		else
-		{
-			bNumX = sign(image_xscale);
-		}
-		if(image_xscale > 0)
-		{
-			rNumY = -sign(image_yscale);
-		}
-		else
-		{
-			lNumY = -sign(image_yscale);
-		}
-	}
+	//asset_remove_tags(obj_MovingTile,"IMovingSolid",asset_object);
+	//asset_remove_tags(obj_MovingSlope,"IMovingSolid",asset_object);
+	//asset_remove_tags(obj_MovingSlope_4th,"IMovingSolid",asset_object);
 	
 	var num = instance_place_list(newPosX,newPosY,obj_Entity,entityList,false);
-		num += instance_place_list(x+tNumX,y+tNumY,obj_Entity,entityList,false);
-		num += instance_place_list(x+bNumX,y+bNumY,obj_Entity,entityList,false);
-		num += instance_place_list(x+lNumX,y+lNumY,obj_Entity,entityList,false);
-		num += instance_place_list(x+rNumX,y+lNumY,obj_Entity,entityList,false);
+	
+		num += instance_place_list(x,y-1,obj_Entity,entityList,false);
+		num += instance_place_list(x,y+1,obj_Entity,entityList,false);
+		num += instance_place_list(x-1,y,obj_Entity,entityList,false);
+		num += instance_place_list(x+1,y,obj_Entity,entityList,false);
+	
+		num += instance_place_list(x-1,y-1,obj_Entity,entityList,false);
+		num += instance_place_list(x+1,y-1,obj_Entity,entityList,false);
+		num += instance_place_list(x-1,y+1,obj_Entity,entityList,false);
+		num += instance_place_list(x+1,y+1,obj_Entity,entityList,false);
 	for(var i = 0; i < num; i++)
 	{
 		if(instance_exists(entityList[| i]) && array_contains(entityList[| i].solids,"IMovingSolid") && entityList[| i] != ignoredEntity)
@@ -84,19 +69,20 @@ function UpdatePosition(_x,_y)
 				var moveXFlag = false,
 					moveYFlag = false;
 				
-				if(place_meeting(newPosX,y,entity) || (place_meeting(newPosX,newPosY,entity) && !place_meeting(x,y+sign(bVelY),entity)))
+				if(place_meeting(newPosX,y,entity) || (place_meeting(newPosX,newPosY,entity) && !place_meeting(x,newPosY,entity)))
 				{
 					moveXFlag = true;
 				}
-				if(place_meeting(x,newPosY,entity) || (place_meeting(newPosX,newPosY,entity) && !place_meeting(x+sign(bVelX),y,entity)))
+				if(place_meeting(x,newPosY,entity) || (place_meeting(newPosX,newPosY,entity) && !place_meeting(newPosX,y,entity)))
 				{
 					moveYFlag = true;
 				}
 				
-				var edgeTop = place_meeting(x+tNumX*2,y+tNumY*2,entity),
-					edgeBottom = place_meeting(x+bNumX*2,y+bNumY*2,entity),
-					edgeLeft = place_meeting(x+lNumX*2,y+lNumY*2,entity),
-					edgeRight = place_meeting(x+rNumX*2,y+rNumY*2,entity);
+				var edgeTop = IsEntity_Top(entity),
+					edgeBottom = IsEntity_Bottom(entity),
+					edgeLeft = IsEntity_Left(entity),
+					edgeRight = IsEntity_Right(entity);
+				
 				var entityEdgeBottomX = entity.MoveStickBottom_X(id),
 					entityEdgeBottomY = entity.MoveStickBottom_Y(id),
 					entityEdgeTopX = entity.MoveStickTop_X(id),
@@ -105,6 +91,7 @@ function UpdatePosition(_x,_y)
 					entityEdgeRightY = entity.MoveStickRight_Y(id),
 					entityEdgeLeftX = entity.MoveStickLeft_X(id),
 					entityEdgeLeftY = entity.MoveStickLeft_Y(id);
+				
 				if ((edgeTop && entityEdgeBottomX) ||
 					(edgeBottom && entityEdgeTopX) ||
 					(edgeLeft && (entityEdgeRightX || bVelX < 0)) || 
@@ -139,25 +126,13 @@ function UpdatePosition(_x,_y)
 					{
 						moveY -= shiftedVelY;
 					}
-					var tempShiftX = shiftedVelX,
-						tempShiftY = shiftedVelY;
-					Collision_Basic(moveX,moveY,15,15,5,5,5,5);
-					if(moveXFlag)
-					{
-						shiftedVelX = x-xprevious;
-					}
-					else
-					{
-						shiftedVelX = tempShiftX;
-					}
-					if(moveYFlag)
-					{
-						shiftedVelY = y-yprevious;
-					}
-					else
-					{
-						shiftedVelY = tempShiftY;
-					}
+					var prevShiftX = shiftedVelX,
+						prevShiftY = shiftedVelY;
+					
+					Collision_MovingSolid(moveX,moveY,8,8);
+					
+					shiftedVelX = moveXFlag ? (x-xprevious) : prevShiftX;
+					shiftedVelY = moveYFlag ? (y-yprevious) : prevShiftY;
 				}
 			}
 		}
@@ -168,7 +143,7 @@ function UpdatePosition(_x,_y)
 	y = newPosY;
 	
 	//isSolid = true;
-	asset_add_tags(obj_MovingTile,"IMovingSolid",asset_object);
-	asset_add_tags(obj_MovingSlope,"IMovingSolid",asset_object);
-	asset_add_tags(obj_MovingSlope_4th,"IMovingSolid",asset_object);
+	//asset_add_tags(obj_MovingTile,"IMovingSolid",asset_object);
+	//asset_add_tags(obj_MovingSlope,"IMovingSolid",asset_object);
+	//asset_add_tags(obj_MovingSlope_4th,"IMovingSolid",asset_object);
 }

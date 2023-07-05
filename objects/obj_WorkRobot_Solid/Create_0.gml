@@ -21,7 +21,7 @@ for(var i = 0; i < 9; i++)
 		type = obj_MovingSlope_4th;
 		xscale = 1;
 		yscale = 1;
-		if(i == 0 || i == 7)
+		if(i == 0 )//|| i == 7)
 		{
 			xscale = -1;
 		}

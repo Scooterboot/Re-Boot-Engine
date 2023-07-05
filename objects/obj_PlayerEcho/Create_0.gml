@@ -6,12 +6,15 @@ surfH = 80;
 playerSurf = surface_create(surfW,surfH);
 
 #region DrawEcho
-function DrawEcho(posX, posY, rotation, alpha)
+function UpdateEchoSurface(_palShader, _palIndex, _palIndex2, _palDif)
 {
 	if(surface_exists(playerSurf))
 	{
 		surface_set_target(playerSurf);
 		draw_clear_alpha(c_black,0);
+		
+		pal_swap_set(_palShader,_palIndex,_palIndex2,_palDif,false);
+		
 		if(stateFrame != State.Morph || morphFrame > 0 || morphAlpha < 1)
 		{
 			var torso = torsoR;
@@ -55,9 +58,23 @@ function DrawEcho(posX, posY, rotation, alpha)
 		{
 			draw_sprite_ext(sprt_ArmGripOverlay,gripFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),fDir,1,0,c_white,1);
 		}
+		
+		shader_reset();
 	
 		surface_reset_target();
-	
+	}
+	else
+	{
+		playerSurf = surface_create(surfW,surfH);
+		surface_set_target(playerSurf);
+		draw_clear_alpha(c_black,0);
+		surface_reset_target();
+	}
+}
+function DrawEcho(posX, posY, rotation, alpha)
+{
+	if(surface_exists(playerSurf))
+	{
 		if(dmgFlash <= 0 && immuneTime > 0 && (immuneTime&1))
 		{
 			gpu_set_blendmode(bm_add);
@@ -74,13 +91,6 @@ function DrawEcho(posX, posY, rotation, alpha)
 			syy = scr_round(posY)-sc*sy+ss*sx;
 		draw_surface_ext(playerSurf,sxx+sprtOffsetX,syy+sprtOffsetY,1,1,rotation,c_white,alpha);
 		gpu_set_blendmode(bm_normal);
-	}
-	else
-	{
-		playerSurf = surface_create(surfW,surfH);
-		surface_set_target(playerSurf);
-		draw_clear_alpha(c_black,0);
-		surface_reset_target();
 	}
 }
 #endregion

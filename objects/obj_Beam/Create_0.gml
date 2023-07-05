@@ -97,6 +97,7 @@ if(isWave)
 		wavesPerSecond = 2.75;
 	}
 	tileCollide = false;
+	switchCollide = false;
 }
 else if(isSpazer)
 {
@@ -108,15 +109,16 @@ if(isPlasma)
 {
 	if(isWave || isSpazer)
 	{
-		delay += 2 + (3*isCharge);
+		delay += 3 + (3*isCharge);
 	}
 	multiHit = true;
 }
 else if(isSpazer)
 {
-	delay += 1 + (1*isCharge);
+	delay += 2 + (1*isCharge);
 }
-wavesPerSecond *= 1.25;
+//wavesPerSecond *= 1.25;
+wavesPerSecond *= 1.5;
 
 if(isSpazer || isPlasma)
 {

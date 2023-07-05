@@ -70,8 +70,13 @@ if(screenFade >= 1 && !menuClosing)
 			case 0:
 			{
 				//Music Volume
-				global.musicVolume = clamp(global.musicVolume+moveX*0.01,0,1);
-				global.musicVolume = scr_round(global.musicVolume*100)/100;
+				//global.musicVolume = clamp(global.musicVolume+moveX*0.01,0,1);
+				//global.musicVolume = scr_round(global.musicVolume*100)/100;
+				
+				var musvol = global.musicVolume*100;
+				musvol = clamp(musvol+moveX,0,100);
+				global.musicVolume = musvol/100;
+				
 				if(global.musicVolume > 0 && global.musicVolume < 1)
 				{
 					audio_play_sound(snd_Menu_Cursor_1,0,false);
@@ -82,8 +87,13 @@ if(screenFade >= 1 && !menuClosing)
 			case 1:
 			{
 				//Sound Volume
-				global.soundVolume = clamp(global.soundVolume+moveX*0.01,0,1);
-				global.soundVolume = scr_round(global.soundVolume*100)/100;
+				//global.soundVolume = clamp(global.soundVolume+moveX*0.01,0,1);
+				//global.soundVolume = scr_round(global.soundVolume*100)/100;
+				
+				var sndvol = global.soundVolume*100;
+				sndvol = clamp(sndvol+moveX,0,100);
+				global.soundVolume = sndvol/100;
+				
 				if(global.soundVolume > 0 && global.soundVolume < 1)
 				{
 					audio_play_sound(snd_Menu_Cursor_1,0,false);
@@ -94,8 +104,13 @@ if(screenFade >= 1 && !menuClosing)
 			case 2:
 			{
 				//Ambiance Volume
-				global.ambianceVolume = clamp(global.ambianceVolume+moveX*0.01,0,1);
-				global.ambianceVolume = scr_round(global.ambianceVolume*100)/100;
+				//global.ambianceVolume = clamp(global.ambianceVolume+moveX*0.01,0,1);
+				//global.ambianceVolume = scr_round(global.ambianceVolume*100)/100;
+				
+				var ambvol = global.ambianceVolume*100;
+				ambvol = clamp(ambvol+moveX,0,100);
+				global.ambianceVolume = ambvol/100;
+				
 				if(global.ambianceVolume > 0 && global.ambianceVolume < 1)
 				{
 					audio_play_sound(snd_Menu_Cursor_1,0,false);

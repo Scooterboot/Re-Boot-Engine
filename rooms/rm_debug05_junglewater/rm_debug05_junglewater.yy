@@ -56,7 +56,6 @@
     {"name":"inst_5F5B527C","path":"rooms/rm_debug05_JungleWater/rm_debug05_JungleWater.yy",},
     {"name":"inst_6ACF42F7","path":"rooms/rm_debug05_JungleWater/rm_debug05_JungleWater.yy",},
     {"name":"inst_3D84B17C","path":"rooms/rm_debug05_JungleWater/rm_debug05_JungleWater.yy",},
-    {"name":"inst_661DEA97","path":"rooms/rm_debug05_JungleWater/rm_debug05_JungleWater.yy",},
     {"name":"inst_1F394B81","path":"rooms/rm_debug05_JungleWater/rm_debug05_JungleWater.yy",},
     {"name":"inst_69D9DCA","path":"rooms/rm_debug05_JungleWater/rm_debug05_JungleWater.yy",},
     {"name":"inst_5151B623","path":"rooms/rm_debug05_JungleWater/rm_debug05_JungleWater.yy",},
@@ -156,7 +155,6 @@
 -2048,0,],"TileDataFormat":1,},"tilesetId":{"name":"ts_Tech","path":"tilesets/ts_Tech/ts_Tech.yy",},"userdefinedDepth":false,"visible":true,"x":0,"y":0,},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Liquids","depth":1400,"effectEnabled":true,"effectType":null,"gridX":16,"gridY":16,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[],"layers":[],"properties":[],"userdefinedDepth":false,"visible":true,},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"WorldObjects","depth":1500,"effectEnabled":true,"effectType":null,"gridX":16,"gridY":16,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
-        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_661DEA97","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"obj_Item_Spazer","path":"objects/obj_Item_Spazer/obj_Item_Spazer.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":160.0,"y":464.0,},
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_69D9DCA","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"obj_DoorHatch","path":"objects/obj_DoorHatch/obj_DoorHatch.yy",},"properties":[],"rotation":90.0,"scaleX":1.0,"scaleY":1.0,"x":64.0,"y":496.0,},
       ],"layers":[],"properties":[],"userdefinedDepth":false,"visible":true,},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Player","depth":1600,"effectEnabled":true,"effectType":null,"gridX":16,"gridY":16,"hierarchyFrozen":false,"inheritLayerDepth":true,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[],"layers":[],"properties":[],"userdefinedDepth":false,"visible":true,},

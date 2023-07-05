@@ -1974,7 +1974,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			case State.Grapple:
 			{
 				//aimFrame = 0;
-	            for(i = 0; i < array_length(frame); i += 1)
+	            for(var i = 0; i < array_length(frame); i += 1)
 	            {
 	                if(i != Frame.GrappleLeg && i != Frame.GrappleBody && i != Frame.JAim)
 	                {
@@ -2021,7 +2021,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					}
 					else
 					{
-						frame[Frame.GrappleBody] = scr_wrap(9-scr_round(grapAngle/18)*dir,0,20);
+						frame[Frame.GrappleBody] = scr_wrap(10-scr_round(grapAngle/18)*dir,0,20);
 					}
 					bodyFrame = frame[Frame.GrappleBody];
 					
@@ -2416,7 +2416,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			#region Push
 			case State.Push:
 			{
-				for(i = 0; i < array_length(frame); i += 1)
+				for(var i = 0; i < array_length(frame); i += 1)
 	            {
 	                if(i != Frame.Push)
 	                {
@@ -2617,45 +2617,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	}
 	#endregion
 
-	// ----- After Images -----
-	#region After Images
-	
-	afterImgAlphaMult = 0.625;
-	if(!speedBoost && state != State.Spark && state != State.BallSpark)
-	{
-		afterImgAlphaMult = 0.25;//0.375;
-		if(state == State.Dodge)
-		{
-			drawAfterImage = true;
-			afterImageNum = min(abs(fVelX), 10);
-		}
-		else if(state == State.Grapple || (grapBoost && !boots[Boots.SpaceJump]))
-		{
-			if(point_distance(xprevious,yprevious,x,y) >= 3)
-			{
-				drawAfterImage = true;
-				afterImageNum = min((point_distance(xprevious,yprevious,x,y)-3),10);
-			}
-		}
-		else if(notGrounded && boots[Boots.SpaceJump] && state == State.Somersault && !liquidMovement)
-		{
-			drawAfterImage = true;
-			afterImageNum = 10;
-		}
-		else if(notGrounded && fVelY < 0)
-		{
-			drawAfterImage = true;
-			afterImageNum = min(abs(fVelY)*1.5, 10);
-		}
-		else if(notGrounded && fVelY >= 3)
-		{
-			drawAfterImage = true;
-			afterImageNum = min((abs(fVelY)-3),10);
-		}
-	}
-	
-	#endregion
-	
 	// ----- MB Trail -----
 	#region MB Trail
 	
@@ -2719,6 +2680,47 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			mbTrailAlpha = max(mbTrailAlpha-0.1, 0);
 		}
 	}
+	
+	#endregion
+	
+	// ----- After Images -----
+	#region After Images
+	
+	afterImgAlphaMult = 0.625;
+	if(!speedBoost && state != State.Spark && state != State.BallSpark)
+	{
+		afterImgAlphaMult = 0.25;//0.375;
+		if(state == State.Dodge)
+		{
+			drawAfterImage = true;
+			afterImageNum = min(abs(fVelX), 10);
+		}
+		else if(state == State.Grapple || (grapBoost && !boots[Boots.SpaceJump]))
+		{
+			if(point_distance(xprevious,yprevious,x,y) >= 3)
+			{
+				drawAfterImage = true;
+				afterImageNum = min((point_distance(xprevious,yprevious,x,y)-3),10);
+			}
+		}
+		else if(notGrounded && boots[Boots.SpaceJump] && state == State.Somersault && !liquidMovement)
+		{
+			drawAfterImage = true;
+			afterImageNum = 10;
+		}
+		else if(notGrounded && fVelY < 0)
+		{
+			drawAfterImage = true;
+			afterImageNum = min(abs(fVelY)*1.5, 10);
+		}
+		else if(notGrounded && fVelY >= 3)
+		{
+			drawAfterImage = true;
+			afterImageNum = min((abs(fVelY)-3),10);
+		}
+	}
+	
+	AfterImage(drawAfterImage,rotation,afterImgDelay,afterImageNum,afterImgAlphaMult);
 	
 	#endregion
 	
@@ -3174,7 +3176,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			if(!audio_is_playing(snd_HeatDamageLoop))
 	        {
 	            var snd = audio_play_sound(snd_HeatDamageLoop,0,true);
-	            audio_sound_gain(snd,0.7*global.soundVolume,0);
+	            audio_sound_gain(snd,0.7,0);
 	        }
 			
 			palFlag = true;
@@ -3191,7 +3193,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	        if(!audio_is_playing(snd_LavaDamageLoop))
 	        {
 	            var snd = audio_play_sound(snd_LavaDamageLoop,0,true);
-	            audio_sound_gain(snd,0.8*global.soundVolume,0);
+	            audio_sound_gain(snd,0.8,0);
 	        }
         
 	        palFlag = true;
@@ -3250,6 +3252,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		grapWJCounter = max(grapWJCounter-1,0);
 		
 		hyperFired = max(hyperFired-1,0);
+		
+		stallCamera = false;
 		
 		if(state != prevState)
 		{
