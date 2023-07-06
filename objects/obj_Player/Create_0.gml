@@ -655,8 +655,6 @@ chargeFrameCounter = 0;
 particleFrame = 0;
 particleFrameMax = 4;
 
-chargeEmit = part_emitter_create(obj_Particles.partSystemA);
-
 
 //downV
 turnArmPosX[0,0] = -9;
@@ -1355,7 +1353,7 @@ function CanMoveUpSlope_Bottom()
 	}
 	return true;
 }
-function OnSlopeXCollision_Bottom(fVX)
+function OnSlopeXCollision_Bottom(fVX, yShift)
 {
 	grounded = true;
 	if(entityPlatformCheck(0,1))
@@ -1389,18 +1387,18 @@ function OnSlopeXCollision_Bottom(fVX)
 		
 		velY = 0;
 	}
-	else if(grounded && (state == State.Stand || state == State.Morph) && abs(fVelX) >= maxSpeed[1,liquidState] && !entity_place_collide(fVX+fVelX,0))
+	else if(grounded && (state == State.Stand || state == State.Morph) && abs(fVelX) >= maxSpeed[1,liquidState] && !entity_place_collide(fVX+fVelX,yShift))
 	{
 		var flag = false;
 		
 		var bbottom = position.Y + (bbox_bottom-y),
 			bright = position.X + (bbox_right-x),
 			bleft = position.X + (bbox_left-x);
-		if(fVelX > 0 && !entity_collision_line(bright+fVX+fVelX,y,bright+fVX+fVelX,bbottom+1))
+		if(fVelX > 0 && !entity_collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1))
 		{
 			flag = true;
 		}
-		if(fVelX < 0 && !entity_collision_line(bleft+fVX+fVelX,y,bleft+fVX+fVelX,bbottom+1))
+		if(fVelX < 0 && !entity_collision_line(bleft+fVX+fVelX,y+yShift,bleft+fVX+fVelX,bbottom+yShift+1))
 		{
 			flag = true;
 		}
@@ -1432,7 +1430,7 @@ function CanMoveUpSlope_Top()
 {
 	return (((state == State.Spark || state == State.BallSpark) && abs(shineDir) >= 2) || state == State.Dodge || state == State.Grapple);
 }
-function OnSlopeXCollision_Top(fVX)
+function OnSlopeXCollision_Top(fVX, yShift)
 {
 	
 }
@@ -1516,7 +1514,7 @@ function CanMoveUpSlope_Right()
 {
 	return CanMoveUpSlope_LeftRight(-1);
 }
-function OnSlopeYCollision_Right(fVY)
+function OnSlopeYCollision_Right(fVY, xShift)
 {
 	
 }
@@ -1527,7 +1525,7 @@ function CanMoveUpSlope_Left()
 {
 	return CanMoveUpSlope_LeftRight(1);
 }
-function OnSlopeYCollision_Left(fVY)
+function OnSlopeYCollision_Left(fVY, xShift)
 {
 	
 }
@@ -1653,7 +1651,7 @@ function Crawler_CanMoveUpSlope_Bottom()
 	}
 	return false;
 }
-function Crawler_OnSlopeXCollision_Bottom(fVX)
+function Crawler_OnSlopeXCollision_Bottom(fVX, yShift)
 {
 	if(state == State.BallSpark)
 	{
@@ -1697,7 +1695,7 @@ function Crawler_CanMoveUpSlope_Top()
 	}
 	return false;
 }
-function Crawler_OnSlopeXCollision_Top(fVX)
+function Crawler_OnSlopeXCollision_Top(fVX, yShift)
 {
 	if(state == State.BallSpark)
 	{
@@ -1794,7 +1792,7 @@ function Crawler_CanMoveUpSlope_Right()
 	}
 	return false;
 }
-function Crawler_OnSlopeYCollision_Right(fVY)
+function Crawler_OnSlopeYCollision_Right(fVY, xShift)
 {
 	if(state == State.BallSpark)
 	{
@@ -1838,7 +1836,7 @@ function Crawler_CanMoveUpSlope_Left()
 	}
 	return false;
 }
-function Crawler_OnSlopeYCollision_Left(fVY)
+function Crawler_OnSlopeYCollision_Left(fVY, xShift)
 {
 	if(state == State.BallSpark)
 	{
@@ -4285,12 +4283,9 @@ function PostDrawPlayer(posX, posY, rot, alph)
 					x2 = pX+8,
 					y1 = pY-8,
 					y2 = pY+8;
-				if(!part_emitter_exists(obj_Particles.partSystemA,chargeEmit))
-				{
-					chargeEmit = part_emitter_create(obj_Particles.partSystemA);
-				}
-				part_emitter_region(obj_Particles.partSystemA,chargeEmit,x1,x2,y1,y2,ps_shape_ellipse,ps_distr_gaussian);
-				part_emitter_burst(obj_Particles.partSystemA,chargeEmit,obj_Particles.bTrails[partType],2+(statCharge >= maxCharge));
+				
+				part_emitter_region(obj_Particles.partSystemA,obj_Particles.partEmitA,x1,x2,y1,y2,ps_shape_ellipse,ps_distr_gaussian);
+				part_emitter_burst(obj_Particles.partSystemA,obj_Particles.partEmitA,obj_Particles.bTrails[partType],2+(statCharge >= maxCharge));
 		
 				particleFrame = 0;
 			}

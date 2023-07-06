@@ -3132,9 +3132,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 				else
 				{
-					stateFrame = State.Somersault;
-					mask_index = mask_Crouch;
-					state = State.Somersault;
+					//stateFrame = State.Somersault;
+					//mask_index = mask_Crouch;
+					//state = State.Somersault;
+					ChangeState(State.Somersault,State.Somersault,mask_Crouch,false);
 				}
 				if(abs(shineDir) == 2)
 				{

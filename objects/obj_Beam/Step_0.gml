@@ -15,10 +15,12 @@ if(particleType != -1)
 	pType = obj_Particles.bTrails[particleType];
 }
 
-var partSys = obj_Particles.partSystemC;
+var partSys = obj_Particles.partSystemC,
+	partEmit = obj_Particles.partEmitC;
 if(isWave)
 {
 	partSys = obj_Particles.partSystemA;
+	partEmit = obj_Particles.partEmitA;
 }
 
 if(!global.gamePaused)
@@ -44,29 +46,23 @@ if(!global.gamePaused)
 				
 				var x1 = x+lengthdir_x(offset,ang+90), x2 = x-lengthdir_x(len,ang)+lengthdir_x(offset,ang+90),
 					y1 = y+lengthdir_y(offset,ang+90), y2 = y-lengthdir_y(len,ang)+lengthdir_y(offset,ang+90);
-				if(!part_emitter_exists(partSys,emit))
-				{
-					emit = part_emitter_create(partSys);
-				}
-				part_emitter_region(partSys,emit,x1,x2,y1,y2,ps_shape_line,ps_distr_linear);
-				part_emitter_burst(partSys,emit,pType,pNum / max(num,1) / 1.5);
+				
+				part_emitter_region(partSys,partEmit,x1,x2,y1,y2,ps_shape_line,ps_distr_linear);
+				part_emitter_burst(partSys,partEmit,pType,pNum / max(num,1) / 1.5);
 				
 				var x3 = x+lengthdir_x(offset,ang-90), x4 = x-lengthdir_x(len,ang)+lengthdir_x(offset,ang-90),
 					y3 = y+lengthdir_y(offset,ang-90), y4 = y-lengthdir_y(len,ang)+lengthdir_y(offset,ang-90);
 				
-				part_emitter_region(partSys,emit,x3,x4,y3,y4,ps_shape_line,ps_distr_linear);
-				part_emitter_burst(partSys,emit,pType,pNum / max(num,1) / 1.5);
+				part_emitter_region(partSys,partEmit,x3,x4,y3,y4,ps_shape_line,ps_distr_linear);
+				part_emitter_burst(partSys,partEmit,pType,pNum / max(num,1) / 1.5);
 			}
 			else
 			{
 				var x1 = bbox_left+2, x2 = bbox_right-1,
 					y1 = bbox_top+2, y2 = bbox_bottom-1;
-				if(!part_emitter_exists(partSys,emit))
-				{
-					emit = part_emitter_create(partSys);
-				}
-				part_emitter_region(partSys,emit,x1,x2,y1,y2,ps_shape_ellipse,ps_distr_linear);
-				part_emitter_burst(partSys, emit, pType, pNum / max(num,1));
+				
+				part_emitter_region(partSys,partEmit,x1,x2,y1,y2,ps_shape_ellipse,ps_distr_linear);
+				part_emitter_burst(partSys, partEmit, pType, pNum / max(num,1));
 			}
 		}
 		

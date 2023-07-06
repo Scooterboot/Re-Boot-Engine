@@ -1,37 +1,24 @@
-/// @description Create and Alter Drawing
+/// @description Initialize
 
 global.gamePaused = true;
 
 var xbackdepth = layer_get_depth(layer_get_id("Tiles_bg0")) - 1;
-BackDraw = instance_create_depth(x,y,xbackdepth,obj_XRayBack);
-BackAlpha = 0.25;
-BackAlphaNum = 1;
+backDraw = instance_create_depth(x,y,xbackdepth,obj_XRayBack);
+backAlpha = 0.25;
+backAlphaNum = 1;
 
-ConeDir = 0;
-ConeSpread = 0;
-VisorX = x;
-VisorY = y;
+coneDir = 0;
+coneSpread = 0;
+visorX = x;
+visorY = y;
 
-Die = 0;
+kill = 0;
 
-Alpha = 0;
-DarkAlpha = 0;
+alpha = 0;
+darkAlpha = 0;
 
-RefreshThisFrame = 0;
+refresh = 0;
 
-//for(var i = 0; i < 4; i++)
-//{
-//	var lay = layer_get_id("Tiles_fg"+string(i));
-//	if(layer_exists(lay))
-//	{
-//		layer_set_visible(lay,false);
-//	}
-//	/*lay = layer_get_id("Tiles_bg"+string(i));
-//	if(layer_exists(lay))
-//	{
-//		layer_set_visible(lay,false);
-//	}*/
-//}
 tileLayers = scr_GetLayersFromString("Tiles_fg");
 for(var i = 0; i < array_length(tileLayers); i++)
 {
@@ -46,54 +33,38 @@ for(var i = 0; i < array_length(bgTileLayers); i++)
 xRaySound = noone;
 xRaySoundPlayed = false;
 
-Width = surface_get_width(application_surface);
-Height = surface_get_height(application_surface);
+width = surface_get_width(application_surface);
+height = surface_get_height(application_surface);
 
-SurfaceFront = surface_create(Width,Height);
-SurfaceBack = surface_create(Width,Height);
-SurfaceFrontTemp = surface_create(Width,Height);
-SurfaceBackTemp = surface_create(Width,Height); 
-AlphaMask = surface_create(Width,Height);
-AlphaMaskTemp = surface_create(Width,Height);
-BreakMask = surface_create(Width,Height);
-BreakMaskTemp = surface_create(Width,Height);
+surfaceFront = surface_create(width,height);
+surfaceBack = surface_create(width,height);
+surfaceFrontTemp = surface_create(width,height);
+surfaceBackTemp = surface_create(width,height); 
+alphaMask = surface_create(width,height);
+alphaMaskTemp = surface_create(width,height);
+breakMask = surface_create(width,height);
+breakMaskTemp = surface_create(width,height);
 
-OutlineSurf = surface_create(Width,Height);
-OutlineSurf2 = surface_create(Width,Height);
-OutlineSurfTemp = surface_create(Width,Height);
-//oColorHue = 0;
+outlineSurf = surface_create(width,height);
+outlineSurf2 = surface_create(width,height);
+outlineSurfTemp = surface_create(width,height);
 outlineFlash = 0;
-
-//FinalSurface = surface_create(Width,Height);
 
 #region xray_refresh()
 function xray_refresh()
 {
-	// Use rarely. Slow.
 	with (obj_XRay)
 	{
-		RefreshThisFrame = 1;
+		refresh = 1;
 	}
 }
 #endregion
 #region xray_redraw_front()
 function xray_redraw_front()
 {
-	surface_set_target(SurfaceFront);
+	surface_set_target(surfaceFront);
 	draw_clear_alpha(0,0);
 
-	/*for(var i = 3; i >= 0; i--)
-	{
-		var lay = layer_get_id("Tiles_fg"+string(i));
-		if(layer_exists(lay))
-		{
-			var TilesFront = layer_tilemap_get_id(lay);
-			if(layer_tilemap_exists(lay,TilesFront))
-			{
-				draw_tilemap(TilesFront,-camera_get_view_x(view_camera[0]),-camera_get_view_y(view_camera[0]));
-			}
-		}
-	}*/
 	for(var i = array_length(tileLayers)-1; i >= 0; i--)
 	{
 		var TilesFront = layer_tilemap_get_id(tileLayers[i]);
@@ -109,18 +80,9 @@ function xray_redraw_front()
 #region xray_redraw_back()
 function xray_redraw_back()
 {
-	surface_set_target(SurfaceBack);
+	surface_set_target(surfaceBack);
 	draw_clear_alpha(0,0);
 
-	/*for(var i = 3; i >= 0; i--)
-	{
-		var lay = layer_get_id("Tiles_bg"+string(i));
-		if(layer_exists(lay))
-		{
-			var TilesFront = layer_tilemap_get_id(lay);
-			draw_tilemap(TilesFront,-camera_get_view_x(view_camera[0]),-camera_get_view_y(view_camera[0]));
-		}
-	}*/
 	for(var i = array_length(bgTileLayers)-1; i >= 0; i--)
 	{
 		var TilesBack = layer_tilemap_get_id(bgTileLayers[i]);
@@ -139,11 +101,8 @@ function xray_redraw_alpha()
 	var camx = camera_get_view_x(view_camera[0]),
 		camy = camera_get_view_y(view_camera[0]);
 	
-	surface_set_target(AlphaMask);
+	surface_set_target(alphaMask);
 	draw_clear_alpha(c_black,0);
-
-	//gpu_set_blendenable(false);
-	//gpu_set_colorwriteenable(0,0,0,1);
 	
 	with (obj_Tile)
 	{
@@ -162,9 +121,6 @@ function xray_redraw_alpha()
 	{
 	    draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
 	}
-	
-	//gpu_set_colorwriteenable(1,1,1,1);
-	//gpu_set_blendenable(true);
 
 	surface_reset_target();
 }
@@ -172,14 +128,13 @@ function xray_redraw_alpha()
 #region xray_redraw_break()
 function xray_redraw_break()
 {
-	surface_set_target(BreakMask);
+	surface_set_target(breakMask);
 	draw_clear_alpha(c_black,0);
 
 	with (obj_Breakable)
 	{
 		if(object_index != obj_Spikes && object_index != obj_NPCBreakable)
 		{
-			//draw_sprite_ext(sprite_index,1,x-camera_get_view_x(view_camera[0]),y-camera_get_view_y(view_camera[0]),1,1,0,c_white,1);
 			DrawBreakable(x-camera_get_view_x(view_camera[0]),y-camera_get_view_y(view_camera[0]),image_index);
 		}
 	}
@@ -197,7 +152,7 @@ function xray_redraw_outline()
 	var camx = camera_get_view_x(view_camera[0]),
 		camy = camera_get_view_y(view_camera[0]);
 	
-	surface_set_target(OutlineSurf);
+	surface_set_target(outlineSurf);
 	draw_clear_alpha(c_black,0);
 
 	with (obj_Tile)
@@ -244,28 +199,12 @@ function xray_redraw_outline2()
 	var camx = camera_get_view_x(view_camera[0]),
 		camy = camera_get_view_y(view_camera[0]);
 	
-	surface_set_target(OutlineSurf2);
+	surface_set_target(outlineSurf2);
 	draw_clear_alpha(c_black,0);
-	
-	/*var visorX = x - camx + lengthdir_x(1,ConeDir),
-		visorY = y - camy + lengthdir_y(1,ConeDir);
-	
-	/*draw_primitive_begin(pr_linelist);
-	draw_vertex_colour(visorX,visorY,c_white,1);
-	draw_vertex_colour(visorX+lengthdir_x(500,ConeDir + ConeSpread),visorY+lengthdir_y(500,ConeDir + ConeSpread),c_white,0.5);
-	draw_vertex_colour(visorX,visorY,c_white,1);
-	draw_vertex_colour(visorX+lengthdir_x(500,ConeDir - ConeSpread),visorY+lengthdir_y(500,ConeDir - ConeSpread),c_white,0.5);
-	draw_primitive_end();
-	
-	draw_primitive_begin(pr_trianglelist);
-	draw_vertex_colour(visorX,visorY,c_white,0.5);
-	draw_vertex_colour(visorX+lengthdir_x(500,ConeDir + ConeSpread),visorY+lengthdir_y(500,ConeDir + ConeSpread),c_white,0.5);
-	draw_vertex_colour(visorX+lengthdir_x(500,ConeDir - ConeSpread),visorY+lengthdir_y(500,ConeDir - ConeSpread),c_white,0.5);
-	draw_primitive_end();*/
 	
 	with(obj_Platform)
 	{
-		if(!XRayHide)
+		if(!xRayHide)
 		{
 			draw_set_color(c_white);
 			draw_set_alpha(1);
@@ -278,7 +217,7 @@ function xray_redraw_outline2()
 		}
 	}
 
-	if(surface_exists(OutlineSurf))
+	if(surface_exists(outlineSurf))
 	{
 		shader_set(shd_Outline);
 
@@ -286,12 +225,12 @@ function xray_redraw_outline2()
 		shader_set_uniform_f(outlineColor, 1,1,1,1 );
 
 		var outlineW = shader_get_uniform(shd_Outline,"outlineW");
-		shader_set_uniform_f(outlineW, 1/Width);
+		shader_set_uniform_f(outlineW, 1/width);
 
 		var outlineH = shader_get_uniform(shd_Outline,"outlineH")
-		shader_set_uniform_f(outlineH, 1/Height)
+		shader_set_uniform_f(outlineH, 1/height)
 	
-		draw_surface_ext(OutlineSurf,0,0,1,1,0,c_white,1);
+		draw_surface_ext(outlineSurf,0,0,1,1,0,c_white,1);
 		shader_reset();
 	}
 

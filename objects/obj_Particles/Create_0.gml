@@ -4,14 +4,22 @@
 partSystemA = part_system_create();
 part_system_layer(partSystemA,layer_get_id("Projectiles_fg"));
 part_system_automatic_update(partSystemA,false);
+partEmitA = part_emitter_create(partSystemA);
 
 partSystemB = part_system_create();
 part_system_layer(partSystemB,layer_get_id("WorldObjects"));
 part_system_automatic_update(partSystemB,false);
+partEmitB = part_emitter_create(partSystemB);
 
 partSystemC = part_system_create();
 part_system_layer(partSystemC,layer_get_id("Projectiles"));
 part_system_automatic_update(partSystemC,false);
+partEmitC = part_emitter_create(partSystemC);
+
+partSystemD = part_system_create();
+part_system_layer(partSystemD,layer_get_id("BTS_Tiles"));
+part_system_automatic_update(partSystemD,false);
+partEmitD = part_emitter_create(partSystemD);
 
 
 //Basic dust
@@ -370,10 +378,6 @@ part_type_speed(npcDeath[7],6,8,-0.25,0);
 part_type_gravity(npcDeath[7],.9,270);
 
 
-partSystemD = part_system_create();
-//part_system_depth(partSystemD,95);
-part_system_layer(partSystemD,layer_get_id("BTS_Tiles"));
-part_system_automatic_update(partSystemD,false);
 
 blockBreak[0] = part_type_create();
 part_type_sprite(blockBreak[0],sprt_BlockBreak,true,true,false);

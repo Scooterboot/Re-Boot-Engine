@@ -2,40 +2,19 @@
 
 global.gamePaused = false;
 
-surface_free(SurfaceFront);
-surface_free(SurfaceBack);
-surface_free(SurfaceFrontTemp);
-surface_free(SurfaceBackTemp);
-surface_free(AlphaMask);
-surface_free(AlphaMaskTemp);
-surface_free(BreakMask);
-surface_free(BreakMaskTemp);
+surface_free(surfaceFront);
+surface_free(surfaceBack);
+surface_free(surfaceFrontTemp);
+surface_free(surfaceBackTemp);
+surface_free(alphaMask);
+surface_free(alphaMaskTemp);
+surface_free(breakMask);
+surface_free(breakMaskTemp);
 
-surface_free(OutlineSurf);
-surface_free(OutlineSurf2);
-surface_free(OutlineSurfTemp);
+surface_free(outlineSurf);
+surface_free(outlineSurf2);
+surface_free(outlineSurfTemp);
 
-//surface_free(SurfaceFade);
-//surface_free(SurfaceFadeTemp);
-
-/*for(var i = 0; i < 4; i++)
-{
-	var lay = layer_get_id("Tiles_fg"+string(i));
-	if(layer_exists(lay))
-	{
-		layer_set_visible(lay,true);
-	}
-	/*lay = layer_get_id("Tiles_bg"+string(i));
-	if(layer_exists(lay))
-	{
-		layer_set_visible(lay,true);
-	}
-	lay = layer_get_id("Tiles_fade"+string(i));
-	if(layer_exists(lay))
-	{
-		layer_set_visible(lay,true);
-	}//
-}*/
 for(var i = 0; i < array_length(tileLayers); i++)
 {
 	layer_set_visible(tileLayers[i],true);
@@ -48,9 +27,4 @@ for(var i = 0; i < array_length(bgTileLayers); i++)
 audio_stop_sound(snd_XRay);
 audio_stop_sound(snd_XRay_Loop);
 
-instance_destroy(BackDraw);
-
-/*with (oDoor)
-{
- visible = 1;
-}*/
+instance_destroy(backDraw);

@@ -308,7 +308,7 @@ if(currentScreen == MainScreen.FileSelect || currentScreen == MainScreen.FileCop
 	}
 	buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1]+"   ${menuCancelButton} - "+bTip;
 	var str = InsertIconsIntoString(buttonTipString);
-	if(buttonTipScrib.text != str)
+	if(buttonTipScrib.get_text() != str)
 	{
 		buttonTipScrib.overwrite(str);
 	}

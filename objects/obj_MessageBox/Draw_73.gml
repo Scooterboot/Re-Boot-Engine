@@ -16,7 +16,7 @@ switch (messageType)
 			
 			var str = header;
 			var str2 = InsertIconsIntoString(description);
-			if(descScrib.text != str2)
+			if(descScrib.get_text() != str2)
 			{
 				descScrib.overwrite(str2);
 			}

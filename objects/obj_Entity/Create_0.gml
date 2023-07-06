@@ -239,7 +239,7 @@ function OnXCollision(fVX) {} // same as both above
 //	 - /
 //	- /
 function CanMoveUpSlope_Bottom() { return true; }
-function OnSlopeXCollision_Bottom(fVX) {} // -->/
+function OnSlopeXCollision_Bottom(fVX, yShift) {} // -->/
 
 // check if allowed to move "down" a slope while on the floor, like so:
 //	\ -
@@ -252,7 +252,7 @@ function CanMoveDownSlope_Bottom() { return true; }
 //	 - \
 //	  ->\
 function CanMoveUpSlope_Top() { return false; }
-function OnSlopeXCollision_Top(fVX) {} // -->\
+function OnSlopeXCollision_Top(fVX, yShift) {} // -->\
 
 // check if allowed to move "down" a slope while on the ceiling, like so:
 //	  / ->
@@ -271,7 +271,7 @@ function OnYCollision(fVY) {} // same as both above
 //	 | \
 //	  | \
 function CanMoveUpSlope_Right() { return false; }
-function OnSlopeYCollision_Right(fVY) {}
+function OnSlopeYCollision_Right(fVY, xShift) {}
 
 // check if allowed to move "down" a slope on the right wall, like so:
 //	  ^ /
@@ -284,7 +284,7 @@ function CanMoveDownSlope_Right() { return false; }
 //	 / |
 //	/ |
 function CanMoveUpSlope_Left() { return false; }
-function OnSlopeYCollision_Left(fVY) {}
+function OnSlopeYCollision_Left(fVY, xShift) {}
 
 // check if allowed to move "down" a slope on the left wall, like so:
 //	\ ^
@@ -384,21 +384,21 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 			{
 				if(yplus > 0)
 				{
+					OnSlopeXCollision_Top(fVX,yplus);
 					position.Y = floor(position.Y + yplus);
 					if(entity_place_collide(fVX,0))
 					{
 						position.Y += 1;
 					}
-					OnSlopeXCollision_Top(fVX);
 				}
 				else
 				{
+					OnSlopeXCollision_Bottom(fVX,yplus);
 					position.Y = ceil(position.Y + yplus);
 					if(entity_place_collide(fVX,0))
 					{
 						position.Y -= 1;
 					}
-					OnSlopeXCollision_Bottom(fVX);
 				}
 			}
 		}
@@ -565,21 +565,21 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 			{
 				if(xplus > 0)
 				{
+					OnSlopeYCollision_Left(fVY,xplus);
 					position.X = floor(position.X + xplus);
 					if(entity_place_collide(0,fVY))
 					{
 						position.X += 1;
 					}
-					OnSlopeYCollision_Left(fVY);
 				}
 				else
 				{
+					OnSlopeYCollision_Right(fVY,xplus);
 					position.X = ceil(position.X + xplus);
 					if(entity_place_collide(0,fVY))
 					{
 						position.X -= 1;
 					}
-					OnSlopeYCollision_Right(fVY);
 				}
 			}
 		}
@@ -688,7 +688,7 @@ function Crawler_CanMoveUpSlope_Bottom()
 {
 	return (colEdge == Edge.Bottom || colEdge == Edge.None);
 }
-function Crawler_OnSlopeXCollision_Bottom(fVX) // -->/
+function Crawler_OnSlopeXCollision_Bottom(fVX, yShift) // -->/
 {
 	if(colEdge == Edge.None)
 	{
@@ -713,7 +713,7 @@ function Crawler_CanMoveUpSlope_Top()
 {
 	return (colEdge == Edge.Top || colEdge == Edge.None);
 }
-function Crawler_OnSlopeXCollision_Top(fVX) // -->\
+function Crawler_OnSlopeXCollision_Top(fVX, yShift) // -->\
 {
 	if(colEdge == Edge.None)
 	{
@@ -744,7 +744,7 @@ function Crawler_CanMoveUpSlope_Right()
 {
 	return (colEdge == Edge.Right);
 }
-function Crawler_OnSlopeYCollision_Right(fVY)
+function Crawler_OnSlopeYCollision_Right(fVY, xShift)
 {
 	if(colEdge == Edge.None)
 	{
@@ -769,7 +769,7 @@ function Crawler_CanMoveUpSlope_Left()
 {
 	return (colEdge == Edge.Left);
 }
-function Crawler_OnSlopeYCollision_Left(fVY)
+function Crawler_OnSlopeYCollision_Left(fVY, xShift)
 {
 	if(colEdge == Edge.None)
 	{
@@ -922,21 +922,21 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCo
 			{
 				if(yplus > 0)
 				{
+					Crawler_OnSlopeXCollision_Top(fVX,yplus);
 					position.Y = floor(position.Y + yplus);
 					if(entity_place_collide(fVX,0))
 					{
 						position.Y += 1;
 					}
-					Crawler_OnSlopeXCollision_Top(fVX);
 				}
 				else
 				{
+					Crawler_OnSlopeXCollision_Bottom(fVX,yplus);
 					position.Y = ceil(position.Y + yplus);
 					if(entity_place_collide(fVX,0))
 					{
 						position.Y -= 1;
 					}
-					Crawler_OnSlopeXCollision_Bottom(fVX);
 				}
 			}
 		}
@@ -1127,21 +1127,21 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCo
 			{
 				if(xplus > 0)
 				{
+					Crawler_OnSlopeYCollision_Left(fVY,xplus);
 					position.X = floor(position.X + xplus);
 					if(entity_place_collide(0,fVY))
 					{
 						position.X += 1;
 					}
-					Crawler_OnSlopeYCollision_Left(fVY);
 				}
 				else
 				{
+					Crawler_OnSlopeYCollision_Right(fVY,xplus);
 					position.X = ceil(position.X + xplus);
 					if(entity_place_collide(0,fVY))
 					{
 						position.X -= 1;
 					}
-					Crawler_OnSlopeYCollision_Right(fVY);
 				}
 			}
 		}

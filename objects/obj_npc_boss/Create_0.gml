@@ -55,7 +55,6 @@ function AnimBone(_defaultX, _defaultY, _parentBone = pointer_null) constructor
 			position.Equals(basePos);
 			position.Add(pos2);
 		}
-		//if(abs(overrideDir) <= 1)
 		if(overrideDir != pointer_null)
 		{
 			dir = overrideDir;
@@ -85,8 +84,6 @@ function AnimBone(_defaultX, _defaultY, _parentBone = pointer_null) constructor
 				//child.position = position.Add(RotationToVector2(AngleFlip(offsetRot, dir)).Multiply(dist)).MultiplyVector2(scale)
 				// child.position = position + RotationToVector2(AngleFlip(offsetRot, dir)) * dist * scale;
 				
-				//offsetRot = scr_round(offsetRot);
-				
 				var cpos2 = RotationToVector2(AngleFlip(offsetRot, dir));
 				cpos2.Multiply(dist);
 				cpos2.MultiplyVector2(scale);
@@ -94,7 +91,6 @@ function AnimBone(_defaultX, _defaultY, _parentBone = pointer_null) constructor
 				child.position.Equals(position);
 				child.position.Add(cpos2);
 				
-				//if(overrideDir >= -1 && overrideDir <= 1)
 				if(overrideDir != pointer_null)
 				{
 					child.dir = overrideDir;
@@ -140,7 +136,7 @@ function DrawLimb(_name, _sprt, _bone, _bone2 = pointer_null) constructor
 	surfW = sprite_get_width(sprt);
 	surfH = sprite_get_height(sprt);
 	limbSurf = surface_create(surfW,surfH);
-	rotScale = 5;//8;
+	rotScale = 5;
 	limbSurf2 = surface_create(surfW*rotScale,surfH*rotScale);
 	function Clean()
 	{
@@ -167,8 +163,6 @@ function DrawLimb(_name, _sprt, _bone, _bone2 = pointer_null) constructor
 		var xOffset = sprite_get_xoffset(sprt),
 			yOffset = sprite_get_yoffset(sprt);
 		
-		//draw_sprite_ext(sprt,frame,scr_round(b.position.X),scr_round(b.position.Y),b.scale.X*dir,b.scale.Y,rot,b.color,b.alpha);
-		
 		if(surface_exists(limbSurf))
 		{
 			surface_set_target(limbSurf);
@@ -177,14 +171,6 @@ function DrawLimb(_name, _sprt, _bone, _bone2 = pointer_null) constructor
 			draw_sprite_ext(sprt,frame,xOffset,yOffset,1,1,0,c_white,1);
 			
 			surface_reset_target();
-			
-			/*var sc = dcos(rot),
-				ss = dsin(rot),
-				sx = xOffset * scaleX,
-				sy = yOffset * scaleY;
-			var sxx = scr_round(b.position.X)-sc*sx-ss*sy,
-				syy = scr_round(b.position.Y)-sc*sy+ss*sx;
-			draw_surface_ext(limbSurf,sxx,syy,scaleX,scaleY,rot,b.color,b.alpha);*/
 		}
 		else
 		{
@@ -197,9 +183,6 @@ function DrawLimb(_name, _sprt, _bone, _bone2 = pointer_null) constructor
 		{
 			surface_set_target(limbSurf2);
 			draw_clear_alpha(c_black,0);
-			
-			//shader_set(sh_better_scaling_hq4x);
-		    //shader_set_uniform_f(shader_get_uniform(sh_better_scaling_hq4x, "texel_size"), 1 / surface_get_width(limbSurf), 1 / surface_get_height(limbSurf));
 			
 			var shd = sh_better_scaling_5xbrc;
 			shader_set(shd);

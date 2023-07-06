@@ -1,6 +1,6 @@
 /// @description Free surfaces
 
-surface_free(FadeTileSurface);
-surface_free(FadeTileSurfaceTemp);
-surface_free(FadeTileSurfaceTemp2);
-surface_free(AlphaMask);
+surface_free(fadeTileSurface);
+surface_free(fadeTileSurfaceTemp);
+surface_free(fadeTileSurfaceTemp2);
+surface_free(alphaMask);

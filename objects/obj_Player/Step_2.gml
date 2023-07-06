@@ -16,24 +16,22 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
         {
             if(cUp)
             {
-                XRay.ConeDir += 3*dir;
+                XRay.coneDir += 3*dir;
             }
             if(cDown)
             {
-                XRay.ConeDir -= 3*dir;
+                XRay.coneDir -= 3*dir;
             }
             
             if(dir != oldDir)
             {
-                XRay.ConeDir = (180 - XRay.ConeDir);
+                XRay.coneDir = (180 - XRay.coneDir);
             }
             
-            if(abs(angle_difference(XRay.ConeDir,90-(90*dir))) >= 80)
+            if(abs(angle_difference(XRay.coneDir,90-(90*dir))) >= 80)
             {
-                XRay.ConeDir = 90-(90*dir) + 80*sign(angle_difference(XRay.ConeDir,90-(90*dir)));
+                XRay.coneDir = 90-(90*dir) + 80*sign(angle_difference(XRay.coneDir,90-(90*dir)));
             }
-            
-            //var coneDir = scr_wrap(XRay.ConeDir,0,360);
             
             XRay.x = x + dir*3;
             XRay.y = y - 12;
@@ -53,8 +51,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			//var xrayDepth = layer_get_depth(layer_get_id("BTS_Tiles")) - 1;
 			var xrayDepth = layer_get_depth(layer_get_id("Tiles_fade0")) - 1;
             XRay = instance_create_depth(x+3*dir,y-12,xrayDepth,obj_XRay);
-            XRay.Die = 0;
-            XRay.ConeDir = 90-(dir*90);
+            XRay.kill = 0;
+            XRay.coneDir = 90-(dir*90);
             global.gamePaused = true;
         }
         shineCharge = 0;
@@ -63,7 +61,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
     {
         if(instance_exists(XRay))
         {
-            XRay.Die = 1;
+            XRay.kill = 1;
         }
         if((state != State.Stand && state != State.Crouch) || !grounded)
         {
@@ -664,10 +662,10 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						{
 							torsoR = sprt_XRayRight;
 							torsoL = sprt_XRayLeft;
-							bodyFrame = scr_round(XRay.ConeDir/45)+2;
+							bodyFrame = scr_round(XRay.coneDir/45)+2;
 							if(dir == -1)
 							{
-								bodyFrame = 4-scr_round((XRay.ConeDir-90)/45);
+								bodyFrame = 4-scr_round((XRay.coneDir-90)/45);
 							}
 						}
 					}
@@ -1217,10 +1215,10 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 							{
 								torsoR = sprt_XRayRight;
 								torsoL = sprt_XRayLeft;
-								bodyFrame = scr_round(XRay.ConeDir/45)+2;
+								bodyFrame = scr_round(XRay.coneDir/45)+2;
 								if(dir == -1)
 								{
-									bodyFrame = 4-scr_round((XRay.ConeDir-90)/45);
+									bodyFrame = 4-scr_round((XRay.coneDir-90)/45);
 								}
 							}
 							else

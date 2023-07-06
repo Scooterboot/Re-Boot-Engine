@@ -78,8 +78,6 @@ for(var i = 0; i < 11; i++)
 }
 oldPositionsSet = false;
 
-emit = noone;
-
 water_init(0);
 
 /*

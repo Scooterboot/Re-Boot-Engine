@@ -66,17 +66,14 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 		}
 		
 		var partSys = obj_Particles.partSystemA,
+			partEmit = obj_Particles.partEmitA,
 			partX1 = posX+(bbox_left-x)+4,
 			partX2 = posX+(bbox_right-x)-4,
 			partY1 = posY+(bbox_top-y)+4,
 			partY2 = posY+(bbox_bottom-y)-4;
 		if(isProjectile)
 		{
-			if(!part_emitter_exists(partSys,emit))
-			{
-				emit = part_emitter_create(partSys);
-			}
-			part_emitter_region(partSys,emit,partX1,partX2,partY1,partY2,ps_shape_ellipse,ps_distr_linear);
+			part_emitter_region(partSys,partEmit,partX1,partX2,partY1,partY2,ps_shape_ellipse,ps_distr_linear);
 		}
                 
 	    if(dmg > 0)
@@ -96,7 +93,7 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 	                if(isProjectile)
 	                {
 	                    //part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.partFreeze,21*(1+isCharge));
-						part_emitter_burst(partSys,emit,obj_Particles.partFreeze,21*(1+isCharge));
+						part_emitter_burst(partSys,partEmit,obj_Particles.partFreeze,21*(1+isCharge));
 						
 						if(freezeKill)
 						{
@@ -122,13 +119,13 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 	            if(isProjectile && particleType != -1)
 	            {
 	                //part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.bTrails[particleType],7*(1+isCharge));
-					part_emitter_burst(partSys,emit,obj_Particles.bTrails[particleType],7*(1+isCharge));
+					part_emitter_burst(partSys,partEmit,obj_Particles.bTrails[particleType],7*(1+isCharge));
 	            }
 	        }
 	        if(isProjectile && particleType != -1 && multiHit)
 	        {
 	            //part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.bTrails[particleType],(1+isCharge));
-				part_emitter_burst(partSys,emit,obj_Particles.bTrails[particleType],(1+isCharge));
+				part_emitter_burst(partSys,partEmit,obj_Particles.bTrails[particleType],(1+isCharge));
 	        }
 	    }
 	    else if(isProjectile)
@@ -143,7 +140,7 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 	            npc.frozen = freezeMax;
                         
 	            //part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.partFreeze,21*(1+isCharge));
-				part_emitter_burst(partSys,emit,obj_Particles.partFreeze,21*(1+isCharge));
+				part_emitter_burst(partSys,partEmit,obj_Particles.partFreeze,21*(1+isCharge));
 	        }
 			else if(dmgType != DmgType.Explosive || !dmgSubType[5])
 	        {
@@ -173,7 +170,7 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 		            audio_play_sound(snd_Reflect,0,false);
 					
 		            //part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.partDeflect,42);
-					part_emitter_burst(partSys,emit,obj_Particles.partDeflect,42);
+					part_emitter_burst(partSys,partEmit,obj_Particles.partDeflect,42);
 				}
 	        }
                     
@@ -185,7 +182,7 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 	                partAmt = (1+isCharge);
 	            }
 	            //part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.bTrails[particleType],partAmt);
-				part_emitter_burst(partSys,emit,obj_Particles.bTrails[particleType],partAmt);
+				part_emitter_burst(partSys,partEmit,obj_Particles.bTrails[particleType],partAmt);
 	        }
 	    }
 

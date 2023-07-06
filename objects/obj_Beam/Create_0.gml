@@ -69,7 +69,7 @@ else if(isGrapple)
 {
 	particleType = -1;
 }
-//emit = noone;
+
 particleDelay = 0;
 
 impactSnd = snd_BeamImpact;

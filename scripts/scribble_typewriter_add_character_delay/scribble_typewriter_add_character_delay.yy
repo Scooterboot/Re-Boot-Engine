@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Miscellaneous",
-    "path": "folders/Extensions/Scribble/Miscellaneous.yy",
+    "name": "Deprecated",
+    "path": "folders/Extensions/Scribble/(System - don't call these functions)/Deprecated.yy",
   },
 }

@@ -579,7 +579,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			var str = InsertIconsIntoString(fText),
 				strX = scr_round(ww/2),
 				strY = scr_round(hh-23);//scr_round(global.resHeight-36+sprite_get_height(sprt_Sub_Footer)/2);
-			if(footerScrib.text != str)
+			if(footerScrib.get_text() != str)
 			{
 				footerScrib.overwrite(str);
 			}

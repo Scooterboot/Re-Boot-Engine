@@ -18,70 +18,75 @@
 
 function scribble_glyph_set(_font, _character, _property, _value, _relative = false)
 {
-    if (!ds_map_exists(global.__scribble_font_data, _font))
-    {
-        __scribble_error("Font \"", _font, "\" not found");
-        exit;
-    }
+    var _font_data = __scribble_get_font_data(_font);
     
-    var _font_data = global.__scribble_font_data[? _font];
-    
-    var _array = _font_data.glyphs_array;
-    var _map   = _font_data.glyphs_map;
+    var _grid = _font_data.__glyph_data_grid;
+    var _map  = _font_data.__glyphs_map;
     
     if ((_character == all) || (_character == "all"))
     {
-        if (_array == undefined)
+        if (_relative)
         {
-            //If the glyph array doesn't exist for this font, use the ds_map fallback
-            var _map = _font_data.glyphs_map;
-            
-            var _key = ds_map_find_first(_map);
-            repeat(ds_map_size(_map))
-            {
-                var _glyph_data = _map[? _key];
-                _glyph_data[@ _property] = _relative? (_glyph_data[_property] + _value) : _value;
-                _key = ds_map_find_next(_map, _key);
-            }
+            ds_grid_add_region(_grid, 0, _property, ds_grid_width(_grid)-1, _property, _value);
         }
         else
         {
-            var _i = 0;
-            repeat(array_length(_array))
-            {
-                var _glyph_data = _array[_i];
-                if (is_array(_glyph_data)) _glyph_data[@ _property] = _relative? (_glyph_data[_property] + _value) : _value;
-                ++_i;
-            }
+            ds_grid_set_region(_grid, 0, _property, ds_grid_width(_grid)-1, _property, _value);
+        }
+        
+        //Space character separation and width should always be the same
+        var _glyph_index = _map[? 0x20];
+        if (_glyph_index == undefined)
+        {
+            __scribble_error("Space character not found for font \"", _font, "\"");
+            exit;
+        }
+        
+        //Changing the width of the space character also changes the separation
+        if (_property == SCRIBBLE_GLYPH.SEPARATION) _grid[# _glyph_index, SCRIBBLE_GLYPH.WIDTH     ] = _grid[# _glyph_index, SCRIBBLE_GLYPH.SEPARATION];
+        if (_property == SCRIBBLE_GLYPH.WIDTH     ) _grid[# _glyph_index, SCRIBBLE_GLYPH.SEPARATION] = _grid[# _glyph_index, SCRIBBLE_GLYPH.WIDTH     ];
+        
+        //Changing the height of the space character also changes its font height
+        if (_property == SCRIBBLE_GLYPH.HEIGHT     ) _grid[# _glyph_index, SCRIBBLE_GLYPH.FONT_HEIGHT] = _grid[# _glyph_index, SCRIBBLE_GLYPH.HEIGHT     ];
+        if (_property == SCRIBBLE_GLYPH.FONT_HEIGHT) _grid[# _glyph_index, SCRIBBLE_GLYPH.HEIGHT     ] = _grid[# _glyph_index, SCRIBBLE_GLYPH.FONT_HEIGHT];
+        
+        //Ensure that a change to the height of a space character also sets the font height for the whole font
+        if ((_property == SCRIBBLE_GLYPH.HEIGHT) || (_property == SCRIBBLE_GLYPH.FONT_HEIGHT))
+        {
+            ds_grid_set_region(_grid, 0, SCRIBBLE_GLYPH.FONT_HEIGHT, ds_grid_width(_grid)-1, SCRIBBLE_GLYPH.FONT_HEIGHT, _grid[# _glyph_index, SCRIBBLE_GLYPH.FONT_HEIGHT]);
+            _font_data.__calculate_font_height();
         }
     }
     else
     {
-        var _ord = ord(_character);
+        var _unicode = is_real(_character)? _character : ord(_character);
+        var _glyph_index = _map[? _unicode];
         
-        if (_array == undefined)
-        {
-            //If the glyph array doesn't exist for this font, use the ds_map fallback
-            var _glyph_data = _map[? _ord];
-        }
-        else
-        {
-            var _glyph_data = _array[_ord - _font_data.glyph_min];
-        }
-        
-        if (_glyph_data == undefined)
+        if (_glyph_index == undefined)
         {
             __scribble_error("Character \"", _character, "\" not found for font \"", _font, "\"");
             exit;
         }
         
-        var _new_value = _relative? (_glyph_data[_property] + _value) : _value;
-        _glyph_data[@ _property] = _new_value;
+        var _new_value = _relative? (_grid[# _glyph_index, _property] + _value) : _value;
+        _grid[# _glyph_index, _property] = _new_value;
         
-        if (_ord == 0x20) //Space character separation and width should always be the same
+        if (_unicode == 0x20) //Space character separation and width should always be the same
         {
-            if (_property == SCRIBBLE_GLYPH.SEPARATION) _glyph_data[@ SCRIBBLE_GLYPH.WIDTH] = _new_value;
-            if (_property == SCRIBBLE_GLYPH.WIDTH) _glyph_data[@ SCRIBBLE_GLYPH.SEPARATION] = _new_value;
+            //Changing the width of the space character also changes the separation
+            if (_property == SCRIBBLE_GLYPH.SEPARATION) _grid[# _glyph_index, SCRIBBLE_GLYPH.WIDTH     ] = _new_value;
+            if (_property == SCRIBBLE_GLYPH.WIDTH     ) _grid[# _glyph_index, SCRIBBLE_GLYPH.SEPARATION] = _new_value;
+            
+            //Changing the height of the space character also changes its font height
+            if (_property == SCRIBBLE_GLYPH.HEIGHT     ) _grid[# _glyph_index, SCRIBBLE_GLYPH.FONT_HEIGHT] = _new_value;
+            if (_property == SCRIBBLE_GLYPH.FONT_HEIGHT) _grid[# _glyph_index, SCRIBBLE_GLYPH.HEIGHT     ] = _new_value;
+        
+            //Ensure that a change to the height of a space character also sets the font height for the whole font
+            if ((_property == SCRIBBLE_GLYPH.HEIGHT) || (_property == SCRIBBLE_GLYPH.FONT_HEIGHT))
+            {
+                ds_grid_set_region(_grid, 0, SCRIBBLE_GLYPH.FONT_HEIGHT, ds_grid_width(_grid)-1, SCRIBBLE_GLYPH.FONT_HEIGHT, _new_value);
+                _font_data.__calculate_font_height();
+            }
         }
         
         return _new_value;

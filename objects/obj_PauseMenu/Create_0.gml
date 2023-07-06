@@ -174,8 +174,9 @@ footerScrib = scribble(footerText[0]);
 footerScrib.align(fa_center,fa_middle);
 footerScrib.starting_format("fnt_GUI_Small2",c_white);
 
-textSurface = surface_create(73,9);
 #region TextOutlineSurface
+
+textSurface = surface_create(73,9);
 function TextOutlineSurface(text)
 {
 	if(!surface_exists(textSurface))
@@ -199,11 +200,14 @@ function TextOutlineSurface(text)
 		surface_reset_target();
 	}
 }
+
 #endregion
 
 #region DrawItemHeader
 function DrawItemHeader(_x,_y,_name,_height,_facing)
 {
+	draw_set_font(fnt_GUI_Small2);
+	
 	var h = 10/17;
 	var yscale = 1+h*(_height-1);
 	draw_sprite_ext(sprt_Sub_ItemHeader,0,_x,_y,_facing,yscale,0,c_white,1);
@@ -246,6 +250,7 @@ function DrawItemHeader(_x,_y,_name,_height,_facing)
 	draw_text(tx,ty,_name);
 }
 #endregion
+
 #region DrawInventoryPlayer
 function DrawInventoryPlayer()
 {

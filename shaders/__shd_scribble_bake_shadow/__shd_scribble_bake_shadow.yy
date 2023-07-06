@@ -3,8 +3,8 @@
   "resourceVersion": "1.0",
   "name": "__shd_scribble_bake_shadow",
   "parent": {
-    "name": "(System - don't call these functions)",
-    "path": "folders/Extensions/Scribble/(System - don't call these functions).yy",
+    "name": "Shaders",
+    "path": "folders/Extensions/Scribble/(System - don't call these functions)/Shaders.yy",
   },
   "type": 1,
 }

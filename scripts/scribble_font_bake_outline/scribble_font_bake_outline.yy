@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Fonts",
-    "path": "folders/Extensions/Scribble/Fonts.yy",
+    "name": "Deprecated",
+    "path": "folders/Extensions/Scribble/(System - don't call these functions)/Deprecated.yy",
   },
 }

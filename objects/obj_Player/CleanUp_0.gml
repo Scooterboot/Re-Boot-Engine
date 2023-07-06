@@ -19,5 +19,3 @@ if(surface_exists(mbTrailSurface))
 {
     surface_free(mbTrailSurface);
 }
-
-part_emitter_destroy(obj_Particles.partSystemA,chargeEmit);
