@@ -9,8 +9,6 @@ if(surface_exists(transSurf))
 			var sx = scr_round(obj_Transition.samusX),
 				sy = scr_round(obj_Transition.samusY);
 			
-            //PreDrawPlayer(sx,sy,0,1);
-			
 			var col = c_lime;
 			gpu_set_fog(true,col,0,0);
 			gpu_set_blendmode(bm_add);
@@ -26,11 +24,9 @@ if(surface_exists(transSurf))
 			gpu_set_blendmode(bm_normal);
 			gpu_set_fog(false,0,0,0);
 			
-            pal_swap_set(palShader,palIndex,palIndex2,palDif,false);
-            DrawPlayer(sx,sy,rotation,1);
-            shader_reset();
-            PostDrawPlayer(sx,sy,0,1);
-            water_init(0);
+			DrawPlayer(sx,sy,rotation,1);
+			
+			PostDrawPlayer(sx,sy,0,1);
         }
     }
 	var appSurfScale = 1;

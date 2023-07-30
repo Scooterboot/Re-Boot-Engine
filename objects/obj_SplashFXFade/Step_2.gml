@@ -1,18 +1,20 @@
-/// -- Fade Away
+/// @description 
 
 if(global.gamePaused)
 {
 	exit;
 }
 
-/// -- Fade
+x += velX;
+y += velY;
 
-x += xVel;
-y += yVel;
+image_alpha -= animSpeed;
+if(image_alpha <= 0)
+{
+	instance_destroy();
+}
 
-image_alpha -= Speed;
-
-if (image_alpha <= 0)
+if(lhc_place_meeting(x,y,solids))
 {
 	instance_destroy();
 }

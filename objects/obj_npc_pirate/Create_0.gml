@@ -52,7 +52,3 @@ maxGrav = 2;
 justFell = false;
 
 grounded = false;
-
-water_init(bbox_bottom-y);
-CanSplash = 1;
-StepSplash = 0;

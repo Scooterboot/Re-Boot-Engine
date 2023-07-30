@@ -207,7 +207,7 @@ else
 }
 
 grounded = (entity_place_collide(0,1) || (bbox_bottom+1) >= room_height);// && velY == 0);
-fGrav = grav[InWater];
+fGrav = grav[instance_exists(liquid)];
 
 if(!grounded)
 {
@@ -218,7 +218,4 @@ fVelX = velX;
 fVelY = velY;
 Collision_Normal(fVelX,fVelY,16,16,true);
 
-/*if(distance_to_object(obj_Camera) <= view_wview[0]*1.375)
-{
-    pushblock_water();
-}*/
+EntityLiquid_Large(x-xprevious,y-yprevious);

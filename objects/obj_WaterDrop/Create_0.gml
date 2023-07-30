@@ -1,25 +1,22 @@
 // -- Mask/Sprite --
 
-//init_mask();
-//change_mask(-1,-1,1,1,0,"");
-water_init(1);
+liquidType = LiquidType.Water;
 
-xVel = 0;
-yVel = 0;
-Gravity = .15;
-Dead = 0;
+velX = 0;
+velY = 0;
+grav = 0.15;
+kill = false;
 
-image_alpha = .6;
-image_xscale = choose(.7,.8,.9);
+image_alpha = 0.6;
+image_xscale = choose(0.7, 0.8, 0.9);
 
-if (instance_exists(obj_Lava))
-{
-    sprite_index = sprt_LavaDrop;
-    Gravity = .18;
-    image_alpha = .9;
-}
+init = false;
 
 image_yscale = image_xscale;
 
 image_index = irandom(image_number);
 image_speed = 0;
+
+lhc_activate();
+solids[0] = "ISolid";
+solids[1] = "IMovingSolid";

@@ -29,8 +29,6 @@ function scr_LoadGame()
 			with(instance_create_layer(_map[? "x"],_map[? "y"],"Player",obj_Player))
 			{
 				lhc_activate();
-				
-				water_init(0);
 			
 				energyMax = _map[? "energyMax"];
 				energy = _map[? "energy"];

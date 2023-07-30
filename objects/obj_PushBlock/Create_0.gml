@@ -28,125 +28,6 @@ solids[2] = "IPlayer";
 moveSnd = noone;
 sndStopped = false;
 
-water_init(bbox_bottom-y);
-CanSplash = 1;
-StepSplash = 0;
-
-#region pushblock_water
-function pushblock_water()
-{
-	var xVel = x - xprevious,
-		yVel = y - yprevious;
-    
-	WaterBot = bbox_bottom-y;
-
-	water_update(2,xVel,yVel);
-
-	/// -- Extra Splash -- \\\
-
-	CanSplash ++;
-
-	if (CanSplash > 65535)
-	{
-		CanSplash = 0;
-	}
-
-	if (in_water() && !in_water_top() && (CanSplash mod 2 == 0))
-	{
-		var splashx = x+random_range(16,-16);
-		Splash = instance_create_layer(splashx,SplashY,"Liquids_fg",obj_SplashFXAnim);
-		Splash.Speed = .25;
-		Splash.sprite_index = sprt_WaterSplashSmall;
-		Splash.image_alpha = 0.4;
-		Splash.depth = 65;
-		Splash.Splash = 1;
-		Splash.image_index = 3;
-		Splash.image_xscale = choose(1,-1);
-    
-		if (xVel == 0 && yVel == 0)
-		{
-			/*Splash.image_yscale = .65;
-			Splash.image_index = 5;
-			Splash.image_xscale = .75;*/
-			Splash.image_yscale = choose(.3,.5,.7,1);
-			Splash.image_index = 0;
-			Splash.image_xscale = choose(1.4,1);
-			Splash.sprite_index = sprt_WaterSplashTiny;
-			Splash.x += irandom(4) - 2;
-		}
-		else if (abs(xVel) > 1 && !StepSplash)
-		{
-			Splash.sprite_index = sprt_WaterSkid;
-			Splash.image_alpha = 0.6;
-			Splash.depth = 65;
-			Splash.image_index = 1;
-			Splash.image_xscale = choose(1,-1);
-			Splash.Splash = 0;
-			Splash.x += xVel * 2;
-			Splash.xVel = xVel/4.5;
-			Splash.image_yscale = (.4 + min(.6,abs(xVel)/10)) * (choose(1, .5 + random(.4)));//.8 + random(.2);
-			Splash.y --;
-        
-			StepSplash = 2;
-        
-			/*if (choose(0,1,1) == 0)
-			{
-				Splash.image_yscale *= .1;
-				StepSplash = 1;
-			}*/
-		}
-	}
-
-	/// -- Underwater Bubbles -- \\\ 
-
-	if ((EnteredWater /*or (State == "DASH" && InWater)*/) && choose(1,1,1,0) == 1)
-	{
-		Bubble = instance_create_layer(x-16+random(32),bbox_bottom+random(bbox_top-y),"Liquids_fg",obj_WaterBubble);
- 
-		if (yVel > 0)
-		{
-			Bubble.yVel += yVel/4;
-		}
- 
-		if (EnteredWater < 60 && (!grounded || abs(xVel) < 5))
-		{
-			Bubble.Alpha *= (EnteredWater/60);
-			Bubble.AlphaMult *= (EnteredWater/60);
-		} 
-	}
-
-	/// -- Leaving Drops
-
-	if (LeftWater && choose(1,1,1,0,0) == 1)
-	{
-		Drop = instance_create_layer(x-16+random(32),y+4,"Liquids_fg",obj_WaterDrop);
- 
-		with (Drop)
-		{
-			if (water_at(x,y))
-			{
-				Dead = 1;
-				instance_destroy();
-			}
-		}
-	}
-
-	if (LeftWaterTop && choose(1,1,1,0,0) == 1)
-	{
-		Drop = instance_create(x-16+random(32),bbox_bottom+random(bbox_top-y+4),"Liquids_fg",obj_WaterDrop);
- 
-		with (Drop)
-		{
-			if (water_at(x,y))
-			{
-				Dead = 1;
-				instance_destroy();
-			}
-		}
-	}
-}
-#endregion
-
 mBlock = instance_create_layer(x-16,y-16,"Collision",obj_MovingTile);
 mBlock.image_xscale = 2;
 mBlock.image_yscale = 2;
@@ -278,13 +159,25 @@ function OnBottomCollision(fVY)
 	if(!grounded)
 	{
 		audio_play_sound(snd_PushBlock_Land,0,false);
-			
-		repeat(8)
+		
+		var bbleft = position.X + (bbox_left-x),
+			bbright = position.X + (bbox_right-x),
+			bbbottom = position.Y + (bbox_bottom-y) + fVY;
+		if(liquid)
 		{
-			var bbleft = position.X + (bbox_left-x),
-				bbright = position.X + (bbox_right-x),
-				bbbottom = position.Y + (bbox_bottom-y) + fVY;
-			part_particles_create(obj_Particles.partSystemB,irandom_range(bbleft,bbright),bbbottom,obj_Particles.bDust[1],1);
+			repeat(8)
+			{
+				var bub = liquid.CreateBubble(irandom_range(bbleft,bbright),bbbottom,0,0);
+				bub.canSpread = false;
+				bub.kill = true;
+			}
+		}
+		else
+		{
+			repeat(8)
+			{
+				part_particles_create(obj_Particles.partSystemB,irandom_range(bbleft,bbright),bbbottom,obj_Particles.bDust[1],1);
+			}
 		}
 			
 		grounded = true;

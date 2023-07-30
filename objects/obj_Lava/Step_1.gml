@@ -1,32 +1,23 @@
 /// @description Lava Movement
 
-if(!global.gamePaused)
+if(global.gamePaused)
 {
-    if (btm <= abs(bspd))
-    {
-        acc *= -1;
-    }
-    
-    if (Move)
-    {
-        bspd += acc;
-        y += bspd;
-    }
-    
-    if(sign(MoveX) == 1)
-    {
-        x = scr_Loop(x+MoveX,0,sprite_width);
-    }
-    if(sign(MoveX) == -1)
-    {
-        x = scr_Loop(x+MoveX,-sprite_width,0);
-    }
- 
-    Gradient.y = y - 32;
+	exit;
+}
 
-    if(!audio_is_playing(snd_LavaLoop))
-    {
-        //var loopSnd = audio_play_sound(snd_LavaLoop,0,true);
-        //audio_sound_gain(loopSnd,0.9*global.soundVolume,0);
-    }
+if(moveY)
+{
+	if(abs(bobSpeed) > bobBtm)
+	{
+		bobAcc *= -1;
+	}
+	bobSpeed += bobAcc;
+	y += bobSpeed;
+	
+	image_yscale = scr_ceil(bottom-y + 1) / sprite_get_height(sprite_index);
+}
+
+if(velX != 0)
+{
+	posX = scr_wrap(posX+velX,-spriteW/2,spriteW/2);
 }

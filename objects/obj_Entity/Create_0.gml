@@ -28,6 +28,7 @@ solids[0] = "ISolid";
 solids[1] = "IMovingSolid";
 
 blockList = ds_list_create();
+edgeSlope = ds_list_create();
 
 #region Base Collision Checks
 
@@ -137,9 +138,6 @@ function GetSlopeAngle(slope)
 }
 
 #endregion
-
-edgeSlope = ds_list_create();
-
 #region GetEdgeSlope
 function GetEdgeSlope()
 {
@@ -297,7 +295,6 @@ function CanMoveDownSlope_Left() { return false; }
 function DestroyBlock(bx,by) {}
 
 #endregion
-
 #region Collision_Normal
 function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol, slopeSpeedAdjust)
 {
@@ -791,7 +788,6 @@ function Crawler_CanMoveDownSlope_Left()
 function Crawler_DestroyBlock(bx,by) {}
 
 #endregion
-
 #region Collision_Crawler
 function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol, slopeSpeedAdjust)
 {
@@ -1284,7 +1280,6 @@ function MovingSolid_OnTopCollision(fVY) {}
 function MovingSolid_OnYCollision(fVY) {} // same as both above
 
 #endregion
-
 #region Collision_MovingSolid
 
 function Collision_MovingSolid(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, downSlopeSteepness_X = 5, upSlopeSteepness_Y = 5, downSlopeSteepness_Y = 5)
@@ -1606,7 +1601,6 @@ function Collision_MovingSolid(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, d
 }
 #endregion
 
-
 #region BreakBlock
 function BreakBlock(xx,yy,type)
 {
@@ -1778,4 +1772,149 @@ function ToggleSwitch(_x,_y,_objIndex)
 	}
 	ds_list_clear(switchList);
 }
+#endregion
+
+#region liquid_place
+function liquid_place()
+{
+	return instance_place(x,y,obj_Liquid);
+}
+#endregion
+#region liquid_top
+function liquid_top()
+{
+	return collision_line(bbox_left, bbox_top, bbox_right, bbox_top, obj_Liquid, true, true);
+}
+#endregion
+
+liquid = liquid_place();
+liquidPrev = liquid;
+liquidTop = liquid_top();
+liquidTopPrev = liquidTop;
+
+enteredLiquid = -1;
+leftLiquid = -1;
+leftLiquidTop = -1;
+leftLiquidType = LiquidType.Water;
+leftLiquidTopType = LiquidType.Water;
+
+canSplash = 1;
+breathTimer = 180;
+stepSplash = 0;
+
+prevTop = bbox_top;
+prevBottom = bbox_bottom;
+
+#region EntityLiquid
+
+function EntityLiquid(_mass, _velX, _velY, _sound = true, _isBeam = false, _isMissile = false)
+{
+	liquid = liquid_place();
+	liquidTop = liquid_top();
+	enteredLiquid = max(enteredLiquid-1,0);
+	leftLiquid = max(leftLiquid-1,0);
+	leftLiquidTop = max(leftLiquidTop-1,0);
+	
+	var returnLiq = liquid;
+	
+	if(liquid != liquidPrev)
+	{
+		if(liquid && prevBottom < liquid.bbox_top)
+		{
+			liquid.CreateSplash(id,_mass,_velX,_velY,true,_sound,_isBeam)
+			enteredLiquid = (_mass+1) * 15;
+		}
+		else if(liquidPrev && bbox_bottom < liquidPrev.bbox_top && !_isBeam)
+		{
+			liquidPrev.CreateSplash(id,_mass,_velX,0,false,_sound,false);
+			returnLiq = liquidPrev;
+			leftLiquid = (_mass+1) * 7.5;
+			leftLiquidType = liquidPrev.liquidType;
+		}
+		liquidPrev = liquid;
+	}
+	
+	if(liquidTop != liquidTopPrev)
+	{
+		if(!liquidTop && liquidTopPrev && bbox_top < liquidTopPrev.bbox_top && !_isMissile)
+		{
+			liquidTopPrev.CreateSplash(id,_mass,_velX,_velY,false,_sound,_isBeam);
+			returnLiq = liquidTopPrev;
+			leftLiquidTop = (_mass+1) * 12.5;
+			leftLiquidTopType = liquidTopPrev.liquidType;
+		}
+		liquidTopPrev = liquidTop;
+	}
+	
+	prevTop = bbox_top;
+	prevBottom = bbox_bottom;
+	
+	return returnLiq;
+}
+
+#endregion
+#region EntityLiquid_Large
+
+function EntityLiquid_Large(_velX, _velY)
+{
+	EntityLiquid(2,_velX,_velY, true, false, false);
+	
+	canSplash++;
+	if(canSplash > 10)
+	{
+		canSplash = 0;
+	}
+	
+	if(liquid && !liquidTop && (canSplash%2) == 0)
+	{
+		liquid.CreateSplash_Extra(id,0,_velX,_velY,true,false);
+	}
+	
+	if(liquid && enteredLiquid > 0 && choose(1,1,1,0) == 1)
+	{
+		var bub = liquid.CreateBubble(x-8+random(16),bbox_top+random(bbox_bottom-bbox_top),0,0);
+		bub.spriteIndex = sprt_WaterBubble;
+
+		if (_velY > 0)
+		{
+			bub.velY += _velY/4;
+		}
+
+		if (enteredLiquid < 60)
+		{
+			bub.alpha *= (enteredLiquid/60);
+			bub.alphaMult *= (enteredLiquid/60);
+		}
+	}
+	
+	if(leftLiquid && choose(1,1,1,0,0) == 1)
+	{
+		var drop = instance_create_depth(x-8+random(16),y+4,depth-1,obj_WaterDrop);
+		drop.liquidType = leftLiquidType;
+		with (drop)
+		{
+			if(position_meeting(x,y,obj_Liquid))
+			{
+				kill = true;
+				instance_destroy();
+			}
+		}
+	}
+	if (leftLiquidTop && choose(1,1,1,0,0) == 1)
+	{
+		var drop = instance_create_depth(x-8+random(16),bbox_bottom+random(bbox_top-y+4),depth-1,obj_WaterDrop);
+		drop.liquidType = leftLiquidTopType;
+		with (drop)
+		{
+			if(position_meeting(x,y,obj_Liquid))
+			{
+				kill = true;
+				instance_destroy();
+			}
+		}
+	}
+	
+	stepSplash = max(stepSplash-1,0);
+}
+
 #endregion

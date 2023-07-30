@@ -1,13 +1,8 @@
-/// -- Draw Self
+/// @description 
 
-if (Additive)
+if(additive)
 {
 	gpu_set_blendmode(bm_add);
 }
-
 draw_self();
-
-if (Additive)
-{
-	gpu_set_blendmode(bm_normal);
-}
+gpu_set_blendmode(bm_normal);

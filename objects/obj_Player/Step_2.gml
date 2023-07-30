@@ -8,7 +8,6 @@ var sndFlag = false;
 
 if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTrans && stateFrame != State.Grapple)) && !obj_PauseMenu.pause && !pauseSelect))
 {
-	// ----- X-Ray -----
 	#region X-Ray
 	if((cDash || global.HUD == 1) && itemSelected == 1 && itemHighlighted[1] == 4 && dir != 0 && fVelX == 0 && fVelY == 0 && (state == State.Stand || state == State.Crouch) && grounded && (move2 == 0 || instance_exists(XRay)))
     {
@@ -88,8 +87,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		{
 			dir2 = -dir;
 		}
-	
-		// ----- Set Shoot Pos -----
+		
 		#region Set Shoot Pos
 		shotOffsetX = 0;
 		shotOffsetY = 0;
@@ -238,8 +236,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			}
 		}
 		#endregion
-
-		// ----- Shoot direction -----
+		
 		#region Shoot direction
 		if(aimAngle == 0)
 		{
@@ -317,8 +314,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		}
 		#endregion
 	}
-
-	// ----- Update Anims -----
+	
 	#region Update Anims
 	drawMissileArm = false;
 	shootFrame = (gunReady || justShot > 0 || (cShoot && (rShoot || (beam[Beam.Charge] && !unchargeable)) && (itemSelected == 1 ||
@@ -1103,7 +1099,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						brakeFrame = max(brakeFrame - ((abs(velX) < (maxSpeed[0,0]*0.75)) + (move != 0)), 0);
 					}
 				}
-				if(brakeFrame >= 10 && !in_water())
+				if(brakeFrame >= 10 && !liquid)
 				{
 					//repeat(3)
 					//{
@@ -2460,37 +2456,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					{
 						stepSndPlayedAt = 0;
 					}
-					
-					/*if(pushMove[pushFrameSequence[scr_floor(frame[Frame.Push])]] >= 3 && abs(pushBlock.fVelX) > 0)
-					{
-						if(!audio_is_playing(pushSnd) || !pushSndPlayed)
-						{
-							pushSnd = audio_play_sound(snd_PushBlock_Move,0,false);
-							audio_sound_loop(pushSnd,true);
-							audio_sound_loop_start(pushSnd,0);
-							audio_sound_loop_end(pushSnd,0.115);
-							pushSndPlayed = true;
-						}
-					}
-					else
-					{
-						audio_sound_loop(pushSnd,false);
-						pushSndPlayed = false;
-					}
-					
-					if(pushMove[pushFrameSequence[scr_floor(frame[Frame.Push])]] >= 2 && abs(pushBlock.fVelX) > 0 && !pushBlock.InWater)
-					{
-						var dustX = irandom_range(pushBlock.bbox_left-2,pushBlock.x-5);
-						if(dir == -1)
-						{
-							dustX = irandom_range(pushBlock.x+5,pushBlock.bbox_right+2);
-						}
-						if(irandom(1) == 0)
-						{
-							dustX = irandom_range(pushBlock.bbox_left-2,pushBlock.bbox_right+2);
-						}
-						part_particles_create(obj_Particles.partSystemB,dustX,irandom_range(pushBlock.bbox_bottom-2,pushBlock.bbox_bottom+1),obj_Particles.bDust[0],1);
-					}*/
 	            }
 	            else
 	            {
@@ -2614,8 +2579,58 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		}
 	}
 	#endregion
-
-	// ----- MB Trail -----
+	
+	#region After Image Logic
+	
+	drawAfterImage = false;
+	afterImageNum = 0;
+	afterImgAlphaMult = 0.625;
+	
+	if(state == State.Spark || state == State.BallSpark)
+	{
+		drawAfterImage = true;
+		afterImageNum = 10*shineFXCounter;
+	}
+	else if(speedBoost)
+	{
+		drawAfterImage = true;
+		afterImageNum = (10 * speedFXCounter);
+	}
+	else
+	{
+		afterImgAlphaMult = 0.25;//0.375;
+		if(state == State.Dodge)
+		{
+			drawAfterImage = true;
+			afterImageNum = min(abs(fVelX), 10);
+		}
+		else if(state == State.Grapple || (grapBoost && !boots[Boots.SpaceJump]))
+		{
+			if(point_distance(xprevious,yprevious,x,y) >= 3)
+			{
+				drawAfterImage = true;
+				afterImageNum = min((point_distance(xprevious,yprevious,x,y)-3),10);
+			}
+		}
+		else if(notGrounded && boots[Boots.SpaceJump] && state == State.Somersault && !liquidMovement)
+		{
+			drawAfterImage = true;
+			afterImageNum = 10;
+		}
+		else if(notGrounded && fVelY < 0)
+		{
+			drawAfterImage = true;
+			afterImageNum = min(abs(fVelY)*1.5, 10);
+		}
+		else if(notGrounded && fVelY >= 3)
+		{
+			drawAfterImage = true;
+			afterImageNum = min((abs(fVelY)-3),10);
+		}
+	}
+	
+	#endregion
+	
 	#region MB Trail
 	
 	if(drawBallTrail)
@@ -2681,48 +2696,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	
 	#endregion
 	
-	// ----- After Images -----
-	#region After Images
 	
-	afterImgAlphaMult = 0.625;
-	if(!speedBoost && state != State.Spark && state != State.BallSpark)
-	{
-		afterImgAlphaMult = 0.25;//0.375;
-		if(state == State.Dodge)
-		{
-			drawAfterImage = true;
-			afterImageNum = min(abs(fVelX), 10);
-		}
-		else if(state == State.Grapple || (grapBoost && !boots[Boots.SpaceJump]))
-		{
-			if(point_distance(xprevious,yprevious,x,y) >= 3)
-			{
-				drawAfterImage = true;
-				afterImageNum = min((point_distance(xprevious,yprevious,x,y)-3),10);
-			}
-		}
-		else if(notGrounded && boots[Boots.SpaceJump] && state == State.Somersault && !liquidMovement)
-		{
-			drawAfterImage = true;
-			afterImageNum = 10;
-		}
-		else if(notGrounded && fVelY < 0)
-		{
-			drawAfterImage = true;
-			afterImageNum = min(abs(fVelY)*1.5, 10);
-		}
-		else if(notGrounded && fVelY >= 3)
-		{
-			drawAfterImage = true;
-			afterImageNum = min((abs(fVelY)-3),10);
-		}
-	}
-	
-	AfterImage(drawAfterImage,rotation,afterImgDelay,afterImageNum,afterImgAlphaMult);
-	
-	#endregion
-	
-
 	if(!global.roomTrans)
 	{
 		var noBeamsActive = (beam[Beam.Ice]+beam[Beam.Wave]+beam[Beam.Spazer]+beam[Beam.Plasma] <= 0);
@@ -3184,7 +3158,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			audio_stop_sound(snd_HeatDamageLoop);
 		}
 		
-		if(instance_exists(obj_Lava) && bbox_bottom > obj_Lava.y && !suit[Suit.Gravity])
+		if(liquid && liquid.liquidType == LiquidType.Lava && !suit[Suit.Gravity])
 	    {
 	        ConstantDamage(1, 2 + (1 * (suit[Suit.Varia])));
         
@@ -3240,7 +3214,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	
 		prevAimAngle = aimAngle;
 	
-		StepSplash = max(StepSplash-1,0);
 		outOfLiquid = (liquidState <= 0);
 		shineRestarted = false;
 	

@@ -297,11 +297,6 @@ playerSurf = surface_create(surfW,surfH);
 rotScale = 5;//8;
 playerSurf2 = surface_create(surfW*rotScale,surfH*rotScale);
 
-water_init(0);
-CanSplash = 1;
-BreathTimer = 180;
-StepSplash = 0;
-
 XRay = noone;
 //XRayDying = 0;
 
@@ -994,15 +989,6 @@ cFlashPalNum = 1;
 cBubblePal = 0;
 
 #endregion
-#region After Image
-
-afterImageNum = 10;
-drawAfterImage = false;
-afterImgDelay = 0;
-afterImgCounter = 0;
-afterImgAlphaMult = 0.625;
-
-#endregion
 #region MB Trail
 
 mbTrailColor_Start = c_lime;
@@ -1016,6 +1002,69 @@ mbTrailDir = array_create(mbTrailLength, noone);
 mbTrailSurface = surface_create(global.resWidth,global.resHeight);
 mbTrailAlpha = 0;
 
+#endregion
+#region AfterImage
+
+drawAfterImage = false;
+afterImageNum = 10;
+afterImgAlphaMult = 0.625;
+
+afterImageList = ds_list_create();
+
+function AfterImage(player, _alpha, _num) constructor
+{
+	_x = player.x;
+	_y = player.y;
+	
+	sprtOffsetX = player.sprtOffsetX;
+	sprtOffsetY = player.sprtOffsetY;
+	
+	rotation = player.rotation;
+	alpha = 1;
+	alpha2 = _alpha;
+	
+	fadeRate = (1 / max(_num,1));
+	
+	surfW = player.surfW;
+	surfH = player.surfH;
+	rotScale = player.rotScale;
+	aftImgSurf = surface_create(surfW*rotScale,surfH*rotScale);
+	surface_copy(aftImgSurf,0,0,player.playerSurf2);
+	
+	function Update()
+	{
+		if(!global.gamePaused)
+		{
+			alpha = max(alpha - fadeRate, 0);
+		}
+		if(alpha <= 0)
+		{
+			Clear();
+		}
+	}
+	
+	_delete = false;
+	function Clear()
+	{
+		surface_free(aftImgSurf);
+		_delete = true;
+	}
+	
+	function Draw()
+	{
+		if(surface_exists(aftImgSurf))
+		{
+			var surfCos = dcos(rotation),
+				surfSin = dsin(rotation),
+				surfX = (surfW/2),
+				surfY = (surfH/2);
+			var surfFX = _x - surfCos*surfX - surfSin*surfY,
+				surfFY = _y - surfCos*surfY + surfSin*surfX;
+			
+			draw_surface_ext(aftImgSurf,surfFX+sprtOffsetX,surfFY+sprtOffsetY,1/rotScale,1/rotScale,rotation,c_white,clamp(alpha*alpha2,0,1));
+		}
+	}
+}
 #endregion
 
 #region Collision (Normal)
@@ -2464,7 +2513,8 @@ function SpiderActive()
 }
 #endregion
 
-#region player_water
+#region player_water (old)
+/*
 function player_water()
 {
 	var xVel = x - xprevious,
@@ -2501,7 +2551,7 @@ function player_water()
 		Dash = 0;
 		DashPhase = 0;
 		DashSpeed = 0;
-	}*/
+	}* /
 
 	/// -- Extra Splash -- \\\
 
@@ -2535,12 +2585,12 @@ function player_water()
 		    Splash.image_yscale = min(max(abs(grapAngVel)/7,.1),.7);
 		    Splash.image_index = 0;
 		}
-		else*/
+		else* /
 		if (xVel == 0 && abs(yVel) < 2)
 		{
 		    /*Splash.image_yscale = .65;
 		    Splash.image_index = 5;
-		    Splash.image_xscale = .75;*/
+		    Splash.image_xscale = .75;* /
 		    Splash.image_yscale = choose(.3,.5,.7,1);
 		    Splash.image_index = 0;
 		    Splash.image_xscale = choose(1.4,1);
@@ -2566,7 +2616,7 @@ function player_water()
 		    {
 		        Splash.image_yscale *= .1;
 		        StepSplash = 1;
-		    }*/
+		    }* /
 		}
     
 		if(((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineEnd <= 0) || speedBoost)// (State == "SUPERJUMP" or DashPhase >= 2)
@@ -2739,6 +2789,138 @@ function player_water()
 		}
 	}
 }
+*/
+#endregion
+#region EntityLiquid_Large
+
+function EntityLiquid_Large(_velX, _velY)
+{
+	EntityLiquid(2,_velX,_velY, true, false, false);
+	
+	canSplash++;
+	if(canSplash > 10)
+	{
+		canSplash = 0;
+	}
+	
+	if(liquid && !liquidTop && (canSplash%2) == 0)
+	{
+		var _skidSnd = false,
+			_size = 0;
+		if((((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineEnd <= 0) || speedBoost || state == State.Dodge) && _velX != 0)
+		{
+			if((canSplash%4) == 0)
+			{
+				_skidSnd = true;
+			}
+			_size = 1;
+		}
+		liquid.CreateSplash_Extra(id,_size,_velX,_velY,true,_skidSnd);
+	}
+	
+	if (liquid && (enteredLiquid > 0 || speedBoost) && choose(1,1,1,0) == 1)
+	{
+		var bub = liquid.CreateBubble(x-8+random(16),bbox_top+random(bbox_bottom-bbox_top),0,0);
+		bub.spriteIndex = sprt_WaterBubble;
+
+		if (_velY > 0)
+		{
+			bub.velY += _velY/4;
+		}
+
+		if (enteredLiquid < 60)
+		{
+			bub.alpha *= (enteredLiquid/60);
+			bub.alphaMult *= (enteredLiquid/60);
+		}
+	}
+	
+	if (leftLiquid && choose(1,1,1,0,0) == 1)
+	{
+		var drop = instance_create_depth(x-8+random(16),y+4,depth-1,obj_WaterDrop);
+		drop.liquidType = leftLiquidType;
+		if (state == State.Somersault)
+		{
+			drop.velX = -random(7) + 3.5;
+			drop.velY = -random(5) + 1;
+		}
+		with (drop)
+		{
+			if(position_meeting(x,y,obj_Liquid))
+			{
+				kill = true;
+				instance_destroy();
+			}
+		}
+	}
+	if (leftLiquidTop && choose(1,1,1,0,0) == 1)
+	{
+		var drop = instance_create_depth(x-8+random(16),bbox_bottom+random(bbox_top-y+4),depth-1,obj_WaterDrop);
+		drop.liquidType = leftLiquidTopType;
+		if (state == State.Somersault)
+		{
+			drop.velX = -random(6) + 3;
+			drop.velY = -random(6) + 1;
+		}
+		with (drop)
+		{
+			if(position_meeting(x,y,obj_Liquid))
+			{
+				kill = true;
+				instance_destroy();
+			}
+		}
+	}
+	
+	if(liquid && liquid.liquidType != LiquidType.Lava)
+	{
+		breathTimer --;
+		if (breathTimer < 16)
+		{
+			if (breathTimer < 0)
+			{
+			    breathTimer = choose(110,150,160);
+			}
+			else if (breathTimer == 15 && liquidTop)
+			{
+			    audio_play_sound(choose(snd_Breath_0,snd_Breath_1,snd_Breath_2),0,false);
+			}
+     
+			if (liquidTop && (breathTimer mod 8 == 0))
+			{
+				var bub = liquid.CreateBubble(x + 4*dir, bbox_top + 7, dir/2 -0.15 + random(0.3), 0.2+random(0.1));
+				bub.spriteIndex = sprt_WaterBubbleSmall;
+				bub.breathed = 0.15;
+				bub.velX += _velX/2;
+				if (state == State.Grip)
+			    {
+			        bub.posX -= (dir * 6);
+			    }
+			}
+		}
+
+		if((state == State.Somersault && misc[Misc.ScrewAttack] && suit[Suit.Gravity]) ||
+			(((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineEnd <= 0) || speedBoost || state == State.Dodge))
+		{
+			repeat(3)
+			{
+				var bub = liquid.CreateBubble(x + random_range(16,-16), y+2 + random_range(16,-16), 0, 0);
+				bub.kill = true;
+				bub.canSpread = false;
+			}
+		}
+		
+		if(stateFrame == State.Brake && brakeFrame >= 9)
+		{
+			var bub = liquid.CreateBubble(x-random(12)*dir,bbox_bottom+4-random(8),0,0);
+			bub.kill = true;
+			bub.canSpread = false;
+		}
+	}
+	
+	stepSplash = max(stepSplash-1,0);
+}
+
 #endregion
 
 #region Set Beams
@@ -2999,82 +3181,6 @@ function ConstantDamage(damage,delay)
 		constantDamageDelay = delay;
 	}
 	constantDamageDelay = max(constantDamageDelay - 1,0);
-}
-#endregion
-
-#region AfterImage
-function AfterImage(_draw, rotation, delay, num, alpha)
-{
-	var echo = noone;
-	
-	if(_draw)
-	{
-		if(!global.gamePaused)
-		{
-			afterImgCounter += 1;
-		}
-		if(afterImgCounter > delay)
-		{
-			echo = instance_create_layer(scr_round(x),scr_round(y),"Player",obj_PlayerEcho);
-			echo.surfW = surfW;
-			echo.surfH = surfH;
-			echo.mask_index = mask_index;
-			echo.fadeRate = (1 / max(num,1));
-			echo.state = state;
-			echo.stateFrame = stateFrame;
-			echo.morphFrame = morphFrame;
-			echo.morphAlpha = morphAlpha;
-			echo.unmorphing = unmorphing;
-			echo.dir = dir;
-			echo.fDir = fDir;
-			echo.torsoR = torsoR;
-			echo.torsoL = torsoL;
-			echo.legs = legs;
-			echo.bodyFrame = bodyFrame;
-			echo.legFrame = legFrame;
-			echo.ballFrame = ballFrame;
-			echo.sprtOffsetX = sprtOffsetX;
-			echo.sprtOffsetY = sprtOffsetY;
-			echo.runYOffset = runYOffset;
-			echo.itemSelected = itemSelected;
-			echo.itemHighlighted = itemHighlighted;
-			echo.missileArmFrame = missileArmFrame;
-			echo.drawMissileArm = drawMissileArm;
-			echo.finalArmFrame = finalArmFrame;
-			echo.armDir = armDir;
-			echo.armOffsetX = armOffsetX;
-			echo.armOffsetY = armOffsetY;
-			echo.rotation = rotation;
-			echo.alpha2 = alpha;
-			//echo.palShader = palShader;
-			//echo.palIndex = palIndex;
-			//echo.palIndex2 = palIndex2;
-			//echo.palDif = palDif;
-			echo.item = item;
-			echo.misc = misc;
-			echo.climbIndex = climbIndex;
-			echo.gripFrame = gripFrame;
-			echo.gripAimFrame = gripAimFrame;
-			echo.liquidState = liquidState;
-			echo.dmgFlash = dmgFlash;
-			echo.immuneTime = immuneTime;
-			//echo.velX = x-xprevious;
-			//echo.velY = y-yprevious;
-			//if((state == "stand" || state == "crouch") && prevState != state)
-			//{
-			//	echo.velY = 0;
-			//}
-			afterImgCounter = 0;
-			
-			echo.UpdateEchoSurface(palShader,palIndex,palIndex2,palDif);
-		}
-	}
-	else
-	{
-		afterImgCounter = 0;
-	}
-	
-	return echo;
 }
 #endregion
 

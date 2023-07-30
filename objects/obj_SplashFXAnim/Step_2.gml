@@ -1,55 +1,89 @@
-/// -- Animated and Died
+/// @description Update
 
 if(global.gamePaused)
 {
 	exit;
 }
+if(!instance_exists(liquid))
+{
+	instance_destroy();
+	exit;
+}
+
+mask_index = sprite_index;
 
 if(!initIndex)
 {
 	newIndex = image_index;
+	prevIndex = floor(image_index);
+	
+	ogScaleX = image_xscale;
+	ogRight = abs(bbox_right-x);
+	ogLeft = abs(x-bbox_left);
+	
 	initIndex = true;
 }
 
-
-
-y += yVel;
-if(!instance_exists(obj_Lava))
+fVelX = 0;
+if(sprite_index == sprt_WaterSplash && prevIndex != floor(image_index))
 {
-    x += xVel;
-    newIndex += Speed;
+	fVelX += waterSplashMoveX[floor(image_index)] * sign(image_xscale);
+	prevIndex = floor(image_index);
+}
+
+y += velY;
+if(liquid.liquidType == LiquidType.Lava)
+{
+	fVelX += velX * 0.75;
+	newIndex += animSpeed * 0.75;
 }
 else
 {
-    x += xVel * 0.75;
-    newIndex += Speed * 0.75;
+	fVelX += velX;
+	newIndex += animSpeed;
 }
 
-if (newIndex >= image_number)
+x += fVelX;
+x = clamp(x,liquid.bbox_left,liquid.bbox_right);
+
+//if(sprite_index == sprt_WaterSplash)
+//{
+	var liqEdge = liquid.bbox_right+6;
+	if(sprite_index == sprt_WaterSplash)
+	{
+		liqEdge = liquid.bbox_right+2;
+	}
+	if((sign(image_xscale) > 0 || sprite_index != sprt_WaterSplash) && bbox_right > liqEdge)
+	{
+		var newRight = abs(liqEdge-x);
+		image_xscale = ogScaleX * (newRight / ogRight);
+	}
+	
+	liqEdge = liquid.bbox_left-6;
+	if(sprite_index == sprt_WaterSplash)
+	{
+		liqEdge = liquid.bbox_left-2;
+	}
+	if((sign(image_xscale) < 0 || sprite_index != sprt_WaterSplash) && bbox_left < liqEdge)
+	{
+		var newLeft = abs(x-liqEdge);
+		image_xscale = ogScaleX * (newLeft / ogLeft);
+	}
+//}
+
+if(newIndex >= image_number)
 {
-    instance_destroy();
+	instance_destroy();
 }
 
 image_index = newIndex;
 
-Watery = 0;
-
-if (sprite_index == sprt_WaterSplashSmall
-or  sprite_index == sprt_WaterSplashLarge
-or  sprite_index == sprt_WaterSplashHuge
-or  sprite_index == sprt_WaterSplash
-or  sprite_index == sprt_WaterSkid
-or  sprite_index == sprt_WaterSkidLarge
-or  Splash)
+if (watery)
 {
-    Watery = 1;
-    if (instance_exists(obj_Liquid))
-    {
-        y = floor(obj_Liquid.y);
-        var ly = obj_Liquid.y - obj_Liquid.yprevious;
-        if(ly > 0)
-        {
-            y = floor(obj_Liquid.y+ly);
-        }
-    }
+	y = scr_round(liquid.bbox_top);
+	var ly = liquid.y - liquid.yprevious;
+	if(ly > 0)
+	{
+		y = scr_round(liquid.bbox_top+ly);
+	}
 }

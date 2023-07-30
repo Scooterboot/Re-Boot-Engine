@@ -95,7 +95,7 @@
             {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"63701a4c-4301-4af2-9733-8a30f7d6a741","path":"sprites/sprt_LavaBubbleSmall/sprt_LavaBubbleSmall.yy",},},},"Disabled":false,"id":"743a7648-475d-4424-a50a-4fd7b429d887","IsCreationKey":false,"Key":19.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
-    "visibleRange": {"x":0.0,"y":0.0,},
+    "visibleRange": null,
     "volume": 1.0,
     "xorigin": 4,
     "yorigin": 4,

@@ -264,23 +264,29 @@ else if(immuneTime > 0 && (immuneTime&1) && !global.roomTrans)
 
 UpdatePlayerSurface(palShader,palIndex,palIndex2,palDif);
 
-if(instance_exists(obj_PlayerEcho))
+if(drawAfterImage && !global.gamePaused)
 {
-	for(var j = 0; j < instance_number(obj_PlayerEcho); j += 1)
+	var aftImg = new AfterImage(id,afterImgAlphaMult,afterImageNum);
+	ds_list_add(afterImageList, aftImg);
+}
+for(var i = 0; i < ds_list_size(afterImageList); i++)
+{
+	var aftImg = afterImageList[| i];
+	aftImg.Update();
+		
+	if(aftImg._delete)
 	{
-		var echo = instance_find(obj_PlayerEcho,j);
-		with(echo)
-		{
-			//pal_swap_set(palShader,palIndex,palIndex2,palDif,false);
-			DrawEcho(x,y,rotation,clamp(alpha*alpha2,0,1));
-			//shader_reset();
-		}
+		ds_list_delete(afterImageList,i);
+	}
+	else
+	{
+		aftImg.Draw();
 	}
 }
 
 PreDrawPlayer(x,y,0,1);
 
-if(InWater && !liquidMovement && suit[Suit.Gravity])
+if(liquid && !liquidMovement && suit[Suit.Gravity])
 {
 	gravGlowAlpha += 0.01*gravGlowNum*(!global.gamePaused);
 	if(gravGlowAlpha <= 0.75)

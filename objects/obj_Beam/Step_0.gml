@@ -6,7 +6,7 @@ if(isWave)
 	layer = layer_get_id("Projectiles_fg");
 }
 
-water_update(isWave,x-xprevious,y-yprevious);
+EntityLiquid(!isWave,x-xprevious,y-yprevious,true,true,false);
 
 var pNum = 7,
 	pType = -1;
@@ -25,7 +25,7 @@ if(isWave)
 
 if(!global.gamePaused)
 {
-	if(!InWater || (isWave && !isIce && !isPlasma))
+	if(!liquid || (isWave && !isIce && !isPlasma))
 	{
 		var num = 3 - (isCharge*2);
 		if(isPlasma)
@@ -85,19 +85,23 @@ if(!global.gamePaused)
 			}
 		}
 	}
-	else
+	else if(liquid)
 	{
 		var x1 = bbox_left+2, x2 = bbox_right-1,
-            y1 = bbox_top+2, y2 = bbox_bottom-1;
-        var D = instance_create_layer(random_range(x1,x2),random_range(y1,y2),"Liquids_fg",obj_WaterBubble);
-        if(!isPlasma && !isCharge)
-        {
-            D.sprite_index = sprt_WaterBubbleTiny;
-        }
-        D.Delete = 1;
-        D.CanSpread = choose(0,1);
-        D.Alpha = .7 + random(.2);
-        D.MaxSpeed /= (1 + random(.3));
+			y1 = bbox_top+2, y2 = bbox_bottom-1;
+		var bub = liquid.CreateBubble(random_range(x1,x2),random_range(y1,y2),0,0);
+		if(!isPlasma && !isCharge)
+		{
+			bub.spriteIndex = sprt_WaterBubbleTiny;
+		}
+		if(isCharge)
+		{
+			bub.spriteIndex = sprt_WaterBubble;
+		}
+		bub.kill = true;
+		bub.canSpread = (irandom(1) == 0);
+		bub.alpha = 0.7 + random(0.2);
+		bub.maxSpeed /= (1 + random(0.3));
 	}
 }
 

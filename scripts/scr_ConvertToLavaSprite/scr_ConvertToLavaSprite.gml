@@ -2,6 +2,10 @@ function scr_ConvertToLavaSprite(spriteIndex)
 {
 	switch(spriteIndex)
 	{
+	    case sprt_WaterBubble:
+	    {
+	        return sprt_LavaBubble;
+	    }
 	    case sprt_WaterBubbleSmall:
 	    {
 	        return sprt_LavaBubbleSmall;
@@ -46,5 +50,9 @@ function scr_ConvertToLavaSprite(spriteIndex)
 	    {
 	        return sprt_LavaSplashTiny;
 	    }
+		default:
+		{
+			return spriteIndex;
+		}
 	}
 }

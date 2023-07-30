@@ -41,18 +41,28 @@ else if(audio_is_playing(moveSnd))
 	sndStopped = true;
 }
 
-if(grounded && (nonPushFlag || dustFlag) && !InWater)
+if(grounded && (nonPushFlag || dustFlag))
 {
-	var dustX = irandom_range(bbox_left-2,x-5);
+	var posX = irandom_range(bbox_left-2,x-5),
+		posY = irandom_range(bbox_bottom-2,bbox_bottom+1);
 	if(sign(velX) == -1)
 	{
-		dustX = irandom_range(x+5,bbox_right+2);
+		posX = irandom_range(x+5,bbox_right+2);
 	}
 	if(irandom(1) == 0)
 	{
-		dustX = irandom_range(bbox_left-2,bbox_right+2);
+		posX = irandom_range(bbox_left-2,bbox_right+2);
 	}
-	part_particles_create(obj_Particles.partSystemB,dustX,irandom_range(bbox_bottom-2,bbox_bottom+1),obj_Particles.bDust[0],1);
+	if(liquid)
+	{
+		var bub = liquid.CreateBubble(posX,posY,0,0);
+		bub.canSpread = false;
+		bub.kill = true;
+	}
+	else
+	{
+		part_particles_create(obj_Particles.partSystemB,posX,posY,obj_Particles.bDust[0],1);
+	}
 }
 
 if(pushState == PushState.None)
@@ -62,7 +72,7 @@ if(pushState == PushState.None)
 	{
 		frict = 0.125;
 	}
-	if(InWater)
+	if(liquid)
 	{
 		frict = 0.75;
 		if(!grounded)
@@ -80,7 +90,7 @@ if(pushState == PushState.None)
 	}
 }
 
-fGrav = grav[InWater];
+fGrav = grav[instance_exists(liquid)];
 
 if(!grounded)
 {
@@ -100,10 +110,7 @@ if(!entity_place_collide(0,1) || downSlopeFlag)
 	grounded = ((bbox_bottom+1) >= room_height);
 }
 
-//if(scr_WithinCamRange())
-//{
-	pushblock_water();
-//}
+EntityLiquid_Large(x-xprevious, y-yprevious);
 
 mBlock.isSolid = false;
 mBlock.UpdatePosition(position.X-16,position.Y-16);

@@ -55,7 +55,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 	if(debug)
 	{
-		//debug keys
 		#region debug keys
 		
 		#region 0, 9, 8
@@ -330,9 +329,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		godmode = false;
 	}
-	
-	afterImageNum = 10;
-	drawAfterImage = false;
 
 	liquidLevel = 0;
 	liquidState = 0;
@@ -371,12 +367,12 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		damageReduct *= 0.5;
 	}
 
-// ----- Liquid Movement
 #region Liquid Movement
 	var liquidMovement = false;
-	if(instance_exists(obj_Liquid))
+	var findLiquid = instance_place(x,y,obj_Liquid);
+	if(instance_exists(findLiquid))
 	{
-	    liquidLevel = max(bbox_bottom - obj_Liquid.y,0);
+		liquidLevel = max(bbox_bottom - findLiquid.y,0);
 
 	    var dph = 10;
 	    if(stateFrame == State.Morph)
@@ -387,19 +383,18 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		
 		if(liquidMovement)
 		{
-			if(instance_exists(obj_Water))
+			if(findLiquid.liquidType == LiquidType.Water)
 			{
 				liquidState = 1;
 			}
-			if(instance_exists(obj_Lava))
+			if(findLiquid.liquidType == LiquidType.Lava)
 			{
 				liquidState = 2;
 			}
 		}
 	}
 #endregion
-	
-// ----- Get Input -----
+
 #region Input
 	cRight = obj_Control.right;
 	cLeft = obj_Control.left;
@@ -476,8 +471,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		ChangeState(State.Morph,State.Morph,mask_Morph,grounded);
 		morphFrame = 8;
 	}
-	
-// ----- Aim Control -----
+
 #region Aim Control
 	prAngle = ((cAngleUp && rAngleUp) || (cAngleDown && rAngleDown));
 	rlAngle = ((!cAngleUp && !rAngleUp) || (!cAngleDown && !rAngleDown));
@@ -597,7 +591,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 #endregion
 
-// ----- Horizontal Movement -----
 #region Horizontal Movement
 
 	var dash = (cDash || global.autoDash);
@@ -940,8 +933,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		
 		speedFXCounter = min(speedFXCounter + 0.05, 1);
-		afterImageNum = (10 * speedFXCounter);
-		drawAfterImage = true;
 	}
 	else
 	{
@@ -979,7 +970,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 #endregion
 
-// ----- Vertical Movement -----
 #region Vertical Movement
 	if(grounded)
 	{
@@ -1009,6 +999,12 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			jumping = false;
 		}
 		
+		var sjThresh = 2;
+		if(liquidTop)
+		{
+			sjThresh = 1;
+		}
+		
 		if(jump <= 0)
 		{
 			if(shineCharge > 0 && rJump && (state != State.Crouch || !entity_place_collide(0,-11) || entity_place_collide(0,0)) && !entity_place_collide(0,-1) && 
@@ -1031,9 +1027,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			(state != State.Morph || misc[Misc.Spring] || !entity_place_collide(0,-17)) && morphFrame <= 0 && state != State.DmgBoost)
 			{
 				if(grounded || bunnyJump > 0 || (canWallJump && rJump) || speedBoostWJ || (state == State.Grip && (move != dir || climbTarget == 0) && !cDown) || 
-				(boots[Boots.SpaceJump] && velY >= (2-InWaterTop) && state == State.Somersault && !liquidMovement && rJump))
+				(boots[Boots.SpaceJump] && velY >= sjThresh && state == State.Somersault && !liquidMovement && rJump))
 				{
-					if(!grounded && !canWallJump && !speedBoostWJ && boots[Boots.SpaceJump] && velY >= (2-InWaterTop))
+					if(!grounded && !canWallJump && !speedBoostWJ && boots[Boots.SpaceJump] && velY >= sjThresh)
 					{
 						spaceJump = 8;
 						//frame[Frame.Somersault] = 0;
@@ -1097,7 +1093,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 							dodgeRecharge = min(dodgeRecharge+dodgeRechargeRate,dodgeRechargeMax);
 						}
 						
-						if(!in_water())
+						if(!liquid)
 						{
 							part_particles_create(obj_Particles.partSystemB,x-6*dir,y+10,obj_Particles.bDust[0],3);
 						}
@@ -1329,7 +1325,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 #endregion
 
-// ----- Spider Ball Movement -----
 #region Spider Ball Movement
 	if(spiderBall)
 	{
@@ -1575,8 +1570,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			y = scr_round(position.Y);
 		}
 	}
-	
-// ----- Collision -----
+
 #region Collision
 	
 	colEdge = Edge.Bottom;
@@ -1774,8 +1768,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 #endregion
 	
 	move2 = cRight - cLeft;
-	
-// ----- Grip Collision -----
+
 #region Grip Collision
 
 	if(misc[Misc.PowerGrip] && (state == State.Jump || state == State.Somersault) && morphFrame <= 0 && !grounded && abs(dirFrame) >= 4 && fVelY >= 0)
@@ -1832,8 +1825,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 	}
 #endregion
-	
-// ----- Quick Climb -----
+
 #region Quick Climb
 	if(global.quickClimb && state != State.Grip && state != State.Morph && morphFrame <= 0 && grounded && abs(dirFrame) >= 4 && entity_place_collide(move2,0) && !entity_place_collide(0,0))
 	{
@@ -1953,7 +1945,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 #endregion
 
-// ----- States -----
 #region Stand, Walk, Run, Dash, Brake
 	if(state == State.Stand)
 	{
@@ -2027,7 +2018,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
             {
                 vX *= 0.75;
             }
-            else if(pushBlock.InWater)
+            else if(pushBlock.liquid)
             {
                 vX *= 0.9;
             }
@@ -2976,13 +2967,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				{
 					for(var i = 0; i < 2; i++)
 					{
-						/*var edir = -45*shineDir + 180*i;
-						var echo = AfterImage(true,rotation,0,0,0.5);
-						echo.damage = 2000;
-						echo.spark = true;
-						echo.velX = lengthdir_x(12,edir);
-						echo.velY = lengthdir_y(12,edir);*/
-						
 						var sdir = -45*shineDir + 180*i;
 						var swave = instance_create_layer(x+sprtOffsetX,y+sprtOffsetY,layer_get_id("Projectiles"),obj_SparkShockwave);
 						swave.damage = 2000;
@@ -3157,8 +3141,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 			}
 		}
-		drawAfterImage = true;
-		afterImageNum = 10*shineFXCounter;
 		
 		sparkCancelSpiderJumpTweak = true;
 	}
@@ -3346,7 +3328,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			            audio_play_sound(snd_WallJump,0,false);
 			            grapWallBounceFrame = 15;
 						
-						if(!in_water())
+						if(!liquid)
 						{
 							var partLen = 20;
 							if(sign(grapWallBounceCounter) == -dir)
@@ -3877,7 +3859,13 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		gbaAimPreAngle = gbaAimAngle;
 	}
 	
-	player_water();
+	var xVel = x - xprevious,
+		yVel = y - yprevious;
+	if(justFell)
+	{
+		yVel = velY;
+	}
+	EntityLiquid_Large(xVel,yVel)
 	
 	if(isChargeSomersaulting)
 	{

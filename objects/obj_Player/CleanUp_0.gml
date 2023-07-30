@@ -19,3 +19,9 @@ if(surface_exists(mbTrailSurface))
 {
     surface_free(mbTrailSurface);
 }
+
+for(var i = 0; i < ds_list_size(afterImageList); i++)
+{
+	afterImageList[| i].Clear();
+	ds_list_delete(afterImageList,i);
+}

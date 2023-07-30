@@ -30,7 +30,6 @@
             DrawPlayer(sx,sy,rotation,1);
             shader_reset();
             PostDrawPlayer(sx,sy,0,1);
-            water_init(0);
         }
     }
 	var appSurfScale = 1;

@@ -5,42 +5,49 @@ if(global.gamePaused)
 	exit;
 }
 
-/// -- Move
-
-yVel = min(yVel+Gravity,6);
-
-x += xVel;
-y += yVel;
-
-/// -- Splash
-
-if (in_water() && !Dead)
+if(!init)
 {
-    Splash = instance_create_layer(x,SplashY,"Liquids_fg",obj_SplashFXAnim);
-    if(yVel > 3)
-    {
-        Splash.sprite_index = sprt_WaterSplashSmall;
-        Splash.image_xscale = choose(-.7,.7);
-        Splash.image_yscale = .7;
-    }
-    else
-    {
-        Splash.sprite_index = sprt_WaterSplashTiny;
-        Splash.image_xscale = choose(-1,1);
-        Splash.image_yscale = 1;
-    }
-    Splash.image_alpha = 0.7;
-    Splash.Speed = .3333;
-    Splash.Splash = 1;
-    Splash.depth = 65;
-    if(instance_exists(obj_Water))
-    {
-        Splash.xVel = obj_Water.MoveX;
-    }
-    else if(instance_exists(obj_Lava))
-    {
-        Splash.xVel = obj_Lava.MoveX;
-    }
-    
-    instance_destroy();
+	if(liquidType == LiquidType.Lava)
+	{
+		sprite_index = sprt_LavaDrop;
+		image_alpha = 0.9;
+		grav = 0.18;
+	}
+	init = true;
+}
+
+velY = min(velY+grav,6);
+
+x += velX;
+y += velY;
+
+var liquid = instance_place(x,y,obj_Liquid);
+if(instance_exists(liquid) && !kill)
+{
+	var splash = instance_create_layer(x,liquid.bbox_top,liquid.layer,obj_SplashFXAnim);
+	splash.liquid = liquid;
+	if(velY > 3)
+	{
+		splash.sprite_index = sprt_WaterSplashSmall;
+		splash.image_xscale = choose(-0.7,0.7);
+		splash.image_yscale = 0.7;
+	}
+	else
+	{
+		splash.sprite_index = sprt_WaterSplashTiny;
+		splash.image_xscale = choose(-1,1);
+		splash.image_yscale = 1;
+	}
+	splash.image_alpha = 0.7;
+	splash.depth += 1;
+	splash.splash = true;
+	splash.animSpeed = 1.0 / 3;
+	splash.velX = liquid.velX;
+
+	instance_destroy();
+}
+
+if(lhc_place_meeting(x,y,solids))
+{
+	instance_destroy();
 }

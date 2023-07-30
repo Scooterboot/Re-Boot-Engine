@@ -1,107 +1,162 @@
-/// -- Movement/Surface --
+/// 
+event_inherited();
 
-image_alpha = .45;
-x = 0;
+alpha = 0.45;
 
-/// -- Create surface and redraw it --
+velX = 0.5;
+moveY = true;
 
-Distortion = surface_create(global.resWidth,global.resHeight);
+refractX = 0;
+refractXSpeed = 1.0 / 3;
 
-/// -- Everything else.
+imgIndex = 0;
+waterColor = merge_color(c_aqua,c_blue,0.85);
 
-#region water_redraw
-function water_redraw(SurfaceID, RefractID)
+surfWidth = scaledW() + spriteW;
+surfHeight = scaledH() + spriteH;
+
+waterSurface = surface_create(surfWidth,surfHeight);
+waterSurfaceRefractGlow = surface_create(surfWidth,surfHeight);
+waterSurfaceRefractMask = surface_create(surfWidth,surfHeight);
+waterSurfaceRefract = surface_create(surfWidth,surfHeight);
+
+finalSurface = surface_create(ceil(scaledW()), ceil(scaledH()));
+
+#region WaterSurface
+
+function WaterSurface()
 {
-	surface_set_target(SurfaceID);
-	draw_clear_alpha(0,0);
-
-	if (RefractID == 0)
+	if(surface_exists(waterSurface))
 	{
-	    /// -- Basic Water
-
-	    for (var xOff = -(sprite_width*2); xOff <= room_width + (sprite_width*2); xOff += sprite_width)
-	    {
-	        draw_sprite_ext(sprite_index, 0, x+xOff, 0, 1, 1, 0, image_blend, 1);
-        
-	        for (var yOff = sprite_height; yOff <= room_height - y + sprite_height; yOff += sprite_height)
-	        {
-	            draw_sprite_ext(sprite_index, 1, x+xOff, yOff, 1, 1, 0, image_blend, 1);
-	        }
-	    }
+		surface_resize(waterSurface, surfWidth,surfHeight);
+		surface_set_target(waterSurface);
+		draw_clear_alpha(c_black,0);
+		
+		draw_sprite_ext(sprite_index,1+scr_floor(imgIndex),posX,0,image_xscale+2,image_yscale+1,0,c_white,1);
+		
+		surface_reset_target();
 	}
-	else if (RefractID == 1)
+	else
 	{
-	    // -- Final Render Refraction Surface
-    
-	    gpu_set_colorwriteenable(1,1,1,0);
-	    draw_surface(waterSurfaceRefractMask, (RefractX mod 64) - 32, 0);
-    
-	    gpu_set_colorwriteenable(0,0,0,1);
-	    draw_surface(waterSurfaceRefractGlow, 0, 0);
-    
-	    gpu_set_colorwriteenable(1,1,1,1);
+		waterSurface = surface_create(surfWidth,surfHeight);
+		surface_set_target(waterSurface);
+		draw_clear_alpha(c_black,0);
+		surface_reset_target();
 	}
-	else if (RefractID == 2)
-	{
-	    // -- Refraction Mask Surface
-    
-	    var refSprt = sprt_WaterRefract;
-	    if(object_index == obj_Lava)
-	    {
-	        refSprt = sprt_LavaRefract;
-	    }
-	    for (var xOff = -sprite_get_width(refSprt); xOff <= room_width + (sprite_get_width(refSprt)*1.5); xOff += sprite_get_width(refSprt))
-	    {
-	        draw_sprite_ext(refSprt, 0, xOff, 0, 1, 1, 0, image_blend, 1);
-        
-	        for (var yOff = sprite_get_height(refSprt); yOff <= room_height - y + sprite_get_height(refSprt); yOff += sprite_get_height(refSprt))
-	        {
-	            draw_sprite_ext(refSprt, 1, xOff, yOff, 1, 1, 0, image_blend, 1);
-	        }
-	    }
-	}
-	else if (RefractID == 3)
-	{
-	    // -- Refraction Glow Surface
-    
-	    var refMSprt = sprt_WaterRefractMask;
-	    for (var xOff = -(sprite_get_width(refMSprt)*2); xOff <= room_width + (sprite_get_width(refMSprt)*2); xOff += sprite_get_width(refMSprt))
-	    {
-	        draw_sprite_ext(refMSprt, 0, x+xOff, 0, 1, 1, 0, image_blend, 1);
-        
-	        for (var yOff = sprite_get_height(refMSprt); yOff <= room_height - y + sprite_get_height(refMSprt); yOff += sprite_get_height(refMSprt))
-	        {
-	            draw_sprite_ext(refMSprt, 1, x+xOff, yOff, 1, 1, 0, image_blend, 1);
-	        }
-	    }
-	}
-
-	surface_reset_target();
 }
+
+#endregion
+#region GlowSurface
+
+function GlowSurface()
+{
+	if(surface_exists(waterSurfaceRefractGlow))
+	{
+		surface_resize(waterSurfaceRefractGlow,surfWidth,surfHeight);
+		surface_set_target(waterSurfaceRefractGlow);
+		draw_clear_alpha(c_black,0);
+		
+		var refMSprt = sprt_WaterRefractMask;
+		draw_sprite_ext(refMSprt,scr_floor(imgIndex),posX,0,image_xscale+2,image_yscale+1,0,c_white,1);
+		
+		surface_reset_target();
+	}
+	else
+	{
+		waterSurfaceRefractGlow = surface_create(surfWidth,surfHeight);
+		surface_set_target(waterSurfaceRefractGlow);
+		draw_clear_alpha(c_black,0);
+		surface_reset_target();
+	}
+}
+
+#endregion
+#region MaskSurface
+
+function MaskSurface()
+{
+	if(surface_exists(waterSurfaceRefractMask))
+	{
+		surface_resize(waterSurfaceRefractMask,surfWidth,surfHeight);
+		surface_set_target(waterSurfaceRefractMask);
+		draw_clear_alpha(c_black,0);
+		
+		var refSprt = sprt_WaterRefract;
+		
+		var scaleX = image_xscale * (spriteW / sprite_get_width(refSprt)),
+			scaleY = image_yscale * (spriteH / sprite_get_height(refSprt));
+		
+		draw_sprite_ext(refSprt,0,refractX-spriteW/2,0,scaleX+2,scaleY+1,0,c_white,1);
+		
+		surface_reset_target();
+	}
+	else
+	{
+		waterSurfaceRefractMask = surface_create(surfWidth,surfHeight);
+		surface_set_target(waterSurfaceRefractMask);
+		draw_clear_alpha(c_black,0);
+		surface_reset_target();
+	}
+}
+
+#endregion
+#region Refract Surface
+
+function RefractSurface()
+{
+	if(surface_exists(waterSurfaceRefract))
+	{
+		surface_resize(waterSurfaceRefract,surfWidth,surfHeight);
+		surface_set_target(waterSurfaceRefract);
+		draw_clear_alpha(c_black,0);
+		
+		gpu_set_colorwriteenable(1,1,1,0);
+		draw_surface_ext(waterSurfaceRefractMask,0,0,1,1,0,c_white,1);
+
+		gpu_set_colorwriteenable(0,0,0,1);
+		draw_surface_ext(waterSurfaceRefractGlow,0,0,1,1,0,c_white,1);
+
+		gpu_set_colorwriteenable(1,1,1,1);
+		
+		surface_reset_target();
+	}
+	else
+	{
+		waterSurfaceRefract = surface_create(surfWidth,surfHeight);
+		surface_set_target(waterSurfaceRefract);
+		draw_clear_alpha(c_black,0);
+		surface_reset_target();
+	}
+}
+
 #endregion
 
-RefractX = 0;
-RefractXSpeed = 0.333;
+#region Draw distorted surface
 
-Time = 0;
+function DrawDistortSurf(_surface, _x, _y, _alpha)
+{
+	var tex = surface_get_texture(_surface),
+		sW = surface_get_width(_surface),
+		sH = surface_get_height(_surface);
+	
+	draw_primitive_begin_texture(pr_trianglestrip, tex);
+	
+	for (var i = 0; i < sH; i += min(max(1,i)*6,32))
+	{
+		var mult = min(12,i/3);
+		var spread = mult * sin(time/2 + i/16) / 2.5;
+		/*var alph = 1;
+		if(i > 64)//16)
+		{
+			alph = max(1 - 0.25*((i-64) / min(max(1,i)*6,32)), 0.25);
+		}*/
+		var alph = lerp(1,0.25,clamp((i-16)/32,0,1));
+		
+		draw_vertex_texture_color(_x+spread, _y+i, 0, i/sH, c_white, _alpha*alph);
+		draw_vertex_texture_color(_x+sW+spread, _y+i, 1, i/sH, c_white, _alpha*alph);
+	}
+	
+	draw_primitive_end();
+}
 
-waterSurface = surface_create(room_width + 64, room_height - y + 48);
-waterSurfaceRefract = surface_create(room_width + 64, room_height - y + 48);
-waterSurfaceRefractMask = surface_create(room_width + 128, room_height - y + 48);
-waterSurfaceRefractGlow = surface_create(room_width + 64, room_height - y + 48);
-
-water_redraw(waterSurface, 0);
-water_redraw(waterSurfaceRefract, 1);
-water_redraw(waterSurfaceRefractMask, 2);
-water_redraw(waterSurfaceRefractGlow, 3);
-
-// -- Bobbing variables
-
-acc = -.0125/4;     //-.0125/4;
-bspd = -.05;         //-.1;
-btm = .25;          //.25;
-
-Move = 1;
-MoveX = 0.5;
-
-waterColor = merge_color(c_aqua,c_blue,0.85);
+#endregion

@@ -1,48 +1,49 @@
-/// -- Spawn Splashes --
+/// @description Update
 
 if(global.gamePaused)
 {
 	exit;
 }
-
-x += xVel;
-
-
-if (instance_exists(obj_Liquid))
+if(!instance_exists(liquid))
 {
-	y = floor(obj_Liquid.y);
+	instance_destroy();
+	exit;
 }
 
-Timer -= 1;
+x += velX;
+x = clamp(x,liquid.bbox_left,liquid.bbox_right);
+y = scr_round(liquid.bbox_top);
 
-var num = random_range(0,4);
-if(abs(xVel) > 1)
-{
-	num = random_range(0,2);
-}
-else if(abs(xVel) < 0.2)
-{
-	num = random_range(0,7);
-}
+timer--;
 
-if (Timer < num)
+if (timer < timeEnd)
 {
-	Timer = 7;
-	Size -= 0.1+((abs(xVel) < 0.2)*0.05);
-	//xVel += obj_Water.MoveX*(1-Size)*0.375;
- 
-	if(Size > 0.1)
+	timeEnd = random_range(0,4);
+	if(abs(velX) > 1)
 	{
-		Splash = instance_create_layer(x, y, "Liquids_fg",obj_SplashFXAnim);
-		Splash.sprite_index = sprite_index;
-		Splash.image_alpha = 0.7;
-		Splash.Speed = .3333;
-		Splash.image_xscale = image_xscale;
-		Splash.image_yscale = Size;
-		Splash.Splash = 1;
-		Splash.depth = 65;
-		Splash.sprite_index = choose(sprt_WaterSplashLarge,sprt_WaterSkidLarge);
-		Splash.xVel = xVel*0.1;
+		timeEnd = random_range(0,2);
+	}
+	else if(abs(velX) < 0.2)
+	{
+		timeEnd = random_range(0,7);
+	}
+	
+	timer = 7;
+	scale -= 0.1 + ((abs(velX) < 0.2) * 0.05);
+	velX += liquid.velX * (1-scale) * 0.375;
+	
+	if(scale > 0.1)
+	{
+		var splash = instance_create_layer(x, y, liquid.layer,obj_SplashFXAnim);
+		splash.liquid = liquid;
+		splash.sprite_index = choose(sprt_WaterSplashLarge,sprt_WaterSkidLarge);
+		splash.image_xscale = image_xscale;
+		splash.image_yscale = scale;
+		splash.image_alpha = 0.7;
+		splash.depth += 1;
+		splash.splash = true;
+		splash.animSpeed = 1.0 / 3;
+		splash.velX = velX*0.1;
 	}
 	else
 	{

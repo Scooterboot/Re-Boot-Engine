@@ -54,10 +54,6 @@ grounded = false;
 
 sndPlayedAt = 0;
 
-water_init(bbox_bottom-y);
-CanSplash = 1;
-StepSplash = 0;
-
 function ChangeDir(newDir)
 {
 	if(sign(newDir) != 0 && sign(newDir) != dir)
@@ -74,6 +70,7 @@ function ChangeDir(newDir)
 array_resize(solids,2);
 solids[0] = "ISolid";
 solids[1] = "INPCSolid";
+passthroughMovingSolids = true;
 
 function OnXCollision(fVX)
 {

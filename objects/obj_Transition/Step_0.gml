@@ -77,14 +77,16 @@ else
 			array_fill(mbTrailPosY, noone);
 			array_fill(mbTrailDir, noone);
 			
-			if(drawBallTrail && stateFrame == State.Morph)
-			{
-				//array_fill(mbTrailPosX, scr_round(x) + sprtOffsetX);
-				//array_fill(mbTrailPosY, scr_round(x) + sprtOffsetX);
-			}
-			
 			x = scr_round(position.X);
 			y = scr_round(position.Y);
+			
+			liquid = liquid_place();
+			liquidPrev = liquid;
+			liquidTop = liquid_top();
+			liquidTopPrev = liquidTop;
+			
+			prevTop = bbox_top;
+			prevBottom = bbox_bottom;
         }
         
         if(instance_exists(nextDoor.hatch))

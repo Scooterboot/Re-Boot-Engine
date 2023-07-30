@@ -1,156 +1,80 @@
-/// -- Draw All Water --
+/// 
+event_inherited();
 
-if(!global.gamePaused)// !(oControl.PausedGame)
+var camX = camera_get_view_x(view_camera[0]),
+	camY = camera_get_view_y(view_camera[0]);
+
+var refSprt = sprt_WaterRefract;
+refractX = scr_wrap(refractX+refractXSpeed,-sprite_get_width(refSprt)/2,sprite_get_width(refSprt)/2);
+
+var fAlpha = alpha*image_alpha;
+
+if(!global.gamePaused)
 {
-    Time += .0625;
+	imgIndex = scr_wrap(imgIndex + 0.075, 0, 6);
 }
-
-/// -- Distort --
-
-if (global.waterDistortion)
-{
-    draw_set_color(c_white);
-	
-	if(surface_exists(Distortion))
-	{
-		var appSurfScale = 1;
-		if(global.upscale == 7)
-		{
-			appSurfScale = 1/obj_Main.screenScale;
-		}
-		
-		surface_resize(Distortion,global.resWidth,global.resHeight);
-		surface_set_target(Distortion);
-		draw_clear_alpha(c_black,1);
-		draw_surface_ext(application_surface,0,0,appSurfScale,appSurfScale,0,c_white,1);
-		surface_reset_target();
-	}
-	else
-	{
-		Distortion = surface_create(global.resWidth,global.resHeight);
-	}
-	
-    var Texture = surface_get_texture(Distortion);
-    
-    draw_primitive_begin_texture(pr_trianglestrip,Texture);
-    
-    for(var i = 0; i < room_height + 48 - y; i += 6)
-    {
-        Mult = -min(1.5,i/6);
-        Spread = Mult * sin(Time+i/4+y/4);
-        
-		var vx = camera_get_view_x(view_camera[0]);
-		var vy = camera_get_view_y(view_camera[0]);
-		
-        draw_vertex_texture_color(vx + Spread,floor(y) + i,0,((i+floor(y)-vy)/global.resHeight),c_white,0.5);
-        draw_vertex_texture_color(vx + Spread + global.resWidth,floor(y) + i,1,((i+floor(y)-vy)/global.resHeight),c_white,0.5);
-    }
-    
-    draw_primitive_end();
-}
-else
-{
-	surface_free(Distortion);
-}
-
-
-/// -- 0: Dark Blue Tint
 
 gpu_set_blendmode(bm_add);
-
-draw_set_alpha(image_alpha/4);
+draw_set_alpha(fAlpha/4);
 draw_set_color(waterColor);
-draw_rectangle(0,y,room_width,room_height,0);
+draw_rectangle(bbox_left,bbox_top,bbox_right,bbox_bottom,0);
 draw_set_color(c_white);
 draw_set_alpha(1);
-
 gpu_set_blendmode(bm_normal);
 
-/// -- Surface 1: Basic Water Layer
+surfWidth = scaledW() + spriteW;
+surfHeight = scaledH() + spriteH;
 
-if (surface_exists(waterSurface))
+WaterSurface();
+GlowSurface();
+MaskSurface();
+RefractSurface();
+
+if(surface_exists(finalSurface))
 {
-    water_redraw(waterSurface, 0);
-    var Texture = surface_get_texture(waterSurface);
-    
-    gpu_set_blendmode(bm_add); 
-    draw_primitive_begin_texture(pr_trianglestrip, Texture);
-    draw_set_color(c_white);
-
-    for (var i = 0; i < room_height - y + 48; i += min(max(1,i)*6,32))
-    {
-        Mult = min(12,i/3);
-        Spread = Mult * sin(Time/2 + i/16) / 2.5;
-        Alpha = 1;
-        if(i > 16)
-        {
-            Alpha = max(1 - 0.25*((i-16)/min(max(1,i)*6,32)), 0.25);
-        }
-        
-        draw_vertex_texture_color(Spread-32,floor(y+i),0,i/surface_get_height(waterSurface),c_white,image_alpha*Alpha);
-        draw_vertex_texture_color(Spread+room_width+32,floor(y+i),1,i/surface_get_height(waterSurface),c_white,image_alpha*Alpha);
-    }
-
-    draw_primitive_end();
-
-    gpu_set_blendmode(bm_normal);
+	surface_resize(finalSurface, ceil(scaledW()), ceil(scaledH()));
+	surface_set_target(finalSurface);
+	
+	draw_surface_ext(application_surface,-(x-camX),-(y-camY),1,1,0,c_white,1);
+	
+	if(global.waterDistortion)
+	{
+		var fW = surface_get_width(finalSurface),
+			fH = surface_get_height(finalSurface);
+		
+		var _x = (x-camX),
+			_y = (y-camY);
+		var tex = surface_get_texture(application_surface),
+		sW = surface_get_width(application_surface),
+		sH = surface_get_height(application_surface);
+		
+		draw_primitive_begin_texture(pr_trianglestrip, tex);
+		
+		for (var i = 0; i < fH; i += 6)
+		{
+			var mult = -min(1.5,i/6);
+			var spread = mult * sin(time+i/4+y/4);
+			
+			draw_vertex_texture_color(0 + spread, i, _x/sW, (_y+i)/sH, c_white, 0.5);
+			draw_vertex_texture_color(fW + spread, i, (_x+fW)/sW, (_y+i)/sH, c_white, 0.5);
+		}
+		
+		draw_primitive_end();
+	}
+	
+	gpu_set_blendmode(bm_add);
+	DrawDistortSurf(waterSurface,-spriteW/2,0,fAlpha);
+	DrawDistortSurf(waterSurfaceRefract,-spriteW/2,0,1);
+	gpu_set_blendmode(bm_normal);
+	
+	surface_reset_target();
+	
+	draw_surface_ext(finalSurface,scr_round(x),scr_round(y),1,1,0,image_blend,image_alpha);
 }
 else
 {
-    waterSurface = surface_create(room_width + 64, room_height - y + 48);
-    water_redraw(waterSurface, 0);
+	finalSurface = surface_create(ceil(scaledW()), ceil(scaledH()));
+	surface_set_target(finalSurface);
+	draw_clear_alpha(c_black,0);
+	surface_reset_target();
 }
-
-/// -- Surface 2: Refraction Layer
-
-if (surface_exists(waterSurfaceRefract))
-{
-    var Texture = surface_get_texture(waterSurfaceRefract);
-    
-    gpu_set_blendmode(bm_add); 
-    
-    draw_primitive_begin_texture(pr_trianglestrip, Texture);
-    draw_set_color(c_white);
-    
-    for (var i = 0; i < room_height - y + 48; i += min(max(1,i)*6,32))
-    {
-        Mult = min(12,i/3);
-        Spread = Mult * sin(Time/2 + i/16) / 2.5;
-        Alpha = 1;
-        if(i > 16)
-        {
-            Alpha = max(1 - 0.25*((i-16)/min(max(1,i)*6,32)), 0.25);
-        }
-        
-        draw_vertex_texture_color(Spread-32,floor(y+i),0,i/surface_get_height(waterSurfaceRefract), c_white, Alpha);
-        draw_vertex_texture_color(Spread+room_width+32,floor(y+i),1,i/surface_get_height(waterSurfaceRefract), c_white, Alpha);
-    }
-    
-    draw_primitive_end();
-    
-    gpu_set_blendmode(bm_normal);
-}
-else
-{
-    waterSurfaceRefract = surface_create(room_width + 64, room_height - y + 48);
-}
-
-/// -- Refraction Surface failsafes
-
-if !(surface_exists(waterSurfaceRefractMask))
-{
-    waterSurfaceRefractMask = surface_create(room_width + 128, room_height - y + 48);
-    water_redraw(waterSurfaceRefractMask, 2);
-}
-
-if !(surface_exists(waterSurfaceRefractGlow))
-{
-    waterSurfaceRefractGlow = surface_create(room_width + 64, room_height - y + 48);
-    //water_redraw(waterSurfaceRefractGlow, 3);
-}
-water_redraw(waterSurfaceRefractGlow, 3);
-
-/// -- Refraction Layer always keeps updating
-
-water_redraw(waterSurfaceRefract, 1);
-RefractX += RefractXSpeed;

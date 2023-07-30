@@ -1,44 +1,35 @@
-/// -- Draw --
+/// @description 
 
-if (sprite_index == sprt_WaterSplash or Watery)
+if(sprite_index == sprt_WaterSplash || watery)
 {
-   gpu_set_blendmode(bm_add);
-    
-    if (Watery)
-    {
-        image_alpha = .7;
-    }
-    
-    if (sprite_index == sprt_WaterSplash)
-    {
-        image_alpha = .5;
-    }
+	gpu_set_blendmode(bm_add);
+	if(watery)
+	{
+		image_alpha = 0.7;
+	}
+	if(sprite_index == sprt_WaterSplash)
+	{
+		image_alpha = 0.5;
+	}
 }
 
-Spr = sprite_index;
-
-if (Watery && instance_exists(obj_Lava))
-{
-    //Spr = asset_get_index(sprite_get_name(Spr) + "Lava");
-    Spr = scr_ConvertToLavaSprite(sprite_index);
-    image_blend = make_color_rgb(255,255,80);
-}
-
+var spInd = sprite_index;
 var yscale = image_yscale;
-if(instance_exists(obj_Lava))
+if(liquid.liquidType == LiquidType.Lava)
 {
-    yscale = image_yscale*0.75;
+	spInd = scr_ConvertToLavaSprite(spInd);
+	yscale = image_yscale*0.75;
+	if(watery)
+	{
+		image_blend = make_color_rgb(255,255,80);
+	}
 }
 
-draw_sprite_ext(Spr, image_index, floor(x), floor(y), image_xscale, yscale, image_angle, image_blend, image_alpha);
+draw_sprite_ext(spInd, image_index, scr_round(x), scr_round(y), image_xscale, yscale, image_angle, image_blend, image_alpha);
 
-if (Splash)
+if(splash)
 {
-    draw_sprite_ext(Spr, image_index, floor(x), floor(y), image_xscale*1.2, -yscale/(1.6 + ((sprite_index == sprt_WaterBoil) * 4)), image_angle, image_blend, image_alpha/1.2);
-    //depth = 41;//-261;
-}    
-
-if (sprite_index == sprt_WaterSplash or Splash or Watery)
-{
-    gpu_set_blendmode(bm_normal);
+    draw_sprite_ext(spInd, image_index, scr_round(x), scr_round(y), image_xscale*1.2, -yscale/(1.6 + ((sprite_index == sprt_WaterBoil) * 4)), image_angle, image_blend, image_alpha/1.2);
 }
+
+gpu_set_blendmode(bm_normal);

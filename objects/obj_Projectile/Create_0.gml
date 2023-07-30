@@ -78,8 +78,6 @@ for(var i = 0; i < 11; i++)
 }
 oldPositionsSet = false;
 
-water_init(0);
-
 /*
 isBomb = false;
 isMissile = false;
