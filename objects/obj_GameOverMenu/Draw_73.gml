@@ -38,6 +38,7 @@ if(room == rm_GameOver)
 		for(var i = 0; i < array_length(option); i++)
 		{
 			var oY2 = oY + i*space;
+			oX = scr_round(ww/2 - string_width(option[i])/2);
 	
 			var col = c_black,
 				alph = 0.5,
@@ -46,7 +47,7 @@ if(room == rm_GameOver)
 			{
 				col = c_white;
 				alph = 0.15;
-				indent = 4;
+				indent = 0;//4;
 		
 				draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX+indent-4,oY2+string_height(option[i])/2,1,1,0,c_white,1);
 			}
@@ -91,7 +92,7 @@ if(room == rm_GameOver)
 		buttonTipString = buttonTipString + "   ${menuCancelButton} - "+buttonTip[2];
 	}
 	var str = InsertIconsIntoString(buttonTipString);
-	if(buttonTipScrib.text != str)
+	if(buttonTipScrib.get_text() != str)
 	{
 		buttonTipScrib.overwrite(str);
 	}

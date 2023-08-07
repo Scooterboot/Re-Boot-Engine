@@ -97,6 +97,5 @@ function scr_MainInitialize()
 	lhc_assign_interface("ISpeedBlock", obj_ShotBlock, obj_BombBlock, obj_SpeedBlock);
 	lhc_assign_interface("IScrewBlock", obj_ShotBlock, obj_BombBlock, obj_ScrewBlock);
 	
-	pal_swap_init_system(shd_pal_swapper); //initialize palette swapper system (Created by PixelatedPope)
-	
+	chameleon_init();
 }

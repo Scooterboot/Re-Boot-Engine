@@ -2,9 +2,9 @@
   "resourceType": "GMSprite",
   "resourceVersion": "1.0",
   "name": "pal_SpacePirate_Green",
-  "bbox_bottom": 13,
+  "bbox_bottom": 15,
   "bbox_left": 0,
-  "bbox_right": 3,
+  "bbox_right": 47,
   "bbox_top": 0,
   "bboxMode": 0,
   "collisionKind": 1,
@@ -13,14 +13,14 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"385c1fbe-da46-47da-aaf1-6c9cb9fddee2",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"4b3f0af1-0050-47b7-a5ce-7783217c3c40",},
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 14,
+  "height": 16,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"0af1112f-0acc-478d-8aa4-0d0e6dc6e536","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"b7fd2f7e-9dbc-4b85-b511-3fd73c3c5c44","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": null,
   "origin": 0,
@@ -54,7 +54,7 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"385c1fbe-da46-47da-aaf1-6c9cb9fddee2","path":"sprites/pal_SpacePirate_Green/pal_SpacePirate_Green.yy",},},},"Disabled":false,"id":"6a900882-b700-495d-971d-db1630617470","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"4b3f0af1-0050-47b7-a5ce-7783217c3c40","path":"sprites/pal_SpacePirate_Green/pal_SpacePirate_Green.yy",},},},"Disabled":false,"id":"7f43372a-6d5e-4a90-97d0-83c938d16e6f","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,
@@ -70,5 +70,5 @@
   },
   "type": 0,
   "VTile": false,
-  "width": 4,
+  "width": 48,
 }

@@ -102,17 +102,6 @@ scale = new Vector2(1,1);
 
 moveDir = 0;
 
-palIndex = 0;
-palIndex2 = 0;
-palDif = 0;
-
-palIndex_Eyes = 1;
-palIndex2_Eyes = 0;
-palDif_Eyes = 0;
-
-eyeGlow = 0;
-eyeGlowNum = -1;
-
 blinkCounter = 0;
 blinkCounterMax = 180;
 
@@ -125,6 +114,78 @@ rHandFrame = 0;
 lHandFrame = 0;
 
 kraidSurf = surface_create(room_width, room_height);
+
+#region Palette
+
+eyeGlow = 0;
+eyeGlowNum = -1;
+
+palSurface = surface_create(sprite_get_height(pal_Kraid),sprite_get_width(pal_Kraid));
+
+function Palette()
+{
+	if(surface_exists(palSurface))
+	{
+		surface_set_target(palSurface);
+		
+		var palIndex = 0;
+		if(life <= lifeMax*0.875)
+		{
+			palIndex = 1;
+		}
+		if(life <= lifeMax*0.75)
+		{
+			palIndex = 2;
+		}
+		if(life <= lifeMax*0.625)
+		{
+			palIndex = 3;
+		}
+		if(life <= lifeMax*0.5)
+		{
+			palIndex = 4;
+		}
+		if(life <= lifeMax*0.375)
+		{
+			palIndex = 5;
+		}
+		if(life <= lifeMax*0.25)
+		{
+			palIndex = 6;
+		}
+		if(life <= lifeMax*0.125)
+		{
+			palIndex = 7;
+		}
+		DrawPalSprite(pal_Kraid,palIndex,1);
+		
+		gpu_set_colorwriteenable(1,1,1,0);
+		
+		if(eyeGlow > 0)
+		{
+			DrawPalSprite(pal_Kraid,9,eyeGlow);
+		}
+		
+		if(dmgFlash > 4)
+		{
+			DrawPalSprite(pal_Kraid,8,1);
+		}
+		
+		gpu_set_colorwriteenable(1,1,1,1);
+		
+		surface_reset_target();
+	}
+	else
+	{
+		palSurface = surface_create(sprite_get_height(pal_Kraid),sprite_get_width(pal_Kraid));
+	}
+}
+function DrawPalSprite(_sprt,_index,_alpha)
+{
+	draw_sprite_ext(_sprt,_index,0,0,1,1,0,c_white,clamp(_alpha,0,1));
+}
+
+#endregion
 
 #region Define Bones/Limbs
 
@@ -170,16 +231,23 @@ Limbs[4] = new DrawLimb("Foot_Back", sprt_Kraid_Foot_Back, LLegBone[1]);
 Limbs[5] = new DrawLimb("Tail", sprt_Kraid_Tail, TailBone);
 Limbs[6] = new DrawLimb("Body", sprt_Kraid_Body, BodyBone);
 Limbs[7] = new DrawLimb("Head", sprt_Kraid_Head, HeadBone);
-Limbs[8] = new DrawLimb("Eyes", sprt_Kraid_Head, HeadBone);
 
-Limbs[9] = new DrawLimb("Leg_Front", sprt_Kraid_Leg, RLegBone[0]);
-Limbs[10] = new DrawLimb("Foot_Front", sprt_Kraid_Foot, RLegBone[1]);
+Limbs[8] = new DrawLimb("Leg_Front", sprt_Kraid_Leg, RLegBone[0]);
+Limbs[9] = new DrawLimb("Foot_Front", sprt_Kraid_Foot, RLegBone[1]);
 
-Limbs[11] = new DrawLimb("Bicep_Front", sprt_Kraid_Bicep, RArmBone[0]);
-Limbs[12] = new DrawLimb("Arm_Front", sprt_Kraid_Forearm, RArmBone[1]);
-Limbs[13] = new DrawLimb("Hand_Front", sprt_Kraid_Hand, RArmBone[2]);
+Limbs[10] = new DrawLimb("Bicep_Front", sprt_Kraid_Bicep, RArmBone[0]);
+Limbs[11] = new DrawLimb("Arm_Front", sprt_Kraid_Forearm, RArmBone[1]);
+Limbs[12] = new DrawLimb("Hand_Front", sprt_Kraid_Hand, RArmBone[2]);
 
-Limbs[14] = new DrawLimb("Ear", sprt_Kraid_Ear, HeadBone);
+Limbs[13] = new DrawLimb("Ear", sprt_Kraid_Ear, HeadBone);
+
+for(var i = 0; i < array_length(Limbs); i++)
+{
+	Limbs[i].Shader = function()
+	{
+		chameleon_set_surface(palSurface);
+	}
+}
 
 #endregion
 

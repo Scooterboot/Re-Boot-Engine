@@ -13,20 +13,20 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"c2f545a4-b433-4987-8925-5a23ccda80d0",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"9fdae0ef-8df0-4fef-bd68-11263663f7fb",},
   ],
   "gridX": 0,
   "gridY": 0,
   "height": 64,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"a853b58f-1785-4528-92fa-b4a5d6a6b18b","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"bf9eb100-222c-42fc-b6f4-f2dedee050ae","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": null,
   "origin": 4,
   "parent": {
     "name": "Effects",
-    "path": "folders/Sprites/Effects.yy",
+    "path": "folders/Sprites/Player/Effects.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {
@@ -54,7 +54,7 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"c2f545a4-b433-4987-8925-5a23ccda80d0","path":"sprites/sprt_CrystalBubble/sprt_CrystalBubble.yy",},},},"Disabled":false,"id":"7c3b5a59-7188-464e-9639-a02b9b6d5241","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"9fdae0ef-8df0-4fef-bd68-11263663f7fb","path":"sprites/sprt_CrystalBubble/sprt_CrystalBubble.yy",},},},"Disabled":false,"id":"26019544-b648-4954-ab37-c45402fe4e89","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,

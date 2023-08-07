@@ -560,8 +560,6 @@ ballFrame = 0;
 morphNum = 0;
 ballAnimDir = dir;
 
-ballGlowIndex = 1;
-
 aimFrame = 0;
 
 aimSnap = 0;
@@ -949,44 +947,6 @@ itemName[1] = "SUPER MISSILE";
 itemName[2] = "POWER BOMB";
 itemName[3] = "GRAPPLE BEAM";
 itemName[4] = "X-RAY VISOR";
-
-#endregion
-#region Palette
-
-chargeReleaseFlash = 0;
-
-shaderFlash = 0;
-shaderFlashMax = 4;
-
-palShader = pal_PowerSuit;
-palIndex = 1;
-palIndex2 = 1;
-palDif = 0;
-beamPalIndex = 0;
-
-xRayVisorFlash = 0;
-xRayVisorNum = 0;
-
-morphPal = 0;
-
-heatPal = 0;
-heatPalNum = 1;
-heatDmgPal = 0;
-heatDmgPalCounter = 0;
-
-screwPal = 0;
-screwPalNum = 1;
-
-hyperFired = 0;
-//hyperFiredFrame = 0;
-//hyperFiredFrameCounter = 0;
-hyperPal = 0;
-
-cFlashPal = 0;
-cFlashPal2 = 0;
-cFlashPalDiff = 0;
-cFlashPalNum = 1;
-cBubblePal = 0;
 
 #endregion
 #region MB Trail
@@ -1943,19 +1903,35 @@ function MoveStickTop_Y(movingTile)
 }
 function MoveStickRight_X(movingTile)
 {
-	return (colEdge == Edge.Right || spiderBall || (state == State.Grip && dir == 1) || (isPushing && dir == 1)); //(isPushing && movingTile == pushBlock.mBlock && dir == 1));
+	if(state == State.Grip && dir == 1 && lhc_position_meeting(x+6,y-17,"IMovingSolid"))
+	{
+		return true;
+	}
+	return (colEdge == Edge.Right || spiderBall || (isPushing && dir == 1)); //(isPushing && movingTile == pushBlock.mBlock && dir == 1));
 }
 function MoveStickRight_Y(movingTile)
 {
-	return (colEdge == Edge.Right || spiderBall || (state == State.Grip && dir == 1));
+	if(state == State.Grip && dir == 1 && lhc_position_meeting(x+6,y-17,"IMovingSolid"))
+	{
+		return true;
+	}
+	return (colEdge == Edge.Right || spiderBall);
 }
 function MoveStickLeft_X(movingTile)
 {
-	return (colEdge == Edge.Left || spiderBall || (state == State.Grip && dir == -1) || (isPushing && dir == -1)); //(isPushing && movingTile == pushBlock.mBlock && dir == -1));
+	if(state == State.Grip && dir == -1 && lhc_position_meeting(x-6,y-17,"IMovingSolid"))
+	{
+		return true;
+	}
+	return (colEdge == Edge.Left || spiderBall || (isPushing && dir == -1)); //(isPushing && movingTile == pushBlock.mBlock && dir == -1));
 }
 function MoveStickLeft_Y(movingTile)
 {
-	return (colEdge == Edge.Left || spiderBall || (state == State.Grip && dir == -1));
+	if(state == State.Grip && dir == -1 && lhc_position_meeting(x-6,y-17,"IMovingSolid"))
+	{
+		return true;
+	}
+	return (colEdge == Edge.Left || spiderBall);
 }
 
 function MovingSolid_OnRightCollision(fVX)
@@ -3683,6 +3659,363 @@ function SetArmPosSomersault(sFrameMax, degNum, frame6)
 }
 #endregion
 
+#region Palette
+
+chargeReleaseFlash = 0;
+
+shaderFlash = 0;
+shaderFlashMax = 4;
+
+palSurface = surface_create(sprite_get_width(pal_PowerSuit),sprite_get_height(pal_PowerSuit));
+
+enum PlayerPal
+{
+	Default = 0,
+	Heat = 1,
+	Speed = 2,
+	Spark = 3,
+	Screw = 4,
+	Morph = 5
+}
+enum PlayerPal2
+{
+	White = 0,
+	Black = 1,
+	Beam_Power = 2,
+	Beam_Ice = 3,
+	Beam_Wave = 4,
+	Beam_Spazer = 5,
+	Beam_Plasma = 6,
+	HyperStart = 7,
+	HyperEnd = 17
+}
+
+darkRoomVisorFlash = 0;
+darkRoomVisorNum = 1;
+
+xRayVisorFlash = 0;
+xRayVisorNum = 1;
+
+morphPal = 0;
+ballGlowIndex = 0;
+
+heatPal = 0;
+heatPalNum = 1;
+heatDmgPal = 0;
+heatDmgPalCounter = 0;
+
+screwPal = 0;
+screwPalNum = 1;
+
+hyperFired = 0;
+hyperPal = 0;
+
+cFlashPalSurf = surface_create(sprite_get_width(pal_CrystalFlash),sprite_get_height(pal_CrystalFlash));
+cFlashPal = 0;
+cFlashPal2 = 0;
+cFlashPalDiff = 0;
+cFlashPalNum = 1;
+cBubblePal = 0;
+
+function PaletteSurface()
+{
+	if(surface_exists(palSurface))
+	{
+		surface_set_target(palSurface);
+		
+		var liquidMovement = (liquidState > 0);
+		
+		var palSprite = pal_PowerSuit,
+			palSprite2 = pal_MiscSuit;
+		if(suit[Suit.Varia])
+		{
+			palSprite = pal_VariaSuit;
+		}
+		if(suit[Suit.Gravity])
+		{
+			palSprite = pal_GravitySuit;
+		}
+		DrawPalSprite(palSprite,PlayerPal.Default,1);
+		
+		if(shineFXCounter > 0 || statCharge >= maxCharge || (state == State.Dodge && statCharge < maxCharge) || (shineCharge > 0 && state != State.Spark))
+		{
+			shaderFlash++;
+		}
+		else
+		{
+			shaderFlash = 0;
+		}
+		
+		gpu_set_colorwriteenable(1,1,1,0);
+		
+		#region -- Heated room glow --
+		if(global.rmHeated)
+		{
+			heatPal += 0.015 * heatPalNum;
+			if(heatPal > 1)
+			{
+				heatPalNum = -1;
+			}
+			else if(heatPal < 0)
+			{
+				heatPalNum = 1;
+			}
+			DrawPalSprite(palSprite,PlayerPal.Heat,heatPal);
+		}
+		else
+		{
+			heatPal = 0;
+			heatPalNum = 1;
+		}
+		#endregion
+		#region -- Visor flashing --
+		if(false) // if(room is dark and activates visor flashing)
+		{
+			if(darkRoomVisorFlash >= 1)
+            {
+                darkRoomVisorNum = -1;
+            }
+            if(darkRoomVisorFlash <= 0)
+            {
+                darkRoomVisorNum = 1;
+            }
+            darkRoomVisorFlash = clamp(darkRoomVisorFlash + 0.125*darkRoomVisorNum,0,1);
+			
+			DrawPalSprite(pal_Visor_Flash,0,1);
+			DrawPalSprite(pal_Visor_Flash,1,darkRoomVisorFlash);
+		}
+		if(instance_exists(XRay))
+		{
+			if(xRayVisorFlash >= 1)
+            {
+                xRayVisorNum = -1;
+            }
+            if(xRayVisorFlash <= 0)
+            {
+                xRayVisorNum = 1;
+            }
+            xRayVisorFlash = clamp(xRayVisorFlash + 0.125*xRayVisorNum,0,1);
+			
+			DrawPalSprite(pal_Visor_XRay,0,XRay.alpha);
+			DrawPalSprite(pal_Visor_XRay,1,XRay.alpha*xRayVisorFlash);
+		}
+		#endregion
+		#region -- Intro fanfare / saving --
+		if(introAnimState != -1)
+		{
+			if(introAnimCounter < 245)
+			{
+				var introPal = lerp(1,0.5, clamp((introAnimCounter-200)/35,0,1));
+				var alph = introPal * power(abs(scr_wrap(introAnimCounter,-4,4) / 4), 2);
+				DrawPalSprite(palSprite,PlayerPal.Speed,alph);
+			}
+		}
+		if(saveAnimCounter > 0)
+		{
+			var alph = power(abs(scr_wrap(saveAnimCounter,-4,4) / 4), 2);
+			DrawPalSprite(palSprite,PlayerPal.Speed,alph);
+		}
+		#endregion
+		#region -- Speed Booster & Shine Spark --
+		if(speedFXCounter > 0)
+		{
+			DrawPalSprite(palSprite,PlayerPal.Speed,speedFXCounter);
+		}
+		
+		if(shineFXCounter > 0)
+		{
+			var alph = shineFXCounter*0.875;
+			if(shaderFlash > (shaderFlashMax/2) || shineFXCounter < 1)
+			{
+				alph = shineFXCounter*0.625;
+			}
+			DrawPalSprite(palSprite,PlayerPal.Spark,alph);
+		}
+		#endregion
+		#region -- Screw Attack --
+		if(isScrewAttacking && frame[6] >= 1 && spaceJump <= 6 && wjFrame <= 0)
+		{
+			screwPal = clamp(screwPal + 0.25*screwPalNum, 0, 1);
+			if(screwPal >= 1)
+			{
+				screwPalNum = -1;
+			}
+			if(screwPal <= 0.25)
+			{
+				screwPalNum = 1;
+			}
+			DrawPalSprite(palSprite,PlayerPal.Screw,screwPal);
+		}
+		else
+		{
+			screwPal = 0;
+			screwPalNum = 1;
+		}
+		#endregion
+		#region -- Beam charge, Shine Spark charge, and Accel dash flash --
+		var beamPalInd = PlayerPal2.Beam_Power;
+		if(beamChargeAnim == sprt_IceBeamChargeAnim)
+		{
+			beamPalInd = PlayerPal2.Beam_Ice;
+		}
+		else if(beamChargeAnim == sprt_PlasmaBeamChargeAnim)
+		{
+			beamPalInd = PlayerPal2.Beam_Plasma;
+		}
+		else if(beamChargeAnim == sprt_WaveBeamChargeAnim)
+		{
+			beamPalInd = PlayerPal2.Beam_Wave;
+		}
+		else if(beamChargeAnim == sprt_SpazerChargeAnim)
+		{
+			beamPalInd = PlayerPal2.Beam_Spazer;
+		}
+		
+		if(statCharge >= maxCharge || (state == State.Dodge && statCharge < maxCharge) || (shineCharge > 0 && state != State.Spark))
+		{
+			if(shaderFlash > (shaderFlashMax/2))
+			{
+				if(statCharge >= maxCharge)
+				{
+					if(state == State.Somersault || state == State.Dodge)
+					{
+						DrawPalSprite(palSprite2,beamPalInd,1);
+					}
+					else
+					{
+						DrawPalSprite(palSprite2,PlayerPal2.White,0.125);
+					}
+				}
+				else if(state == State.Dodge)
+				{
+					DrawPalSprite(palSprite,PlayerPal.Screw,0.375);
+				}
+				else if(shineCharge > 0)
+				{
+					DrawPalSprite(palSprite,PlayerPal.Spark,0.35);
+				}
+			}
+			else if((state == State.Somersault || state == State.Dodge) && statCharge >= maxCharge)
+			{
+				DrawPalSprite(palSprite2,beamPalInd,0.375);
+			}
+		}
+		#endregion
+		#region -- Beam charge shot flash & Hyper beam --
+		if(hyperFired > 0)
+		{
+			hyperPal = min(hyperPal+0.25,1);
+		}
+		else
+		{
+			hyperPal = max(hyperPal-0.1,0);
+		}
+		if(hyperPal > 0)
+		{
+			var hyperInd = PlayerPal2.HyperStart + obj_Main.hyperRainbowCycle;
+			DrawPalSprite(palSprite2,scr_wrap(scr_floor(hyperInd), PlayerPal2.HyperStart, PlayerPal2.HyperEnd), hyperPal);
+			DrawPalSprite(palSprite2,scr_wrap(scr_ceil(hyperInd), PlayerPal2.HyperStart, PlayerPal2.HyperEnd), hyperPal*frac(hyperInd));
+		}
+		else if(chargeReleaseFlash > 0)
+		{
+			DrawPalSprite(palSprite2,beamPalInd,1);
+		}
+		#endregion
+		#region -- Morphing into ball --
+		if(morphFrame > 0)
+		{
+			morphPal = min(morphPal + 0.25/(1+liquidMovement),1);
+		}
+		else
+		{
+			morphPal = max(morphPal - 0.15/(1+liquidMovement),0);
+		}
+		if(morphPal > 0)
+		{
+			DrawPalSprite(palSprite,PlayerPal.Morph,morphPal);
+		}
+		#endregion
+		#region -- Damage flicker & Heated room damage flash --
+		if(heatDmgPalCounter > 30)
+		{
+			heatDmgPal = min(heatDmgPal + 0.25, 1);
+		}
+		else
+		{
+			heatDmgPal = max(heatDmgPal - 0.25, 0);
+		}
+		if(heatDmgPalCounter > 34)
+		{
+			heatDmgPalCounter = 0;
+		}
+		if(heatDmgPal > 0)
+		{
+			DrawPalSprite(palSprite2,PlayerPal2.White,heatDmgPal * 0.8);
+		}
+		
+		if(dmgFlash > 0)
+		{
+			DrawPalSprite(palSprite2,PlayerPal2.White,0.8);
+		}
+		else if(immuneTime > 0 && (immuneTime&1) && !global.roomTrans)
+		{
+			DrawPalSprite(palSprite2,PlayerPal2.Black,1);
+		}
+		#endregion
+		#region -- Crystal Flash --
+		if(cFlashPal > 0)
+		{
+			DrawPalSprite(palSprite2,PlayerPal2.White,cFlashPal);
+		}
+		#endregion
+		
+		gpu_set_colorwriteenable(1,1,1,1);
+		
+		if(shaderFlash >= shaderFlashMax)
+		{
+			shaderFlash = 0;
+		}
+		
+		surface_reset_target();
+	}
+	else
+	{
+		palSurface = surface_create(sprite_get_width(pal_PowerSuit),sprite_get_height(pal_PowerSuit));
+	}
+	
+	if(surface_exists(cFlashPalSurf))
+	{
+		surface_set_target(cFlashPalSurf);
+		
+		DrawPalSprite(pal_CrystalFlash,0,1);
+		
+		gpu_set_colorwriteenable(1,1,1,0);
+		
+		if(cFlashPal2 > 0)
+		{
+			DrawPalSprite(pal_CrystalFlash,1,cFlashPal2);
+		}
+		if(cFlashPalDiff > 0)
+		{
+			DrawPalSprite(pal_CrystalFlash,2,cFlashPalDiff);
+		}
+		
+		gpu_set_colorwriteenable(1,1,1,1);
+		
+		surface_reset_target();
+	}
+	else
+	{
+		cFlashPalSurf = surface_create(sprite_get_width(pal_CrystalFlash),sprite_get_height(pal_CrystalFlash));
+	}
+}
+function DrawPalSprite(_sprt,_index,_alpha)
+{
+	draw_sprite_ext(_sprt,_index,0,0,1,1,0,c_white,clamp(_alpha,0,1));
+}
+
+#endregion
+
 #region PreDrawPlayer
 function PreDrawPlayer(xx, yy, rot, alpha)
 {
@@ -3823,7 +4156,7 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 			cBubblePal = scr_wrap(cBubblePal-0.1,0,7);
 		}
 		
-		pal_swap_set(pal_CrystalBubble,cBubblePal,0,0,false);
+		chameleon_set(pal_CrystalBubble,cBubblePal,0,0,7);
 		draw_sprite_ext(sprt_CrystalBubble,0,scr_round(xx),scr_round(yy),cBubbleScale,cBubbleScale,0,c_white,alpha);
 		shader_reset();
 	}
@@ -3834,14 +4167,14 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 }
 #endregion
 #region UpdatePlayerSurface
-function UpdatePlayerSurface(_palShader, _palIndex, _palIndex2, _palDif)
+function UpdatePlayerSurface(_palSurface)
 {
 	if(surface_exists(playerSurf))
 	{
 		surface_set_target(playerSurf);
 		draw_clear_alpha(c_black,0);
 		
-		pal_swap_set(_palShader,_palIndex,_palIndex2,_palDif,false);
+		chameleon_set_surface(_palSurface);
 		
 		if(stateFrame != State.Morph || morphFrame > 0 || morphAlpha < 1)
 		{
@@ -3935,15 +4268,6 @@ function UpdatePlayerSurface(_palShader, _palIndex, _palIndex2, _palDif)
 		surface_set_target(playerSurf2);
 		draw_clear_alpha(c_black,0);
 		
-		if(dmgFlash <= 0 && immuneTime > 0 && (immuneTime&1))
-		{
-			gpu_set_blendmode(bm_add);
-		}
-		else
-		{
-			gpu_set_blendmode(bm_normal);
-		}
-		
 		var shd = sh_better_scaling_5xbrc;
 		shader_set(shd);
 	    shader_set_uniform_f(shader_get_uniform(shd, "texel_size"), 1 / surface_get_width(playerSurf), 1 / surface_get_height(playerSurf));
@@ -3953,8 +4277,6 @@ function UpdatePlayerSurface(_palShader, _palIndex, _palIndex2, _palDif)
 		
 		draw_surface_ext(playerSurf,0,0,rotScale,rotScale,0,c_white,1);
 		shader_reset();
-		
-		gpu_set_blendmode(bm_normal);
 		
 		surface_reset_target();
 	}
@@ -4080,22 +4402,22 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		{
 			glowSpeed = 0;
 		}
-		ballGlowIndex = scr_wrap(ballGlowIndex + glowSpeed, 1, 10);
+		ballGlowIndex = scr_wrap(ballGlowIndex + glowSpeed, 0, 9);
 		
-		var spiderPal = 9+ballGlowIndex;//11;
+		var spiderPal = 9+ballGlowIndex;
 		var spiderPalDiff = 0;
 		if(spiderBall)
 		{
 			spiderPalDiff = 1;//1-clamp(spiderGlowAlpha,0,1);
 		}
 		
-		pal_swap_set(palSet,ballGlowIndex,spiderPal,spiderPalDiff,false);
+		chameleon_set(palSet,ballGlowIndex,spiderPal,spiderPalDiff,20);
 		draw_sprite_ext(sprt_SpringBall_Glow,ballFrame,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,rot,c_white,morphAlpha*alph);
 		shader_reset();
 	}
 	else
 	{
-		ballGlowIndex = 1;
+		ballGlowIndex = 0;
 	}
 	
 	if(stateFrame == State.Morph)
@@ -4140,6 +4462,17 @@ function PostDrawPlayer(posX, posY, rot, alph)
 	{
 		spiderGlowAlpha = 0;
 		spiderGlowNum = 2;
+	}
+	
+	if(cBubbleScale > 0)
+	{
+		chameleon_set(pal_CrystalBubble,cBubblePal,0,0,7);
+		
+		gpu_set_colorwriteenable(1,1,1,0);
+		draw_sprite_ext(sprt_CrystalBubble,0,scr_round(xx),scr_round(yy),cBubbleScale,cBubbleScale,0,c_white,alph*0.375);
+		gpu_set_colorwriteenable(1,1,1,1);
+		
+		shader_reset();
 	}
 	
 	if(state == State.Dodge)

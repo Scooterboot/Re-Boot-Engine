@@ -5,6 +5,10 @@ if(surface_exists(kraidSurf))
 {
 	surface_free(kraidSurf);
 }
+if(surface_exists(palSurface))
+{
+	surface_free(palSurface);
+}
 for(var i = 0; i < array_length(Bones); i++)
 {
 	Bones[i].Clean();

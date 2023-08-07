@@ -32,18 +32,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
                 XRay.coneDir = 90-(90*dir) + 80*sign(angle_difference(XRay.coneDir,90-(90*dir)));
             }
             
-            XRay.x = x + dir*3;
-            XRay.y = y - 12;
-
-            if(xRayVisorFlash >= 1)
-            {
-                xRayVisorNum = -1;
-            }
-            if(xRayVisorFlash <= 0)
-            {
-                xRayVisorNum = 1;
-            }
-            xRayVisorFlash = clamp(xRayVisorFlash + 0.125*xRayVisorNum,0,1);
+            XRay.x = x + dir*3 + lengthdir_x(-1,XRay.coneDir);
+            XRay.y = y - 12 + lengthdir_y(-1,XRay.coneDir);
         }
         else
         {
@@ -316,9 +306,10 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	}
 	
 	#region Update Anims
+	
 	drawMissileArm = false;
-	shootFrame = (gunReady || justShot > 0 || (cShoot && (rShoot || (beam[Beam.Charge] && !unchargeable)) && (itemSelected == 1 ||
-	((itemHighlighted[1] != 0 || missileStat > 0) && (itemHighlighted[1] != 1 || superMissileStat > 0)))));
+	shootFrame = (gunReady || justShot > 0 || instance_exists(grapple) || (cShoot && (rShoot || (beam[Beam.Charge] && !unchargeable)) && (itemSelected == 1 ||
+				((itemHighlighted[1] != 0 || missileStat > 0) && (itemHighlighted[1] != 1 || superMissileStat > 0)))));
 	sprtOffsetX = 0;
 	sprtOffsetY = 0;
 	torsoR = sprt_StandCenter;

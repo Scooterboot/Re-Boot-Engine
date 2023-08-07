@@ -37,7 +37,7 @@
   "origin": 4,
   "parent": {
     "name": "Effects",
-    "path": "folders/Sprites/Effects.yy",
+    "path": "folders/Sprites/Player/Effects.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {

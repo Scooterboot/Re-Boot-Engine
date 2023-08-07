@@ -1,12 +1,14 @@
 /// @description Insert description here
 // You can write your code in this editor
 
-if(state == 1)
+if(state > 0)
 {
 	instance_destroy(camTile1);
 	instance_destroy(camTile2);
-	//instance_destroy(solidTile);
-	
+}
+
+if(state == 1)
+{
 	counter[0]++;
 	if(counter[0] > 20 && counter[1] < array_length(phase2Blocks))
 	{

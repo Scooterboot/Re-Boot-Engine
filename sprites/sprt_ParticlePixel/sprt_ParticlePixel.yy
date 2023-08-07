@@ -25,8 +25,8 @@
   "nineSlice": null,
   "origin": 0,
   "parent": {
-    "name": "Effects",
-    "path": "folders/Sprites/Effects.yy",
+    "name": "Particles",
+    "path": "folders/Sprites/Particles.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {

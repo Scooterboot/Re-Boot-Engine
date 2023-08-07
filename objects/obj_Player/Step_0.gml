@@ -939,20 +939,21 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		speedSoundPlayed = false;
 		audio_stop_sound(snd_SpeedBooster);
 		audio_stop_sound(snd_SpeedBooster_Loop);
-		if(shineCharge > 0 && state != State.Spark && state != State.BallSpark)
-		{
-			if(!audio_is_playing(snd_ShineSpark_Charge))
-			{
-				audio_play_sound(snd_ShineSpark_Charge,0,true);
-			}
-		}
-		else if(audio_is_playing(snd_ShineSpark_Charge) && state != State.Spark && state != State.BallSpark)
-		{
-			audio_stop_sound(snd_ShineSpark_Charge);
-		}
 		
 		speedFXCounter = max(speedFXCounter - 0.075, 0);
 		speedCatchCounter = max(speedCatchCounter - 1, 0);
+	}
+	
+	if(shineCharge > 0 && state != State.Spark && state != State.BallSpark)
+	{
+		if(!audio_is_playing(snd_ShineSpark_Charge))
+		{
+			audio_play_sound(snd_ShineSpark_Charge,0,true);
+		}
+	}
+	else if(audio_is_playing(snd_ShineSpark_Charge) && state != State.Spark && state != State.BallSpark)
+	{
+		audio_stop_sound(snd_ShineSpark_Charge);
 	}
 	
 	if((state == State.Stand || state == State.Crouch || state == State.Morph) && (speedBoost || speedCatchCounter > 0) && move == 0 && cDown && dir != 0 && grounded && morphFrame <= 0 && !spiderBall)
@@ -2788,7 +2789,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		ds_list_clear(blockList);
 		
-		if((!entity_place_collide(2*dir,0) && !entity_place_collide(2*dir,8)) || (colFlag && !startClimb) || (cDown && cJump && rJump))
+		if((!entity_place_collide(2*dir,0) && !entity_place_collide(2*dir,8)) || (colFlag && !startClimb) || (cDown && cJump && rJump) || (lhc_place_meeting(x,y,"IMovingSolid") && !startClimb))
 		{
 			if(stateFrame == State.Morph)
 			{
@@ -3782,12 +3783,22 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		{
 			if(cFlashPalDiff <= 0)
 			{
-				cFlashPal2 = clamp(cFlashPal2+0.025*cFlashPalNum,0,1.5);
+				/*cFlashPal2 = clamp(cFlashPal2+0.025*cFlashPalNum,0,1.5);
 				if(cFlashPal2 <= 0)
 				{
 					cFlashPalNum = 1;
 				}
 				if(cFlashPal2 >= 1.5)
+				{
+					cFlashPalNum = -1;
+				}*/
+				
+				cFlashPal2 = clamp(cFlashPal2+0.025*cFlashPalNum,0,1);
+				if(cFlashPal2 <= 0)
+				{
+					cFlashPalNum = 1;
+				}
+				if(cFlashPal2 >= 1)
 				{
 					cFlashPalNum = -1;
 				}

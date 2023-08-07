@@ -103,11 +103,12 @@ if(instance_exists(obj_XRay))
 		draw_primitive_end();
 	}
 
-	with(obj_Player)
+	/*with(obj_Player)
 	{
 	    gpu_set_blendmode(bm_add);
-		UpdatePlayerSurface(pal_XRay_Visor,1+xRayVisorFlash,0,0);
+		//UpdatePlayerSurface(pal_XRay_Visor,1+xRayVisorFlash,0,0);
+		UpdatePlayerSurface(pal_XRay_Visor,0,1,0,xRayVisorFlash,0,2);
 		DrawPlayer(x,y,rotation,obj_XRay.alpha);
 	    gpu_set_blendmode(bm_normal);
-	}
+	}*/
 }

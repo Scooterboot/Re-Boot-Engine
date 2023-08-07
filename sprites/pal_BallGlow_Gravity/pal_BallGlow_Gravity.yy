@@ -4,7 +4,7 @@
   "name": "pal_BallGlow_Gravity",
   "bbox_bottom": 5,
   "bbox_left": 0,
-  "bbox_right": 20,
+  "bbox_right": 19,
   "bbox_top": 0,
   "bboxMode": 0,
   "collisionKind": 1,
@@ -13,20 +13,20 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"56071f54-05ee-4b7a-9228-9cee80653c0e",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"27a0796f-3f2e-4fea-b821-8f152c9bb5c5",},
   ],
   "gridX": 0,
   "gridY": 0,
   "height": 6,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"5a108262-30c6-420f-b083-88b77deeee1b","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"dbfce568-e9f3-4c33-9771-928c554e8064","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": null,
   "origin": 0,
   "parent": {
     "name": "Palette",
-    "path": "folders/Sprites/Palette.yy",
+    "path": "folders/Sprites/Player/Palette.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {
@@ -54,7 +54,7 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"56071f54-05ee-4b7a-9228-9cee80653c0e","path":"sprites/pal_BallGlow_Gravity/pal_BallGlow_Gravity.yy",},},},"Disabled":false,"id":"8b619cae-4b7d-4b3e-af0c-c8ebaab51709","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"27a0796f-3f2e-4fea-b821-8f152c9bb5c5","path":"sprites/pal_BallGlow_Gravity/pal_BallGlow_Gravity.yy",},},},"Disabled":false,"id":"1fc1eae3-0f1f-4e8c-9981-e560faaef119","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,
@@ -70,5 +70,5 @@
   },
   "type": 0,
   "VTile": false,
-  "width": 21,
+  "width": 20,
 }

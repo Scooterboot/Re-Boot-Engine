@@ -56,7 +56,7 @@ for(var i = 0; i < 5; i++)
 		yscale = dist2;
 	}
 	
-	pal_swap_set(sprt_HyperBeamPalette,1+obj_Main.hyperRainbowCycle,0,0,false);
+	chameleon_set(sprt_HyperBeamPalette,obj_Main.hyperRainbowCycle,0,0,11);
 	draw_sprite_ext(sprite_index,image_index,scr_round(xx),scr_round(yy),xscale,yscale,oldRot[i],c_white,alpha);
 	shader_reset();
 }
@@ -64,16 +64,16 @@ for(var i = 0; i < 5; i++)
 var xscale = image_xscale,
 	yscale = image_yscale;
 
-var dist = clamp((point_distance(x,y,xstart,ystart) + 4 + sprite_xoffset)/projLength,0,1);
+var dist = clamp((point_distance(x,y,xstart,ystart) + 2 + sprite_xoffset)/projLength,0,1);
 xscale = dist;
 if(rFrame != 0)
 {
-	dist = clamp((lengthdir_x(point_distance(x,y,xstart,ystart) + 4,45) + sprite_xoffset)/projLength,0,1);
+	dist = clamp((lengthdir_x(point_distance(x,y,xstart,ystart) + 2,45) + sprite_xoffset)/projLength,0,1);
 	xscale = dist;
 	yscale = dist;
 }
 
-pal_swap_set(sprt_HyperBeamPalette,1+obj_Main.hyperRainbowCycle,0,0,false);
+chameleon_set(sprt_HyperBeamPalette,obj_Main.hyperRainbowCycle,0,0,11);
 draw_sprite_ext(sprite_index,image_index,scr_round(x),scr_round(y),xscale,yscale,image_angle,c_white,image_alpha);
 shader_reset();
 
@@ -92,7 +92,7 @@ if(fired < 4)
 	
 	with(obj_Player)
 	{
-		pal_swap_set(sprt_HyperBeamPalette,1+obj_Main.hyperRainbowCycle,0,0,false);
+		chameleon_set(sprt_HyperBeamPalette,obj_Main.hyperRainbowCycle,0,0,11);
 		draw_sprite_ext(sSprt,hObj.firedFrame,scr_round(shootPosX),scr_round(shootPosY),1,1,0,c_white,1);
 		shader_reset();
 		

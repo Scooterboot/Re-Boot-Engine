@@ -1,48 +1,6 @@
 /// @description 
 
-palIndex = 0;
-if(life <= lifeMax*0.875)
-{
-	palIndex = 1;
-}
-if(life <= lifeMax*0.75)
-{
-	palIndex = 2;
-}
-if(life <= lifeMax*0.625)
-{
-	palIndex = 3;
-}
-if(life <= lifeMax*0.5)
-{
-	palIndex = 4;
-}
-if(life <= lifeMax*0.375)
-{
-	palIndex = 5;
-}
-if(life <= lifeMax*0.25)
-{
-	palIndex = 6;
-}
-if(life <= lifeMax*0.125)
-{
-	palIndex = 7;
-}
-
-palIndex_Eyes = palIndex+1;
-
-palIndex2_Eyes = 11;//5;
-palDif_Eyes = eyeGlow;
-
-if(dmgFlash > 4)
-{
-	palIndex = 8;//4;
-	palDif = 0;
-	
-	palIndex_Eyes = 9;//6;
-	palDif_Eyes = 0;
-}
+Palette();
 
 for(var i = 0; i < array_length(Limbs); i++)
 {
@@ -60,16 +18,7 @@ for(var i = 0; i < array_length(Limbs); i++)
 		frame = headFrame;
 	}
 	
-	if(Limbs[i].name == "Eyes")
-	{
-		pal_swap_set(pal_Kraid_Eyes,palIndex_Eyes,palIndex2_Eyes,palDif_Eyes,false);
-	}
-	else
-	{
-		pal_swap_set(pal_Kraid,palIndex,palIndex2,palDif,false);
-	}
 	Limbs[i].Draw(frame,dir);
-	shader_reset();
 }
 
 dmgFlash = max(dmgFlash-1,0);

@@ -11,6 +11,8 @@ function CameraLogic() {}
 #region AnimBone
 function AnimBone(_defaultX, _defaultY, _parentBone = pointer_null) constructor
 {
+	npc = other;
+	
 	defaultPosition = new Vector2(_defaultX,_defaultY);
 	
 	parent = _parentBone;
@@ -128,6 +130,8 @@ function AnimBone(_defaultX, _defaultY, _parentBone = pointer_null) constructor
 #region DrawLimb
 function DrawLimb(_name, _sprt, _bone, _bone2 = pointer_null) constructor
 {
+	npc = other;
+	
 	name = _name;
 	sprt = _sprt;
 	bone = _bone;
@@ -150,6 +154,7 @@ function DrawLimb(_name, _sprt, _bone, _bone2 = pointer_null) constructor
 		}
 	}
 	
+	function Shader() {}
 	function Draw(frame = 0, dir = 1)
 	{
 		var b = bone;
@@ -168,7 +173,9 @@ function DrawLimb(_name, _sprt, _bone, _bone2 = pointer_null) constructor
 			surface_set_target(limbSurf);
 			draw_clear_alpha(c_black,0);
 			
+			Shader();
 			draw_sprite_ext(sprt,frame,xOffset,yOffset,1,1,0,c_white,1);
+			shader_reset();
 			
 			surface_reset_target();
 		}

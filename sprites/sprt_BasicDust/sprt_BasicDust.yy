@@ -28,8 +28,8 @@
   "nineSlice": null,
   "origin": 4,
   "parent": {
-    "name": "Effects",
-    "path": "folders/Sprites/Effects.yy",
+    "name": "Particles",
+    "path": "folders/Sprites/Particles.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {

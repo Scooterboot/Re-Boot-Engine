@@ -22,7 +22,7 @@ if(projLength > 0)
 	    xstart += speed_x;
 	    ystart += speed_y;
 	}
-	dist = clamp((point_distance(x,y,xstart,ystart) + 4 + sprite_xoffset)/projLength,0,1);
+	dist = clamp((point_distance(x,y,xstart,ystart) + 2 + sprite_xoffset)/projLength,0,1);
 }
 
 var xscale = image_xscale,
@@ -61,7 +61,7 @@ if(!isSpazer && !isPlasma)
 				xscale = dist;
 				if(rFrame != 0)
 				{
-					dist = clamp((lengthdir_x(point_distance(x,y,xstart,ystart) + 4,45) + sprite_xoffset)/projLength,0,1);
+					dist = clamp((lengthdir_x(point_distance(x,y,xstart,ystart) + 2,45) + sprite_xoffset)/projLength,0,1);
 					xscale = dist;
 					yscale = dist;
 				}
@@ -77,7 +77,7 @@ if(projLength > 0)
 	xscale = dist;
 	if(rFrame != 0)
 	{
-		dist = clamp((lengthdir_x(point_distance(x,y,xstart,ystart) + 4,45) + sprite_xoffset)/projLength,0,1);
+		dist = clamp((lengthdir_x(point_distance(x,y,xstart,ystart) + 2,45) + sprite_xoffset)/projLength,0,1);
 		xscale = dist;
 		yscale = dist;
 	}

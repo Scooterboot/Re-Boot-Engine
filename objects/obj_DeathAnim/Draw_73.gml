@@ -18,7 +18,20 @@ if(dir == -1)
 }
 if(instance_exists(obj_Player))
 {
-	pal_swap_set(obj_Player.palShader,obj_Player.palIndex,obj_Player.palIndex2,obj_Player.palDif,false);
+	//pal_swap_set(obj_Player.palShader,obj_Player.palIndex,obj_Player.palIndex2,obj_Player.palDif,false);
+	if(animSequence[frame] <= 0)
+	{
+		var palSprite = pal_PowerSuit;
+		if(obj_Player.suit[Suit.Varia])
+		{
+			palSprite = pal_VariaSuit;
+		}
+		if(obj_Player.suit[Suit.Gravity])
+		{
+			palSprite = pal_GravitySuit;
+		}
+		chameleon_set(palSprite,0,0,0,1);
+	}
 	draw_sprite_ext(sIndex,animSequence[frame],vx+posX,vy+posY,dir,1,0,c_white,screenFade[0]);
 	shader_reset();
 }

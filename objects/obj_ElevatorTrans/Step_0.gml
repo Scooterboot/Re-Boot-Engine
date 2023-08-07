@@ -48,8 +48,25 @@ else
 				yDiff = scr_round(obj_Camera.y-obj_Camera.playerY);
 			camera_set_view_pos(view_camera[0], scr_round(obj_Camera.playerX)+xDiff, scr_round(obj_Camera.playerY)+yDiff);
 		}
-	    obj_Player.x = nextEle.x;
-	    obj_Player.y = nextEle.PosY - (obj_Player.bbox_bottom-obj_Player.y);
+	    obj_Player.position.X = nextEle.x;
+	    obj_Player.position.Y = nextEle.PosY - (obj_Player.bbox_bottom-obj_Player.y);
+		with(obj_Player)
+        {
+            array_fill(mbTrailPosX, noone);
+			array_fill(mbTrailPosY, noone);
+			array_fill(mbTrailDir, noone);
+			
+			x = scr_round(position.X);
+			y = scr_round(position.Y);
+			
+			liquid = liquid_place();
+			liquidPrev = liquid;
+			liquidTop = liquid_top();
+			liquidTopPrev = liquidTop;
+			
+			prevTop = bbox_top;
+			prevBottom = bbox_bottom;
+        }
 
 	    if(fadeCounter < 20)
 	    {

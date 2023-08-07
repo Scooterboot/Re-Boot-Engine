@@ -1,25 +1,26 @@
 /// @description 
 
-/*if(dmgFlash > 4)
+if(surface_exists(palSurface))
 {
-    shader_set(shd_WhiteFlash);
+	surface_copy(palSurface,0,0,realLife.palSurface);
+	
+	surface_set_target(palSurface);
+	
+	gpu_set_colorwriteenable(1,1,1,0);
+	if(ai[0] == 1 && (ai[1] % 2) == 0)
+	{
+		draw_sprite_ext(pal_Kraid,8,0,0,1,1,0,c_white,1);
+	}
+	gpu_set_colorwriteenable(1,1,1,1);
+	
+	surface_reset_target();
 }
-else if(frozen > 120 || (frozen&2))
+else
 {
-    shader_set(shd_Frozen);
-}*/
-
-var palIndex = realLife.palIndex,
-	palIndex2 = realLife.palIndex2,
-	palDif = realLife.palDif;
-
-if(ai[0] == 1 && (ai[1] % 2) == 0)
-{
-	palIndex = 8;
-	palDif = 0;
+	palSurface = surface_create(sprite_get_height(pal_Kraid),sprite_get_width(pal_Kraid));
 }
 
-pal_swap_set(pal_Kraid,palIndex,palIndex2,palDif,false);
+chameleon_set_surface(palSurface);
 draw_sprite_ext(sprite_index,image_index,scr_round(x),scr_round(y),image_xscale,image_yscale,rotation,c_white,image_alpha);
 shader_reset();
 

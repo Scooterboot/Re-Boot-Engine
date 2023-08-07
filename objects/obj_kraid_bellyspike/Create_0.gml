@@ -30,3 +30,5 @@ function NPCDeath(_x,_y)
 {
 	instance_destroy();
 }
+
+palSurface = surface_create(sprite_get_height(pal_Kraid),sprite_get_width(pal_Kraid));
