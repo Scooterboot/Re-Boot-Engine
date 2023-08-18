@@ -1,1 +1,0 @@
-scr_InitRoom(noone,0,0,mus_CrateriaMain);
