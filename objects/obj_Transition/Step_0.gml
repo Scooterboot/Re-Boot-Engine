@@ -14,8 +14,8 @@ if(room != goal)
     {
         angle = door.image_angle;
 
-        samusX = obj_Player.position.X - camera_get_view_x(view_camera[0]);
-        samusY = obj_Player.position.Y - camera_get_view_y(view_camera[0]);
+        playerX = obj_Player.position.X - camera_get_view_x(view_camera[0]);
+        playerY = obj_Player.position.Y - camera_get_view_y(view_camera[0]);
 		if(obj_Player.state == State.Stand && obj_Player.stateFrame == State.Stand)
 		{
 			obj_Player.stateFrame = State.Run;
@@ -93,29 +93,29 @@ else
         {
             nextDoor.hatch.frame = 4;
         }
-        nSamusX = obj_Player.position.X - camera_get_view_x(view_camera[0]);
-        nSamusY = obj_Player.position.Y - camera_get_view_y(view_camera[0]);
+        var nPlayerX = obj_Player.position.X - camera_get_view_x(view_camera[0]),
+			nPlayerY = obj_Player.position.Y - camera_get_view_y(view_camera[0]);
         angle = nextDoor.image_angle;
-        if(samusX != nSamusX || samusY != nSamusY)
+        if(playerX != nPlayerX || playerY != nPlayerY)
         {
-            samusSpeedX = min(samusSpeedX+1.5,max(abs(nSamusX - samusX)*0.15,0.5));
-            if(samusX < nSamusX)
+            playerSpeedX = min(playerSpeedX+1.5,max(abs(nPlayerX - playerX)*0.15,0.5));
+            if(playerX < nPlayerX)
             {
-                samusX = min(samusX + samusSpeedX, nSamusX);
+                playerX = min(playerX + playerSpeedX, nPlayerX);
             }
             else
             {
-                samusX = max(samusX - samusSpeedX, nSamusX);
+                playerX = max(playerX - playerSpeedX, nPlayerX);
             }
             
-            samusSpeedY = min(samusSpeedY+1.5,max(abs(samusY - nSamusY)*0.15,0.5));
-            if(samusY < nSamusY)
+            playerSpeedY = min(playerSpeedY+1.5,max(abs(playerY - nPlayerY)*0.15,0.5));
+            if(playerY < nPlayerY)
             {
-                samusY = min(samusY + samusSpeedY, nSamusY);
+                playerY = min(playerY + playerSpeedY, nPlayerY);
             }
             else
             {
-                samusY = max(samusY - samusSpeedY, nSamusY);
+                playerY = max(playerY - playerSpeedY, nPlayerY);
             }
         }
         else

@@ -15,10 +15,9 @@ else
 	exit;
 }
 
+#region Spawn Anim
 if(phase == 0) // spawn anim
 {
-	ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
-	
 	if(ai[1] == 0)
 	{
 		immune = true;
@@ -54,13 +53,11 @@ if(phase == 0) // spawn anim
 		if(ai[0] == 0)
 		{
 			obj_ScreenShaker.Shake(p1Height*2, 2, 2);
+			enviroHandler.state = 1;
+			enviroHandler.counter[1] = p1Height*2;
 		}
 		
-		if(ai[0] % 5 == 0)
-		{
-			audio_stop_sound(snd_BlockBreakHeavy);
-			audio_play_sound(snd_BlockBreakHeavy,0,false);
-		}
+		ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
 		
 		if(ai[0] < p1Height)
 		{
@@ -75,6 +72,8 @@ if(phase == 0) // spawn anim
 		}
 	}
 }
+#endregion
+#region First Phase
 if(phase == 1) // first phase
 {
 	if(ai[0] == 0) // idle
@@ -82,10 +81,19 @@ if(phase == 1) // first phase
 		ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
 		
 		ai[1]++;
-		if(ai[1] > 300)
+		if(ai[1] > 240)
 		{
 			ai[0] = 1;
 			ai[1] = 0;
+		}
+		if(mouthCounter <= -1)
+		{
+			ai[2]++;
+			if(ai[2] > 180)
+			{
+				ai[0] = 2;
+				ai[2] = 0;
+			}
 		}
 	}
 	if(ai[0] == 1) // move and jab
@@ -128,9 +136,36 @@ if(phase == 1) // first phase
 			if(ArmPokeTransition <= 0)
 			{
 				ai[0] = 0;
-				ai[1] = 0;
+				ai[1] = irandom(120);
 				ArmPokeFrame = 0;
 			}
+		}
+	}
+	if(ai[0] == 2)
+	{
+		ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
+		
+		mouthCounter = -1;
+		if(ai[2] == 0)
+		{
+			mouthOpen = true;
+			audio_play_sound(snd_Kraid_Roar,0,false);
+		}
+		
+		ai[2]++;
+		if(ai[2] % 10 == 0 && headFrame >= 8 && headFrame <= 10)
+		{
+			var headX = HeadBone.position.X + 10*dir,
+				headY = HeadBone.position.Y + 2;
+			var rock = instance_create_depth(headX,headY,depth+1,obj_Kraid_Spit);
+			rock.velX = random_range(3.5,4)*dir;
+			rock.velY = random_range(-1.5,-1);
+		}
+		if(ai[2] > 90)
+		{
+			mouthOpen = false;
+			ai[0] = 0;
+			ai[2] = irandom(120);
 		}
 	}
 	
@@ -156,6 +191,8 @@ else
 		ArmPokeFrame = 0;
 	}
 }
+#endregion
+#region Phase 2 Transition
 if(phase == 2) // phase transition
 {
 	ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
@@ -174,14 +211,8 @@ if(phase == 2) // phase transition
 		if(ai[0] == 0)
 		{
 			obj_ScreenShaker.Shake(p2Height*2, 2, 2);
-			
-			enviroHandler.state = 1;
-		}
-		
-		if(ai[0] % 5 == 0)
-		{
-			audio_stop_sound(snd_BlockBreakHeavy);
-			audio_play_sound(snd_BlockBreakHeavy,0,false);
+			enviroHandler.state = 3;
+			enviroHandler.counter[1] = p2Height*2;
 		}
 		
 		if(ai[0] < p2Height)
@@ -211,10 +242,10 @@ if(phase == 2) // phase transition
 		}
 	}
 }
+#endregion
+#region Second Phase
 if(phase == 3) // second phase
 {
-	ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
-	
 	if(moveDir == 0)
 	{
 		if(ai[0] > 0)
@@ -259,20 +290,81 @@ if(phase == 3) // second phase
 		ai[1] = 0;
 		ai[2] = scr_wrap(ai[2]+1,0,3);
 	}
+	
+	ai[3]++;
+	if(ai[3] > 150)
+	{
+		if(ArmFlingFrame < 8)
+		{
+			ArmFlingTransition = min(ArmFlingTransition+0.05,1);
+			if(ArmFlingTransition >= 1)
+			{
+				ArmIdleFrame = 15;
+				if(ArmFlingUseLeft)
+				{
+					ArmIdleFrame = 7;
+				}
+				ArmFlingFrame = min(ArmFlingFrame+0.15,8);
+				
+				if(!fingerFlung && ArmFlingFrame >= 4.5 && ArmFlingFrame <= 4.6)
+				{
+					var fingX = RArmBone[2].position.X + lengthdir_x(38,RArmBone[2].rotation) * dir,
+						fingY = RArmBone[2].position.Y + lengthdir_y(38,RArmBone[2].rotation);
+					if(ArmFlingUseLeft)
+					{
+						fingX = LArmBone[2].position.X + lengthdir_x(38,LArmBone[2].rotation) * dir;
+						fingY = LArmBone[2].position.Y + lengthdir_y(38,LArmBone[2].rotation);
+					}
+					var spX = lengthdir_x(2.5,irandom_range(-45,45)) * dir,
+						spY = lengthdir_y(2.5,irandom_range(-45,45));
+					var fing = instance_create_depth(fingX,fingY,depth-1,obj_Kraid_FingerProj);
+					fing.damage = fingerDamage;
+					fing.velX = spX;
+					fing.velY = spY;
+					fing.image_xscale = dir;
+					fingerFlung = true;
+				}
+			}
+		}
+		else
+		{
+			ArmFlingTransition = max(ArmFlingTransition-0.05,0);
+			if(ArmFlingTransition <= 0)
+			{
+				fingerFlung = false;
+				ArmFlingFrame = 0;
+				ArmFlingUseLeft = !ArmFlingUseLeft;
+				ai[3] = irandom(60);
+			}
+		}
+	}
+	else
+	{
+		ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
+	}
 }
+#endregion
+#region Death Anim
 if(phase == 4) // death anim
 {
-	ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
+	for(var i = 0; i < instance_number(obj_Kraid_FingerProj); i++)
+	{
+		instance_destroy(instance_find(obj_Kraid_FingerProj,i));
+	}
 	
 	if(ai[0] == 0)
 	{
-		enviroHandler.state = 3;
-		//obj_ScreenShaker.Shake(320, 2, 2);
 		obj_ScreenShaker.Shake(300, 2, 2);
+		enviroHandler.state = 5;
+		enviroHandler.counter[1] = 300;
 	}
 	
 	ai[0]++;
 	position.Y++;
+	
+	var animSpeed = 0.4 * ((300-ai[0]) / 300);
+	ArmDyingFrame = scr_wrap(ArmDyingFrame + animSpeed, 0, 9);
+	ArmDyingTransition = min(ArmDyingTransition+0.1, 1);
 	
 	var bstep = max(scr_floor(4 + (ai[0]/50)), 5);
 	if(ai[0] % bstep == 0 && ai[0] < 300)
@@ -309,8 +401,9 @@ if(phase == 4) // death anim
 		instance_destroy();
 	}
 }
+#endregion
 
-
+#region Move Logic
 if(moveDir != 0)
 {
 	var walkAnimSpd = 0.075;
@@ -335,10 +428,13 @@ if(moveDir != 0)
 		audio_play_sound(snd_Kraid_Footstep,1,false);
 	}
 }
+#endregion
 
 
 ArmIdleAnim(ArmIdleFrame,ArmIdleTransition);
 ArmPokeAnim(ArmPokeFrame,ArmPokeTransition);
+ArmFlingAnim(ArmFlingFrame,ArmFlingTransition);
+ArmDyingAnim(ArmDyingFrame,ArmDyingTransition);
 WalkAnim(WalkFrame,WalkTransition);
 
 var bodyOffset = 72 - (max(RLegBone[1].position.Y+18,LLegBone[1].position.Y+18) - BodyBone.position.Y);

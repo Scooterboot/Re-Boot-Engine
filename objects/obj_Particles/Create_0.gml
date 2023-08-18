@@ -35,6 +35,19 @@ part_type_life(bDust[1],8,16);
 part_type_direction(bDust[1],85,95,0,0);
 part_type_speed(bDust[1],0.5,0.75,0.025,0);
 
+//Large Basic dust
+lDust[0] = part_type_create();
+part_type_sprite(lDust[0],sprt_LargeDust,true,true,false);
+part_type_life(lDust[0],12,18);
+part_type_direction(lDust[0],0,180,0,0);
+part_type_speed(lDust[0],0.25,0.375,0,0);
+
+lDust[1] = part_type_create();
+part_type_sprite(lDust[1],sprt_LargeDust,true,true,false);
+part_type_life(lDust[1],12,18);
+part_type_direction(lDust[1],85,95,0,0);
+part_type_speed(lDust[1],0.5,0.75,0.025,0);
+
 //Muzzle Flare
 mFlare[0] = part_type_create();
 part_type_sprite(mFlare[0],sprt_PowerBeamStartParticle,true,true,false);

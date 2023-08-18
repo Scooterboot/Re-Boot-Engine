@@ -29,6 +29,7 @@ dmgMult[DmgType.Misc][3] = 0; // screw attack
 //dmgAbsorb = true;
 
 damage = 20;
+spitDamage = 10;
 spikeDamage = 10;
 fingerDamage = 10;
 
@@ -52,6 +53,8 @@ bellySpikePos[0] = new Vector2(41,24);
 bellySpikePos[1] = new Vector2(42,-41);
 bellySpikePos[2] = new Vector2(16,-99);
 
+fingerFlung = false;
+
 function ModifyDamageTaken(damage,object,isProjectile)
 {
 	//dmgAbsorb = false;
@@ -70,7 +73,7 @@ function ModifyDamageTaken(damage,object,isProjectile)
 }
 function OnDamageAbsorbed(damage, object, isProjectile)
 {
-	if(mouthCounter < 0 && (phase == 1 || phase == 3) && object.y <= y-140)
+	if(mouthCounter < 0 && ((phase == 1 && ai[0] != 2) || phase == 3) && object.y <= y-140)
 	{
 		mouthCounter = 0;
 		//eyeGlowNum = 1;
@@ -266,8 +269,8 @@ LArm_Idle =
 	[-20,-19,-17,-14.5, -7,  0.5,   8,  14,    15,  14,   8,  0.5, -7,-14.5, -17, -19],
 	[ 45, 42, 40,   35, 30,   25,  20,  16,    15,  16,  20,   25, 30,   35,  40,  42]
 ];
-RHandAnimSeq = array(0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0);
-LHandAnimSeq = array(8,7,6,5,4,3,2,1,0,1,2,3,4,5,6,7,8);
+RHandAnimSeq_Idle = array(0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0);
+LHandAnimSeq_Idle = array(8,7,6,5,4,3,2,1,0,1,2,3,4,5,6,7,8);
 
 ArmIdleFrame = 0;
 ArmIdleTransition = 1;
@@ -279,8 +282,8 @@ function ArmIdleAnim(frame, transition)
 		RArmBone[i].AnimateRotation(RArm_Idle[i],frame,transition,true);
 		LArmBone[i].AnimateRotation(LArm_Idle[i],frame,transition,true);
 	}
-	rHandFrame = RHandAnimSeq[scr_round(frame)];
-	lHandFrame = LHandAnimSeq[scr_round(frame)];
+	rHandFrame = RHandAnimSeq_Idle[scr_round(frame)];
+	lHandFrame = LHandAnimSeq_Idle[scr_round(frame)];
 }
 
 
@@ -317,34 +320,61 @@ function ArmPokeAnim(frame, transition)
 
 
 // Arm Anim Fling
-RArm_Fling = 
+Arm_Fling = 
 [
-	[0],
-	[0],
-	[0]
+	[-30, -16, -3,  9, 20,  18,  15,  11, -9.5],
+	[ 15,  18, 20, 10,  0, -15, -27, -37,  -11],
+	[ 15,  25, 40, 45, 43,  25,  10,   0,  7.5]
 ];
-LArm_Fling = 
-[
-	[0],
-	[0],
-	[0]
-];
+Arm_Fling_Offhand = [-15,0,15];
+HandAnimSeq_Fling = array(0,3,6,8,8,7,6,5,3,0);
 
 ArmFlingFrame = 0;
 ArmFlingTransition = 0;
+ArmFlingUseLeft = false;
 
 function ArmFlingAnim(frame, transition)
 {
-	for(var i = 0; i < 3; i++)
+	if(ArmFlingUseLeft)
 	{
-		RArmBone[i].AnimateRotation(RArm_Fling[i],frame,transition,true);
-		LArmBone[i].AnimateRotation(LArm_Fling[i],frame,transition,true);
+		for(var i = 0; i < 3; i++)
+		{
+			RArmBone[i].offsetRotation = lerp(RArmBone[i].offsetRotation,Arm_Fling_Offhand[i],transition);
+			LArmBone[i].AnimateRotation(Arm_Fling[i],frame,transition,true);
+		}
+		rHandFrame = lerp(rHandFrame,0,transition);
+		lHandFrame = lerp(lHandFrame,HandAnimSeq_Fling[scr_round(frame)],transition);
 	}
-	
-	rHandFrame = 0;
-	lHandFrame = 0;
+	else
+	{
+		for(var i = 0; i < 3; i++)
+		{
+			RArmBone[i].AnimateRotation(Arm_Fling[i],frame,transition,true);
+			LArmBone[i].offsetRotation = lerp(LArmBone[i].offsetRotation,Arm_Fling_Offhand[i],transition);
+		}
+		rHandFrame = lerp(rHandFrame,HandAnimSeq_Fling[scr_round(frame)],transition);
+		lHandFrame = lerp(lHandFrame,0,transition);
+	}
 }
 
+
+// Arm Anim Dying
+ArmDyingFrame = 0;
+ArmDyingTransition = 0;
+
+function ArmDyingAnim(frame, transition)
+{
+	var len = array_length(Arm_Fling[0]);
+	var frame2 = scr_wrap(frame + (len / 2), 0, len);
+	
+	for(var i = 0; i < 3; i++)
+	{
+		RArmBone[i].AnimateRotation(Arm_Fling[i],frame,transition,true);
+		LArmBone[i].AnimateRotation(Arm_Fling[i],frame2,transition,true);
+	}
+	rHandFrame = lerp(rHandFrame,HandAnimSeq_Fling[scr_round(frame)],transition);
+	lHandFrame = lerp(lHandFrame,HandAnimSeq_Fling[scr_round(frame2)],transition);
+}
 
 // Walk Anim
 RLeg_Walk = 

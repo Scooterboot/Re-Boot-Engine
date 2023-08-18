@@ -81,3 +81,6 @@ edgeText[1] = "Bottom";
 edgeText[2] = "Top";
 edgeText[3] = "Left";
 edgeText[4] = "Right";
+
+zoomScale = 1;
+zoomTempFlag = false;

@@ -1,10 +1,10 @@
 global.gamePaused = true;
 global.roomTrans = true;
 alpha = 0;
-samusX = -1;
-samusY = -1;
-samusSpeedX = 0;
-samusSpeedY = 0;
+playerX = -1;
+playerY = -1;
+playerSpeedX = 0;
+playerSpeedY = 0;
 transSprtDraw = false;
 angle = 0;
 

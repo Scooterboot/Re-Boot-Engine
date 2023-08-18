@@ -723,20 +723,20 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	if(state != State.Crouch && state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Grapple && 
 	state != State.Hurt && /*state != State.DmgBoost &&*/ (!spiderBall || spiderEdge == Edge.None) && !xRayActive && state != State.Dodge)
 	{
-		if((move == 1 && !brake) || (state == State.Somersault && dir == 1 && velX < 0))
+		if((move == 1 && !brake) || (state == State.Somersault && dir == 1 && velX > 1.1*moveSpeed[0,liquidState]))
 		{
 			if(velX <= fMaxSpeed)
 			{
 				if(velX < 0)
 				{
-					if(state == State.Somersault && velX > -maxSpeed[3,0] && !liquidMovement)
+					/*if(state == State.Somersault && velX > -maxSpeed[3,0] && !liquidMovement)
 					{
 						velX = 0;
 					}
 					else
-					{
+					{*/
 						velX = min(velX + fMoveSpeed + fFrict, 0);
-					}
+					//}
 				}
 				else if(sign(dirFrame) != dir && sign(dirFrame) != 0 && !speedBoost && state != State.Somersault)
 				{
@@ -748,20 +748,20 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 			}
 		}
-		else if((move == -1 && !brake) || (state == State.Somersault && dir == -1 && velX > 0))
+		else if((move == -1 && !brake) || (state == State.Somersault && dir == -1 && velX < -1.1*moveSpeed[0,liquidState]))
 		{
 			if(velX >= -fMaxSpeed)
 			{
 				if(velX > 0)
 				{
-					if(state == State.Somersault && velX < maxSpeed[3,0] && !liquidMovement)
+					/*if(state == State.Somersault && velX < maxSpeed[3,0] && !liquidMovement)
 					{
 						velX = 0;
 					}
 					else
-					{
+					{*/
 						velX = max(velX - fMoveSpeed - fFrict, 0);
-					}
+					//}
 				}
 				else if(sign(dirFrame) != dir && sign(dirFrame) != 0 && !speedBoost && state != State.Somersault)
 				{
@@ -775,7 +775,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		else
 		{
-			if((grounded || state != State.Somersault) && (aimAngle > -2 || !cJump) && 
+			//if((grounded || state != State.Somersault) && (aimAngle > -2 || !cJump) && 
+			if((aimAngle > -2 || !cJump) && 
 			(state != State.Morph || (state == State.Morph && abs(velX) <= maxSpeed[5,liquidState]) || grounded) && morphFrame <= 0)
 			{
 				if(velX > 0)
@@ -2004,7 +2005,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		
 		isPushing = false;
-		pushBlock = instance_place(x+2*move2,y,obj_PushBlock);
+		pushBlock = instance_place(x+3*move2,y,obj_PushBlock);
 		if(move2 == dir && grounded && !xRayActive && !place_meeting(x-move2,y+2,pushBlock))
 		{
 		    isPushing = (instance_exists(pushBlock) && pushBlock.grounded);
@@ -2512,14 +2513,14 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		
 		wallJumpDelay = max(wallJumpDelay - 1, 0);
-		if(velX < maxSpeed[3,liquidState] && velX > 0 && dir == 1)
+		/*if(velX < maxSpeed[3,liquidState] && velX > 0 && dir == 1)
 		{
 			velX = maxSpeed[3,liquidState];
 		}
 		else if(velX > -maxSpeed[3,liquidState] && velX < 0 && dir == -1)
 		{
 			velX = -maxSpeed[3,liquidState];
-		}
+		}*/
 		
 		if(grounded)
 		{

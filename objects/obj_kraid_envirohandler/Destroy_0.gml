@@ -2,17 +2,18 @@
 
 instance_destroy(camTile1);
 instance_destroy(camTile2);
-//instance_destroy(solidTile);
 
-for(var i = 0; i < array_length(phase2Blocks); i++)
+for(var i = 0; i < ds_list_size(phase2Blocks); i++)
 {
-	var blocks = phase2Blocks[i];
+	var blocks = phase2Blocks[| i];
 	if(instance_exists(blocks))
 	{
 		blocks.hiddenDestroy = true;
 		instance_destroy(blocks);
 	}
 }
+ds_list_destroy(phase2Blocks);
+
 for(var i = 0; i < array_length(remainingBlocks); i++)
 {
 	var blocks = remainingBlocks[i];
@@ -23,21 +24,15 @@ for(var i = 0; i < array_length(remainingBlocks); i++)
 	}
 }
 
-if(ds_exists(spikes,ds_type_list))
+for(var i = 0; i < ds_list_size(spikes); i++)
 {
-	if(ds_list_size(spikes) > 0)
+	var spik = spikes[| i];
+	if(instance_exists(spik))
 	{
-		for(var i = 0; i < ds_list_size(spikes); i++)
-		{
-			var spik = spikes[| i];
-			if(instance_exists(spik))
-			{
-				spik.hiddenDestroy = true;
-				instance_destroy(spikes[| i]);
-			}
-		}
+		spik.hiddenDestroy = true;
+		instance_destroy(spikes[| i]);
 	}
-	ds_list_destroy(spikes);
 }
+ds_list_destroy(spikes);
 
 layer_background_blend(layer_background_get_id(layer_get_id("Background")),c_white);

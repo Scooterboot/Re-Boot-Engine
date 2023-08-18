@@ -6,8 +6,8 @@ if(surface_exists(transSurf))
     {
         with(obj_Player)
         {
-			var sx = scr_round(obj_Transition.samusX),
-				sy = scr_round(obj_Transition.samusY);
+			var sx = scr_round(obj_Transition.playerX),
+				sy = scr_round(obj_Transition.playerY);
 			
 			var col = c_lime;
 			gpu_set_fog(true,col,0,0);

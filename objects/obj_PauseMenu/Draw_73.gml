@@ -55,8 +55,11 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			surface_set_target(pauseSurf);
 			
 			draw_clear_alpha(c_black,1);
-			shader_set(shd_GaussianBlur);
-			shader_set_uniform_f(shader_get_uniform(shd_GaussianBlur,"size"), global.resWidth,global.resHeight,4);
+			shader_set(shd_PauseBlur);
+			var tex = surface_get_texture(application_surface),
+				texel_x = texture_get_texel_width(tex),
+				texel_y = texture_get_texel_height(tex);
+			shader_set_uniform_f(shader_get_uniform(shd_PauseBlur,"texelSize"),texel_x,texel_y);
 			draw_surface_ext(application_surface,0,0,appSurfScale,appSurfScale,0,c_white,1);
 			shader_reset();
 			

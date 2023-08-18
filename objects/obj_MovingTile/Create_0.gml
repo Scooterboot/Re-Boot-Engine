@@ -33,18 +33,38 @@ function UpdatePosition(_x,_y)
 	//asset_remove_tags(obj_MovingSlope,"IMovingSolid",asset_object);
 	//asset_remove_tags(obj_MovingSlope_4th,"IMovingSolid",asset_object);
 	
-	var num = instance_place_list(newPosX,newPosY,obj_Entity,entityList,false);
 	
-		num += instance_place_list(x,y-1,obj_Entity,entityList,false);
-		num += instance_place_list(x,y+1,obj_Entity,entityList,false);
-		num += instance_place_list(x-1,y,obj_Entity,entityList,false);
-		num += instance_place_list(x+1,y,obj_Entity,entityList,false);
+	/*instance_place_list(newPosX,newPosY,obj_Entity,entityList,false);
 	
-		num += instance_place_list(x-1,y-1,obj_Entity,entityList,false);
-		num += instance_place_list(x+1,y-1,obj_Entity,entityList,false);
-		num += instance_place_list(x-1,y+1,obj_Entity,entityList,false);
-		num += instance_place_list(x+1,y+1,obj_Entity,entityList,false);
-	for(var i = 0; i < num; i++)
+	instance_place_list(x,y-1,obj_Entity,entityList,false);
+	instance_place_list(x,y+1,obj_Entity,entityList,false);
+	instance_place_list(x-1,y,obj_Entity,entityList,false);
+	instance_place_list(x+1,y,obj_Entity,entityList,false);
+	
+	instance_place_list(x-1,y-1,obj_Entity,entityList,false);
+	instance_place_list(x+1,y-1,obj_Entity,entityList,false);
+	instance_place_list(x-1,y+1,obj_Entity,entityList,false);
+	instance_place_list(x+1,y+1,obj_Entity,entityList,false);
+	
+	for(var i = 0; i < ds_list_size(entityList); i++)
+	{
+		for(var j = 0; j < ds_list_size(entityList); j++)
+		{
+			if(j != i && entityList[| j] == entityList[| i])
+			{
+				ds_list_delete(entityList,j);
+			}
+		}
+	}*/
+	
+	collision_rectangle_list(
+		min(bbox_left-1,bbox_left+bVelX),
+		min(bbox_top-1,bbox_top+bVelY),
+		max(bbox_right+1,bbox_right+bVelX),
+		max(bbox_bottom+1,bbox_bottom+bVelY),
+		obj_Entity,true,true,entityList,false);
+	
+	for(var i = 0; i < ds_list_size(entityList); i++)
 	{
 		if(instance_exists(entityList[| i]) && array_contains(entityList[| i].solids,"IMovingSolid") && entityList[| i] != ignoredEntity)
 		{
@@ -68,15 +88,6 @@ function UpdatePosition(_x,_y)
 					moveY = 0;
 				var moveXFlag = false,
 					moveYFlag = false;
-				
-				if(place_meeting(newPosX,y,entity) || (place_meeting(newPosX,newPosY,entity) && !place_meeting(x,newPosY,entity)))
-				{
-					moveXFlag = true;
-				}
-				if(place_meeting(x,newPosY,entity) || (place_meeting(newPosX,newPosY,entity) && !place_meeting(newPosX,y,entity)))
-				{
-					moveYFlag = true;
-				}
 				
 				var edgeTop = IsEntity_Top(entity),
 					edgeBottom = IsEntity_Bottom(entity),
@@ -103,6 +114,15 @@ function UpdatePosition(_x,_y)
 					(edgeBottom && (entityEdgeTopY || bVelY > 0)) ||
 					(edgeLeft && entityEdgeRightY) || 
 					(edgeRight && entityEdgeLeftY))
+				{
+					moveYFlag = true;
+				}
+				
+				if(place_meeting(newPosX,y,entity) || (place_meeting(newPosX,newPosY,entity) && !place_meeting(x,newPosY,entity)))
+				{
+					moveXFlag = true;
+				}
+				if(place_meeting(x,newPosY,entity) || (place_meeting(newPosX,newPosY,entity) && !place_meeting(newPosX,y,entity)))
 				{
 					moveYFlag = true;
 				}

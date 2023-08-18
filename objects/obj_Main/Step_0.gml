@@ -25,7 +25,7 @@ view_enabled = true;
 
 view_set_wport(0,global.resWidth);
 view_set_hport(0,global.resHeight);
-camera_set_view_size(view_camera[0],global.resWidth,global.resHeight);
+camera_set_view_size(view_camera[0],global.resWidth*zoomScale,global.resHeight*zoomScale);
 
 if(global.upscale == 7)
 {
@@ -97,6 +97,49 @@ else if(!global.gamePaused)
 var gameSpeed = 60;
 if(debug > 0)
 {
+	if(keyboard_check(vk_add))
+	{
+		if(!zoomTempFlag)
+		{
+			var zoomspd = 0.01;
+			if(zoomScale > 1)
+			{
+				zoomScale = max(zoomScale-zoomspd,1);
+				if(zoomScale <= 1)
+				{
+					zoomTempFlag = true;
+				}
+			}
+			else
+			{
+				zoomScale = max(zoomScale-zoomspd,0.5);
+			}
+		}
+	}
+	else if(keyboard_check(vk_subtract))
+	{
+		if(!zoomTempFlag)
+		{
+			var zoomspd = 0.01;
+			if(zoomScale < 1)
+			{
+				zoomScale = min(zoomScale+zoomspd,1);
+				if(zoomScale >= 1)
+				{
+					zoomTempFlag = true;
+				}
+			}
+			else
+			{
+				zoomScale = min(zoomScale+zoomspd,2);
+			}
+		}
+	}
+	else
+	{
+		zoomTempFlag = false;
+	}
+	
 	if(keyboard_check(vk_shift))
 	{
 		gameSpeed = 2;
@@ -105,6 +148,10 @@ if(debug > 0)
 	{
 		gameSpeed = 600;
 	}
+}
+else
+{
+	zoomScale = 1;
 }
 game_set_speed(gameSpeed, gamespeed_fps);
 
