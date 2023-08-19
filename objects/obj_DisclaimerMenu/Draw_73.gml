@@ -45,7 +45,7 @@ if(room == rm_Disclaimer)
 		for(var i = 0; i < array_length(option); i++)
 		{
 			oX = scr_round(ww/2 - string_width(option[i])/2);
-			oY = scr_round(hh - space*6) + i*space;
+			oY = scr_round(hh - space*4) + i*space;
 	
 			var col = c_black,
 				alph = 0.5,

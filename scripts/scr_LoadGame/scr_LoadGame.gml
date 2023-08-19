@@ -143,5 +143,6 @@ function scr_LoadGame()
 		global.currentPlayTime = 0;
 		ds_list_clear(global.openHatchList);
 		ds_list_clear(global.collectedItemList);
+		ds_list_clear(global.npcKillList);
 	}
 }
