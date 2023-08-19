@@ -950,6 +950,7 @@
     {"id":{"name":"__shd_scribble_bake_outline_8dir_2px","path":"shaders/__shd_scribble_bake_outline_8dir_2px/__shd_scribble_bake_outline_8dir_2px.yy",},},
     {"id":{"name":"snd_PlasmaBeam_ChargeShot","path":"sounds/snd_PlasmaBeam_ChargeShot/snd_PlasmaBeam_ChargeShot.yy",},},
     {"id":{"name":"seq_KraidAnim_Arms_Poke","path":"sequences/seq_KraidAnim_Arms_Poke/seq_KraidAnim_Arms_Poke.yy",},},
+    {"id":{"name":"obj_DisclaimerMenu","path":"objects/obj_DisclaimerMenu/obj_DisclaimerMenu.yy",},},
     {"id":{"name":"snd_BombSet","path":"sounds/snd_BombSet/snd_BombSet.yy",},},
     {"id":{"name":"__shd_scribble","path":"shaders/__shd_scribble/__shd_scribble.yy",},},
     {"id":{"name":"__scribble_gen_10_set_padding_flags","path":"scripts/__scribble_gen_10_set_padding_flags/__scribble_gen_10_set_padding_flags.yy",},},
@@ -1215,6 +1216,7 @@
     {"id":{"name":"obj_Camera","path":"objects/obj_Camera/obj_Camera.yy",},},
     {"id":{"name":"obj_CamTile","path":"objects/obj_CamTile/obj_CamTile.yy",},},
     {"id":{"name":"obj_CamTileRed","path":"objects/obj_CamTileRed/obj_CamTileRed.yy",},},
+    {"id":{"name":"rm_Disclaimer","path":"rooms/rm_Disclaimer/rm_Disclaimer.yy",},},
     {"id":{"name":"sprt_PushBall_Grapple","path":"sprites/sprt_PushBall_Grapple/sprt_PushBall_Grapple.yy",},},
     {"id":{"name":"sprt_Font_gpControl","path":"sprites/sprt_Font_gpControl/sprt_Font_gpControl.yy",},},
     {"id":{"name":"sprt_HyperBeamPalette","path":"sprites/sprt_HyperBeamPalette/sprt_HyperBeamPalette.yy",},},
@@ -1350,6 +1352,7 @@
     {"roomId":{"name":"rm_debug14_Lava02","path":"rooms/rm_debug14_Lava02/rm_debug14_Lava02.yy",},},
     {"roomId":{"name":"rm_debug15_Grapple","path":"rooms/rm_debug15_Grapple/rm_debug15_Grapple.yy",},},
     {"roomId":{"name":"rm_debug16_Save","path":"rooms/rm_debug16_Save/rm_debug16_Save.yy",},},
+    {"roomId":{"name":"rm_Disclaimer","path":"rooms/rm_Disclaimer/rm_Disclaimer.yy",},},
   ],
   "TextureGroups": [
     {"resourceType":"GMTextureGroup","resourceVersion":"1.3","name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"targets":-1,},

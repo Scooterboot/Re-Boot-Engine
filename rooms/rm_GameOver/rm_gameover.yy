@@ -2,7 +2,7 @@
   "resourceType": "GMRoom",
   "resourceVersion": "1.0",
   "name": "rm_GameOver",
-  "creationCodeFile": "${project_dir}/rooms/rm_GameOver/RoomCreationCode.gml",
+  "creationCodeFile": "rooms/rm_GameOver/RoomCreationCode.gml",
   "inheritCode": false,
   "inheritCreationOrder": true,
   "inheritLayers": false,

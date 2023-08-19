@@ -67,8 +67,9 @@ function scr_MainInitialize()
 	instance_create_depth(0,0,0,obj_TileFadeHandler);
 	instance_create_depth(0,0,0,obj_ScreenShaker);
 
-	room_goto(rm_MainMenu); //go to the main menu
-	instance_create_depth(0,0,0,obj_MainMenu);
+	//room_goto(rm_MainMenu); //go to the main menu
+	//instance_create_depth(0,0,0,obj_MainMenu);
+	room_goto(rm_Disclaimer);
 	
 	
 	lhc_init();

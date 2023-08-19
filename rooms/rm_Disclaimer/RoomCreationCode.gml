@@ -1,0 +1,1 @@
+scr_InitRoom(global.music_AmbientSilence,noone,0,0);
