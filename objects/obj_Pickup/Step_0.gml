@@ -13,11 +13,10 @@ visible = !place_meeting(x,y,obj_Breakable);
 
 if(!collected)
 {
-	if(instance_exists(obj_Player))
+	if(instance_exists(obj_Player) && !place_meeting(x,y,obj_Tile))
 	{
 		var P = obj_Player;
 		if(place_meeting(x-P.fVelX-P.move2,y-P.fVelY,P))
-		//if(place_meeting(x,y,obj_Player))
 		{
 			CollectItem();
 			if(!isExpansion)
@@ -33,7 +32,6 @@ if(!collected)
 				audio_play_sound(snd_ExpansionGet,0,false);
 			}
 			collected = true;
-			//global.gamePaused = true;
 		}
 	}
 }

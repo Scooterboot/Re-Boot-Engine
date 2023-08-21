@@ -10,21 +10,10 @@ if(stateFrame == State.CrystalFlash && torsoR == sprt_CrystalFlash)
 }
 UpdatePlayerSurface(palSurf);
 
-if(drawAfterImage && !global.gamePaused)
-{
-	var aftImg = new AfterImage(id,afterImgAlphaMult,afterImageNum);
-	ds_list_add(afterImageList, aftImg);
-}
 for(var i = 0; i < ds_list_size(afterImageList); i++)
 {
 	var aftImg = afterImageList[| i];
-	aftImg.Update();
-		
-	if(aftImg._delete)
-	{
-		ds_list_delete(afterImageList,i);
-	}
-	else
+	if(aftImg != pointer_null && !aftImg._delete)
 	{
 		aftImg.Draw();
 	}
