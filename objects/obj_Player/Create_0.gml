@@ -971,8 +971,9 @@ afterImgAlphaMult = 0.625;
 
 afterImageList = ds_list_create();
 
-function AfterImage(player, _alpha, _num) constructor
+function AfterImage(_player, _alpha, _num) constructor
 {
+	player = _player;
 	_x = player.x;
 	_y = player.y;
 	
@@ -989,7 +990,6 @@ function AfterImage(player, _alpha, _num) constructor
 	surfH = player.surfH;
 	rotScale = player.rotScale;
 	aftImgSurf = surface_create(surfW*rotScale,surfH*rotScale);
-	surface_copy(aftImgSurf,0,0,player.playerSurf2);
 	
 	function Update()
 	{
@@ -1010,10 +1010,20 @@ function AfterImage(player, _alpha, _num) constructor
 		_delete = true;
 	}
 	
+	initSurf = false;
 	function Draw()
 	{
 		if(surface_exists(aftImgSurf))
 		{
+			if(!initSurf)
+			{
+				surface_set_target(aftImgSurf);
+				draw_clear_alpha(c_black,0);
+				surface_reset_target();
+				
+				surface_copy(aftImgSurf,0,0,player.playerSurf2);
+				initSurf = true;
+			}
 			var surfCos = dcos(rotation),
 				surfSin = dsin(rotation),
 				surfX = (surfW/2),

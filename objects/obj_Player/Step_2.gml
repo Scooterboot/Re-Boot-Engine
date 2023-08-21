@@ -2620,23 +2620,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		}
 	}
 	
-	if(drawAfterImage && !global.gamePaused)
-	{
-		var aftImg = new AfterImage(id,afterImgAlphaMult,afterImageNum);
-		ds_list_add(afterImageList, aftImg);
-	}
-	for(var i = 0; i < ds_list_size(afterImageList); i++)
-	{
-		var aftImg = afterImageList[| i];
-		aftImg.Update();
-		
-		if(aftImg._delete)
-		{
-			delete aftImg;
-			ds_list_delete(afterImageList,i);
-		}
-	}
-	
 	#endregion
 	
 	#region MB Trail
