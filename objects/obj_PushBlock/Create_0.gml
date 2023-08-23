@@ -28,6 +28,40 @@ solids[2] = "IPlayer";
 moveSnd = noone;
 sndStopped = false;
 
+function explodePush(_proj,_velX)
+{
+	if(!place_meeting(x,y-2,obj_Player))
+	{
+		var _dir = sign(_velX);
+		if(_velX == 0)
+		{
+			_dir = sign(x - _proj.x);
+		}
+		var _spd = 4;
+		if(_proj.object_index == obj_MissileShot)
+		{
+			_spd = 6;
+		}
+		if(_proj.object_index == obj_SuperMissileShot)
+		{
+			_spd = 10;
+		}
+		if(_proj.x > bbox_left && _proj.x < bbox_right)
+		{
+			_spd *= abs(x - _proj.x) / (bbox_right-x);
+			if(_spd <= 1 || (_velX != 0 && sign(_velX) != sign(x - _proj.x)))
+			{
+				_spd = 0;
+			}
+		}
+		
+		if(abs(_spd) > 0)
+		{
+			velX += _spd*_dir;
+		}
+	}
+}
+
 mBlock = instance_create_layer(x-16,y-16,"Collision",obj_MovingTile);
 mBlock.image_xscale = 2;
 mBlock.image_yscale = 2;
