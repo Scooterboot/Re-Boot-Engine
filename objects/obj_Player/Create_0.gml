@@ -290,13 +290,6 @@ rMorph = !cMorph;
 
 rMorphJump = false;
 
-surfW = 80;
-surfH = 80;
-playerSurf = surface_create(surfW,surfH);
-
-rotScale = 5;//8;
-playerSurf2 = surface_create(surfW*rotScale,surfH*rotScale);
-
 XRay = noone;
 //XRayDying = 0;
 
@@ -4177,6 +4170,14 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 }
 #endregion
 #region UpdatePlayerSurface
+
+surfW = 80;
+surfH = 80;
+playerSurf = surface_create(surfW,surfH);
+
+rotScale = 5;//8;
+playerSurf2 = surface_create(surfW*rotScale,surfH*rotScale);
+
 function UpdatePlayerSurface(_palSurface)
 {
 	if(surface_exists(playerSurf))

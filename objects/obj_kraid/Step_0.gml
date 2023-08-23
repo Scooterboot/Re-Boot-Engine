@@ -318,6 +318,7 @@ if(phase == 3) // second phase
 					var spX = lengthdir_x(2.5,irandom_range(-45,45)) * dir,
 						spY = lengthdir_y(2.5,irandom_range(-45,45));
 					var fing = instance_create_depth(fingX,fingY,depth-1,obj_Kraid_FingerProj);
+					fing.creator = id;
 					fing.damage = fingerDamage;
 					fing.velX = spX;
 					fing.velY = spY;

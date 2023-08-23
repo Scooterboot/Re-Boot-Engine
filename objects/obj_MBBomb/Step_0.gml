@@ -48,48 +48,16 @@ if(spreadType != -1)
 			}
 		}
 		
-		if(place_collide(velX,0) && abs(velX) >= 0.5)
-		{
-			velX *= -0.25;
-		}
-		
-		if(place_collide(velX,0))
-		{
-			var xspeed = velX;
-			while(!place_collide(sign(velX),0) && xspeed > 0)
-			{
-				x += sign(velX);
-				xspeed--;
-			}
-			velX = 0;
-		}
-		x += velX;
-		
-		if(place_collide(0,velY) && abs(velY) >= 0.5)
-		{
-			velY *= -0.25;
-		}
-		
-		if(place_collide(0,velY))
-		{
-			var yspeed = velY;
-			while(!place_collide(0,sign(velY)) && yspeed > 0)
-			{
-				y += sign(velY);
-				yspeed--;
-			}
-			velY = 0;
-		}
-		y += velY;
+		Collision_Normal(velX,velY,16,16,false);
 	}
 	else if(spreadType == 2)
 	{
 		var speedX = lengthdir_x(spreadSpeed,spreadDir),
 			speedY = lengthdir_y(spreadSpeed,spreadDir);
-		if(place_collide(speedX,speedY))
+		if(entity_place_collide(speedX,speedY))
 		{
 			var sSpeed = max(abs(speedX),abs(speedY));
-			while(!place_collide(sign(speedX),sign(speedY)) && sSpeed > 0)
+			while(!entity_place_collide(sign(speedX),sign(speedY)) && sSpeed > 0)
 			{
 				x += sign(speedX);
 				y += sign(speedY);

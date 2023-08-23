@@ -19,3 +19,5 @@ function OnYCollision(fVY)
 {
 	velY *= -1;
 }
+
+palSurface = surface_create(sprite_get_height(pal_Kraid),sprite_get_width(pal_Kraid));

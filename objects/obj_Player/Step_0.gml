@@ -457,7 +457,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 	walkState = ((cAimLock || grappleActive) && velX != 0 && sign(velX) != dir && state == State.Stand && !xRayActive);
 	
-	if(cMorph && rMorph && morphFrame <= 0 && state != State.Morph && stateFrame != State.Morph && misc[Misc.Morph] && state != State.Spark && state != State.BallSpark && state != State.Grip && !xRayActive)
+	if(dir != 0 && cMorph && rMorph && morphFrame <= 0 && state != State.Morph && stateFrame != State.Morph && misc[Misc.Morph] && state != State.Spark && state != State.BallSpark && state != State.Grip && state != State.Grapple && !xRayActive)
 	{
 		audio_play_sound(snd_Morph,0,false);
 		if(state == State.Stand)
@@ -2144,7 +2144,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			ChangeState(State.Morph,State.Morph,mask_Morph,true);
 			morphFrame = 8;
 		}
-		if(!grounded && (!entity_place_collide(0,-8) || (!entity_place_collide(0,8) && (!onPlatform || !lhc_place_meeting(x,y+8,"IPlatform")))))
+		else if(!grounded && (!entity_place_collide(0,-8) || (!entity_place_collide(0,8) && (!onPlatform || !lhc_place_meeting(x,y+8,"IPlatform")))))
 		{
 			ChangeState(State.Jump,State.Jump,mask_Jump,false);
 		}
@@ -3569,7 +3569,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 #endregion
 #region Dodge
-	if(boots[Boots.Dodge] && (state == State.Stand || state == State.Crouch || state == State.Jump || state == State.Somersault || state == State.Grip))
+	if(boots[Boots.Dodge] && dir != 0 && (state == State.Stand || state == State.Crouch || state == State.Jump || state == State.Somersault || state == State.Grip))
 	{
 		if(cDash && !global.autoDash)
 		{

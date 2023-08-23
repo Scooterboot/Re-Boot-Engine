@@ -20,3 +20,18 @@ damageSubType[3] = true;
 
 exploProj = obj_MBBombExplosion;
 exploDmgMult = 1;
+
+function OnXCollision(fVX)
+{
+	if(spreadType < 2)
+	{
+		velX *= -0.25;
+	}
+}
+function OnYCollision(fVY)
+{
+	if(spreadType < 2)
+	{
+		velY *= -0.25;
+	}
+}

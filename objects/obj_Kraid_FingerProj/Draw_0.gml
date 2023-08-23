@@ -2,12 +2,12 @@
 
 if(surface_exists(palSurface))
 {
-	surface_copy(palSurface,0,0,realLife.palSurface);
+	surface_copy(palSurface,0,0,creator.palSurface);
 	
 	surface_set_target(palSurface);
 	
 	gpu_set_colorwriteenable(1,1,1,0);
-	if(dmgFlash > 4 || (ai[0] == 1 && (ai[1] % 2) == 0))
+	if(dmgFlash > 4)
 	{
 		draw_sprite_ext(pal_Kraid,8,0,0,1,1,0,c_white,1);
 	}
