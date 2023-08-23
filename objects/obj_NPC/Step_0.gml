@@ -15,6 +15,11 @@ if(frozen > 0 && !dead)
 	    freezePlatform.image_yscale = (bbox_bottom-bbox_top+1)/16;
 		freezePlatform.XRayHide = true;
 	}
+	else
+	{
+		freezePlatform.x = bbox_left;
+		freezePlatform.y = bbox_top;
+	}
 }
 else if(instance_exists(freezePlatform))
 {

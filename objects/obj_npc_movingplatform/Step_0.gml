@@ -8,22 +8,20 @@ frozenImmuneTime = max(frozenImmuneTime-1,0);
 frozen = max(frozen - 1, 0);
 
 
-if(PauseAI())
+if(!PauseAI())
 {
-	exit;
-}
+	fVelX = velX;
+	fVelY = velY;//scr_round(velY);
 
-fVelX = velX;
-fVelY = velY;//scr_round(velY);
-
-if(tileCollide)
-{
-	Collision_Normal(fVelX,fVelY,16,16,false);
-}
-else
-{
-	x += fVelX;
-	y += fVelY;
+	if(tileCollide)
+	{
+		Collision_Normal(fVelX,fVelY,16,16,false);
+	}
+	else
+	{
+		x += fVelX;
+		y += fVelY;
+	}
 }
 
 var top = bbox_top-y;

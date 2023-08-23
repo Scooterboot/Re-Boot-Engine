@@ -12,6 +12,9 @@ if(setOldPoses > 0)
 	setOldPoses = 2;
 }
 
+shiftedVelX = 0;
+shiftedVelY = 0;
+
 if(justHit)
 {
 	justHit = false;
