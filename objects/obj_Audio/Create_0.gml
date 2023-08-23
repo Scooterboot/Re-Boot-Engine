@@ -131,10 +131,12 @@ snd_PowerBombExplode,
 snd_SpiderLoop,
 snd_GrappleBeam_Loop,
 snd_Elevator,
+snd_InteractLoop,
 snd_LavaLoop,
 snd_LavaDamageLoop,
 snd_HeatDamageLoop,
 snd_LowHealthAlarm,
+snd_PushBlock_Move,
 snd_Kraid_DyingRoar);
 
 global.SilenceAudio = function()
