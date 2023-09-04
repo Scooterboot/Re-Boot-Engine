@@ -7,7 +7,8 @@ if(global.gamePaused)
 
 var player = instance_place(x,y,obj_Player);
 if (instance_exists(player) && (player.state == State.Stand || player.state == State.Elevator) &&
-	player.grounded && abs(player.x - x) < 12 && !player.grappleActive && !player.isPushing)
+	abs(player.x - x) < 12 && player.bbox_bottom < bbox_bottom+1 && player.bbox_bottom > bbox_bottom-1 && 
+	player.grounded && !player.grappleActive && !player.isPushing)
 {
 	if(saveCooldown <= 0)
 	{
@@ -29,7 +30,7 @@ if (instance_exists(player) && (player.state == State.Stand || player.state == S
 		else
 		{
 			var xx = x,
-				yy = bbox_bottom-41;
+				yy = bbox_bottom-25;
 			if(saving == maxSave)
 			{
 				player.state = State.Elevator;
@@ -39,24 +40,6 @@ if (instance_exists(player) && (player.state == State.Stand || player.state == S
 				obj_UI.CreateMessageBox(gameSavedText,"",Message.Simple);
 			}
 			
-			/*if(player.position.X < xx)
-			{
-				player.position.X = min(player.position.X+1,xx);
-			}
-			else
-			{
-				player.position.X = max(player.position.X-1,xx);
-			}
-			if(player.position.Y < yy)
-			{
-				player.position.Y = min(player.position.Y+1,yy);
-			}
-			else
-			{
-				player.position.Y = max(player.position.Y-1,yy);
-			}
-			player.x = scr_round(player.position.X);
-			player.y = scr_round(player.position.Y);*/
 			if(player.position.X < xx)
 			{
 				player.shiftX = min(xx-player.position.X,1);

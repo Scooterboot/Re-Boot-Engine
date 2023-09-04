@@ -1121,7 +1121,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					}
 					if((rJump || bufferJump > 0) && state != State.Morph)// && state != State.Grip)
 					{
-						if(((abs(velX) > 0 && sign(velX) == dir) || (move != 0 && move == dir) || cDash || (!grounded && state != State.Grip) || (state == State.Crouch && entity_place_collide(0,-8))) && !grappleActive)
+						if((abs(velX) > 0 && sign(velX) == dir) || (move != 0 && move == dir) || cDash || (!grounded && state != State.Grip) || (state == State.Crouch && entity_place_collide(0,-8)))
 						{
 							var mask = mask_Jump;
 							if(entity_place_collide(0,-8))
@@ -1207,6 +1207,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		{
 			bufferJump = 0;
 		}
+		
+		jump = 0;
 	}
 	if(grounded)
 	{
@@ -1236,10 +1238,13 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					}
 					jumpStop = false;
 				}
-				jump = 0;
 				jumping = false;
 			}
 		}
+	}
+	else
+	{
+		jumpStop = false;
 	}
 	
 	#endregion
@@ -2071,11 +2076,13 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		aimAngle = 0;
 		
 		var flag = true;
-		if(instance_exists(obj_Elevator) && obj_Elevator.activeDir != 0)
+		var elev = instance_place(x,y+2,obj_Elevator);
+		if(instance_exists(elev) && elev.activeDir != 0)
 		{
 			flag = false;
 		}
-		if(instance_exists(obj_SaveStation) && obj_SaveStation.saving > 0)
+		var savStat = instance_place(x,y,obj_SaveStation);
+		if(instance_exists(savStat) && savStat.saving > 0)
 		{
 			flag = false;
 		}
@@ -3538,7 +3545,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 #endregion
 #region Dodge
-	if(boots[Boots.Dodge] && dir != 0 && (state == State.Stand || state == State.Crouch || state == State.Jump || state == State.Somersault || state == State.Grip))
+	if(boots[Boots.Dodge] && dir != 0 && (state == State.Stand || state == State.Crouch || state == State.Jump || state == State.Somersault || (state == State.Grip && !startClimb)))
 	{
 		if(cDash && !global.autoDash)
 		{

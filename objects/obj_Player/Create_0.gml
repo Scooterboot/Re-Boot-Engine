@@ -382,7 +382,7 @@ moveSpeed[3,1] = 0.03125;	// Shine Spark
 moveSpeed[0,2] = 0.015625;	// Normal
 moveSpeed[1,2] = 0.02;		// Morph
 moveSpeed[2,2] = 0.015625;	// Dash/Speedboost
-moveSpeed[3,1] = 0.03125;	// Shine Spark
+moveSpeed[3,2] = 0.03125;	// Shine Spark
 
 frict[0] = 0.5;		// Out of water
 frict[1] = 0.5;		// Underwater
