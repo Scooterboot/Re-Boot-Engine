@@ -38,10 +38,6 @@ if(instance_exists(creator) && creator.object_index == obj_WorkRobot)
 }
 else
 {
-	for(var i = 0; i < array_length(mBlocks); i++)
-	{
-		instance_destroy(mBlocks[i]);
-	}
 	instance_destroy();
 	exit;
 }

@@ -3,7 +3,7 @@
 
 scr_MainInitialize();
 
-depth = 0;
+depth = -1;
 
 debug = 0;
 

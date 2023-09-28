@@ -1,2 +1,2 @@
 /// @description Graphics
-draw_sprite(sprite_index,image_index,x,PosY);
+draw_sprite(sprite_index,image_index,x,y);

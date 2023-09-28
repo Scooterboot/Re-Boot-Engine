@@ -1,7 +1,7 @@
 /// @description Logic
 if(place_meeting(x,y,obj_Player) && frame >= 4)
 {
-    htc = instance_create_layer(x,y,layer,obj_ClosingHatch);
+    var htc = instance_create_layer(x,y,layer,obj_ClosingHatch);
     htc.image_index = image_index;
     htc.direction = direction;
     htc.image_angle = image_angle;

@@ -120,16 +120,16 @@ else
 frameCounter++;
 if(frameCounter > frameSpeed)
 {
-    frame += num;
+    frame += frameNum;
     frameCounter = 0;
 }
 if(frame >= 2)
 {
-    num = -1;
+    frameNum = -1;
 }
 if(frame <= 0)
 {
-    num = 1;
+    frameNum = 1;
 }
 
 if(screeDur1 <= 0)

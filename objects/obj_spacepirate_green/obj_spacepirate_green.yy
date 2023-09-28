@@ -34,6 +34,9 @@
     "name": "sprt_SpacePirate_Green",
     "path": "sprites/sprt_SpacePirate_Green/sprt_SpacePirate_Green.yy",
   },
-  "spriteMaskId": null,
+  "spriteMaskId": {
+    "name": "mask_SpacePirate",
+    "path": "sprites/mask_SpacePirate/mask_SpacePirate.yy",
+  },
   "visible": true,
 }

@@ -12,9 +12,11 @@ if(!falseDestroy)
 	{
 		ds_list_add(global.openHatchList,room_get_name(room)+"_hatchOpened_"+string(hatchID));
 	}
+	
 	audio_stop_sound(snd_Door_Open);
     audio_play_sound(snd_Door_Open,0,false);
-    prt = instance_create_layer(x,y,layer,obj_HatchOpen);
+	
+    var prt = instance_create_layer(x,y,layer,obj_HatchOpen);
 	prt.sprite_index = sprite_index;
     prt.image_index = 0;
     prt.direction = direction;

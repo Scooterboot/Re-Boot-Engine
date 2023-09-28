@@ -2277,7 +2277,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 	else
 	{
-		ballBounce = 0;
 		unmorphing = false;
 		mockBall = false;
 		cFlashStartCounter = 0;
@@ -2380,7 +2379,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			}
 		}
 		wallJumpDelay = max(wallJumpDelay - 1, 0);
-		if(grounded)
+		if(grounded || (mask_index == mask_Crouch && entity_place_collide(0,8)))
 		{
 			if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
 			{
@@ -3819,7 +3818,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	prevVelX = velX;
 	
 	aimUpDelay = max(aimUpDelay - 1, 0);
-	ballBounce = max(ballBounce - 1, 0);
 	
 	shineCharge = max(shineCharge - 1, 0);
 	shineStart = max(shineStart - 1, 0);
@@ -3853,7 +3851,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		yVel = velY;
 	}
-	EntityLiquid_Large(xVel,yVel)
+	EntityLiquid_Large(xVel,yVel);
 	
 	if(isChargeSomersaulting)
 	{

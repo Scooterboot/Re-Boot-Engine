@@ -1,5 +1,5 @@
 /// @description 
-event_inherited();
+//event_inherited();
 
 rot = 0;
 

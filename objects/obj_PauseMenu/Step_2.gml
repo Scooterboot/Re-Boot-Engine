@@ -535,7 +535,9 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 						}
 						if(confirmQuitDT)// >= 0)
 						{
+							instance_deactivate_object(all);
 							game_end();
+							exit;
 						}
 					}
 					else

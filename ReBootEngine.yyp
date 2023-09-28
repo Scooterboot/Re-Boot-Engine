@@ -233,7 +233,7 @@
   "isEcma": false,
   "LibraryEmitters": [],
   "MetaData": {
-    "IDEVersion": "2023.6.0.89",
+    "IDEVersion": "2023.8.1.102",
   },
   "resources": [
     {"id":{"name":"obj_PushBall_Grapple","path":"objects/obj_PushBall_Grapple/obj_PushBall_Grapple.yy",},},
@@ -752,6 +752,7 @@
     {"id":{"name":"sprt_Sub_Footer","path":"sprites/sprt_Sub_Footer/sprt_Sub_Footer.yy",},},
     {"id":{"name":"sprt_Sub_SelectArrows","path":"sprites/sprt_Sub_SelectArrows/sprt_Sub_SelectArrows.yy",},},
     {"id":{"name":"obj_Gadora_EyeBeam","path":"objects/obj_Gadora_EyeBeam/obj_Gadora_EyeBeam.yy",},},
+    {"id":{"name":"mask_SpacePirate","path":"sprites/mask_SpacePirate/mask_SpacePirate.yy",},},
     {"id":{"name":"sprt_Sub_SelectIcons","path":"sprites/sprt_Sub_SelectIcons/sprt_Sub_SelectIcons.yy",},},
     {"id":{"name":"sprt_Sub_Samus","path":"sprites/sprt_Sub_Samus/sprt_Sub_Samus.yy",},},
     {"id":{"name":"sprt_Sub_Samus_Boots1","path":"sprites/sprt_Sub_Samus_Boots1/sprt_Sub_Samus_Boots1.yy",},},
@@ -1354,6 +1355,7 @@
     {"roomId":{"name":"rm_debug16_Save","path":"rooms/rm_debug16_Save/rm_debug16_Save.yy",},},
     {"roomId":{"name":"rm_Disclaimer","path":"rooms/rm_Disclaimer/rm_Disclaimer.yy",},},
   ],
+  "templateType": null,
   "TextureGroups": [
     {"resourceType":"GMTextureGroup","resourceVersion":"1.3","name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"targets":-1,},
   ],

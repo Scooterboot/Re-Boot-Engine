@@ -107,7 +107,6 @@ uncrouch = 0;
 //uncrouched = true;
 
 canMorphBounce = true;
-ballBounce = 0;
 mockBall = false;
 
 aimAngle = 0; //2 = verticle up, 1 = diagonal up, 0 = forward, -1 = diagonal down, -2 = vertical down
@@ -1231,7 +1230,7 @@ function ModifyFinalVelX(fVX)
 function ModifyFinalVelY(fVY)
 {
 	var fellVel = 1;
-	var shouldForceDown = (state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Dodge && jump <= 0 && bombJump <= 0 && ballBounce <= 0);
+	var shouldForceDown = (state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Dodge && jump <= 0 && bombJump <= 0);
 	if((entity_place_collide(0,fVY+fellVel) || (bbox_bottom+fVY+fellVel) >= room_height) && fVY >= 0)
 	{
 		justFell = shouldForceDown;
@@ -1435,7 +1434,7 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 }
 function CanMoveDownSlope_Bottom()
 {
-	return (state != State.Hurt && state != State.DmgBoost && state != State.Spark && state != State.BallSpark && grounded && ballBounce <= 0 && velY >= 0 && velY <= fGrav && jump <= 0 && bombJump <= 0);
+	return (state != State.Hurt && state != State.DmgBoost && state != State.Spark && state != State.BallSpark && grounded && velY >= 0 && velY <= fGrav && jump <= 0 && bombJump <= 0);
 }
 
 function CanMoveUpSlope_Top()
@@ -1513,7 +1512,7 @@ function OnYCollision(fVY)
 		}
 		velY = min(bounceVelY,0);
 		
-		ballBounce = ceil(abs(velY)/fGrav)*(2.1 / (1+(liquidState > 0)));
+		justFell = false;
 	}
 	else if(sign(velY) == sign(fVelY))
 	{
@@ -1906,35 +1905,42 @@ function MoveStickTop_Y(movingTile)
 }
 function MoveStickRight_X(movingTile)
 {
-	if(state == State.Grip && dir == 1 && lhc_position_meeting(x+6,y-17,"IMovingSolid"))
-	{
-		return true;
-	}
-	return (colEdge == Edge.Right || spiderBall || (isPushing && dir == 1)); //(isPushing && movingTile == pushBlock.mBlock && dir == 1));
+	return (colEdge == Edge.Right || spiderBall || MoveStick_CheckPGrip(1, movingTile) || (isPushing && dir == 1));
 }
 function MoveStickRight_Y(movingTile)
 {
-	if(state == State.Grip && dir == 1 && lhc_position_meeting(x+6,y-17,"IMovingSolid"))
-	{
-		return true;
-	}
-	return (colEdge == Edge.Right || spiderBall);
+	return (colEdge == Edge.Right || spiderBall || MoveStick_CheckPGrip(1, movingTile));
 }
 function MoveStickLeft_X(movingTile)
 {
-	if(state == State.Grip && dir == -1 && lhc_position_meeting(x-6,y-17,"IMovingSolid"))
-	{
-		return true;
-	}
-	return (colEdge == Edge.Left || spiderBall || (isPushing && dir == -1)); //(isPushing && movingTile == pushBlock.mBlock && dir == -1));
+	return (colEdge == Edge.Left || spiderBall || MoveStick_CheckPGrip(-1, movingTile) || (isPushing && dir == -1));
 }
 function MoveStickLeft_Y(movingTile)
 {
-	if(state == State.Grip && dir == -1 && lhc_position_meeting(x-6,y-17,"IMovingSolid"))
+	return (colEdge == Edge.Left || spiderBall || MoveStick_CheckPGrip(-1, movingTile));
+}
+
+function MoveStick_CheckPGrip(_dir, movingTile)
+{
+	if(state == State.Grip && dir == _dir)
 	{
-		return true;
+		if(startClimb)
+		{
+			var liquidMovement = (liquidState > 0);
+			var cX = 0, cY = 0;
+			for(var i = 0; i < climbIndex; i++)
+			{
+				cX += climbX[i] / (1+liquidMovement) * _dir;
+				cY += climbY[i] / (1+liquidMovement);
+			}
+			return lhc_position_meeting(x+6*_dir - cX, y-17 + cY, "IMovingSolid");
+		}
+		else
+		{
+			return lhc_position_meeting(x+6*_dir,y-17,"IMovingSolid");
+		}
 	}
-	return (colEdge == Edge.Left || spiderBall);
+	return false;
 }
 
 function MovingSolid_OnRightCollision(fVX)
@@ -2027,93 +2033,6 @@ function ChangeState(newState,newStateFrame,newMask,isGrounded)
 }
 #endregion
 
-#region Shoot (old)
-//function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex)
-/*function Shoot()
-{
-	/// @description Shoot
-	/// @param ShotIndex
-	/// @param Damage
-	/// @param Speed
-	/// @param CoolDown
-	/// @param ShotAmount
-	/// @param SoundIndex
-	/// @param SkipCenterShot=false
-	var ShotIndex = argument[0],
-		Damage = argument[1],
-		Speed = argument[2],
-		CoolDown = argument[3],
-		ShotAmount = argument[4],
-		SoundIndex = argument[5],
-		SkipCenterShot = false;
-	if(argument_count > 6)
-	{
-		SkipCenterShot = argument[6];
-	}
-	
-	var spawnX = shootPosX,
-		spawnY = shootPosY;
-
-	if(SoundIndex != noone)
-	{
-		if(audio_is_playing(global.prevShotSndIndex))
-		{
-			var gain = 0;
-			if(asset_get_index(audio_get_name(global.prevShotSndIndex)) != SoundIndex)
-			{
-				gain = audio_sound_get_gain(global.prevShotSndIndex);//*0.5;
-			}
-			audio_sound_gain(global.prevShotSndIndex,gain,25);
-		}
-		var snd = audio_play_sound(SoundIndex,1,false);
-		audio_sound_gain(snd,global.soundVolume,0);
-		global.prevShotSndIndex = snd;
-	}
-
-	if(ShotIndex != noone)
-	{
-		var shot = noone;
-		for(var i = 0; i < ShotAmount; i++)
-		{
-			if(i != 2 || !SkipCenterShot)
-			{
-				shot = instance_create_layer(spawnX,spawnY,layer_get_id("Projectiles"),ShotIndex);
-				shot.damage = Damage;
-				shot.velocity = Speed;
-				if(!shot.isBomb)
-				{
-					shot.direction = shootDir;
-					shot.image_angle = shootDir;
-				}
-				shot.speed_x = extraSpeed_x;
-				shot.speed_y = extraSpeed_y;
-				shot.waveStyle = i;
-				shot.dir = dir2;
-				shot.waveDir = waveDir;
-				shot.creator = object_index;
-			}
-		}
-		shotDelayTime = CoolDown;
-		if(shot.particleType >= 0 && !shot.isGrapple)
-		{
-			var partSys = obj_Particles.partSystemB;
-			if(shot.isWave)
-			{
-				partSys = obj_Particles.partSystemA;
-			}
-		
-			part_particles_create(partSys,shootPosX,shootPosY,obj_Particles.bTrails[shot.particleType],7+(5*(statCharge >= maxCharge)));
-	        part_particles_create(partSys,shootPosX,shootPosY,obj_Particles.mFlare[shot.particleType],1);
-		}
-		waveDir *= -1;
-		if(instance_exists(shot))
-		{
-			return shot;
-		}
-	}
-	return noone;
-}*/
-#endregion
 #region Shoot
 function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWave = false, WaveStyleOffset = 0)
 {
@@ -2225,262 +2144,6 @@ function SpiderEnable(flag)
 	}
 }
 #endregion
-#region SpiderMovement (old)
-/*function SpiderMovement()
-{
-	var edge = spiderEdge;
-	var angle = 270;
-	if(edge == Edge.Right)
-	{
-	    angle = 0;
-	}
-	if(edge == Edge.Top)
-	{
-	    angle = 90;
-	}
-	if(edge == Edge.Left)
-	{
-	    angle = 180;
-	}
-	var angle2 = angle;
-
-	var num = 4;
-	while(spiderMove != 0 && place_collide(scr_ceil(lengthdir_x(1,angle)),scr_ceil(lengthdir_y(1,angle))) && num > 0)
-	{
-	    angle += 45*spiderMove;
-	    num -= 1;
-	}
-
-	var xa = lengthdir_x(spiderMove!=0,angle),
-	    ya = lengthdir_y(spiderMove!=0,angle),
-	    xv = lengthdir_x(1,angle2),
-	    yv = lengthdir_y(1,angle2);
-
-	if(edge == Edge.Bottom || edge == Edge.Top)
-	{
-	    if(!place_collide(xa,0))
-	    {
-	        x += xa;
-	    }
-	    else if(!place_collide(xa,ya))
-	    {
-	        y += ya;
-	        x += xa;
-	    }
-	}
-
-	if(edge == Edge.Left || edge == Edge.Right)
-	{
-	    if(!place_collide(0,ya))
-	    {
-	        y += ya;
-	    }
-	    else if(!place_collide(xa,ya))
-	    {
-	        x += xa;
-	        y += ya;
-	    }
-	}
-
-	if(!place_collide(xv,yv))
-	{
-	    x += xv;
-	    y += yv;
-	}
-	if(place_collide(0,0))
-	{
-	    x -= xv;
-	    y -= yv;
-	}
-}*/
-#endregion
-#region SpiderBall (old)
-/*function SpiderBall()
-{
-	if(spiderEdge != Edge.None)
-	{
-	    velX = 0;
-	    fVelX = 0;
-	    velY = 0;
-	    fVelY = 0;
-	    var moveX = (cRight-cLeft),
-	        moveY = (cDown-cUp);
-
-	    if(moveX == 0 && moveY == 0)
-	    {
-	        spiderMove = 0;
-	    }
-	    if(spiderMove == 0)
-	    {
-	        if(spiderEdge == Edge.Bottom)
-	        {
-	            spiderMove = moveX;
-	        }
-	        if(spiderEdge == Edge.Top)
-	        {
-	            spiderMove = -moveX;
-	        }
-	        if(spiderEdge == Edge.Left)
-	        {
-	            spiderMove = moveY;
-	        }
-	        if(spiderEdge == Edge.Right)
-	        {
-	            spiderMove = -moveY;
-	        }
-	    }
-    
-	    switch(spiderEdge)
-	    {
-	        case Edge.Bottom:
-	        {
-	            SpiderMovement();
-
-	            if(place_collide(spiderMove,0))
-	            {
-	                if(spiderMove > 0)
-	                {
-	                    spiderEdge = Edge.Right;
-	                }
-	                if(spiderMove < 0)
-	                {
-	                    spiderEdge = Edge.Left;
-	                }
-	            }
-	            else
-	            {
-	                if(!place_collide(0,1) && place_collide(1,1))
-	                {
-	                    spiderEdge = Edge.Right;
-	                }
-	                if(!place_collide(0,1) && place_collide(-1,1))
-	                {
-	                    spiderEdge = Edge.Left;
-	                }
-	            }
-	            break;
-	        }
-	        case Edge.Left:
-	        {
-	            SpiderMovement();
-
-	            if(place_collide(0,spiderMove))
-	            {
-	                if(spiderMove > 0)
-	                {
-	                    spiderEdge = Edge.Bottom;
-	                }
-	                if(spiderMove < 0)
-	                {
-	                    spiderEdge = Edge.Top;
-	                    dir *= -1;
-	                }
-	            }
-	            else
-	            {
-	                if(!place_collide(-1,0) && place_collide(-1,-1))
-	                {
-	                    spiderEdge = Edge.Top;
-	                    dir *= -1;
-	                }
-	                if(!place_collide(-1,0) && place_collide(-1,1))
-	                {
-	                    spiderEdge = Edge.Bottom;
-	                }
-	            }
-	            break;
-	        }
-	        case Edge.Top:
-	        {
-	            SpiderMovement();
-
-	            if(place_collide(-spiderMove,0))
-	            {
-	                if(spiderMove < 0)
-	                {
-	                    spiderEdge = Edge.Right;
-	                    dir *= -1;
-	                }
-	                if(spiderMove > 0)
-	                {
-	                    spiderEdge = Edge.Left;
-	                    dir *= -1;
-	                }
-	            }
-	            else
-	            {
-	                if(!place_collide(0,-1) && place_collide(-1,-1))
-	                {
-	                    spiderEdge = Edge.Left;
-	                    dir *= -1;
-	                }
-	                if(!place_collide(0,-1) && place_collide(1,-1))
-	                {
-	                    spiderEdge = Edge.Right;
-	                    dir *= -1;
-	                }
-	            }
-	            break;
-	        }
-	        case Edge.Right:
-	        {
-	            SpiderMovement();
-
-	            if(place_collide(0,-spiderMove))
-	            {
-	                if(spiderMove > 0)
-	                {
-	                    spiderEdge = Edge.Top;
-	                    dir *= -1;
-	                }
-	                if(spiderMove < 0)
-	                {
-	                    spiderEdge = Edge.Bottom;
-	                }
-	            }
-	            else
-	            {
-	                if(!place_collide(1,0) && place_collide(1,-1))
-	                {
-	                    spiderEdge = Edge.Top;
-	                    dir *= -1;
-	                }
-	                if(!place_collide(1,0) && place_collide(1,1))
-	                {
-	                    spiderEdge = Edge.Bottom;
-	                }
-	            }
-	            break;
-	        }
-	    }
-
-	    if(!collision_rectangle(bbox_left-4,bbox_top-4,bbox_right+3,bbox_bottom+3,obj_Tile,1,0))
-	    {
-	        spiderEdge = Edge.None;
-	    }
-	}
-	else
-	{
-	    spiderMove = 0;
-	    if(place_collide(1,0))
-	    {
-	        spiderEdge = Edge.Right;
-	    }
-	    if(place_collide(-1,0))
-	    {
-	        spiderEdge = Edge.Left;
-	    }
-	    if(place_collide(0,1))
-	    {
-	        spiderEdge = Edge.Bottom;
-	    }
-	    if(place_collide(0,-1))
-	    {
-	        spiderEdge = Edge.Top;
-	    }
-	}
-}*/
-#endregion
 #region SpiderActive
 function SpiderActive()
 {
@@ -2492,284 +2155,6 @@ function SpiderActive()
 }
 #endregion
 
-#region player_water (old)
-/*
-function player_water()
-{
-	var xVel = x - xprevious,
-		yVel = y - yprevious;
-
-	if(justFell)
-	{
-		yVel = velY;
-	}
-    
-	WaterBot = bbox_bottom-y;
-	if(state == State.Grip && !startClimb)
-	{
-		WaterBot += 4;
-	}
-
-	water_update(2,xVel,yVel);
-
-	//PhysState = ((water_at(x,y-12)) && !oControl.Power[17]);
-
-	/*if (State == "JUMPING" or (State == "DASH" && !get_check("GROUND",1,0)))
-	{
-		WaterBot = -12;
-	}
-
-	if (State == "GRAPPLE")
-	{
-		WaterBot = 16;
-	}
-
-	if (PhysState != 0)
-	{
-		DashTime = 0;
-		Dash = 0;
-		DashPhase = 0;
-		DashSpeed = 0;
-	}* /
-
-	/// -- Extra Splash -- \\\
-
-	CanSplash ++;
-
-	if (CanSplash > 65535)
-	{
-		CanSplash = 0;
-	}
-
-	if (in_water() && !in_water_top() && (CanSplash mod 2 == 0))
-	{
-		var splashx = x+random_range(4,-4);
-		if(state == State.Grip && !startClimb)
-		{
-		    splashx -= 4*dir;
-		}
-		Splash = instance_create_layer(splashx,SplashY,"Liquids_fg",obj_SplashFXAnim);
-		Splash.Speed = .25;
-		Splash.sprite_index = sprt_WaterSplashSmall;
-		Splash.image_alpha = 0.4;
-		Splash.depth = 65;
-		Splash.Splash = 1;
-		Splash.image_index = 3;
-		Splash.image_xscale = choose(1,-1);
-    
-		/*if (state == "grapple" && abs(grapAngVel) > 1 && abs(angle_difference(grapAngle,0)) < 90)//(State == "GRAPPLE" && abs(GrappleAngleVel)>1 && abs(angle_difference(GrappleAngle,0))<90 && Sprite != sSCrouch)
-		{
-		    Splash.sprite_index = sprt_WaterSplashLarge;
-		    Splash.image_alpha = .5;
-		    Splash.image_yscale = min(max(abs(grapAngVel)/7,.1),.7);
-		    Splash.image_index = 0;
-		}
-		else* /
-		if (xVel == 0 && abs(yVel) < 2)
-		{
-		    /*Splash.image_yscale = .65;
-		    Splash.image_index = 5;
-		    Splash.image_xscale = .75;* /
-		    Splash.image_yscale = choose(.3,.5,.7,1);
-		    Splash.image_index = 0;
-		    Splash.image_xscale = choose(1.4,1);
-		    Splash.sprite_index = sprt_WaterSplashTiny;
-		    Splash.x += irandom(4) - 2;
-		}
-		else if (abs(xVel) > 0 && !StepSplash)
-		{
-		    Splash.sprite_index = sprt_WaterSkid;
-		    Splash.image_alpha = 0.6;
-		    Splash.depth = 65;
-		    Splash.image_index = 1;
-		    Splash.image_xscale = choose(1,-1);
-		    Splash.Splash = 0;
-		    Splash.x += xVel * 2;
-		    Splash.xVel = xVel/4.5;
-		    Splash.image_yscale = (.4 + min(.6,abs(xVel)/10)) * (choose(1, .5 + random(.4)));//.8 + random(.2);
-		    Splash.y --;
-        
-		    StepSplash = 2;
-        
-		    /*if (choose(0,1,1) == 0)
-		    {
-		        Splash.image_yscale *= .1;
-		        StepSplash = 1;
-		    }* /
-		}
-    
-		if(((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineEnd <= 0) || speedBoost)// (State == "SUPERJUMP" or DashPhase >= 2)
-		{
-		    if (CanSplash mod 2 == 0)
-		    {
-		        Splash.sprite_index = sprt_WaterSkidLarge;
-		        Splash.Speed = .5;
-		        Splash.image_yscale = 1;
-		        Splash.image_index = 0;
-		        Splash.image_xscale = 1;
-		        Splash.image_index = 0;
-		        Splash.image_alpha = .5;
-		        Splash.Splash = 0;
-		        Splash.x -= xVel;
-		        repeat (3)
-		        {
-		            Drop = instance_create_layer(x,SplashY-4,"Liquids_fg",obj_WaterDrop);
-		            Drop.xVel = -2.25+random(4.5);
-		            Drop.yVel = -.5-random(2.5);
-		            Drop.xVel += (xVel)/2;
-		        }
-            
-		        if (CanSplash mod 4 == 0)
-		        {
-		            //sound_play_pos(sndSplashTiny,x,y,0);
-		            //audio_play_sound(snd_SplashTiny,0,false);
-		            audio_play_sound(snd_SplashSkid,0,false);
-		        }
-		    }
-		}
-
-		if ((!audio_is_playing(WaterShuffleSoundID[WaterShuffleCount]) or (abs(xVel > 0) && irandom(7) == 0))) && ((abs(xVel) > 0) or (irandom(23) == 0))
-		{
-		    audio_play_sound(WaterShuffleSoundID[WaterShuffleCount],0,false);
-		    WaterShuffleCount = choose(0,1,2,3);
-		}
-	}
-
-
-	/// -- Underwater Bubbles -- \\\ 
-	
-	var maxDashSpeed = maxSpeed[1,liquidState];
-	if ((EnteredWater || (abs(xVel) >= maxDashSpeed && InWater)) && choose(1,1,1,0) == 1)
-	{
-		Bubble = instance_create_layer(x-8+random(16),bbox_top+random(bbox_bottom-bbox_top),"Liquids_fg",obj_WaterBubble);
-    
-		if (yVel > 0)
-		{
-		    Bubble.yVel += yVel/4;
-		}
-    
-		if (EnteredWater < 60 && (state != State.Stand || abs(xVel) < maxDashSpeed))
-		{
-		    Bubble.Alpha *= (EnteredWater/60);
-		    Bubble.AlphaMult *= (EnteredWater/60);
-		} 
-	}
-
-	/// -- Leaving Drops
-
-	if (LeftWater && choose(1,1,1,0,0) == 1)
-	{
-		Drop = instance_create_layer(x-8+random(16),y+4,"Liquids_fg",obj_WaterDrop);
- 
-		if (state == State.Somersault)
-		{
-			Drop.xVel = -random(7) + 3.5;
-			Drop.yVel = -random(5) + 1;
-		}
- 
-		with (Drop)
-		{
-			if (water_at(x,y))
-			{
-				Dead = 1;
-				instance_destroy();
-			}
-		}
-	}
-
-	if (LeftWaterTop && choose(1,1,1,0,0) == 1)
-	{
-		Drop = instance_create_layer(x-8+random(16),bbox_bottom+random(bbox_top-y+4),"Liquids_fg",obj_WaterDrop);
- 
-		if (state == State.Somersault)
-		{
-			Drop.xVel = -random(6) + 3;
-			Drop.yVel = -random(6) + 1;
-		}
- 
-		with (Drop)
-		{
-			if (water_at(x,y))
-			{
-				Dead = 1;
-				instance_destroy();
-			}
-		}
-	}
-
-	/// -- Breathing Bubbles --
-	
-	if(!instance_exists(obj_Lava))
-	{
-		BreathTimer --;
-		if (BreathTimer < 16)
-		{
-			if (BreathTimer < 0)
-			{
-			    BreathTimer = choose(110,150,160);
-			}
-			else if (BreathTimer == 15 && InWaterTop)
-			{
-			    audio_play_sound(choose(snd_Breath_0,snd_Breath_1,snd_Breath_2),0,false);
-			}
-     
-			if (InWaterTop && (BreathTimer mod 8 == 0))
-			{
-			    Bubble = instance_create_layer(x + 4*dir,bbox_top + 7, "Liquids_fg", obj_WaterBubble);
-			    Bubble.xVel = dir/2 -.15 + random(.3);
-			    Bubble.yVel = .2+random(.1);
-			    Bubble.Breathed = 0.15;
-			    Bubble.image_xscale /= choose(1.3,1.5);
-			    Bubble.image_yscale = Bubble.image_xscale;
-			    Bubble.xVel += (x - xprevious)/2;
-			    Bubble.sprite_index = sprt_WaterBubbleSmall;
-        
-			    if (state == State.Grip)
-			    {
-			        Bubble.x -= (dir * 6);
-			    }
-			}
-		}
-
-		/// -- Screw Attack boiling nearby water --
-
-		if (state == State.Somersault && misc[Misc.ScrewAttack] && suit[Suit.Gravity])
-		{
-			if (InWater)
-			{
-			    repeat (3)
-			    {
-			        D = instance_create_layer(x + random_range(16,-16), y+2 + random_range(16,-16), "Liquids_fg", obj_WaterBubble);
-			        D.Delete = 1;
-			        D.CanSpread = 0;
-			    }
-			}
-		}
-
-		if(((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineEnd <= 0) || speedBoost || state == State.Dodge)
-		{
-			if (InWater)
-			{
-			    repeat (3)
-			    {
-			        D = instance_create_layer(random_range(bbox_left,bbox_right), random_range(bbox_top,bbox_bottom), "Liquids_fg", obj_WaterBubble);
-			        D.Delete = 1;
-			        D.CanSpread = 0;
-			    }
-			}
-		}
-		
-		if(InWater && stateFrame == State.Brake && brakeFrame >= 9)
-		{
-			//D = instance_create_layer(x-8+random(16),bbox_bottom,"Liquids_fg",obj_WaterBubble);
-			D = instance_create_layer(x-random(12)*dir,bbox_bottom+4-random(8),"Liquids_fg",obj_WaterBubble);
-			D.Delete = 1;
-			D.CanSpread = 0;
-		}
-	}
-}
-*/
-#endregion
 #region EntityLiquid_Large
 
 function EntityLiquid_Large(_velX, _velY)
@@ -2799,7 +2184,8 @@ function EntityLiquid_Large(_velX, _velY)
 	
 	if (liquid && (enteredLiquid > 0 || speedBoost) && choose(1,1,1,0) == 1)
 	{
-		var bub = liquid.CreateBubble(x-8+random(16),bbox_top+random(bbox_bottom-bbox_top),0,0);
+		//var bub = liquid.CreateBubble(x-8+random(16),bbox_top+random(bbox_bottom-bbox_top),0,0);
+		var bub = liquid.CreateBubble(random_range(bbox_left-3,bbox_right+3),random_range(bbox_top-3,bbox_bottom+3),0,0);
 		bub.spriteIndex = sprt_WaterBubble;
 
 		if (_velY > 0)
@@ -2878,12 +2264,20 @@ function EntityLiquid_Large(_velX, _velY)
 			}
 		}
 
-		if((state == State.Somersault && misc[Misc.ScrewAttack] && suit[Suit.Gravity]) ||
-			(((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineEnd <= 0) || speedBoost || state == State.Dodge))
+		if(state == State.Somersault && misc[Misc.ScrewAttack] && suit[Suit.Gravity])
 		{
 			repeat(3)
 			{
 				var bub = liquid.CreateBubble(x + random_range(16,-16), y+2 + random_range(16,-16), 0, 0);
+				bub.kill = true;
+				bub.canSpread = false;
+			}
+		}
+		else if(((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineEnd <= 0) || speedBoost || state == State.Dodge)
+		{
+			repeat(3)
+			{
+				var bub = liquid.CreateBubble(random_range(bbox_left-3,bbox_right+3),random_range(bbox_top-3,bbox_bottom+3),0,0);
 				bub.kill = true;
 				bub.canSpread = false;
 			}

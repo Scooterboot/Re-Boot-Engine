@@ -246,11 +246,14 @@ for(var i = 0; i < array_length(npcImmuneTime); i++)
 
 if(impacted == 1)
 {
-	if(audio_is_playing(impactSnd))
+	if(impactSnd != noone)
 	{
-		audio_stop_sound(impactSnd);
+		if(audio_is_playing(impactSnd))
+		{
+			audio_stop_sound(impactSnd);
+		}
+		audio_play_sound(impactSnd,0,false);
 	}
-	audio_play_sound(impactSnd,0,false);
 	if(particleType != -1 && particleType <= 4)
 	{
 		part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.bTrails[particleType],7*(1+isCharge));

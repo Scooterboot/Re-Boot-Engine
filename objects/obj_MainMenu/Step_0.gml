@@ -195,7 +195,9 @@ if(room == rm_MainMenu)
 					{
 						if(confirmPos == 1)
 						{
+							instance_deactivate_object(all);
 							game_end();
+							exit;
 						}
 						else
 						{

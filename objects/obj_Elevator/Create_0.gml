@@ -16,6 +16,4 @@ nextElevatorID = -1;
 
 activeDir = 0;
 
-PosY = y;
-
 resetState = false;

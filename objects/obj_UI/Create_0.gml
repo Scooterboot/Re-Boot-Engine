@@ -1,30 +1,5 @@
 /// @description Initialize
 
-/*controlPad = "";
-controlPad_Text = "${controlPad}";
-function InsertControlPad(str)
-{
-	return string_replace_all(str,controlPad_Text,controlPad);
-}
-jumpButton = "";
-jumpButton_Text = "${jumpButton}";
-function InsertJumpButton(str)
-{
-	return string_replace_all(str,jumpButton,jumpButton_Text);
-}
-shootButton = "";
-shootButton_Text = "${shootButton}";
-function InsertShootButton(str)
-{
-	return string_replace_all(str,shootButton_Text,shootButton);
-}
-hudSelectButton = "";
-hudSelectButton_Text = "${hudSelectButton}";
-function InsertHUDSelectButton(str)
-{
-	return string_replace_all(str,hudSelectButton_Text,hudSelectButton);
-}*/
-
 for(var i = 0; i < 13; i++)
 {
 	textButton[i] = "";

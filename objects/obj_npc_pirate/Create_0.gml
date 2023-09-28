@@ -52,3 +52,14 @@ maxGrav = 2;
 justFell = false;
 
 grounded = false;
+
+function DmgCollide(posX,posY,object,isProjectile)
+{
+	/*var npc = id;
+	with(object)
+	{
+		return place_meeting(posX,posY,npc);
+	}
+	return false;*/
+	return collision_rectangle(bbox_left-4,bbox_top-2,bbox_right+4,bbox_bottom+1,object,true,true);
+}

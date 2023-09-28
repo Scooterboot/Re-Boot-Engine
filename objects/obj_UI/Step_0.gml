@@ -1,13 +1,5 @@
 /// @description Update text stuff
 
-/*hudSelectButton = "[["+scr_CorrectKeyboardString(global.key[KeyboardButton.ItemSelect])+"]";
-shootButton = "[["+scr_CorrectKeyboardString(global.key[KeyboardButton.Shoot])+"]";
-if(obj_Control.usingGamePad)
-{
-	hudSelectButton = "[sprt_Text_XBButton_"+string(scr_GetButtonSprtIndexXB(global.gp[GamepadButton.ItemSelect]))+"]";
-	shootButton = "[sprt_Text_XBButton_"+string(scr_GetButtonSprtIndexXB(global.gp[GamepadButton.Shoot]))+"]";
-}*/
-
 var moveKeys = scr_CorrectKeyboardString(global.key[0])+","+scr_CorrectKeyboardString(global.key[2])+","+scr_CorrectKeyboardString(global.key[1])+","+scr_CorrectKeyboardString(global.key[3]);
 if(global.key[0] == vk_up && global.key[1] == vk_down && global.key[2] == vk_left && global.key[3] == vk_right)
 {

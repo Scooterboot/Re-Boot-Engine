@@ -27,7 +27,7 @@ if(activeDir != 0)
     }
     if(activeDir == dir)
     {
-        PosY += eleSpeed*activeDir;
+        y += eleSpeed*activeDir;
         if((activeDir == 1 && obj_Player.bbox_top > room_height+8) || (activeDir == -1 && obj_Player.bbox_bottom < -8))
         {
             scr_ElevatorTrans(nextroom,elevatorID,nextElevatorID,activeDir);
@@ -37,19 +37,19 @@ if(activeDir != 0)
     {
         if(activeDir == 1)
         {
-            PosY = min(PosY+eleSpeed,y);
+            y = min(y+eleSpeed,ystart);
         }
         if(activeDir == -1)
         {
-            PosY = max(PosY-eleSpeed,y);
+            y = max(y-eleSpeed,ystart);
         }
-        if(PosY == y)
+        if(y == ystart)
         {
             activeDir = 0;
             resetState = true;
         }
     }
-    obj_Player.position.Y = PosY - (obj_Player.bbox_bottom-obj_Player.y);
+    obj_Player.position.Y = y - (obj_Player.bbox_bottom-obj_Player.y);
 	
 	obj_Player.x = scr_round(obj_Player.position.X);
 	obj_Player.y = scr_round(obj_Player.position.Y);

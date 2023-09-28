@@ -33,7 +33,7 @@ function scr_DrawMouse(mouseX,mouseY)
 			draw_set_alpha((1-(abs(i)/height))*0.75);
 			draw_line(lx1,ly,lx2,ly2);
 			
-			draw_set_color(c_black);
+			//draw_set_color(c_black);
 			draw_set_alpha(1);
 		}
 		gpu_set_colorwriteenable(1,1,1,0);
