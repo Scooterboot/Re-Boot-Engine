@@ -721,22 +721,17 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 	
 	if(state != State.Crouch && state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Grapple && 
-	state != State.Hurt && /*state != State.DmgBoost &&*/ (!spiderBall || spiderEdge == Edge.None) && !xRayActive && state != State.Dodge)
+	state != State.Hurt && (!spiderBall || spiderEdge == Edge.None) && !xRayActive && state != State.Dodge)
 	{
+		var moveflag = false;
 		if((move == 1 && !brake) || (state == State.Somersault && dir == 1 && velX > 1.1*moveSpeed[0,liquidState]))
 		{
+			moveflag = true;
 			if(velX <= fMaxSpeed)
 			{
 				if(velX < 0)
 				{
-					/*if(state == State.Somersault && velX > -maxSpeed[3,0] && !liquidMovement)
-					{
-						velX = 0;
-					}
-					else
-					{*/
-						velX = min(velX + fMoveSpeed + fFrict, 0);
-					//}
+					velX = min(velX + fMoveSpeed + fFrict, 0);
 				}
 				else if(sign(dirFrame) != dir && sign(dirFrame) != 0 && !speedBoost && state != State.Somersault)
 				{
@@ -748,20 +743,14 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 			}
 		}
-		else if((move == -1 && !brake) || (state == State.Somersault && dir == -1 && velX < -1.1*moveSpeed[0,liquidState]))
+		if((move == -1 && !brake) || (state == State.Somersault && dir == -1 && velX < -1.1*moveSpeed[0,liquidState]))
 		{
+			moveflag = true;
 			if(velX >= -fMaxSpeed)
 			{
 				if(velX > 0)
 				{
-					/*if(state == State.Somersault && velX < maxSpeed[3,0] && !liquidMovement)
-					{
-						velX = 0;
-					}
-					else
-					{*/
-						velX = max(velX - fMoveSpeed - fFrict, 0);
-					//}
+					velX = max(velX - fMoveSpeed - fFrict, 0);
 				}
 				else if(sign(dirFrame) != dir && sign(dirFrame) != 0 && !speedBoost && state != State.Somersault)
 				{
@@ -773,9 +762,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 			}
 		}
-		else
+		
+		if(!moveflag)
 		{
-			//if((grounded || state != State.Somersault) && (aimAngle > -2 || !cJump) && 
 			if((aimAngle > -2 || !cJump) && 
 			(state != State.Morph || (state == State.Morph && abs(velX) <= maxSpeed[5,liquidState]) || grounded) && morphFrame <= 0)
 			{
