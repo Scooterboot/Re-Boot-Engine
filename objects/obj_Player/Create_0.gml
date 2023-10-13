@@ -435,6 +435,7 @@ grav[1] = 0.03125;		// Underwater
 grav[2] = 0.03515625;	// In lava/acid
 
 fallSpeedMax = 5; // Maximum fall speed - soft cap
+//moonFallMax = 32;
 
 bombJumpMax[0] = 13;	// air
 bombJumpMax[1] = 1;		// underwater
@@ -1031,36 +1032,9 @@ function AfterImage(_player, _alpha, _num) constructor
 
 #region Collision (Normal)
 
-function entity_place_collide()
+function CanPlatformCollide()
 {
-	/// @description entity_place_collide
-	/// @param offsetX
-	/// @param offsetY
-	/// @param baseX=x
-	/// @param baseY=y
-	
-	var offsetX = argument[0],
-		offsetY = argument[1],
-		xx = position.X,
-		yy = position.Y;
-	if(argument_count > 2)
-	{
-		xx = argument[2];
-		if(argument_count > 3)
-		{
-			yy = argument[3];
-		}
-	}
-	
-	if(lhc_place_meeting(xx+offsetX,yy+offsetY,"IPlatform") && (!spiderBall || spiderEdge == Edge.None || spiderEdge == Edge.Bottom))
-	{
-		if(entityPlatformCheck(offsetX,offsetY,xx,yy))
-		{
-			return true;
-		}
-	}
-	
-	return entity_collision(instance_place_list(xx+offsetX,yy+offsetY,all,blockList,true));
+	return (grounded || !cDown) && (!spiderBall || spiderEdge == Edge.None || spiderEdge == Edge.Bottom);
 }
 
 function entity_collision(listNum)
@@ -1085,137 +1059,6 @@ function entity_collision(listNum)
 		}
 	}
 	ds_list_clear(blockList);
-	return false;
-}
-/*function entity_place_collide()
-{
-	/// @description entity_place_collide
-	/// @param offsetX
-	/// @param offsetY
-	/// @param baseX=x
-	/// @param baseY=y
-	
-	var offsetX = argument[0],
-		offsetY = argument[1],
-		xx = scr_round(position.X),
-		yy = scr_round(position.Y);
-	if(argument_count > 2)
-	{
-		xx = argument[2];
-		if(argument_count > 3)
-		{
-			yy = argument[3];
-		}
-	}
-	
-	if(lhc_place_meeting(xx+offsetX,yy+offsetY,"IPlatform") && (!spiderBall || spiderEdge == Edge.None || spiderEdge == Edge.Bottom))
-	{
-		if(entityPlatformCheck(offsetX,offsetY,xx,yy))
-		{
-			return true;
-		}
-	}
-	
-	if((isSpeedBoosting && shineStart <= 0) || isScrewAttacking)
-	{
-		return SpeedAndScrewBlockCheck(instance_place_list(xx+offsetX,yy+offsetY,all,blockList,true));
-	}
-	
-	return lhc_place_meeting(xx+offsetX,yy+offsetY,solids);
-}
-function entity_position_collide()
-{
-	/// @description entity_position_collide
-	/// @param offsetX
-	/// @param offsetY
-	/// @param baseX=x
-	/// @param baseY=y
-	
-	var offsetX = argument[0],
-		offsetY = argument[1],
-		xx = scr_round(position.X),
-		yy = scr_round(position.Y);
-	if(argument_count > 2)
-	{
-		xx = argument[2];
-		if(argument_count > 3)
-		{
-			yy = argument[3];
-		}
-	}
-	
-	if((isSpeedBoosting && shineStart <= 0) || isScrewAttacking)
-	{
-		return SpeedAndScrewBlockCheck(instance_position_list(xx+offsetX,yy+offsetY,all,blockList,true));
-	}
-	
-	return lhc_position_meeting(xx+offsetX,yy+offsetY,solids);
-}
-function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
-{
-	if((isSpeedBoosting && shineStart <= 0) || isScrewAttacking)
-	{
-		return SpeedAndScrewBlockCheck(collision_line_list(x1,y1,x2,y2,all,prec,notme,blockList,true));
-	}
-	return lhc_collision_line(x1,y1,x2,y2,solids,prec,notme);
-}
-function SpeedAndScrewBlockCheck(instanceNum)
-{
-	for(var i = 0; i < instanceNum; i++)
-	{
-		if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object))
-		{
-			var block = blockList[| i];
-			
-			var sp = (asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting && shineStart <= 0),
-				sc = (asset_has_any_tag(block.object_index, "IScrewBlock", asset_object) && isScrewAttacking);
-			if(!sp && !sc)
-			{
-				ds_list_clear(blockList);
-				return true;
-			}
-		}
-	}
-	ds_list_clear(blockList);
-	return false;
-}*/
-function entityPlatformCheck()
-{
-	/// @description entityPlatformCheck
-	/// @param offsetX
-	/// @param offsetY
-	/// @param baseX=x
-	/// @param baseY=y
-	var offsetX = argument[0],
-		offsetY = argument[1],
-		xx = scr_round(position.X),
-		yy = scr_round(position.Y);
-	if(argument_count > 2)
-	{
-		xx = argument[2];
-		if(argument_count > 3)
-		{
-			yy = argument[3];
-		}
-	}
-	
-	if(lhc_place_meeting(xx+offsetX,yy+offsetY,"IPlatform"))
-	{
-		var pl = instance_place_list(xx+offsetX,yy+offsetY,all,blockList,true);
-		for(var i = 0; i < pl; i++)
-		{
-			if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,"IPlatform",asset_object))
-			{
-				var platform = blockList[| i];
-				if(place_meeting(xx+offsetX,yy+offsetY,platform) && !place_meeting(xx,yy,platform) && bbox_bottom < platform.bbox_top)// && (grounded || !cDown))//offsetY > 0)
-				{
-					ds_list_clear(blockList);
-					return true;
-				}
-			}
-		}
-		ds_list_clear(blockList);
-	}
 	return false;
 }
 

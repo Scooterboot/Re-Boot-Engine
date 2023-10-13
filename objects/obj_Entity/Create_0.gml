@@ -26,6 +26,10 @@ lhc_activate();
 
 solids[0] = "ISolid";
 solids[1] = "IMovingSolid";
+function CanPlatformCollide()
+{
+	return false;
+}
 
 blockList = ds_list_create();
 edgeSlope = ds_list_create();
@@ -52,7 +56,15 @@ function entity_place_collide()
 			yy = argument[3];
 		}
 	}
-	//return lhc_place_meeting(xx+offsetX,yy+offsetY,solids);
+	
+	if(lhc_place_meeting(xx+offsetX,yy+offsetY,"IPlatform") && CanPlatformCollide())
+	{
+		if(entityPlatformCheck(offsetX,offsetY,xx,yy))
+		{
+			return true;
+		}
+	}
+	
 	return entity_collision(instance_place_list(xx+offsetX,yy+offsetY,all,blockList,true));
 }
 
@@ -106,6 +118,46 @@ function entity_collision(listNum)
 		}
 	}
 	ds_list_clear(blockList);
+	return false;
+}
+
+function entityPlatformCheck()
+{
+	/// @description entityPlatformCheck
+	/// @param offsetX
+	/// @param offsetY
+	/// @param baseX=x
+	/// @param baseY=y
+	var offsetX = argument[0],
+		offsetY = argument[1],
+		xx = scr_round(position.X),
+		yy = scr_round(position.Y);
+	if(argument_count > 2)
+	{
+		xx = argument[2];
+		if(argument_count > 3)
+		{
+			yy = argument[3];
+		}
+	}
+	
+	if(lhc_place_meeting(xx+offsetX,yy+offsetY,"IPlatform"))
+	{
+		var pl = instance_place_list(xx+offsetX,yy+offsetY,all,blockList,true);
+		for(var i = 0; i < pl; i++)
+		{
+			if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,"IPlatform",asset_object))
+			{
+				var platform = blockList[| i];
+				if(platform.isSolid && place_meeting(xx+offsetX,yy+offsetY,platform) && !place_meeting(xx,yy,platform) && bbox_bottom < platform.bbox_top)
+				{
+					ds_list_clear(blockList);
+					return true;
+				}
+			}
+		}
+		ds_list_clear(blockList);
+	}
 	return false;
 }
 

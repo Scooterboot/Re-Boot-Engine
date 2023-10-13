@@ -233,7 +233,7 @@
   "isEcma": false,
   "LibraryEmitters": [],
   "MetaData": {
-    "IDEVersion": "2023.8.1.102",
+    "IDEVersion": "2023.8.2.106",
   },
   "resources": [
     {"id":{"name":"obj_PushBall_Grapple","path":"objects/obj_PushBall_Grapple/obj_PushBall_Grapple.yy",},},

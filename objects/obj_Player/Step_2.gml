@@ -68,11 +68,12 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	{
 		hSpeed = fVelX;
 		vSpeed = fVelY * 0.75;
-		dir2 = sign(dirFrame);
+		/*dir2 = sign(dirFrame);
 		if(dir2 == 0 || (itemSelected == 1 && itemHighlighted[1] == 3 && item[Item.Grapple]))
 		{
 			dir2 = dir;
-		}
+		}*/
+		dir2 = dir;
 		if(stateFrame == State.Grip)
 		{
 			dir2 = -dir;

@@ -1304,6 +1304,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 	// Gravity
 	var fallspd = fallSpeedMax;
+	//if(cDown && cDash)
+	//{
+	//	fallspd = moonFallMax;
+	//}
 	
 	fGrav = grav[liquidState];
 	if(jump <= 0 && !grounded && (state != State.Grip || (startClimb && climbIndex > 7)) && state != State.Spark && state != State.BallSpark && state != State.Grapple && state != State.Hurt && state != State.Dodge && state != State.CrystalFlash)
@@ -2353,7 +2357,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		{
 			mask_index = mask_Crouch;
 		}
-		else
+		else if(!entity_place_collide(0,8))
 		{
 			ChangeState(State.Jump,State.Jump,mask_Jump,false);
 		}
@@ -2368,7 +2372,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			}
 		}
 		wallJumpDelay = max(wallJumpDelay - 1, 0);
-		if(grounded || (mask_index == mask_Crouch && entity_place_collide(0,8)))
+		if(grounded)// || (mask_index == mask_Crouch && entity_place_collide(0,8)))
 		{
 			if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
 			{
@@ -2544,7 +2548,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			var unchargeable = ((itemSelected == 1 && (itemHighlighted[1] == 0 || itemHighlighted[1] == 1 || itemHighlighted[1] == 3)) || xRayActive || hyperBeam);
 			if(prAngle || (cUp && rUp) || (cDown && rDown) || (cShoot && rShoot) || (!cShoot && !rShoot && !unchargeable))
 			{
-				if(entity_place_collide(0,-8))
+				if(entity_place_collide(0,8) && entity_place_collide(0,-8))
 				{
 					ChangeState(State.Crouch,State.Crouch,mask_Crouch,true);
 					crouchFrame = 0;

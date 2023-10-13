@@ -8,8 +8,8 @@ if(impacted <= 0)
 		rFrame = rotFrame;
 		image_angle = direction+225;
 	}
-	var velAngX = x-(oldPosX[0]+speed_x),
-		velAngY = y-(oldPosY[0]+speed_y),
+	var velAngX = x-(oldPosX[0]),//+speed_x),
+		velAngY = y-(oldPosY[0]),//+speed_y),
 		nVelX = velX,//lengthdir_x(velocity,direction),
 		nVelY = velY;//lengthdir_y(velocity,direction);
 	if(point_distance(x,y,x+velAngX,y+velAngY) >= point_distance(x,y,x+nVelX,y+nVelY))
@@ -27,7 +27,7 @@ if((image_number-rotFrame) > 1)
 }
 image_index = rFrame+frame;
 
-if(!global.gamePaused)
+/*if(!global.gamePaused)
 {
 	xstart += speed_x;
 	ystart += speed_y;
@@ -37,7 +37,7 @@ if(!global.gamePaused)
 		oldPosX[i] += speed_x;
 		oldPosY[i] += speed_y;
 	}
-}
+}*/
 
 for(var i = 0; i < 5; i++)
 {

@@ -28,35 +28,6 @@ function UpdatePosition(_x,_y)
 	var bVelX = newPosX-x,
 		bVelY = newPosY-y;
 	
-	//isSolid = false;
-	//asset_remove_tags(obj_MovingTile,"IMovingSolid",asset_object);
-	//asset_remove_tags(obj_MovingSlope,"IMovingSolid",asset_object);
-	//asset_remove_tags(obj_MovingSlope_4th,"IMovingSolid",asset_object);
-	
-	
-	/*instance_place_list(newPosX,newPosY,obj_Entity,entityList,false);
-	
-	instance_place_list(x,y-1,obj_Entity,entityList,false);
-	instance_place_list(x,y+1,obj_Entity,entityList,false);
-	instance_place_list(x-1,y,obj_Entity,entityList,false);
-	instance_place_list(x+1,y,obj_Entity,entityList,false);
-	
-	instance_place_list(x-1,y-1,obj_Entity,entityList,false);
-	instance_place_list(x+1,y-1,obj_Entity,entityList,false);
-	instance_place_list(x-1,y+1,obj_Entity,entityList,false);
-	instance_place_list(x+1,y+1,obj_Entity,entityList,false);
-	
-	for(var i = 0; i < ds_list_size(entityList); i++)
-	{
-		for(var j = 0; j < ds_list_size(entityList); j++)
-		{
-			if(j != i && entityList[| j] == entityList[| i])
-			{
-				ds_list_delete(entityList,j);
-			}
-		}
-	}*/
-	
 	collision_rectangle_list(
 		min(bbox_left-1,bbox_left+bVelX),
 		min(bbox_top-1,bbox_top+bVelY),
@@ -161,9 +132,4 @@ function UpdatePosition(_x,_y)
 	
 	x = newPosX;
 	y = newPosY;
-	
-	//isSolid = true;
-	//asset_add_tags(obj_MovingTile,"IMovingSolid",asset_object);
-	//asset_add_tags(obj_MovingSlope,"IMovingSolid",asset_object);
-	//asset_add_tags(obj_MovingSlope_4th,"IMovingSolid",asset_object);
 }
