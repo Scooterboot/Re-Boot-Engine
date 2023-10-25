@@ -682,9 +682,13 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 	if(state == State.Stand)
 	{
-		if(walkState && sign(velX) != dir)
+		if((walkState && sign(velX) != dir) || moonFallState)
 		{
 			fMaxSpeed = maxSpeed[11,liquidState];
+			if(moonFallState)
+			{
+				fMaxSpeed = 0;
+			}
 			if(abs(velX) > fMaxSpeed)
 			{
 				if(velX > 0)
@@ -979,6 +983,12 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 	canMorphBounce = true;
 	
+	if(moonFallState)
+	{
+		bufferJump = 0;
+		bunnyJump = 0;
+	}
+	
 	#region Jump Logic
 	
 	var isJumping = (cJump && dir != 0 && climbIndex <= 0 && state != State.Spark && state != State.BallSpark && 
@@ -1017,7 +1027,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			else if((rJump || (state == State.Morph && !spiderBall && rMorphJump) || bufferJump > 0) && /*!jumping &&*/ quickClimbTarget <= 0 && 
 			(state != State.Morph || misc[Misc.Spring] || !entity_place_collide(0,-17)) && morphFrame <= 0 && state != State.DmgBoost)
 			{
-				if(grounded || bunnyJump > 0 || (canWallJump && rJump) || speedBoostWJ || (state == State.Grip && (move != dir || climbTarget == 0) && !cDown) || 
+				if((grounded && !moonFallState) || bunnyJump > 0 || (canWallJump && rJump) || speedBoostWJ || (state == State.Grip && (move != dir || climbTarget == 0) && !cDown) || 
 				(boots[Boots.SpaceJump] && velY >= sjThresh && state == State.Somersault && !liquidMovement && rJump))
 				{
 					if(!grounded && !canWallJump && !speedBoostWJ && boots[Boots.SpaceJump] && velY >= sjThresh)
@@ -1136,6 +1146,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					if(state != State.Morph && state != State.Grip && !grappleActive)
 					{
 						ChangeState(State.Somersault,State.Somersault,mask_Crouch,false);
+						if(moonFallState)
+						{
+							moonFall = true;
+						}
 					}
 					if(state == State.Morph && cDash)
 					{
@@ -1304,10 +1318,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 	// Gravity
 	var fallspd = fallSpeedMax;
-	//if(cDown && cDash)
-	//{
-	//	fallspd = moonFallMax;
-	//}
+	if(moonFall)
+	{
+		fallspd = moonFallMax;
+	}
 	
 	fGrav = grav[liquidState];
 	if(jump <= 0 && !grounded && (state != State.Grip || (startClimb && climbIndex > 7)) && state != State.Spark && state != State.BallSpark && state != State.Grapple && state != State.Hurt && state != State.Dodge && state != State.CrystalFlash)
@@ -1673,20 +1687,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		onPlatform = true;
 	}
 	
-	var downSlope = GetEdgeSlope(Edge.Bottom);
-	var downSlopeFlag = (place_meeting(x,y+2,downSlope) && downSlope.image_yscale > 1 && 
-						((downSlope.image_xscale > 0 && bbox_left > downSlope.bbox_left) || (downSlope.image_xscale < 0 && bbox_right < downSlope.bbox_right)));
-	var downNum = instance_place_list(x,y+2,all,blockList,true);
-	for(var i = 0; i < downNum; i++)
-	{
-		if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object) && !asset_has_any_tag(blockList[| i].object_index,"ISlope",asset_object))
-		{
-			downSlopeFlag = false;
-			break;
-		}
-	}
-	ds_list_clear(blockList);
-	if((!PlayerGrounded() || (downSlopeFlag && !speedBoost)) && !PlayerOnPlatform())
+	if(!PlayerGrounded() && !PlayerOnPlatform())
 	{
 		grounded = false;
 	}
@@ -1951,6 +1952,17 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		stateFrame = State.Stand;
 		mask_index = mask_Stand;
 		
+		if(cAimLock && move != 0 && move != dir && !entity_place_collide(-2*dir,4))
+		{
+			moonFallCounter++;
+		}
+		else
+		{
+			moonFallCounter = 0;
+		}
+		moonFallState = (moonFallCounter > 0 && moonFallCounter < moonFallCounterMax);
+		moonFall = false;
+		
 		if(crouchFrame >= 5)
 		{
 			var velMove = (velX != 0 && sign(velX) == dir) || (prevVelX != 0 && sign(prevVelX) == dir),// && (!lhc_place_collide(sign(velX),0) || !lhc_place_collide(sign(velX),-3))),
@@ -1958,6 +1970,12 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			if(brake)
 			{
 				stateFrame = State.Brake;
+			}
+			else if(moonFallState)
+			{
+				//stateFrame = State.Brake;
+				//brakeFrame = 6;
+				stateFrame = State.Moon;
 			}
 			else if((velMove || moveMove) && landFrame <= 0 && !xRayActive)
 			{
@@ -2004,7 +2022,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		
 		isPushing = false;
 		pushBlock = instance_place(x+3*move2,y,obj_PushBlock);
-		if(move2 == dir && grounded && !xRayActive && !place_meeting(x-move2,y+2,pushBlock))
+		if(move2 == dir && grounded && !xRayActive && !place_meeting(x,y+2,pushBlock))
 		{
 		    isPushing = (instance_exists(pushBlock) && pushBlock.grounded);
 		}
@@ -2053,6 +2071,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		brake = false;
 		brakeFrame = 0;
+		
+		moonFallState = false;
+		moonFallCounter = 0;
 		
 		isPushing = false;
 		pushBlock = noone;
@@ -2357,7 +2378,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		{
 			mask_index = mask_Crouch;
 		}
-		else if(!entity_place_collide(0,8))
+		//else if(!entity_place_collide(0,8))
+		else if(!entity_place_collide(0,8) || !entity_place_collide(0,-8))
 		{
 			ChangeState(State.Jump,State.Jump,mask_Jump,false);
 		}

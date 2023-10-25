@@ -17,8 +17,11 @@ if(frozen > 0 && !dead)
 	}
 	else
 	{
-		freezePlatform.x = bbox_left;
-		freezePlatform.y = bbox_top;
+		//freezePlatform.x = bbox_left;
+		//freezePlatform.y = bbox_top;
+		freezePlatform.isSolid = false;
+		freezePlatform.UpdatePosition(bbox_left,bbox_top);
+		freezePlatform.isSolid = true;
 	}
 }
 else if(instance_exists(freezePlatform))

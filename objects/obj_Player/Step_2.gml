@@ -68,11 +68,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	{
 		hSpeed = fVelX;
 		vSpeed = fVelY * 0.75;
-		/*dir2 = sign(dirFrame);
-		if(dir2 == 0 || (itemSelected == 1 && itemHighlighted[1] == 3 && item[Item.Grapple]))
-		{
-			dir2 = dir;
-		}*/
 		dir2 = dir;
 		if(stateFrame == State.Grip)
 		{
@@ -119,7 +114,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				}
 			}
 		}
-		if(stateFrame == State.Walk || stateFrame == State.Run || stateFrame == State.Brake || stateFrame == State.Jump || stateFrame == State.Somersault ||
+		if(stateFrame == State.Walk || stateFrame == State.Moon || stateFrame == State.Run || stateFrame == State.Brake || stateFrame == State.Jump || stateFrame == State.Somersault ||
 		stateFrame == State.Spark || stateFrame == State.Hurt || stateFrame == State.DmgBoost)
 		{
 			switch aimAngle
@@ -786,6 +781,88 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				walkToStandFrame = min(walkToStandFrame + 0.5, 2);
 				transFrame = min(transFrame + 1, 2);
 				frame[Frame.JAim] = 6;
+				break;
+			}
+			#endregion
+			#region Moon
+			case State.Moon:
+			{
+				for(var i = 0; i < array_length(frame); i++)
+				{
+					if(i != Frame.Moon)
+					{
+						frame[i] = 0;
+						frameCounter[i] = 0;
+					}
+				}
+				frame[Frame.JAim] = 6;
+				aimFrame = 0;
+				walkToStandFrame = 0;
+				runToStandFrame[0] = 0;
+				runToStandFrame[1] = 0;
+				
+				torsoR = sprt_BrakeRight;
+				torsoL = sprt_BrakeLeft;
+				
+				bodyFrame = 4 - floor(frame[Frame.Moon]);
+				switch bodyFrame
+				{
+					case 4:
+					{
+						ArmPos(11,-5);
+						if(dir == -1)
+						{
+							ArmPos(-9,-4);
+						}
+						break;
+					}
+					case 3:
+					{
+						ArmPos(4,-7);
+						if(dir == -1)
+						{
+							ArmPos(-1,-6);
+						}
+						break;
+					}
+					case 2:
+					{
+						ArmPos(0,-8);
+						if(dir == -1)
+						{
+							ArmPos(1,-7);
+						}
+						break;
+					}
+					case 1:
+					{
+						ArmPos(-2,-8);
+						if(dir == -1)
+						{
+							ArmPos(4,-6);
+						}
+						break;
+					}
+					default:
+					{
+						ArmPos(-3,-8);
+						if(dir == -1)
+						{
+							ArmPos(5,-6);
+						}
+						break;
+					}
+				}
+				
+				if(moonFallCounter < moonFallCounterMax-6)
+				{
+					frame[Frame.Moon] = min(frame[Frame.Moon] + 0.75, 2);
+				}
+				else
+				{
+					frame[Frame.Moon] = max(frame[Frame.Moon] - 1/3, 0);
+				}
+				
 				break;
 			}
 			#endregion
@@ -2693,7 +2770,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	{
 		var noBeamsActive = (beam[Beam.Ice]+beam[Beam.Wave]+beam[Beam.Spazer]+beam[Beam.Plasma] <= 0);
 		
-		var canShoot = (!startClimb && !brake && !isPushing && state != State.Somersault && state != State.Spark && state != State.BallSpark && 
+		var canShoot = (!startClimb && !brake && !moonFallState && !isPushing && state != State.Somersault && state != State.Spark && state != State.BallSpark && 
 						state != State.Hurt && (stateFrame != State.DmgBoost || dBoostFrame >= 19) && state != State.Dodge && state != State.Death);
 		
 		if(!canShoot)
@@ -2884,7 +2961,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					cFlashStartCounter++;
 					//audio_play_sound(snd_PowerBombSet,0,false);
 				}
-				else if(misc[Misc.Bomb] && instance_number(obj_MBBomb) < 3)
+				else if(misc[Misc.Bomb] && (instance_number(obj_MBBomb) < 3 || cDown))
 				{
 					var bombposx = x,
 						bombposy = y+11;
@@ -2893,10 +2970,20 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						bombposx = x + lengthdir_x(-2,spiderJumpDir);
 						bombposy = y+9 + lengthdir_y(-2,spiderJumpDir);
 					}
-					var mbBomb = instance_create_layer(bombposx,bombposy,"Projectiles_fg",obj_MBBomb);
-					mbBomb.damage = 50 / 2;
+					
+					if(cDown)
+					{
+						var explo = instance_create_layer(bombposx,bombposy,"Projectiles_fg",obj_MBBombExplosion);
+						explo.damage = 50;
+						scr_PlayExplodeSnd(0,false);
+					}
+					else
+					{
+						var mbBomb = instance_create_layer(bombposx,bombposy,"Projectiles_fg",obj_MBBomb);
+						mbBomb.damage = 50;
+						//audio_play_sound(snd_BombSet,0,false);
+					}
 					bombDelayTime = 8;
-					//audio_play_sound(snd_BombSet,0,false);
 				}
 			}
 		
@@ -3039,7 +3126,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						{
 							bomb.spreadSpeed = bombSpd;
 						}
-						bomb.forceJump = true;
 						bomb.spreadDir = bombDir[i];
 						bomb.spreadFrict = 0.5;
 						bomb.bombTimer = bombTime[i];
@@ -3217,6 +3303,9 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		hyperFired = max(hyperFired-1,0);
 		
 		stallCamera = false;
+		
+		shiftedVelX = 0;
+		shiftedVelY = 0;
 		
 		if(state != prevState)
 		{

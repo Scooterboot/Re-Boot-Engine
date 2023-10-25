@@ -2,7 +2,7 @@
   "resourceType": "GMRoom",
   "resourceVersion": "1.0",
   "name": "rm_debug03_Blocks",
-  "creationCodeFile": "${project_dir}/rooms/rm_debug03_Blocks/RoomCreationCode.gml",
+  "creationCodeFile": "rooms/rm_debug03_Blocks/RoomCreationCode.gml",
   "inheritCode": false,
   "inheritCreationOrder": true,
   "inheritLayers": false,
@@ -1303,6 +1303,8 @@
     {"name":"inst_1F8D2816","path":"rooms/rm_debug03_Blocks/rm_debug03_Blocks.yy",},
     {"name":"inst_153B5937","path":"rooms/rm_debug03_Blocks/rm_debug03_Blocks.yy",},
     {"name":"inst_36309BDD","path":"rooms/rm_debug03_Blocks/rm_debug03_Blocks.yy",},
+    {"name":"inst_587B1EA","path":"rooms/rm_debug03_Blocks/rm_debug03_Blocks.yy",},
+    {"name":"inst_643B8EB9","path":"rooms/rm_debug03_Blocks/rm_debug03_Blocks.yy",},
   ],
   "isDnd": false,
   "layers": [
@@ -2653,6 +2655,8 @@
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_3EA91E57","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"obj_Geemer","path":"objects/obj_Geemer/obj_Geemer.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":2056.0,"y":808.0,},
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_2B4E61DA","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"obj_Tripper","path":"objects/obj_Tripper/obj_Tripper.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":1792.0,"y":624.0,},
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_7D4DFDD7","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"obj_WorkRobot","path":"objects/obj_WorkRobot/obj_WorkRobot.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":1168.0,"y":1808.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_587B1EA","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"obj_SpacePirate_Grey","path":"objects/obj_SpacePirate_Grey/obj_SpacePirate_Grey.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":176.0,"y":496.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_643B8EB9","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"obj_Geemer","path":"objects/obj_Geemer/obj_Geemer.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":160.0,"y":528.0,},
       ],"layers":[],"properties":[],"userdefinedDepth":false,"visible":true,},
     {"resourceType":"GMRTileLayer","resourceVersion":"1.1","name":"Tiles_bg0","depth":1900,"effectEnabled":true,"effectType":null,"gridX":16,"gridY":16,"hierarchyFrozen":false,"inheritLayerDepth":true,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[
         {"resourceType":"GMRTileLayer","resourceVersion":"1.1","name":"Tiles_bg1","depth":2000,"effectEnabled":true,"effectType":null,"gridX":16,"gridY":16,"hierarchyFrozen":false,"inheritLayerDepth":true,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"properties":[],"tiles":{"SerialiseHeight":0,"SerialiseWidth":0,"TileSerialiseData":[

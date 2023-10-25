@@ -78,3 +78,8 @@ function SkipOwnMovingTile(num, checkOnlyMoving = false)
 	ds_list_clear(block_list);
 	return false;
 }
+
+rotScale = 5;
+surfW = sprite_get_width(sprite_index) + 8;
+surfH = sprite_get_height(sprite_index) + 8;
+surf = surface_create(surfW*rotScale,surfH*rotScale);

@@ -77,6 +77,7 @@ enum State
 	Recharge,
 	Crouch,
 	Walk,
+	Moon,
 	Run,
 	Brake,
 	Morph,
@@ -183,6 +184,11 @@ isScrewAttacking = false;
 stepSndPlayedAt = 0;
 
 walkState = false;
+
+moonFallState = false;
+moonFallCounter = 0;
+moonFallCounterMax = 18;//30;
+moonFall = false;
 
 //uncrouching = false;
 
@@ -435,7 +441,7 @@ grav[1] = 0.03125;		// Underwater
 grav[2] = 0.03515625;	// In lava/acid
 
 fallSpeedMax = 5; // Maximum fall speed - soft cap
-//moonFallMax = 32;
+moonFallMax = 32;
 
 bombJumpMax[0] = 13;	// air
 bombJumpMax[1] = 1;		// underwater
@@ -518,18 +524,19 @@ enum Frame
 	Jump = 5,
 	Somersault = 6,
 	Walk = 7,
-	SparkV = 8,
-	SparkH = 9,
-	SparkStart = 10,
-	GrappleLeg = 11,
-	Dodge = 12,
-	GrappleBody = 13,
-	CFlash = 14,
-	Push = 15
+	Moon = 8,
+	SparkV = 9,
+	SparkH = 10,
+	SparkStart = 11,
+	GrappleLeg = 12,
+	Dodge = 13,
+	GrappleBody = 14,
+	CFlash = 15,
+	Push = 16
 };
 
-frame[15] = 0;
-frameCounter[15] = 0;
+frame[16] = 0;
+frameCounter[16] = 0;
 
 idleNum = array(32,8,8,8,16,6,6,6);
 idleSequence = array(0,1,2,3,4,3,2,1);
@@ -1074,7 +1081,8 @@ function ModifyFinalVelY(fVY)
 {
 	var fellVel = 1;
 	var shouldForceDown = (state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Dodge && jump <= 0 && bombJump <= 0);
-	if((entity_place_collide(0,fVY+fellVel) || (bbox_bottom+fVY+fellVel) >= room_height) && fVY >= 0)
+	//if((entity_place_collide(0,fVY+fellVel) || (bbox_bottom+fVY+fellVel) >= room_height) && fVY >= 0)
+	if(PlayerGrounded(fVY+fellVel) && fVY >= 0)
 	{
 		justFell = shouldForceDown;
 	}
@@ -1090,7 +1098,7 @@ function ModifyFinalVelY(fVY)
 	return fVY;
 }
 
-function ModifySlopeXSteepness_Up(steepness)
+function ModifySlopeXSteepness_Up()
 {
 	if((speedBoost && grounded) || state == State.Grapple || ((state == State.Spark || state == State.BallSpark) && abs(shineDir) != 2))
 	{
@@ -1098,11 +1106,11 @@ function ModifySlopeXSteepness_Up(steepness)
 	}
 	return 2;
 }
-function ModifySlopeXSteepness_Down(steepness)
+function ModifySlopeXSteepness_Down()
 {
 	return 3;
 }
-function ModifySlopeYSteepness_Up(steepness)
+function ModifySlopeYSteepness_Up()
 {
 	if(fVelY < 0)
 	{
@@ -1110,7 +1118,7 @@ function ModifySlopeYSteepness_Up(steepness)
 	}
 	return 1;
 }
-function ModifySlopeYSteepness_Down(steepness)
+function ModifySlopeYSteepness_Down()
 {
 	return 2;
 }
@@ -1938,19 +1946,16 @@ function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWav
 #endregion
 
 #region PlayerGrounded
-function PlayerGrounded()
+function PlayerGrounded(ydiff = 2)
 {
-	var xdiff = 0,
-		ydiff = 2;
-	if(argument_count > 0)
-	{
-		ydiff = argument[0];
-	}
+	var bottomCollision = (entity_collision_line(bbox_left,bbox_bottom+ydiff,bbox_right,bbox_bottom+ydiff) || (y+ydiff) >= room_height);
 	
-	//var bottomCollision = (entity_place_collide(xdiff,ydiff) || (y+ydiff) >= room_height);
-	var bottomCollision = (entity_collision_line(bbox_left+xdiff,bbox_bottom+ydiff,bbox_right+xdiff,bbox_bottom+ydiff) || (y+ydiff) >= room_height);
+	var downSlope = GetEdgeSlope(Edge.Bottom);
+	var downSlopeFlag = (instance_exists(downSlope) && place_meeting(x,y+2,downSlope) && downSlope.image_yscale > 1 && 
+						((downSlope.image_xscale > 0 && bbox_left > downSlope.bbox_left && !entity_place_collide(2,3)) || 
+						(downSlope.image_xscale < 0 && bbox_right < downSlope.bbox_right && !entity_place_collide(-2,3))));
 	
-	return (((bottomCollision && velY >= 0 && velY <= fGrav) || (spiderBall && spiderEdge != Edge.None)) && jump <= 0);
+	return (((bottomCollision && (!downSlopeFlag || speedBoost) && velY >= 0 && velY <= fGrav) || (spiderBall && spiderEdge != Edge.None)) && jump <= 0);
 }
 #endregion
 #region PlayerOnPlatform

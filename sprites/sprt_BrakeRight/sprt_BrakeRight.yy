@@ -65,7 +65,7 @@
             {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"b1e39c0c-a1a7-471f-8cb3-c0c6d535d784","path":"sprites/sprt_BrakeRight/sprt_BrakeRight.yy",},},},"Disabled":false,"id":"d1b5ac05-fa3e-47a5-86a7-27d454b3a1db","IsCreationKey":false,"Key":4.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
-    "visibleRange": {"x":0.0,"y":0.0,},
+    "visibleRange": null,
     "volume": 1.0,
     "xorigin": 15,
     "yorigin": 16,

@@ -11,7 +11,7 @@ if(state != PirateState.Turn)
 {
     var xplus = 0;
     var num = 10;
-    while(!collision_rectangle(max(bbox_left+xplus,bbox_left),bbox_top,min(bbox_right+xplus,bbox_right),bbox_bottom-16,obj_Tile,false,true) && num > 0)
+    while(!lhc_collision_rectangle(max(bbox_left+xplus,bbox_left),bbox_top,min(bbox_right+xplus,bbox_right),bbox_bottom-16,solids,false,true) && num > 0)
     {
         xplus += 16*dir;
         num--;
@@ -104,18 +104,18 @@ if(state == PirateState.Run)
     runCounter++;
     
     var num2 = 0;
-    while(place_collide(num2*sign(velX),1) && num2 <= abs(velX))
+    while(entity_place_collide(num2*sign(velX),1) && num2 <= abs(velX))
     {
         num2 = min(num2 + 1, abs(velX)+1);
     }
     
-    if(place_collide(sign(velX),-3))
+    if(entity_place_collide(sign(velX),-3))
     {
         state = PirateState.Turn;
         currentSprt = sprtTurn;
         currentFrame = 0;
     }
-    else if(runCounter > 90 || !place_collide(num2*sign(velX),4))
+    else if(runCounter > 90 || !entity_place_collide(num2*sign(velX),4))
     {
         state = PirateState.Stand;
         currentSprt = sprtStand;

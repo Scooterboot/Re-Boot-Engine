@@ -12,8 +12,6 @@ spreadSpeed = 0;
 spreadDir = 0;
 spreadFrict = 4;
 
-forceJump = false;
-
 type = ProjType.Bomb;
 
 damageSubType[3] = true;

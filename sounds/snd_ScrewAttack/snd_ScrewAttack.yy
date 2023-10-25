@@ -10,7 +10,7 @@
   "bitRate": 128,
   "compression": 0,
   "conversionMode": 0,
-  "duration": 0.572517,
+  "duration": 0.57678,
   "parent": {
     "name": "Somersault",
     "path": "folders/Sounds/Player/Somersault.yy",

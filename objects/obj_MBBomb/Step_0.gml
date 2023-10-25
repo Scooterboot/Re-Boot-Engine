@@ -92,7 +92,7 @@ if(bombTimer <= 0 || impacted > 0)
 	var player = collision_circle(x,y,(bbox_right-bbox_left)/3,obj_Player,false,true);
 	if(instance_exists(player))
 	{
-		if((!player.cDown || forceJump) && (!player.entity_place_collide(0,-11) || ((player.state != State.Crouch || !player.grounded) && player.morphFrame <= 0)))
+		if(!player.entity_place_collide(0,-11) || ((player.state != State.Crouch || !player.grounded) && player.morphFrame <= 0))
 		{
 			var num = player.x - x;
 			if(abs(num) > 1)

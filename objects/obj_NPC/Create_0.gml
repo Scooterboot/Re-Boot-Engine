@@ -116,8 +116,6 @@ function PauseAI()
 	return point_direction(scr_round(x1),scr_round(y1),scr_round(x2),scr_round(y2));
 }*/
 
-lhc_activate();
-
 function DmgColPlayer()
 {
 	return instance_place(x,y,obj_Player);
@@ -303,11 +301,17 @@ solids[2] = "INPCSolid";
 
 function OnXCollision(fVX)
 {
-	velX = 0;
+	if(sign(velX) == sign(fVelX))
+	{
+		velX = 0;
+	}
 	fVelX = 0;
 }
 function OnYCollision(fVY)
 {
-	velY = 0;
+	if(sign(velY) == sign(fVelY))
+	{
+		velY = 0;
+	}
 	fVelY = 0;
 }

@@ -267,10 +267,10 @@ function GetEdgeSlope()
 function ModifyFinalVelX(fVX) { return fVX; }
 function ModifyFinalVelY(fVY) { return fVY; }
 
-function ModifySlopeXSteepness_Up(steepness) { return steepness; }
-function ModifySlopeXSteepness_Down(steepness) { return steepness; }
-function ModifySlopeYSteepness_Up(steepness) { return steepness; }
-function ModifySlopeYSteepness_Down(steepness) { return steepness; }
+function ModifySlopeXSteepness_Up() { return 3; }
+function ModifySlopeXSteepness_Down() { return 4; }
+function ModifySlopeYSteepness_Up() { return 3; }
+function ModifySlopeYSteepness_Down() { return 4; }
 
 // check if slope speed adjustments are applicable
 function SlopeCheck(slope)
@@ -380,7 +380,7 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		var xspeed = abs(fVX);
 		if(entity_place_collide(max(abs(fVX),1)*sign(fVX),0) && (!entity_place_collide(0,0) || (fVX > 0 && colR) || (fVX < 0 && colL)))
 		{
-			var steepness = ModifySlopeXSteepness_Up(3);
+			var steepness = ModifySlopeXSteepness_Up();
 			
 			var yplus = 0;
 			while(entity_place_collide(fVX,yplus) && yplus >= -yplusMax)
@@ -453,7 +453,7 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		}
 		else if(!entity_place_collide(0,0))
 		{
-			var steepness = ModifySlopeXSteepness_Down(4);
+			var steepness = ModifySlopeXSteepness_Down();
 			
 			DestroyBlock(scr_round(position.X)+fVX+sign(fVX),scr_round(position.Y)+min(abs(fVX),steepness+2));
 			DestroyBlock(scr_round(position.X)+fVX+sign(fVX),scr_round(position.Y)-min(abs(fVX),steepness+2));
@@ -561,7 +561,7 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		var yspeed = abs(fVY);
 		if(entity_place_collide(0,max(abs(fVY),1)*sign(fVY)) && (!entity_place_collide(0,0) || (fVY > 0 && colB) || (fVY < 0 && colT)))
 		{
-			var steepness = ModifySlopeYSteepness_Up(3);
+			var steepness = ModifySlopeYSteepness_Up();
 			
 			var xplus = 0;
 			while(entity_place_collide(xplus,fVY) && xplus >= -xplusMax)
@@ -634,7 +634,7 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		}
 		else if(!entity_place_collide(0,0))
 		{
-			var steepness = ModifySlopeYSteepness_Down(4);
+			var steepness = ModifySlopeYSteepness_Down();
 			
 			DestroyBlock(scr_round(position.X)+min(abs(fVY),steepness+2),scr_round(position.Y)+fVY+sign(fVY));
 			DestroyBlock(scr_round(position.X)-min(abs(fVY),steepness+2),scr_round(position.Y)+fVY+sign(fVY));
