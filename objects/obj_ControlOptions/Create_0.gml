@@ -19,7 +19,7 @@ gpNotFound = "NO CONTROLLER DETECTED";
 option = array(
 "WEAPON HUD",
 "AIM CONTROL",
-"AUTO-DASH",
+"AUTO-RUN",
 "QUICK-CLIMB",
 "MORE OPTIONS",
 "KEYBOARD BINDINGS",
@@ -71,12 +71,14 @@ advOption = array(
 "GRIP CLIMB CONTROL",
 "GRAPPLE CONTROL",
 "SPIDER BALL CONTROL",
+"ACCEL DASH CONTROL",
 "BACK");
 
 advCurrentOption = array(
 global.gripStyle,
 global.grappleStyle,
-global.spiderBallStyle);
+global.spiderBallStyle,
+global.dodgeStyle);
 
 advCurrentOptionName[0,0] = "DEFAULT";
 advCurrentOptionName[0,1] = "ADVANCED";
@@ -89,6 +91,9 @@ advCurrentOptionName[2,0] = "TOGGLE";
 advCurrentOptionName[2,1] = "HOLD";
 advCurrentOptionName[2,2] = "CLASSIC";
 
+advCurrentOptionName[3,0] = "AIMLOCK BUTTON";
+advCurrentOptionName[3,1] = "RUN BUTTON";
+
 advOptionTip[0,0] = "Either hold forward and press [Jump] or hold [Up] to climb up when gripping a ledge.";
 advOptionTip[0,1] = "Holding forward and pressing [Jump] is the only way to climb when gripping a ledge.";
 advOptionTip[0,2] = "Press [Jump] or hold [Up] to climb when gripping a ledge.";
@@ -100,7 +105,10 @@ advOptionTip[2,0] = "Press any [Aim] button to activate.";
 advOptionTip[2,1] = "Hold any [Aim] button to activate.";
 advOptionTip[2,2] = "Press [Down] while morphed to activate, press [Jump] to deactivate.";
 
-advOptionTip[3,0] = "Previous Control Options";
+advOptionTip[3,0] = "Tap [Aim lock] to Accel Dash";
+advOptionTip[3,1] = "Tap [Run] to Accel Dash";
+
+advOptionTip[4,0] = "Previous Control Options";
 
 
 cNameAim[0] = "AIM UP";
@@ -112,7 +120,7 @@ cNameHUD[2] = "WEAPON SLOT SWITCH";
 
 controlKey = array(
 "UP","DOWN","LEFT","RIGHT",
-"JUMP","SHOOT","DASH","AIM UP","AIM DOWN",
+"JUMP","SHOOT","RUN","AIM UP","AIM DOWN",
 "AIM LOCK","QUICK MORPH",
 "WEAPON SELECT","WEAPON CANCEL",
 "MENU - START","MENU - SELECT","MENU - CANCEL",
@@ -130,7 +138,7 @@ for(var i = 0; i < array_length(global.key_m); i++)
 
 controlButton = array(
 "D-PAD","LEFT STICK","DEAD ZONE",
-"JUMP","SHOOT","DASH","AIM UP","AIM DOWN",
+"JUMP","SHOOT","RUN","AIM UP","AIM DOWN",
 "AIM LOCK","QUICK MORPH",
 "WEAPON SELECT","WEAPON CANCEL",
 "MENU - START","MENU - SELECT","MENU - CANCEL",

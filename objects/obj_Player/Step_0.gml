@@ -1146,8 +1146,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					if(state != State.Morph && state != State.Grip && !grappleActive)
 					{
 						ChangeState(State.Somersault,State.Somersault,mask_Crouch,false);
-						if(moonFallState)
+						if(moonFallState && !moonFall)
 						{
+							velX -= maxSpeed[11,liquidState] * dir;
 							moonFall = true;
 						}
 					}
@@ -1324,7 +1325,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 	
 	fGrav = grav[liquidState];
-	if(jump <= 0 && !grounded && (state != State.Grip || (startClimb && climbIndex > 7)) && state != State.Spark && state != State.BallSpark && state != State.Grapple && state != State.Hurt && state != State.Dodge && state != State.CrystalFlash)
+	if(jump <= 0 && !grounded && state != State.Elevator && (state != State.Grip || (startClimb && climbIndex > 7)) && state != State.Spark && state != State.BallSpark && state != State.Grapple && state != State.Hurt && state != State.Dodge && state != State.CrystalFlash)
 	{
 		velY += min(fGrav,max(fallspd-velY,0));
 	}
@@ -1487,11 +1488,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 			}
 			
-			var sAngle = 0;
+			/*var sAngle = 0;
 			var bottom_rot = 0,
 				left_rot = 270,
 				top_rot = 180,
-				right_rot = 90;
+				right_rot = 90;*/
 			switch(spiderEdge)
 			{
 				case Edge.Bottom:
@@ -1501,7 +1502,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					
 					spiderJump_SpeedAddX = velX;
 					spiderJump_SpeedAddY = 0;
-					sAngle = bottom_rot;
+					//sAngle = bottom_rot;
 					break;
 				}
 				case Edge.Left:
@@ -1511,7 +1512,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					
 					spiderJump_SpeedAddX = 0;
 					spiderJump_SpeedAddY = velY;
-					sAngle = left_rot;
+					//sAngle = left_rot;
 					break;
 				}
 				case Edge.Top:
@@ -1521,7 +1522,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					
 					spiderJump_SpeedAddX = velX;
 					spiderJump_SpeedAddY = 0;
-					sAngle = top_rot;
+					//sAngle = top_rot;
 					break;
 				}
 				case Edge.Right:
@@ -1531,12 +1532,12 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					
 					spiderJump_SpeedAddX = 0;
 					spiderJump_SpeedAddY = velY;
-					sAngle = right_rot;
+					//sAngle = right_rot;
 					break;
 				}
 			}
 			
-			var sAngle2 = 0;
+			/*var sAngle2 = 0;
 			var slope = GetEdgeSlope(colEdge);
 			if(instance_exists(slope))
 			{
@@ -1546,7 +1547,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 			}
 			
-			spiderJumpDir = sAngle + sAngle2 + 90;
+			spiderJumpDir = sAngle + sAngle2 + 90;*/
+			spiderJumpDir = GetEdgeAngle(spiderEdge) + 90;
 			
 			if(shineEnd > 0)
 			{
@@ -1992,24 +1994,36 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		
 		var canCrouch = true;
-		if(instance_exists(obj_Elevator))
+		
+		var ship = instance_position(x,bbox_bottom+1,obj_Gunship);
+		if(instance_exists(ship) && ship.state == ShipState.Idle && abs(x - ship.x) <= 10 && y < ship.y)
 		{
-			var ele = instance_position(x,bbox_bottom+1,obj_Elevator);
-			if(instance_exists(ele))
+			canCrouch = false;
+			if(cDown && (gbaAimPreAngle == gbaAimAngle || global.aimStyle != 1) && move2 == 0 && velX == 0 && dir != 0 && grounded && !xRayActive)
 			{
-				if(ele.dir == 1)
-				{
-					canCrouch = false;
-				}
-				if(ele.activeDir == 0 && ele.dir != 0 && (cDown-cUp) == ele.dir && (gbaAimPreAngle == gbaAimAngle || global.aimStyle != 1) && move2 == 0 && velX == 0 && dir != 0 && grounded && !xRayActive)
-				{
-					ele.activeDir = (cDown-cUp);
-					state = State.Elevator;
-					dir = 0;
-					aimAngle = 0;
-				}
+				ship.state = ShipState.SaveDescend;
+				
+				state = State.Elevator;
+				dir = 0;
+				aimAngle = 0;
 			}
 		}
+		var ele = instance_position(x,bbox_bottom+1,obj_Elevator);
+		if(instance_exists(ele))
+		{
+			if(ele.dir == 1)
+			{
+				canCrouch = false;
+			}
+			if(ele.activeDir == 0 && ele.dir != 0 && (cDown-cUp) == ele.dir && (gbaAimPreAngle == gbaAimAngle || global.aimStyle != 1) && move2 == 0 && velX == 0 && dir != 0 && grounded && !xRayActive)
+			{
+				ele.activeDir = (cDown-cUp);
+				state = State.Elevator;
+				dir = 0;
+				aimAngle = 0;
+			}
+		}
+		
 		if(canCrouch && move2 == 0 && cDown && (gbaAimPreAngle == gbaAimAngle || global.aimStyle != 1) && dir != 0 && grounded && !xRayActive)
 		{
 			crouchFrame = 5;
@@ -2090,6 +2104,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		aimAngle = 0;
 		
 		var flag = true;
+		var ship = instance_place(x,y+2,obj_Gunship);
+		if(instance_exists(ship) && ship.state != ShipState.Idle)
+		{
+			flag = false;
+		}
 		var elev = instance_place(x,y+2,obj_Elevator);
 		if(instance_exists(elev) && elev.activeDir != 0)
 		{
@@ -2373,12 +2392,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			stateFrame = State.Jump;
 		}
 		
-		//mask_index = mask_Jump;
 		if(aimAngle == -2 || aimFrame <= -3)
 		{
 			mask_index = mask_Crouch;
 		}
-		//else if(!entity_place_collide(0,8))
 		else if(!entity_place_collide(0,8) || !entity_place_collide(0,-8))
 		{
 			ChangeState(State.Jump,State.Jump,mask_Jump,false);
@@ -2394,7 +2411,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			}
 		}
 		wallJumpDelay = max(wallJumpDelay - 1, 0);
-		if(grounded)// || (mask_index == mask_Crouch && entity_place_collide(0,8)))
+		if(grounded || PlayerGrounded())
 		{
 			if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
 			{
@@ -2986,7 +3003,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		else
 		{
 			var oldSDir = shineDir;
-			if(cDash && rDash && canDodge && shineSparkRedirect)
+			if (canDodge && shineSparkRedirect && (
+				(global.dodgeStyle == 0 && cAimLock && rAimLock) || 
+				(global.dodgeStyle == 1 && cDash && rDash)))
 			{
 				if(move2 != 0 || aUp || (aDown && boots[Boots.ChainSpark]))
 				{
@@ -3561,7 +3580,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 #region Dodge
 	if(boots[Boots.Dodge] && dir != 0 && (state == State.Stand || state == State.Crouch || state == State.Jump || state == State.Somersault || (state == State.Grip && !startClimb)))
 	{
-		if(cDash && !global.autoDash)
+		if ((global.dodgeStyle == 0 && cAimLock) || 
+			(global.dodgeStyle == 1 && cDash && !global.autoDash))
 		{
 			dodgePress++;
 			if(xRayActive || prevState == State.Morph)
@@ -3571,7 +3591,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		else if(canDodge)
 		{
-			if((!rDash && dodgePress <= 15 && !global.autoDash) || (cDash && rDash && global.autoDash))
+			if ((global.dodgeStyle == 0 && !rAimLock && dodgePress <= 15) || 
+				(global.dodgeStyle == 1 && !global.autoDash && !rDash && dodgePress <= 15) || 
+				(global.dodgeStyle == 1 && global.autoDash && cDash && rDash))
 			{
 				groundedDodge = 0;
 				if(state == State.Stand)

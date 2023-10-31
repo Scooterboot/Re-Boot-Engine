@@ -11,8 +11,8 @@
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "SpecialTiles",
-    "path": "folders/Objects/Room Elements/SpecialTiles.yy",
+    "name": "ShutterGates",
+    "path": "folders/Objects/Room Elements/SpecialTiles/ShutterGates.yy",
   },
   "parentObjectId": null,
   "persistent": false,

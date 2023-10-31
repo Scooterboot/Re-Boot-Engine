@@ -49,8 +49,8 @@
   },
   "origin": 0,
   "parent": {
-    "name": "SpecialTiles",
-    "path": "folders/Sprites/Room Elements/SpecialTiles.yy",
+    "name": "BTSTiles",
+    "path": "folders/Sprites/Room Elements/BTSTiles.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {

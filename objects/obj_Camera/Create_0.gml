@@ -52,6 +52,7 @@ function camera_collide(colX, colY, dsList)
 	return col;
 }
 
+/*
 function CamTileFacing_Down(camTile)
 {
 	return ((angle_difference(camTile.image_angle,0) == 0 && camTile.image_yscale > 0) || 
@@ -72,3 +73,4 @@ function CamTileFacing_Left(camTile)
 	return ((angle_difference(camTile.image_angle,-90) == 0 && camTile.image_yscale > 0) || 
 			(angle_difference(camTile.image_angle,90) == 0 && camTile.image_yscale < 0));
 }
+*/

@@ -24,12 +24,12 @@ if(instance_exists(obj_Player))
 	}
 	
 	var _list = ds_list_create();
-	var _num = instance_place_list(x,y,obj_CamScroll,_list,true);
+	var _num = instance_place_list(x,y,obj_CamScroll,scrollList,true);
 	if(_num > 0)
 	{
 		for(var i = 0; i < _num; i++)
 		{
-			var scroll = _list[| i];
+			var scroll = scrollList[| i];
 			var flag = false;
 			with(scroll)
 			{
@@ -45,5 +45,5 @@ if(instance_exists(obj_Player))
 			}
 		}
 	}
-	ds_list_destroy(_list);
+	ds_list_clear(scrollList);
 }

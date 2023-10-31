@@ -127,7 +127,7 @@
     {"lower":32,"upper":255,},
   ],
   "regenerateBitmap": false,
-  "sampleText": "abcdef ABCDEF\r\n0123456789 .,<>\"'&!?\r\nthe quick brown fox jumps over the lazy dog\r\nTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG\r\n\r\nDefault Character(9647) ▯ &\r\n\r\n",
+  "sampleText": "abcdef ABCDEF\r\n0123456789 .,<>\"'&!?\r\nthe quick brown fox jumps over the lazy dog\r\nTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG\r\n\r\nDefault Character(9647) ▯ &\r\n\r\n1234",
   "sdfSpread": 8,
   "size": 6.0,
   "styleName": "Regular",

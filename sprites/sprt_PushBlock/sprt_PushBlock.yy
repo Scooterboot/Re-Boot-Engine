@@ -25,8 +25,8 @@
   "nineSlice": null,
   "origin": 4,
   "parent": {
-    "name": "SpecialTiles",
-    "path": "folders/Sprites/Room Elements/SpecialTiles.yy",
+    "name": "MovingSolids",
+    "path": "folders/Sprites/Room Elements/SpecialTiles/MovingSolids.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {

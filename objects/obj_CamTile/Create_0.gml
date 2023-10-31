@@ -2,6 +2,8 @@
 
 active = true;
 
+scrollList = ds_list_create();
+
 enum CamTileFacing
 {
 	Down,

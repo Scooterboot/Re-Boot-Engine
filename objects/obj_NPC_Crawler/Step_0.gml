@@ -98,47 +98,35 @@ if(entity_place_collide(0,0) && colL+colR+colT+colB >= 3)
 }
 else
 {
-	var bottom_rot = 0,
-	left_rot = 270,
-	top_rot = 180,
-	right_rot = 90;
-			
 	switch(colEdge)
 	{
 		case Edge.Bottom:
 		{
 			velX = mSpeed*moveDir;
 			velY = 1;
-			rotation2 = bottom_rot;
 			break;
 		}
 		case Edge.Left:
 		{
 			velX = -1;
 			velY = mSpeed*moveDir;
-			rotation2 = left_rot;
 			break;
 		}
 		case Edge.Top:
 		{
 			velX = -mSpeed*moveDir;
 			velY = -1;
-			rotation2 = top_rot;
 			break;
 		}
 		case Edge.Right:
 		{
 			velX = 1;
 			velY = -mSpeed*moveDir;
-			rotation2 = right_rot;
 			break;
 		}
 	}
-	var slope = GetEdgeSlope(colEdge,2);
-	if(instance_exists(slope))
-	{
-		rotation2 = GetSlopeAngle(slope);
-	}
+	
+	rotation2 = GetEdgeAngle(colEdge,2);
 	
 	fVelX = velX;
 	fVelY = velY;

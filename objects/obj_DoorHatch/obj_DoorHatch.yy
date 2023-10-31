@@ -12,8 +12,8 @@
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "SpecialTiles",
-    "path": "folders/Objects/Room Elements/SpecialTiles.yy",
+    "name": "Hatches",
+    "path": "folders/Objects/Room Elements/SpecialTiles/Hatches.yy",
   },
   "parentObjectId": {
     "name": "obj_Tile",

@@ -1,3 +1,3 @@
 /// @description Initialize
 
-opacity = 0.5;
+opacity = 0;//0.5;

@@ -10,8 +10,8 @@
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "SpecialTiles",
-    "path": "folders/Objects/Room Elements/SpecialTiles.yy",
+    "name": "BTSTiles",
+    "path": "folders/Objects/Room Elements/BTSTiles.yy",
   },
   "parentObjectId": null,
   "persistent": false,

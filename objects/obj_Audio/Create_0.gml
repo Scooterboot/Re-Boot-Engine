@@ -103,6 +103,8 @@ global.SilenceMusic = function()
 global.music_Title = new LoopedSong(mus_Title, 58.090, 90.858);
 global.music_ItemRoom = new LoopedSong(mus_ItemRoom, 13.962, 34.698);
 global.music_AmbientSilence = new LoopedSong(mus_AmbientSilence, 10.562, 27.901);
+global.music_CrateriaArrival = new LoopedSong(mus_CrateriaArrival, 19.352, 86.059);
+global.music_CrateriaActive = new LoopedSong(mus_CrateriaActive, 0.495, 208.025);
 global.music_CrateriaMain = new LoopedSong(mus_CrateriaMain, 28.602, 238.914);
 global.music_BrinstarGreen = new LoopedSong(mus_BrinstarGreen, 64.806, 166.750);
 global.music_BrinstarRed = new LoopedSong(mus_BrinstarRed, 106.264, 218.838);
@@ -110,6 +112,8 @@ global.music_BrinstarRed = new LoopedSong(mus_BrinstarRed, 106.264, 218.838);
 global.music_UpperNorfair = new LoopedSong(mus_UpperNorfair, 22.855, 101.109);
 global.music_BossTension = new LoopedSong(mus_BossTension,0.027,62.945);
 global.music_Boss1 = new LoopedSong(mus_Boss1,13.712,39.692);
+
+global.ambiance_Rain = new LoopedSong(amb_Rain, 19.352, 86.059);
 
 global.prevShotSndIndex = noone;
 global.prevExplodeSnd = noone;

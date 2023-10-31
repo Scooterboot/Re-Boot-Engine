@@ -18,6 +18,7 @@ function scr_MainInitialize()
 	global.gripStyle = ini_read_real("Controls", "grip control", 0);				//load power grip control setting
 	global.grappleStyle = ini_read_real("Controls", "grapple control", 0);			//load grapple beam control setting
 	global.spiderBallStyle = ini_read_real("Controls", "spiderball control", 0);	//load spider ball control setting
+	global.dodgeStyle = ini_read_real("Controls", "dodge control", 0);				//load dodge control setting
 
 
 	global.fullScreen = ini_read_real("Display", "fullscreen", false);				//load fullscreen setting

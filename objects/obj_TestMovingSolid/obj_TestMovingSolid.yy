@@ -11,8 +11,8 @@
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "SpecialTiles",
-    "path": "folders/Objects/Room Elements/SpecialTiles.yy",
+    "name": "MovingSolids",
+    "path": "folders/Objects/Room Elements/SpecialTiles/MovingSolids.yy",
   },
   "parentObjectId": null,
   "persistent": false,

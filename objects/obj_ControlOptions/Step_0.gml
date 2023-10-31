@@ -170,9 +170,9 @@ if(screenFade >= 1 && !menuClosing)
 	if(screen == 1)
 	{
 		optionPos = scr_wrap(optionPos,0,array_length(advOption));
-		if(select || (moveX != 0 && optionPos < 3))
+		if(select || (moveX != 0 && optionPos < 4))
 		{
-			if(optionPos >= 3)
+			if(optionPos >= 4)
 			{
 				audio_play_sound(snd_MenuBoop,0,false);
 			}
@@ -203,6 +203,12 @@ if(screenFade >= 1 && !menuClosing)
 				}
 				case 3:
 				{
+					//Accel dash control
+					global.dodgeStyle = scr_wrap(global.dodgeStyle+moveX+select,0,2);
+					break;
+				}
+				case 4:
+				{
 					//Back
 					optionPos = prevOptionPos;
 					screen = 0;
@@ -213,12 +219,14 @@ if(screenFade >= 1 && !menuClosing)
 			advCurrentOption = array(
 			global.gripStyle,
 			global.grappleStyle,
-			global.spiderBallStyle);
+			global.spiderBallStyle,
+			global.dodgeStyle);
 			
 			ini_open("settings.ini");
 			ini_write_real("Controls", "grip control", global.gripStyle);
 			ini_write_real("Controls", "grapple control", global.grappleStyle);
 			ini_write_real("Controls", "spiderball control", global.spiderBallStyle);
+			ini_write_real("Controls", "dodge control", global.dodgeStyle);
 			ini_close();
 		}
 	}

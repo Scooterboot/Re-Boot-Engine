@@ -50,8 +50,8 @@
   },
   "origin": 0,
   "parent": {
-    "name": "SpecialTiles",
-    "path": "folders/Sprites/Room Elements/SpecialTiles.yy",
+    "name": "ShutterGates",
+    "path": "folders/Sprites/Room Elements/SpecialTiles/ShutterGates.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {

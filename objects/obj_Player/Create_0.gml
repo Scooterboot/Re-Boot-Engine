@@ -187,7 +187,7 @@ walkState = false;
 
 moonFallState = false;
 moonFallCounter = 0;
-moonFallCounterMax = 18;//30;
+moonFallCounterMax = 12;//30;
 moonFall = false;
 
 //uncrouching = false;

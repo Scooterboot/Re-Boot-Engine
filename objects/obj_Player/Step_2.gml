@@ -1059,7 +1059,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				}*/
 				#endregion
 				
-				var shootFrame2 = (shootFrame || cAimLock);
+				var shootFrame2 = shootFrame;//(shootFrame || cAimLock);
 				
 				runYOffset = -rOffset[frame[Frame.Run]];
 				if(aimFrame != 0 || shootFrame2)
@@ -2964,14 +2964,27 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				else if(misc[Misc.Bomb] && (instance_number(obj_MBBomb) < 3 || cDown))
 				{
 					var bombposx = x,
-						bombposy = y+11;
+						bombposy = y+11,
+						instaBomb = cDown;
 					if(spiderBall)
 					{
 						bombposx = x + lengthdir_x(-2,spiderJumpDir);
 						bombposy = y+9 + lengthdir_y(-2,spiderJumpDir);
+						if(spiderEdge == Edge.Top)
+						{
+							instaBomb = cUp;
+						}
+						if(spiderEdge == Edge.Left)
+						{
+							instaBomb = cLeft;
+						}
+						if(spiderEdge == Edge.Right)
+						{
+							instaBomb = cRight;
+						}
 					}
 					
-					if(cDown)
+					if(instaBomb)
 					{
 						var explo = instance_create_layer(bombposx,bombposy,"Projectiles_fg",obj_MBBombExplosion);
 						explo.damage = 50;

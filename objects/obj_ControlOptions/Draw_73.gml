@@ -185,7 +185,7 @@ if(surface_exists(surf))
 		}
 	
 		tipStrg = advOptionTip[optionPos,0];
-		if(optionPos < 3)
+		if(optionPos < 4)
 		{
 			tipStrg = advOptionTip[optionPos,advCurrentOption[optionPos]];
 		}

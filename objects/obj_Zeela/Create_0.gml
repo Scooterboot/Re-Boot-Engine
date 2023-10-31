@@ -5,7 +5,7 @@ lifeMax = 30;
 damage = 10;
 dmgMult[DmgType.Misc][1] = 1; // grapple beam
 
-mSpeed = 0.75;
+mSpeed = 0.5;
 
 image_angle = 0;
 

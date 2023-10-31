@@ -25,8 +25,8 @@
   "nineSlice": null,
   "origin": 4,
   "parent": {
-    "name": "SpecialTiles",
-    "path": "folders/Sprites/Room Elements/SpecialTiles.yy",
+    "name": "Hatches",
+    "path": "folders/Sprites/Room Elements/SpecialTiles/Hatches.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {
