@@ -18,18 +18,22 @@ movePlayer = false;
 moveY = 0;
 moveYMax = 56;
 
-saving = 0;
+saving = -20;
 maxSave = 170;
 gameSavedText = "GAME SAVED"+"\n\n"+"ENERGY & AMMO REPLENISHED";
 
 idleAnim = 0;
-lightGlow = 0;
-lightGlowNum = 1;
 
 hatchOpen = false;
 hatchFrame = 0;
 hatchFrameCounter = 0;
 hatchY = 9;
+
+lightGlow = 0;
+lightGlowNum = 1;
+
+visorLightGlow = 0;
+visorLightGlowNum = 1;
 
 
 block[0] = instance_create_layer(x-94,y+44,layer,obj_MovingTile);

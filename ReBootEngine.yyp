@@ -453,6 +453,7 @@
     {"id":{"name":"sprt_DamageBoostRight","path":"sprites/sprt_DamageBoostRight/sprt_DamageBoostRight.yy",},},
     {"id":{"name":"sprt_DamageBoostLeft","path":"sprites/sprt_DamageBoostLeft/sprt_DamageBoostLeft.yy",},},
     {"id":{"name":"sprt_DeathRight","path":"sprites/sprt_DeathRight/sprt_DeathRight.yy",},},
+    {"id":{"name":"sprt_Gunship_Visor","path":"sprites/sprt_Gunship_Visor/sprt_Gunship_Visor.yy",},},
     {"id":{"name":"sprt_DeathLeft","path":"sprites/sprt_DeathLeft/sprt_DeathLeft.yy",},},
     {"id":{"name":"bg_CrateriaExterior_0","path":"sprites/bg_CrateriaExterior_0/bg_CrateriaExterior_0.yy",},},
     {"id":{"name":"sprt_Text_XBButton_1","path":"sprites/sprt_Text_XBButton_1/sprt_Text_XBButton_1.yy",},},

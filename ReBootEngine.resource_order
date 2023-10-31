@@ -381,6 +381,7 @@
     {"name":"sprt_DamageBoostRight","order":4,"path":"sprites/sprt_DamageBoostRight/sprt_DamageBoostRight.yy",},
     {"name":"sprt_DamageBoostLeft","order":5,"path":"sprites/sprt_DamageBoostLeft/sprt_DamageBoostLeft.yy",},
     {"name":"sprt_DeathRight","order":6,"path":"sprites/sprt_DeathRight/sprt_DeathRight.yy",},
+    {"name":"sprt_Gunship_Visor","order":13,"path":"sprites/sprt_Gunship_Visor/sprt_Gunship_Visor.yy",},
     {"name":"sprt_DeathLeft","order":7,"path":"sprites/sprt_DeathLeft/sprt_DeathLeft.yy",},
     {"name":"sprt_Text_XBButton_1","order":1,"path":"sprites/sprt_Text_XBButton_1/sprt_Text_XBButton_1.yy",},
     {"name":"draw_text_scribble_ext","order":1,"path":"scripts/draw_text_scribble_ext/draw_text_scribble_ext.yy",},
