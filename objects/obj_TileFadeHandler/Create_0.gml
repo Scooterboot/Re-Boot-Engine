@@ -10,7 +10,6 @@ var appWidth = surface_get_width(application_surface),
 	appHeight = surface_get_height(application_surface);
 fadeTileSurface = surface_create(appWidth,appHeight);
 fadeTileSurfaceTemp = surface_create(appWidth,appHeight);
-fadeTileSurfaceTemp2 = surface_create(appWidth,appHeight);
 alphaMask = surface_create(appWidth,appHeight);
 
 
@@ -42,15 +41,11 @@ function redraw_alpha()
 		camy = camera_get_view_y(view_camera[0]);
 	
 	surface_set_target(alphaMask);
-	draw_clear_alpha(c_black,1);
+	draw_clear_alpha(c_black,0);
 
 	with (obj_TileFadeBlock)
 	{
-		gpu_set_blendenable(false);
-		gpu_set_colorwriteenable(0,0,0,1);
 		draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,image_alpha);
-		gpu_set_colorwriteenable(1,1,1,1);
-		gpu_set_blendenable(true);
 	}
 
 	surface_reset_target();

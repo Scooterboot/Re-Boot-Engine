@@ -101,10 +101,13 @@ fVelX = velX;
 fVelY = velY;
 
 Collision_Normal(fVelX,fVelY,15,15,true);
-
+/*
 var downSlope = GetEdgeSlope(Edge.Bottom);
 var downSlopeFlag = (place_meeting(x,y+2,downSlope) && downSlope.image_yscale > 1 && 
 					((downSlope.image_xscale > 0 && bbox_left > downSlope.bbox_left) || (downSlope.image_xscale < 0 && bbox_right < downSlope.bbox_right)));
+*/
+var downAng = GetEdgeAngle(Edge.Bottom,4);
+var downSlopeFlag = (downAng >= 55 && downAng <= 305);
 if(!entity_place_collide(0,2) || downSlopeFlag)
 {
 	grounded = ((bbox_bottom+2) >= room_height);

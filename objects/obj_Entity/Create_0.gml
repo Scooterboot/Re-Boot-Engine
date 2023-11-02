@@ -162,8 +162,8 @@ function entityPlatformCheck()
 }
 
 #endregion
-#region GetEdgeSlope
-function GetEdgeSlope()
+#region GetEdgeSlope (old)
+/*function GetEdgeSlope()
 {
 	/// @description GetEdgeSlope
 	/// @param edge
@@ -231,9 +231,9 @@ function GetEdgeSlope()
 	ds_list_clear(edgeSlope);
 	
 	return noone;
-}
+}*/
 #endregion
-#region GetSlopeAngle
+#region GetSlopeAngle (old)
 /*function GetSlopeAngle(slope)
 {
 	var ang = 315;
@@ -284,6 +284,9 @@ function GetEdgeAngle(edge, margin = 1)
 		ang = 270;
 	}
 	
+	var maxCheck1 = 8+margin,
+		maxCheck2 = 8+margin;
+	
 	if(edge == Edge.Bottom || edge == Edge.Top)
 	{
 		pos1.Y = margin;
@@ -298,7 +301,7 @@ function GetEdgeAngle(edge, margin = 1)
 				if(checkDir == 1)
 				{
 					pos1.X++;
-					if(pos1.X > 8)
+					if(pos1.X > maxCheck1)
 					{
 						pos1.X = 0;
 						checkDir = -1;
@@ -307,7 +310,7 @@ function GetEdgeAngle(edge, margin = 1)
 				if(checkDir == -1)
 				{
 					pos1.X--;
-					if(pos1.X < -8)
+					if(pos1.X < -maxCheck1)
 					{
 						pos1.X = 0;
 						checkDir = 0;
@@ -315,17 +318,19 @@ function GetEdgeAngle(edge, margin = 1)
 					}
 				}
 			}
-			
-			if(checkDir != 0 && entity_place_collide(pos1.X,pos1.Y*2))
+			while(!entity_place_collide(pos1.X,pos1.Y+sign(pos1.Y)) && abs(pos1.Y) < maxCheck2)
 			{
-				while(!entity_place_collide(pos2.X,pos2.Y) && abs(pos2.X) < 8)
+				pos1.Y += sign(pos1.Y);
+			}
+			
+			if(checkDir != 0 && entity_place_collide(pos1.X,pos1.Y+sign(pos1.Y)))
+			{
+				while(!entity_place_collide(pos2.X-checkDir,pos2.Y) && abs(pos2.X) < maxCheck1)
 				{
 					pos2.X -= checkDir;
 				}
-				if(abs(pos2.X) < 8)
+				if(abs(pos2.X) < maxCheck1)
 				{
-					pos2.X += checkDir;
-					
 					var poses = array_create(2);
 					poses[0] = pos1;
 					poses[1] = pos2;
@@ -364,7 +369,7 @@ function GetEdgeAngle(edge, margin = 1)
 				if(checkDir == 1)
 				{
 					pos1.Y++;
-					if(pos1.Y > 8)
+					if(pos1.Y > maxCheck1)
 					{
 						pos1.Y = 0;
 						checkDir = -1;
@@ -373,7 +378,7 @@ function GetEdgeAngle(edge, margin = 1)
 				if(checkDir == -1)
 				{
 					pos1.Y--;
-					if(pos1.Y < -8)
+					if(pos1.Y < -maxCheck1)
 					{
 						pos1.Y = 0;
 						checkDir = 0;
@@ -381,16 +386,19 @@ function GetEdgeAngle(edge, margin = 1)
 					}
 				}
 			}
-			if(checkDir != 0 && entity_place_collide(pos1.X*2,pos1.Y))
+			while(!entity_place_collide(pos1.X+sign(pos1.X),pos1.Y) && abs(pos1.X) < maxCheck2)
 			{
-				while(!entity_place_collide(pos2.X,pos2.Y) && abs(pos2.Y) < 8)
+				pos1.X += sign(pos1.X);
+			}
+			
+			if(checkDir != 0 && entity_place_collide(pos1.X+sign(pos1.X),pos1.Y))
+			{
+				while(!entity_place_collide(pos2.X,pos2.Y-checkDir) && abs(pos2.Y) < maxCheck1)
 				{
 					pos2.Y -= checkDir;
 				}
-				if(abs(pos2.Y) < 8)
+				if(abs(pos2.Y) < maxCheck1)
 				{
-					pos2.Y += checkDir;
-					
 					var poses = array_create(2);
 					poses[0] = pos1;
 					poses[1] = pos2;
@@ -525,7 +533,7 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		var sAngle = 0;
 		if(slopeSpeedAdjust)
 		{
-			sAngle = GetEdgeAngle(Edge.Bottom);
+			sAngle = GetEdgeAngle(Edge.Bottom,2);
 		}
 		
 		var fVX = lengthdir_x(vX2,sAngle);
@@ -711,7 +719,7 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		var sAngle2 = 0;
 		if(slopeSpeedAdjust)
 		{
-			sAngle2 = angle_difference(GetEdgeAngle(Edge.Top),180);
+			sAngle2 = angle_difference(GetEdgeAngle(Edge.Top,3),180);
 		}
 		
 		var fVY = lengthdir_x(vY2,sAngle2);

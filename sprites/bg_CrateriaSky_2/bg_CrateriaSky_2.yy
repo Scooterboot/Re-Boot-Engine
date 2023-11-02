@@ -1,10 +1,10 @@
 {
   "resourceType": "GMSprite",
   "resourceVersion": "1.0",
-  "name": "bg_CrateriaExterior_0",
-  "bbox_bottom": 79,
+  "name": "bg_CrateriaSky_2",
+  "bbox_bottom": 15,
   "bbox_left": 0,
-  "bbox_right": 127,
+  "bbox_right": 255,
   "bbox_top": 0,
   "bboxMode": 0,
   "collisionKind": 1,
@@ -13,14 +13,14 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"7d9972f1-ec74-45b0-9259-e20d06747c3e",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"ab86eae6-8ffa-4bf2-ab3f-af5c7cd1b66a",},
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 80,
+  "height": 16,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"9ebcd969-4f3e-40bc-96b6-dc40b4b23a50","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"38fca911-b8a8-401a-9c28-ac8eae181a21","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": null,
   "origin": 0,
@@ -32,7 +32,7 @@
   "sequence": {
     "resourceType": "GMSequence",
     "resourceVersion": "1.4",
-    "name": "bg_CrateriaExterior_0",
+    "name": "bg_CrateriaSky_2",
     "autoRecord": true,
     "backdropHeight": 768,
     "backdropImageOpacity": 0.5,
@@ -54,7 +54,7 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"7d9972f1-ec74-45b0-9259-e20d06747c3e","path":"sprites/bg_CrateriaExterior_0/bg_CrateriaExterior_0.yy",},},},"Disabled":false,"id":"d8ab74dc-9fff-42ee-bad8-08b4c9ec5612","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"ab86eae6-8ffa-4bf2-ab3f-af5c7cd1b66a","path":"sprites/bg_CrateriaSky_2/bg_CrateriaSky_2.yy",},},},"Disabled":false,"id":"a084ff5f-5588-4cd7-acd2-cf63d2e05688","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,
@@ -70,5 +70,5 @@
   },
   "type": 0,
   "VTile": false,
-  "width": 128,
+  "width": 256,
 }

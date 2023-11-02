@@ -26,10 +26,6 @@ else
 	{
 	    fadeTileSurfaceTemp = surface_create(appWidth,appHeight);
 	}
-	if !(surface_exists(fadeTileSurfaceTemp2))
-	{
-	    fadeTileSurfaceTemp2 = surface_create(appWidth,appHeight);
-	}
 
 	if !(surface_exists(alphaMask))
 	{
@@ -43,11 +39,15 @@ else
 
 
 	surface_set_target(fadeTileSurfaceTemp);
-	draw_clear_alpha(0,0);
+	//draw_clear_alpha(0,0);
+	if(surface_exists(application_surface))
+	{
+		draw_surface(application_surface,0,0);
+	}
 
 	draw_surface(fadeTileSurface,0,0);
 
-	gpu_set_blendmode_ext(bm_inv_src_alpha,bm_src_colour);
+	gpu_set_blendmode_ext(bm_inv_src_alpha, bm_src_colour);
 	gpu_set_colorwriteenable(0,0,0,1);
 	draw_surface(alphaMask,0,0);
 	gpu_set_colorwriteenable(1,1,1,1);
@@ -71,20 +71,7 @@ else
 
 	surface_reset_target();
 	
-	surface_set_target(fadeTileSurfaceTemp2);
-	draw_clear_alpha(c_black,0);
-	
-	gpu_set_blendmode(bm_add);
-	draw_surface(fadeTileSurfaceTemp,0,0);
-	gpu_set_blendmode(bm_normal);
-	
-	gpu_set_colorwriteenable(1,1,1,0);
-	draw_surface(fadeTileSurfaceTemp,0,0);
-	gpu_set_colorwriteenable(1,1,1,1);
-	
-	surface_reset_target();
-	
-	draw_surface(fadeTileSurfaceTemp2,camx,camy);
+	draw_surface(fadeTileSurfaceTemp,camx,camy);
 }
 
 if(instance_exists(obj_XRay))

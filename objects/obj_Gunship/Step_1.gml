@@ -30,6 +30,9 @@ if(state == ShipState.Idle)
 	saving = -20;
 }
 
+var xx = x,
+	yy = y-18;
+
 var player = instance_place(x,y,obj_Player);
 if (instance_exists(player) && player.state == State.Elevator &&
 	abs(player.x - x) <= 10 && !player.grappleActive && !player.isPushing)
@@ -59,7 +62,6 @@ if (instance_exists(player) && player.state == State.Elevator &&
 				player.position.X += max(x-player.position.X,-1);
 			}
 			
-			var yy = y-18;
 			if(player.position.Y < yy)
 			{
 				player.position.Y += min(yy-player.position.Y,1);
@@ -83,15 +85,15 @@ if (instance_exists(player) && player.state == State.Elevator &&
 				movePlayer = false;
 			}
 			
-			player.position.X = x;
-			player.position.Y = y-18+moveY;
+			player.position.X = xx;
+			player.position.Y = yy+moveY;
 		}
 	}
 	if(state == ShipState.SaveAnim)
 	{
 		player.state = State.Elevator;
-		player.position.X = x;
-		player.position.Y = y-18+moveY;
+		player.position.X = xx;
+		player.position.Y = yy+moveY;
 		
 		hatchOpen = false;
 		if(saving < 0)
@@ -158,15 +160,13 @@ if (instance_exists(player) && player.state == State.Elevator &&
 				audio_play_sound(snd_ShipHatch_Close,0,false);
 				hatchOpen = false;
 				movePlayer = false;
+				moveY = 0;
 			}
 		}
 		
-		player.position.X = x;
-		player.position.Y = y-18+moveY;
+		player.position.X = xx;
+		player.position.Y = yy+moveY;
 	}
-	
-	player.x = scr_round(player.position.X);
-	player.y = scr_round(player.position.Y);
 }
 else if(state != ShipState.Land && state != ShipState.TakeOff)
 {

@@ -1,7 +1,12 @@
 /// @description Transparancy
 
+if(opacity >= 1)
+{
+	exit;
+}
+
 var fade = false;
-var fadespeed = 0.05;
+var fadespeed = 0.05*(1 - opacity);
 var _list = ds_list_create();
 var triggerBlock = instance_place_list(x,y,obj_TileFadeBlockTrigger,_list,true);
 if(triggerBlock > 0)

@@ -1949,11 +1949,14 @@ function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWav
 function PlayerGrounded(ydiff = 2)
 {
 	var bottomCollision = (entity_collision_line(bbox_left,bbox_bottom+ydiff,bbox_right,bbox_bottom+ydiff) || (y+ydiff) >= room_height);
-	
+	/*
 	var downSlope = GetEdgeSlope(Edge.Bottom);
 	var downSlopeFlag = (instance_exists(downSlope) && place_meeting(x,y+2,downSlope) && downSlope.image_yscale > 1 && 
 						((downSlope.image_xscale > 0 && bbox_left > downSlope.bbox_left && !entity_place_collide(2,3)) || 
 						(downSlope.image_xscale < 0 && bbox_right < downSlope.bbox_right && !entity_place_collide(-2,3))));
+	*/
+	var downAng = GetEdgeAngle(Edge.Bottom,4);
+	var downSlopeFlag = (downAng >= 55 && downAng <= 305);
 	
 	return (((bottomCollision && (!downSlopeFlag || speedBoost) && velY >= 0 && velY <= fGrav) || (spiderBall && spiderEdge != Edge.None)) && jump <= 0);
 }
