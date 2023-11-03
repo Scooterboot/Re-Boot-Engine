@@ -1267,7 +1267,7 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		
 		if(flag)
 		{
-			var sAngle = 0;
+			/*var sAngle = 0;
 			var slope = GetEdgeSlope(Edge.Bottom);
 			if(instance_exists(slope))
 			{
@@ -1275,7 +1275,8 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 				{
 					sAngle = GetSlopeAngle(slope);
 				}
-			}
+			}*/
+			var sAngle = GetEdgeAngle(Edge.Bottom);
 			velX = lengthdir_x(velX,sAngle);
 			velY = lengthdir_y(velX,sAngle);
 			ledgeFall = false;
