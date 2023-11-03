@@ -2,7 +2,7 @@
   "resourceType": "GMRoom",
   "resourceVersion": "1.0",
   "name": "rm_debug01_Start",
-  "creationCodeFile": "${project_dir}/rooms/rm_debug01_Start/RoomCreationCode.gml",
+  "creationCodeFile": "rooms/rm_debug01_Start/RoomCreationCode.gml",
   "inheritCode": false,
   "inheritCreationOrder": true,
   "inheritLayers": false,

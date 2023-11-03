@@ -5,4 +5,4 @@ if(global.BossDowned("Kraid"))
 }
 
 scr_InitRoom(music,sprt_Map_DebugRooms,30,4);
-scr_BGParallax("Background",0.5,0.5);
+scr_SetParallax("Background",0.5,0.5);
