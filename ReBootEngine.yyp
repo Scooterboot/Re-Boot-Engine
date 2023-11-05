@@ -653,6 +653,7 @@
     {"id":{"name":"bg_Norfair2","path":"sprites/bg_Norfair2/bg_Norfair2.yy",},},
     {"id":{"name":"snd_InteractLoop","path":"sounds/snd_InteractLoop/snd_InteractLoop.yy",},},
     {"id":{"name":"sprt_WaterDrop","path":"sprites/sprt_WaterDrop/sprt_WaterDrop.yy",},},
+    {"id":{"name":"mask_Somersault","path":"sprites/mask_Somersault/mask_Somersault.yy",},},
     {"id":{"name":"sprt_CrystalBubble","path":"sprites/sprt_CrystalBubble/sprt_CrystalBubble.yy",},},
     {"id":{"name":"sprt_Text_GPButton_3","path":"sprites/sprt_Text_GPButton_3/sprt_Text_GPButton_3.yy",},},
     {"id":{"name":"sprt_GrappleRipper_Flame","path":"sprites/sprt_GrappleRipper_Flame/sprt_GrappleRipper_Flame.yy",},},

@@ -457,7 +457,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 	walkState = ((cAimLock || grappleActive) && velX != 0 && sign(velX) != dir && state == State.Stand && !xRayActive);
 	
-	if(dir != 0 && cMorph && rMorph && morphFrame <= 0 && state != State.Morph && stateFrame != State.Morph && misc[Misc.Morph] && state != State.Spark && state != State.BallSpark && state != State.Grip && state != State.Grapple && !xRayActive)
+	if(dir != 0 && cMorph && rMorph && morphFrame <= 0 && state != State.Crouch && state != State.Morph && stateFrame != State.Morph && misc[Misc.Morph] && state != State.Spark && state != State.BallSpark && state != State.Grip && state != State.Grapple && !xRayActive)
 	{
 		audio_play_sound(snd_Morph,0,false);
 		if(state == State.Stand)
@@ -701,6 +701,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 			}
 		}
+	}
+	else if(moonFall && !grounded)
+	{
+		fMaxSpeed = maxSpeed[12,liquidState];
 	}
 	
 	maxSpeed2 = maxSpeed[1,liquidState];
@@ -1008,7 +1012,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		
 		if(jump <= 0)
 		{
-			if(shineCharge > 0 && rJump && (state != State.Crouch || !entity_place_collide(0,-11) || entity_place_collide(0,0)) && !entity_place_collide(0,-1) && 
+			//if(shineCharge > 0 && rJump && (state != State.Crouch || !entity_place_collide(0,-11) || entity_place_collide(0,0)) && !entity_place_collide(0,-1) && 
+			//(move == 0 || velX == 0) && state != State.Somersault && state != State.DmgBoost && ((!cAngleDown && !cDown) || boots[Boots.ChainSpark]) && 
+			//(state != State.Morph || misc[Misc.Spring]) && morphFrame <= 0 && state != State.Grip)
+			
+			if(shineCharge > 0 && rJump && (CanChangeState(mask_Jump) || state == State.Morph) && !entity_place_collide(0,-1) && 
 			(move == 0 || velX == 0) && state != State.Somersault && state != State.DmgBoost && ((!cAngleDown && !cDown) || boots[Boots.ChainSpark]) && 
 			(state != State.Morph || misc[Misc.Spring]) && morphFrame <= 0 && state != State.Grip)
 			{
@@ -1025,7 +1033,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 			}
 			else if((rJump || (state == State.Morph && !spiderBall && rMorphJump) || bufferJump > 0) && /*!jumping &&*/ quickClimbTarget <= 0 && 
-			(state != State.Morph || misc[Misc.Spring] || !entity_place_collide(0,-17)) && morphFrame <= 0 && state != State.DmgBoost)
+			(state != State.Morph || misc[Misc.Spring] || CanChangeState(mask_Somersault)) && morphFrame <= 0 && state != State.DmgBoost)
 			{
 				if((grounded && !moonFallState) || bunnyJump > 0 || (canWallJump && rJump) || speedBoostWJ || (state == State.Grip && (move != dir || climbTarget == 0) && !cDown) || 
 				(boots[Boots.SpaceJump] && velY >= sjThresh && state == State.Somersault && !liquidMovement && rJump))
@@ -1080,7 +1088,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 							{
 								velX = maxSpeed[4,liquidState]*m;
 							}
-							ChangeState(State.Somersault,State.Somersault,mask_Crouch,false);
+							ChangeState(State.Somersault,State.Somersault,mask_Somersault,false);
 							if(move != 0)
 							{
 								dir = move;
@@ -1120,12 +1128,12 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					}
 					if((rJump || bufferJump > 0) && state != State.Morph)// && state != State.Grip)
 					{
-						if((abs(velX) > 0 && sign(velX) == dir) || (move != 0 && move == dir) || cDash || (!grounded && state != State.Grip) || (state == State.Crouch && entity_place_collide(0,-8)))
+						if((abs(velX) > 0 && sign(velX) == dir) || (move != 0 && move == dir) || cDash || (!grounded && state != State.Grip) || (state == State.Crouch && !CanChangeState(mask_Jump)))
 						{
 							var mask = mask_Jump;
-							if(entity_place_collide(0,-8))
+							if(!CanChangeState(mask_Jump))
 							{
-								mask = mask_Crouch;
+								mask = mask_Somersault;
 							}
 							ChangeState(State.Somersault,State.Somersault,mask,false);
 						}
@@ -1145,10 +1153,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				{
 					if(state != State.Morph && state != State.Grip && !grappleActive)
 					{
-						ChangeState(State.Somersault,State.Somersault,mask_Crouch,false);
+						ChangeState(State.Somersault,State.Somersault,mask_Somersault,false);
 						if(moonFallState && !moonFall)
 						{
-							velX -= maxSpeed[11,liquidState] * dir;
+							//velX -= maxSpeed[11,liquidState] * dir;
 							moonFall = true;
 						}
 					}
@@ -1359,7 +1367,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		{
 			spiderSpeed = 0;
 			
-			var dcheck = 2,
+			/*var dcheck = 2,
 				ucheck = -2,
 				rcheck = 2,
 				lcheck = -2;
@@ -1400,7 +1408,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					spiderSpeed = velY;
 					spiderMove = sign(spiderSpeed);
 				}
-			}
+			}*/
 		}
 		else
 		{
@@ -1548,7 +1556,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			}
 			
 			spiderJumpDir = sAngle + sAngle2 + 90;*/
-			spiderJumpDir = GetEdgeAngle(spiderEdge) + 90;
+			spiderJumpDir = scr_wrap(GetEdgeAngle(spiderEdge) + 90,0,360);
 			
 			if(shineEnd > 0)
 			{
@@ -1582,7 +1590,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		if(keyboard_check(vk_numpad5) || keyboard_check(vk_numpad8))
 		{
 			position.Y += (keyboard_check(vk_numpad5) - keyboard_check(vk_numpad8)) * 3;
-			velY = -fGrav;
+			if(!grounded)
+			{
+				velY = -fGrav;
+			}
 			y = scr_round(position.Y);
 		}
 	}
@@ -1776,7 +1787,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 
 	if(misc[Misc.PowerGrip] && (state == State.Jump || state == State.Somersault) && morphFrame <= 0 && !grounded && abs(dirFrame) >= 4 && fVelY >= 0)
 	{
-		if(!entity_place_collide(0,-4) && ((state == State.Jump && !entity_place_collide(0,3)) || (state == State.Somersault && !entity_place_collide(0,11))))
+		if(!entity_place_collide(0,-4) && ((state == State.Jump && !entity_place_collide(0,3)) || (state == State.Somersault && !entity_place_collide(0,13))))
 		{
 			var num = instance_place_list(x+move2,y,all,blockList,true);
 				num += instance_position_list(x+6*move2,y-17,all,blockList,true);
@@ -2159,7 +2170,12 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	if(state == State.Crouch)
 	{
 		stateFrame = State.Crouch;
-		mask_index = mask_Crouch;
+		//mask_index = mask_Crouch;
+		if(CanChangeState(mask_Crouch))
+		{
+			ChangeState(state,stateFrame,mask_Crouch,false);
+		}
+		
 		landFrame = 0;
 		if(uncrouch < 7)
 		{
@@ -2173,18 +2189,19 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		{
 			uncrouch = 0;
 		}
-		if(((cUp && rUp && (gbaAimPreAngle == gbaAimAngle || global.aimStyle != 1)) || uncrouch >= 7) && !entity_place_collide(0,-11) && crouchFrame <= 0 && !xRayActive)
+		if(((cUp && rUp && (gbaAimPreAngle == gbaAimAngle || global.aimStyle != 1)) || uncrouch >= 7) && CanChangeState(mask_Stand) && crouchFrame <= 0 && !xRayActive)
 		{
 			aimUpDelay = 10;
 			ChangeState(State.Stand,State.Stand,mask_Stand,true);
 		}
-		if(crouchFrame <= 0 && cDown && (gbaAimAngle == gbaAimPreAngle || global.aimStyle != 1) && (rDown || entity_place_collide(0,-11)) && move2 == 0 && misc[Misc.Morph] && !xRayActive && stateFrame != State.Morph && morphFrame <= 0)
+		if(crouchFrame <= 0 && (cDown || cMorph) && (gbaAimAngle == gbaAimPreAngle || global.aimStyle != 1) && (rDown || !CanChangeState(mask_Stand)) && move2 == 0 && misc[Misc.Morph] && !xRayActive && stateFrame != State.Morph && morphFrame <= 0)
 		{
 			audio_play_sound(snd_Morph,0,false);
 			ChangeState(State.Morph,State.Morph,mask_Morph,true);
 			morphFrame = 8;
 		}
-		else if(!grounded && (!entity_place_collide(0,-8) || (!entity_place_collide(0,8) && (!onPlatform || !lhc_place_meeting(x,y+8,"IPlatform")))))
+		//else if(!grounded && (!entity_place_collide(0,-8) || (!entity_place_collide(0,8) && (!onPlatform || !lhc_place_meeting(x,y+8,"IPlatform")))))
+		else if(!grounded && CanChangeState(mask_Jump))
 		{
 			ChangeState(State.Jump,State.Jump,mask_Jump,false);
 		}
@@ -2244,7 +2261,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		
 		if(((cUp && rUp) || (cJump && rJump && (!misc[Misc.Spring] || morphSpinJump)) || (cMorph && rMorph)) && !unmorphing && morphFrame <= 0 && !spiderBall)
 		{
-			if(!entity_place_collide(0,-17))
+			//if(!entity_place_collide(0,-17))
+			if(CanChangeState(mask_Crouch))
 			{
 				audio_play_sound(snd_Morph,0,false);
 				unmorphing = true;
@@ -2262,13 +2280,21 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		if(unmorphing)
 		{
-			mask_index = mask_Crouch;
+			//mask_index = mask_Crouch;
+			var oldY = y;
+			ChangeState(state,stateFrame,mask_Crouch,false);
+			
+			if(morphFrame == 8)
+			{
+				morphYOff = oldY-y;
+			}
+			
 			aimUpDelay = 10;
 			if(morphFrame <= 0)
 			{
 				if(morphSpinJump)
 				{
-					ChangeState(State.Somersault,State.Somersault,mask_Crouch,false);
+					ChangeState(State.Somersault,State.Somersault,mask_Somersault,false);
 					frame[Frame.Somersault] = 2;
 					morphSpinJump = false;
 				}
@@ -2294,7 +2320,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		
 		var ammo = missileStat+superMissileStat+powerBombStat;
-		if((!entity_place_collide(0,-11) || crystalClip) && energy < lowEnergyThresh && ammo > 0 && cFlashStartCounter > 0 && cShoot && cDown)// && (cAngleUp || (cAngleDown && global.aimStyle == 0)))
+		//if((!entity_place_collide(0,-11) || crystalClip) && energy < lowEnergyThresh && ammo > 0 && cFlashStartCounter > 0 && cShoot && cDown)// && (cAngleUp || (cAngleDown && global.aimStyle == 0)))
+		if((CanChangeState(mask_Crouch) || crystalClip) && energy < lowEnergyThresh && ammo > 0 && cFlashStartCounter > 0 && cShoot && cDown)
 		{
 			cFlashStartCounter++;
 			
@@ -2394,11 +2421,13 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		
 		if(aimAngle == -2 || aimFrame <= -3)
 		{
-			mask_index = mask_Crouch;
+			//mask_index = mask_Crouch;
+			ChangeState(state,stateFrame,mask_Somersault,false);
 		}
-		else if(!entity_place_collide(0,8) || !entity_place_collide(0,-8))
+		//else if(!entity_place_collide(0,8) || !entity_place_collide(0,-8))
+		else if(CanChangeState(mask_Jump))
 		{
-			ChangeState(State.Jump,State.Jump,mask_Jump,false);
+			ChangeState(state,stateFrame,mask_Jump,false);
 		}
 		
 		canWallJump = false;
@@ -2420,11 +2449,12 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				speedCounter = 0;
 			}
 			audio_play_sound(snd_Land,0,false);
-			if(mask_index == mask_Crouch)
+			if(mask_index == mask_Somersault)
 			{
-				if(entity_place_collide(0,-11))
+				//if(entity_place_collide(0,-11))
+				if(!CanChangeState(mask_Stand))
 				{
-					ChangeState(State.Crouch,State.Crouch,mask_Crouch,true);
+					ChangeState(State.Crouch,State.Crouch,mask_Somersault,true);
 					crouchFrame = 0;
 				}
 				else
@@ -2436,7 +2466,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			}
 			else
 			{
-				if(entity_place_collide(0,-3) && !entity_place_collide(0,0))
+				//if(entity_place_collide(0,-3) && !entity_place_collide(0,0))
+				if(!CanChangeState(mask_Stand))
 				{
 					crouchFrame = 5;
 					ChangeState(State.Crouch,State.Crouch,mask_Crouch,true);
@@ -2466,7 +2497,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	if(state == State.Somersault)
 	{
 		stateFrame = State.Somersault;
-		mask_index = mask_Crouch;
+		mask_index = mask_Somersault;
 		gunReady = true;
 		ledgeFall = false;
 		ledgeFall2 = false;
@@ -2569,9 +2600,15 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				speedCounter = 0;
 			}
 			audio_play_sound(snd_Land,0,false);
-			if(entity_place_collide(0,-11))
+			//if(entity_place_collide(0,-11))
+			if(!CanChangeState(mask_Stand))
 			{
-				ChangeState(State.Crouch,State.Crouch,mask_Crouch,true);
+				var mask = mask_Crouch;
+				if(!CanChangeState(mask_Crouch))
+				{
+					mask = mask_Somersault;
+				}
+				ChangeState(State.Crouch,State.Crouch,mask,true);
 				crouchFrame = 0;
 			}
 			else
@@ -2587,14 +2624,20 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			var unchargeable = ((itemSelected == 1 && (itemHighlighted[1] == 0 || itemHighlighted[1] == 1 || itemHighlighted[1] == 3)) || xRayActive || hyperBeam);
 			if(prAngle || (cUp && rUp) || (cDown && rDown) || (cShoot && rShoot) || (!cShoot && !rShoot && !unchargeable))
 			{
-				if(entity_place_collide(0,8) && entity_place_collide(0,-8))
+				//if(entity_place_collide(0,8) && entity_place_collide(0,-8))
+				if(!CanChangeState(mask_Jump))
 				{
-					ChangeState(State.Crouch,State.Crouch,mask_Crouch,true);
+					ChangeState(State.Crouch,State.Crouch,mask_Somersault,true);
 					crouchFrame = 0;
 				}
 				else
 				{
-					ChangeState(State.Jump,State.Jump,mask_Jump,false);
+					var mask = mask_Jump;
+					if(aimAngle == -2 || aimFrame <= -3)
+					{
+						mask = mask_Somersault;
+					}
+					ChangeState(State.Jump,State.Jump,mask,false);
 				}
 			}
 		}
@@ -2689,7 +2732,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					}
 					else if(climbIndex > 17)
 					{
-						if(!entity_place_collide(0,-11))
+						//if(!entity_place_collide(0,-11))
+						if(CanChangeState(mask_Stand))
 						{
 							ChangeState(State.Stand,State.Stand,mask_Stand,true);
 							//landFrame = 7;
@@ -3127,10 +3171,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 				else
 				{
-					//stateFrame = State.Somersault;
-					//mask_index = mask_Crouch;
-					//state = State.Somersault;
-					ChangeState(State.Somersault,State.Somersault,mask_Crouch,false);
+					ChangeState(State.Somersault,State.Somersault,mask_Somersault,false);
 				}
 				if(abs(shineDir) == 2)
 				{
@@ -3491,7 +3532,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		dmgBoost = max(dmgBoost - 1, 0);
 	}
 	
-	if(state == State.Hurt || state == State.Stand || (state == State.Crouch && !entity_place_collide(0,-11)) || state == State.Jump || state == State.Somersault)
+	if(state == State.Hurt || state == State.Stand || (state == State.Crouch && CanChangeState(mask_Stand)) || state == State.Jump || state == State.Somersault)
 	{
 		if(dmgBoost > 0 && stateFrame != State.Morph && cJump && move2 == -dir)
 		{
@@ -3538,7 +3579,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				velX = min(abs(velX),maxSpeed[0,liquidState])*sign(velX);
 				speedCounter = 0;
 				audio_play_sound(snd_Land,0,false);
-				if(entity_place_collide(0,-3) && !entity_place_collide(0,0))
+				//if(entity_place_collide(0,-3) && !entity_place_collide(0,0))
+				if(!CanChangeState(mask_Stand))
 				{
 					crouchFrame = 3;
 					ChangeState(State.Crouch,State.Crouch,mask_Crouch,true);
@@ -3637,10 +3679,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		{
 			if(grounded)
 			{
-				if(entity_place_collide(0,-11) || groundedDodge == 2)
+				//if(entity_place_collide(0,-11) || groundedDodge == 2)
+				if(!CanChangeState(mask_Stand) || groundedDodge == 2)
 				{
-					stateFrame = State.Crouch;
-					state = State.Crouch;
+					ChangeState(State.Crouch,State.Crouch,mask_Crouch,true);
 					crouchFrame = 0;
 				}
 				else
@@ -3652,7 +3694,14 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			}
 			else if(shoot)
 			{
-				ChangeState(State.Jump,State.Jump,mask_Jump,false);
+				if(!CanChangeState(mask_Jump))
+				{
+					ChangeState(State.Crouch,State.Crouch,mask_Crouch,false);
+				}
+				else
+				{
+					ChangeState(State.Jump,State.Jump,mask_Jump,false);
+				}
 			}
 			else
 			{
@@ -3781,7 +3830,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		else
 		{
-			if(entity_place_collide(0,-11))
+			//if(entity_place_collide(0,-11))
+			if(!CanChangeState(mask_Jump))
 			{
 				ChangeState(State.Crouch,State.Crouch,mask_Crouch,true);
 				crouchFrame = 0;

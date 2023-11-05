@@ -346,6 +346,7 @@ maxSpeed[8,0] = 1.25;	// Air Spring Ball
 maxSpeed[9,0] = 5.375;	// Damage Boost
 maxSpeed[10,0] = 7.25;	// Dodge
 maxSpeed[11,0] = 1.25;	// Moonwalk
+maxSpeed[12,0] = 1.75;	// Moonfall
 // Underwater (no grav suit)
 maxSpeed[0,1] = 2.75;	// Running
 maxSpeed[1,1] = 3.75;	// Dashing (no speed boost)
@@ -359,6 +360,7 @@ maxSpeed[8,1] = 1.25;	// Air Spring Ball
 maxSpeed[9,1] = 3.3;	// Damage Boost
 maxSpeed[10,1] = 3.25;	// Dodge
 maxSpeed[11,1] = 0.75;	// Moonwalk
+maxSpeed[12,1] = 1.5;	// Moonfall
 // In lava/acid (no grav suit)
 maxSpeed[0,2] = 1.75;	// Running
 maxSpeed[1,2] = 2.75;	// Dashing (no speed boost)
@@ -372,6 +374,7 @@ maxSpeed[8,2] = 1.25;	// Air Spring Ball
 maxSpeed[9,2] = 3.3;	// Damage Boost
 maxSpeed[10,2] = 3.25;	// Dodge
 maxSpeed[11,2] = 0.75;	// Moonwalk
+maxSpeed[12,2] = 1.5;	// Moonfall
 
 // Out of water
 moveSpeed[0,0] = 0.1875;	// Normal
@@ -559,6 +562,7 @@ morphAlpha = 0;
 ballFrame = 0;
 morphNum = 0;
 ballAnimDir = dir;
+morphYOff = 0;
 
 aimFrame = 0;
 
@@ -1849,6 +1853,45 @@ function MovingSolid_OnYCollision(fVY) {}
 
 #endregion
 
+#region CanChangeState
+function CanChangeState(newMask)
+{
+	if(mask_index != newMask)
+	{
+		var curMask = mask_index,
+			curTop = bbox_top,
+			curBottom = bbox_bottom;
+		
+		mask_index = newMask;
+		var newTop = bbox_top,
+			newBottom = bbox_bottom;
+		
+		var checkYTop = 0,
+			checkYBottom = 0;
+		for(var i = 0; i < newBottom-curBottom; i++)
+		{
+			if((entity_place_collide(0,checkYBottom) || (onPlatform && lhc_place_meeting(x,y+checkYBottom,"IPlatform"))) && !entity_collision_line(bbox_left,bbox_top+checkYBottom,bbox_right,bbox_top+checkYBottom))
+			{
+				checkYBottom--;
+			}
+		}
+		for(var i = 0; i < curTop-newTop; i++)
+		{
+			if(entity_place_collide(0,checkYTop) && !entity_collision_line(bbox_left,bbox_bottom+checkYTop,bbox_right,bbox_bottom+checkYTop))
+			{
+				checkYTop++;
+			}
+		}
+		
+		var flag = (!entity_place_collide(0,checkYBottom) || !entity_place_collide(0,checkYTop));
+		mask_index = curMask;
+		
+		return flag;
+	}
+	
+	return true;
+}
+#endregion
 #region ChangeState
 function ChangeState(newState,newStateFrame,newMask,isGrounded)
 {
@@ -1856,30 +1899,58 @@ function ChangeState(newState,newStateFrame,newMask,isGrounded)
 	
 	if(mask_index != newMask)
 	{
-		var prevHeight = bbox_bottom-bbox_top;
+		var curMask = mask_index,
+			curTop = bbox_top,
+			curBottom = bbox_bottom;
+		
 		mask_index = newMask;
-		var newHeight = bbox_bottom-bbox_top;
+		var newTop = bbox_top,
+			newBottom = bbox_bottom;
 		
-		var shift = prevHeight - newHeight;
+		var checkYTop = 0,
+			checkYBottom = 0;
 		
-		for(var i = abs(shift); i > 0; i--)
+		for(var i = 0; i < abs(newBottom-curBottom); i++)
 		{
-			if(shift > 0)
+			if(newBottom-curBottom > 0)
 			{
-				if(!entity_place_collide(0,1) && isGrounded)
+				if((entity_place_collide(0,checkYBottom) || (onPlatform && lhc_place_meeting(x,y+checkYBottom,"IPlatform"))) && !entity_collision_line(bbox_left,bbox_top+checkYBottom,bbox_right,bbox_top+checkYBottom))
 				{
-					position.Y += 1;
+					checkYBottom--;
 				}
 			}
-			else
+			else if(isGrounded)
 			{
-				if((entity_place_collide(0,0) || (onPlatform && lhc_place_meeting(x,y,"IPlatform"))) && !entity_collision_line(bbox_left,bbox_top,bbox_right,bbox_top))
+				if(!entity_place_collide(0,checkYBottom+1))
 				{
-					position.Y -= 1;
+					checkYBottom++;
 				}
 			}
 		}
+		
+		for(var i = 0; i < curTop-newTop; i++)
+		{
+			if(entity_place_collide(0,checkYTop) && !entity_collision_line(bbox_left,bbox_bottom+checkYTop,bbox_right,bbox_bottom+checkYTop))
+			{
+				checkYTop++;
+			}
+		}
+		
+		if(!entity_place_collide(0,checkYBottom))
+		{
+			position.Y += checkYBottom;
+		}
+		if(!entity_place_collide(0,checkYTop))
+		{
+			position.Y += checkYTop;
+		}
+		var oldY = y;
 		y = scr_round(position.Y);
+		
+		if(y != oldY)
+		{
+			stallCamera = true;
+		}
 	}
 	state = newState;
 }

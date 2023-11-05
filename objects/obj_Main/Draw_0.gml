@@ -269,6 +269,9 @@ if(debug == 1)
 		{
 			draw_text(xx+10,yy+40+10*i,global.openHatchList[| i]);
 		}*/
+		
+		var edgeAng = GetEdgeAngle(colEdge);
+		draw_text(x,y,string(edgeAng));
     }
 	
 	with(obj_Camera)

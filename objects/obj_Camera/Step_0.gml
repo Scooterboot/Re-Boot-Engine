@@ -7,8 +7,9 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 	
 	var xsp = player.x - player.xprevious,
 		ysp = player.y - player.yprevious;
-	if(((player.state == State.Stand || player.state == State.Crouch || player.state == State.Dodge || player.state == State.Grip) && player.prevState != player.state)
-		|| (player.prevState == State.Stand && player.state == State.Morph) || player.stallCamera)
+	/*if(((player.state == State.Stand || player.state == State.Crouch || player.state == State.Dodge || player.state == State.Grip) && player.prevState != player.state)
+		|| (player.prevState == State.Stand && player.state == State.Morph) || player.stallCamera)*/
+	if(player.stallCamera)
 	{
 		ysp = 0;
 	}

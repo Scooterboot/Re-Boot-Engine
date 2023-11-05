@@ -1341,8 +1341,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				ArmPos(0,0);
 				torsoR = sprt_MorphFade;
 				
-				sprtOffsetY = 8;
-				
 				ballAnimDir = dir;
 				if(sign(velX) != 0)
 				{
@@ -1433,6 +1431,14 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					bodyFrame = scr_round(frame[Frame.Morph]);
 				}
 				torsoL = torsoR;
+				
+				var yOff = 0;
+				if(unmorphing)
+				{
+					yOff = morphYOff * (morphFrame/8);
+				}
+				
+				sprtOffsetY = 8+yOff;
 				break;
 			}
 			#endregion

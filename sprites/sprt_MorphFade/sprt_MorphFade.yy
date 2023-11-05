@@ -101,7 +101,7 @@
             {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"257e417d-2567-427d-bc9c-2bbbe8f9c20f","path":"sprites/sprt_MorphFade/sprt_MorphFade.yy",},},},"Disabled":false,"id":"6d2d9f19-53ea-43fc-b6b8-49e330ff5c3b","IsCreationKey":false,"Key":22.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
-    "visibleRange": {"x":0.0,"y":0.0,},
+    "visibleRange": null,
     "volume": 1.0,
     "xorigin": 8,
     "yorigin": 8,

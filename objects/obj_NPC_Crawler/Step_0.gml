@@ -126,7 +126,7 @@ else
 		}
 	}
 	
-	rotation2 = GetEdgeAngle(colEdge,2);
+	rotation2 = GetEdgeAngle(colEdge);
 	
 	fVelX = velX;
 	fVelY = velY;

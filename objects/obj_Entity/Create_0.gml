@@ -88,13 +88,12 @@ function entity_position_collide()
 			yy = argument[3];
 		}
 	}
-	//return lhc_position_meeting(xx+offsetX,yy+offsetY,solids);
+	
 	return entity_collision(instance_position_list(xx+offsetX,yy+offsetY,all,blockList,true));
 }
 
 function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
 {
-	//return lhc_collision_line(x1,y1,x2,y2,solids,prec,notme);
 	return entity_collision(collision_line_list(x1,y1,x2,y2,all,prec,notme,blockList,true));
 }
 
@@ -1062,7 +1061,7 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCo
 				sAngle2 = angle_difference(GetSlopeAngle(slope),sAngle);
 			}
 		}*/
-		if(slopeSpeedAdjust)
+		if(slopeSpeedAdjust && colEdge != Edge.None)
 		{
 			sAngle2 = angle_difference(GetEdgeAngle(colEdge),sAngle);
 		}
@@ -1191,8 +1190,8 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCo
 				xnum4++;
 			}
 			
-			var moveDownSlope_Bottom = (entity_place_collide(xnum3*sign(fVX)+sign(fVX),steepness) && Crawler_CanMoveDownSlope_Bottom());
-			var moveDownSlope_Top = (entity_place_collide(xnum4*sign(fVX)+sign(fVX),-steepness) && Crawler_CanMoveDownSlope_Top());
+			var moveDownSlope_Bottom = (entity_place_collide(0,1) && entity_place_collide(xnum3*sign(fVX)+sign(fVX),steepness) && Crawler_CanMoveDownSlope_Bottom());
+			var moveDownSlope_Top = (entity_place_collide(0,-1) && entity_place_collide(xnum4*sign(fVX)+sign(fVX),-steepness) && Crawler_CanMoveDownSlope_Top());
 			
 			if(moveDownSlope_Bottom || moveDownSlope_Top)
 			{
@@ -1396,8 +1395,8 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCo
 				ynum4++;
 			}
 			
-			var moveDownSlope_Right = (entity_place_collide(steepness,ynum3*sign(fVY)+sign(fVY)) && Crawler_CanMoveDownSlope_Right());
-			var moveDownSlope_Left = (entity_place_collide(-steepness,ynum4*sign(fVY)+sign(fVY)) && Crawler_CanMoveDownSlope_Left());
+			var moveDownSlope_Right = (entity_place_collide(1,0) && entity_place_collide(steepness,ynum3*sign(fVY)+sign(fVY)) && Crawler_CanMoveDownSlope_Right());
+			var moveDownSlope_Left = (entity_place_collide(-1,0) && entity_place_collide(-steepness,ynum4*sign(fVY)+sign(fVY)) && Crawler_CanMoveDownSlope_Left());
 			
 			if(moveDownSlope_Right || moveDownSlope_Left)
 			{
