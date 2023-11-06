@@ -36,8 +36,4 @@ visorLightGlow = 0;
 visorLightGlowNum = 1;
 
 
-block[0] = instance_create_layer(x-94,y+44,layer,obj_MovingTile);
-block[0].image_yscale = 0.5;
-block[1] = instance_create_layer(x+78,y+44,layer,obj_MovingTile);
-block[1].image_yscale = 0.5;
-block[2] = instance_create_layer(x,y,layer,obj_Gunship_Mask);
+block = instance_create_layer(x,y,layer,obj_Gunship_Mask);

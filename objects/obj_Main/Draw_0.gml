@@ -225,12 +225,12 @@ if(debug == 1)
         draw_text(xx+marginX,yy+30+marginY,"state: "+obj_Main.stateText[state]);
         draw_text(xx+marginX,yy+30+marginY*2,"stateFrame: "+obj_Main.stateText[stateFrame]);
         draw_text(xx+marginX,yy+30+marginY*3,"lastState: "+obj_Main.stateText[lastState]);
-        draw_text(xx+marginX,yy+30+marginY*4,"velX: "+string(velX));
-        draw_text(xx+marginX,yy+30+marginY*5,"velY: "+string(velY));
-        draw_text(xx+marginX,yy+30+marginY*6,"fVelX: "+string(fVelX));
-        draw_text(xx+marginX,yy+30+marginY*7,"fVelY: "+string(fVelY));
-        draw_text(xx+marginX,yy+30+marginY*8,"real pos (x . y): "+string(x) + " x "+string(y));
-        draw_text(xx+marginX,yy+30+marginY*9,"position (x . y): "+string(position.X) + " x "+string(position.Y));
+        draw_text(xx+marginX,yy+30+marginY*4,"vel (x.y): "+string(velX)+" x "+string(velY));
+        draw_text(xx+marginX,yy+30+marginY*5,"fVel (x.y): "+string(fVelX)+" x "+string(fVelY));
+        draw_text(xx+marginX,yy+30+marginY*6,"pos diff (x.y): "+string(position.X-oldPosition.X)+" x "+string(position.Y-oldPosition.Y));
+        //draw_text(xx+marginX,yy+30+marginY*7,": "+string());
+        draw_text(xx+marginX,yy+30+marginY*8,"real pos (x.y): "+string(x) + " x "+string(y));
+        draw_text(xx+marginX,yy+30+marginY*9,"position (x.y): "+string(position.X) + " x "+string(position.Y));
 		
 		
 		draw_text(xx+marginX,yy+30+marginY*11,"speedCounter: "+string(speedCounter));
@@ -270,8 +270,34 @@ if(debug == 1)
 			draw_text(xx+10,yy+40+10*i,global.openHatchList[| i]);
 		}*/
 		
-		var edgeAng = GetEdgeAngle(colEdge);
-		draw_text(x,y,string(edgeAng));
+		draw_set_halign(fa_center);
+		draw_set_valign(fa_top);
+		var edgeAng = GetEdgeAngle(Edge.Bottom);
+		if(entity_place_collide(0,2))
+		{
+			draw_text(x,y+10,string(edgeAng));
+		}
+		if(entity_place_collide(0,-2))
+		{
+			draw_set_halign(fa_center);
+			draw_set_valign(fa_bottom);
+			edgeAng = GetEdgeAngle(Edge.Top);
+			draw_text(x,y-10,string(edgeAng));
+		}
+		if(entity_place_collide(2,0))
+		{
+			draw_set_halign(fa_left);
+			draw_set_valign(fa_middle);
+			edgeAng = GetEdgeAngle(Edge.Right);
+			draw_text(bbox_right,y,string(edgeAng));
+		}
+		if(entity_place_collide(-2,0))
+		{
+			draw_set_halign(fa_right);
+			draw_set_valign(fa_middle);
+			edgeAng = GetEdgeAngle(Edge.Left);
+			draw_text(bbox_left,y,string(edgeAng));
+		}
     }
 	
 	with(obj_Camera)

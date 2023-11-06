@@ -7,8 +7,8 @@ if(PauseAI())
 
 var rot = rotation2;
 
-var xcheck = max(abs(velX),2),
-	ycheck = max(abs(velY),2);
+var xcheck = 2,//max(abs(velX),2),
+	ycheck = 2;//max(abs(velY),2);
 var collideAny = (entity_place_collide(xcheck,0) || entity_place_collide(-xcheck,0) || entity_place_collide(0,ycheck) || entity_place_collide(0,-ycheck) ||
 				entity_place_collide(xcheck,ycheck) || entity_place_collide(-xcheck,ycheck) || entity_place_collide(xcheck,-ycheck) || entity_place_collide(-xcheck,-ycheck));
 

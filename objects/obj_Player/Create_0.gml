@@ -544,9 +544,6 @@ frameCounter[16] = 0;
 idleNum = array(32,8,8,8,16,6,6,6);
 idleSequence = array(0,1,2,3,4,3,2,1);
 
-//idleNum_Low = array(12,6,6,10,6,6);
-//idleSequence_Low = array(0,2,4,5,3,1);
-
 idleNum_Low = array(12,4,4,4,10,4,4,4);
 idleSequence_Low = array(0,2,4,4,5,3,3,1);
 
@@ -1043,6 +1040,8 @@ function AfterImage(_player, _alpha, _num) constructor
 
 #region Collision (Normal)
 
+oldPosition = new Vector2(position.X,position.Y);
+
 function CanPlatformCollide()
 {
 	return (grounded || !cDown) && (!spiderBall || spiderEdge == Edge.None || spiderEdge == Edge.Bottom);
@@ -1188,10 +1187,7 @@ function OnXCollision(fVX)
 		}
 	}
 	fVelX = 0;
-	//if(entity_place_collide(move,-3))
-	//{
-		move = 0;
-	//}
+	move = 0;
 	bombJumpX = 0;
 	
 	var diagSparkSlide = (diagSparkSlideOnWalls && (abs(shineDir) == 1 || abs(shineDir) == 3) && !boots[Boots.ChainSpark]);
@@ -1227,22 +1223,17 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		onPlatform = true;
 	}
 	
-	if((state == State.Spark || state == State.BallSpark) && abs(shineDir) <= 2 && shineStart <= 0 && shineEnd <= 0 && move != 0)
+	if((state == State.Spark || state == State.BallSpark) && abs(shineDir) <= 2 && shineStart <= 0 && shineEnd <= 0 && move != 0 && yShift < 0)
 	{
 		shineEnd = 0;
 		shineDir = 0;
 		if(state == State.BallSpark)
 		{
-			//state = State.Morph;
 			ChangeState(State.Morph,State.Morph,mask_Morph,true);
 			mockBall = true;
 		}
 		else
 		{
-			/*stateFrame = State.Stand;
-			mask_index = mask_Stand;
-			y -= 3;
-			state = State.Stand;*/
 			ChangeState(State.Stand,State.Stand,mask_Stand,true);
 		}
 		speedBoost = true;
@@ -1253,7 +1244,7 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		
 		velY = 0;
 	}
-	else if(grounded && (state == State.Stand || state == State.Morph) && abs(fVelX) >= maxSpeed[1,liquidState] && !entity_place_collide(fVX+fVelX,yShift))
+	else if(yShift < 0 && (state == State.Stand || state == State.Morph) && abs(fVelX) >= maxSpeed[1,liquidState] && !entity_place_collide(fVX+fVelX,yShift))
 	{
 		var flag = false;
 		
@@ -1271,15 +1262,6 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		
 		if(flag)
 		{
-			/*var sAngle = 0;
-			var slope = GetEdgeSlope(Edge.Bottom);
-			if(instance_exists(slope))
-			{
-				if(SlopeCheck(slope))
-				{
-					sAngle = GetSlopeAngle(slope);
-				}
-			}*/
 			var sAngle = GetEdgeAngle(Edge.Bottom);
 			velX = lengthdir_x(velX,sAngle);
 			velY = lengthdir_y(velX,sAngle);
@@ -1327,16 +1309,11 @@ function OnYCollision(fVY)
 			shineDir = 0;
 			if(state == State.BallSpark)
 			{
-				//state = State.Morph;
 				ChangeState(State.Morph,State.Morph,mask_Morph,true);
 				mockBall = true;
 			}
 			else
 			{
-				/*stateFrame = State.Stand;
-				mask_index = mask_Stand;
-				y -= 3;
-				state = State.Stand;*/
 				ChangeState(State.Stand,State.Stand,mask_Stand,true);
 			}
 			speedBoost = true;
@@ -1893,7 +1870,7 @@ function CanChangeState(newMask)
 }
 #endregion
 #region ChangeState
-function ChangeState(newState,newStateFrame,newMask,isGrounded)
+function ChangeState(newState,newStateFrame,newMask,isGrounded,stallCam = true)
 {
 	stateFrame = newStateFrame;
 	
@@ -1947,7 +1924,7 @@ function ChangeState(newState,newStateFrame,newMask,isGrounded)
 		var oldY = y;
 		y = scr_round(position.Y);
 		
-		if(y != oldY)
+		if(stallCam && y != oldY)
 		{
 			stallCamera = true;
 		}
@@ -1969,7 +1946,7 @@ function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWav
 			var gain = 0;
 			if(asset_get_index(audio_get_name(global.prevShotSndIndex)) != SoundIndex)
 			{
-				gain = audio_sound_get_gain(global.prevShotSndIndex);//*0.5;
+				gain = audio_sound_get_gain(global.prevShotSndIndex);
 			}
 			audio_sound_gain(global.prevShotSndIndex,gain,25);
 		}
@@ -2021,13 +1998,7 @@ function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWav
 function PlayerGrounded(ydiff = 2)
 {
 	var bottomCollision = (entity_collision_line(bbox_left,bbox_bottom+ydiff,bbox_right,bbox_bottom+ydiff) || (y+ydiff) >= room_height);
-	/*
-	var downSlope = GetEdgeSlope(Edge.Bottom);
-	var downSlopeFlag = (instance_exists(downSlope) && place_meeting(x,y+2,downSlope) && downSlope.image_yscale > 1 && 
-						((downSlope.image_xscale > 0 && bbox_left > downSlope.bbox_left && !entity_place_collide(2,3)) || 
-						(downSlope.image_xscale < 0 && bbox_right < downSlope.bbox_right && !entity_place_collide(-2,3))));
-	*/
-	var downAng = GetEdgeAngle(Edge.Bottom,4);
+	var downAng = GetEdgeAngle(Edge.Bottom);
 	var downSlopeFlag = (downAng >= 55 && downAng <= 305);
 	
 	return (((bottomCollision && (!downSlopeFlag || speedBoost) && velY >= 0 && velY <= fGrav) || (spiderBall && spiderEdge != Edge.None)) && jump <= 0);
@@ -3339,38 +3310,6 @@ function DrawPalSprite(_sprt,_index,_alpha)
 #region PreDrawPlayer
 function PreDrawPlayer(xx, yy, rot, alpha)
 {
-	/*if(stateFrame == State.Morph)
-	{
-		if(state == State.Morph && morphFrame <= 0 && spiderBall)
-		{
-			spiderGlowAlpha += 0.02 * spiderGlowNum * (!global.gamePaused);
-			if(spiderGlowAlpha <= 0.1)
-			{
-				spiderGlowNum = max(spiderGlowNum,1);
-			}
-			if(spiderGlowAlpha >= 0.75)
-			{
-				spiderGlowNum = -1;
-			}
-		}
-		else
-		{
-			spiderGlowAlpha = max(spiderGlowAlpha - (0.1*(!global.gamePaused)), 0);
-			spiderGlowNum = 2;
-		}
-		if(spiderGlowAlpha > 0)
-		{
-			gpu_set_blendmode(bm_add);
-			draw_sprite_ext(sprt_SpiderBallFX,0,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,rot,c_white,min(spiderGlowAlpha,0.5)*alpha);
-			gpu_set_blendmode(bm_normal);
-		}
-	}
-	else
-	{
-		spiderGlowAlpha = 0;
-		spiderGlowNum = 2;
-	}*/
-	
 	if(drawBallTrail)
 	{
 		if(stateFrame == State.Morph || mbTrailAlpha > 0)
@@ -3886,8 +3825,6 @@ function PostDrawPlayer(posX, posY, rot, alph)
 	    var gx = scr_round(sPosX),
 	        gy = scr_round(sPosY);
 	    draw_sprite_ext(sprt_GrappleBeamStart,grapPartFrame,gx,gy,1,1,0,c_white,1);
-	    //part_particles_create(obj_Particles.partSystemB,gx,gy,obj_Particles.PartBeam[3],1);
-	    //part_particles_create(obj_Particles.partSystemB,gx,gy,obj_Particles.PartBeam[2],1);
 
 	    if(grapple.drawGrapDelay <= 0)
 	    {
@@ -3918,13 +3855,6 @@ function PostDrawPlayer(posX, posY, rot, alph)
 	                draw_sprite_ext(sprt,random_range(0,3),linksX[i],linksY[i],image_xscale,image_yscale,rotation2,c_white,1);
 	            }
 	        }
-	        /*var rotation2 = point_direction(startX, startY, endX, endY);
-	        grappleBeamFrame = scr_Loop(grappleBeamFrame+1,0,5);
-
-	        draw_set_blend_mode(bm_add);
-	        draw_sprite_ext(sprt_GrappleBeam,grappleBeamFrame,startX,startY,length/192,0.275,rotation2,c_white,.9);
-	        draw_sprite_ext(sprt_GrappleBeamGlow,grappleBeamFrame,startX,startY,length/192,0.3, rotation2, make_color_rgb(32,128,255),.9);
-	        draw_set_blend_mode(bm_normal);*/
 	    }
 	    if(grapPartCounter > 1)
 	    {

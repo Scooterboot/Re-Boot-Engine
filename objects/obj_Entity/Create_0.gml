@@ -262,7 +262,7 @@ function entityPlatformCheck()
 }*/
 #endregion
 #region GetEdgeAngle
-function GetEdgeAngle(edge, margin = 1)
+function GetEdgeAngle(edge, margin = 6)
 {
 	var pos1 = new Vector2(0,0),
 		pos2 = new Vector2(0,0);
@@ -283,24 +283,28 @@ function GetEdgeAngle(edge, margin = 1)
 		ang = 270;
 	}
 	
-	var maxCheck1 = 8+margin,
-		maxCheck2 = 8+margin;
-	
 	if(edge == Edge.Bottom || edge == Edge.Top)
 	{
-		pos1.Y = margin;
-		if(edge == Edge.Top)
+		while(!entity_place_collide(pos1.X,pos1.Y) && abs(pos1.Y) < margin)
 		{
-			pos1.Y = -margin;
+			if(edge == Edge.Top)
+			{
+				pos1.Y--;
+			}
+			else
+			{
+				pos1.Y++;
+			}
 		}
-		if(entity_place_collide(pos1.X,pos1.Y))
+		
+		if(entity_place_collide(pos1.X,pos1.Y) && pos1.Y != 0)
 		{
 			while(entity_place_collide(pos1.X,pos1.Y))
 			{
 				if(checkDir == 1)
 				{
 					pos1.X++;
-					if(pos1.X > maxCheck1)
+					if(pos1.X > margin)
 					{
 						pos1.X = 0;
 						checkDir = -1;
@@ -309,7 +313,7 @@ function GetEdgeAngle(edge, margin = 1)
 				if(checkDir == -1)
 				{
 					pos1.X--;
-					if(pos1.X < -maxCheck1)
+					if(pos1.X < -margin)
 					{
 						pos1.X = 0;
 						checkDir = 0;
@@ -317,18 +321,18 @@ function GetEdgeAngle(edge, margin = 1)
 					}
 				}
 			}
-			while(!entity_place_collide(pos1.X,pos1.Y+sign(pos1.Y)) && abs(pos1.Y) < maxCheck2)
+			while(!entity_place_collide(pos1.X,pos1.Y+sign(pos1.Y)) && abs(pos1.Y) < margin)
 			{
 				pos1.Y += sign(pos1.Y);
 			}
 			
 			if(checkDir != 0 && entity_place_collide(pos1.X,pos1.Y+sign(pos1.Y)))
 			{
-				while(!entity_place_collide(pos2.X-checkDir,pos2.Y) && abs(pos2.X) < maxCheck1)
+				while(!entity_place_collide(pos2.X-checkDir,pos2.Y) && abs(pos2.X) < margin)
 				{
 					pos2.X -= checkDir;
 				}
-				if(abs(pos2.X) < maxCheck1)
+				if(entity_place_collide(pos2.X-checkDir,pos2.Y))
 				{
 					var poses = array_create(2);
 					poses[0] = pos1;
@@ -356,19 +360,26 @@ function GetEdgeAngle(edge, margin = 1)
 	
 	if(edge == Edge.Right || edge == Edge.Left)
 	{
-		pos1.X = margin;
-		if(edge == Edge.Left)
+		while(!entity_place_collide(pos1.X,pos1.Y) && abs(pos1.X) < margin)
 		{
-			pos1.X = -margin;
+			if(edge == Edge.Left)
+			{
+				pos1.X--;
+			}
+			else
+			{
+				pos1.X++;
+			}
 		}
-		if(entity_place_collide(pos1.X,pos1.Y))
+		
+		if(entity_place_collide(pos1.X,pos1.Y) && pos1.X != 0)
 		{
 			while(entity_place_collide(pos1.X,pos1.Y))
 			{
 				if(checkDir == 1)
 				{
 					pos1.Y++;
-					if(pos1.Y > maxCheck1)
+					if(pos1.Y > margin)
 					{
 						pos1.Y = 0;
 						checkDir = -1;
@@ -377,7 +388,7 @@ function GetEdgeAngle(edge, margin = 1)
 				if(checkDir == -1)
 				{
 					pos1.Y--;
-					if(pos1.Y < -maxCheck1)
+					if(pos1.Y < -margin)
 					{
 						pos1.Y = 0;
 						checkDir = 0;
@@ -385,18 +396,18 @@ function GetEdgeAngle(edge, margin = 1)
 					}
 				}
 			}
-			while(!entity_place_collide(pos1.X+sign(pos1.X),pos1.Y) && abs(pos1.X) < maxCheck2)
+			while(!entity_place_collide(pos1.X+sign(pos1.X),pos1.Y) && abs(pos1.X) < margin)
 			{
 				pos1.X += sign(pos1.X);
 			}
 			
 			if(checkDir != 0 && entity_place_collide(pos1.X+sign(pos1.X),pos1.Y))
 			{
-				while(!entity_place_collide(pos2.X,pos2.Y-checkDir) && abs(pos2.Y) < maxCheck1)
+				while(!entity_place_collide(pos2.X,pos2.Y-checkDir) && abs(pos2.Y) < margin)
 				{
 					pos2.Y -= checkDir;
 				}
-				if(abs(pos2.Y) < maxCheck1)
+				if(entity_place_collide(pos2.X,pos2.Y-checkDir))
 				{
 					var poses = array_create(2);
 					poses[0] = pos1;
@@ -532,7 +543,11 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		var sAngle = 0;
 		if(slopeSpeedAdjust)
 		{
-			sAngle = GetEdgeAngle(Edge.Bottom,2);
+			sAngle = GetEdgeAngle(Edge.Bottom);
+			if(!grounded && entity_place_collide(0,-2))
+			{
+				sAngle = angle_difference(GetEdgeAngle(Edge.Top),180);
+			}
 		}
 		
 		var fVX = lengthdir_x(vX2,sAngle);
@@ -718,7 +733,15 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		var sAngle2 = 0;
 		if(slopeSpeedAdjust)
 		{
-			sAngle2 = angle_difference(GetEdgeAngle(Edge.Top,3),180);
+			//sAngle2 = angle_difference(GetEdgeAngle(Edge.Top),180);
+			if(entity_place_collide(2,0))
+			{
+				sAngle2 = angle_difference(GetEdgeAngle(Edge.Right),90);
+			}
+			else if(entity_place_collide(-2,0))
+			{
+				sAngle2 = angle_difference(GetEdgeAngle(Edge.Left),270);
+			}
 		}
 		
 		var fVY = lengthdir_x(vY2,sAngle2);

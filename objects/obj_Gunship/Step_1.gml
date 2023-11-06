@@ -10,17 +10,9 @@ if(state != ShipState.Land && state != ShipState.TakeOff)
 	y = ystart + dsin(idleAnim)*2;
 }
 
-block[0].isSolid = false;
-block[1].isSolid = false;
-block[2].isSolid = false;
-
-block[0].UpdatePosition(x-94,y+44);
-block[1].UpdatePosition(x+78,y+44);
-block[2].UpdatePosition(x,y);
-
-block[0].isSolid = true;
-block[1].isSolid = true;
-block[2].isSolid = true;
+block.isSolid = false;
+block.UpdatePosition(x,y);
+block.isSolid = true;
 
 if(state == ShipState.Idle)
 {

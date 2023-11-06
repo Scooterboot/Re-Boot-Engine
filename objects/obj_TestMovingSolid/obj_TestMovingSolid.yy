@@ -14,7 +14,10 @@
     "name": "MovingSolids",
     "path": "folders/Objects/Room Elements/SpecialTiles/MovingSolids.yy",
   },
-  "parentObjectId": null,
+  "parentObjectId": {
+    "name": "obj_MovingTile",
+    "path": "objects/obj_MovingTile/obj_MovingTile.yy",
+  },
   "persistent": false,
   "physicsAngularDamping": 0.1,
   "physicsDensity": 0.5,
