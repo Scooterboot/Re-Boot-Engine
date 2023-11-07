@@ -12,8 +12,8 @@
   "conversionMode": 0,
   "duration": 0.177187,
   "parent": {
-    "name": "Misc",
-    "path": "folders/Sounds/Misc.yy",
+    "name": "Tiles",
+    "path": "folders/Sounds/Tiles.yy",
   },
   "preload": false,
   "sampleRate": 44100,

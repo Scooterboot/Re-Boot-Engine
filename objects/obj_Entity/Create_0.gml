@@ -1,6 +1,11 @@
 /// @description Initialize
 
 position = new Vector2(x,y);
+oldPosition = new Vector2(position.X,position.Y);
+function Center()
+{
+	return new Vector2(bbox_left + (bbox_right-bbox_left)/2, bbox_top + (bbox_bottom-bbox_top)/2);
+}
 
 velX = 0; // velocity x
 velY = 0; // velocity y
@@ -32,7 +37,7 @@ function CanPlatformCollide()
 }
 
 blockList = ds_list_create();
-edgeSlope = ds_list_create();
+//edgeSlope = ds_list_create();
 
 #region Base Collision Checks
 
@@ -328,11 +333,15 @@ function GetEdgeAngle(edge, margin = 6)
 			
 			if(checkDir != 0 && entity_place_collide(pos1.X,pos1.Y+sign(pos1.Y)))
 			{
+				while(entity_place_collide(pos2.X-checkDir,pos2.Y) && abs(pos2.Y) < margin)
+				{
+					pos2.Y -= sign(pos1.Y);
+				}
 				while(!entity_place_collide(pos2.X-checkDir,pos2.Y) && abs(pos2.X) < margin)
 				{
 					pos2.X -= checkDir;
 				}
-				if(entity_place_collide(pos2.X-checkDir,pos2.Y))
+				if(pos2.X != 0 && entity_place_collide(pos2.X-checkDir,pos2.Y))
 				{
 					var poses = array_create(2);
 					poses[0] = pos1;
@@ -403,11 +412,15 @@ function GetEdgeAngle(edge, margin = 6)
 			
 			if(checkDir != 0 && entity_place_collide(pos1.X+sign(pos1.X),pos1.Y))
 			{
+				while(entity_place_collide(pos2.X,pos2.Y-checkDir) && abs(pos2.X) < margin)
+				{
+					pos2.X -= sign(pos1.X);
+				}
 				while(!entity_place_collide(pos2.X,pos2.Y-checkDir) && abs(pos2.Y) < margin)
 				{
 					pos2.Y -= checkDir;
 				}
-				if(entity_place_collide(pos2.X,pos2.Y-checkDir))
+				if(pos2.Y != 0 && entity_place_collide(pos2.X,pos2.Y-checkDir))
 				{
 					var poses = array_create(2);
 					poses[0] = pos1;
@@ -1970,8 +1983,7 @@ function DamageDoor(_x,_y,_objIndex,_dmg)
 switchCollide = true;
 function ShutterSwitch(_x,_y,_type)
 {
-	var sSwitch = instance_place(_x,_y,obj_ShutterSwitch);
-	if(instance_exists(sSwitch) && _type > -1)
+	if(place_meeting(_x,_y,obj_ShutterSwitch) && _type > -1)
 	{
 		ToggleSwitch(_x,_y,obj_ShutterSwitch);
 		
@@ -2003,10 +2015,11 @@ function ToggleSwitch(_x,_y,_objIndex)
 				var flag = true;
 				if(switchCollide)
 				{
-					var entity = id;
+					var entity = id,
+						center = Center();
 					with(sSwitch)
 					{
-						if(lhc_collision_line(entity.x,entity.y,x+8*image_xscale,y+8*image_yscale,entity.solids,true,true))
+						if(lhc_collision_line(center.X,center.Y,x,y,entity.solids,true,true))
 						{
 							flag = false;
 						}

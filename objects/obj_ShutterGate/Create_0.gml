@@ -57,15 +57,15 @@ if(shutterH <= 0)
 	state = ShutterState.Opened;
 }
 
-function Toggle()
+function Toggle(_override = false)
 {
-	if(state == ShutterState.Closed)
+	if(state == ShutterState.Closed || (_override && state == ShutterState.Closing))
 	{
 		state = ShutterState.Opening;
 		audio_stop_sound(snd_ShutterGate);
 		audio_play_sound(snd_ShutterGate,0,false);
 	}
-	if(state == ShutterState.Opened)
+	else if(state == ShutterState.Opened || (_override && state == ShutterState.Opening))
 	{
 		state = ShutterState.Closing;
 		audio_stop_sound(snd_ShutterGate);

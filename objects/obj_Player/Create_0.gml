@@ -1040,8 +1040,6 @@ function AfterImage(_player, _alpha, _num) constructor
 
 #region Collision (Normal)
 
-oldPosition = new Vector2(position.X,position.Y);
-
 function CanPlatformCollide()
 {
 	return (grounded || !cDown) && (!spiderBall || spiderEdge == Edge.None || spiderEdge == Edge.Bottom);
