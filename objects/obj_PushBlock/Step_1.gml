@@ -116,7 +116,7 @@ if(!entity_place_collide(0,2) || downSlopeFlag)
 EntityLiquid_Large(x-xprevious, y-yprevious);
 
 mBlock.isSolid = false;
-mBlock.UpdatePosition(x-16,y-16);
+mBlock.UpdatePosition(x+mBlockOffsetX,y+mBlockOffsetX);
 mBlock.isSolid = true;
 
 /*

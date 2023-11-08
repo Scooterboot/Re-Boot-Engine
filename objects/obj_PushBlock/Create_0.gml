@@ -62,7 +62,9 @@ function explodePush(_proj,_velX)
 	}
 }
 
-mBlock = instance_create_layer(x-16,y-16,"Collision",obj_MovingTile);
+mBlockOffsetX = -16;
+mBlockOffsetY = -16;
+mBlock = instance_create_layer(x+mBlockOffsetX,y+mBlockOffsetX,"Collision",obj_MovingTile);
 mBlock.image_xscale = 2;
 mBlock.image_yscale = 2;
 mBlock.ignoredEntity = id;
