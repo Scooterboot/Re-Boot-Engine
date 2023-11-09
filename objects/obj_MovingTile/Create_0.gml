@@ -16,7 +16,7 @@ function IsEntity_Bottom(entity) { return place_meeting(x,y+1,entity); }
 function IsEntity_Left(entity) { return place_meeting(x-1,y,entity); }
 function IsEntity_Right(entity) { return place_meeting(x+1,y,entity); }
 
-function UpdatePosition(_x,_y)
+function UpdatePosition(_x,_y, avoidClipping = false)
 {
 	// round x and y just in case
 	x = scr_round(x);
@@ -124,12 +124,23 @@ function UpdatePosition(_x,_y)
 					
 					shiftedVelX = moveXFlag ? (x-xprevious) : prevShiftX;
 					shiftedVelY = moveYFlag ? (y-yprevious) : prevShiftY;
+					
+					bVelX = moveXFlag ? (x-xprevious) : bVelX;
+					bVelY = moveYFlag ? (y-yprevious) : bVelY;
 				}
 			}
 		}
 	}
 	ds_list_clear(entityList);
 	
-	x = newPosX;
-	y = newPosY;
+	if(avoidClipping)
+	{
+		x += bVelX;
+		y += bVelY;
+	}
+	else
+	{
+		x = newPosX;
+		y = newPosY;
+	}
 }

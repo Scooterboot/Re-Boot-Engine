@@ -1,11 +1,11 @@
 /// @description 
-event_inherited();
+//event_inherited();
 
 rot = 0;
 
-posX = x;
-posY = y;
-/*for(var i = 0; i < 11; i++)
+//posX = x;
+//posY = y;
+for(var i = 0; i < 11; i++)
 {
 	var type = obj_MovingTile;
 	var xscale = 1,
@@ -92,4 +92,4 @@ posY = y;
 	mBlocks[i].image_yscale = yscale;
 	mBlockOffX[i] = offx;
 	mBlockOffY[i] = offy;
-}*/
+}

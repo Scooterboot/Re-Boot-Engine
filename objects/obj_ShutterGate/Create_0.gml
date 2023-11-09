@@ -8,9 +8,14 @@ shutterID = 0;
 image_index = 0;
 image_speed = 0;
 
-shutterH = sprite_height - 16;
+shutterH = max(sprite_height - 16,0);
 sSpeed = 1;
+init = false;
+initialH = shutterH;
+
 overrideHeight = 0;
+stopAnywhere = false;
+ignoreEntities = false;
 
 image_xscale = 1;
 image_yscale = 1;

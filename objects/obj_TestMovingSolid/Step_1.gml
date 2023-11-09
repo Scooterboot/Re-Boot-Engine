@@ -6,7 +6,6 @@ if(global.gamePaused)
 
 rot -= 2;
 
-/*
 x = xstart + lengthdir_x(64,rot);
 y = ystart + lengthdir_y(64,rot);
 
@@ -30,9 +29,9 @@ for(var i = 0; i < array_length(mBlocks); i++)
 {
 	mBlocks[i].isSolid = true;
 }
-*/
-posX = xstart + lengthdir_x(64,rot);
-posY = ystart + lengthdir_y(64,rot);
-isSolid = false;
-UpdatePosition(posX,posY);
-isSolid = true;
+
+//posX = xstart + lengthdir_x(64,rot);
+//posY = ystart + lengthdir_y(64,rot);
+//isSolid = false;
+//UpdatePosition(posX,posY);
+//isSolid = true;
