@@ -1997,7 +1997,7 @@ function PlayerGrounded(ydiff = 2)
 {
 	var bottomCollision = (entity_collision_line(bbox_left,bbox_bottom+ydiff,bbox_right,bbox_bottom+ydiff) || (y+ydiff) >= room_height);
 	var downAng = GetEdgeAngle(Edge.Bottom);
-	var downSlopeFlag = (downAng >= 55 && downAng <= 305);
+	var downSlopeFlag = (downAng >= 60 && downAng <= 300);
 	
 	return (((bottomCollision && (!downSlopeFlag || speedBoost) && velY >= 0 && velY <= fGrav) || (spiderBall && spiderEdge != Edge.None)) && jump <= 0);
 }

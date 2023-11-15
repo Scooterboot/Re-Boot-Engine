@@ -1804,7 +1804,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 #endregion
 
 #region Quick Climb
-	if(global.quickClimb && state != State.Grip && state != State.Morph && morphFrame <= 0 && grounded && abs(dirFrame) >= 4 && entity_place_collide(move2,0) && !entity_place_collide(0,0))
+	if(global.quickClimb && state != State.Grip && state != State.Morph && morphFrame <= 0 && grounded && abs(dirFrame) >= 4 && entity_place_collide(2*move2,0) && !entity_place_collide(0,0))
 	{
 		var qcHeight = 0;
 		var bbottom = scr_round(bbox_bottom);
@@ -1819,9 +1819,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			// then again, 'if it looks stupid, but works, it isn't stupid.'
 			for(var i = 0; i < 2; i++)
 			{
-				if(i == 0 && lhc_collision_rectangle(x,bbottom-8,x+6*dir,bbottom-5,solids,true,true))
+				if(i == 0 && lhc_collision_rectangle(x,bbottom-8,x+7*dir,bbottom-5,solids,true,true))
 				{
-					while(qcHeight > -heightMax && lhc_collision_line(x,bbottom+qcHeight,x+6*dir,bbottom+qcHeight,solids,true,true))
+					while(qcHeight > -heightMax && lhc_collision_line(x,bbottom+qcHeight,x+7*dir,bbottom+qcHeight,solids,true,true))
 					{
 						qcHeight--;
 					}
@@ -1830,7 +1830,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				else if(i == 1)
 				{
 					qcHeight = -heightMax;
-					while(qcHeight < -5 && !lhc_collision_line(x,bbottom+qcHeight,x+6*dir,bbottom+qcHeight,solids,true,true))
+					while(qcHeight < -5 && !lhc_collision_line(x,bbottom+qcHeight,x+7*dir,bbottom+qcHeight,solids,true,true))
 					{
 						qcHeight++;
 					}
@@ -1842,9 +1842,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					var yHeight = bbottom+qcHeight;
 			
 					var slopeOffset = 0;
-					while(slopeOffset > -16 && collision_rectangle(x+6*dir,yHeight+slopeOffset-8,x+16*dir,yHeight+slopeOffset,obj_Slope,true,true))
+					while(slopeOffset > -16 && collision_rectangle(x+7*dir,yHeight+slopeOffset-8,x+17*dir,yHeight+slopeOffset,obj_Slope,true,true))
 					{
-						var slopeCol = collision_rectangle(x+6*dir,yHeight+slopeOffset-8,x+16*dir,yHeight+slopeOffset,obj_Slope,true,true);
+						var slopeCol = collision_rectangle(x+7*dir,yHeight+slopeOffset-8,x+17*dir,yHeight+slopeOffset,obj_Slope,true,true);
 						if(slopeCol != noone && slopeCol.image_yscale > 0 && slopeCol.image_yscale <= 1 && sign(slopeCol.image_xscale) == -dir)
 						{
 							slopeOffset -= 1;
@@ -1857,9 +1857,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			
 					yHeight += slopeOffset;
 			
-					if(!lhc_collision_rectangle(x-4*dir,yHeight-15,x+16*dir,yHeight-2,solids,true,true))
+					if(!lhc_collision_rectangle(x-4*dir,yHeight-15,x+17*dir,yHeight-2,solids,true,true))
 					{
-						if(!lhc_collision_rectangle(x-4*dir,yHeight-31,x+16*dir,yHeight-2,solids,true,true))
+						if(!lhc_collision_rectangle(x-4*dir,yHeight-31,x+17*dir,yHeight-2,solids,true,true))
 						{
 							quickClimbTarget = 2;
 						}

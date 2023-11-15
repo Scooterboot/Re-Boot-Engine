@@ -270,6 +270,7 @@ if(debug == 1)
 			draw_text(xx+10,yy+40+10*i,global.openHatchList[| i]);
 		}*/
 		
+		draw_set_alpha(0.5);
 		draw_set_halign(fa_center);
 		draw_set_valign(fa_top);
 		var edgeAng = GetEdgeAngle(Edge.Bottom);
@@ -298,6 +299,7 @@ if(debug == 1)
 			edgeAng = GetEdgeAngle(Edge.Left);
 			draw_text(bbox_left,y,string(edgeAng));
 		}
+		draw_set_alpha(1);
     }
 	
 	with(obj_Camera)

@@ -49,9 +49,11 @@ function GetEntity()
 		{
 			continue;
 		}
-		
+		ds_list_clear(entityList);
 		return entity;
 	}
+	ds_list_clear(entityList);
+	return noone;
 }
 
 frame = 0;
