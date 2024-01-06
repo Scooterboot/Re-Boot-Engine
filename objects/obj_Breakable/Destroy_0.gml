@@ -8,16 +8,6 @@ if(!hiddenDestroy)
 	    audio_play_sound(snd,0,false);
 	    global.breakSndCounter = 5;
 	}
-	
-	for(var k = 0; k < image_xscale; k++)
-	{
-		for(var l = 0; l < image_yscale; l++)
-		{
-			var ix = x+16*k,
-				iy = y+16*l;
-			part_particles_create(obj_Particles.partSystemD,ix,iy,obj_Particles.blockBreak[breakType],1);
-		}
-	}
 }
 
 if(!visible)
@@ -25,11 +15,10 @@ if(!visible)
 	RevealTile();
 }
 
-if(respawnTime > 0)
-{
+//if(respawnTime > 0)
+//{
     var re = instance_create_layer(x,y,layer,obj_BlockRespawn);
     re.sprite_index = respawnSprt;
-    re.breakType = breakType;
     re.blockIndex = object_index;
     re.respawnTime = respawnTime;
     re.initialTime = respawnTime;
@@ -46,4 +35,4 @@ if(respawnTime > 0)
         re.downright = downright;
         re.downleft = downleft;
     }
-}
+//}

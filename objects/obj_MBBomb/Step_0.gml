@@ -11,20 +11,6 @@ if(spreadType != -1)
 	{
 		if(spreadType == 0)
 		{
-			if(place_collide(0,1))
-			{
-				var frict = 0.2;
-				
-				if(velX > 0)
-				{
-					velX = max(velX-frict,0);
-				}
-				if(velX < 0)
-				{
-					velX = min(velX+frict,0);
-				}
-			}
-			
 			velY = min(velY+0.25,10);
 		}
 		if(spreadType == 1)

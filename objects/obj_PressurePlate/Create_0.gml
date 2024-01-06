@@ -7,33 +7,14 @@ init = false;
 image_index = 0;
 image_speed = 0;
 
-function GetGates()
-{
-	var gates = array_create(0),
-		gnum = 0;
-	
-	var num = instance_number(obj_ShutterGate);
-	for(var i = 0; i < num; i++)
-	{
-		var sGate = instance_find(obj_ShutterGate,i);
-		if(instance_exists(sGate) && sGate.shutterID == shutterID)
-		{
-			gates[gnum] = sGate;
-			gnum++;
-		}
-	}
-	return gates;
-}
-
 gates = array_create(0);
-gateStartedOpen = array_create(0);
 
 entityDetected = false;
 
 entityList = ds_list_create();
 function GetEntity()
 {
-	var num = instance_place_list(x,y-2,obj_Entity,entityList,true);
+	var num = instance_place_list(x,y,obj_Entity,entityList,true);
 	for(var i = 0; i < num; i++)
 	{
 		var entity = entityList[| i];

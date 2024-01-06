@@ -5,7 +5,7 @@
   "bbox_bottom": 14,
   "bbox_left": 1,
   "bbox_right": 14,
-  "bbox_top": 1,
+  "bbox_top": 2,
   "bboxMode": 0,
   "collisionKind": 1,
   "collisionTolerance": 0,
@@ -13,16 +13,16 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"10425c78-5317-4bd0-a978-2e5dc9553b6c",},
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"4d3f8f5f-e32b-4337-ab9a-7c7e1625d184",},
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"cba2a5cc-7ec7-4d25-9c87-d1a32596538f",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"1ed0e468-80dc-4b82-abd7-1808b4d02d16",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"79697af3-974e-431f-b846-ebb157450858",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"9b623c94-2a0a-4c3c-abea-640f76c60d43",},
   ],
   "gridX": 0,
   "gridY": 0,
   "height": 16,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"ba7b64a7-d115-4a0c-9d9d-50217c294dbd","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"938da09f-9e08-47df-9682-42fb45015bbd","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": {
     "resourceType": "GMNineSliceData",
@@ -50,8 +50,8 @@
   },
   "origin": 0,
   "parent": {
-    "name": "BTSTiles",
-    "path": "folders/Sprites/Room Elements/BTSTiles.yy",
+    "name": "BreakAnims",
+    "path": "folders/Sprites/Room Elements/BTSTiles/BreakAnims.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {
@@ -79,9 +79,9 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"10425c78-5317-4bd0-a978-2e5dc9553b6c","path":"sprites/sprt_ScrewBlockBreak/sprt_ScrewBlockBreak.yy",},},},"Disabled":false,"id":"16867d91-e6f5-4327-b0de-7b2cb9d1a44e","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"4d3f8f5f-e32b-4337-ab9a-7c7e1625d184","path":"sprites/sprt_ScrewBlockBreak/sprt_ScrewBlockBreak.yy",},},},"Disabled":false,"id":"819ee568-6d55-45a2-9960-d1b7e1a96b3f","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"cba2a5cc-7ec7-4d25-9c87-d1a32596538f","path":"sprites/sprt_ScrewBlockBreak/sprt_ScrewBlockBreak.yy",},},},"Disabled":false,"id":"5639d1e3-50ff-408c-9942-1ce5a4a880f7","IsCreationKey":false,"Key":2.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"1ed0e468-80dc-4b82-abd7-1808b4d02d16","path":"sprites/sprt_ScrewBlockBreak/sprt_ScrewBlockBreak.yy",},},},"Disabled":false,"id":"c7124a4e-50e8-4a46-9d1c-e31230014d51","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"79697af3-974e-431f-b846-ebb157450858","path":"sprites/sprt_ScrewBlockBreak/sprt_ScrewBlockBreak.yy",},},},"Disabled":false,"id":"d1ef4476-d9e9-49b3-90c5-9f623cdeecbc","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"9b623c94-2a0a-4c3c-abea-640f76c60d43","path":"sprites/sprt_ScrewBlockBreak/sprt_ScrewBlockBreak.yy",},},},"Disabled":false,"id":"d8185b3d-f435-4cc0-b621-ddafcc3f7047","IsCreationKey":false,"Key":2.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,

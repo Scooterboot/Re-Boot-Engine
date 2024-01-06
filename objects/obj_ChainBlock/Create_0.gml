@@ -1,8 +1,7 @@
 /// @description Initialize
 event_inherited();
 //snd = snd_BlockBreakHeavy;
-respawnSprt = sprt_ChainBlockBreak;
-breakType = 1;
+respawnSprt = sprt_BombBlockBreak;
 
 destroy = false;
 time = 0;

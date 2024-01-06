@@ -38,7 +38,7 @@ if(!isSpazer && !isPlasma)
 	{
 		var rotspeed = 30;
 		var i = 1;
-		if(waveStyle == 1)
+		if(isWave && waveDir == -1)
 		{
 			i = -1;
 		}
@@ -84,3 +84,12 @@ if(projLength > 0)
 }
 
 draw_sprite_ext(sprite_index,image_index,scr_round(x),scr_round(y),xscale,yscale,angle,c_white,image_alpha);
+
+if(!global.gamePaused)
+{
+	for(var i = 10; i > 0; i--)
+	{
+		oldRot[i] = oldRot[i - 1];
+	}
+	oldRot[0] = angle;
+}

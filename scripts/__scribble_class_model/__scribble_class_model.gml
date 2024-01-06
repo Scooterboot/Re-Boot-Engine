@@ -1,6 +1,9 @@
 /// @param element
 /// @param modelCacheName
 
+// feather disable all
+// feather ignore all
+
 function __scribble_class_model(_element, _model_cache_name) constructor
 {
     static __scribble_state    = __scribble_get_state();

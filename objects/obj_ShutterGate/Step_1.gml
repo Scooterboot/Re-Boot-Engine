@@ -47,6 +47,7 @@ if(state == ShutterState.Closing)
 	}
 }
 
+stuck = false;
 if(instance_exists(mBlock))
 {
 	mBlock.isSolid = false;
@@ -54,6 +55,13 @@ if(instance_exists(mBlock))
 	mBlock.UpdatePosition(x+lengthdir_x(shutterH+16,image_angle-90),y+lengthdir_y(shutterH+16,image_angle-90),!ignoreEntities);
 	mBlock.isSolid = true;
 	
+	var sh = shutterH;
+	
 	shutterH = max(point_distance(x,y,mBlock.x,mBlock.y)-16,0);
 	mBlock.image_yscale = -(scr_round(shutterH+4)/16);
+	
+	if(state == ShutterState.Closing && shutterH < sh)
+	{
+		stuck = true;
+	}
 }

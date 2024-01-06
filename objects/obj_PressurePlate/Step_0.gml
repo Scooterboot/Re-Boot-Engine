@@ -20,8 +20,13 @@ for(var i = 0; i < num; i++)
 
 for(var i = 0; i < array_length(gates); i++)
 {
-	var toggleOpen = (entityDetected && !gateStartedOpen[i]) || (!entityDetected && gateStartedOpen[i]),
-		toggleClose = (!entityDetected && !gateStartedOpen[i]) || (entityDetected && gateStartedOpen[i]);
+	var toggleOpen = entityDetected,
+		toggleClose = !entityDetected;
+	if(gates[i].initialState == ShutterState.Opened)
+	{
+		toggleOpen = !entityDetected;
+		toggleClose = entityDetected;
+	}
 	
 	if((toggleClose && 
 		(gates[i].state == ShutterState.Opened || gates[i].state == ShutterState.Opening)) ||
@@ -32,7 +37,7 @@ for(var i = 0; i < array_length(gates); i++)
 	}
 }
 
-if(entityDetected)
+if(instance_exists(GetEntity()))
 {
 	frameCounter++;
 	if(frameCounter > 2)

@@ -13,16 +13,16 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"1fcba80f-26c6-430e-8053-c67e6f01e7c0",},
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"c6951ef5-6ed4-4dbf-914f-6974c3598e39",},
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"4e4c854f-f735-499a-97af-df0631d1f1fb",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"1e0006c7-dd84-46de-bb9f-38e5565f53c4",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"41f9da0d-ff3e-4c6c-a0aa-e70d8dd7359d",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"2b86e475-c162-4ca8-9733-d141ad16acce",},
   ],
   "gridX": 0,
   "gridY": 0,
   "height": 16,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"0cee411a-8422-4799-aaa0-5f3922026d5e","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"0267bdeb-6caa-4d14-9294-e1e299b8ead9","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": {
     "resourceType": "GMNineSliceData",
@@ -50,8 +50,8 @@
   },
   "origin": 0,
   "parent": {
-    "name": "BTSTiles",
-    "path": "folders/Sprites/Room Elements/BTSTiles.yy",
+    "name": "BreakAnims",
+    "path": "folders/Sprites/Room Elements/BTSTiles/BreakAnims.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {
@@ -79,9 +79,9 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"1fcba80f-26c6-430e-8053-c67e6f01e7c0","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},},},"Disabled":false,"id":"a41c04f6-ec15-42fb-b224-d2c16d2c963c","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"c6951ef5-6ed4-4dbf-914f-6974c3598e39","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},},},"Disabled":false,"id":"e3f6c764-141c-4509-8143-cc48c5706cbc","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"4e4c854f-f735-499a-97af-df0631d1f1fb","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},},},"Disabled":false,"id":"dd5547f1-f33e-420d-a29f-b50c4b0b6821","IsCreationKey":false,"Key":2.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"1e0006c7-dd84-46de-bb9f-38e5565f53c4","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},},},"Disabled":false,"id":"30fb3508-6ca3-4a8e-9e6e-c4163912ead8","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"41f9da0d-ff3e-4c6c-a0aa-e70d8dd7359d","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},},},"Disabled":false,"id":"e8c5e4a4-e2ba-42f8-abf8-a78acf8bbc22","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"2b86e475-c162-4ca8-9733-d141ad16acce","path":"sprites/sprt_MissileBlockBreak/sprt_MissileBlockBreak.yy",},},},"Disabled":false,"id":"f1e19660-4c60-487b-b4c5-c44ce43e315e","IsCreationKey":false,"Key":2.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,

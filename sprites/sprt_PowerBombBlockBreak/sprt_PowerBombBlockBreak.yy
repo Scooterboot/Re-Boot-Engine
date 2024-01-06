@@ -13,16 +13,16 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"15b565e4-f79d-4b2f-b6d1-814bec30dc52",},
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"867914e0-a718-4af5-bab0-bb05dca27d94",},
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"da97b09a-df2b-4876-b01d-07ce6bd7e271",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"2a408494-c23a-49a3-8420-9f745c2e8770",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"1a7e4c9d-1525-4033-9777-2505111027aa",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"9631494e-a2ed-4c69-8d10-81dc5ec00f51",},
   ],
   "gridX": 0,
   "gridY": 0,
   "height": 16,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"709266a9-60b0-435a-bb3a-6ef3df9caaba","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"4512b66f-e1ad-4242-9dc5-ea75ea8e78f8","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": {
     "resourceType": "GMNineSliceData",
@@ -50,8 +50,8 @@
   },
   "origin": 0,
   "parent": {
-    "name": "BTSTiles",
-    "path": "folders/Sprites/Room Elements/BTSTiles.yy",
+    "name": "BreakAnims",
+    "path": "folders/Sprites/Room Elements/BTSTiles/BreakAnims.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {
@@ -79,9 +79,9 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"15b565e4-f79d-4b2f-b6d1-814bec30dc52","path":"sprites/sprt_PowerBombBlockBreak/sprt_PowerBombBlockBreak.yy",},},},"Disabled":false,"id":"e4be456d-d5a6-4ece-8aaa-e0f3c0e8d064","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"867914e0-a718-4af5-bab0-bb05dca27d94","path":"sprites/sprt_PowerBombBlockBreak/sprt_PowerBombBlockBreak.yy",},},},"Disabled":false,"id":"8161c1a7-7974-4f93-9a91-6b336f7c5a42","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"da97b09a-df2b-4876-b01d-07ce6bd7e271","path":"sprites/sprt_PowerBombBlockBreak/sprt_PowerBombBlockBreak.yy",},},},"Disabled":false,"id":"f494c78a-1f47-44c7-8ed6-2b2ee0284756","IsCreationKey":false,"Key":2.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"2a408494-c23a-49a3-8420-9f745c2e8770","path":"sprites/sprt_PowerBombBlockBreak/sprt_PowerBombBlockBreak.yy",},},},"Disabled":false,"id":"adbfd950-3a18-4185-a618-9854814644f6","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"1a7e4c9d-1525-4033-9777-2505111027aa","path":"sprites/sprt_PowerBombBlockBreak/sprt_PowerBombBlockBreak.yy",},},},"Disabled":false,"id":"4518066e-8737-47e6-b916-7a29badeb94c","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"9631494e-a2ed-4c69-8d10-81dc5ec00f51","path":"sprites/sprt_PowerBombBlockBreak/sprt_PowerBombBlockBreak.yy",},},},"Disabled":false,"id":"af794d15-0220-4e25-8454-3e3fb8ef1932","IsCreationKey":false,"Key":2.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,

@@ -51,13 +51,12 @@ function scr_MainInitialize()
 
 	global.currentPlayTime = 0;
 	global.currentItemPercent = 0;
-	
-	global.cursorGlow = 0;
 
 	global.rmHeated = false;
 
 	randomize(); //randomize seed for various random numbers
 
+	instance_create_depth(mouse_x,mouse_y,-2,obj_Mouse);
 	instance_create_depth(0,0,0,obj_PauseMenu);
 	instance_create_depth(0,0,0,obj_Particles);
 	instance_create_depth(0,0,0,obj_Control);

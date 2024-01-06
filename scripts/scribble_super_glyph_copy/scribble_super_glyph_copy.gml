@@ -4,6 +4,9 @@
 /// @param glyphs
 /// @param [glyphs]...
 
+// feather disable all
+// feather ignore all
+
 function scribble_super_glyph_copy(_target, _source, _overwrite)
 {
     var _target_font_data = __scribble_get_font_data(_target);

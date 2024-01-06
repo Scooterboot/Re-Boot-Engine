@@ -1,3 +1,6 @@
+// feather disable all
+// feather ignore all
+
 #macro font_add_sprite          __scribble_font_add_sprite
 #macro font_add_sprite_ext      __scribble_font_add_sprite_ext
 #macro __font_add_sprite__      font_add_sprite

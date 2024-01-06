@@ -22,6 +22,8 @@ image_yscale = 1;
 
 frame = 1;
 
+stuck = false;
+
 mBlock = instance_create_layer(x+lengthdir_x(shutterH+16,image_angle-90),y+lengthdir_y(shutterH+16,image_angle-90),"Collision",obj_MovingTile);
 mBlock.image_angle = image_angle;
 mBlock.image_yscale = -(scr_round(shutterH)/16);
@@ -61,6 +63,7 @@ if(shutterH <= 0)
 {
 	state = ShutterState.Opened;
 }
+initialState = state;
 
 function Toggle(_override = false)
 {

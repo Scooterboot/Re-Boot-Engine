@@ -1,5 +1,8 @@
 /// @param font
 
+// feather disable all
+// feather ignore all
+
 function __scribble_font_add_from_project(_font)
 {
     var _name = font_get_name(_font);

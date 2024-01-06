@@ -23,13 +23,28 @@ function OnXCollision(fVX)
 {
 	if(spreadType < 2)
 	{
-		velX *= -0.25;
+		velX *= -0.5;
 	}
 }
 function OnYCollision(fVY)
 {
 	if(spreadType < 2)
 	{
-		velY *= -0.25;
+		velY *= -0.5;
+	}
+}
+function OnBottomCollision(fVY)
+{
+	if(spreadType == 0)
+	{
+		var frict = 0.2;
+		if(velX > 0)
+		{
+			velX = max(velX-frict,0);
+		}
+		if(velX < 0)
+		{
+			velX = min(velX+frict,0);
+		}
 	}
 }

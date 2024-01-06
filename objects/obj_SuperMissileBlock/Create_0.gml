@@ -2,4 +2,3 @@
 event_inherited();
 snd = snd_BlockBreakHeavy;
 respawnSprt = sprt_SuperMissileBlockBreak;
-breakType = 3;

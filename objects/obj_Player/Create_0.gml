@@ -470,8 +470,8 @@ jumping = false;
 jumpStart = false;
 jumpStop = !jumpStart;
 
-bunnyJumpMax = 3;
-bunnyJump = bunnyJumpMax;
+coyoteJumpMax = 3;
+coyoteJump = coyoteJumpMax;
 bufferJumpMax = 7;//5;
 bufferJump = bufferJumpMax;
 
@@ -1258,11 +1258,12 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 			flag = true;
 		}
 		
-		if(flag)
+		if(flag && velY >= 0)
 		{
 			var sAngle = GetEdgeAngle(Edge.Bottom);
-			velX = lengthdir_x(velX,sAngle);
-			velY = lengthdir_y(velX,sAngle);
+			var vx = velX;
+			//velX = lengthdir_x(vx,sAngle);
+			velY = lengthdir_y(vx,sAngle);
 			ledgeFall = false;
 			ledgeFall2 = false;
 		}
@@ -1996,7 +1997,7 @@ function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWav
 function PlayerGrounded(ydiff = 2)
 {
 	var bottomCollision = (entity_collision_line(bbox_left,bbox_bottom+ydiff,bbox_right,bbox_bottom+ydiff) || (y+ydiff) >= room_height);
-	var downAng = GetEdgeAngle(Edge.Bottom);
+	var downAng = scr_wrap(GetEdgeAngle(Edge.Bottom),0,360);
 	var downSlopeFlag = (downAng >= 60 && downAng <= 300);
 	
 	return (((bottomCollision && (!downSlopeFlag || speedBoost) && velY >= 0 && velY <= fGrav) || (spiderBall && spiderEdge != Edge.None)) && jump <= 0);
@@ -2312,6 +2313,7 @@ function Set_Beams()
 				beamShot = obj_IceWavePlasmaBeamShot;
 				beamCharge = obj_IceWavePlasmaBeamChargeShot;
 				beamSound = snd_IceComboShot;
+				beamAmt = 2;
 				beamIconIndex = 11;
 			}
 		}
@@ -2343,6 +2345,7 @@ function Set_Beams()
 			beamChargeAnim = sprt_PlasmaBeamChargeAnim;
 			beamSound = snd_PlasmaBeam_Shot;
 			beamChargeSound = snd_PlasmaBeam_ChargeShot;
+			beamAmt = 2;
 			beamIconIndex = 10;
 			beamFlare = sprt_PlasmaBeamChargeFlare;
 		}

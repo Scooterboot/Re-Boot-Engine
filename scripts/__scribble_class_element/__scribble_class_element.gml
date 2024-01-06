@@ -1,6 +1,9 @@
 /// @param string
 /// @param uniqueID
 
+// feather disable all
+// feather ignore all
+
 function __scribble_class_element(_string, _unique_id) constructor
 {
     static __scribble_state    = __scribble_get_state();

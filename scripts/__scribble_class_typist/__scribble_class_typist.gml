@@ -1,5 +1,8 @@
 /// @param perLine
 
+// feather disable all
+// feather ignore all
+
 function __scribble_class_typist(_per_line) constructor
 {
     static __scribble_state = __scribble_get_state();

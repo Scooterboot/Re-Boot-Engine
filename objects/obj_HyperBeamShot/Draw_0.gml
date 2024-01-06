@@ -1,24 +1,22 @@
 /// @description 
 
-if(impacted <= 0)
+image_angle = 0;
+var angle = direction+180;
+if((direction-45)%90 == 0 && rotFrame > 0)
 {
-	image_angle = direction+180;
-	if((direction-45)%90 == 0 && rotFrame > 0)
+	rFrame = rotFrame;
+	angle = direction+225;
+}
+var velAngX = x-(oldPosX[0]),//+speed_x),
+	velAngY = y-(oldPosY[0]),//+speed_y),
+	nVelX = velX,//lengthdir_x(velocity,direction),
+	nVelY = velY;//lengthdir_y(velocity,direction);
+if(point_distance(x,y,x+velAngX,y+velAngY) >= point_distance(x,y,x+nVelX,y+nVelY))
+{
+	angle = point_direction(0,0,velAngX,velAngY)+180;
+	if(rFrame != 0)
 	{
-		rFrame = rotFrame;
-		image_angle = direction+225;
-	}
-	var velAngX = x-(oldPosX[0]),//+speed_x),
-		velAngY = y-(oldPosY[0]),//+speed_y),
-		nVelX = velX,//lengthdir_x(velocity,direction),
-		nVelY = velY;//lengthdir_y(velocity,direction);
-	if(point_distance(x,y,x+velAngX,y+velAngY) >= point_distance(x,y,x+nVelX,y+nVelY))
-	{
-		image_angle = point_direction(0,0,velAngX,velAngY)+180;
-		if(rFrame != 0)
-		{
-			image_angle = point_direction(0,0,velAngX,velAngY)+225;
-		}
+		angle = point_direction(0,0,velAngX,velAngY)+225;
 	}
 }
 if((image_number-rotFrame) > 1)
@@ -74,7 +72,7 @@ if(rFrame != 0)
 }
 
 chameleon_set(sprt_HyperBeamPalette,obj_Main.hyperRainbowCycle,0,0,11);
-draw_sprite_ext(sprite_index,image_index,scr_round(x),scr_round(y),xscale,yscale,image_angle,c_white,image_alpha);
+draw_sprite_ext(sprite_index,image_index,scr_round(x),scr_round(y),xscale,yscale,angle,c_white,image_alpha);
 shader_reset();
 
 if(fired < 4)
@@ -100,4 +98,13 @@ if(fired < 4)
 		draw_sprite_ext(sprt_HyperBeamStartParticle_Glow,hObj.firedFrame,scr_round(shootPosX),scr_round(shootPosY),1,1,0,c_white,0.75);
 		gpu_set_blendmode(bm_normal);
 	}
+}
+
+if(!global.gamePaused)
+{
+	for(var i = 10; i > 0; i--)
+	{
+		oldRot[i] = oldRot[i - 1];
+	}
+	oldRot[0] = angle;
 }

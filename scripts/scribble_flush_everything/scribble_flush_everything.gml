@@ -2,6 +2,9 @@
 /// to call this function (Scribble automatically garbage collects resources that haven't been used recently)
 /// but it's occasionally useful when you need memory to be available immediately.
 
+// feather disable all
+// feather ignore all
+
 function scribble_flush_everything()
 {
     if (__SCRIBBLE_DEBUG) __scribble_trace("Flushing everything");

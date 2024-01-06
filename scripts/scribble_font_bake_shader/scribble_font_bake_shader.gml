@@ -12,6 +12,9 @@
 /// @param smooth               Set to <true> to turn on linear interpolation
 /// @param [surfaceSize=2048]   Size of the surface to use. Defaults to 2048x2048
 
+// feather disable all
+// feather ignore all
+
 function scribble_font_bake_shader(_source_font_name, _new_font_name, _shader, _border, _l_pad, _t_pad, _r_pad, _b_pad, _separation, _smooth, _texture_size = 2048)
 {
     if (!is_string(_source_font_name))

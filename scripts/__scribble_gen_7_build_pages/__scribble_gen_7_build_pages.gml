@@ -1,3 +1,6 @@
+// feather disable all
+// feather ignore all
+
 #macro __SCRIBBLE_GEN_PAGE_POP  var _page_end_line = _i - 1;\
                                 _page_data.__line_end    = _page_end_line;\
                                 _page_data.__line_count  = 1 + _page_data.__line_end - _page_data.__line_start;\

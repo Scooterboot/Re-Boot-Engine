@@ -1,8 +1,5 @@
 /// @description Main
-//discord_update_text("Testing stuff", "Debug Area");
-//discord_update_image("brinstarelevator", "smallicon", "Derp", "Made by Scooterboot");
 
-//discord_update();
 global.currentItemPercent = (ds_list_size(global.collectedItemList) / global.totalItems) * 100;
 
 
@@ -56,7 +53,7 @@ else if(global.screenScale == 0)
 	screenScale = min(max(window_get_width()/global.resWidth,1),max(window_get_height()/global.resHeight,1));
 }
 
-if(!window_get_fullscreen())
+/*if(!window_get_fullscreen())
 {
 	if(windowResizeTimer <= 0)
 	{
@@ -70,7 +67,7 @@ if(!window_get_fullscreen())
 else
 {
 	windowResizeTimer = 10;
-}
+}*/
 
 
 if(room == rm_MainMenu)

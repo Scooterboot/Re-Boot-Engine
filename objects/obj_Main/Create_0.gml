@@ -1,5 +1,4 @@
 /// @description Initialize
-//discord_start("569344917676228631");
 
 scr_MainInitialize();
 
@@ -41,14 +40,8 @@ global.screenY = (window_get_height() - (surface_get_height(application_surface)
 window_set_fullscreen(global.fullScreen);
 display_reset(0, global.vsync);
 window_set_size(global.resWidth*screenScale,global.resHeight*screenScale);
-windowResizeTimer = 0;
-window_center(); // <- this stopped working for some reason. had to fix it with the code below \/
-
-/*
-var winMoveX = (global.ogResWidth - global.resWidth*screenScale) / 2,
-	winMoveY = (global.resHeight - global.resHeight*screenScale) / 2;
-window_set_position(window_get_x()+winMoveX,window_get_y()+winMoveY);
-*/
+//windowResizeTimer = 0;
+window_center();
 
 oldDelta = delta_time;
 

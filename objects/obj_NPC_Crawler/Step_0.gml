@@ -133,10 +133,10 @@ else
 	Collision_Crawler(fVelX,fVelY,3,3,true);
 }
 
-var rot2 = scr_round(rotation2);
+var rot2 = scr_wrap(scr_round(rotation2),0,360);
 rotation2 = scr_wrap(rot,0,360);
 var rot3 = abs(rotation2 - rot2),
-	rotRate = radtodeg(0.25) * mSpeed;
+	rotRate = 10 * mSpeed;//radtodeg(0.25) * mSpeed;
 if(rotation2 > rot2)
 {
 	if(rot3 > 180)

@@ -18,14 +18,46 @@ for(var i = 0; i < num; i++)
 	}
 }
 
-var sGates = GetGates();
-for(var i = 0; i < array_length(sGates); i++)
+for(var i = 0; i < array_length(gates); i++)
 {
-	if((playerDetected && 
-		(sGates[i].state == ShutterState.Opened || sGates[i].state == ShutterState.Opening)) ||
-	(!playerDetected && !stayClosed && 
-		(sGates[i].state == ShutterState.Closed || sGates[i].state == ShutterState.Closing)))
+	var toggleOpen = playerDetected,
+		toggleClose = !playerDetected && !stayClosed;
+	if(gates[i].initialState == ShutterState.Opened)
 	{
-		sGates[i].Toggle(true);
+		toggleOpen = !playerDetected && !stayClosed;
+		toggleClose = playerDetected;
 	}
+	
+	if((toggleClose && 
+		(gates[i].state == ShutterState.Opened || gates[i].state == ShutterState.Opening)) ||
+	(toggleOpen && 
+		(gates[i].state == ShutterState.Closed || gates[i].state == ShutterState.Closing)))
+	{
+		gates[i].Toggle(true);
+	}
+}
+
+
+frameCounter++;
+if(frameCounter > 2)
+{
+	if(playerDetected)
+	{
+		frame = min(frame+1,5);
+	}
+	else
+	{
+		frame = max(frame-1,2);
+	}
+	frameCounter = 0;
+}
+if(frameFlicker)
+{
+	image_index = frame;
+	frameFlicker = false;
+}
+else
+{
+	image_index = 2;
+	frameFlicker = true;
 }

@@ -13,15 +13,15 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"561fe77d-115c-4b38-83e5-97fc5cfc7372",},
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"9a447df5-01bd-4528-8fcb-dc5311037d47",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"1ba853eb-662e-42e4-94ea-da4588d5a7d5",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"1de14e78-48c4-4330-9bdc-1c167ee427d7",},
   ],
   "gridX": 0,
   "gridY": 0,
   "height": 16,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"3479a6fd-3d11-401f-aae9-1f49bee123f9","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"16c7e20f-28ac-429b-a0e9-2eaaade28e71","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": {
     "resourceType": "GMNineSliceData",
@@ -78,8 +78,8 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"561fe77d-115c-4b38-83e5-97fc5cfc7372","path":"sprites/sprt_GrappleBlockCracked/sprt_GrappleBlockCracked.yy",},},},"Disabled":false,"id":"3de87da8-6fce-44f4-8c87-9ccef628870e","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"9a447df5-01bd-4528-8fcb-dc5311037d47","path":"sprites/sprt_GrappleBlockCracked/sprt_GrappleBlockCracked.yy",},},},"Disabled":false,"id":"744b06ee-8ebc-4996-98f2-b4c85c8a59bc","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"1ba853eb-662e-42e4-94ea-da4588d5a7d5","path":"sprites/sprt_GrappleBlockCracked/sprt_GrappleBlockCracked.yy",},},},"Disabled":false,"id":"7eec58dd-045a-4904-b8ae-8e9da94c9121","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"1de14e78-48c4-4330-9bdc-1c167ee427d7","path":"sprites/sprt_GrappleBlockCracked/sprt_GrappleBlockCracked.yy",},},},"Disabled":false,"id":"c51078bb-884a-442b-9b45-892c341c5697","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,

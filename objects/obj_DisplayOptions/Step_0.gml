@@ -148,6 +148,7 @@ if(screenFade >= 1 && !menuClosing)
 				break;
 			}
 		}
+		window_set_size(global.resWidth*global.screenScale,global.resHeight*global.screenScale);
 		
 		currentOption = array(
 		global.fullScreen,

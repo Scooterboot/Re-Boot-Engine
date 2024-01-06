@@ -1,3 +1,6 @@
+// feather disable all
+// feather ignore all
+
 function __scribble_gen_8_position_glyphs()
 {
     static _generator_state = __scribble_get_generator_state();

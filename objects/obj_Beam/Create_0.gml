@@ -71,6 +71,7 @@ else if(isGrapple)
 }
 
 particleDelay = 0;
+particleDelay2 = 0;
 
 impactSnd = snd_BeamImpact;
 

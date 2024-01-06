@@ -13,16 +13,16 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"4bbe0739-ac15-4d7c-86c9-6caf10c749dc",},
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"cf6968fc-2dd2-4fbb-8e45-1ed0291af09e",},
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"5ea11e12-fe99-431e-99d3-222651b83db1",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"ae47cebf-99d4-4c25-aa38-ab0968f6f832",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"c5ddac29-5054-4339-a1eb-b5cc4f072ad7",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"e9ee689f-1de5-4800-86b4-379a1df43703",},
   ],
   "gridX": 0,
   "gridY": 0,
   "height": 16,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"90633b3d-2b38-406d-9c27-8d0a2cd56f67","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"636d50bc-34d1-4c82-939b-8e4df2fc4ae8","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": {
     "resourceType": "GMNineSliceData",
@@ -50,8 +50,8 @@
   },
   "origin": 0,
   "parent": {
-    "name": "BTSTiles",
-    "path": "folders/Sprites/Room Elements/BTSTiles.yy",
+    "name": "BreakAnims",
+    "path": "folders/Sprites/Room Elements/BTSTiles/BreakAnims.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {
@@ -79,9 +79,9 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"4bbe0739-ac15-4d7c-86c9-6caf10c749dc","path":"sprites/sprt_BlockBreak/sprt_BlockBreak.yy",},},},"Disabled":false,"id":"b3058791-a2f2-4958-b419-0a8cc95f85bd","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"cf6968fc-2dd2-4fbb-8e45-1ed0291af09e","path":"sprites/sprt_BlockBreak/sprt_BlockBreak.yy",},},},"Disabled":false,"id":"9fc998b6-274d-4c4e-9a15-2cf069fd8c2f","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"5ea11e12-fe99-431e-99d3-222651b83db1","path":"sprites/sprt_BlockBreak/sprt_BlockBreak.yy",},},},"Disabled":false,"id":"a933e3c7-1b84-438c-a462-88a9debcc269","IsCreationKey":false,"Key":2.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"ae47cebf-99d4-4c25-aa38-ab0968f6f832","path":"sprites/sprt_BlockBreak/sprt_BlockBreak.yy",},},},"Disabled":false,"id":"edce6373-3f21-421c-a925-f912cd3a6e19","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"c5ddac29-5054-4339-a1eb-b5cc4f072ad7","path":"sprites/sprt_BlockBreak/sprt_BlockBreak.yy",},},},"Disabled":false,"id":"2ec62898-6798-43f1-b913-c93943f1001d","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"e9ee689f-1de5-4800-86b4-379a1df43703","path":"sprites/sprt_BlockBreak/sprt_BlockBreak.yy",},},},"Disabled":false,"id":"0460112d-5f01-419c-a9dd-fcf22aba0e7d","IsCreationKey":false,"Key":2.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,

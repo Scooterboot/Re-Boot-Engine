@@ -1,5 +1,8 @@
 /// @param string
 
+// feather disable all
+// feather ignore all
+
 #macro __SCRIBBLE_MARKDOWN_UPDATE_NEXT_VALUE  _next_value = buffer_peek(_buffer, buffer_tell(_buffer)-1, buffer_u8);
 
 #macro __SCRIBBLE_MARKDOWN_TOGGLE_BOLD  if (_new_style == "body")\

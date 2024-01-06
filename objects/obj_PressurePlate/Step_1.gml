@@ -1,10 +1,18 @@
 /// @description 
 if(!init)
 {
-	gates = GetGates();
-	for(var i = 0; i < array_length(gates); i++)
+	var gnum = 0;
+	
+	var num = instance_number(obj_ShutterGate);
+	for(var i = 0; i < num; i++)
 	{
-		gateStartedOpen[i] = (gates[i].state == ShutterState.Opened || gates[i].state == ShutterState.Opening);
+		var sGate = instance_find(obj_ShutterGate,i);
+		if(instance_exists(sGate) && sGate.shutterID == shutterID)
+		{
+			gates[gnum] = sGate;
+			gnum++;
+		}
 	}
+	
 	init = true;
 }

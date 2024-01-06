@@ -6,7 +6,6 @@ image_index = 1;
 
 snd = snd_BlockBreakSoft;
 respawnSprt = sprt_BlockBreak;
-breakType = 0;
 
 visible = true;
 tileLayers = scr_GetLayersFromString("Tiles_fg", "Tiles_fade");

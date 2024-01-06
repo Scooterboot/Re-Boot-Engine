@@ -36,53 +36,61 @@ if(!global.gamePaused)
 		{
 			num = 2*(!isCharge);
 		}
+		
 		if(pType != -1)
 		{
-			if(projLength > 0)
+			if(particleDelay2 <= 0)
 			{
-				var offset = ceil(sprite_yoffset/2),
-					len = clamp(point_distance(x,y,xstart,ystart),1,projLength),
-					ang = direction;
+				if(projLength > 0)
+				{
+					var offset = ceil(sprite_yoffset/2),
+						len = clamp(point_distance(x,y,xstart,ystart),1,projLength),
+						ang = direction;
 				
-				var x1 = x+lengthdir_x(offset,ang+90), x2 = x-lengthdir_x(len,ang)+lengthdir_x(offset,ang+90),
-					y1 = y+lengthdir_y(offset,ang+90), y2 = y-lengthdir_y(len,ang)+lengthdir_y(offset,ang+90);
+					var x1 = x+lengthdir_x(offset,ang+90), x2 = x-lengthdir_x(len,ang)+lengthdir_x(offset,ang+90),
+						y1 = y+lengthdir_y(offset,ang+90), y2 = y-lengthdir_y(len,ang)+lengthdir_y(offset,ang+90);
 				
-				part_emitter_region(partSys,partEmit,x1,x2,y1,y2,ps_shape_line,ps_distr_linear);
-				part_emitter_burst(partSys,partEmit,pType,pNum / max(num,1) / 1.5);
+					part_emitter_region(partSys,partEmit,x1,x2,y1,y2,ps_shape_line,ps_distr_linear);
+					part_emitter_burst(partSys,partEmit,pType,pNum / max(num,1) / 1.5);
 				
-				var x3 = x+lengthdir_x(offset,ang-90), x4 = x-lengthdir_x(len,ang)+lengthdir_x(offset,ang-90),
-					y3 = y+lengthdir_y(offset,ang-90), y4 = y-lengthdir_y(len,ang)+lengthdir_y(offset,ang-90);
+					var x3 = x+lengthdir_x(offset,ang-90), x4 = x-lengthdir_x(len,ang)+lengthdir_x(offset,ang-90),
+						y3 = y+lengthdir_y(offset,ang-90), y4 = y-lengthdir_y(len,ang)+lengthdir_y(offset,ang-90);
 				
-				part_emitter_region(partSys,partEmit,x3,x4,y3,y4,ps_shape_line,ps_distr_linear);
-				part_emitter_burst(partSys,partEmit,pType,pNum / max(num,1) / 1.5);
+					part_emitter_region(partSys,partEmit,x3,x4,y3,y4,ps_shape_line,ps_distr_linear);
+					part_emitter_burst(partSys,partEmit,pType,pNum / max(num,1) / 1.5);
+				}
+				else
+				{
+					var x1 = bbox_left+2, x2 = bbox_right-1,
+						y1 = bbox_top+2, y2 = bbox_bottom-1;
+				
+					part_emitter_region(partSys,partEmit,x1,x2,y1,y2,ps_shape_ellipse,ps_distr_linear);
+					part_emitter_burst(partSys, partEmit, pType, pNum / max(num,1));
+				}
+				particleDelay2 = irandom(1);
 			}
 			else
 			{
-				var x1 = bbox_left+2, x2 = bbox_right-1,
-					y1 = bbox_top+2, y2 = bbox_bottom-1;
-				
-				part_emitter_region(partSys,partEmit,x1,x2,y1,y2,ps_shape_ellipse,ps_distr_linear);
-				part_emitter_burst(partSys, partEmit, pType, pNum / max(num,1));
+				particleDelay2--;
 			}
 		}
 		
-		if(isIce)
+		if(particleDelay <= 0)
 		{
-			particleDelay = max(particleDelay - 1, 0);
-			if(particleDelay <= 0)
+			if(isIce)
 			{
 				part_particles_create(partSys,x,y,obj_Particles.bTrails[6],1);
 				particleDelay = irandom_range(2,4)-isCharge;
 			}
-		}
-		else if(isWave && !isPlasma)
-		{
-			particleDelay = max(particleDelay - 1, 0);
-			if(particleDelay <= 0)
+			else if(isWave && !isPlasma)
 			{
 				part_particles_create(partSys,x,y,obj_Particles.bTrails[5],1);
 				particleDelay = irandom_range(2,4)-isCharge;
 			}
+		}
+		else
+		{
+			particleDelay--;
 		}
 	}
 	else if(liquid)

@@ -1,4 +1,9 @@
 /// @description Anim
+if(global.gamePaused)
+{
+	exit;
+}
+
 if(dethType == 1)
 {
     //if(timer == (scr_round(timer/5)*5))

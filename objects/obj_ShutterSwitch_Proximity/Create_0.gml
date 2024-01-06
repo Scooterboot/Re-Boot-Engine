@@ -2,8 +2,8 @@
 event_inherited();
 lhc_activate();
 
-sizeX = 112;
-sizeY = 112;
+sizeX = 120;
+sizeY = 120;
 shape = "rectangle"; // "rectangle", "circle"
 lineOfSight = true;
 stayClosed = true;//false;
@@ -12,32 +12,21 @@ shutterID = 0;
 
 playerDetected = false;
 
-image_index = 0;
+frame = 2;
+frameCounter = 0;
+image_index = frame;
 image_speed = 0;
+frameFlicker = false;
 
-function GetGates()
-{
-	var gates = array_create(0),
-		gnum = 0;
-	
-	var num = instance_number(obj_ShutterGate);
-	for(var i = 0; i < num; i++)
-	{
-		var sGate = instance_find(obj_ShutterGate,i);
-		if(instance_exists(sGate) && sGate.shutterID == shutterID)
-		{
-			gates[gnum] = sGate;
-			gnum++;
-		}
-	}
-	return gates;
-}
+init = false;
+
+gates = array_create(0);
+
 function Toggle(_override)
 {
-	var sGates = GetGates();
-	for(var i = 0; i < array_length(sGates); i++)
+	for(var i = 0; i < array_length(gates); i++)
 	{
-		sGates[i].Toggle(_override);
+		gates[i].Toggle(_override);
 	}
 }
 
@@ -66,11 +55,10 @@ function GetPlayer()
 			if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,player.solids,asset_object))
 			{
 				var block = blockList[| i];
-				var sGates = GetGates();
 				var gflag = false;
-				for(var j = 0; j < array_length(sGates); j++)
+				for(var j = 0; j < array_length(gates); j++)
 				{
-					if(block == sGates[j].mBlock)
+					if(block == gates[j].mBlock)
 					{
 						gflag = true;
 						break;

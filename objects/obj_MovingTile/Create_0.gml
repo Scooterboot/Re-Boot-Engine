@@ -89,13 +89,17 @@ function UpdatePosition(_x,_y, avoidClipping = false)
 					moveYFlag = true;
 				}
 				
+				var moveXFlag2 = false,
+					moveYFlag2 = false;
 				if(place_meeting(newPosX,y,entity) || (place_meeting(newPosX,newPosY,entity) && !place_meeting(x,newPosY,entity)))
 				{
 					moveXFlag = true;
+					moveXFlag2 = true;
 				}
 				if(place_meeting(x,newPosY,entity) || (place_meeting(newPosX,newPosY,entity) && !place_meeting(newPosX,y,entity)))
 				{
 					moveYFlag = true;
+					moveYFlag2 = true;
 				}
 				
 				if(moveXFlag)
@@ -125,8 +129,14 @@ function UpdatePosition(_x,_y, avoidClipping = false)
 					shiftedVelX = moveXFlag ? (x-xprevious) : prevShiftX;
 					shiftedVelY = moveYFlag ? (y-yprevious) : prevShiftY;
 					
-					bVelX = moveXFlag ? (x-xprevious) : bVelX;
-					bVelY = moveYFlag ? (y-yprevious) : bVelY;
+					if(moveXFlag2 && abs(x-xprevious) < abs(bVelX))
+					{
+						bVelX = (x-xprevious);
+					}
+					if(moveYFlag2 && abs(y-yprevious) < abs(bVelY))
+					{
+						bVelY = (y-yprevious);
+					}
 				}
 			}
 		}

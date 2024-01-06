@@ -391,31 +391,3 @@ part_type_speed(npcDeath[7],6,8,-0.25,0);
 part_type_gravity(npcDeath[7],.9,270);
 
 
-
-blockBreak[0] = part_type_create();
-part_type_sprite(blockBreak[0],sprt_BlockBreak,true,true,false);
-part_type_life(blockBreak[0],9,9);
-
-blockBreak[1] = part_type_create();
-part_type_sprite(blockBreak[1],sprt_ChainBlockBreak,true,true,false);
-part_type_life(blockBreak[1],9,9);
-
-blockBreak[2] = part_type_create();
-part_type_sprite(blockBreak[2],sprt_MissileBlockBreak,true,true,false);
-part_type_life(blockBreak[2],9,9);
-
-blockBreak[3] = part_type_create();
-part_type_sprite(blockBreak[3],sprt_SuperMissileBlockBreak,true,true,false);
-part_type_life(blockBreak[3],9,9);
-
-blockBreak[4] = part_type_create();
-part_type_sprite(blockBreak[4],sprt_PowerBombBlockBreak,true,true,false);
-part_type_life(blockBreak[4],9,9);
-
-blockBreak[5] = part_type_create();
-part_type_sprite(blockBreak[5],sprt_SpeedBlockBreak,true,true,false);
-part_type_life(blockBreak[5],9,9);
-
-blockBreak[6] = part_type_create();
-part_type_sprite(blockBreak[6],sprt_ScrewBlockBreak,true,true,false);
-part_type_life(blockBreak[6],9,9);

@@ -23,10 +23,4 @@ if(!global.gamePaused)
 	}
 	oldPosX[0] = x;
 	oldPosY[0] = y;
-            
-	for(var i = 10; i > 0; i--)
-	{
-		oldRot[i] = oldRot[i - 1];
-	}
-	oldRot[0] = image_angle;
 }

@@ -22,8 +22,6 @@ currentScreen = Screen.Map;
 screenSelect = false;
 screenSelectAnim = 0;
 
-cursorGlowSurf = surface_create(11,15);
-
 mapX = 0;
 mapY = 0;
 mapMove = 0;

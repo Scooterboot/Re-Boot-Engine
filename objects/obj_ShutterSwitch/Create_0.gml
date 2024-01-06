@@ -2,22 +2,31 @@
 event_inherited();
 lhc_activate();
 
-image_index = 0;
+shutterID = 0;
+
+frame = 2;
+frameCounter = 0;
+image_index = frame;
 image_speed = 0;
 
-shutterID = 0;
+init = false;
+
+gates = array_create(0);
 
 lastProj = noone;
 
 function Toggle()
 {
-	var num = instance_number(obj_ShutterGate);
-	for(var i = 0; i < num; i++)
+	for(var i = 0; i < array_length(gates); i++)
 	{
-		var sGate = instance_find(obj_ShutterGate,i);
-		if(instance_exists(sGate) && sGate.shutterID == shutterID)
+		if(gates[i].state == ShutterState.Opening || (gates[i].state == ShutterState.Closing && !gates[i].stuck))
 		{
-			sGate.Toggle();
+			return;
 		}
+	}
+	
+	for(var i = 0; i < array_length(gates); i++)
+	{
+		gates[i].Toggle(gates[i].stuck);
 	}
 }

@@ -133,6 +133,32 @@ if(debug == 1)
 			draw_self();
 		}
 	}
+	with(obj_ShutterSwitch_Proximity)
+	{
+		var col = c_lime;
+		if(playerDetected)
+		{
+			col = c_red;
+		}
+		draw_set_color(col);
+		draw_set_alpha(0.5);
+		if(string_contains(shape,"circle"))
+		{
+			draw_ellipse(x-sizeX,y-sizeY,x+sizeX-1,y+sizeY-1,true);
+		}
+		else
+		{
+			draw_rectangle(x-sizeX,y-sizeY,x+sizeX-1,y+sizeY-1,true);
+		}
+		draw_set_color(c_white);
+		
+		var player = GetPlayer();
+		if(instance_exists(player))
+		{
+			draw_line(player.Center().X,player.Center().Y,x,y);
+		}
+		draw_set_alpha(1);
+	}
 	
 	with(obj_CamTile)
 	{
@@ -228,7 +254,7 @@ if(debug == 1)
         draw_text(xx+marginX,yy+30+marginY*4,"vel (x.y): "+string(velX)+" x "+string(velY));
         draw_text(xx+marginX,yy+30+marginY*5,"fVel (x.y): "+string(fVelX)+" x "+string(fVelY));
         draw_text(xx+marginX,yy+30+marginY*6,"pos diff (x.y): "+string(position.X-oldPosition.X)+" x "+string(position.Y-oldPosition.Y));
-        //draw_text(xx+marginX,yy+30+marginY*7,": "+string());
+        //draw_text(xx+marginX,yy+30+marginY*7,"bufferJump: "+string(bufferJump));
         draw_text(xx+marginX,yy+30+marginY*8,"real pos (x.y): "+string(x) + " x "+string(y));
         draw_text(xx+marginX,yy+30+marginY*9,"position (x.y): "+string(position.X) + " x "+string(position.Y));
 		

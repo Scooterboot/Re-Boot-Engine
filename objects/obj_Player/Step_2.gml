@@ -2932,14 +2932,17 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				}
 				else
 				{
-					var bombDirection = array(45, 135, 67.5, 112.5, 90),
+					//var bombDirection = array(45, 135, 67.5, 112.5, 90),
+					var bombDirection = array(60, 120, 75, 105, 90),
 						bombDirectionR = array(45, 56.25, 67.5, 78.75, 90),
 						bombDirectionL = array(135, 123.75, 112.5, 101.25, 90),
-						bombSpeed = 2+((4/bChMax)*bombCharge),
+						bombSpeed = ((6/bChMax)*bombCharge),
 						spreadFrict = 2,
 						spreadType = 0;
 					for(var i = 0; i < 5; i++)
 					{
+						//var bombTime = 60 + 10*i;
+						var bombTime = 100 - 5*i;
 						var bDir = bombDirection[i];
 						if(move2 != 0)
 						{
@@ -2955,8 +2958,10 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						else if(cDown)
 						{
 							bDir = 90;
+							bombSpeed = 2+((4/bChMax)*bombCharge);
 							spreadFrict = 2 / max(3*i,1);
 							spreadType = 1;
+							bombTime = 55 + 15*i;
 						}
 						var bomb = instance_create_layer(x,y+11,"Projectiles_fg",obj_MBBomb);
 						bomb.damage = 15;
@@ -2964,7 +2969,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						bomb.velY = lengthdir_y(bombSpeed,bDir);
 						bomb.spreadType = spreadType;
 						bomb.spreadFrict = spreadFrict;
-						bomb.bombTimer = 55 + (10 + (5*spreadType))*i;
+						bomb.bombTimer = bombTime;
 					}
 					bombDelayTime = 120 + (30*spreadType);
 					audio_play_sound(snd_BombSet,0,false);

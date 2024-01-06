@@ -32,14 +32,20 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 		fxsp = max(xsp-num,player.x-playerX);
 	}
 	
-	num = 1 + scr_floor(abs(player.y-playerY) / 7);
-	if(playerY < player.y)
+	var pY = player.y;
+	if(player.stateFrame == State.Morph)
 	{
-		fysp = min(ysp+num,player.y-playerY);
+		pY = player.y+8;
 	}
-	if(playerY > player.y)
+	
+	num = 1 + scr_floor(abs(pY-playerY) / 7);
+	if(playerY < pY)
 	{
-		fysp = max(ysp-num,player.y-playerY);
+		fysp = min(ysp+num,pY-playerY);
+	}
+	if(playerY > pY)
+	{
+		fysp = max(ysp-num,pY-playerY);
 	}
 	
 	playerX += fxsp;
@@ -48,7 +54,7 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 	if(global.roomTrans)
 	{
 		playerX = player.x;
-		playerY = player.y;
+		playerY = pY;
 	}
 	
 	targetX = playerX;

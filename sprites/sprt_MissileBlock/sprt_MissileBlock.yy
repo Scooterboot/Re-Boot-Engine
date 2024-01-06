@@ -13,15 +13,15 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"e84a2d01-ce7d-46aa-852b-a8e3c032d9ef",},
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"95eafb90-48b2-4a82-89d4-b77f96eb6b2d",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"f9ea6a44-de5b-47d9-8ef2-66a636348c3a",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"31a86811-8027-47e3-bd57-71a3b8975182",},
   ],
   "gridX": 0,
   "gridY": 0,
   "height": 16,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"92886c8e-9889-4545-9289-0a8d8516a87b","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"16e7124f-e971-471a-85ab-a2777b0b20c1","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": {
     "resourceType": "GMNineSliceData",
@@ -78,8 +78,8 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"e84a2d01-ce7d-46aa-852b-a8e3c032d9ef","path":"sprites/sprt_MissileBlock/sprt_MissileBlock.yy",},},},"Disabled":false,"id":"a91cc889-8e27-4bb5-84df-9ac5818a6f29","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"95eafb90-48b2-4a82-89d4-b77f96eb6b2d","path":"sprites/sprt_MissileBlock/sprt_MissileBlock.yy",},},},"Disabled":false,"id":"aa5fa8fb-a485-4e10-91d8-9708c83b8a2d","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"f9ea6a44-de5b-47d9-8ef2-66a636348c3a","path":"sprites/sprt_MissileBlock/sprt_MissileBlock.yy",},},},"Disabled":false,"id":"2c073339-3b37-4c3e-a8df-289cd2c38c37","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"31a86811-8027-47e3-bd57-71a3b8975182","path":"sprites/sprt_MissileBlock/sprt_MissileBlock.yy",},},},"Disabled":false,"id":"6ea5514b-1601-4ee3-bdff-a4aacfca6be0","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,
