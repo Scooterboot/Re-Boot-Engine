@@ -25,12 +25,20 @@ function OnXCollision(fVX)
 	{
 		velX *= -0.5;
 	}
+	else
+	{
+		velX = 0;
+	}
 }
 function OnYCollision(fVY)
 {
 	if(spreadType < 2)
 	{
 		velY *= -0.5;
+	}
+	else
+	{
+		velY = 0;
 	}
 }
 function OnBottomCollision(fVY)

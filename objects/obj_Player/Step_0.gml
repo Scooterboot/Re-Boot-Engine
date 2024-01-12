@@ -430,7 +430,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	pMove = ((cRight && rRight) - (cLeft && rLeft));
 	
 	if(move != 0 && !brake && morphFrame <= 0 && wjFrame <= 0 && state != State.Grip && 
-	(!cAimLock || cDash || state == State.Somersault || state == State.Morph || xRayActive || (global.aimStyle == 2 && cAngleUp)) && 
+	(!cAimLock /*|| cDash*/ || state == State.Somersault || state == State.Morph || xRayActive || (global.aimStyle == 2 && cAngleUp)) && 
 	!grappleActive && state != State.Spark && state != State.BallSpark && state != State.Hurt && stateFrame != State.DmgBoost && dmgBoost <= 0 && state != State.Dodge)
 	{
 		dir = move;
@@ -658,29 +658,13 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	fMoveSpeed = moveSpeed[(state == State.Morph),liquidState];
 	fFrict = frict[liquidState];
 	
-	if(moveState == 1 || moveState == 2)
+	if(moveState == 1 || moveState == 2 || state == State.Grapple)
 	{
 		var runMaxSpd = maxSpeed[0,liquidState],
 			dashMaxSpd = maxSpeed[1,liquidState],
 			runMoveSpd = moveSpeed[0,liquidState],
 			dashMoveSpd = moveSpeed[2,liquidState],
 			spd = abs(velX);
-
-		/*if(abs(velX) >= runMaxSpd)
-		{
-			if(abs(velX) < dashMaxSpd)
-			{
-				fMoveSpeed = lerp(runMoveSpd,dashMoveSpd, (abs(velX)-runMaxSpd) / (dashMaxSpd-runMaxSpd));
-			}
-			else
-			{
-				fMoveSpeed = dashMoveSpd;
-			}
-		}
-		else if(moveState > 0 && abs(velX) < runMaxSpd-dashMoveSpd)
-		{
-			fMoveSpeed += dashMoveSpd;
-		}*/
 		
 		if(spd < runMaxSpd)
 		{
@@ -703,6 +687,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		if((walkState && sign(velX) != dir) || moonFallState)
 		{
 			fMaxSpeed = maxSpeed[11,liquidState];
+			if(dash)
+			{
+				fMaxSpeed = maxSpeed[12,liquidState];
+			}
 			if(moonFallState)
 			{
 				fMaxSpeed = 0;
@@ -722,7 +710,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 	else if(moonFall && !grounded)
 	{
-		fMaxSpeed = maxSpeed[12,liquidState];
+		fMaxSpeed = maxSpeed[13,liquidState];
 	}
 	
 	maxSpeed2 = maxSpeed[1,liquidState];
@@ -2820,7 +2808,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		ds_list_clear(blockList);
 		
-		if((!entity_place_collide(2*dir,0) && !entity_place_collide(2*dir,8)) || entity_position_collide(6*dir,-19) || (colFlag && !startClimb) || (cDown && cJump && rJump) || (lhc_place_meeting(x,y,"IMovingSolid") && !startClimb))
+		if((!entity_place_collide(2*dir,0) && !entity_place_collide(2*dir,8)) || (entity_position_collide(6*dir,-19) && !startClimb) || (colFlag && !startClimb) || (cDown && cJump && rJump) || (lhc_place_meeting(x,y,"IMovingSolid") && !startClimb))
 		{
 			if(stateFrame == State.Morph)
 			{

@@ -405,10 +405,10 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	{
 		turnSpeed /= 2;
 	}
-	else if(lastDir == 0)
+	/*else if(lastDir == 0)
 	{
 		turnSpeed *= 0.75;
-	}
+	}*/
 	if(state == State.Grip)
 	{
 		turnSpeed *= 2;
@@ -707,6 +707,10 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				
 				frameCounter[Frame.Walk]++;
 				var numCounter = 2.5 * (1+liquidMovement);
+				if(abs(velX) > maxSpeed[11,liquidState])
+				{
+					numCounter = 1.875 * (1+liquidMovement);
+				}
 				if(global.roomTrans)
 				{
 					numCounter = 5;

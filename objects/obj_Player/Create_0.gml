@@ -346,7 +346,8 @@ maxSpeed[8,0] = 1.25;	// Air Spring Ball
 maxSpeed[9,0] = 5.375;	// Damage Boost
 maxSpeed[10,0] = 7.25;	// Dodge
 maxSpeed[11,0] = 1.25;	// Moonwalk
-maxSpeed[12,0] = 1.75;	// Moonfall
+maxSpeed[12,0] = 2.125;	// Moonwalk (dash)
+maxSpeed[13,0] = 1.75;	// Moonfall
 // Underwater (no grav suit)
 maxSpeed[0,1] = 2.75;	// Running
 maxSpeed[1,1] = 3.75;	// Dashing (no speed boost)
@@ -360,7 +361,8 @@ maxSpeed[8,1] = 1.25;	// Air Spring Ball
 maxSpeed[9,1] = 3.3;	// Damage Boost
 maxSpeed[10,1] = 3.25;	// Dodge
 maxSpeed[11,1] = 0.75;	// Moonwalk
-maxSpeed[12,1] = 1.5;	// Moonfall
+maxSpeed[12,1] = 1.25;	// Moonwalk (dash)
+maxSpeed[13,1] = 1.5;	// Moonfall
 // In lava/acid (no grav suit)
 maxSpeed[0,2] = 1.75;	// Running
 maxSpeed[1,2] = 2.75;	// Dashing (no speed boost)
@@ -374,7 +376,8 @@ maxSpeed[8,2] = 1.25;	// Air Spring Ball
 maxSpeed[9,2] = 3.3;	// Damage Boost
 maxSpeed[10,2] = 3.25;	// Dodge
 maxSpeed[11,2] = 0.75;	// Moonwalk
-maxSpeed[12,2] = 1.5;	// Moonfall
+maxSpeed[12,2] = 1.25;	// Moonwalk (dash)
+maxSpeed[13,2] = 1.5;	// Moonfall
 
 // Out of water
 moveSpeed[0,0] = 0.1875;	// Normal

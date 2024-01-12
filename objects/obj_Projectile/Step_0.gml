@@ -7,7 +7,7 @@ if(global.gamePaused)
 	exit;
 }
 
-if(creator == obj_Player)
+if(creator == obj_Player && lastReflec == noone)
 {
 	if(sign(velX) == sign(creator.hSpeed) && abs(speed_x) < abs(creator.hSpeed))
 	{
@@ -21,6 +21,80 @@ if(creator == obj_Player)
 
 fVelX = velX + speed_x;
 fVelY = velY + speed_y;
+
+#region Reflection
+
+var _x = x,
+	_y = y;
+if(aiStyle == 1 || aiStyle == 2)
+{
+	_x = xx;
+	_y = yy;
+}
+
+var reflec = noone;
+var _num = collision_circle_list(_x,_y,40,obj_Reflec,false,true,reflecList,true);
+for(var i = 0; i < _num; i++)
+{
+	var _ref = reflecList[| i];
+	if(instance_exists(_ref))
+	{
+		var p1 = _ref.GetPoint1(),
+			p2 = _ref.GetPoint2();
+		if(lines_intersect(p1.X,p1.Y,p2.X,p2.Y,_x,_y,_x+fVelX,_y+fVelY,true) > 0 && lastReflec != _ref)
+		{
+			reflec = _ref;
+			break;
+		}
+	}
+}
+ds_list_clear(reflecList);
+
+if(instance_exists(reflec) && lastReflec != reflec)
+{
+	var _ang = direction;
+	var _spd = point_distance(0,0,velX,velY);
+	
+	_ang = reflec.ReflectAngle(_ang);
+	
+	var p1 = reflec.GetPoint1(),
+		p2 = reflec.GetPoint2();
+	var vX = 0,
+		vY = 0,
+		_c = 0;
+	while(lines_intersect(p1.X,p1.Y,p2.X,p2.Y,_x,_y,_x+vX,_y+vY,true) <= 0 && _c < _spd)
+	{
+		vX += sign(velX) * min(1,abs(velX)-abs(vX));
+		vY += sign(velY) * min(1,abs(velY)-abs(vY));
+		_c++;
+	}
+	
+	xstart = _x+vX;
+	ystart = _y+vY;
+	
+	velX = lengthdir_x(_spd,_ang);
+	velY = lengthdir_y(_spd,_ang);
+	
+	while(_c < _spd)
+	{
+		vX += sign(velX) * min(1,abs(velX)-abs(vX));
+		vY += sign(velY) * min(1,abs(velY)-abs(vY));
+		_c++;
+	}
+	
+	fVelX = vX;
+	fVelY = vY;
+	
+	direction = _ang;
+	//dir *= -1;
+	
+	speed_x = 0;
+	speed_y = 0;
+	
+	lastReflec = reflec;
+}
+
+#endregion
 
 #region Collision
 if(tileCollide && impacted == 0)
@@ -276,6 +350,18 @@ if(impacted > 0)
 		instance_destroy();
 	}
 	impacted += 1;
+}
+
+if(timeLeft > -1)
+{
+	if(timeLeft <= 0)
+	{
+		instance_destroy();
+	}
+	else
+	{
+		timeLeft--;
+	}
 }
 
 if(!scr_WithinCamRange() && !ignoreCamera)

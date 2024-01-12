@@ -2,7 +2,7 @@
 
 if(!hiddenDestroy)
 {
-	if((global.breakSndCounter <= 0) && !audio_is_playing(snd_PowerBombExplode))
+	if(snd != noone && (global.breakSndCounter <= 0) && !audio_is_playing(snd_PowerBombExplode))
 	{
 	    audio_stop_sound(snd);
 	    audio_play_sound(snd,0,false);

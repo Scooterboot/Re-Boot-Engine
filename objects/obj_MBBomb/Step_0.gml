@@ -7,57 +7,38 @@ if(global.gamePaused)
 
 if(spreadType != -1)
 {
-	if(spreadType < 2)
+	if(spreadType == 0)
 	{
-		if(spreadType == 0)
-		{
-			velY = min(velY+0.25,10);
-		}
-		if(spreadType == 1)
-		{
-			if(velX > 0)
-			{
-				velX = max(velX-spreadFrict,0);
-			}
-			if(velX < 0)
-			{
-				velX = min(velX+spreadFrict,0);
-			}
-			
-			if(velY > 0)
-			{
-				velY = max(velY-spreadFrict,0);
-			}
-			if(velY < 0)
-			{
-				velY = min(velY+spreadFrict,0);
-			}
-		}
-		
-		Collision_Normal(velX,velY,16,16,false);
+		velY = min(velY+0.25,10);
 	}
-	else if(spreadType == 2)
+	if(spreadType == 1)
 	{
-		var speedX = lengthdir_x(spreadSpeed,spreadDir),
-			speedY = lengthdir_y(spreadSpeed,spreadDir);
-		if(entity_place_collide(speedX,speedY))
+		if(velX > 0)
 		{
-			var sSpeed = max(abs(speedX),abs(speedY));
-			while(!entity_place_collide(sign(speedX),sign(speedY)) && sSpeed > 0)
-			{
-				x += sign(speedX);
-				y += sign(speedY);
-				sSpeed -= 1;
-			}
-			spreadSpeed = 0;
-			speedX = 0;
-			speedY = 0;
+			velX = max(velX-spreadFrict,0);
 		}
-		
-		x += speedX;
-		y += speedY;
+		if(velX < 0)
+		{
+			velX = min(velX+spreadFrict,0);
+		}
+			
+		if(velY > 0)
+		{
+			velY = max(velY-spreadFrict,0);
+		}
+		if(velY < 0)
+		{
+			velY = min(velY+spreadFrict,0);
+		}
+	}
+	if(spreadType == 2)
+	{
+		velX = lengthdir_x(spreadSpeed,spreadDir);
+		velY = lengthdir_y(spreadSpeed,spreadDir);
 		spreadSpeed = max(spreadSpeed-spreadFrict,0);
 	}
+		
+	Collision_Normal(velX,velY,16,16,false);
 }
 
 scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,4);

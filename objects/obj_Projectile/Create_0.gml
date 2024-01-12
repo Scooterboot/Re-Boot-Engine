@@ -9,6 +9,7 @@ aiStyle = 0;
 hostile = false;
 tileCollide = true;
 multiHit = false;
+timeLeft = 300;
 
 isCharge = false;
 
@@ -57,6 +58,9 @@ waveDir = 1;
 amplitude = 0;
 wavesPerSecond = 0;
 delay = 0;
+
+lastReflec = noone;
+reflecList = ds_list_create();
 
 //speed = 0;
 //velocity = 0;
