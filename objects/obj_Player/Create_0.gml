@@ -53,9 +53,10 @@ shineSparkFlightAdjust = false;
 
 // High-level Shine Spark flight control when Accel Dash is enabled
 //activated by holding a direction and pressing Run during flight (consumes Dash charge)
-shineSparkRedirect = true;
+shineSparkRedirect = false;
 
-// Make diagonal sparks slide up/down walls while Chain Spark is inactive
+// Make diagonal sparks slide up/down walls
+// To still use Chain Spark, press in the direction of the wall you're sliding on to initiate
 diagSparkSlideOnWalls = true;
 
 // Prime-like trail effect for Morph Ball
@@ -148,6 +149,7 @@ speedBoostWJMax = 12;
 
 shineCharge = 0;
 shineDir = 0;
+shineDirDiff = 0;
 shineStart = 0;
 shineEnd = 0;
 shineEndMax = 40;//30;
@@ -160,6 +162,15 @@ shineRampFix = 0;
 shineDownRot = 0;
 shineRestart = false;
 shineRestarted = false;
+
+shineLauncherStart = 0;
+
+function GetSparkDir() { return scr_wrap(shineDir+shineDirDiff,-180,180); }
+function SparkDir_VertUp() { return abs(GetSparkDir()) > 157.5; }
+function SparkDir_DiagUp() { return abs(GetSparkDir()) >= 112.5 && abs(GetSparkDir()) <= 157.5; }
+function SparkDir_Hori() { return abs(GetSparkDir()) > 67.5 && abs(GetSparkDir()) < 112.5; }
+function SparkDir_DiagDown() { return abs(GetSparkDir()) >= 22.5 && abs(GetSparkDir()) <= 67.5; }
+function SparkDir_VertDown() { return abs(GetSparkDir()) < 22.5; }
 
 
 spiderBall = false;
@@ -328,6 +339,9 @@ cFlashLastEnergy = 0;
 cFlashAmmoUse = 0;
 
 stallCamera = false;
+
+reflecList = ds_list_create();
+lastReflec = noone;
 
 #endregion
 #region Physics Vars
@@ -1060,7 +1074,7 @@ function entity_collision(listNum)
 			{
 				isSolid = block.isSolid;
 			}
-			var sp = (asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting && shineStart <= 0),
+			var sp = (asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting && shineStart <= 0 && shineLauncherStart <= 0),
 				sc = (asset_has_any_tag(block.object_index, "IScrewBlock", asset_object) && isScrewAttacking);
 			if(isSolid && !sp && !sc)
 			{
@@ -1104,7 +1118,8 @@ function ModifyFinalVelY(fVY)
 
 function ModifySlopeXSteepness_Up()
 {
-	if((speedBoost && grounded) || state == State.Grapple || ((state == State.Spark || state == State.BallSpark) && abs(shineDir) != 2))
+	//if((speedBoost && grounded) || state == State.Grapple || ((state == State.Spark || state == State.BallSpark) && abs(shineDir) != 2))
+	if((speedBoost && grounded) || state == State.Grapple || ((state == State.Spark || state == State.BallSpark) && !SparkDir_Hori()))
 	{
 		return 4;
 	}
@@ -1191,10 +1206,13 @@ function OnXCollision(fVX)
 	move = 0;
 	bombJumpX = 0;
 	
-	var diagSparkSlide = (diagSparkSlideOnWalls && (abs(shineDir) == 1 || abs(shineDir) == 3) && !boots[Boots.ChainSpark]);
-	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && !diagSparkSlide)
+	//var diagSparkSlide = (diagSparkSlideOnWalls && (abs(shineDir) == 1 || abs(shineDir) == 3) && !boots[Boots.ChainSpark]);
+	//var diagSparkSlide = (diagSparkSlideOnWalls && (SparkDir_DiagUp() || SparkDir_DiagDown()) && !boots[Boots.ChainSpark]);
+	var diagSparkSlide = (diagSparkSlideOnWalls && (SparkDir_DiagUp() || SparkDir_DiagDown()) && (cRight - cLeft) != dir);
+	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0 && !diagSparkSlide)
 	{
-		if(boots[Boots.ChainSpark] && !instance_exists(pBlock) && (abs(shineDir) == 2 || (!entity_place_collide(0,3) && abs(shineDir) > 2) || (!entity_place_collide(0,-3) && abs(shineDir) < 2)))
+		//if(boots[Boots.ChainSpark] && !instance_exists(pBlock) && (abs(shineDir) == 2 || (!entity_place_collide(0,3) && abs(shineDir) > 2) || (!entity_place_collide(0,-3) && abs(shineDir) < 2)))
+		if(boots[Boots.ChainSpark] && !instance_exists(pBlock) && (abs(GetSparkDir()) == 90 || (!entity_place_collide(0,3) && abs(GetSparkDir()) < 90) || (!entity_place_collide(0,-3) && abs(GetSparkDir()) > 90)))
 		{
 			shineRestart = true;
 			audio_stop_sound(snd_ShineSpark_Charge);
@@ -1210,7 +1228,8 @@ function OnXCollision(fVX)
 
 function CanMoveUpSlope_Bottom()
 {
-	if((state == State.Spark || state == State.BallSpark) && abs(shineDir) > 2)
+	//if((state == State.Spark || state == State.BallSpark) && abs(shineDir) > 2)
+	if((state == State.Spark || state == State.BallSpark) && abs(GetSparkDir()) < 90)
 	{
 		return false;
 	}
@@ -1224,7 +1243,8 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		onPlatform = true;
 	}
 	
-	if((state == State.Spark || state == State.BallSpark) && abs(shineDir) <= 2 && shineStart <= 0 && shineEnd <= 0 && move != 0 && yShift < 0)
+	//if((state == State.Spark || state == State.BallSpark) && abs(shineDir) <= 2 && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0 && move != 0 && yShift < 0)
+	if((state == State.Spark || state == State.BallSpark) && abs(GetSparkDir()) >= 90 && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0 && move != 0 && yShift < 0)
 	{
 		shineEnd = 0;
 		shineDir = 0;
@@ -1279,7 +1299,8 @@ function CanMoveDownSlope_Bottom()
 
 function CanMoveUpSlope_Top()
 {
-	return (((state == State.Spark || state == State.BallSpark) && abs(shineDir) >= 2) || state == State.Dodge || state == State.Grapple);
+	//return (((state == State.Spark || state == State.BallSpark) && abs(shineDir) >= 2) || state == State.Dodge || state == State.Grapple);
+	return (((state == State.Spark || state == State.BallSpark) && abs(GetSparkDir()) <= 90) || state == State.Dodge || state == State.Grapple);
 }
 function OnSlopeXCollision_Top(fVX, yShift)
 {
@@ -1303,9 +1324,10 @@ function OnTopCollision(fVY)
 }
 function OnYCollision(fVY)
 {
-	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineEnd <= 0)
+	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0)
 	{
-		if(abs(shineDir) >= 2 && abs(shineDir) != 4 && !entity_place_collide(3*sign(velX),0))
+		//if(abs(shineDir) >= 2 && abs(shineDir) != 4 && !entity_place_collide(3*sign(velX),0))
+		if(abs(GetSparkDir()) <= 90 && !SparkDir_VertDown() && !entity_place_collide(3*sign(velX),0))
 		{
 			shineEnd = 0;
 			shineDir = 0;
@@ -1448,9 +1470,10 @@ function Crawler_OnLeftCollision(fVX)
 }
 function Crawler_OnXCollision(fVX)
 {
-	if(state == State.BallSpark && shineStart <= 0)
+	if(state == State.BallSpark && shineStart <= 0 && shineLauncherStart <= 0)
 	{
-		if(abs(shineDir) != 2 && !entity_place_collide(0,2*sign(velY)) && shineEnd <= 0)
+		//if(abs(shineDir) != 2 && !entity_place_collide(0,2*sign(velY)) && shineEnd <= 0)
+		if(!SparkDir_Hori() && !entity_place_collide(0,2*sign(velY)) && shineEnd <= 0)
 		{
 			//shineEnd = 0;
 			shineDir = 0;
@@ -1486,7 +1509,8 @@ function Crawler_CanMoveUpSlope_Bottom()
 {
 	if(state == State.BallSpark)
 	{
-		if(shineStart <= 0 && abs(shineDir) <= 2)
+		//if(shineStart <= 0 && shineLauncherStart <= 0 && abs(shineDir) <= 2)
+		if(shineStart <= 0 && shineLauncherStart <= 0 && abs(GetSparkDir()) >= 90)
 		{
 			return true;
 		}
@@ -1530,7 +1554,8 @@ function Crawler_CanMoveUpSlope_Top()
 {
 	if(state == State.BallSpark)
 	{
-		if(shineStart <= 0 && abs(shineDir) >= 2)
+		//if(shineStart <= 0 && shineLauncherStart <= 0 && abs(shineDir) >= 2)
+		if(shineStart <= 0 && shineLauncherStart <= 0 && abs(GetSparkDir()) <= 90)
 		{
 			return true;
 		}
@@ -1596,9 +1621,10 @@ function Crawler_OnTopCollision(fVY)
 }
 function Crawler_OnYCollision(fVY)
 {
-	if(state == State.BallSpark && shineStart <= 0)
+	if(state == State.BallSpark && shineStart <= 0 && shineLauncherStart <= 0)
 	{
-		if(abs(shineDir) != 0 && abs(shineDir) != 4 && !entity_place_collide(2*sign(velX),0) && shineEnd <= 0)
+		//if(abs(shineDir) != 0 && abs(shineDir) != 4 && !entity_place_collide(2*sign(velX),0) && shineEnd <= 0)
+		if(!SparkDir_VertUp() && !SparkDir_VertDown() && !entity_place_collide(2*sign(velX),0) && shineEnd <= 0)
 		{
 			//shineEnd = 0;
 			shineDir = 0;
@@ -1627,7 +1653,8 @@ function Crawler_CanMoveUpSlope_Right()
 {
 	if(state == State.BallSpark)
 	{
-		if(shineStart <= 0 && (abs(shineDir) == 0 || abs(shineDir) == 4 || sign(shineDir) == -1))
+		//if(shineStart <= 0 && shineLauncherStart <= 0 && (abs(shineDir) == 0 || abs(shineDir) == 4 || sign(shineDir) == -1))
+		if(shineStart <= 0 && shineLauncherStart <= 0 && GetSparkDir() <= 0 && (GetSparkDir() > -180 || abs(GetSparkDir()) == 180))
 		{
 			return true;
 		}
@@ -1671,7 +1698,8 @@ function Crawler_CanMoveUpSlope_Left()
 {
 	if(state == State.BallSpark)
 	{
-		if(shineStart <= 0 && (abs(shineDir) == 0 || abs(shineDir) == 4 || sign(shineDir) == 1))
+		//if(shineStart <= 0 && shineLauncherStart <= 0 && (abs(shineDir) == 0 || abs(shineDir) == 4 || sign(shineDir) == 1))
+		if(shineStart <= 0 && shineLauncherStart <= 0 && GetSparkDir() >= 0 && (GetSparkDir() < 180 || abs(GetSparkDir()) == 180))
 		{
 			return true;
 		}
@@ -2067,7 +2095,7 @@ function EntityLiquid_Large(_velX, _velY)
 	{
 		var _skidSnd = false,
 			_size = 0;
-		if((((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineEnd <= 0) || speedBoost || state == State.Dodge) && _velX != 0)
+		if((((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0) || speedBoost || state == State.Dodge) && _velX != 0)
 		{
 			if((canSplash%4) == 0)
 			{
@@ -2169,7 +2197,7 @@ function EntityLiquid_Large(_velX, _velY)
 				bub.canSpread = false;
 			}
 		}
-		else if(((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineEnd <= 0) || speedBoost || state == State.Dodge)
+		else if(((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0) || speedBoost || state == State.Dodge)
 		{
 			repeat(3)
 			{
@@ -3775,11 +3803,13 @@ function PostDrawPlayer(posX, posY, rot, alph)
 			shineFrameCounter = 0;
 		}
 		var sFrame = shineFrame;
-		var shineRot = 90 - 45*shineDir;
+		//var shineRot = 90 - 45*shineDir;
+		var shineRot = shineDir - 90;
 		var len = 6;
 		var shineX = scr_round(xx + lengthdir_x(len,shineRot)),
 			shineY = scr_round(yy + lengthdir_y(len,shineRot));
-		if(abs(shineDir) == 1 || abs(shineDir) == 3)
+		//if(abs(shineDir) == 1 || abs(shineDir) == 3)
+		if(SparkDir_DiagUp() || SparkDir_DiagDown())
 		{
 			sFrame += 4;
 			shineRot -= 45*dir;

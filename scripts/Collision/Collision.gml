@@ -107,3 +107,19 @@ function lines_intersect(x1,y1,x2,y2,x3,y3,x4,y4,segment)
     }
     return ua;
 }
+
+function rectangle_intersect_line(rx1,ry1,rx2,ry2, x1,y1,x2,y2)
+{
+	if(lines_intersect(x1,y1,x2,y2, rx1,ry1,rx2,ry1, true) > 0 || // top
+		lines_intersect(x1,y1,x2,y2, rx1,ry2,rx2,ry2, true) > 0 || // bottom
+		lines_intersect(x1,y1,x2,y2, rx1,ry1,rx1,ry2, true) > 0 || // left
+		lines_intersect(x1,y1,x2,y2, rx2,ry1,rx2,ry2, true) > 0) // right
+	{
+		return true;
+	}
+	if(point_in_rectangle(x1,y1, rx1,ry1,rx2,ry2) || point_in_rectangle(x2,y2, rx1,ry1,rx2,ry2))
+	{
+		return true;
+	}
+	return false;
+}

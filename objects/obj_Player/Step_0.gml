@@ -2876,38 +2876,38 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				{
 					if(move2 != 0)
 					{
-						shineDir = move2;
+						shineDir = 135*move2;
 					}
 					else
 					{
-						shineDir = dir;
+						shineDir = 135*dir;
 					}
 				}
 				else if((aDown || cDown) && boots[Boots.ChainSpark])
 				{
 					if(move2 != 0)
 					{
-						shineDir = 3*move2;
+						shineDir = 45*move2;
 					}
 					else
 					{
-						shineDir = 3*dir;
+						shineDir = 45*dir;
 					}
 				}
 				else
 				{
-					shineDir = 2*move2;
+					shineDir = 90*move2;
 				}
 			}
 			else
 			{
 				if(cDown && boots[Boots.ChainSpark])
 				{
-					shineDir = 4;
+					shineDir = 0;
 				}
 				else
 				{
-					shineDir = 0;
+					shineDir = 180;
 				}
 			}
 			if((entity_place_collide(0,4) || (onPlatform && lhc_place_meeting(x,y+4,"IPlatform"))) && (!entity_place_collide(0,-1) || entity_place_collide(0,0)))
@@ -2935,6 +2935,19 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 			}
 		}
+		else if(state == State.BallSpark && shineLauncherStart > 0)
+		{
+			shineDir = 180;
+			velX = 0;
+			velY = 0;
+			shineCharge = 0;
+			shineSparkSpeed = shineSparkStartSpeed;
+			
+			if(shineLauncherStart == 1)
+			{
+				audio_play_sound(snd_ShineSpark,0,false);
+			}
+		}
 		else if(shineEnd > 0)
 		{
 			if(shineEnd == shineEndMax)
@@ -2956,15 +2969,15 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				{
 					if(aUp || cUp)
 					{
-						shineDir = move2;
+						shineDir = 135*move2;
 					}
 					else if(aDown || cDown)
 					{
-						shineDir = 3*move2;
+						shineDir = 45*move2;
 					}
 					else
 					{
-						shineDir = 2*move2;
+						shineDir = 90*move2;
 					}
 					audio_play_sound(snd_ShineSpark,0,false);
 					dir = move2;
@@ -2986,7 +2999,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				{
 					for(var i = 0; i < 2; i++)
 					{
-						var sdir = -45*shineDir + 180*i;
+						//var sdir = -45*shineDir + 180*i;
+						var sdir = shineDir + 180*i;
 						var swave = instance_create_layer(x+sprtOffsetX,y+sprtOffsetY,layer_get_id("Projectiles"),obj_SparkShockwave);
 						swave.damage = 2000;
 						swave.velX = lengthdir_x(3,sdir);
@@ -3023,36 +3037,36 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					{
 						if(move2 != 0)
 						{
-							shineDir = move2;
+							shineDir = 135*move2;
 						}
 						else
 						{
-							shineDir = dir;
+							shineDir = 135*dir;
 						}
 					}
 					else if((aDown || cDown) && boots[Boots.ChainSpark])
 					{
 						if(move2 != 0)
 						{
-							shineDir = 3*move2;
+							shineDir = 45*move2;
 						}
 						else
 						{
-							shineDir = 3*dir;
+							shineDir = 45*dir;
 						}
 					}
 					else
 					{
-						shineDir = 2*move2;
+						shineDir = 90*move2;
 					}
 				}
 				else if(cDown && boots[Boots.ChainSpark])
 				{
-					shineDir = 4;
+					shineDir = 0;
 				}
 				else if(cUp)
 				{
-					shineDir = 0;
+					shineDir = 180;
 				}
 				if(shineDir != oldSDir)
 				{
@@ -3067,7 +3081,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					audio_play_sound(snd_ShineSpark_Charge,0,false);
 				}
 			}
-			if(shineDir != 0 && shineDir != 4)
+			//if(shineDir != 0 && shineDir != 4)
+			if(!SparkDir_VertUp() && !SparkDir_VertDown())
 			{
 				dir = sign(shineDir);
 			}
@@ -3075,7 +3090,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			
 			shineSparkSpeed = min(shineSparkSpeed+moveSpeed[3,liquidState], shineSparkSpeedMax);
 			
-			var shineAng = 90;
+			/*var shineAng = 90;
 			var shineSpeedX = shineSparkSpeed;
 			switch(abs(shineDir))
 			{
@@ -3102,8 +3117,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					shineAng = -90;
 					break;
 				}
-			}
+			}*/
 			
+			shineDirDiff = 0;
 			if(shineSparkFlightAdjust)
 			{
 				var moveY = (cDown-cUp);
@@ -3111,7 +3127,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				
 				var angleChange = 11.25;
 				
-				if(shineDir == 0 || shineDir == 4)
+				/*if(shineDir == 0 || shineDir == 4)
 				{
 					shineAng -= angleChange*move2 * ((shineDir == 0) - (shineDir == 4));
 				}
@@ -3123,11 +3139,119 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				if(abs(shineDir) == 2)
 				{
 					shineAng -= angleChange*moveY;
+				}*/
+				if(SparkDir_VertUp() || SparkDir_VertDown())
+				{
+					shineDirDiff -= angleChange*move2 * (SparkDir_VertUp() - SparkDir_VertDown());
+				}
+				if(SparkDir_DiagUp() || SparkDir_DiagDown())
+				{
+					var sdir = SparkDir_DiagUp() - SparkDir_DiagDown();
+					shineDirDiff -= angleChange*clamp(move2*sign(GetSparkDir())*sdir + moveY,-1,1)*dir;
+				}
+				if(SparkDir_Hori())
+				{
+					shineDirDiff -= angleChange*moveY*dir;
 				}
 			}
 			
-			velX = lengthdir_x(shineSpeedX,shineAng);
-			velY = lengthdir_y(shineSparkSpeed,shineAng);
+			//velX = lengthdir_x(shineSpeedX,shineAng);
+			velX = lengthdir_x(shineSparkSpeed,shineDir-90+shineDirDiff);
+			velY = lengthdir_y(shineSparkSpeed,shineDir-90+shineDirDiff);
+			
+			var reflec = noone;
+			//var _num = collision_circle_list(x+velX,y+velY,40,obj_Reflec,false,true,reflecList,true);
+			//var _num = instance_place_list(x+velX,y+velY,obj_Reflec,reflecList,true);
+			
+			/*for(var k = 0; k < ceil(shineSparkSpeed); k++)
+			{
+				instance_place_list(x+sign(velX)*k,y+sign(velY)*k,obj_Reflec,reflecList,true);
+			}
+			/*for(var i = 0; i < ds_list_size(reflecList); i++)
+			{
+				for(var j = 0; j < ds_list_size(reflecList); j++)
+				{
+					if(reflecList[| i] == reflecList[| j])
+					{
+						ds_list_delete(reflecList,j);
+					}
+				}
+			}*/
+			instance_place_list(x+velX,y+velY,obj_Reflec,reflecList,true);
+			for(var i = 0; i < ds_list_size(reflecList); i++)
+			{
+				var _ref = reflecList[| i];
+				if(instance_exists(_ref))
+				{
+					var p1 = _ref.GetPoint1(),
+						p2 = _ref.GetPoint2();
+					for(var k = 0; k < ceil(shineSparkSpeed); k++)
+					{
+						var vX = sign(velX)*k, vY = sign(velY)*k;
+						if(lastReflec != _ref && rectangle_intersect_line(bbox_left+vX,bbox_top+vY,bbox_right+vX,bbox_bottom+vY, p1.X,p1.Y,p2.X,p2.Y))
+						{
+							reflec = _ref;
+							break;
+						}
+					}
+				}
+				if(instance_exists(reflec))
+				{
+					break;
+				}
+			}
+			ds_list_clear(reflecList);
+			
+			if(instance_exists(reflec) && lastReflec != reflec)
+			{
+				shineDir = reflec.ReflectAngle(scr_wrap(shineDir-90,0,360))+90;
+				shineDir = scr_wrap(shineDir,-180,180);
+				
+				var p1 = reflec.GetPoint1(),
+					p2 = reflec.GetPoint2();
+				var vX = 0,
+					vY = 0,
+					_c = 0,
+					_spd = ceil(shineSparkSpeed);
+				while(!rectangle_intersect_line(bbox_left+vX,bbox_top+vY,bbox_right+vX,bbox_bottom+vY, p1.X,p1.Y,p2.X,p2.Y) && _c < _spd)
+				{
+					vX += sign(velX) * min(1,abs(velX)-abs(vX));
+					vY += sign(velY) * min(1,abs(velY)-abs(vY));
+					_c++;
+				}
+				
+				velX = lengthdir_x(shineSparkSpeed,shineDir-90);
+				velY = lengthdir_y(shineSparkSpeed,shineDir-90);
+				
+				while(_c < _spd)
+				{
+					vX += sign(velX) * min(1,abs(velX)-abs(vX));
+					vY += sign(velY) * min(1,abs(velY)-abs(vY));
+					_c++;
+				}
+				
+				velX = vX;
+				velY = vY;
+				
+				lastReflec = reflec;
+			}
+			
+			if(instance_exists(lastReflec))
+			{
+				if(place_meeting(x,y,lastReflec))
+				{
+					var p1 = lastReflec.GetPoint1(),
+						p2 = lastReflec.GetPoint2();
+					if(!rectangle_intersect_line(bbox_left,bbox_top,bbox_right,bbox_bottom, p1.X,p1.Y,p2.X,p2.Y))
+					{
+						lastReflec = noone;
+					}
+				}
+				else
+				{
+					lastReflec = noone;
+				}
+			}
         
 			if(cJump && rJump && shineSparkCancel)
 			{
@@ -3139,7 +3263,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				{
 					ChangeState(State.Somersault,State.Somersault,mask_Somersault,false);
 				}
-				if(abs(shineDir) == 2)
+				//if(abs(shineDir) == 2)
+				if(SparkDir_Hori())
 				{
 					if(boots[Boots.SpaceJump] && state != State.Morph)
 					{
@@ -3151,7 +3276,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 						velY = -jumpSpeed[0,liquidState]*0.25;
 					}
 				}
-				if(shineDir != 0 && shineDir != 4)
+				//if(shineDir != 0 && shineDir != 4)
+				if(!SparkDir_VertUp() && !SparkDir_VertDown())
 				{
 					speedCounter = speedCounterMax;
 					speedFXCounter = 1;
@@ -3822,6 +3948,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	shineCharge = max(shineCharge - 1, 0);
 	shineStart = max(shineStart - 1, 0);
 	shineEnd = max(shineEnd - 1, 0);
+	shineLauncherStart = max(shineLauncherStart - 1, 0);
 	if(grapWallBounceCounter > 0)
 	{
 		grapWallBounceCounter = max(grapWallBounceCounter-1,0);

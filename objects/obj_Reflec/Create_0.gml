@@ -1,7 +1,7 @@
 /// @description 
 
-var _p1 = new Vector2(-16,13),
-	_p2 = new Vector2(16,13);
+var _p1 = new Vector2(-17,13),
+	_p2 = new Vector2(17,13);
 
 _len1 = _p1.Length();
 _len2 = _p2.Length();

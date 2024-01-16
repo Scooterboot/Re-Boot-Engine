@@ -79,7 +79,8 @@ if((state == State.Spark || state == State.BallSpark) && shineEnd > 0)
 	{
 		for(var i = 0; i < 2; i++)
 		{
-			var edir = -45*shineDir + (sEnd/sEndMax * 360) + 180*i;
+			//var edir = -45*shineDir + (sEnd/sEndMax * 360) + 180*i;
+			var edir = shineDir + (sEnd/sEndMax * 360) + 180*i;
 			DrawPlayer(x+lengthdir_x(dist,edir),y+lengthdir_y(dist,edir),rotation,0.5);
 		}
 	}

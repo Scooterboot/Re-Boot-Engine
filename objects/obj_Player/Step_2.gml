@@ -1748,7 +1748,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				}
 				else
 				{
-					if(shineDir == 0)
+					//if(shineDir == 0)
+					if(SparkDir_VertUp())
 					{
 						if(frame[Frame.SparkV] < 1)
 						{
@@ -1774,7 +1775,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						
 						SetArmPosSpark(0);
 					}
-					else if(shineDir == 4)
+					//else if(shineDir == 4)
+					else if(SparkDir_VertDown())
 					{
 						if(abs(shineDownRot) < 180)
 						{
