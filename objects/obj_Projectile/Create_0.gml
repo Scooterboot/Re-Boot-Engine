@@ -129,6 +129,59 @@ function OnDamageNPC(damage,npc) {}
 
 #endregion
 
+#region Base Collision
+function entity_place_collide()
+{
+	/// @description entity_place_collide
+	/// @param offsetX
+	/// @param offsetY
+	/// @param baseX=x
+	/// @param baseY=y
+	
+	var offsetX = argument[0],
+		offsetY = argument[1],
+		xx = position.X,
+		yy = position.Y;
+	if(argument_count > 2)
+	{
+		xx = argument[2];
+		if(argument_count > 3)
+		{
+			yy = argument[3];
+		}
+	}
+	
+	return entity_collision(instance_place_list(xx+offsetX,yy+offsetY,all,blockList,true));
+}
+
+function entity_collision(listNum)
+{
+	for(var i = 0; i < listNum; i++)
+	{
+		if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object))
+		{
+			var block = blockList[| i];
+			var isSolid = true;
+			if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
+			{
+				isSolid = block.isSolid;
+			}
+			if(instance_exists(lastReflec) && block == lastReflec)
+			{
+				isSolid = false;
+			}
+			if(isSolid)
+			{
+				ds_list_clear(blockList);
+				return true;
+			}
+		}
+	}
+	ds_list_clear(blockList);
+	return false;
+}
+
+#endregion
 #region Collision (Unused atm)
 
 function ModifyFinalVelX(fVX)

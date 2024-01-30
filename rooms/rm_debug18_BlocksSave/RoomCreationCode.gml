@@ -1,1 +1,1 @@
-scr_InitRoom(global.music_BrinstarRed,sprt_Map_DebugRooms,0,0);
+scr_InitRoom(global.music_BrinstarRed,sprt_Map_DebugRooms,-1,3);

@@ -123,9 +123,9 @@ itemName = array(
 miscName = array(
 "POWER GRIP",
 "MORPH BALL",
-//"BOMB",
 "M.B. BOMB",
 "SPRING BALL",
+"BOOST BALL",
 "SPIDER BALL",
 "SCREW ATTACK");
 bootsName = array(

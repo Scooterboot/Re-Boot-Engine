@@ -45,3 +45,9 @@ function AngleFlip(angle, dir)
 		s = dsin(angle);
 	return darctan2(s,c*dir);
 }
+
+function ReflectAngle(_src, _dest)
+{
+	var _diffAng = angle_difference(scr_wrap(_src,0,360),scr_wrap(_dest,0,360));
+	return _src + (180 - 2*_diffAng);
+}

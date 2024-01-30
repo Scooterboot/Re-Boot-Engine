@@ -262,7 +262,7 @@ if(debug == 1)
         draw_text(xx+marginX,yy+30+marginY*4,"vel (x.y): "+string(velX)+" x "+string(velY));
         draw_text(xx+marginX,yy+30+marginY*5,"fVel (x.y): "+string(fVelX)+" x "+string(fVelY));
         draw_text(xx+marginX,yy+30+marginY*6,"pos diff (x.y): "+string(position.X-oldPosition.X)+" x "+string(position.Y-oldPosition.Y));
-        draw_text(xx+marginX,yy+30+marginY*7,"shineDir: "+string(GetSparkDir()));
+        //draw_text(xx+marginX,yy+30+marginY*7,"climbIndex: "+string(climbIndex));
         draw_text(xx+marginX,yy+30+marginY*8,"real pos (x.y): "+string(x) + " x "+string(y));
         draw_text(xx+marginX,yy+30+marginY*9,"position (x.y): "+string(position.X) + " x "+string(position.Y));
 		

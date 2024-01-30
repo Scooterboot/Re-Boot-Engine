@@ -148,6 +148,7 @@ speedBoostWJCounter = 0;
 speedBoostWJMax = 12;
 
 shineCharge = 0;
+
 shineDir = 0;
 shineDirDiff = 0;
 shineStart = 0;
@@ -161,10 +162,23 @@ shineRampFix = 0;
 
 shineDownRot = 0;
 shineRestart = false;
-shineRestarted = false;
 
 shineLauncherStart = 0;
 
+/*
+	Shine spark direction was a bit annoying to set up,
+	but i needed it so that right is positive and left is negative,
+	so i ended up with this:
+	
+	 0 = Down
+	 +45 = Down-Right, -45 = Down-Left
+	 +90 = Right, -90 = Left
+	 +135 = Up-Right, -135 = Up-Left
+	 +/-180 = Up
+	
+	All values have a +/-22.5 degree variance,
+	due to the existence of omni-directional reflec panels.
+*/
 function GetSparkDir() { return scr_wrap(shineDir+shineDirDiff,-180,180); }
 function SparkDir_VertUp() { return abs(GetSparkDir()) > 157.5; }
 function SparkDir_DiagUp() { return abs(GetSparkDir()) >= 112.5 && abs(GetSparkDir()) <= 157.5; }
@@ -186,6 +200,14 @@ spiderGlowAlpha = 0;
 spiderGlowNum = 1;
 
 sparkCancelSpiderJumpTweak = false;
+
+boostBallCharge = 0;
+boostBallChargeMax = 80;
+boostBallChargeMin = 40;
+boostBallFX = 0;
+boostBallChargeSoundPlayed = false;
+boostBallDmgCounter = 0;
+boostBallFXFlash = false;
 
 
 isChargeSomersaulting = false;
@@ -216,8 +238,10 @@ startClimb = false;
 climbTarget = 0;
 climbIndex = 0;
 climbIndexCounter = 0;
-climbX = array(0,0,0,0,0,1,2,2,2,2,2,1,1,0,0,0,0,0,0);
-climbY = array(0,6,6,5,5,4,4,2,0,0,0,0,0,0,0,0,0,0,0);
+//climbX = array(0,0,0,0,0,1,2,2,2,2,2,1,1,0,0,0,0,0,0);
+//climbY = array(0,6,6,5,5,4,4,2,0,0,0,0,0,0,0,0,0,0,0);
+climbX = [0,0,0,0,0,0,3,3,2,2,2,1,1,0,0,0,0,0,0];
+climbY = [0,6,6,6,5,5,4,0,0,0,0,0,0,0,0,0,0,0,0];
 
 quickClimbTarget = 0;
 
@@ -262,12 +286,8 @@ maxCharge = 60;
 bombCharge = 0;
 bombChargeMax = 30;
 
-hSpeed = 0;
-vSpeed = 0;
 shootDir = 0;
 shootSpeed = 10;//8;
-extraSpeed_x = 0;
-extraSpeed_y = 0;
 
 shotDelayTime = 0;
 bombDelayTime = 0;
@@ -803,7 +823,7 @@ enum Suit
 	Gravity
 };
 // 2 Suits
-suit[1] = false;
+suit = array_create(2);
 
 enum Boots
 {
@@ -814,7 +834,7 @@ enum Boots
 	ChainSpark
 };
 // 5 Boots
-boots[4] = false;
+boots = array_create(5);
 
 enum Misc
 {
@@ -822,11 +842,12 @@ enum Misc
 	Morph,
 	Bomb,
 	Spring,
+	Boost,
 	Spider,
 	ScrewAttack
 };
-// 6 Misc
-misc[5] = false;
+// 7 Misc
+misc = array_create(7);
 
 enum Beam
 {
@@ -837,7 +858,7 @@ enum Beam
 	Plasma
 };
 // 5 Beams
-beam[4] = false;
+beam = array_create(5);
 
 enum Item
 {
@@ -848,13 +869,13 @@ enum Item
 	XRay
 };
 // 5 Items
-item[4] = false;
+item = array_create(5);
 
-hasSuit[array_length(suit)-1] = false;
-hasMisc[array_length(misc)-1] = false;
-hasBoots[array_length(boots)-1] = false;
-hasBeam[array_length(beam)-1] = false;
-hasItem[array_length(item)-1] = false;
+hasSuit = array_create(array_length(suit));
+hasMisc = array_create(array_length(misc));
+hasBoots = array_create(array_length(boots));
+hasBeam = array_create(array_length(beam));
+hasItem = array_create(array_length(item));
 
 //starting items
 /*misc[Misc.PowerGrip] = true;
@@ -1793,14 +1814,16 @@ function MoveStick_CheckPGrip(_dir, movingTile)
 			var cX = 0, cY = 0;
 			for(var i = 0; i < climbIndex; i++)
 			{
-				cX += climbX[i] / (1+liquidMovement) * _dir;
-				cY += climbY[i] / (1+liquidMovement);
+				cX -= climbX[floor(i)] * _dir;
+				cY += climbY[floor(i)];
 			}
-			return lhc_position_meeting(x+6*_dir - cX, y-17 + cY, "IMovingSolid");
+			//return lhc_position_meeting(x+6*_dir - cX, y-17 + cY, "IMovingSolid");
+			return lhc_collision_line(x+cX, y-17+cY, x+6*_dir+cX, y-17+cY, "IMovingSolid", true, true);
 		}
 		else
 		{
-			return lhc_position_meeting(x+6*_dir,y-17,"IMovingSolid");
+			//return lhc_position_meeting(x+6*_dir,y-17,"IMovingSolid");
+			return lhc_collision_line(x, y-17, x+6*_dir, y-17, "IMovingSolid", true, true);
 		}
 	}
 	return false;
@@ -1995,8 +2018,6 @@ function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWav
 			shot.velX = lengthdir_x(Speed,shootDir);
 			shot.velY = lengthdir_y(Speed,shootDir);
 			shot.direction = shootDir;
-			shot.speed_x = extraSpeed_x;
-			shot.speed_y = extraSpeed_y;
 			shot.waveStyle = i + WaveStyleOffset;
 			shot.dir = dir2;
 			shot.waveDir = waveDir;
@@ -3060,7 +3081,7 @@ function PaletteSurface()
 		}
 		DrawPalSprite(palSprite,PlayerPal.Default,1);
 		
-		if(shineFXCounter > 0 || statCharge >= maxCharge || (state == State.Dodge && statCharge < maxCharge) || (shineCharge > 0 && state != State.Spark))
+		if(shineFXCounter > 0 || statCharge >= maxCharge || (state == State.Dodge && statCharge < maxCharge) || (shineCharge > 0 && state != State.Spark) || boostBallCharge > 0)
 		{
 			shaderFlash++;
 		}
@@ -3151,6 +3172,17 @@ function PaletteSurface()
 			if(shaderFlash > (shaderFlashMax/2) || shineFXCounter < 1)
 			{
 				alph = shineFXCounter*0.625;
+			}
+			DrawPalSprite(palSprite,PlayerPal.Spark,alph);
+		}
+		#endregion
+		#region -- Boost Ball --
+		if(boostBallFX > 0)
+		{
+			var alph = boostBallFX*0.875;
+			if(shaderFlash > (shaderFlashMax/2))
+			{
+				alph = boostBallFX*0.625;
 			}
 			DrawPalSprite(palSprite,PlayerPal.Spark,alph);
 		}
@@ -3792,6 +3824,43 @@ function PostDrawPlayer(posX, posY, rot, alph)
 				shineFrame++;
 				shineFrameCounter = 0;
 			}
+		}
+	}
+	else if(state == State.Morph && boostBallFXFlash)
+	{
+		if(shineFrame < 4)
+		{
+			var _ang = point_direction(oldPosition.X,oldPosition.Y,position.X,position.Y);
+			
+			var sFrame = shineFrame;
+			var shineRot = _ang;
+			var len = 3;
+			var shineX = scr_round(xx + lengthdir_x(len,shineRot)),
+				shineY = scr_round(yy + lengthdir_y(len,shineRot));
+			var _wrp = scr_wrap(_ang,0,90);
+			if(_wrp >= 22.5 && _wrp <= 67.5)
+			{
+				sFrame += 4;
+				shineRot -= 45*dir;
+			}
+			if(dir == -1 && shineRot != 0)
+			{
+				shineRot -= 180;
+			}
+			gpu_set_blendmode(bm_add);
+			draw_sprite_ext(sprt_ShineSparkFX,sFrame,shineX+sprtOffsetX,shineY+sprtOffsetY,dir*0.75,0.75,shineRot,c_white,alph*0.9);
+			gpu_set_blendmode(bm_normal);
+			
+			shineFrameCounter += 1*(!global.gamePaused);
+			if(shineFrameCounter >= 2)
+			{
+				shineFrame++;
+				shineFrameCounter = 0;
+			}
+		}
+		else
+		{
+			boostBallFXFlash = false;
 		}
 	}
 	else if(state == State.Spark && shineStart <= 0 && shineEnd <= 0)

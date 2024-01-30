@@ -13,11 +13,11 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 	{
 		ysp = 0;
 	}
-	if(player.state == State.Grip && player.startClimb)
+	/*if(player.state == State.Grip && player.startClimb)
 	{
 		xsp = 0;
 		ysp = 0;
-	}
+	}*/
 	
 	var fxsp = xsp,
 		fysp = ysp;

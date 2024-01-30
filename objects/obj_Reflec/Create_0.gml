@@ -17,9 +17,3 @@ function GetPoint2()
 {
 	return new Vector2(x + lengthdir_x(_len2,_ang2+image_angle), y + lengthdir_y(_len2,_ang2+image_angle));
 }
-
-function ReflectAngle(_angle)
-{
-	var _diffAng = angle_difference(_angle,scr_wrap(image_angle+90,0,360))
-	return _angle + (180 - 2*_diffAng);
-}

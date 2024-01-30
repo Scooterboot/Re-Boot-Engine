@@ -7,15 +7,17 @@ if(global.gamePaused)
 	exit;
 }
 
-if(creator == obj_Player && lastReflec == noone)
+if(instance_exists(creator) && creator.object_index == obj_Player && lastReflec == noone)
 {
-	if(sign(velX) == sign(creator.hSpeed) && abs(speed_x) < abs(creator.hSpeed))
+	var hSpeed = creator.fVelX;
+	if(sign(velX) == sign(hSpeed) && abs(speed_x) < abs(hSpeed))
 	{
-		speed_x = creator.hSpeed;
+		speed_x = hSpeed;
 	}
-	if(sign(velY) == sign(creator.vSpeed) && abs(speed_y) < abs(creator.vSpeed))
+	var vSpeed = creator.fVelY * 0.75;
+	if(sign(velY) == sign(vSpeed) && abs(speed_y) < abs(vSpeed))
 	{
-		speed_y = creator.vSpeed;
+		speed_y = vSpeed;
 	}
 }
 
@@ -33,18 +35,37 @@ if(aiStyle == 1 || aiStyle == 2)
 }
 
 var reflec = noone;
-var _num = collision_circle_list(_x,_y,40,obj_Reflec,false,true,reflecList,true);
-for(var i = 0; i < _num; i++)
+collision_line_list(_x,_y,_x+fVelX,_y+fVelY,obj_Reflec,true,true,reflecList,true);
+if(tileCollide && doorOpenType >= 0)
+{
+	collision_line_list(_x,_y,_x+fVelX,_y+fVelY,obj_DoorHatch,true,true,reflecList,true);
+}
+for(var i = 0; i < ds_list_size(reflecList); i++)
 {
 	var _ref = reflecList[| i];
 	if(instance_exists(_ref))
 	{
-		var p1 = _ref.GetPoint1(),
-			p2 = _ref.GetPoint2();
-		if(lines_intersect(p1.X,p1.Y,p2.X,p2.Y,_x,_y,_x+fVelX,_y+fVelY,true) > 0 && lastReflec != _ref)
+		if(_ref.object_index == obj_Reflec)
 		{
-			reflec = _ref;
-			break;
+			var p1 = _ref.GetPoint1(),
+				p2 = _ref.GetPoint2();
+			if(lines_intersect(p1.X,p1.Y,p2.X,p2.Y,_x,_y,_x+fVelX,_y+fVelY,true) > 0 && lastReflec != _ref)
+			{
+				reflec = _ref;
+				break;
+			}
+		}
+		else if(_ref.object_index == obj_DoorHatch || object_is_ancestor(_ref.object_index,obj_DoorHatch))
+		{
+			if((!_ref.unlocked ||
+			(doorOpenType <= -1 && _ref.object_index == obj_DoorHatch) ||
+			(doorOpenType != 1 && doorOpenType != 2 && _ref.object_index == obj_DoorHatch_Missile) ||
+			(doorOpenType != 2 && _ref.object_index == obj_DoorHatch_Super) ||
+			(doorOpenType != 3 && _ref.object_index == obj_DoorHatch_Power)) && doorOpenType != 4)
+			{
+				reflec = _ref;
+				break;
+			}
 		}
 	}
 }
@@ -55,18 +76,35 @@ if(instance_exists(reflec) && lastReflec != reflec)
 	var _ang = direction;
 	var _spd = point_distance(0,0,velX,velY);
 	
-	_ang = reflec.ReflectAngle(_ang);
-	
-	var p1 = reflec.GetPoint1(),
-		p2 = reflec.GetPoint2();
 	var vX = 0,
 		vY = 0,
 		_c = 0;
-	while(lines_intersect(p1.X,p1.Y,p2.X,p2.Y,_x,_y,_x+vX,_y+vY,true) <= 0 && _c < _spd)
+	if(reflec.object_index == obj_Reflec)
 	{
-		vX += sign(velX) * min(1,abs(velX)-abs(vX));
-		vY += sign(velY) * min(1,abs(velY)-abs(vY));
-		_c++;
+		_ang = ReflectAngle(_ang, reflec.image_angle+90);
+		
+		var p1 = reflec.GetPoint1(),
+			p2 = reflec.GetPoint2();
+		while(lines_intersect(p1.X,p1.Y,p2.X,p2.Y,_x,_y,_x+vX,_y+vY,true) <= 0 && _c < _spd)
+		{
+			vX += sign(velX) * min(1,abs(velX)-abs(vX));
+			vY += sign(velY) * min(1,abs(velY)-abs(vY));
+			_c++;
+		}
+	}
+	else if(reflec.object_index == obj_DoorHatch || object_is_ancestor(reflec.object_index,obj_DoorHatch))
+	{
+		_ang = ReflectAngle(_ang, reflec.image_angle+(180 * (reflec.image_xscale < 0)));
+		
+		while(!collision_line(_x,_y,_x+vX,_y+vY,reflec,true,true) && _c < _spd)
+		{
+			vX += sign(velX) * min(1,abs(velX)-abs(vX));
+			vY += sign(velY) * min(1,abs(velY)-abs(vY));
+			_c++;
+		}
+		vX -= sign(velX);
+		vY -= sign(velY);
+		_c--;
 	}
 	
 	xstart = _x+vX;
@@ -86,13 +124,80 @@ if(instance_exists(reflec) && lastReflec != reflec)
 	fVelY = vY;
 	
 	direction = _ang;
-	//dir *= -1;
 	
 	speed_x = 0;
 	speed_y = 0;
 	
 	lastReflec = reflec;
 }
+
+/*if(tileCollide && doorOpenType >= 0)
+{
+	var door = noone;
+	_num = collision_line_list(_x,_y,_x+fVelX,_y+fVelY,obj_DoorHatch,true,true,doorList,true);
+	for(var i = 0; i < _num; i++)
+	{
+		if(instance_exists(doorList[| i]))
+		{
+			var _door = doorList[| i];
+			if((!_door.unlocked ||
+			(doorOpenType <= -1 && _door.object_index == obj_DoorHatch) ||
+			(doorOpenType != 1 && doorOpenType != 2 && _door.object_index == obj_DoorHatch_Missile) ||
+			(doorOpenType != 2 && _door.object_index == obj_DoorHatch_Super) ||
+			(doorOpenType != 3 && _door.object_index == obj_DoorHatch_Power)) && doorOpenType != 4)
+			{
+				door = _door;
+				break;
+			}
+		}
+	}
+	ds_list_clear(doorList);
+	
+	//if(instance_exists(door) && lastReflectedDoor != door)
+	if(instance_exists(door) && lastReflec != door)
+	{
+		var _ang = direction;
+		var _spd = point_distance(0,0,velX,velY);
+		
+		_ang = ReflectAngle(_ang, door.image_angle+(180 * (door.image_xscale < 0)));
+		
+		var vX = 0,
+			vY = 0,
+			_c = 0;
+		while(!collision_line(_x,_y,_x+vX,_y+vY,door,true,true) && _c < _spd)
+		{
+			vX += sign(velX) * min(1,abs(velX)-abs(vX));
+			vY += sign(velY) * min(1,abs(velY)-abs(vY));
+			_c++;
+		}
+		vX -= sign(velX);
+		vY -= sign(velY);
+		_c--;
+		
+		xstart = _x+vX;
+		ystart = _y+vY;
+		
+		velX = lengthdir_x(_spd,_ang);
+		velY = lengthdir_y(_spd,_ang);
+		
+		while(_c < _spd)
+		{
+			vX += sign(velX) * min(1,abs(velX)-abs(vX));
+			vY += sign(velY) * min(1,abs(velY)-abs(vY));
+			_c++;
+		}
+		
+		fVelX = vX;
+		fVelY = vY;
+		
+		direction = _ang;
+		
+		speed_x = 0;
+		speed_y = 0;
+		
+		lastReflec = door;
+	}
+}*/
 
 #endregion
 
@@ -104,10 +209,14 @@ if(tileCollide && impacted == 0)
 	var fVX = fVelX,
 		fVY = fVelY;
 	
+	var refFlag = instance_exists(lastReflec) && (lastReflec.object_index == obj_DoorHatch || object_is_ancestor(lastReflec.object_index,obj_DoorHatch)) && position_meeting(x,y,lastReflec);
+	
 	var counter = abs(fVelX)+abs(fVelY);
-	if(lhc_position_collide(fVelX,fVelY) || lhc_position_collide(0,0) || lhc_collision_line(xprevious-fVelX,yprevious-fVelY,x+fVelX,y+fVelY,solids,true,true))
+	//if(lhc_position_collide(fVelX,fVelY) || lhc_position_collide(0,0) || lhc_collision_line(xprevious-fVelX,yprevious-fVelY,x+fVelX,y+fVelY,solids,true,true))
+	if(entity_position_collide(fVelX,fVelY) || entity_position_collide(0,0) || entity_collision_line(x-fVelX,y-fVelY,x+fVelX,y+fVelY,true,true) || refFlag)
 	{
-		while(!lhc_position_collide(sign(fVelX),sign(fVelY)) && !lhc_position_collide(0,0) && !lhc_collision_line(xprevious-fVelX,yprevious-fVelY,x+sign(fVelX),y+sign(fVelY),solids,true,false) && counter > 0)
+		//while(!lhc_position_collide(sign(fVelX),sign(fVelY)) && !lhc_position_collide(0,0) && !lhc_collision_line(xprevious-fVelX,yprevious-fVelY,x+sign(fVelX),y+sign(fVelY),solids,true,false) && counter > 0)
+		while(!entity_position_collide(sign(fVelX),sign(fVelY)) && !entity_position_collide(0,0) && !entity_collision_line(x-fVelX,y-fVelY,x+sign(fVelX),y+sign(fVelY),true,true) && !refFlag && counter > 0)
 		{
 			x += sign(fVelX);
 			y += sign(fVelY);

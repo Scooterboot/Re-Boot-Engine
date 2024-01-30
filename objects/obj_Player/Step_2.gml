@@ -65,8 +65,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	
 	if(!global.roomTrans)
 	{
-		hSpeed = fVelX;
-		vSpeed = fVelY * 0.75;
 		dir2 = dir;
 		if(stateFrame == State.Grip)
 		{
@@ -225,8 +223,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		#region Shoot direction
 		if(aimAngle == 0)
 		{
-			extraSpeed_x = hSpeed;
-			extraSpeed_y = 0;
 			shootDir = 0;
 			if(dir2 == -1)
 			{
@@ -235,15 +231,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		}
 		else if(aimAngle == 1)
 		{
-			extraSpeed_x = hSpeed;
-			if(vSpeed < 0)
-			{
-				extraSpeed_y = vSpeed;
-			}
-			else
-			{
-				extraSpeed_y = 0;
-			}
 			shootDir = 45;
 			if(dir2 == -1)
 			{
@@ -252,15 +239,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		}
 		else if(aimAngle == -1)
 		{
-			extraSpeed_x = hSpeed;
-			if(vSpeed > 0)
-			{
-				extraSpeed_y = vSpeed;
-			}
-			else
-			{
-				extraSpeed_y = 0;
-			}
 			shootDir = 315;
 			if(dir2 == -1)
 			{
@@ -269,33 +247,11 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		}
 		else if(aimAngle == 2)
 		{
-			extraSpeed_x = 0;
-			if(vSpeed < 0)
-			{
-				extraSpeed_y = vSpeed;
-			}
-			else
-			{
-				extraSpeed_y = 0;
-			}
 			shootDir = 90;
 		}
 		else if(aimAngle == -2)
 		{
-			extraSpeed_x = 0;
-			if(vSpeed > 0)
-			{
-				extraSpeed_y = vSpeed;
-			}
-			else
-			{
-				extraSpeed_y = 0;
-			}
 			shootDir = 270;
-		}
-		if((dir == 1 && extraSpeed_x < 0) || (dir == -1 && extraSpeed_x > 0))
-		{
-			extraSpeed_x = 0;
 		}
 		#endregion
 	}
@@ -2429,7 +2385,12 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		{
 			if(state == State.Grip && startClimb)
 			{
-				climbIndex = min(climbIndex + 1, 18);
+				var ciNum = 1;
+				if(climbIndex >= 10 && (cDash || global.autoDash) && move != 0)
+				{
+					ciNum = 2;
+				}
+				climbIndex = min(climbIndex + ciNum, 18);
 			}
 			climbIndexCounter = 0;
 		}
@@ -2512,15 +2473,21 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				mbTrailColor_Start = c_aqua;
 				mbTrailColor_End = c_teal;
 			}*/
-			if(state == State.BallSpark)
+			
+			if(speedFXCounter > 0)
 			{
-				mbTrailColor_Start = c_yellow;
-				mbTrailColor_End = c_olive;
+				mbTrailColor_Start = merge_color(mbTrailColor_Start, c_aqua, speedFXCounter);
+				mbTrailColor_End = merge_color(mbTrailColor_End, make_color_rgb(0,148,255), speedFXCounter);
 			}
-			else if(speedBoost)
+			if(shineFXCounter > 0)
 			{
-				mbTrailColor_Start = c_aqua;
-				mbTrailColor_End = make_color_rgb(0,148,255);
+				mbTrailColor_Start = merge_color(mbTrailColor_Start, c_yellow, shineFXCounter);
+				mbTrailColor_End = merge_color(mbTrailColor_End, c_olive, shineFXCounter);
+			}
+			if(boostBallFX > 0)
+			{
+				mbTrailColor_Start = merge_color(mbTrailColor_Start, c_yellow, boostBallFX);
+				mbTrailColor_End = merge_color(mbTrailColor_End, c_olive, boostBallFX);
 			}
 		
 			if(immuneTime > 0 && !(immuneTime&1) && !global.roomTrans)
@@ -3020,6 +2987,19 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			dmgST[5] = (beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4));
 		    scr_DamageNPC(x,y,psDmg,DmgType.Charge,dmgST,0,3,0);
 		}
+		if(boostBallDmgCounter > 0)
+		{
+			var dmgST;
+			dmgST[0] = true;
+			dmgST[1] = false;
+			dmgST[2] = true;
+			dmgST[3] = false;
+			dmgST[4] = false;
+			dmgST[5] = false;
+		    scr_DamageNPC(x,y,300*boostBallDmgCounter,DmgType.Misc,dmgST,0,3,0);
+			
+			boostBallDmgCounter = max(boostBallDmgCounter - 0.0375, 0);
+		}
 		
 		// ----- Environmental Damage -----
 		#region Environmental Damage
@@ -3100,7 +3080,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		prevAimAngle = aimAngle;
 	
 		outOfLiquid = (liquidState <= 0);
-		shineRestarted = false;
 	
 		immuneTime = max(immuneTime - 1, 0);
 	
