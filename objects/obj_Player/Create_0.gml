@@ -204,10 +204,10 @@ sparkCancelSpiderJumpTweak = false;
 boostBallCharge = 0;
 boostBallChargeMax = 80;
 boostBallChargeMin = 40;
-boostBallFX = 0;
-boostBallChargeSoundPlayed = false;
 boostBallDmgCounter = 0;
+boostBallFX = 0;
 boostBallFXFlash = false;
+boostBallSnd = noone;
 
 
 isChargeSomersaulting = false;
@@ -382,6 +382,7 @@ maxSpeed[10,0] = 7.25;	// Dodge
 maxSpeed[11,0] = 1.25;	// Moonwalk
 maxSpeed[12,0] = 2.125;	// Moonwalk (dash)
 maxSpeed[13,0] = 1.75;	// Moonfall
+maxSpeed[14,0] = 4.75;	// Boost Ball
 // Underwater (no grav suit)
 maxSpeed[0,1] = 2.75;	// Running
 maxSpeed[1,1] = 3.75;	// Dashing (no speed boost)
@@ -397,6 +398,7 @@ maxSpeed[10,1] = 3.25;	// Dodge
 maxSpeed[11,1] = 0.75;	// Moonwalk
 maxSpeed[12,1] = 1.25;	// Moonwalk (dash)
 maxSpeed[13,1] = 1.5;	// Moonfall
+maxSpeed[14,1] = 3.75;	// Boost Ball
 // In lava/acid (no grav suit)
 maxSpeed[0,2] = 1.75;	// Running
 maxSpeed[1,2] = 2.75;	// Dashing (no speed boost)
@@ -412,6 +414,7 @@ maxSpeed[10,2] = 3.25;	// Dodge
 maxSpeed[11,2] = 0.75;	// Moonwalk
 maxSpeed[12,2] = 1.25;	// Moonwalk (dash)
 maxSpeed[13,2] = 1.5;	// Moonfall
+maxSpeed[14,2] = 2.75;	// Boost Ball
 
 // Out of water
 moveSpeed[0,0] = 0.1875;	// Normal
@@ -1094,6 +1097,10 @@ function entity_collision(listNum)
 			if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
 			{
 				isSolid = block.isSolid;
+				if(block.ignoredEntity == id)
+				{
+					isSolid = false;
+				}
 			}
 			var sp = (asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting && shineStart <= 0 && shineLauncherStart <= 0),
 				sc = (asset_has_any_tag(block.object_index, "IScrewBlock", asset_object) && isScrewAttacking);

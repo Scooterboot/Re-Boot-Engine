@@ -67,7 +67,7 @@ else
         with(obj_Player)
         {
             var gNum = 16;
-            while(grounded && !place_collide(0,1) && place_collide(0,3+max(ceil(abs(velX)),1)) && gNum > 0)
+            while(grounded && !entity_place_collide(0,1) && entity_place_collide(0,3+max(ceil(abs(velX)),1)) && gNum > 0)
             {
                 y += 1;
                 gNum -= 1;

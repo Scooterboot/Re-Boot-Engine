@@ -1,4 +1,7 @@
 /// @description 
 event_inherited();
 
-instance_destroy(solidObj);
+for(var i = 0; i < array_length(mBlocks); i++)
+{
+	instance_destroy(mBlocks[i]);
+}

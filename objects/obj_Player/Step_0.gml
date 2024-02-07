@@ -692,19 +692,21 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			{
 				fMaxSpeed = maxSpeed[12,liquidState];
 			}
+			var _frict = fFrict*0.25;
 			if(moonFallState)
 			{
 				fMaxSpeed = 0;
+				_frict = fFrict*2;
 			}
 			if(abs(velX) > fMaxSpeed)
 			{
 				if(velX > 0)
 				{
-					velX = min(velX - fFrict, fMaxSpeed);
+					velX = max(velX - _frict, fMaxSpeed);
 				}
 				if(velX < 0)
 				{
-					velX = max(velX + fFrict, -fMaxSpeed);
+					velX = min(velX + _frict, -fMaxSpeed);
 				}
 			}
 		}
@@ -714,16 +716,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		fMaxSpeed = maxSpeed[13,liquidState];
 	}
 	
-	/*maxSpeed2 = maxSpeed[1,liquidState];
-	if(boots[Boots.SpeedBoost])
-	{*/
-		maxSpeed2 = maxSpeed[2,liquidState];
-	/*}
-	else if(state == State.Morph)
-	{
-		maxSpeed2 = maxSpeed[6,liquidState];
-	}*/
-	if(move != 0 && abs(velX) > maxSpeed2 && state != State.Spark && state != State.BallSpark && state != State.Grapple && state != State.Dodge && state != State.DmgBoost && (speedCounter > 0 || grounded))
+	maxSpeed2 = maxSpeed[2,liquidState];
+	if(abs(velX) > maxSpeed2 && state != State.Spark && state != State.BallSpark && state != State.Grapple && state != State.Dodge && state != State.DmgBoost && (speedCounter > 0 || grounded))
 	{
 		if(sign(velX) == 1)
 		{
@@ -1174,7 +1168,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 							ChangeState(State.Jump,State.Jump,mask_Jump,false, false);
 						}
 					}
-					if((rJump || bufferJump > 0) && state == State.Morph && (cDash || !misc[Misc.Spring]) && boostBallCharge < boostBallChargeMin)
+					if((rJump || bufferJump > 0) && state == State.Morph &&  !misc[Misc.Spring])//(cDash || !misc[Misc.Spring]) && boostBallCharge < boostBallChargeMin)
 					{
 						morphSpinJump = true;
 					}
@@ -1192,7 +1186,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 							moonFall = true;
 						}
 					}
-					if(state == State.Morph && cDash)
+					if(state == State.Morph && (cDash || !misc[Misc.Spring]))
 					{
 						morphSpinJump = true;
 					}
@@ -1391,14 +1385,12 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			
 			if(boostBallCharge >= 10)
 			{
-				if(!boostBallChargeSoundPlayed)
+				if(boostBallSnd == noone || !audio_is_playing(boostBallSnd))
 				{
-					audio_play_sound(snd_BoostBall_Charge,0,false);
-					boostBallChargeSoundPlayed = true;
-				}
-				else if(!audio_is_playing(snd_BoostBall_Charge) && !audio_is_playing(snd_BoostBall_ChargeLoop))
-				{
-					audio_play_sound(snd_BoostBall_ChargeLoop,0,true);
+					boostBallSnd = audio_play_sound(snd_BoostBall_Charge,0,false);
+					audio_sound_loop(boostBallSnd,true);
+					audio_sound_loop_start(boostBallSnd,1.938);
+					audio_sound_loop_end(boostBallSnd,3.589);
 				}
 			}
 		}
@@ -1412,7 +1404,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				{
 					_dir = move2;
 				}
-				var _spd = maxSpeed[1,liquidState] * bbMult;
+				var _spd = maxSpeed[14,liquidState] * bbMult;
 					
 				if(spiderBall && spiderEdge != Edge.None)
 				{
@@ -1444,9 +1436,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			}
 			
 			boostBallCharge = 0;
-			audio_stop_sound(snd_BoostBall_Charge);
-			audio_stop_sound(snd_BoostBall_ChargeLoop);
-			boostBallChargeSoundPlayed = false;
+			audio_stop_sound(boostBallSnd);
 			
 			boostBallFX = max(boostBallFX - 0.025, 0);
 		}
@@ -1456,9 +1446,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		boostBallCharge = 0;
 		boostBallFX = 0;
 		boostBallFXFlash = false;
-		audio_stop_sound(snd_BoostBall_Charge);
-		audio_stop_sound(snd_BoostBall_ChargeLoop);
-		boostBallChargeSoundPlayed = false;
+		audio_stop_sound(boostBallSnd);
 	}
 #endregion
 #region Spider Ball Movement
@@ -1625,7 +1613,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 	if(debug)
 	{
-		// -- debug: noclip --
+		#region noclip
 		if(keyboard_check(vk_numpad6) || keyboard_check(vk_numpad4))
 		{
 			position.X += (keyboard_check(vk_numpad6) - keyboard_check(vk_numpad4)) * 3;
@@ -1641,6 +1629,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			}
 			y = scr_round(position.Y);
 		}
+		#endregion
 	}
 
 
@@ -1936,9 +1925,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 	speedKill = false;
 	
-	fVelX += shiftX;
-	fVelY += shiftY;
-	
 	var vstepx = 1,
 		vstepy = 1;
 	if(spiderBall || (state == State.Grip && startClimb && climbIndex <= 6))
@@ -1949,9 +1935,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		Collision_Normal(fVelX,fVelY,vstepx,vstepy, (state != State.Grip));
 	}
-	
-	shiftX = 0;
-	shiftY = 0;
 	
 	if(!grounded && velY == 0 && PlayerGrounded())
 	{
@@ -2294,7 +2277,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	if(state == State.Morph)
 	{
 		stateFrame = State.Morph;
-		mask_index = mask_Morph;
 		gunReady = false;
 		ledgeFall = true;
 		ledgeFall2 = true;
@@ -2359,7 +2341,14 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		if(unmorphing)
 		{
 			var oldY = y;
-			ChangeState(state,stateFrame,mask_Crouch,false);
+			if(grounded)
+			{
+				ChangeState(state,stateFrame,mask_Crouch,false);
+			}
+			else
+			{
+				ChangeState(state,stateFrame,mask_Somersault,false);
+			}
 			
 			if(morphFrame == 8)
 			{
@@ -2369,7 +2358,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			aimUpDelay = 10;
 			if(morphFrame <= 0)
 			{
-				if(morphSpinJump)
+				if(morphSpinJump || (!grounded && move2 != 0))
 				{
 					ChangeState(State.Somersault,State.Somersault,mask_Somersault,false);
 					frame[Frame.Somersault] = 2;
@@ -2389,14 +2378,15 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 						}
 					}
 				}
-				if(cUp)
+				/*if(cUp)
 				{
 					velY = min(velY, 0);
-				}
+				}*/
 			}
 		}
 		else
 		{
+			mask_index = mask_Morph;
 			morphSpinJump = false;
 		}
 		

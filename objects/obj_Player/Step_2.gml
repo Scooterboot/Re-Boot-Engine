@@ -3090,8 +3090,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		
 		stallCamera = false;
 		
-		shiftedVelX = 0;
-		shiftedVelY = 0;
+		movedVelX = 0;
+		movedVelY = 0;
 		
 		if(state != prevState)
 		{

@@ -1,47 +1,8 @@
 
-function place_collide(offsetX, offsetY)
-{
-	return place_meeting(x+offsetX,y+offsetY,obj_Tile);
-}
-
-function position_collide(offsetX, offsetY)
-{
-	return position_meeting(x+offsetX,y+offsetY,obj_Tile);
-}
-
-function lhc_place_collide()
-{
-	/// @description lhc_place_collide
-	/// @param offsetX
-	/// @param offsetY
-	/// @param baseX=x
-	/// @param baseY=y
-	
-	var offsetX = argument[0],
-		offsetY = argument[1],
-		xx = x,
-		yy = y;
-	if(argument_count > 2)
-	{
-		xx = argument[2];
-		if(argument_count > 3)
-		{
-			yy = argument[3];
-		}
-	}
-	return lhc_place_meeting(xx+offsetX,yy+offsetY,"ISolid");
-}
-
-function lhc_position_collide(offsetX, offsetY)
+/*function lhc_position_collide(offsetX, offsetY)
 {
 	return lhc_position_meeting(x+offsetX,y+offsetY,"ISolid");
-}
-
-function collide_rect(x1, y1, x2, y2)
-{
-	var rect = collision_rectangle(x1,y1,x2,y2,obj_Tile,true,true);
-	return (rect != noone);
-}
+}*/
 
 /*function scr_GetSlopeAngle(slope)
 {
@@ -123,3 +84,122 @@ function rectangle_intersect_line(rx1,ry1,rx2,ry2, x1,y1,x2,y2)
 	}
 	return false;
 }
+
+#region experimental (inefficient and laggy)
+
+function instance_place_array(_x, _y, obj)
+{
+	if(place_meeting(_x,_y,obj))
+	{
+		var result = [];
+		var num = 0;
+		with(obj)
+		{
+			if(place_meeting(x-(_x-other.x), y-(_y-other.y), other))
+			{
+				result[num] = id;
+				num++;
+			}
+		}
+		return result;
+	}
+	return [noone];
+}
+
+function collision_circle_array(_x, _y, radius, obj, prec, notme)
+{
+	var num = 0;
+	var result = [];
+	with(obj)
+	{
+		if(notme && id == other.id)
+		{
+			continue;
+		}
+		if(!collision_circle(_x,_y,radius,id,prec,false))
+		{
+			continue;
+		}
+		result[num] = id;
+		num++;
+	}
+	return result;
+}
+function collision_ellipse_array(x1, y1, x2, y2, obj, prec, notme)
+{
+	var num = 0;
+	var result = [];
+	with(obj)
+	{
+		if(notme && id == other.id)
+		{
+			continue;
+		}
+		if(!collision_ellipse(x1,y1,x2,y2,id,prec,false))
+		{
+			continue;
+		}
+		result[num] = id;
+		num++;
+	}
+	return result;
+}
+function collision_line_array(x1, y1, x2, y2, obj, prec, notme)
+{
+	var num = 0;
+	var result = [];
+	with(obj)
+	{
+		if(notme && id == other.id)
+		{
+			continue;
+		}
+		if(!collision_line(x1,y1,x2,y2,id,prec,false))
+		{
+			continue;
+		}
+		result[num] = id;
+		num++;
+	}
+	return result;
+}
+function collision_point_array(_x, _y, obj, prec, notme)
+{
+	var num = 0;
+	var result = [];
+	with(obj)
+	{
+		if(notme && id == other.id)
+		{
+			continue;
+		}
+		if(!collision_point(_x,_y,id,prec,false))
+		{
+			continue;
+		}
+		result[num] = id;
+		num++;
+	}
+	return result;
+}
+function collision_rectangle_array(x1, y1, x2, y2, obj, prec, notme)
+{
+	var num = 0;
+	var result = [];
+	with(obj)
+	{
+		if(notme && id == other.id)
+		{
+			continue;
+		}
+		if(!collision_rectangle(x1,y1,x2,y2,id,prec,false))
+		{
+			continue;
+		}
+		result[num] = id;
+		num++;
+	}
+	return result;
+}
+
+#endregion

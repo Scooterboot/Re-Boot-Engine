@@ -162,10 +162,10 @@ function entity_collision(listNum)
 		{
 			var block = blockList[| i];
 			var isSolid = true;
-			if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
-			{
-				isSolid = block.isSolid;
-			}
+			//if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
+			//{
+			//	isSolid = block.isSolid;
+			//}
 			if(instance_exists(lastReflec) && block == lastReflec)
 			{
 				isSolid = false;

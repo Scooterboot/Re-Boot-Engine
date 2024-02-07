@@ -19,6 +19,8 @@ damageSubType[3] = true;
 exploProj = obj_MBBombExplosion;
 exploDmgMult = 1;
 
+doorOpenType = 5;
+
 function OnXCollision(fVX)
 {
 	if(spreadType < 2)

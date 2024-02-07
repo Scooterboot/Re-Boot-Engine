@@ -2,7 +2,7 @@
 event_inherited();
 
 blockDestroyType = 1;
-doorOpenType = 0;
+doorOpenType = 5;
 
 multiHit = true;
 

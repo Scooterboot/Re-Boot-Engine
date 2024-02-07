@@ -1,0 +1,43 @@
+{
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "obj_ShutterSwitch_Bomb",
+  "eventList": [
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,},
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,},
+  ],
+  "managed": true,
+  "overriddenProperties": [],
+  "parent": {
+    "name": "ShutterGates",
+    "path": "folders/Objects/Room Elements/SpecialTiles/ShutterGates.yy",
+  },
+  "parentObjectId": {
+    "name": "obj_ShutterSwitch",
+    "path": "objects/obj_ShutterSwitch/obj_ShutterSwitch.yy",
+  },
+  "persistent": false,
+  "physicsAngularDamping": 0.1,
+  "physicsDensity": 0.5,
+  "physicsFriction": 0.2,
+  "physicsGroup": 1,
+  "physicsKinematic": false,
+  "physicsLinearDamping": 0.1,
+  "physicsObject": false,
+  "physicsRestitution": 0.1,
+  "physicsSensor": false,
+  "physicsShape": 1,
+  "physicsShapePoints": [],
+  "physicsStartAwake": true,
+  "properties": [],
+  "solid": false,
+  "spriteId": {
+    "name": "sprt_ShutterSwitch_Bomb",
+    "path": "sprites/sprt_ShutterSwitch_Bomb/sprt_ShutterSwitch_Bomb.yy",
+  },
+  "spriteMaskId": {
+    "name": "sprt_ShutterSwitch_Bomb_mask",
+    "path": "sprites/sprt_ShutterSwitch_Bomb_mask/sprt_ShutterSwitch_Bomb_mask.yy",
+  },
+  "visible": true,
+}

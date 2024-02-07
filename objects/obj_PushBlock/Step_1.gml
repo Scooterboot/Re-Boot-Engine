@@ -115,34 +115,24 @@ if(!entity_place_collide(0,2) || downSlopeFlag)
 
 EntityLiquid_Large(x-xprevious, y-yprevious);
 
+var xx = x+mBlockOffsetX,
+	yy = y+mBlockOffsetX;
 mBlock.isSolid = false;
-mBlock.UpdatePosition(x+mBlockOffsetX,y+mBlockOffsetX);
+mBlock.UpdatePosition(xx,yy, true);
 mBlock.isSolid = true;
 
-/*
-var passthruCheck = SkipOwnMovingTile(instance_place_list(scr_round(x),scr_round(y),all,block_list,true),true);
-if (passthruCheck)
+var _xdif = xx-mBlock.x;
+if(_xdif != 0)
 {
-	passthru = min(passthru+1,passthruMax);
+	position.X -= _xdif;
+	x = scr_round(position.X);
 }
-else
+var _ydif = yy-mBlock.y;
+if(_ydif != 0)
 {
-	passthru = 0;
+	position.Y -= _ydif;
+	y = scr_round(position.Y);
 }
-passthroughMovingSolids = (passthru >= passthruMax);
-if(passthroughMovingSolids)
-{
-	array_resize(solids,1);
-	solids[0] = "ISolid";
-	solids[1] = "IPlayer";
-}
-else
-{
-	solids[0] = "ISolid";
-	solids[1] = "IMovingSolid";
-	solids[2] = "IPlayer";
-}
-*/
 
 if(pushState == PushState.Push)
 {

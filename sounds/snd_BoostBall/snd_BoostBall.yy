@@ -10,7 +10,7 @@
   "bitRate": 128,
   "compression": 0,
   "conversionMode": 0,
-  "duration": 0.910476,
+  "duration": 0.823741,
   "parent": {
     "name": "Morph",
     "path": "folders/Sounds/Player/Morph.yy",

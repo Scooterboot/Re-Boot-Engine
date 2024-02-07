@@ -11,9 +11,10 @@ velX = 0; // velocity x
 velY = 0; // velocity y
 fVelX = 0; // final velocity x
 fVelY = 0; // final velocity y
-
-shiftedVelX = 0;
-shiftedVelY = 0;
+shiftX = 0;
+shiftY = 0;
+movedVelX = 0;
+movedVelY = 0;
 
 enum Edge
 {
@@ -113,6 +114,10 @@ function entity_collision(listNum)
 			if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
 			{
 				isSolid = block.isSolid;
+				if(block.ignoredEntity == id)
+				{
+					isSolid = false;
+				}
 			}
 			if(isSolid)
 			{
@@ -268,7 +273,6 @@ function entityPlatformCheck()
 #endregion
 #region GetEdgeAngle
 
-//function GetEdgeAngle(edge, margin = 6)
 function GetEdgeAngle(edge, offsetX = 0, offsetY = 0)
 {
 	var pos1 = new Vector2(0,0),
@@ -290,8 +294,8 @@ function GetEdgeAngle(edge, offsetX = 0, offsetY = 0)
 		ang = 270;
 	}
 	
-	var maxX = 4,//abs(bbox_right-bbox_left),
-		maxY = 4;//abs(bbox_bottom-bbox_top);
+	var maxX = 4,
+		maxY = 4;
 	
 	if(edge == Edge.Bottom || edge == Edge.Top)
 	{
@@ -461,7 +465,6 @@ function GetEdgeAngle(edge, offsetX = 0, offsetY = 0)
 		}
 	}
 	
-	//return scr_wrap(ang,-180,180);
 	return angle_difference(ang,0);
 }
 #endregion
@@ -554,6 +557,9 @@ function DestroyBlock(bx,by) {}
 #region Collision_Normal
 function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol, slopeSpeedAdjust)
 {
+	vX += shiftX;
+	vY += shiftY;
+	
 	var maxSpeedX = abs(vX),
 		maxSpeedY = abs(vY);
 	while((maxSpeedX > 0 && vStepX > 0) || (maxSpeedY > 0 && vStepY > 0))
@@ -902,8 +908,11 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 	x = scr_round(position.X);
 	y = scr_round(position.Y);
 	
-	shiftedVelX = 0;
-	shiftedVelY = 0;
+	shiftX = 0;
+	shiftY = 0;
+	
+	movedVelX = 0;
+	movedVelY = 0;
 }
 #endregion
 
@@ -1037,6 +1046,9 @@ function Crawler_DestroyBlock(bx,by) {}
 #region Collision_Crawler
 function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
 {
+	vX += shiftX;
+	vY += shiftY;
+	
 	var maxSpeedX = abs(vX),
 		maxSpeedY = abs(vY);
 	while((maxSpeedX > 0 && vStepX > 0) || (maxSpeedY > 0 && vStepY > 0))
@@ -1486,8 +1498,11 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
 	x = scr_round(position.X);
 	y = scr_round(position.Y);
 	
-	shiftedVelX = 0;
-	shiftedVelY = 0;
+	shiftX = 0;
+	shiftY = 0;
+	
+	movedVelX = 0;
+	movedVelY = 0;
 }
 #endregion
 
@@ -1830,9 +1845,6 @@ function Collision_MovingSolid(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, d
 	
 	x = scr_round(position.X);
 	y = scr_round(position.Y);
-	
-	shiftedVelX = 0;
-	shiftedVelY = 0;
 }
 #endregion
 
@@ -1967,6 +1979,10 @@ function ShutterSwitch(_x,_y,_type)
 		if(_type == 3 || _type == 4)
 		{
 			ToggleSwitch(_x,_y,obj_ShutterSwitch_Power);
+		}
+		if(_type == 5 || _type == 4)
+		{
+			ToggleSwitch(_x,_y,obj_ShutterSwitch_Bomb);
 		}
 	}
 }

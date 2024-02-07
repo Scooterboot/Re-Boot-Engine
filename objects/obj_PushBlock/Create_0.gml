@@ -30,7 +30,7 @@ sndStopped = false;
 
 function explodePush(_proj,_velX)
 {
-	if(!place_meeting(x,y-2,obj_Player))
+	if(!place_meeting(x,y-2,obj_Player) || _proj.y > bbox_top)
 	{
 		var _dir = sign(_velX);
 		if(_velX == 0)
@@ -69,85 +69,6 @@ mBlock.image_xscale = 2;
 mBlock.image_yscale = 2;
 mBlock.ignoredEntity = id;
 
-passthru = 0;
-passthruMax = 2;
-
-block_list = ds_list_create();
-
-function entity_place_collide()
-{
-	/// @description entity_place_collide
-	/// @param offsetX
-	/// @param offsetY
-	/// @param baseX=x
-	/// @param baseY=y
-	
-	var offsetX = argument[0],
-		offsetY = argument[1],
-		xx = scr_round(position.X),
-		yy = scr_round(position.Y);
-	if(argument_count > 2)
-	{
-		xx = argument[2];
-		if(argument_count > 3)
-		{
-			yy = argument[3];
-		}
-	}
-	//return lhc_place_meeting(xx+offsetX,yy+offsetY,solids);
-	return SkipOwnMovingTile(instance_place_list(xx+offsetX,yy+offsetY,all,block_list,true));
-}
-
-function entity_position_collide()
-{
-	/// @description entity_position_collide
-	/// @param offsetX
-	/// @param offsetY
-	/// @param baseX=x
-	/// @param baseY=y
-	
-	var offsetX = argument[0],
-		offsetY = argument[1],
-		xx = scr_round(position.X),
-		yy = scr_round(position.Y);
-	if(argument_count > 2)
-	{
-		xx = argument[2];
-		if(argument_count > 3)
-		{
-			yy = argument[3];
-		}
-	}
-	//return lhc_position_meeting(xx+offsetX,yy+offsetY,solids);
-	return SkipOwnMovingTile(instance_position_list(xx+offsetX,yy+offsetY,all,block_list,true));
-}
-
-function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
-{
-	//return lhc_collision_line(x1,y1,x2,y2,solids,prec,notme);
-	return SkipOwnMovingTile(collision_line_list(x1,y1,x2,y2,all,prec,notme,block_list,true));
-}
-
-function SkipOwnMovingTile(num, checkOnlyMoving = false)
-{
-	for(var i = 0; i < num; i++)
-	{
-		if(instance_exists(block_list[| i]) && 
-		((asset_has_any_tag(block_list[| i].object_index,solids,asset_object) && !checkOnlyMoving) ||
-		(asset_has_any_tag(block_list[| i].object_index,"IMovingSolid",asset_object) && checkOnlyMoving)))
-		{
-			var block = block_list[| i];
-			
-			if(block != mBlock)
-			{
-				ds_list_clear(block_list);
-				return true;
-			}
-		}
-	}
-	ds_list_clear(block_list);
-	return false;
-}
 
 function ModifyFinalVelY(fVY)
 {

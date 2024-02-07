@@ -113,21 +113,13 @@ function UpdatePosition(_x,_y, avoidClipping = false)
 				
 				with(entity)
 				{
-					if(moveXFlag)
-					{
-						moveX -= shiftedVelX;
-					}
-					if(moveYFlag)
-					{
-						moveY -= shiftedVelY;
-					}
-					var prevShiftX = shiftedVelX,
-						prevShiftY = shiftedVelY;
+					if(moveXFlag) { moveX -= movedVelX; }
+					if(moveYFlag) { moveY -= movedVelY; }
 					
 					Collision_MovingSolid(moveX,moveY,8,8);
 					
-					shiftedVelX = moveXFlag ? (x-xprevious) : prevShiftX;
-					shiftedVelY = moveYFlag ? (y-yprevious) : prevShiftY;
+					if(moveXFlag) { movedVelX = (x-xprevious); }
+					if(moveYFlag) { movedVelY = (y-yprevious); }
 					
 					if(moveXFlag2 && abs(x-xprevious) < abs(bVelX))
 					{
