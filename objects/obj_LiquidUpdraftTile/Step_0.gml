@@ -31,9 +31,11 @@ if(instance_exists(liquid))
 	{
 		for(var j = bbox_top; j < bbox_bottom; j += 2)
 		{
-			if(irandom(2000) == 0)
+			if(irandom(1500) == 0)
 			{
-				liquid.CreateBubble(i,j, 0,-10);
+				var bub = liquid.CreateBubble(i,j, 0,-10);
+				bub.kill = true;
+				bub.canSpread = false;
 			}
 		}
 	}

@@ -17,7 +17,9 @@ posY = (mouse_y - yy) * (window_get_height() / (hh*screenScale)) - global.screen
 x = posX + xx;
 y = posY + yy;
 
-if(room == rm_MainMenu || obj_PauseMenu.pause)
+hide = true; //(room != rm_MainMenu && !obj_PauseMenu.pause);
+
+if(!hide)
 {
 	image_alpha = min(image_alpha+0.1,1);
 }

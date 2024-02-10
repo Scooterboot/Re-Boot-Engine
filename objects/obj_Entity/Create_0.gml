@@ -480,11 +480,11 @@ function ModifySlopeYSteepness_Up() { return 3; }
 function ModifySlopeYSteepness_Down() { return 4; }
 
 // check if slope speed adjustments are applicable
-function SlopeCheck(slope)
+/*function SlopeCheck(slope) // old
 {
 	return (slope.image_yscale > 0 && slope.image_yscale <= 1 && 
 	((slope.image_xscale > 0 && bbox_left >= slope.bbox_left) || (slope.image_xscale < 0 && bbox_right <= slope.bbox_right)));
-}
+}*/
 
 // called on horizontal collision
 function OnRightCollision(fVX) {} // -->|
@@ -555,19 +555,12 @@ function DestroyBlock(bx,by) {}
 
 #endregion
 #region Collision_Normal
-function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol, slopeSpeedAdjust)
+function Collision_Normal(vX, vY, slopeSpeedAdjust)
 {
-	vX += shiftX;
-	vY += shiftY;
-	
-	var maxSpeedX = abs(vX),
-		maxSpeedY = abs(vY);
-	while((maxSpeedX > 0 && vStepX > 0) || (maxSpeedY > 0 && vStepY > 0))
+	if(slopeSpeedAdjust)
 	{
-		var vX2 = min(maxSpeedX,vStepX)*sign(vX);
-		
 		var sAngle = 0;
-		if(slopeSpeedAdjust && (entity_place_collide(0,2) ^^ entity_place_collide(0,-2)))
+		if(entity_place_collide(0,2) ^^ entity_place_collide(0,-2))
 		{
 			if(entity_place_collide(0,2))
 			{
@@ -578,45 +571,64 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 				sAngle = angle_difference(GetEdgeAngle(Edge.Top),180);
 			}
 		}
+		vX = lengthdir_x(vX,sAngle);
 		
-		var fVX = lengthdir_x(vX2,sAngle);
-		fVX = ModifyFinalVelX(fVX);
+		sAngle = 0;
+		if(entity_place_collide(2,0) ^^ entity_place_collide(-2,0))
+		{
+			if(entity_place_collide(2,0))
+			{
+				sAngle = angle_difference(GetEdgeAngle(Edge.Right),90);
+			}
+			if(entity_place_collide(-2,0))
+			{
+				sAngle = angle_difference(GetEdgeAngle(Edge.Left),270);
+			}
+		}
+		vY = lengthdir_x(vY,sAngle);
+	}
+	
+	vX += shiftX;
+	vY += shiftY;
+	
+	var maxSpeedX = abs(vX),
+		maxSpeedY = abs(vY);
+	while(maxSpeedX > 0 || maxSpeedY > 0)
+	{
+		var fVX = ModifyFinalVelX(min(maxSpeedX,1)*sign(vX));
 		
 		#region X Collision
 		
-		DestroyBlock(scr_round(position.X)+fVX,scr_round(position.Y));
-		
-		var yplusMax = maxSpeedX+1;
+		DestroyBlock(position.X+fVX,position.Y);
 		
 		var colR = entity_collision_line(bbox_right+fVX,bbox_top,bbox_right+fVX,bbox_bottom),
 			colL = entity_collision_line(bbox_left+fVX,bbox_top,bbox_left+fVX,bbox_bottom);
-		var xspeed = abs(fVX);
-		if(entity_place_collide(max(abs(fVX),1)*sign(fVX),0) && (!entity_place_collide(0,0) || (fVX > 0 && colR) || (fVX < 0 && colL)))
+		if(entity_place_collide(sign(fVX),0) && (!entity_place_collide(0,0) || (fVX > 0 && colR) || (fVX < 0 && colL)))
 		{
 			var steepness = ModifySlopeXSteepness_Up();
+			var xnum = 2*sign(fVX);
+			
+			DestroyBlock(position.X+xnum,position.Y+steepness);
+			DestroyBlock(position.X+xnum,position.Y-steepness);
+			
+			var moveUpSlope_Bottom = (!entity_place_collide(xnum,-steepness) && entity_place_collide(0,steepness) && CanMoveUpSlope_Bottom());
+			var moveUpSlope_Top = (!entity_place_collide(xnum,steepness) && entity_place_collide(0,-steepness) && CanMoveUpSlope_Top());
 			
 			var yplus = 0;
-			while(entity_place_collide(fVX,yplus) && yplus >= -yplusMax)
+			if(moveUpSlope_Bottom)
 			{
-				yplus--;
-				DestroyBlock(scr_round(position.X)+sign(fVX),scr_round(position.Y)+yplus);
-				DestroyBlock(scr_round(position.X)+fVX+sign(fVX),scr_round(position.Y)+yplus);
+				while(entity_place_collide(fVX,yplus) && yplus > -steepness)
+				{
+					yplus--;
+				}
 			}
-			while(entity_place_collide(fVX,yplus) && yplus <= yplusMax)
+			if(moveUpSlope_Top)
 			{
-				yplus++;
-				DestroyBlock(scr_round(position.X)+sign(fVX),scr_round(position.Y)+yplus);
-				DestroyBlock(scr_round(position.X)+fVX+sign(fVX),scr_round(position.Y)+yplus);
+				while(entity_place_collide(fVX,yplus) && yplus < steepness)
+				{
+					yplus++;
+				}
 			}
-			
-			var xnum = 0;
-			while(!entity_place_collide(xnum*sign(fVX),0) && xnum <= xspeed)
-			{
-				xnum++;
-			}
-			
-			var moveUpSlope_Bottom = (!entity_place_collide((xnum+1)*sign(fVX),-steepness) && entity_place_collide((xnum-1)*sign(fVX),steepness) && CanMoveUpSlope_Bottom());
-			var moveUpSlope_Top = (!entity_place_collide((xnum+1)*sign(fVX),steepness) && entity_place_collide((xnum-1)*sign(fVX),-steepness) && CanMoveUpSlope_Top());
 			
 			if(entity_place_collide(fVX,yplus) || (!moveUpSlope_Bottom && !moveUpSlope_Top))
 			{
@@ -630,11 +642,9 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 					OnLeftCollision(fVX);
 					position.X = scr_ceil(position.X);
 				}
-				var xnum2 = xspeed+2;
-				while(!entity_place_collide(sign(fVX),0) && xnum2 > 0)
+				if(!entity_place_collide(sign(fVX),0))
 				{
 					position.X += sign(fVX);
-					xnum2--;
 				}
 				OnXCollision(fVX);
 				fVX = 0;
@@ -665,44 +675,32 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		else if(!entity_place_collide(0,0))
 		{
 			var steepness = ModifySlopeXSteepness_Down();
+			var xnum = 2*sign(fVX);
 			
-			DestroyBlock(scr_round(position.X)+fVX+sign(fVX),scr_round(position.Y)+min(abs(fVX),steepness+2));
-			DestroyBlock(scr_round(position.X)+fVX+sign(fVX),scr_round(position.Y)-min(abs(fVX),steepness+2));
+			DestroyBlock(position.X+xnum,position.Y+steepness);
+			DestroyBlock(position.X+xnum,position.Y-steepness);
 			
-			var xnum3 = 0;
-			while(entity_place_collide(xnum3*sign(fVX),1) && xnum3 <= xspeed)
-			{
-				xnum3++;
-			}
-			var xnum4 = 0;
-			while(entity_place_collide(xnum4*sign(fVX),-1) && xnum4 <= xspeed)
-			{
-				xnum4++;
-			}
-			
-			var moveDownSlope_Bottom = (entity_place_collide(0,1) && entity_place_collide(xnum3*sign(fVX)+sign(fVX),steepness) && CanMoveDownSlope_Bottom());
-			var moveDownSlope_Top = (entity_place_collide(0,-1) && entity_place_collide(xnum4*sign(fVX)+sign(fVX),-steepness) && CanMoveDownSlope_Top());
+			var moveDownSlope_Bottom = (entity_place_collide(0,1) && entity_place_collide(xnum,steepness) && CanMoveDownSlope_Bottom());
+			var moveDownSlope_Top = (entity_place_collide(0,-1) && entity_place_collide(xnum,-steepness) && CanMoveDownSlope_Top());
 			
 			if(moveDownSlope_Bottom || moveDownSlope_Top)
 			{
 				var yplus2 = 0;
 				if(moveDownSlope_Bottom)
 				{
-					while(!entity_place_collide(fVX,yplus2+1) && yplus2 <= yplusMax)
+					while(!entity_place_collide(fVX,yplus2+1) && yplus2 < steepness)
 					{
 						yplus2++;
 					}
 				}
 				if(moveDownSlope_Top)
 				{
-					while(!entity_place_collide(fVX,yplus2-1) && yplus2 >= -yplusMax)
+					while(!entity_place_collide(fVX,yplus2-1) && yplus2 > -steepness)
 					{
 						yplus2--;
 					}
 				}
-					
-				DestroyBlock(scr_round(position.X)+fVX,scr_round(position.Y)+yplus2+sign(yplus2));
-			
+				
 				if(!entity_place_collide(fVX,yplus2))
 				{
 					if(entity_place_collide(fVX,yplus2+sign(yplus2)))
@@ -731,62 +729,43 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		
 		position.X += fVX;
 		
-		maxSpeedX = max(maxSpeedX-vStepX,0);
+		maxSpeedX = max(maxSpeedX-1,0);
 	
 	
-		var vY2 = min(maxSpeedY,vStepY)*sign(vY);
-		
-		sAngle = 0;
-		if(slopeSpeedAdjust && (entity_place_collide(2,0) ^^ entity_place_collide(-2,0)))
-		{
-			if(entity_place_collide(2,0))
-			{
-				sAngle = angle_difference(GetEdgeAngle(Edge.Right),90);
-			}
-			if(entity_place_collide(-2,0))
-			{
-				sAngle = angle_difference(GetEdgeAngle(Edge.Left),270);
-			}
-		}
-		
-		var fVY = lengthdir_x(vY2,sAngle);
-		fVY = ModifyFinalVelY(fVY);
+		var fVY = ModifyFinalVelY(min(maxSpeedY,1)*sign(vY));
 		
 		#region Y Collision
 		
-		DestroyBlock(scr_round(position.X),scr_round(position.Y)+fVY);
-		
-		var xplusMax = maxSpeedY+1;
+		DestroyBlock(position.X,position.Y+fVY);
 		
 		var colB = entity_collision_line(bbox_left,bbox_bottom+fVY,bbox_right,bbox_bottom+fVY),
 			colT = entity_collision_line(bbox_left,bbox_top+fVY,bbox_right,bbox_top+fVY);
-		var yspeed = abs(fVY);
-		if(entity_place_collide(0,max(abs(fVY),1)*sign(fVY)) && (!entity_place_collide(0,0) || (fVY > 0 && colB) || (fVY < 0 && colT)))
+		if(entity_place_collide(0,sign(fVY)) && (!entity_place_collide(0,0) || (fVY > 0 && colB) || (fVY < 0 && colT)))
 		{
 			var steepness = ModifySlopeYSteepness_Up();
+			var ynum = 2*sign(fVY);
+			
+			DestroyBlock(position.X+steepness,position.Y+ynum);
+			DestroyBlock(position.X-steepness,position.Y+ynum);
+			
+			var moveUpSlope_Right = (!entity_place_collide(-steepness,ynum) && entity_place_collide(steepness,0) && CanMoveUpSlope_Right());
+			var moveUpSlope_Left = (!entity_place_collide(steepness,ynum) && entity_place_collide(-steepness,0) && CanMoveUpSlope_Left());
 			
 			var xplus = 0;
-			while(entity_place_collide(xplus,fVY) && xplus >= -xplusMax)
+			if(moveUpSlope_Right)
 			{
-				xplus--;
-				DestroyBlock(scr_round(position.X)+xplus,scr_round(position.Y)+sign(fVY));
-				DestroyBlock(scr_round(position.X)+xplus,scr_round(position.Y)+fVY+sign(fVY));
+				while(entity_place_collide(xplus,fVY) && xplus > -steepness)
+				{
+					xplus--;
+				}
 			}
-			while(entity_place_collide(xplus,fVY) && xplus <= xplusMax)
+			if(moveUpSlope_Left)
 			{
-				xplus++;
-				DestroyBlock(scr_round(position.X)+xplus,scr_round(position.Y)+sign(fVY));
-				DestroyBlock(scr_round(position.X)+xplus,scr_round(position.Y)+fVY+sign(fVY));
+				while(entity_place_collide(xplus,fVY) && xplus < steepness)
+				{
+					xplus++;
+				}
 			}
-			
-			var ynum = 0;
-			while(!entity_place_collide(0,ynum*sign(fVY)) && ynum <= yspeed)
-			{
-				ynum++;
-			}
-			
-			var moveUpSlope_Right = (!entity_place_collide(-steepness,(ynum+1)*sign(fVY)) && entity_place_collide(steepness,(ynum-1)*sign(fVY)) && CanMoveUpSlope_Right());
-			var moveUpSlope_Left = (!entity_place_collide(steepness,(ynum+1)*sign(fVY)) && entity_place_collide(-steepness,(ynum-1)*sign(fVY)) && CanMoveUpSlope_Left());
 			
 			if(entity_place_collide(xplus,fVY) || (!moveUpSlope_Right && !moveUpSlope_Left))
 			{
@@ -800,11 +779,9 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 					OnTopCollision(fVY);
 					position.Y = scr_ceil(position.Y);
 				}
-				var ynum2 = yspeed+2;
-				while(!entity_place_collide(0,sign(fVY)) && ynum2 > 0)
+				if(!entity_place_collide(0,sign(fVY)))
 				{
 					position.Y += sign(fVY);
-					ynum2--;
 				}
 				OnYCollision(fVY);
 				fVY = 0;
@@ -835,44 +812,32 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		else if(!entity_place_collide(0,0))
 		{
 			var steepness = ModifySlopeYSteepness_Down();
+			var ynum = 2*sign(fVY);
 			
-			DestroyBlock(scr_round(position.X)+min(abs(fVY),steepness+2),scr_round(position.Y)+fVY+sign(fVY));
-			DestroyBlock(scr_round(position.X)-min(abs(fVY),steepness+2),scr_round(position.Y)+fVY+sign(fVY));
+			DestroyBlock(position.X+steepness,position.Y+ynum);
+			DestroyBlock(position.X-steepness,position.Y+ynum);
 			
-			var ynum3 = 0;
-			while(entity_place_collide(1,ynum3*sign(fVY)) && ynum3 <= yspeed)
-			{
-				ynum3++;
-			}
-			var ynum4 = 0;
-			while(entity_place_collide(-1,ynum4*sign(fVY)) && ynum4 <= yspeed)
-			{
-				ynum4++;
-			}
-			
-			var moveDownSlope_Right = (entity_place_collide(1,0) && entity_place_collide(steepness,ynum3*sign(fVY)+sign(fVY)) && CanMoveDownSlope_Right());
-			var moveDownSlope_Left = (entity_place_collide(-1,0) && entity_place_collide(-steepness,ynum4*sign(fVY)+sign(fVY)) && CanMoveDownSlope_Left());
+			var moveDownSlope_Right = (entity_place_collide(1,0) && entity_place_collide(steepness,ynum) && CanMoveDownSlope_Right());
+			var moveDownSlope_Left = (entity_place_collide(-1,0) && entity_place_collide(-steepness,ynum) && CanMoveDownSlope_Left());
 			
 			if(moveDownSlope_Right || moveDownSlope_Left)
 			{
 				var xplus2 = 0;
 				if(moveDownSlope_Right)
 				{
-					while(!entity_place_collide(1+xplus2,fVY) && xplus2 <= xplusMax)
+					while(!entity_place_collide(1+xplus2,fVY) && xplus2 < steepness)
 					{
 						xplus2++;
 					}
 				}
 				if(moveDownSlope_Left)
 				{
-					while(!entity_place_collide(-1+xplus2,fVY) && xplus2 >= -xplusMax)
+					while(!entity_place_collide(-1+xplus2,fVY) && xplus2 > -steepness)
 					{
 						xplus2--;
 					}
 				}
-					
-				DestroyBlock(scr_round(position.X)+xplus2+sign(xplus2),scr_round(position.Y)+fVY);
-			
+				
 				if(!entity_place_collide(xplus2,fVY))
 				{
 					if(entity_place_collide(xplus2+sign(xplus2),fVY))
@@ -902,7 +867,7 @@ function Collision_Normal(vX, vY, vStepX, vStepY, slopeSpeedAdjust)//platformCol
 		
 		position.Y += fVY;
 		
-		maxSpeedY = max(maxSpeedY-vStepY,0);
+		maxSpeedY = max(maxSpeedY-1,0);
 	}
 	
 	x = scr_round(position.X);
@@ -922,10 +887,10 @@ function Crawler_ModifyFinalVelX(fVX) { return fVX; }
 function Crawler_ModifyFinalVelY(fVY) { return fVY; }
 
 // check if slope speed adjustments are applicable
-function Crawler_SlopeCheck(slope)
+/*function Crawler_SlopeCheck(slope) // old
 {
 	return colEdge != Edge.None;
-}
+}*/
 
 // called on horizontal collision
 function Crawler_OnRightCollision(fVX) {} // -->|
@@ -1040,88 +1005,89 @@ function Crawler_CanMoveDownSlope_Left()
 
 //function Crawler_OnPlatformCollision(fVY) {}
 
-function Crawler_DestroyBlock(bx,by) {}
+//function Crawler_DestroyBlock(bx,by) {}
 
 #endregion
 #region Collision_Crawler
-function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
+function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 {
+	if(slopeSpeedAdjust && colEdge != Edge.None)
+	{
+		var sAngle = 0;
+		switch(colEdge)
+		{
+			case Edge.Bottom:
+			{
+				sAngle = GetEdgeAngle(colEdge);
+				break;
+			}
+			case Edge.Right:
+			{
+				sAngle = angle_difference(GetEdgeAngle(colEdge),90);
+				break;
+			}
+			case Edge.Top:
+			{
+				sAngle = angle_difference(GetEdgeAngle(colEdge),180);
+				break;
+			}
+			case Edge.Left:
+			{
+				sAngle = angle_difference(GetEdgeAngle(colEdge),270);
+				break;
+			}
+		}
+		vX = lengthdir_x(vX,sAngle);
+		vY = lengthdir_x(vY,sAngle);
+	}
+	
 	vX += shiftX;
 	vY += shiftY;
 	
 	var maxSpeedX = abs(vX),
 		maxSpeedY = abs(vY);
-	while((maxSpeedX > 0 && vStepX > 0) || (maxSpeedY > 0 && vStepY > 0))
+	while(maxSpeedX > 0 || maxSpeedY > 0)
 	{
-		var vX2 = min(maxSpeedX,vStepX)*sign(vX);
-		
-		var sAngle = 0;
-		if(slopeSpeedAdjust && colEdge != Edge.None)
-		{
-			switch(colEdge)
-			{
-				case Edge.Bottom:
-				{
-					sAngle = GetEdgeAngle(colEdge);
-					break;
-				}
-				case Edge.Right:
-				{
-					sAngle = angle_difference(GetEdgeAngle(colEdge),90);
-					break;
-				}
-				case Edge.Top:
-				{
-					sAngle = angle_difference(GetEdgeAngle(colEdge),180);
-					break;
-				}
-				case Edge.Left:
-				{
-					sAngle = angle_difference(GetEdgeAngle(colEdge),270);
-					break;
-				}
-			}
-		}
-		
-		var fVX = lengthdir_x(vX2,sAngle);
-		fVX = Crawler_ModifyFinalVelX(fVX);
+		var fVX = Crawler_ModifyFinalVelX(min(maxSpeedX,1)*sign(vX));
 		
 		#region X Collision
 		
-		Crawler_DestroyBlock(scr_round(position.X)+fVX,scr_round(position.Y));
-		
-		var yplusMax = vStepX+1;
+		DestroyBlock(position.X+fVX,position.Y);
 		
 		var colR = entity_collision_line(bbox_right+fVX,bbox_top,bbox_right+fVX,bbox_bottom),
 			colL = entity_collision_line(bbox_left+fVX,bbox_top,bbox_left+fVX,bbox_bottom);
-		var xspeed = abs(fVX);
-		if(entity_place_collide(max(abs(fVX),1)*sign(fVX),0) && (!entity_place_collide(0,0) || (fVX > 0 && colR) || (fVX < 0 && colL)))
+		if(entity_place_collide(sign(fVX),0) && (!entity_place_collide(0,0) || (fVX > 0 && colR) || (fVX < 0 && colL)))
 		{
-			var steepness = 3;
+			var steepness = ModifySlopeXSteepness_Up();
+			var xnum = 2*sign(fVX);
+			
+			DestroyBlock(position.X+xnum,position.Y+steepness);
+			DestroyBlock(position.X+xnum,position.Y-steepness);
+			
+			var moveUpSlope_Bottom = (!entity_place_collide(xnum,-steepness) && entity_place_collide(0,steepness) && Crawler_CanMoveUpSlope_Bottom());
+			var moveUpSlope_Top = (!entity_place_collide(xnum,steepness) && entity_place_collide(0,-steepness) && Crawler_CanMoveUpSlope_Top());
+			var horizontalEdge = (colEdge == Edge.Bottom || colEdge == Edge.Top);
+			var ydir = -1;
+			if(colEdge == Edge.Top)
+			{
+				ydir = 1;
+			}
 			
 			var yplus = 0;
-			while(entity_place_collide(fVX,yplus) && yplus >= -yplusMax)
+			if(moveUpSlope_Bottom)
 			{
-				yplus--;
-				Crawler_DestroyBlock(scr_round(position.X)+sign(fVX),scr_round(position.Y)+min(yplus,-steepness));
-				Crawler_DestroyBlock(scr_round(position.X)+fVX+sign(fVX),scr_round(position.Y)+min(yplus,-steepness));
+				while(entity_place_collide(fVX,yplus) && yplus > -steepness)
+				{
+					yplus--;
+				}
 			}
-			while(entity_place_collide(fVX,yplus) && yplus <= yplusMax)
+			if(moveUpSlope_Top)
 			{
-				yplus++;
-				Crawler_DestroyBlock(scr_round(position.X)+sign(fVX),scr_round(position.Y)+max(yplus,steepness));
-				Crawler_DestroyBlock(scr_round(position.X)+fVX+sign(fVX),scr_round(position.Y)+max(yplus,steepness));
+				while(entity_place_collide(fVX,yplus) && yplus < steepness)
+				{
+					yplus++;
+				}
 			}
-			
-			var xnum = 0;
-			while(!entity_place_collide(xnum*sign(fVX),0) && xnum <= xspeed)
-			{
-				xnum++;
-			}
-			
-			var moveUpSlope_Bottom = (!entity_place_collide(xnum*sign(fVX)+sign(fVX),-steepness) && Crawler_CanMoveUpSlope_Bottom());
-			var moveUpSlope_Top = (!entity_place_collide(xnum*sign(fVX)+sign(fVX),steepness) && Crawler_CanMoveUpSlope_Top());
-			var horizontalEdge = (colEdge == Edge.Bottom || colEdge == Edge.Top);
 			
 			if(entity_place_collide(fVX,yplus) || (!moveUpSlope_Bottom && !moveUpSlope_Top) || (!horizontalEdge && colEdge != Edge.None))
 			{
@@ -1132,7 +1098,8 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
 					{
 						if(horizontalEdge)
 						{
-							vY *= -1;
+							vY = abs(vX)*ydir;
+							maxSpeedY = maxSpeedX-1;
 						}
 						colEdge = Edge.Right;
 					}
@@ -1145,17 +1112,16 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
 					{
 						if(horizontalEdge)
 						{
-							vY *= -1;
+							vY = abs(vX)*ydir;
+							maxSpeedY = maxSpeedX-1;
 						}
 						colEdge = Edge.Left;
 					}
 					position.X = scr_ceil(position.X);
 				}
-				var xnum2 = xspeed+2;
-				while(!entity_place_collide(sign(fVX),0) && xnum2 > 0)
+				if(!entity_place_collide(sign(fVX),0))
 				{
 					position.X += sign(fVX);
-					xnum2--;
 				}
 				Crawler_OnXCollision(fVX);
 				fVX = 0;
@@ -1185,10 +1151,14 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
 		}
 		else if(!entity_place_collide(0,0) && (colEdge == Edge.Bottom || colEdge == Edge.Top))
 		{
-			var steepness = 3;
+			var steepness = ModifySlopeXSteepness_Down();
+			var xnum = 2*sign(fVX);
 			
-			Crawler_DestroyBlock(scr_round(position.X)+fVX+sign(fVX),scr_round(position.Y)+min(abs(fVX),steepness+2));
-			Crawler_DestroyBlock(scr_round(position.X)+fVX+sign(fVX),scr_round(position.Y)-min(abs(fVX),steepness+2));
+			DestroyBlock(position.X+xnum,position.Y+steepness);
+			DestroyBlock(position.X+xnum,position.Y-steepness);
+			
+			var moveDownSlope_Bottom = (entity_place_collide(0,1) && entity_place_collide(xnum,steepness) && Crawler_CanMoveDownSlope_Bottom());
+			var moveDownSlope_Top = (entity_place_collide(0,-1) && entity_place_collide(xnum,-steepness) && Crawler_CanMoveDownSlope_Top());
 			
 			var ydir = 1;
 			if(colEdge == Edge.Top)
@@ -1196,40 +1166,24 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
 				ydir = -1;
 			}
 			
-			var xnum3 = 0;
-			while(entity_place_collide(xnum3*sign(fVX),1) && xnum3 <= xspeed)
-			{
-				xnum3++;
-			}
-			var xnum4 = 0;
-			while(entity_place_collide(xnum4*sign(fVX),-1) && xnum4 <= xspeed)
-			{
-				xnum4++;
-			}
-			
-			var moveDownSlope_Bottom = (entity_place_collide(0,1) && entity_place_collide(xnum3*sign(fVX)+sign(fVX),steepness) && Crawler_CanMoveDownSlope_Bottom());
-			var moveDownSlope_Top = (entity_place_collide(0,-1) && entity_place_collide(xnum4*sign(fVX)+sign(fVX),-steepness) && Crawler_CanMoveDownSlope_Top());
-			
 			if(moveDownSlope_Bottom || moveDownSlope_Top)
 			{
 				var yplus2 = 0;
 				if(moveDownSlope_Bottom)
 				{
-					while(!entity_place_collide(fVX,1+yplus2) && yplus2 <= yplusMax)
+					while(!entity_place_collide(fVX,yplus2+1) && yplus2 < steepness)
 					{
 						yplus2++;
 					}
 				}
 				if(moveDownSlope_Top)
 				{
-					while(!entity_place_collide(fVX,-1+yplus2) && yplus2 >= -yplusMax)
+					while(!entity_place_collide(fVX,yplus2-1) && yplus2 > -steepness)
 					{
 						yplus2--;
 					}
 				}
-					
-				Crawler_DestroyBlock(scr_round(position.X)+fVX,scr_round(position.Y)+yplus2+sign(yplus2));
-			
+				
 				if(!entity_place_collide(fVX,yplus2))
 				{
 					if(entity_place_collide(fVX,yplus2+sign(yplus2)))
@@ -1253,7 +1207,7 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
 					}
 				}
 			}
-			else
+			else if(!entity_place_collide(fVX,ydir))
 			{
 				if(fVX > 0)
 				{
@@ -1265,68 +1219,70 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
 					position.X = scr_ceil(position.X);
 					colEdge = Edge.Right;
 				}
-				var xnum2 = xspeed+2;
-				while(entity_place_collide(0,ydir) && xnum2 > 0)
+				if(entity_place_collide(0,ydir))
 				{
 					position.X += sign(fVX);
-					xnum2--;
 				}
 				if(!entity_place_collide(0,ydir))
 				{
 					position.Y += ydir;
 				}
 				
+				vY = abs(vX)*ydir;
+				maxSpeedY = maxSpeedX-1;
+				
 				vX *= -1;
 				fVX = 0;
 				maxSpeedX = 0;
 			}
 		}
-		
 		#endregion
 		
 		position.X += fVX;
 		
-		
-		var vY2 = min(maxSpeedY,vStepY)*sign(vY);
-		var fVY = lengthdir_x(vY2,sAngle);
-		fVY = Crawler_ModifyFinalVelY(fVY);
+		maxSpeedX = max(maxSpeedX-1,0);
+	
+	
+		var fVY = Crawler_ModifyFinalVelY(min(maxSpeedY,1)*sign(vY));
 		
 		#region Y Collision
 		
-		Crawler_DestroyBlock(scr_round(position.X),scr_round(position.Y)+fVY);
-		
-		var xplusMax = vStepY+1;
+		DestroyBlock(position.X,position.Y+fVY);
 		
 		var colB = entity_collision_line(bbox_left,bbox_bottom+fVY,bbox_right,bbox_bottom+fVY),
 			colT = entity_collision_line(bbox_left,bbox_top+fVY,bbox_right,bbox_top+fVY);
-		var yspeed = abs(fVY);
-		if(entity_place_collide(0,max(abs(fVY),1)*sign(fVY)) && (!entity_place_collide(0,0) || (fVY > 0 && colB) || (fVY < 0 && colT)))
+		if(entity_place_collide(0,sign(fVY)) && (!entity_place_collide(0,0) || (fVY > 0 && colB) || (fVY < 0 && colT)))
 		{
-			var steepness = 3;
+			var steepness = ModifySlopeYSteepness_Up();
+			var ynum = 2*sign(fVY);
+			
+			DestroyBlock(position.X+steepness,position.Y+ynum);
+			DestroyBlock(position.X-steepness,position.Y+ynum);
+			
+			var moveUpSlope_Right = (!entity_place_collide(-steepness,ynum) && entity_place_collide(steepness,0) && Crawler_CanMoveUpSlope_Right());
+			var moveUpSlope_Left = (!entity_place_collide(steepness,ynum) && entity_place_collide(-steepness,0) && Crawler_CanMoveUpSlope_Left());
+			var verticalEdge = (colEdge == Edge.Left || colEdge == Edge.Right);
+			var xdir = -1;
+			if(colEdge == Edge.Left)
+			{
+				xdir = 1;
+			}
 			
 			var xplus = 0;
-			while(entity_place_collide(xplus,fVY) && xplus >= -xplusMax)
+			if(moveUpSlope_Right)
 			{
-				xplus--;
-				Crawler_DestroyBlock(scr_round(position.X)+min(xplus,-steepness),scr_round(position.Y)+sign(fVY));
-				Crawler_DestroyBlock(scr_round(position.X)+min(xplus,-steepness),scr_round(position.Y)+fVY+sign(fVY));
+				while(entity_place_collide(xplus,fVY) && xplus > -steepness)
+				{
+					xplus--;
+				}
 			}
-			while(entity_place_collide(xplus,fVY) && xplus <= xplusMax)
+			if(moveUpSlope_Left)
 			{
-				xplus++;
-				Crawler_DestroyBlock(scr_round(position.X)+max(xplus,steepness),scr_round(position.Y)+sign(fVY));
-				Crawler_DestroyBlock(scr_round(position.X)+max(xplus,steepness),scr_round(position.Y)+fVY+sign(fVY));
+				while(entity_place_collide(xplus,fVY) && xplus < steepness)
+				{
+					xplus++;
+				}
 			}
-			
-			var ynum = 0;
-			while(!entity_place_collide(0,ynum*sign(fVY)) && ynum <= yspeed)
-			{
-				ynum++;
-			}
-			
-			var moveUpSlope_Right = (!entity_place_collide(-steepness,ynum*sign(fVY)+sign(fVY)) && Crawler_CanMoveUpSlope_Right());
-			var moveUpSlope_Left = (!entity_place_collide(steepness,ynum*sign(fVY)+sign(fVY)) && Crawler_CanMoveUpSlope_Left());
-			var verticalEdge = (colEdge == Edge.Left || colEdge == Edge.Right);
 			
 			if(entity_place_collide(xplus,fVY) || (!moveUpSlope_Right && !moveUpSlope_Left) || (!verticalEdge && colEdge != Edge.None))
 			{
@@ -1337,7 +1293,8 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
 					{
 						if(verticalEdge)
 						{
-							vX *= -1;
+							vX = abs(vY)*xdir;
+							maxSpeedX = maxSpeedY-1;
 						}
 						colEdge = Edge.Bottom;
 					}
@@ -1350,17 +1307,16 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
 					{
 						if(verticalEdge)
 						{
-							vX *= -1;
+							vX = abs(vY)*xdir;
+							maxSpeedX = maxSpeedY-1;
 						}
 						colEdge = Edge.Top;
 					}
 					position.Y = scr_ceil(position.Y);
 				}
-				var ynum2 = yspeed+2;
-				while(!entity_place_collide(0,sign(fVY)) && ynum2 > 0)
+				if(!entity_place_collide(0,sign(fVY)))
 				{
 					position.Y += sign(fVY);
-					ynum2--;
 				}
 				Crawler_OnYCollision(fVY);
 				fVY = 0;
@@ -1390,10 +1346,14 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
 		}
 		else if(!entity_place_collide(0,0) && (colEdge == Edge.Left || colEdge == Edge.Right))
 		{
-			var steepness = 3;
+			var steepness = ModifySlopeYSteepness_Down();
+			var ynum = 2*sign(fVY);
 			
-			Crawler_DestroyBlock(scr_round(position.X)+min(abs(fVY),steepness+2),scr_round(position.Y)+fVY+sign(fVY));
-			Crawler_DestroyBlock(scr_round(position.X)-min(abs(fVY),steepness+2),scr_round(position.Y)+fVY+sign(fVY));
+			DestroyBlock(position.X+steepness,position.Y+ynum);
+			DestroyBlock(position.X-steepness,position.Y+ynum);
+			
+			var moveDownSlope_Right = (entity_place_collide(1,0) && entity_place_collide(steepness,ynum) && Crawler_CanMoveDownSlope_Right());
+			var moveDownSlope_Left = (entity_place_collide(-1,0) && entity_place_collide(-steepness,ynum) && Crawler_CanMoveDownSlope_Left());
 			
 			var xdir = 1;
 			if(colEdge == Edge.Left)
@@ -1401,40 +1361,24 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
 				xdir = -1;
 			}
 			
-			var ynum3 = 0;
-			while(entity_place_collide(1,ynum3*sign(fVY)) && ynum3 <= yspeed)
-			{
-				ynum3++;
-			}
-			var ynum4 = 0;
-			while(entity_place_collide(-1,ynum4*sign(fVY)) && ynum4 <= yspeed)
-			{
-				ynum4++;
-			}
-			
-			var moveDownSlope_Right = (entity_place_collide(1,0) && entity_place_collide(steepness,ynum3*sign(fVY)+sign(fVY)) && Crawler_CanMoveDownSlope_Right());
-			var moveDownSlope_Left = (entity_place_collide(-1,0) && entity_place_collide(-steepness,ynum4*sign(fVY)+sign(fVY)) && Crawler_CanMoveDownSlope_Left());
-			
 			if(moveDownSlope_Right || moveDownSlope_Left)
 			{
 				var xplus2 = 0;
-				if(moveDownSlope_Right && colEdge == Edge.Right)
+				if(moveDownSlope_Right)
 				{
-					while(!entity_place_collide(1+xplus2,fVY) && xplus2 <= xplusMax)
+					while(!entity_place_collide(1+xplus2,fVY) && xplus2 < steepness)
 					{
 						xplus2++;
 					}
 				}
-				if(moveDownSlope_Left && colEdge == Edge.Left)
+				if(moveDownSlope_Left)
 				{
-					while(!entity_place_collide(-1+xplus2,fVY) && xplus2 >= -xplusMax)
+					while(!entity_place_collide(-1+xplus2,fVY) && xplus2 > -steepness)
 					{
 						xplus2--;
 					}
 				}
-					
-				Crawler_DestroyBlock(scr_round(position.X)+xplus2+sign(xplus2),scr_round(position.Y)+fVY);
-			
+				
 				if(!entity_place_collide(xplus2,fVY))
 				{
 					if(entity_place_collide(xplus2+sign(xplus2),fVY))
@@ -1458,7 +1402,7 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
 					}
 				}
 			}
-			else
+			else if(!entity_place_collide(xdir,fVY))
 			{
 				if(fVY > 0)
 				{
@@ -1470,16 +1414,17 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
 					position.Y = scr_ceil(position.Y);
 					colEdge = Edge.Bottom;
 				}
-				var ynum2 = yspeed+2;
-				while(entity_place_collide(xdir,0) && ynum2 > 0)
+				if(entity_place_collide(xdir,0))
 				{
 					position.Y += sign(fVY);
-					ynum2--;
 				}
 				if(!entity_place_collide(xdir,0))
 				{
 					position.X += xdir;
 				}
+				
+				vX = abs(vY)*xdir;
+				maxSpeedX = maxSpeedY-1;
 				
 				vY *= -1;
 				fVY = 0;
@@ -1491,8 +1436,7 @@ function Collision_Crawler(vX, vY, vStepX, vStepY, slopeSpeedAdjust)
 		
 		position.Y += fVY;
 		
-		maxSpeedX = max(maxSpeedX-vStepX,0);
-		maxSpeedY = max(maxSpeedY-vStepY,0);
+		maxSpeedY = max(maxSpeedY-1,0);
 	}
 	
 	x = scr_round(position.X);
@@ -1531,50 +1475,51 @@ function MovingSolid_OnYCollision(fVY) {} // same as both above
 
 #endregion
 #region Collision_MovingSolid
-
-function Collision_MovingSolid(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, downSlopeSteepness_X = 5, upSlopeSteepness_Y = 5, downSlopeSteepness_Y = 5)
+function Collision_MovingSolid(vX, vY)
 {
+	var upSlopeSteepness_X = 5,
+		downSlopeSteepness_X = 5,
+		upSlopeSteepness_Y = 5,
+		downSlopeSteepness_Y = 5;
+	
 	var maxSpeedX = abs(vX),
 		maxSpeedY = abs(vY);
-	while((maxSpeedX > 0 && vStepX > 0) || (maxSpeedY > 0 && vStepY > 0))
+	while(maxSpeedX > 0 || maxSpeedY > 0)
 	{
-		var fVX = min(maxSpeedX,vStepX)*sign(vX);
+		var fVX = min(maxSpeedX,1)*sign(vX);
 		
 		#region X Collision
 		
-		DestroyBlock(scr_round(position.X)+fVX,scr_round(position.Y));
-		
-		var yplusMax = vStepX+1;
+		DestroyBlock(position.X+fVX,position.Y);
 		
 		var colR = entity_collision_line(bbox_right+fVX,bbox_top,bbox_right+fVX,bbox_bottom),
 			colL = entity_collision_line(bbox_left+fVX,bbox_top,bbox_left+fVX,bbox_bottom);
-		var xspeed = abs(fVX);
-		if(entity_place_collide(max(abs(fVX),1)*sign(fVX),0) && (!entity_place_collide(0,0) || (fVX > 0 && colR) || (fVX < 0 && colL)))
+		if(entity_place_collide(sign(fVX),0) && (!entity_place_collide(0,0) || (fVX > 0 && colR) || (fVX < 0 && colL)))
 		{
 			var steepness = upSlopeSteepness_X;
+			var xnum = 2*sign(fVX);
+			
+			DestroyBlock(position.X+xnum,position.Y+steepness);
+			DestroyBlock(position.X+xnum,position.Y-steepness);
+			
+			var moveUpSlope_Bottom = (!entity_place_collide(xnum,-steepness) && entity_place_collide(0,steepness) && steepness > 0);
+			var moveUpSlope_Top = (!entity_place_collide(xnum,steepness) && entity_place_collide(0,-steepness) && steepness > 0);
 			
 			var yplus = 0;
-			while(entity_place_collide(fVX,yplus) && yplus >= -yplusMax)
+			if(moveUpSlope_Bottom)
 			{
-				yplus--;
-				DestroyBlock(scr_round(position.X)+sign(fVX),scr_round(position.Y)+min(yplus,-steepness));
-				DestroyBlock(scr_round(position.X)+fVX+sign(fVX),scr_round(position.Y)+min(yplus,-steepness));
+				while(entity_place_collide(fVX,yplus) && yplus > -steepness)
+				{
+					yplus--;
+				}
 			}
-			while(entity_place_collide(fVX,yplus) && yplus <= yplusMax)
+			if(moveUpSlope_Top)
 			{
-				yplus++;
-				DestroyBlock(scr_round(position.X)+sign(fVX),scr_round(position.Y)+max(yplus,steepness));
-				DestroyBlock(scr_round(position.X)+fVX+sign(fVX),scr_round(position.Y)+max(yplus,steepness));
+				while(entity_place_collide(fVX,yplus) && yplus < steepness)
+				{
+					yplus++;
+				}
 			}
-			
-			var xnum = 0;
-			while(!entity_place_collide(xnum*sign(fVX),0) && xnum <= xspeed)
-			{
-				xnum++;
-			}
-			
-			var moveUpSlope_Bottom = (!entity_place_collide((xnum+1)*sign(fVX),-steepness) && entity_place_collide((xnum-1)*sign(fVX),steepness) && steepness > 0);
-			var moveUpSlope_Top = (!entity_place_collide((xnum+1)*sign(fVX),steepness) && entity_place_collide((xnum-1)*sign(fVX),-steepness) && steepness > 0);
 			
 			if(entity_place_collide(fVX,yplus) || (!moveUpSlope_Bottom && !moveUpSlope_Top))
 			{
@@ -1588,11 +1533,9 @@ function Collision_MovingSolid(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, d
 					MovingSolid_OnLeftCollision(fVX);
 					position.X = scr_ceil(position.X);
 				}
-				var xnum2 = xspeed+2;
-				while(!entity_place_collide(sign(fVX),0) && xnum2 > 0)
+				if(!entity_place_collide(sign(fVX),0))
 				{
 					position.X += sign(fVX);
-					xnum2--;
 				}
 				MovingSolid_OnXCollision(fVX);
 				fVX = 0;
@@ -1618,47 +1561,35 @@ function Collision_MovingSolid(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, d
 				}
 			}
 		}
-		else if(!entity_place_collide(0,0) && downSlopeSteepness_X > 0)
+		else if(!entity_place_collide(0,0))
 		{
 			var steepness = downSlopeSteepness_X;
+			var xnum = 2*sign(fVX);
 			
-			DestroyBlock(scr_round(position.X)+fVX+sign(fVX),scr_round(position.Y)+min(abs(fVX),steepness+2));
-			DestroyBlock(scr_round(position.X)+fVX+sign(fVX),scr_round(position.Y)-min(abs(fVX),steepness+2));
+			DestroyBlock(position.X+xnum,position.Y+steepness);
+			DestroyBlock(position.X+xnum,position.Y-steepness);
 			
-			var xnum3 = 0;
-			while(entity_place_collide(xnum3*sign(fVX),1) && xnum3 <= xspeed)
-			{
-				xnum3++;
-			}
-			var xnum4 = 0;
-			while(entity_place_collide(xnum4*sign(fVX),-1) && xnum4 <= xspeed)
-			{
-				xnum4++;
-			}
-			
-			var moveDownSlope_Bottom = (entity_place_collide(0,1) && entity_place_collide(xnum3*sign(fVX)+sign(fVX),steepness));
-			var moveDownSlope_Top = (entity_place_collide(0,-1) && entity_place_collide(xnum4*sign(fVX)+sign(fVX),-steepness));
+			var moveDownSlope_Bottom = (entity_place_collide(0,1) && entity_place_collide(xnum,steepness));
+			var moveDownSlope_Top = (entity_place_collide(0,-1) && entity_place_collide(xnum,-steepness));
 			
 			if(moveDownSlope_Bottom || moveDownSlope_Top)
 			{
 				var yplus2 = 0;
 				if(moveDownSlope_Bottom)
 				{
-					while(!entity_place_collide(fVX,yplus2+1) && yplus2 <= yplusMax)
+					while(!entity_place_collide(fVX,yplus2+1) && yplus2 < steepness)
 					{
 						yplus2++;
 					}
 				}
 				if(moveDownSlope_Top)
 				{
-					while(!entity_place_collide(fVX,yplus2-1) && yplus2 >= -yplusMax)
+					while(!entity_place_collide(fVX,yplus2-1) && yplus2 > -steepness)
 					{
 						yplus2--;
 					}
 				}
-					
-				DestroyBlock(scr_round(position.X)+fVX,scr_round(position.Y)+yplus2+sign(yplus2));
-			
+				
 				if(!entity_place_collide(fVX,yplus2))
 				{
 					if(entity_place_collide(fVX,yplus2+sign(yplus2)))
@@ -1687,46 +1618,43 @@ function Collision_MovingSolid(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, d
 		
 		position.X += fVX;
 		
-		maxSpeedX = max(maxSpeedX-vStepX,0);
+		maxSpeedX = max(maxSpeedX-1,0);
 	
 	
-		var fVY = min(maxSpeedY,vStepY)*sign(vY);
+		var fVY = min(maxSpeedY,1)*sign(vY);
 		
 		#region Y Collision
 		
-		DestroyBlock(scr_round(position.X),scr_round(position.Y)+fVY);
-		
-		var xplusMax = vStepY+1;
+		DestroyBlock(position.X,position.Y+fVY);
 		
 		var colB = entity_collision_line(bbox_left,bbox_bottom+fVY,bbox_right,bbox_bottom+fVY),
 			colT = entity_collision_line(bbox_left,bbox_top+fVY,bbox_right,bbox_top+fVY);
-		var yspeed = abs(fVY);
-		if(entity_place_collide(0,max(abs(fVY),1)*sign(fVY)) && (!entity_place_collide(0,0) || (fVY > 0 && colB) || (fVY < 0 && colT)))
+		if(entity_place_collide(0,sign(fVY)) && (!entity_place_collide(0,0) || (fVY > 0 && colB) || (fVY < 0 && colT)))
 		{
 			var steepness = upSlopeSteepness_Y;
+			var ynum = 2*sign(fVY);
+			
+			DestroyBlock(position.X+steepness,position.Y+ynum);
+			DestroyBlock(position.X-steepness,position.Y+ynum);
+			
+			var moveUpSlope_Right = (!entity_place_collide(-steepness,ynum) && entity_place_collide(steepness,0) && steepness > 0);
+			var moveUpSlope_Left = (!entity_place_collide(steepness,ynum) && entity_place_collide(-steepness,0) && steepness > 0);
 			
 			var xplus = 0;
-			while(entity_place_collide(xplus,fVY) && xplus >= -xplusMax)
+			if(moveUpSlope_Right)
 			{
-				xplus--;
-				DestroyBlock(scr_round(position.X)+min(xplus,-steepness),scr_round(position.Y)+sign(fVY));
-				DestroyBlock(scr_round(position.X)+min(xplus,-steepness),scr_round(position.Y)+fVY+sign(fVY));
+				while(entity_place_collide(xplus,fVY) && xplus > -steepness)
+				{
+					xplus--;
+				}
 			}
-			while(entity_place_collide(xplus,fVY) && xplus <= xplusMax)
+			if(moveUpSlope_Left)
 			{
-				xplus++;
-				DestroyBlock(scr_round(position.X)+max(xplus,steepness),scr_round(position.Y)+sign(fVY));
-				DestroyBlock(scr_round(position.X)+max(xplus,steepness),scr_round(position.Y)+fVY+sign(fVY));
+				while(entity_place_collide(xplus,fVY) && xplus < steepness)
+				{
+					xplus++;
+				}
 			}
-			
-			var ynum = 0;
-			while(!entity_place_collide(0,ynum*sign(fVY)) && ynum <= yspeed)
-			{
-				ynum++;
-			}
-			
-			var moveUpSlope_Right = (!entity_place_collide(-steepness,(ynum+1)*sign(fVY)) && entity_place_collide(steepness,(ynum-1)*sign(fVY)) && steepness > 0);
-			var moveUpSlope_Left = (!entity_place_collide(steepness,(ynum+1)*sign(fVY)) && entity_place_collide(-steepness,(ynum-1)*sign(fVY)) && steepness > 0);
 			
 			if(entity_place_collide(xplus,fVY) || (!moveUpSlope_Right && !moveUpSlope_Left))
 			{
@@ -1740,11 +1668,9 @@ function Collision_MovingSolid(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, d
 					MovingSolid_OnTopCollision(fVY);
 					position.Y = scr_ceil(position.Y);
 				}
-				var ynum2 = yspeed+2;
-				while(!entity_place_collide(0,sign(fVY)) && ynum2 > 0)
+				if(!entity_place_collide(0,sign(fVY)))
 				{
 					position.Y += sign(fVY);
-					ynum2--;
 				}
 				MovingSolid_OnYCollision(fVY);
 				fVY = 0;
@@ -1770,47 +1696,35 @@ function Collision_MovingSolid(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, d
 				}
 			}
 		}
-		else if(!entity_place_collide(0,0) && downSlopeSteepness_Y > 0)
+		else if(!entity_place_collide(0,0))
 		{
 			var steepness = downSlopeSteepness_Y;
+			var ynum = 2*sign(fVY);
 			
-			DestroyBlock(scr_round(position.X)+min(abs(fVY),steepness+2),scr_round(position.Y)+fVY+sign(fVY));
-			DestroyBlock(scr_round(position.X)-min(abs(fVY),steepness+2),scr_round(position.Y)+fVY+sign(fVY));
+			DestroyBlock(position.X+steepness,position.Y+ynum);
+			DestroyBlock(position.X-steepness,position.Y+ynum);
 			
-			var ynum3 = 0;
-			while(entity_place_collide(1,ynum3*sign(fVY)) && ynum3 <= yspeed)
-			{
-				ynum3++;
-			}
-			var ynum4 = 0;
-			while(entity_place_collide(-1,ynum4*sign(fVY)) && ynum4 <= yspeed)
-			{
-				ynum4++;
-			}
-			
-			var moveDownSlope_Right = (entity_place_collide(1,0) && entity_place_collide(steepness,ynum3*sign(fVY)+sign(fVY)));
-			var moveDownSlope_Left = (entity_place_collide(-1,0) && entity_place_collide(-steepness,ynum4*sign(fVY)+sign(fVY)));
+			var moveDownSlope_Right = (entity_place_collide(1,0) && entity_place_collide(steepness,ynum));
+			var moveDownSlope_Left = (entity_place_collide(-1,0) && entity_place_collide(-steepness,ynum));
 			
 			if(moveDownSlope_Right || moveDownSlope_Left)
 			{
 				var xplus2 = 0;
 				if(moveDownSlope_Right)
 				{
-					while(!entity_place_collide(1+xplus2,fVY) && xplus2 <= xplusMax)
+					while(!entity_place_collide(1+xplus2,fVY) && xplus2 < steepness)
 					{
 						xplus2++;
 					}
 				}
 				if(moveDownSlope_Left)
 				{
-					while(!entity_place_collide(-1+xplus2,fVY) && xplus2 >= -xplusMax)
+					while(!entity_place_collide(-1+xplus2,fVY) && xplus2 > -steepness)
 					{
 						xplus2--;
 					}
 				}
-					
-				DestroyBlock(scr_round(position.X)+xplus2+sign(xplus2),scr_round(position.Y)+fVY);
-			
+				
 				if(!entity_place_collide(xplus2,fVY))
 				{
 					if(entity_place_collide(xplus2+sign(xplus2),fVY))
@@ -1840,7 +1754,7 @@ function Collision_MovingSolid(vX, vY, vStepX, vStepY, upSlopeSteepness_X = 5, d
 		
 		position.Y += fVY;
 		
-		maxSpeedY = max(maxSpeedY-vStepY,0);
+		maxSpeedY = max(maxSpeedY-1,0);
 	}
 	
 	x = scr_round(position.X);

@@ -12,6 +12,7 @@ dmgMult[DmgType.Explosive][0] = 0; // all
 
 dmgMult[DmgType.Misc][2] = 0; // speed booster / shine spark
 dmgMult[DmgType.Misc][3] = 0; // screw attack
+dmgMult[DmgType.Misc][5] = 0; // boost ball
 
 //dmgAbsorb = true;
 

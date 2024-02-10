@@ -216,6 +216,6 @@ if(!grounded)
 
 fVelX = velX;
 fVelY = velY;
-Collision_Normal(fVelX,fVelY,16,16,true);
+Collision_Normal(fVelX,fVelY,true);
 
 EntityLiquid_Large(x-xprevious,y-yprevious);

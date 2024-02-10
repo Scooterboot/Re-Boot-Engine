@@ -19,6 +19,7 @@ dmgMult[DmgType.Explosive][4] = 0; // power bomb
 dmgMult[DmgType.Explosive][5] = 0; // splash damage
 dmgMult[DmgType.Misc][2] = 0; // speed booster / shine spark
 dmgMult[DmgType.Misc][3] = 0; // screw attack
+dmgMult[DmgType.Misc][5] = 0; // boost ball
 
 lhc_inherit_interface("ISolid");
 

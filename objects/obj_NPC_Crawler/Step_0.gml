@@ -130,7 +130,7 @@ else
 	
 	fVelX = velX;
 	fVelY = velY;
-	Collision_Crawler(fVelX,fVelY,3,3,true);
+	Collision_Crawler(fVelX,fVelY,true);
 }
 
 var rot2 = scr_wrap(scr_round(rotation2),0,360);

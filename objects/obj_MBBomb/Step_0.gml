@@ -37,8 +37,8 @@ if(spreadType != -1)
 		velY = lengthdir_y(spreadSpeed,spreadDir);
 		spreadSpeed = max(spreadSpeed-spreadFrict,0);
 	}
-		
-	Collision_Normal(velX,velY,16,16,false);
+	
+	Collision_Normal(velX,velY,false);
 }
 
 scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,4);

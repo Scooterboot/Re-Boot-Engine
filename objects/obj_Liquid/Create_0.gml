@@ -448,6 +448,16 @@ function Bubble(_liq, _x, _y, _velX, _velY) constructor
 	
 	function Update()
 	{
+		var extraRng = 64,
+			cam = obj_Camera;
+		if (!instance_exists(cam) || 
+			posX < cam.x-extraRng || posX > cam.x+global.resWidth+extraRng || 
+			posY < cam.y-extraRng || posY > cam.y+global.resHeight+extraRng)
+		{
+			_delete = true;
+			exit;
+		}
+		
 		if(!canBubble)
 		{
 			if(canSpread)

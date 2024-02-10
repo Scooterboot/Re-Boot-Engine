@@ -1767,10 +1767,10 @@ function Crawler_CanMoveDownSlope_Left()
 	return (colEdge == Edge.Left);
 }
 
-function Crawler_DestroyBlock(bx,by)
+/*function Crawler_DestroyBlock(bx,by)
 {
 	DestroyBlock(bx,by);
-}
+}*/
 
 #endregion
 #region Moving Tile Collision
@@ -2053,7 +2053,7 @@ function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWav
 #endregion
 
 #region PlayerGrounded
-function PlayerGrounded(ydiff = 2)
+function PlayerGrounded(ydiff = 1)
 {
 	var bottomCollision = (entity_collision_line(bbox_left,bbox_bottom+ydiff,bbox_right,bbox_bottom+ydiff) || (y+ydiff) >= room_height);
 	var downAng = scr_wrap(GetEdgeAngle(Edge.Bottom),0,360);
@@ -2200,7 +2200,8 @@ function EntityLiquid_Large(_velX, _velY)
 			}
 			else if (breathTimer == 15 && liquidTop)
 			{
-			    audio_play_sound(choose(snd_Breath_0,snd_Breath_1,snd_Breath_2),0,false);
+			    //audio_play_sound(choose(snd_Breath_0,snd_Breath_1,snd_Breath_2),0,false);
+			    audio_play_sound(choose(snd_Bubble_0,snd_Bubble_1),0,false);
 			}
      
 			if (liquidTop && (breathTimer mod 8 == 0))
@@ -3120,7 +3121,7 @@ function PaletteSurface()
 		}
 		#endregion
 		#region -- Visor flashing --
-		if(false) // if(room is dark and activates visor flashing)
+		/*if(false) // if(room is dark and activates visor flashing)
 		{
 			if(darkRoomVisorFlash >= 1)
             {
@@ -3149,7 +3150,7 @@ function PaletteSurface()
 			
 			DrawPalSprite(pal_Visor_XRay,0,XRay.alpha);
 			DrawPalSprite(pal_Visor_XRay,1,XRay.alpha*xRayVisorFlash);
-		}
+		}*/
 		#endregion
 		#region -- Intro fanfare / saving --
 		if(introAnimState != -1)

@@ -100,7 +100,7 @@ if(!grounded)
 fVelX = velX;
 fVelY = velY;
 
-Collision_Normal(fVelX,fVelY,15,15,true);
+Collision_Normal(fVelX,fVelY,true);
 /*
 var downSlope = GetEdgeSlope(Edge.Bottom);
 var downSlopeFlag = (place_meeting(x,y+2,downSlope) && downSlope.image_yscale > 1 && 
@@ -124,12 +124,16 @@ mBlock.isSolid = true;
 var _xdif = xx-mBlock.x;
 if(_xdif != 0)
 {
+	velX = 0;
+	fVelX = 0;
 	position.X -= _xdif;
 	x = scr_round(position.X);
 }
 var _ydif = yy-mBlock.y;
 if(_ydif != 0)
 {
+	velY = 0;
+	fVelY = 0;
 	position.Y -= _ydif;
 	y = scr_round(position.Y);
 }

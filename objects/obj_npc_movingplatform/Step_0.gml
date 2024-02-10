@@ -15,7 +15,7 @@ if(!PauseAI())
 
 	if(tileCollide)
 	{
-		Collision_Normal(fVelX,fVelY,16,16,false);
+		Collision_Normal(fVelX,fVelY,false);
 	}
 	else
 	{

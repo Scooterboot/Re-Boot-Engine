@@ -17,7 +17,7 @@
   },
   "preload": true,
   "sampleRate": 44100,
-  "soundFile": "snd_SplashTiny",
+  "soundFile": "snd_SplashTiny.wav",
   "type": 1,
   "volume": 1.0,
 }

@@ -2992,10 +2992,10 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			var dmgST;
 			dmgST[0] = true;
 			dmgST[1] = false;
-			dmgST[2] = true;
+			dmgST[2] = false;
 			dmgST[3] = false;
 			dmgST[4] = false;
-			dmgST[5] = false;
+			dmgST[5] = true;
 		    scr_DamageNPC(x,y,300*boostBallDmgCounter,DmgType.Misc,dmgST,0,3,0);
 			
 			boostBallDmgCounter = max(boostBallDmgCounter - 0.0375, 0);

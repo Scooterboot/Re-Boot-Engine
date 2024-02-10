@@ -116,7 +116,7 @@ function UpdatePosition(_x,_y, avoidClipping = false)
 					if(moveXFlag) { moveX -= movedVelX; }
 					if(moveYFlag) { moveY -= movedVelY; }
 					
-					Collision_MovingSolid(moveX,moveY,8,8);
+					Collision_MovingSolid(moveX,moveY);
 					
 					if(moveXFlag) { movedVelX = (x-xprevious); }
 					if(moveYFlag) { movedVelY = (y-yprevious); }

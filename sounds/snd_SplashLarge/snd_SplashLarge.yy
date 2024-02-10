@@ -17,7 +17,7 @@
   },
   "preload": true,
   "sampleRate": 44100,
-  "soundFile": "snd_SplashLarge",
+  "soundFile": "snd_SplashLarge.wav",
   "type": 1,
   "volume": 1.0,
 }

@@ -8,6 +8,6 @@ if(PauseAI())
 
 fVelX = velX;
 fVelY = velY;
-Collision_Normal(fVelX,fVelY,16,16,false);
+Collision_Normal(fVelX,fVelY,false);
 
 rotation -= 22.5 * sign(image_xscale);

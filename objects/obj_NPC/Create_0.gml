@@ -84,7 +84,7 @@ dmgMult[DmgType.Misc][1] = 0; // grapple beam
 dmgMult[DmgType.Misc][2] = 1; // speed booster / shine spark
 dmgMult[DmgType.Misc][3] = 1; // screw attack
 dmgMult[DmgType.Misc][4] = 1; // hyper beam
-dmgMult[DmgType.Misc][5] = 0; // unused
+dmgMult[DmgType.Misc][5] = 1; // boost ball
 
 dmgAbsorb = false;
 

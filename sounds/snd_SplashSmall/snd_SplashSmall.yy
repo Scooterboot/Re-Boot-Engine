@@ -10,14 +10,14 @@
   "bitRate": 128,
   "compression": 0,
   "conversionMode": 0,
-  "duration": 0.978542,
+  "duration": 0.978563,
   "parent": {
     "name": "Liquid",
     "path": "folders/Sounds/Liquid.yy",
   },
   "preload": true,
   "sampleRate": 44100,
-  "soundFile": "snd_SplashSmall",
+  "soundFile": "snd_SplashSmall.wav",
   "type": 1,
   "volume": 1.0,
 }

@@ -1635,7 +1635,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 
 #region Grip Collision
 
-	if(misc[Misc.PowerGrip] && (state == State.Jump || state == State.Somersault) && morphFrame <= 0 && !grounded && abs(dirFrame) >= 4 && fVelY >= 0)
+	if(misc[Misc.PowerGrip] && (state == State.Jump || state == State.Somersault) && morphFrame <= 0 && !grounded && abs(dirFrame) >= 4 && velY >= 0)
 	{
 		if(!entity_place_collide(0,-4) && ((state == State.Jump && !entity_place_collide(0,3)) || (state == State.Somersault && !entity_place_collide(0,13))))
 		{
@@ -1925,15 +1925,13 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 	speedKill = false;
 	
-	var vstepx = 1,
-		vstepy = 1;
 	if(spiderBall || (state == State.Grip && startClimb && climbIndex <= 6))
 	{
-		Collision_Crawler(fVelX,fVelY,vstepx,vstepy, (state != State.Grip));
+		Collision_Crawler(fVelX,fVelY, (state != State.Grip));
 	}
 	else
 	{
-		Collision_Normal(fVelX,fVelY,vstepx,vstepy, (state != State.Grip));
+		Collision_Normal(fVelX,fVelY, (state != State.Grip));
 	}
 	
 	if(!grounded && velY == 0 && PlayerGrounded())
@@ -3986,7 +3984,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 	EntityLiquid_Large(xVel,yVel);
 	
-	if(isChargeSomersaulting)
+	if(isChargeSomersaulting || boostBallDmgCounter > 0)
 	{
 		immune = true;
 	}

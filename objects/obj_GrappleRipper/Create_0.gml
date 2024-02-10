@@ -12,8 +12,9 @@ dmgMult[DmgType.Explosive][2] = 1; // super missile
 dmgMult[DmgType.Explosive][3] = 0; // bomb
 dmgMult[DmgType.Explosive][4] = 1; // power bomb
 
-dmgMult[DmgType.Misc][2] = 0; // speed booster / shine spark
-dmgMult[DmgType.Misc][3] = 0; // screw attack
+//dmgMult[DmgType.Misc][2] = 0; // speed booster / shine spark
+//dmgMult[DmgType.Misc][3] = 0; // screw attack
+dmgMult[DmgType.Misc][5] = 0; // boost ball
 
 mSpeed2 = 1;
 mSpeed = mSpeed2;

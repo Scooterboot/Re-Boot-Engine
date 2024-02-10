@@ -1,7 +1,7 @@
 {
   "resourceType": "GMSound",
   "resourceVersion": "1.0",
-  "name": "snd_Breath_0",
+  "name": "snd_Bubble_0",
   "audioGroupId": {
     "name": "audio_sound",
     "path": "audiogroups/audio_sound",
@@ -10,14 +10,14 @@
   "bitRate": 128,
   "compression": 0,
   "conversionMode": 0,
-  "duration": 0.427354,
+  "duration": 0.370292,
   "parent": {
-    "name": "Player",
-    "path": "folders/Sounds/Player.yy",
+    "name": "Liquid",
+    "path": "folders/Sounds/Liquid.yy",
   },
-  "preload": true,
+  "preload": false,
   "sampleRate": 44100,
-  "soundFile": "snd_Breath_0",
-  "type": 0,
+  "soundFile": "snd_Bubble_0.wav",
+  "type": 1,
   "volume": 1.0,
 }

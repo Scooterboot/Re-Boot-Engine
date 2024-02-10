@@ -23,7 +23,7 @@ grounded = true;
 
 solids[0] = "ISolid";
 solids[1] = "IMovingSolid";
-solids[2] = "IPlayer";
+//solids[2] = "IPlayer";
 
 moveSnd = noone;
 sndStopped = false;
