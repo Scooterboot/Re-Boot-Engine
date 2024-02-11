@@ -25,16 +25,26 @@ liquidShuffleSnd[1] = snd_WaterShuffle2;
 liquidShuffleSnd[2] = snd_WaterShuffle3;
 liquidShuffleSnd[3] = snd_WaterShuffle4;
 
+liquidShuffleSnd[4] = snd_LavaShuffle1;
+liquidShuffleSnd[5] = snd_LavaShuffle2;
+liquidShuffleSnd[6] = snd_LavaShuffle3;
+liquidShuffleSnd[7] = snd_LavaShuffle4;
+
 #region CreateSplash
 function CreateSplash(_entity, _mass, _velX, _velY, _into, _sound = true, _isBeam = false)
 {
 	var vx = _velX*0.375,
 		vy = _velY;
 	
-	var pitch = 1;
+	/*var pitch = 1;
 	if(liquidType == LiquidType.Lava)
 	{
 		pitch = 0.8;
+	}*/
+	var _snd = "";
+	if(liquidType == LiquidType.Lava)
+	{
+		_snd = "_Lava";
 	}
 	
 	var splX = _entity.x,
@@ -63,13 +73,19 @@ function CreateSplash(_entity, _mass, _velX, _velY, _into, _sound = true, _isBea
 	        {
 	            if(_into)
 	            {
-	                audio_stop_sound(snd_SplashLarge);
-	                audio_play_sound(snd_SplashLarge,0,false, 1,0,pitch);
+	                //audio_stop_sound(snd_SplashLarge);
+	                //audio_play_sound(snd_SplashLarge,0,false, 1,0,pitch);
+					var sndIndex = asset_get_index("snd_SplashLarge"+_snd);
+					audio_stop_sound(sndIndex);
+					audio_play_sound(sndIndex,0,false);
 	            }
 	            else
 	            {
-	                audio_stop_sound(snd_SplashLargeExit);
-	                audio_play_sound(snd_SplashLargeExit,0,false, 1,0,pitch);
+	                //audio_stop_sound(snd_SplashLargeExit);
+	                //audio_play_sound(snd_SplashLargeExit,0,false, 1,0,pitch);
+					var sndIndex = asset_get_index("snd_SplashLargeExit"+_snd);
+					audio_stop_sound(sndIndex);
+					audio_play_sound(sndIndex,0,false);
 	            }
 	        }
 		}
@@ -79,20 +95,29 @@ function CreateSplash(_entity, _mass, _velX, _velY, _into, _sound = true, _isBea
 	        {
 	            if(_into)
 	            {
-	                audio_stop_sound(snd_SplashMedium);
-	                audio_play_sound(snd_SplashMedium,0,false, 1,0,pitch);
+	                //audio_stop_sound(snd_SplashMedium);
+	                //audio_play_sound(snd_SplashMedium,0,false, 1,0,pitch);
+					var sndIndex = asset_get_index("snd_SplashMedium"+_snd);
+					audio_stop_sound(sndIndex);
+					audio_play_sound(sndIndex,0,false);
 	            }
 	            else
 	            {
-	                if(audio_is_playing(snd_SplashSmall))
+					var sndIndex = asset_get_index("snd_SplashSmall"+_snd);
+	                if(audio_is_playing(sndIndex))
 	                {
-	                    audio_stop_sound(snd_SplashTiny2);
-	                    audio_play_sound(snd_SplashTiny2,0,false, 1,0,pitch);
+	                    //audio_stop_sound(snd_SplashTiny2);
+	                    //audio_play_sound(snd_SplashTiny2,0,false, 1,0,pitch);
+						var sndIndex2 = asset_get_index("snd_SplashTiny2"+_snd);
+						audio_stop_sound(sndIndex2);
+						audio_play_sound(sndIndex2,0,false);
 	                }
 	                else
 	                {
-	                    audio_stop_sound(snd_SplashSmall);
-	                    audio_play_sound(snd_SplashSmall,0,false, 1,0,pitch);
+	                    //audio_stop_sound(snd_SplashSmall);
+	                    //audio_play_sound(snd_SplashSmall,0,false, 1,0,pitch);
+						audio_stop_sound(sndIndex);
+						audio_play_sound(sndIndex,0,false);
 	                }
 	            }
 	        }
@@ -190,12 +215,17 @@ function CreateSplash(_entity, _mass, _velX, _velY, _into, _sound = true, _isBea
 		{
 			if (_into && !_isBeam)
 			{
-				audio_play_sound(snd_SplashTiny,0,false, 1,0,pitch);
+				//audio_play_sound(snd_SplashTiny,0,false, 1,0,pitch);
+				var sndIndex = asset_get_index("snd_SplashTiny"+_snd);
+				audio_play_sound(sndIndex,0,false);
 			}
 			else
 			{
-				audio_stop_sound(snd_SplashSkid);
-				audio_play_sound(snd_SplashSkid,0,false, 1,0,pitch);
+				//audio_stop_sound(snd_SplashSkid);
+				//audio_play_sound(snd_SplashSkid,0,false, 1,0,pitch);
+				var sndIndex = asset_get_index("snd_SplashSkid"+_snd);
+				audio_stop_sound(sndIndex);
+				audio_play_sound(sndIndex,0,false);
 			}
 		}
 
@@ -327,10 +357,17 @@ function CreateSplash(_entity, _mass, _velX, _velY, _into, _sound = true, _isBea
 #region CreateSplash_Extra
 function CreateSplash_Extra(_entity, _size, _velX, _velY, _sound = true, _skidSound = true)
 {
-	var pitch = 1;
+	/*var pitch = 1;
 	if(liquidType == LiquidType.Lava)
 	{
 		pitch = 0.8;
+	}*/
+	var _snd = "";
+	var _count = 0;
+	if(liquidType == LiquidType.Lava)
+	{
+		_snd = "_Lava";
+		_count = 4;
 	}
 	
 	var splX = irandom_range(_entity.bbox_left+1,_entity.bbox_right-1),
@@ -395,13 +432,15 @@ function CreateSplash_Extra(_entity, _size, _velX, _velY, _sound = true, _skidSo
 		
 		if (_sound && _skidSound)
 		{
-			audio_play_sound(snd_SplashSkid,0,false);
+			//audio_play_sound(snd_SplashSkid,0,false);
+			var sndIndex = asset_get_index("snd_SplashSkid"+_snd);
+			audio_play_sound(sndIndex,0,false);
 		}
 	}
 	
-	if (_sound && (!audio_is_playing(liquidShuffleSnd[liquidShuffleCount]) || (abs(_velX) > 0 && irandom(7) == 0)) && (abs(_velX) > 0 || irandom(23) == 0))
+	if (_sound && (!audio_is_playing(liquidShuffleSnd[liquidShuffleCount+_count]) || (abs(_velX) > 0 && irandom(7) == 0)) && (abs(_velX) > 0 || irandom(23) == 0))
 	{
-		audio_play_sound(liquidShuffleSnd[liquidShuffleCount],0,false);
+		audio_play_sound(liquidShuffleSnd[liquidShuffleCount+_count],0,false);
 		liquidShuffleCount = choose(0,1,2,3);
 	}
 }

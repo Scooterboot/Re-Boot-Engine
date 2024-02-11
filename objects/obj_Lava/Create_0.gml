@@ -40,3 +40,7 @@ function LavaSurface()
 
 gradCol = make_color_rgb(225,32,0);
 gradAlpha = 0.75;
+
+ambSnd[0] = snd_LavaAmbiance_0;
+ambSnd[1] = snd_LavaAmbiance_1;
+ambSnd[2] = snd_LavaAmbiance_2;

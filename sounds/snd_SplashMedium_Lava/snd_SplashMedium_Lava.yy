@@ -1,7 +1,7 @@
 {
   "resourceType": "GMSound",
   "resourceVersion": "1.0",
-  "name": "snd_WaterShuffle3",
+  "name": "snd_SplashMedium_Lava",
   "audioGroupId": {
     "name": "audio_sound",
     "path": "audiogroups/audio_sound",
@@ -10,14 +10,14 @@
   "bitRate": 128,
   "compression": 0,
   "conversionMode": 0,
-  "duration": 1.079771,
+  "duration": 0.681292,
   "parent": {
-    "name": "Water",
-    "path": "folders/Sounds/Liquid/Water.yy",
+    "name": "Lava",
+    "path": "folders/Sounds/Liquid/Lava.yy",
   },
-  "preload": true,
+  "preload": false,
   "sampleRate": 44100,
-  "soundFile": "snd_WaterShuffle3.wav",
+  "soundFile": "snd_SplashMedium_Lava.wav",
   "type": 1,
   "volume": 1.0,
 }

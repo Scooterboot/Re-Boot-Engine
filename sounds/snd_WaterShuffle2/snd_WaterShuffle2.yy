@@ -12,8 +12,8 @@
   "conversionMode": 0,
   "duration": 0.596875,
   "parent": {
-    "name": "Liquid",
-    "path": "folders/Sounds/Liquid.yy",
+    "name": "Water",
+    "path": "folders/Sounds/Liquid/Water.yy",
   },
   "preload": true,
   "sampleRate": 44100,
