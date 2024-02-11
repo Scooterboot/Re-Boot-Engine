@@ -278,8 +278,6 @@ function GetEdgeAngle(edge, offsetX = 0, offsetY = 0)
 	var pos1 = new Vector2(0,0),
 		pos2 = new Vector2(0,0);
 	
-	var checkDir = 1;
-	
 	var ang = 0;
 	if(edge == Edge.Right)
 	{
@@ -307,76 +305,89 @@ function GetEdgeAngle(edge, offsetX = 0, offsetY = 0)
 		
 		if(entity_place_collide(offsetX,offsetY+ySign) || (entity_place_collide(offsetX+1,offsetY) ^^ entity_place_collide(offsetX-1,offsetY)))
 		{
-			while(!entity_place_collide(pos1.X+offsetX+checkDir,pos1.Y+offsetY) && checkDir != 0)
-			{
-				pos1.X += checkDir;
-				if(abs(pos1.X) >= maxX)
-				{
-					if(checkDir == 1)
-					{
-						pos1.X = 0;
-						checkDir = -1;
-					}
-					else
-					{
-						pos1.X = 0;
-						checkDir = 0;
-					}
-				}
-			}
-			while(!entity_place_collide(pos1.X+offsetX,pos1.Y+offsetY+ySign) && abs(pos1.Y) < maxY)
+			while(!entity_place_collide(pos1.X+offsetX,pos1.Y+ySign+offsetY) && abs(pos1.Y) < maxY)
 			{
 				pos1.Y += ySign;
 			}
-			
-			if(checkDir != 0 && abs(pos1.Y) < maxY)
+			pos2.Y = pos1.Y;
+			if(abs(pos1.Y) >= maxY)
 			{
-				pos2.Equals(pos1);
-				pos2.Y += ySign;
-				
-				if(entity_place_collide(pos1.X+offsetX-1,pos1.Y+offsetY))
+				return ang;
+			}
+			
+			while(!entity_place_collide(pos1.X-1+offsetX,pos1.Y+offsetY) && entity_place_collide(pos1.X+offsetX,pos1.Y+ySign+offsetY) && abs(pos1.X) < maxX)
+			{
+				pos1.X -= 1;
+			}
+			while(!entity_place_collide(pos2.X+1+offsetX,pos2.Y+offsetY) && entity_place_collide(pos2.X+offsetX,pos2.Y+ySign+offsetY) && abs(pos2.X) < maxX)
+			{
+				pos2.X += 1;
+			}
+			if(abs(pos1.X) >= maxX || abs(pos2.X) >= maxX)
+			{
+				return ang;
+			}
+			
+			var checkDir = 0;
+			if(!entity_place_collide(pos1.X+offsetX,pos1.Y+ySign+offsetY) || entity_place_collide(pos2.X+offsetX,pos2.Y+offsetY))
+			{
+				checkDir = 1;
+			}
+			if(entity_place_collide(pos1.X+offsetX,pos1.Y+offsetY) || !entity_place_collide(pos2.X+offsetX,pos2.Y+ySign+offsetY))
+			{
+				checkDir = -1;
+			}
+			
+			if(checkDir == 1)
+			{
+				while(!entity_place_collide(pos1.X+offsetX,pos1.Y+ySign+offsetY) && abs(pos1.Y) < maxY)
 				{
-					checkDir = 1;
+					pos1.Y += ySign;
 				}
-				if(entity_place_collide(pos1.X+offsetX+1,pos1.Y+offsetY))
+				while(entity_place_collide(pos2.X+offsetX,pos2.Y+offsetY) && abs(pos2.Y) < maxY)
 				{
-					checkDir = -1;
+					pos2.Y -= ySign;
 				}
-				while(entity_place_collide(pos2.X+offsetX,pos2.Y+offsetY) && checkDir != 0)
+			}
+			if(checkDir == -1)
+			{
+				while(entity_place_collide(pos1.X+offsetX,pos1.Y+offsetY) && abs(pos1.Y) < maxY)
 				{
-					pos2.X += checkDir;
-					if(abs(pos2.X) >= maxX)
-					{
-						checkDir = 0;
-					}
+					pos1.Y -= ySign;
 				}
-				while(!entity_place_collide(pos2.X+offsetX,pos2.Y+offsetY+ySign) && abs(pos2.Y) < maxY)
+				while(!entity_place_collide(pos2.X+offsetX,pos2.Y+ySign+offsetY) && abs(pos2.Y) < maxY)
 				{
 					pos2.Y += ySign;
 				}
-				
-				if(checkDir != 0 && abs(pos2.Y) < maxY)
+			}
+			if(abs(pos1.Y) >= maxY || abs(pos2.Y) >= maxY)
+			{
+				return ang;
+			}
+			
+			if(checkDir != 0 && pos1.Y != pos2.Y && 
+			!entity_place_collide(pos1.X+offsetX,pos1.Y+offsetY) && entity_place_collide(pos1.X+offsetX,pos1.Y+ySign+offsetY) && 
+			!entity_place_collide(pos2.X+offsetX,pos2.Y+offsetY) && entity_place_collide(pos2.X+offsetX,pos2.Y+ySign+offsetY))
+			{
+				var poses = array_create(2);
+				poses[0] = pos1;
+				poses[1] = pos2;
+				if(pos1.X > pos2.X)
 				{
-					var poses = array_create(2);
-					poses[0] = pos1;
-					poses[1] = pos2;
+					poses[0] = pos2;
+					poses[1] = pos1;
+				}
+				if(edge == Edge.Top)
+				{
+					poses[0] = pos2;
+					poses[1] = pos1;
 					if(pos1.X > pos2.X)
 					{
-						poses[0] = pos2;
-						poses[1] = pos1;
+						poses[0] = pos1;
+						poses[1] = pos2;
 					}
-					if(edge == Edge.Top)
-					{
-						poses[0] = pos2;
-						poses[1] = pos1;
-						if(pos1.X > pos2.X)
-						{
-							poses[0] = pos1;
-							poses[1] = pos2;
-						}
-					}
-					ang += angle_difference(point_direction(poses[0].X,poses[0].Y,poses[1].X,poses[1].Y),ang);
 				}
+				ang += angle_difference(point_direction(poses[0].X,poses[0].Y,poses[1].X,poses[1].Y),ang);
 			}
 		}
 	}
@@ -391,76 +402,89 @@ function GetEdgeAngle(edge, offsetX = 0, offsetY = 0)
 		
 		if(entity_place_collide(offsetX+xSign,offsetY) || (entity_place_collide(offsetX,offsetY+1) ^^ entity_place_collide(offsetX,offsetY-1)))
 		{
-			while(!entity_place_collide(pos1.X+offsetX,pos1.Y+offsetY+checkDir) && checkDir != 0)
-			{
-				pos1.Y += checkDir;
-				if(abs(pos1.Y) >= maxY)
-				{
-					if(checkDir == 1)
-					{
-						pos1.Y = 0;
-						checkDir = -1;
-					}
-					else
-					{
-						pos1.Y = 0;
-						checkDir = 0;
-					}
-				}
-			}
-			while(!entity_place_collide(pos1.X+offsetX+xSign,pos1.Y+offsetY) && abs(pos1.X) < maxX)
+			while(!entity_place_collide(pos1.X+xSign+offsetX,pos1.Y+offsetY) && abs(pos1.X) < maxX)
 			{
 				pos1.X += xSign;
 			}
-			
-			if(checkDir != 0 && abs(pos1.X) < maxX)
+			pos2.X = pos1.X;
+			if(abs(pos1.X) >= maxX)
 			{
-				pos2.Equals(pos1);
-				pos2.X += xSign;
-				
-				if(entity_place_collide(pos1.X+offsetX,pos1.Y+offsetY-1))
+				return ang;
+			}
+			
+			while(!entity_place_collide(pos1.X+offsetX,pos1.Y-1+offsetY) && entity_place_collide(pos1.X+xSign+offsetX,pos1.Y+offsetY) && abs(pos1.Y) < maxY)
+			{
+				pos1.Y -= 1;
+			}
+			while(!entity_place_collide(pos2.X+offsetX,pos2.Y+1+offsetY) && entity_place_collide(pos2.X+xSign+offsetX,pos2.Y+offsetY) && abs(pos2.Y) < maxY)
+			{
+				pos2.Y += 1;
+			}
+			if(abs(pos1.Y) >= maxY || abs(pos2.Y) >= maxY)
+			{
+				return ang;
+			}
+			
+			var checkDir = 0;
+			if(!entity_place_collide(pos1.X+xSign+offsetX,pos1.Y+offsetY) || entity_place_collide(pos2.X+offsetX,pos2.Y+offsetY))
+			{
+				checkDir = 1;
+			}
+			if(entity_place_collide(pos1.X+offsetX,pos1.Y+offsetY) || !entity_place_collide(pos2.X+xSign+offsetX,pos2.Y+offsetY))
+			{
+				checkDir = -1;
+			}
+			
+			if(checkDir == 1)
+			{
+				while(!entity_place_collide(pos1.X+xSign+offsetX,pos1.Y+offsetY) && abs(pos1.X) < maxX)
 				{
-					checkDir = 1;
+					pos1.X += xSign;
 				}
-				if(entity_place_collide(pos1.X+offsetX,pos1.Y+offsetY+1))
+				while(entity_place_collide(pos2.X+offsetX,pos2.Y+offsetY) && abs(pos2.X) < maxX)
 				{
-					checkDir = -1;
+					pos2.X -= xSign;
 				}
-				while(entity_place_collide(pos2.X+offsetX,pos2.Y+offsetY) && checkDir != 0)
+			}
+			if(checkDir == -1)
+			{
+				while(entity_place_collide(pos1.X+offsetX,pos1.Y+offsetY) && abs(pos1.X) < maxX)
 				{
-					pos2.Y += checkDir;
-					if(abs(pos2.Y) >= maxX)
-					{
-						checkDir = 0;
-					}
+					pos1.X -= xSign;
 				}
-				while(!entity_place_collide(pos2.X+offsetX+xSign,pos2.Y+offsetY) && abs(pos2.X) < maxX)
+				while(!entity_place_collide(pos2.X+xSign+offsetX,pos2.Y+offsetY) && abs(pos2.X) < maxX)
 				{
 					pos2.X += xSign;
 				}
-				
-				if(checkDir != 0 && abs(pos2.X) < maxX)
+			}
+			if(abs(pos1.X) >= maxX || abs(pos2.X) >= maxX)
+			{
+				return ang;
+			}
+			
+			if(checkDir != 0 && pos1.X != pos2.X && 
+			!entity_place_collide(pos1.X+offsetX,pos1.Y+offsetY) && entity_place_collide(pos1.X+xSign+offsetX,pos1.Y+offsetY) && 
+			!entity_place_collide(pos2.X+offsetX,pos2.Y+offsetY) && entity_place_collide(pos2.X+xSign+offsetX,pos2.Y+offsetY))
+			{
+				var poses = array_create(2);
+				poses[0] = pos1;
+				poses[1] = pos2;
+				if(pos1.Y < pos2.Y)
 				{
-					var poses = array_create(2);
-					poses[0] = pos1;
-					poses[1] = pos2;
+					poses[0] = pos2;
+					poses[1] = pos1;
+				}
+				if(edge == Edge.Left)
+				{
+					poses[0] = pos2;
+					poses[1] = pos1;
 					if(pos1.Y < pos2.Y)
 					{
-						poses[0] = pos2;
-						poses[1] = pos1;
+						poses[0] = pos1;
+						poses[1] = pos2;
 					}
-					if(edge == Edge.Left)
-					{
-						poses[0] = pos2;
-						poses[1] = pos1;
-						if(pos1.Y < pos2.Y)
-						{
-							poses[0] = pos1;
-							poses[1] = pos2;
-						}
-					}
-					ang += angle_difference(point_direction(poses[0].X,poses[0].Y,poses[1].X,poses[1].Y),ang);
 				}
+				ang += angle_difference(point_direction(poses[0].X,poses[0].Y,poses[1].X,poses[1].Y),ang);
 			}
 		}
 	}
@@ -1099,7 +1123,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 						if(horizontalEdge)
 						{
 							vY = abs(vX)*ydir;
-							maxSpeedY = maxSpeedX-1;
+							maxSpeedY = maxSpeedX;
 						}
 						colEdge = Edge.Right;
 					}
@@ -1113,7 +1137,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 						if(horizontalEdge)
 						{
 							vY = abs(vX)*ydir;
-							maxSpeedY = maxSpeedX-1;
+							maxSpeedY = maxSpeedX;
 						}
 						colEdge = Edge.Left;
 					}
@@ -1207,7 +1231,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 					}
 				}
 			}
-			else if(!entity_place_collide(fVX,ydir))
+			else if(!entity_place_collide(sign(fVX),ydir))
 			{
 				if(fVX > 0)
 				{
@@ -1229,7 +1253,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 				}
 				
 				vY = abs(vX)*ydir;
-				maxSpeedY = maxSpeedX-1;
+				maxSpeedY = maxSpeedX;
 				
 				vX *= -1;
 				fVX = 0;
@@ -1239,8 +1263,6 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 		#endregion
 		
 		position.X += fVX;
-		
-		maxSpeedX = max(maxSpeedX-1,0);
 	
 	
 		var fVY = Crawler_ModifyFinalVelY(min(maxSpeedY,1)*sign(vY));
@@ -1294,7 +1316,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 						if(verticalEdge)
 						{
 							vX = abs(vY)*xdir;
-							maxSpeedX = maxSpeedY-1;
+							maxSpeedX = maxSpeedY;
 						}
 						colEdge = Edge.Bottom;
 					}
@@ -1308,7 +1330,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 						if(verticalEdge)
 						{
 							vX = abs(vY)*xdir;
-							maxSpeedX = maxSpeedY-1;
+							maxSpeedX = maxSpeedY;
 						}
 						colEdge = Edge.Top;
 					}
@@ -1402,7 +1424,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 					}
 				}
 			}
-			else if(!entity_place_collide(xdir,fVY))
+			else if(!entity_place_collide(xdir,sign(fVY)))
 			{
 				if(fVY > 0)
 				{
@@ -1424,7 +1446,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 				}
 				
 				vX = abs(vY)*xdir;
-				maxSpeedX = maxSpeedY-1;
+				maxSpeedX = maxSpeedY;
 				
 				vY *= -1;
 				fVY = 0;
@@ -1436,6 +1458,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 		
 		position.Y += fVY;
 		
+		maxSpeedX = max(maxSpeedX-1,0);
 		maxSpeedY = max(maxSpeedY-1,0);
 	}
 	
@@ -1989,7 +2012,7 @@ function EntityLiquid(_mass, _velX, _velY, _sound = true, _isBeam = false, _isMi
 			liquid.CreateSplash(id,_mass,_velX,_velY,true,_sound,_isBeam)
 			enteredLiquid = (_mass+1) * 15;
 		}
-		else if(liquidPrev && bbox_bottom < liquidPrev.bbox_top && !_isBeam)
+		else if(liquidPrev && bbox_bottom < liquidPrev.bbox_top && !_isBeam && !_isMissile)
 		{
 			liquidPrev.CreateSplash(id,_mass,_velX,0,false,_sound,false);
 			returnLiq = liquidPrev;
@@ -2001,7 +2024,7 @@ function EntityLiquid(_mass, _velX, _velY, _sound = true, _isBeam = false, _isMi
 	
 	if(liquidTop != liquidTopPrev)
 	{
-		if(!liquidTop && liquidTopPrev && bbox_top < liquidTopPrev.bbox_top && !_isMissile)
+		if(!liquidTop && liquidTopPrev && bbox_top < liquidTopPrev.bbox_top)
 		{
 			liquidTopPrev.CreateSplash(id,_mass,_velX,_velY,false,_sound,_isBeam);
 			returnLiq = liquidTopPrev;

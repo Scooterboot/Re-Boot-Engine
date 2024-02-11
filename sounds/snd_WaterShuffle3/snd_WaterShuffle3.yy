@@ -10,7 +10,7 @@
   "bitRate": 128,
   "compression": 0,
   "conversionMode": 0,
-  "duration": 1.07975,
+  "duration": 1.079771,
   "parent": {
     "name": "Liquid",
     "path": "folders/Sounds/Liquid.yy",

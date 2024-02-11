@@ -2091,6 +2091,11 @@ function SpiderEnable(flag)
 		else
 		{
 			audio_stop_sound(snd_SpiderLoop);
+			if(spiderEdge == Edge.Top && spiderSpeed != 0)
+			{
+				dir *= -1;
+				dirFrame = 4*dir;
+			}
 			spiderEdge = Edge.None;
 		}
 	}
