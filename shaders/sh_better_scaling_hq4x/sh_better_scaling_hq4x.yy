@@ -1,10 +1,12 @@
 {
-  "resourceType": "GMShader",
-  "resourceVersion": "1.0",
-  "name": "sh_better_scaling_hq4x",
-  "parent": {
-    "name": "Better Scaling",
-    "path": "folders/Shaders/Better Scaling.yy",
+  "$GMShader":"",
+  "%Name":"sh_better_scaling_hq4x",
+  "name":"sh_better_scaling_hq4x",
+  "parent":{
+    "name":"Better Scaling",
+    "path":"folders/Shaders/Better Scaling.yy",
   },
-  "type": 1,
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
 }

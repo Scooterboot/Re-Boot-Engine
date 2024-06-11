@@ -1,1 +1,2 @@
-moveY = false;
+//moveY = false;
+bobAcc *= -1;

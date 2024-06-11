@@ -9,7 +9,7 @@ if(dead)
 		{
 			if(irandom(2) == 0)
 			{
-				NPCLoot(i,j);
+				NPCDropItem(i,j);
 			}
 		}
 	}

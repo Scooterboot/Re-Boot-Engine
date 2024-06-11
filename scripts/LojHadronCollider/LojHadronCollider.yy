@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "LojHadronCollider",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Extensions",
-    "path": "folders/Extensions.yy",
+  "$GMScript":"",
+  "%Name":"LojHadronCollider",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"LojHadronCollider",
+  "parent":{
+    "name":"Extensions",
+    "path":"folders/Extensions.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

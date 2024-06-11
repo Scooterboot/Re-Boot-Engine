@@ -1,23 +1,19 @@
 /// @description Particle System
 
 //System
-partSystemA = part_system_create();
-part_system_layer(partSystemA,layer_get_id("Projectiles_fg"));
+partSystemA = part_system_create_layer("Projectiles_fg",true);
 part_system_automatic_update(partSystemA,false);
 partEmitA = part_emitter_create(partSystemA);
 
-partSystemB = part_system_create();
-part_system_layer(partSystemB,layer_get_id("WorldObjects"));
+partSystemB = part_system_create_layer("Player",true);
 part_system_automatic_update(partSystemB,false);
 partEmitB = part_emitter_create(partSystemB);
 
-partSystemC = part_system_create();
-part_system_layer(partSystemC,layer_get_id("Projectiles"));
+partSystemC = part_system_create_layer("Projectiles",true);
 part_system_automatic_update(partSystemC,false);
 partEmitC = part_emitter_create(partSystemC);
 
-partSystemD = part_system_create();
-part_system_layer(partSystemD,layer_get_id("BTS_Tiles"));
+partSystemD = part_system_create_layer("BTS_Tiles",true);
 part_system_automatic_update(partSystemD,false);
 partEmitD = part_emitter_create(partSystemD);
 

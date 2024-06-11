@@ -1,4 +1,5 @@
 /// @description Initialize
+event_inherited();
 
 if(!initialize)
 {

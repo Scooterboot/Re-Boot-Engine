@@ -17,3 +17,5 @@ function GetPoint2()
 {
 	return new Vector2(x + lengthdir_x(_len2,_ang2+image_angle), y + lengthdir_y(_len2,_ang2+image_angle));
 }
+
+rotStep = 22.5;

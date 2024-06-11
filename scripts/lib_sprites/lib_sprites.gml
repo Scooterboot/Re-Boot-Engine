@@ -1,3 +1,6 @@
+// feather disable all
+// feather ignore all
+
 /// @func Sprite(sprite_index)
 /// @param {real}	sprite_index 
 function Sprite(_spr_index) constructor {

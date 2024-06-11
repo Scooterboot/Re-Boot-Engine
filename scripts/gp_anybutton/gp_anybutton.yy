@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "gp_anybutton",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Main",
-    "path": "folders/Scripts/Main.yy",
+  "$GMScript":"",
+  "%Name":"gp_anybutton",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"gp_anybutton",
+  "parent":{
+    "name":"Main",
+    "path":"folders/Scripts/Main.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

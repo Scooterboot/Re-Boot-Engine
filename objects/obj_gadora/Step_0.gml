@@ -28,34 +28,7 @@ if (point_distance(x,y,player.x,player.y) <= 150 &&
 	}
 }
 
-#region Damage to Player
-if(!friendly && damage > 0 && !frozen && !dead)
-{
-    if(instance_exists(player) && collision_rectangle(bbox_left-2,bbox_top-2,bbox_right+2,bbox_bottom+2,player,false,true))
-    {
-        if (player.immuneTime <= 0 && !player.immune)//!player.isChargeSomersaulting && !player.isScrewAttacking && !player.isSpeedBoosting)
-        {
-            //var ang = point_direction(x,y,obj_Samus.x,obj_Samus.y);
-            var ang = 45;
-            if(player.bbox_bottom > bbox_bottom)
-            {
-                ang = 315;
-            }
-            if(player.x < x)
-            {
-                ang = 135;
-                if(player.bbox_bottom > bbox_bottom)
-                {
-                    ang = 225;
-                }
-            }
-            var knockX = lengthdir_x(knockBackSpeed,ang),
-                knockY = lengthdir_y(knockBackSpeed,ang);
-            scr_DamagePlayer(damage,knockBack,knockX,knockY,damageImmuneTime);
-        }
-    }
-}
-#endregion
+DamagePlayer();
 
 if(!dead)
 {

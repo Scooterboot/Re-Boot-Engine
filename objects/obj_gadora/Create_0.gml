@@ -45,3 +45,8 @@ function ModifyDamageTaken(damage,object,isProjectile)
 	}
 	return 0;
 }
+
+function DmgColPlayer()
+{
+	return collision_rectangle(bbox_left-2,bbox_top-2,bbox_right+2,bbox_bottom+2,obj_Player,false,true);
+}

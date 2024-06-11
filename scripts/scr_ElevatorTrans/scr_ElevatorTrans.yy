@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "scr_ElevatorTrans",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Room",
-    "path": "folders/Scripts/Room.yy",
+  "$GMScript":"",
+  "%Name":"scr_ElevatorTrans",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_ElevatorTrans",
+  "parent":{
+    "name":"Room",
+    "path":"folders/Scripts/Room.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

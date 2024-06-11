@@ -93,7 +93,7 @@ for(var i = 0; i < 9; i++)
 	}
 	if(i == 8)
 	{
-		yscale = 15/16;
+		yscale = 14/16;
 	}
 	if(i == 0 || i == 2)
 	{

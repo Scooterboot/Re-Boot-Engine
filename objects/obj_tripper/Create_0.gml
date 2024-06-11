@@ -19,6 +19,7 @@ dir = sign(image_xscale);
 mSpeed = 1;
 
 gravCounter = 0;
+gravCounterMax = 20;
 grav = 0.03;//0.07;
 fallSpeedMax = 4;
 

@@ -289,7 +289,7 @@ function GetEdgeAngle(edge, offsetX = 0, offsetY = 0)
 	}
 	if(edge == Edge.Left)
 	{
-		ang = 270;
+		ang = -90;//270;
 	}
 	
 	var maxX = 4,
@@ -2053,7 +2053,7 @@ function EntityLiquid_Large(_velX, _velY)
 		canSplash = 0;
 	}
 	
-	if(liquid && !liquidTop && (canSplash%2) == 0)
+	if(liquid && !liquidTop && (canSplash%4) == 0)
 	{
 		liquid.CreateSplash_Extra(id,0,_velX,_velY,true,false);
 	}

@@ -234,7 +234,7 @@ function NPCDeath(_x,_y)
         audio_stop_sound(snd_KillNPC);
         audio_play_sound(snd_KillNPC,0,false);
     }
-    if(deathType == 2) // multi-explosion enemy death (e.g. space pirate)
+    if(deathType == 2) // multi-explosion enemy death (e.g. space pirate / mini kraid)
     {
         var d = instance_create_layer(_x,_y,layer_get_id("Projectiles_fg"),obj_NPC_DeathAnim);
         d.dethType = 1;
@@ -248,50 +248,121 @@ function NPCDeath(_x,_y)
         audio_play_sound(snd_InstaKillNPC,0,false);
     }
 	
-	NPCLoot(_x,_y);
+	NPCDropItem(_x,_y);
 	
     instance_destroy();
 }
 
 
-//
-// to do: rewrite this shit
-//
-
-dropChance[0] = 75; // base
-dropChance[1] = 25; // energy
-dropChance[2] = 25; // large energy
-dropChance[3] = 20; // missile
-dropChance[4] = 15; // super missile
-dropChance[5] = 15; // power bomb
-function NPCLoot(_x,_y)
+function NPCDropItem(_x,_y)
 {
-	if(irandom(100) < dropChance[0])
+	_NPCDropItem(_x,_y);
+}
+dropChance[0] = 5; // nothing
+dropChance[1] = 50; // energy
+dropChance[2] = 50; // large energy
+dropChance[3] = 50; // missile
+dropChance[4] = 50; // super missile
+dropChance[5] = 50; // power bomb
+// Chances don't need to add up to 100. In fact, they can technically be anything.
+// But the total value of them all added together does matter.
+// For example, if all values are set 1, 10, or 100, they'd all be a 1/6 chance.
+// By default, the total value is 255, which is how SM calculates it (because hex).
+
+function _NPCDropItem(_x,_y)
+{
+	var player = obj_Player;
+	if(instance_exists(player))
 	{
 		var item = noone;
-		var rand = irandom(dropChance[1]+dropChance[2]+dropChance[3]+dropChance[4]+dropChance[5])
-		if(rand < dropChance[1])
+		
+		// "Health Bomb" - always drop health when player is low
+		if(player.energy <= player.lowEnergyThresh && (dropChance[1] > 0 || dropChance[2] > 0))
 		{
-			item = obj_EnergyDrop;
+			if(dropChance[1] > 0 && irandom(dropChance[1]+dropChance[2]) <= dropChance[1])
+			{
+				item = obj_EnergyDrop;
+			}
+			else
+			{
+				item = obj_LargeEnergyDrop;
+			}
 		}
-		else if(rand < dropChance[1]+dropChance[2])
+		else // Normal drop behavior
 		{
-			item = obj_LargeEnergyDrop;
-		}
-		else if(rand < dropChance[1]+dropChance[2]+dropChance[3])
-		{
-			item = obj_MissileDrop;
-		}
-		else if(rand < dropChance[1]+dropChance[2]+dropChance[3]+dropChance[4])
-		{
-			item = obj_SuperMissileDrop;
-		}
-		else
-		{
-			item = obj_PowerBombDrop;
+			var dChNum = dropChance[0];
+			var dChFlag = array_create(6,false);
+			dChFlag[0] = true;
+			if(player.energy < player.energyMax)
+			{
+				dChNum += dropChance[1];
+				dChNum += dropChance[2];
+				dChFlag[1] = true;
+				dChFlag[2] = true;
+			}
+			if(player.hasItem[Item.Missile] && player.missileStat < player.missileMax)
+			{
+				dChNum += dropChance[3];
+				dChFlag[3] = true;
+			}
+			if(player.hasItem[Item.SMissile] && player.superMissileStat < player.superMissileMax)
+			{
+				dChNum += dropChance[4];
+				dChFlag[4] = true;
+				
+				for(var i = 1; i <= 3; i++)
+				{
+					if(!dChFlag[i])
+					{
+						dChNum += dropChance[i];
+					}
+				}
+			}
+			if(player.hasItem[Item.PBomb] && player.powerBombStat < player.powerBombMax)
+			{
+				dChNum += dropChance[5];
+				dChFlag[5] = true;
+				
+				for(var i = 1; i <= 3; i++)
+				{
+					if(!dChFlag[i])
+					{
+						dChNum += dropChance[i];
+					}
+				}
+			}
+			
+			var items = array_create(0);
+			items[0] = noone;
+			items[1] = obj_EnergyDrop;
+			items[2] = obj_LargeEnergyDrop;
+			items[3] = obj_MissileDrop;
+			items[4] = obj_SuperMissileDrop;
+			items[5] = obj_PowerBombDrop;
+			
+			if(dChNum > dropChance[0])
+			{
+				var dChRand = irandom(dChNum-1)+1;
+				var dChNum2 = 0;
+				for(var i = 0; i < array_length(dropChance); i++)
+				{
+					if(dChFlag[i] && dChRand > dChNum2)
+					{
+						dChNum2 += dropChance[i];
+						if(dChRand <= dChNum2)
+						{
+							item = items[i];
+							break;
+						}
+					}
+				}
+			}
 		}
 		
-		instance_create_layer(_x,_y,layer_get_id("Liquids_fg"),item);
+		if(item != noone)
+		{
+			instance_create_layer(_x,_y,layer_get_id("Liquids_fg"),item);
+		}
 	}
 }
 

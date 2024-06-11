@@ -4,6 +4,7 @@ event_inherited();
 image_speed = 0.25;
 bombTimer = 55;//60;
 //exploded = false;
+ignoreCamera = true;
 
 velX = 0;
 velY = 0;

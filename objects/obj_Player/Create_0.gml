@@ -101,6 +101,7 @@ lastState = prevState;
 
 grounded = true;
 notGrounded = !grounded;
+slopeGrounded = false;
 
 wallJumpDelay = 6;
 canWallJump = false;
@@ -145,9 +146,10 @@ speedKillMax = 6;
 
 speedBoostWJ = false;
 speedBoostWJCounter = 0;
-speedBoostWJMax = 12;
+speedBoostWJMax = 8;//12;
 
 shineCharge = 0;
+shineChargeMax = 300;
 
 shineDir = 0;
 shineDirDiff = 0;
@@ -588,8 +590,10 @@ idleNum_Low = array(12,4,4,4,10,4,4,4);
 idleSequence_Low = array(0,2,4,4,5,3,3,1);
 
 wjFrame = 0;
-wjSequence = array(3,3,3,2,2,1,1,1,0);
+//wjSequence = array(3,3,3,2,2,1,1,1,0);
+wjSequence = array(3,3,3,2,2,1,1,0,0);
 wjAnimDelay = 0;
+wjGripAnim = false;
 
 crouchFrame = 0;
 
@@ -782,6 +786,18 @@ saveAnimFrameCounter = 0;
 
 cBubbleScale = 0;
 cFlashFrameSequence = array(0,1,2,1);
+
+/*
+memeDance = false;
+memeDanceFrame = 0;
+memeDanceFrameCounter = 0;
+memeDanceSeq = 
+[14.4, 3.6, 3.6, 3.6, 7.2, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6,14.4, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6,
+  7.2, 3.6, 3.6, 7.2, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 7.2, 3.6, 3.6, 3.6,10.8, 3.6, 3.6, 7.2, 3.6, 3.6,
+  3.6, 3.6, 3.6, 3.6,10.8, 3.6, 3.6, 7.2, 3.6, 3.6, 7.2, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6,
+  3.6, 3.6, 3.6, 3.6, 3.6,10.8, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6,
+  3.6, 7.2, 3.6, 3.6, 3.6, 7.2, 3.6, 3.6, 3.6, 7.2, 7.2, 3.6, 3.6, 3.6,14.4];
+*/
 
 #endregion
 #region Audio
@@ -1207,13 +1223,10 @@ function OnXCollision(fVX)
 	
 	if(speedBoost && speedKillCounter < speedKillMax)
 	{
+		speedKill = true;
 		if(speedBoostWJ && speedBoostWallJump)
 		{
-			speedKill = false;
-		}
-		else
-		{
-			speedKill = true;
+			speedKillCounter = min(speedKillCounter,speedKillMax-1);
 		}
 	}
 	else
@@ -1384,8 +1397,35 @@ function OnYCollision(fVY)
 		}
 	}
 	
+	var bFlag = true;
+	if(velY > 0 && (entity_place_collide(2,0) ^^ entity_place_collide(-2,0)))
+	{
+		var sideAng = 0;
+		if(entity_place_collide(2,0))
+		{
+			sideAng = GetEdgeAngle(Edge.Right);
+		}
+		if(entity_place_collide(-2,0))
+		{
+			sideAng = GetEdgeAngle(Edge.Left);
+		}
+		var botAng = GetEdgeAngle(Edge.Bottom);
+		if(abs(sideAng) > 45 && abs(sideAng) < 90 && abs(botAng) > 0 && abs(botAng) <= 45)
+		{
+			velX = lengthdir_y(velY,sideAng);
+			slopeGrounded = true;
+			
+			/*if(sign(velX) != 0)
+			{
+				dir = sign(velX);
+			}*/
+			
+			bFlag = false;
+		}
+	}
+	
 	// Ball Bounce
-	if(canMorphBounce && velY > (2.5 + fGrav) && state == State.Morph && morphFrame <= 0 && shineRampFix <= 0)
+	if(canMorphBounce && bFlag && velY > (2.5 + fGrav) && state == State.Morph && morphFrame <= 0 && shineRampFix <= 0)
 	{
 		audio_stop_sound(snd_Land);
 		audio_play_sound(snd_Land,0,false);
@@ -2053,11 +2093,10 @@ function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWav
 #endregion
 
 #region PlayerGrounded
-function PlayerGrounded(ydiff = 1)
+function PlayerGrounded(ydiff = 1.1)
 {
 	var bottomCollision = (entity_collision_line(bbox_left,bbox_bottom+ydiff,bbox_right,bbox_bottom+ydiff) || (y+ydiff) >= room_height);
-	var downAng = scr_wrap(GetEdgeAngle(Edge.Bottom),0,360);
-	var downSlopeFlag = (downAng >= 60 && downAng <= 300);
+	var downSlopeFlag = abs(GetEdgeAngle(Edge.Bottom,0,0)) >= 60;
 	
 	return (((bottomCollision && (!downSlopeFlag || speedBoost) && velY >= 0 && velY <= fGrav) || (spiderBall && spiderEdge != Edge.None)) && jump <= 0);
 }
@@ -2124,19 +2163,37 @@ function EntityLiquid_Large(_velX, _velY)
 		canSplash = 0;
 	}
 	
-	if(liquid && !liquidTop && (canSplash%2) == 0)
+	if(liquid && !liquidTop && (canSplash%4) == 0)
 	{
 		var _skidSnd = false,
 			_size = 0;
 		if((((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0) || speedBoost || state == State.Dodge) && _velX != 0)
 		{
-			if((canSplash%4) == 0)
-			{
+			//if((canSplash%4) == 0)
+			//{
 				_skidSnd = true;
-			}
+			//}
 			_size = 1;
 		}
-		liquid.CreateSplash_Extra(id,_size,_velX,_velY,true,_skidSnd);
+		var _velX2 = _velX;
+		if(liquid.liquidType == LiquidType.Acid)
+		{
+			_velX2 += choose(1,-1) * random_range(0.1,1);
+			
+			repeat(3)
+			{
+				var splX = irandom_range(bbox_left+1,bbox_right-1),
+					splY = liquid.bbox_top;
+				var spl = instance_create_layer(splX - 1 + irandom(2), splY, "Liquids_fg", obj_SplashFXFade);
+				spl.liquid = liquid;
+				spl.image_index = irandom(2);
+				spl.image_alpha = 1;
+				spl.velX = choose(-0.5,-0.3,-0.15,0.15,0.3,0.5) * random_range(1.5,2.5);
+				spl.velY = -0.5 * random_range(1.5,2.5);
+				spl.animSpeed = 0.1;
+			}
+		}
+		liquid.CreateSplash_Extra(id,_size,_velX2,_velY,true,_skidSnd);
 	}
 	
 	if (liquid && (enteredLiquid > 0 || speedBoost) && choose(1,1,1,0) == 1)
@@ -2239,6 +2296,12 @@ function EntityLiquid_Large(_velX, _velY)
 				bub.kill = true;
 				bub.canSpread = false;
 			}
+		}
+		else if(liquid.liquidType == LiquidType.Acid)
+		{
+			var bub = liquid.CreateBubble(random_range(bbox_left-3,bbox_right+3),random_range(bbox_top-3,bbox_bottom+3),0,0);
+			bub.kill = true;
+			bub.canSpread = false;
 		}
 		
 		if(stateFrame == State.Brake && brakeFrame >= 9)
@@ -2496,24 +2559,27 @@ function Set_Beams()
 #region ConstantDamage
 function ConstantDamage(damage,delay)
 {
-	// heat 0.25 dmg per frame
-	// lava 0.5 dmg per frame
-	// acid 1.5 dmg per frame
-	
-	if(constantDamageDelay <= 0)
+	if(!godmode)
 	{
-		if(damage >= energy)
+		// heat 0.25 dmg per frame
+		// lava 0.5 dmg per frame
+		// acid 1.5 dmg per frame
+		
+		if(constantDamageDelay <= 0)
 		{
-			energy = max(energy - damage, 0);
-			state = State.Death;
+			if(damage >= energy)
+			{
+				energy = max(energy - damage, 0);
+				state = State.Death;
+			}
+			else
+			{
+				energy = max(energy - damage, 0);
+			}
+			constantDamageDelay = delay;
 		}
-		else
-		{
-			energy = max(energy - damage, 0);
-		}
-		constantDamageDelay = delay;
+		constantDamageDelay = max(constantDamageDelay - 1,0);
 	}
-	constantDamageDelay = max(constantDamageDelay - 1,0);
 }
 #endregion
 
@@ -3140,7 +3206,7 @@ function PaletteSurface()
 			
 			DrawPalSprite(pal_Visor_Flash,0,1);
 			DrawPalSprite(pal_Visor_Flash,1,darkRoomVisorFlash);
-		}
+		}*/
 		if(instance_exists(XRay))
 		{
 			if(xRayVisorFlash >= 1)
@@ -3155,7 +3221,7 @@ function PaletteSurface()
 			
 			DrawPalSprite(pal_Visor_XRay,0,XRay.alpha);
 			DrawPalSprite(pal_Visor_XRay,1,XRay.alpha*xRayVisorFlash);
-		}*/
+		}
 		#endregion
 		#region -- Intro fanfare / saving --
 		if(introAnimState != -1)
@@ -3423,7 +3489,7 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 							}
 						}
 
-						var dist = min(i+1,7);
+						var dist = min(i,7);
 						if(mbTrailDir[i] == noone)
 						{
 							dist = 0;
@@ -3504,8 +3570,8 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 #endregion
 #region UpdatePlayerSurface
 
-surfW = 80;
-surfH = 80;
+surfW = 128;
+surfH = 128;
 playerSurf = surface_create(surfW,surfH);
 
 rotScale = 5;//8;
@@ -3843,20 +3909,19 @@ function PostDrawPlayer(posX, posY, rot, alph)
 	{
 		if(shineFrame < 4)
 		{
-			var _ang = point_direction(oldPosition.X,oldPosition.Y,position.X,position.Y);
-			
 			var sFrame = shineFrame;
-			var shineRot = _ang;
+			var shineRot = point_direction(oldPosition.X,oldPosition.Y,position.X,position.Y);
 			var len = 3;
 			var shineX = scr_round(xx + lengthdir_x(len,shineRot)),
 				shineY = scr_round(yy + lengthdir_y(len,shineRot));
-			var _wrp = scr_wrap(_ang,0,90);
+			var _wrp = scr_wrap(shineRot,0,90);
 			if(_wrp >= 22.5 && _wrp <= 67.5)
 			{
 				sFrame += 4;
 				shineRot -= 45*dir;
 			}
-			if(dir == -1 && shineRot != 0)
+			//if(dir == -1 && shineRot != 0)
+			if(dir == -1 && point_distance(oldPosition.X,oldPosition.Y,position.X,position.Y) != 0)
 			{
 				shineRot -= 180;
 			}

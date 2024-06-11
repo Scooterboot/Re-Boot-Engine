@@ -15,7 +15,8 @@ surfHeight = scaledH() + spriteH;
 
 lavaSurface = surface_create(surfWidth,surfHeight);
 
-finalSurface = surface_create(ceil(scaledW()), ceil(scaledH()));
+extraDistH = 32;
+finalSurface = surface_create(ceil(scaledW()), ceil(scaledH() + extraDistH));
 
 function LavaSurface()
 {

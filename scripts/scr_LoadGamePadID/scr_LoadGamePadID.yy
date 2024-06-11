@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "scr_LoadGamePadID",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Load",
-    "path": "folders/Scripts/Main/Load.yy",
+  "$GMScript":"",
+  "%Name":"scr_LoadGamePadID",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_LoadGamePadID",
+  "parent":{
+    "name":"Load",
+    "path":"folders/Scripts/Main/Load.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,10 +1,12 @@
 {
-  "resourceType": "GMShader",
-  "resourceVersion": "1.0",
-  "name": "shd_Scanlines",
-  "parent": {
-    "name": "CRT Pixel Shader",
-    "path": "folders/Shaders/CRT Pixel Shader.yy",
+  "$GMShader":"",
+  "%Name":"shd_Scanlines",
+  "name":"shd_Scanlines",
+  "parent":{
+    "name":"CRT Pixel Shader",
+    "path":"folders/Shaders/CRT Pixel Shader.yy",
   },
-  "type": 1,
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
 }

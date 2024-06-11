@@ -51,7 +51,8 @@ if(room == rm_MainMenu)
 		}
 		else
 		{
-			screenFade = min(screenFade+0.075,1);
+			//screenFade = min(screenFade+0.075,1);
+			screenFade += 0.075;
 		}
 	}
 	else
@@ -60,7 +61,7 @@ if(room == rm_MainMenu)
 		fileIconFrame = 0;
 		fileIconFrameCounter = 0;
 	}
-	if(screenFade >= 1)
+	if(screenFade > 1.075)
 	{
 		currentScreen = targetScreen;
 	}

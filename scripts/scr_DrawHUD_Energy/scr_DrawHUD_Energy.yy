@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "scr_DrawHUD_Energy",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "UI",
-    "path": "folders/Scripts/UI.yy",
+  "$GMScript":"",
+  "%Name":"scr_DrawHUD_Energy",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_DrawHUD_Energy",
+  "parent":{
+    "name":"UI",
+    "path":"folders/Scripts/UI.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

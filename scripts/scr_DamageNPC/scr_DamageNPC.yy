@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "scr_DamageNPC",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Damage",
-    "path": "folders/Scripts/Damage.yy",
+  "$GMScript":"",
+  "%Name":"scr_DamageNPC",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_DamageNPC",
+  "parent":{
+    "name":"Damage",
+    "path":"folders/Scripts/Damage.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

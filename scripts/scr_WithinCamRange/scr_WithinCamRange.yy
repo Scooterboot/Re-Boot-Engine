@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "scr_WithinCamRange",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Camera",
-    "path": "folders/Scripts/Camera.yy",
+  "$GMScript":"",
+  "%Name":"scr_WithinCamRange",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_WithinCamRange",
+  "parent":{
+    "name":"Camera",
+    "path":"folders/Scripts/Camera.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

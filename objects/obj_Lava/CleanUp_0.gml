@@ -1,4 +1,5 @@
 /// @description Free surface
+event_inherited();
 
 surface_free(lavaSurface);
 surface_free(finalSurface);

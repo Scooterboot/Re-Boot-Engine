@@ -15,8 +15,8 @@ if(!visible)
 	RevealTile();
 }
 
-//if(respawnTime > 0)
-//{
+if(respawnTime > 0 || !hiddenDestroy)
+{
     var re = instance_create_layer(x,y,layer,obj_BlockRespawn);
     re.sprite_index = respawnSprt;
     re.blockIndex = object_index;
@@ -35,4 +35,4 @@ if(!visible)
         re.downright = downright;
         re.downleft = downleft;
     }
-//}
+}

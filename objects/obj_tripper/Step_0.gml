@@ -12,7 +12,7 @@ if(!PauseAI())
 		player.grounded && (place_meeting(x,y-2,player) || place_meeting(x-moveX,y-moveY-2,player)))
 	{
 		gravCounter++;
-		if(gravCounter > 5)
+		if(gravCounter > gravCounterMax)
 		{
 			velY = min(velY+grav,fallSpeedMax);
 		}

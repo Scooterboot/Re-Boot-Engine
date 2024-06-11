@@ -55,10 +55,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		debug = (obj_Main.debug > 0);
 	}
+	#region debug keys
 	if(debug)
 	{
-		#region debug keys
-		
 		#region 0, 9, 8
 		if(keyboard_check(ord("0")))
 		{
@@ -324,13 +323,28 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			//}
 		}
 		#endregion
-		
-		#endregion
 	}
 	else
 	{
 		godmode = false;
 	}
+	
+	#region meme dance (press 1)
+	/*if(state == State.Stand && stateFrame == State.Stand)
+	{
+		if(debug && keyboard_check(ord("1")))
+		{
+			memeDance = true;
+		}
+	}
+	else
+	{
+		memeDance = false;
+		memeDanceFrame = 0;
+	}*/
+	#endregion
+	
+	#endregion
 
 	liquidLevel = 0;
 	liquidState = 0;
@@ -389,7 +403,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			{
 				liquidState = 1;
 			}
-			if(findLiquid.liquidType == LiquidType.Lava)
+			if(findLiquid.liquidType == LiquidType.Lava || findLiquid.liquidType == LiquidType.Acid)
 			{
 				liquidState = 2;
 			}
@@ -865,7 +879,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		speedBoostWJCounter = 0;
 	}
-	speedBoostWJ = (sBoostWJFlag && speedBoostWJCounter < speedBoostWJMax && speedBoostWallJump);
+	speedBoostWJ = (sBoostWJFlag && speedBoostWJCounter < speedBoostWJMax);
 
 	minBoostSpeed = maxSpeed[1,liquidState] + ((maxSpeed[2,liquidState] - maxSpeed[1,liquidState])*0.75);
 
@@ -883,7 +897,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		{
 			speedBoost = true;
 		}
-		else if(!speedBoost && abs(velX) >= minBoostSpeed && state != State.Grapple && !grapBoost && state != State.Dodge)
+		else if(!speedBoost && (abs(velX) >= minBoostSpeed || abs(spiderSpeed) >= minBoostSpeed) && state != State.Grapple && !grapBoost && state != State.Dodge)
 		{
 			speedCounter = speedCounterMax;
 			speedBoost = true;
@@ -953,7 +967,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	
 	if((state == State.Stand || state == State.Crouch || state == State.Morph) && (speedBoost || speedCatchCounter > 0) && move == 0 && cDown && dir != 0 && grounded && morphFrame <= 0 && !spiderBall)
 	{
-		shineCharge = 300;
+		shineCharge = shineChargeMax;
 		speedCounter = 0;
 	}
 	
@@ -1092,6 +1106,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 						{
 							dir *= -1;
 							dirFrame = dir;
+							wjGripAnim = true;
 						}
 						if(speedBoostWJ)
 						{
@@ -1417,6 +1432,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 				else
 				{
+					if(!grounded)
+					{
+						_spd /= 2;
+					}
+					
 					if(grounded && velX == 0 && velY == 0)
 					{
 						velX += _spd * _dir;
@@ -1904,11 +1924,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				
 				if(climbIndex >= 7 && move == dir)
 				{
-					var msp = 0;
-					if(cDash || global.autoDash)
-					{
-						msp = 1 + 0.5*(stateFrame == State.Morph) / (1+liquidMovement);
-					}
+					var msp = 0.5*(stateFrame == State.Morph) / (1+liquidMovement);
+					//if(cDash || global.autoDash)
+					//{
+					//	msp = 1 + 0.5*(stateFrame == State.Morph) / (1+liquidMovement);
+					//}
 					velX = max(msp,abs(velX))*move;
 				}
 				
@@ -2030,7 +2050,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		stateFrame = State.Stand;
 		mask_index = mask_Stand;
 		
-		if(cAimLock && move != 0 && move != dir && !entity_place_collide(-2*dir,4))
+		if(cAimLock && move != 0 && move != dir && !entity_place_collide(-3*dir,4))
 		{
 			moonFallCounter++;
 		}
@@ -2295,7 +2315,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		if(grounded && notGrounded)
 		{
-			if(morphFrame <= 0 && shineRampFix <= 0)
+			if(morphFrame <= 0 && shineRampFix <= 0 && !slopeGrounded)
 			{
 				if(!spiderBall)
 				{
@@ -2509,12 +2529,15 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		
 		if(grounded || PlayerGrounded())
 		{
-			if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
+			if(!slopeGrounded)
 			{
-				velX = min(abs(velX) * (power(abs(velX),0.1) - 1),maxSpeed[0,liquidState])*sign(velX);
-				speedCounter = 0;
+				if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
+				{
+					velX = min(abs(velX) * (power(abs(velX),0.1) - 1),maxSpeed[0,liquidState])*sign(velX);
+					speedCounter = 0;
+				}
+				audio_play_sound(snd_Land,0,false);
 			}
-			audio_play_sound(snd_Land,0,false);
 			
 			if(mask_index == mask_Somersault)
 			{
@@ -2549,6 +2572,17 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					}
 					ChangeState(State.Stand,State.Stand,mask_Stand,true);
 				}
+			}
+			
+			if(slopeGrounded && state == State.Stand)
+			{
+				landFrame = 0;
+				smallLand = false;
+				
+				brake = true;
+				brakeFrame = 10;
+				audio_play_sound(snd_Brake,0,false);
+				stateFrame = State.Brake;
 			}
 		}
 		else
@@ -2650,12 +2684,15 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		
 		if(grounded)
 		{
-			if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
+			if(!slopeGrounded)
 			{
-				velX = min(abs(velX) * (power(abs(velX),0.1) - 1),maxSpeed[0,liquidState])*sign(velX);
-				speedCounter = 0;
+				if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
+				{
+					velX = min(abs(velX) * (power(abs(velX),0.1) - 1),maxSpeed[0,liquidState])*sign(velX);
+					speedCounter = 0;
+				}
+				audio_play_sound(snd_Land,0,false);
 			}
-			audio_play_sound(snd_Land,0,false);
 			
 			if(!CanChangeState(mask_Stand))
 			{
@@ -2672,6 +2709,17 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				ChangeState(State.Stand,State.Stand,mask_Stand,true);
 				landFrame = 7;
 				smallLand = false;
+			}
+			
+			if(slopeGrounded && state == State.Stand)
+			{
+				landFrame = 0;
+				smallLand = false;
+				
+				brake = true;
+				brakeFrame = 10;
+				audio_play_sound(snd_Brake,0,false);
+				stateFrame = State.Brake;
 			}
 		}
 		else
@@ -3062,7 +3110,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 				else if(cDown && move2 == -dir)
 				{
-					shineCharge = 300;
+					shineCharge = shineChargeMax;
 					shineEnd = 1;
 					shineRestart = false;
 				}
@@ -3970,6 +4018,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 	
 	notGrounded = !grounded;
+	slopeGrounded = false;
 	
 	if(((!cUp && !cDown) || (move != 0 && state == State.Stand)) && aimAngle == gbaAimAngle)
 	{

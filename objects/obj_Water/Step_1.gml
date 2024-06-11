@@ -7,7 +7,7 @@ if(global.gamePaused)
 
 if(moveY)
 {
-	if(abs(bobSpeed) > bobBtm)
+	if(abs(bobSpeed) >= bobBtm)
 	{
 		bobAcc *= -1;
 	}

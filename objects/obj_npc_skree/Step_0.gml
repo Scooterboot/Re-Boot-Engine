@@ -55,8 +55,6 @@ if(state == 3) // dig
 	counter[0]++;
 	if(counter[0] > 60)
 	{
-		//dead = true;
-		//NPCLoot(x,y);
 		instance_destroy();
 	}
 }

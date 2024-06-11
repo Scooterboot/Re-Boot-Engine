@@ -70,7 +70,7 @@ function xray_redraw_front()
 		var TilesFront = layer_tilemap_get_id(tileLayers[i]);
 		if(layer_tilemap_exists(tileLayers[i],TilesFront))
 		{
-			draw_tilemap(TilesFront,-camera_get_view_x(view_camera[0]),-camera_get_view_y(view_camera[0]));
+			draw_tilemap(TilesFront,layer_get_x(tileLayers[i])-camera_get_view_x(view_camera[0]),layer_get_y(tileLayers[i])-camera_get_view_y(view_camera[0]));
 		}
 	}
 
@@ -88,7 +88,7 @@ function xray_redraw_back()
 		var TilesBack = layer_tilemap_get_id(bgTileLayers[i]);
 		if(layer_tilemap_exists(bgTileLayers[i],TilesBack))
 		{
-			draw_tilemap(TilesBack,-camera_get_view_x(view_camera[0]),-camera_get_view_y(view_camera[0]));
+			draw_tilemap(TilesBack,layer_get_x(bgTileLayers[i])-camera_get_view_x(view_camera[0]),layer_get_y(bgTileLayers[i])-camera_get_view_y(view_camera[0]));
 		}
 	}
 

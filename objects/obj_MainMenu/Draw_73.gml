@@ -3,7 +3,7 @@ var xx = camera_get_view_x(view_camera[0]),
 	yy = camera_get_view_y(view_camera[0]),
 	ww = global.resWidth,
 	hh = global.resHeight,
-	alpha = screenFade;
+	alpha = min(screenFade,1);
 
 if(currentScreen == MainScreen.TitleIntro)
 {

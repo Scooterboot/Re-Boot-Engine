@@ -15,8 +15,8 @@ velX = 0;
 
 moveY = false;
 bottom = bbox_bottom;
-bobAcc = -0.0125/4;
-bobSpeed = -0.05;
+bobAcc = -(1 / 256);//-0.0125/4;
+bobSpeed = 0;//-0.05;
 bobBtm = 0.25;
 
 liquidShuffleCount = 0;
@@ -649,6 +649,10 @@ function Bubble(_liq, _x, _y, _velX, _velY) constructor
 		if(liquid.liquidType == LiquidType.Lava)
 		{
 			sprIndex = scr_ConvertToLavaSprite(spriteIndex);
+		}
+		else if(liquid.liquidType == LiquidType.Acid)
+		{
+			sprIndex = scr_ConvertToAcidSprite(spriteIndex);
 		}
 		
 		gpu_set_blendmode(bm_add);

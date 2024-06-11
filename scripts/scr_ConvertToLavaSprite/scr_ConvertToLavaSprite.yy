@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "scr_ConvertToLavaSprite",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Liquid",
-    "path": "folders/Scripts/Liquid.yy",
+  "$GMScript":"",
+  "%Name":"scr_ConvertToLavaSprite",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_ConvertToLavaSprite",
+  "parent":{
+    "name":"Liquid",
+    "path":"folders/Scripts/Liquid.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

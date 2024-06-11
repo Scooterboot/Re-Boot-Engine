@@ -16,6 +16,47 @@ camLimit_Right = camLimitMax_Right;
 camLimit_Top = camLimitMax_Top;
 camLimit_Bottom = camLimitMax_Bottom;
 
+function LimitCamX()
+{
+	var xx = x + (global.resWidth/2);
+	if((xx+fVelX) < (playerX + camLimit_Left))
+	{
+		fVelX = min((playerX+camLimit_Left) - xx, 1 + max((playerX-prevPlayerX) + sign(velX),0));
+		if(global.roomTrans)
+		{
+			fVelX = (playerX+camLimit_Left) - xx;
+		}
+	}
+	if((xx+fVelX) > (playerX + camLimit_Right))
+	{
+		fVelX = max((playerX+camLimit_Right) - xx, -1 + min((playerX-prevPlayerX) + sign(velX),0));
+		if(global.roomTrans)
+		{
+			fVelX = (playerX+camLimit_Right) - xx;
+		}
+	}
+}
+function LimitCamY()
+{
+	var yy = y + (global.resHeight/2);
+	if((yy+fVelY) < (playerY + camLimit_Top))
+	{
+		fVelY = min((playerY+camLimit_Top) - yy, 1 + max((playerY-prevPlayerY) + sign(velY),0));
+		if(global.roomTrans)
+		{
+			fVelY = (playerY+camLimit_Top) - yy;
+		}
+	}
+	if((yy+fVelY) > (playerY + camLimit_Bottom))
+	{
+		fVelY = max((playerY+camLimit_Bottom) - yy, -1 + min((playerY-prevPlayerY) + sign(velY),0));
+		if(global.roomTrans)
+		{
+			fVelY = (playerY+camLimit_Bottom) - yy;
+		}
+	}
+}
+
 velX = 0;
 velY = 0;
 fVelX = velX;

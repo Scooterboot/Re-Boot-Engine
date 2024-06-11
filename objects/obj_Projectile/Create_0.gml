@@ -162,10 +162,17 @@ function entity_collision(listNum)
 		{
 			var block = blockList[| i];
 			var isSolid = true;
-			//if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
-			//{
-			//	isSolid = block.isSolid;
-			//}
+			if(block.object_index == obj_DoorHatch || object_is_ancestor(block.object_index,obj_DoorHatch))
+			{
+				if((!block.unlocked ||
+				(doorOpenType <= -1 && block.object_index == obj_DoorHatch) ||
+				(doorOpenType != 1 && doorOpenType != 2 && block.object_index == obj_DoorHatch_Missile) ||
+				(doorOpenType != 2 && block.object_index == obj_DoorHatch_Super) ||
+				(doorOpenType != 3 && block.object_index == obj_DoorHatch_Power)) && doorOpenType != 4)
+				{
+					isSolid = false;
+				}
+			}
 			if(instance_exists(lastReflec) && block == lastReflec)
 			{
 				isSolid = false;

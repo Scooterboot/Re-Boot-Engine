@@ -93,11 +93,24 @@ function scr_DrawHUD_Energy() {
 		}
 	}
 	
+	if(global.HUD == 2)
+	{
+		yDiff = max(yDiff,10);
+	}
+	else if(item[Item.Missile])
+	{
+		yDiff = max(yDiff,7);
+	}
 	if(boots[Boots.Dodge])
 	{
+		var _meterY = yy+yDiff+8;
+		if(boots[Boots.SpeedBoost])
+		{
+			_meterY += 5;
+		}
 		for(var i = 0; i < 2; i += 1)
 		{
-			draw_sprite_ext(sprt_DodgeMeter,0,xx+14*i,yy+22,1,1,0,c_white,1);
+			draw_sprite_ext(sprt_DodgeMeter,0,xx+14*i,_meterY,1,1,0,c_white,1);
 		
 			var recharge = clamp((dodgeRecharge / (dodgeRechargeMax/2)) - i,0,1);
 			var width = sprite_get_width(sprt_DodgeMeter)*recharge;
@@ -108,9 +121,77 @@ function scr_DrawHUD_Energy() {
 				var rw = min(width-j+1,width);
 				if(rw > 0)
 				{
-					draw_sprite_part_ext(sprt_DodgeMeter,imgInd,0,j,rw,1,xx+14*i,yy+22+j,1,1,c_white,1);
+					draw_sprite_part_ext(sprt_DodgeMeter,imgInd,0,j,rw,1,xx+14*i,_meterY+j,1,1,c_white,1);
 				}
 			}
+		}
+	}
+	
+	if(boots[Boots.SpeedBoost])
+	{
+		var _meterY = yy+yDiff+8;
+		var width = sprite_get_width(sprt_SpeedMeter);
+		var height = sprite_get_height(sprt_SpeedMeter);
+		
+		draw_sprite_ext(sprt_SpeedMeter,0,xx,_meterY,1,1,0,c_white,1);
+		
+		if(shineCharge > 0)
+		{
+			width *= shineCharge / shineChargeMax;
+			for(var j = 0; j < height; j++)
+			{
+				var rw = min(width-j+1,width);
+				if(rw > 0)
+				{
+					draw_sprite_part_ext(sprt_SpeedMeter,1,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
+				}
+			}
+		}
+		
+		var _widths = [12,15,19,23];
+		var _prevWidth = 0;
+		for(var i = 0; i < speedCounter; i++)
+		{
+			_prevWidth += _widths[i];
+		}
+		
+		if(speedCounter < 4)
+		{
+			width = _prevWidth + _widths[speedCounter] * ((speedBuffer+1) / speedBufferMax);
+			for(var j = 0; j < height; j++)
+			{
+				var rw = min(width-j+1,width);
+				if(rw > 0)
+				{
+					draw_sprite_part_ext(sprt_SpeedMeter,2,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
+				}
+			}
+		}
+		
+		if(!walkState)
+		{
+			width = sprite_get_width(sprt_SpeedMeter);
+			if(SpiderActive())
+			{
+				width *= power((abs(spiderSpeed) / minBoostSpeed),2.1);
+			}
+			else
+			{
+				width *= power((abs(velX) / minBoostSpeed),2.1);
+			}
+			for(var j = 0; j < height; j++)
+			{
+				var rw = min(width-j+1,width);
+				if(rw > 0)
+				{
+					draw_sprite_part_ext(sprt_SpeedMeter,3,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
+				}
+			}
+		}
+		
+		if(speedCounter >= 4 || state == State.Spark || state == State.BallSpark)
+		{
+			draw_sprite_ext(sprt_SpeedMeter,4,xx,_meterY,1,1,0,c_white,1);
 		}
 	}
 }

@@ -57,3 +57,11 @@ function PauseAI()
 {
 	return (global.gamePaused || /*!scr_WithinCamRange() ||*/ frozen > 0 || dmgFlash > 0);
 }
+
+function NPCDropItem(_x,_y)
+{
+	for(var i = 0; i < 5; i++)
+	{
+		_NPCDropItem(_x+irandom_range(-12,12),_y+irandom_range(-12,12));
+	}
+}

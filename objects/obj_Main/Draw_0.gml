@@ -366,7 +366,7 @@ if(debug > 0)
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
 	draw_set_font(fnt_Menu2);
-	draw_text(xx+7,yy+30,dbStr);
+	draw_text(xx+37,yy+30,dbStr);
 	
 	var spStr = "";
 	
@@ -403,7 +403,7 @@ if(debug > 0)
 			spStr += "   spc: "+string(speedCounter);
 		}
 		
-		draw_text(xx+60,yy+20,spStr);
+		draw_text(xx+80,yy+20,spStr);
 	}
 	
 	draw_set_halign(fa_right);

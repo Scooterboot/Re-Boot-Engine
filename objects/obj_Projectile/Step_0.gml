@@ -131,74 +131,6 @@ if(instance_exists(reflec) && lastReflec != reflec)
 	lastReflec = reflec;
 }
 
-/*if(tileCollide && doorOpenType >= 0)
-{
-	var door = noone;
-	_num = collision_line_list(_x,_y,_x+fVelX,_y+fVelY,obj_DoorHatch,true,true,doorList,true);
-	for(var i = 0; i < _num; i++)
-	{
-		if(instance_exists(doorList[| i]))
-		{
-			var _door = doorList[| i];
-			if((!_door.unlocked ||
-			(doorOpenType <= -1 && _door.object_index == obj_DoorHatch) ||
-			(doorOpenType != 1 && doorOpenType != 2 && _door.object_index == obj_DoorHatch_Missile) ||
-			(doorOpenType != 2 && _door.object_index == obj_DoorHatch_Super) ||
-			(doorOpenType != 3 && _door.object_index == obj_DoorHatch_Power)) && doorOpenType != 4)
-			{
-				door = _door;
-				break;
-			}
-		}
-	}
-	ds_list_clear(doorList);
-	
-	//if(instance_exists(door) && lastReflectedDoor != door)
-	if(instance_exists(door) && lastReflec != door)
-	{
-		var _ang = direction;
-		var _spd = point_distance(0,0,velX,velY);
-		
-		_ang = ReflectAngle(_ang, door.image_angle+(180 * (door.image_xscale < 0)));
-		
-		var vX = 0,
-			vY = 0,
-			_c = 0;
-		while(!collision_line(_x,_y,_x+vX,_y+vY,door,true,true) && _c < _spd)
-		{
-			vX += sign(velX) * min(1,abs(velX)-abs(vX));
-			vY += sign(velY) * min(1,abs(velY)-abs(vY));
-			_c++;
-		}
-		vX -= sign(velX);
-		vY -= sign(velY);
-		_c--;
-		
-		xstart = _x+vX;
-		ystart = _y+vY;
-		
-		velX = lengthdir_x(_spd,_ang);
-		velY = lengthdir_y(_spd,_ang);
-		
-		while(_c < _spd)
-		{
-			vX += sign(velX) * min(1,abs(velX)-abs(vX));
-			vY += sign(velY) * min(1,abs(velY)-abs(vY));
-			_c++;
-		}
-		
-		fVelX = vX;
-		fVelY = vY;
-		
-		direction = _ang;
-		
-		speed_x = 0;
-		speed_y = 0;
-		
-		lastReflec = door;
-	}
-}*/
-
 #endregion
 
 #region Collision
@@ -209,14 +141,10 @@ if(tileCollide && impacted == 0)
 	var fVX = fVelX,
 		fVY = fVelY;
 	
-	var refFlag = instance_exists(lastReflec) && (lastReflec.object_index == obj_DoorHatch || object_is_ancestor(lastReflec.object_index,obj_DoorHatch)) && position_meeting(x,y,lastReflec);
-	
 	var counter = abs(fVelX)+abs(fVelY);
-	//if(lhc_position_collide(fVelX,fVelY) || lhc_position_collide(0,0) || lhc_collision_line(xprevious-fVelX,yprevious-fVelY,x+fVelX,y+fVelY,solids,true,true))
-	if(entity_position_collide(fVelX,fVelY) || entity_position_collide(0,0) || entity_collision_line(x-fVelX,y-fVelY,x+fVelX,y+fVelY,true,true) || refFlag)
+	if(entity_position_collide(fVelX,fVelY,x,y) || entity_position_collide(0,0,x,y) || entity_collision_line(x-fVelX,y-fVelY,x+fVelX,y+fVelY,true,true))
 	{
-		//while(!lhc_position_collide(sign(fVelX),sign(fVelY)) && !lhc_position_collide(0,0) && !lhc_collision_line(xprevious-fVelX,yprevious-fVelY,x+sign(fVelX),y+sign(fVelY),solids,true,false) && counter > 0)
-		while(!entity_position_collide(sign(fVelX),sign(fVelY)) && !entity_position_collide(0,0) && !entity_collision_line(x-fVelX,y-fVelY,x+sign(fVelX),y+sign(fVelY),true,true) && !refFlag && counter > 0)
+		while(!entity_position_collide(sign(fVelX),sign(fVelY),x,y) && !entity_position_collide(0,0,x,y) && !entity_collision_line(x-fVelX,y-fVelY,x+sign(fVelX),y+sign(fVelY),true,true) && counter > 0)
 		{
 			x += sign(fVelX);
 			y += sign(fVelY);

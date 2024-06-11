@@ -1,10 +1,12 @@
 {
-  "resourceType": "GMShader",
-  "resourceVersion": "1.0",
-  "name": "shd_Chameleon",
-  "parent": {
-    "name": "Palette Swapper",
-    "path": "folders/Shaders/Palette Swapper.yy",
+  "$GMShader":"",
+  "%Name":"shd_Chameleon",
+  "name":"shd_Chameleon",
+  "parent":{
+    "name":"Palette Swapper",
+    "path":"folders/Shaders/Palette Swapper.yy",
   },
-  "type": 1,
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
 }

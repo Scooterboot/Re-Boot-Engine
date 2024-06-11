@@ -13,6 +13,10 @@ if(!init)
 		image_alpha = 0.9;
 		grav = 0.18;
 	}
+	else if(liquidType == LiquidType.Acid)
+	{
+		sprite_index = sprt_AcidDrop;
+	}
 	init = true;
 }
 

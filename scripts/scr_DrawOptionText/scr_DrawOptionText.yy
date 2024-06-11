@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "scr_DrawOptionText",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Text",
-    "path": "folders/Scripts/UI/Text.yy",
+  "$GMScript":"",
+  "%Name":"scr_DrawOptionText",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_DrawOptionText",
+  "parent":{
+    "name":"Text",
+    "path":"folders/Scripts/UI/Text.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "discord_init",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Discord Rich Presence",
-    "path": "folders/Scripts/Discord Rich Presence.yy",
+  "$GMScript":"",
+  "%Name":"discord_init",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"discord_init",
+  "parent":{
+    "name":"Discord Rich Presence",
+    "path":"folders/Scripts/Discord Rich Presence.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

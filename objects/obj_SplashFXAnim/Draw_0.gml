@@ -24,6 +24,10 @@ if(liquid.liquidType == LiquidType.Lava)
 		image_blend = make_color_rgb(255,255,80);
 	}
 }
+else if(liquid.liquidType == LiquidType.Acid)
+{
+	spInd = scr_ConvertToAcidSprite(spInd);
+}
 
 draw_sprite_ext(spInd, image_index, scr_round(x), scr_round(y), image_xscale, yscale, image_angle, image_blend, image_alpha);
 

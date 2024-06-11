@@ -37,10 +37,10 @@ LavaSurface();
 
 if(surface_exists(finalSurface))
 {
-	surface_resize(finalSurface, ceil(scaledW()), ceil(scaledH()));
+	surface_resize(finalSurface, ceil(scaledW()), ceil(scaledH() + extraDistH));
 	surface_set_target(finalSurface);
 	
-	draw_surface_ext(application_surface,-(x-camX),-(y-camY),1,1,0,c_white,1);
+	draw_surface_ext(application_surface,-(x-camX),extraDistH-(y-camY),1,1,0,c_white,1);
 	
 	if(global.waterDistortion)
 	{
@@ -48,7 +48,7 @@ if(surface_exists(finalSurface))
 			fH = surface_get_height(finalSurface);
 		
 		var _x = (x-camX),
-			_y = (y-camY);
+			_y = (y-camY)-extraDistH;
 		var tex = surface_get_texture(application_surface),
 		sW = surface_get_width(application_surface),
 		sH = surface_get_height(application_surface);
@@ -59,6 +59,10 @@ if(surface_exists(finalSurface))
 		{
 			var mult = -min(1.5,i/6);
 			var spread = mult * sin(time+i/4+y/4);
+			if(i < extraDistH)
+			{
+				spread *= i/extraDistH;
+			}
 			
 			draw_vertex_texture_color(0 + spread, i, _x/sW, (_y+i)/sH, c_white, 0.5);
 			draw_vertex_texture_color(fW + spread, i, (_x+fW)/sW, (_y+i)/sH, c_white, 0.5);
@@ -67,16 +71,16 @@ if(surface_exists(finalSurface))
 		draw_primitive_end();
 	}
 	gpu_set_blendmode(bm_add);
-	draw_surface_ext(lavaSurface,-spriteW/2,0,1,1,0,c_white,fAlpha);
+	draw_surface_ext(lavaSurface,-spriteW/2,extraDistH,1,1,0,c_white,fAlpha);
 	gpu_set_blendmode(bm_normal);
 	
 	surface_reset_target();
 	
-	draw_surface_ext(finalSurface,scr_round(x),scr_round(y),1,1,0,image_blend,image_alpha);
+	draw_surface_ext(finalSurface,scr_round(x),scr_round(y)-extraDistH,1,1,0,image_blend,image_alpha);
 }
 else
 {
-	finalSurface = surface_create(ceil(scaledW()), ceil(scaledH()));
+	finalSurface = surface_create(ceil(scaledW()), ceil(scaledH() + extraDistH));
 	surface_set_target(finalSurface);
 	draw_clear_alpha(c_black,0);
 	surface_reset_target();

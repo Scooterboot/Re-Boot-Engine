@@ -1,5 +1,20 @@
 /// @description Logic
-if(place_meeting(x,y,obj_Player) && frame >= 4)
+var player = noone;
+for(var i = 0; i < (room_width+room_height)/2; i+= 16)
+{
+	var _checkX = x - lengthdir_x(i,image_angle)*sign(image_xscale),
+		_checkY = y - lengthdir_y(i,image_angle)*sign(image_xscale);
+	if(place_meeting(_checkX,_checkY,obj_Player))
+	{
+		player = instance_place(_checkX,_checkY,obj_Player);
+		break;
+	}
+	else if(place_meeting(_checkX,_checkY,obj_Door))
+	{
+		break;
+	}
+}
+if(instance_exists(player) && frame >= 4)
 {
     var htc = instance_create_layer(x,y,layer,obj_ClosingHatch);
     htc.image_index = image_index;

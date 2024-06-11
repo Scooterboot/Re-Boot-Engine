@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "lib_images",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Libraries",
-    "path": "folders/Extensions/Libraries.yy",
+  "$GMScript":"",
+  "%Name":"lib_images",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"lib_images",
+  "parent":{
+    "name":"Libraries",
+    "path":"folders/Extensions/Libraries.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }
