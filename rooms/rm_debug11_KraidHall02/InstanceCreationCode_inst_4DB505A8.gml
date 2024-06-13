@@ -1,0 +1,1 @@
+npcType[0] = obj_Zeb;

@@ -173,11 +173,11 @@ function scr_DrawHUD_Energy() {
 			width = sprite_get_width(sprt_SpeedMeter);
 			if(SpiderActive())
 			{
-				width *= power((abs(spiderSpeed) / minBoostSpeed),2.1);
+				width *= power((abs(spiderSpeed) / minBoostSpeed),2);
 			}
 			else
 			{
-				width *= power((abs(velX) / minBoostSpeed),2.1);
+				width *= power((abs(velX) / minBoostSpeed),2);
 			}
 			for(var j = 0; j < height; j++)
 			{

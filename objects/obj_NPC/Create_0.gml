@@ -253,10 +253,22 @@ function NPCDeath(_x,_y)
     instance_destroy();
 }
 
+spawnerObj = noone;
 
 function NPCDropItem(_x,_y)
 {
-	_NPCDropItem(_x,_y);
+	var item = _NPCDropItem(_x,_y);
+	if(instance_exists(spawnerObj))
+	{
+		for(var i = 0; i < array_length(spawnerObj.spawnedNPC); i++)
+		{
+			if(spawnerObj.spawnedNPC[i] == id)
+			{
+				spawnerObj.spawnedNPC[i] = item;
+				break;
+			}
+		}
+	}
 }
 dropChance[0] = 5; // nothing
 dropChance[1] = 50; // energy
@@ -361,9 +373,10 @@ function _NPCDropItem(_x,_y)
 		
 		if(item != noone)
 		{
-			instance_create_layer(_x,_y,layer_get_id("Liquids_fg"),item);
+			return instance_create_layer(_x,_y,layer_get_id("Liquids_fg"),item);
 		}
 	}
+	return noone;
 }
 
 solids[0] = "ISolid";
