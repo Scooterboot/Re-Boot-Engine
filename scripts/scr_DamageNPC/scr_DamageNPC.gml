@@ -12,6 +12,10 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 	///@param npcImmuneTime
 	
 	var isProjectile = object_is_ancestor(object_index,obj_Projectile);
+	if(isProjectile)
+	{
+		array_resize(npcImmuneTime,instance_number(obj_NPC));
+	}
 
 	var freezeMax = 500;
 

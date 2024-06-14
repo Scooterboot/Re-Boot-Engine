@@ -7,17 +7,15 @@ if(PauseAI())
 }
 
 frameCounter++;
-var flag = (frameCounter > 2);
 var seq = frameSeq;
 if(state == 3)
 {
-	flag = (frameCounter > 1 || frame == 1 || frame == 3);
 	seq = frameSeq2;
 }
 
-if(flag)
+if(frameCounter > 1)
 {
-	frame = scr_wrap(frame+1,0,4);
+	frame = scr_wrap(frame+1,0,8);
 	frameCounter = 0;
 }
 image_index = seq[frame];

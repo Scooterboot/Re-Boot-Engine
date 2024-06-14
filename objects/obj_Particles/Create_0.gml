@@ -5,7 +5,7 @@ partSystemA = part_system_create_layer("Projectiles_fg",true);
 part_system_automatic_update(partSystemA,false);
 partEmitA = part_emitter_create(partSystemA);
 
-partSystemB = part_system_create_layer("Player",true);
+partSystemB = part_system_create_layer("WorldObjects",true);
 part_system_automatic_update(partSystemB,false);
 partEmitB = part_emitter_create(partSystemB);
 

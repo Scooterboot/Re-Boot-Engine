@@ -31,7 +31,8 @@ if(instance_exists(obj_Player))
 		}
 		
 		var offset = 14;
-		p.state = State.Recharge;
+		//p.state = State.Recharge;
+		p.ChangeState(State.Recharge,State.Stand,mask_Stand,true,false);
 		p.dir = -activeDir;
 		var xPos = bbox_right+offset;
 		if(activeDir == -1)

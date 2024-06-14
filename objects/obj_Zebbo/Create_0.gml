@@ -3,7 +3,7 @@ event_inherited();
 
 life = 30;
 lifeMax = 30;
-damage = 14;
+damage = 20;
 dmgMult[DmgType.Misc][1] = 1; // grapple beam
 
 image_speed = 0;

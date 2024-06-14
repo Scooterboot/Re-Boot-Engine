@@ -1,8 +1,19 @@
 /// @description 
 event_inherited();
 
+function PauseAI()
+{
+	return (global.gamePaused || /*!scr_WithinCamRange() ||*/ frozen > 0 || dmgFlash > 0);
+}
+
 state = 0;
 // 0 = idle, 1 = rise, 2 = fly toward player
+attackDelay = 0;
+heightOffset = 0;
+currentY = y;
+
+moveSpX = 2.25;
+moveSpY = 1;
 
 detectDelay = 0;
 
