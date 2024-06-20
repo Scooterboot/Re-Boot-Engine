@@ -27,13 +27,13 @@ freezeKill = false;
 
 knockBack = 4;//9;
 knockBackSpeed = 5;
-damageImmuneTime = 96;
+damageInvFrames = 96;
 
 dmgDelay = 0;
 
 ignoreCamera = false;
 
-npcImmuneTime[instance_number(obj_NPC)] = 0;
+npcInvFrames[instance_number(obj_NPC)] = 0;
 npcDeathType = -1;
 
 creator = noone;

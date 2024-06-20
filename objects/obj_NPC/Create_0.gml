@@ -30,7 +30,7 @@ lifeMax = 0;
 damage = 0;
 knockBack = 5;//9;
 knockBackSpeed = 5;
-damageImmuneTime = 96;
+damageInvFrames = 96;
 
 // damage player through things like speed booster and screw attack
 // does not affect i-frames
@@ -91,7 +91,7 @@ dmgAbsorb = false;
 realLife = noone;
 
 freezeImmune = false;
-frozenImmuneTime = 0;
+frozenInvFrames = 0;
 frozen = 0;
 
 hurtSound = noone;
@@ -127,26 +127,22 @@ function DamagePlayer()
 	    var player = DmgColPlayer();
 	    if(instance_exists(player))
 	    {
-	        if (player.immuneTime <= 0 && (!player.immune || ignorePlayerImmunity))//!player.isChargeSomersaulting && !player.isScrewAttacking && !player.isSpeedBoosting)
-	        {
-	            //var ang = point_direction(x,y,obj_Samus.x,obj_Samus.y);
-	            var ang = 45;
-	            if(player.bbox_bottom > bbox_bottom)
-	            {
-	                ang = 315;
-	            }
-	            if(player.x < x)
-	            {
-	                ang = 135;
-	                if(player.bbox_bottom > bbox_bottom)
-	                {
-	                    ang = 225;
-	                }
-	            }
-	            var knockX = lengthdir_x(knockBackSpeed,ang),
-	                knockY = lengthdir_y(knockBackSpeed,ang);
-	            scr_DamagePlayer(damage,knockBack,knockX,knockY,damageImmuneTime);
-	        }
+	        var ang = 45;
+			if(player.bbox_bottom > bbox_bottom)
+			{
+				ang = 315;
+			}
+			if(player.x < x)
+			{
+				ang = 135;
+				if(player.bbox_bottom > bbox_bottom)
+				{
+					ang = 225;
+				}
+			}
+			var knockX = lengthdir_x(knockBackSpeed,ang),
+				knockY = lengthdir_y(knockBackSpeed,ang);
+			player.StrikePlayer(damage,knockBack,knockX,knockY,damageInvFrames,ignorePlayerImmunity);
 	    }
 	}
 }
@@ -160,7 +156,7 @@ function DmgCollide(posX,posY,object,isProjectile)
 	}
 	return false;
 }
-function StrikeNPC(damage, lifeEnd = 0, dethType = -1)
+function StrikeNPC(damage, dmgType, dmgSubType, lifeEnd = 0, dethType = -1)
 {
 	if(instance_exists(realLife))
 	{
@@ -198,7 +194,7 @@ function StrikeNPC(damage, lifeEnd = 0, dethType = -1)
 	dmgFlash = 8;
 	justHit = true;
 
-	if(hurtSound != noone)
+	if(hurtSound != noone && (dmgType != DmgType.Explosive || !dmgSubType[4]))
 	{
 		audio_stop_sound(hurtSound);
 		audio_play_sound(hurtSound,0,false);

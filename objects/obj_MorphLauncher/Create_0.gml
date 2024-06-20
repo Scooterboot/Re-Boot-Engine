@@ -3,7 +3,7 @@
 image_speed = 0;
 image_index = 0;
 
-back = instance_create_layer(x,y,"NPCs",obj_MorphLauncher_Back);
+back = instance_create_layer(x,y,"NPCs_bg",obj_MorphLauncher_Back);
 
 state = 0;
 

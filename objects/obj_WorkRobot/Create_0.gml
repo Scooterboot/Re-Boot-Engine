@@ -1,9 +1,9 @@
 /// @description 
 event_inherited();
 
-life = 10;
-lifeMax = 10;
-damage = 0;//5;
+life = 800;
+lifeMax = 800;
+damage = 0;
 
 dmgMult[DmgType.Beam][0] = 0; // all
 dmgMult[DmgType.Charge][0] = 0; // all
@@ -13,6 +13,13 @@ dmgMult[DmgType.Misc][3] = 0; // screw attack
 dmgMult[DmgType.Misc][5] = 0; // boost ball
 
 freezeImmune = true;
+
+dropChance[0] = 2; // nothing
+dropChance[1] = 32; // energy
+dropChance[2] = 32; // large energy
+dropChance[3] = 32; // missile
+dropChance[4] = 2; // super missile
+dropChance[5] = 2; // power bomb
 
 mSpeed = 0.2;
 

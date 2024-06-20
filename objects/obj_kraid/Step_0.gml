@@ -15,6 +15,15 @@ else
 	exit;
 }
 
+if(haltArmMove > 0)
+{
+	armAnimSpeed = max(armAnimSpeed-0.0025,0);
+}
+else
+{
+	armAnimSpeed = min(armAnimSpeed+0.0015,0.1);
+}
+
 #region Spawn Anim
 if(phase == 0) // spawn anim
 {
@@ -57,7 +66,7 @@ if(phase == 0) // spawn anim
 			enviroHandler.counter[1] = p1Height*2;
 		}
 		
-		ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
+		ArmIdleFrame = scr_wrap(ArmIdleFrame + armAnimSpeed, 0, 16);
 		
 		if(ai[0] < p1Height)
 		{
@@ -78,7 +87,7 @@ if(phase == 1) // first phase
 {
 	if(ai[0] == 0) // idle
 	{
-		ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
+		ArmIdleFrame = scr_wrap(ArmIdleFrame + armAnimSpeed, 0, 16);
 		
 		ai[1]++;
 		if(ai[1] > 240)
@@ -143,7 +152,7 @@ if(phase == 1) // first phase
 	}
 	if(ai[0] == 2)
 	{
-		ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
+		ArmIdleFrame = scr_wrap(ArmIdleFrame + armAnimSpeed, 0, 16);
 		
 		mouthCounter = -1;
 		if(ai[2] == 0)
@@ -158,6 +167,7 @@ if(phase == 1) // first phase
 			var headX = HeadBone.position.X + 10*dir,
 				headY = HeadBone.position.Y + 2;
 			var rock = instance_create_depth(headX,headY,depth+1,obj_Kraid_Spit);
+			rock.damage = spitDamage;
 			rock.velX = random_range(3.5,4)*dir;
 			rock.velY = random_range(-1.5,-1);
 		}
@@ -195,7 +205,7 @@ else
 #region Phase 2 Transition
 if(phase == 2) // phase transition
 {
-	ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
+	ArmIdleFrame = scr_wrap(ArmIdleFrame + armAnimSpeed, 0, 16);
 	
 	if(ai[1] == 0)
 	{
@@ -291,7 +301,10 @@ if(phase == 3) // second phase
 		ai[2] = scr_wrap(ai[2]+1,0,3);
 	}
 	
-	ai[3]++;
+	if(haltArmMove <= 0)
+	{
+		ai[3]++;
+	}
 	if(ai[3] > 150)
 	{
 		if(ArmFlingFrame < 8)
@@ -341,7 +354,7 @@ if(phase == 3) // second phase
 	}
 	else
 	{
-		ArmIdleFrame = scr_wrap(ArmIdleFrame + 0.1, 0, 16);
+		ArmIdleFrame = scr_wrap(ArmIdleFrame + armAnimSpeed, 0, 16);
 	}
 }
 #endregion
@@ -449,6 +462,8 @@ camPosY = HeadBone.position.Y;
 
 x = BodyBone.position.X;
 y = BodyBone.position.Y;
+
+haltArmMove = max(haltArmMove-1,0);
 
 if(mouthCounter >= 0)
 {

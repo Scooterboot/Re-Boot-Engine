@@ -4,7 +4,7 @@ if(global.gamePaused)
 	exit;
 }
 
-frozenImmuneTime = max(frozenImmuneTime-1,0);
+frozenInvFrames = max(frozenInvFrames-1,0);
 frozen = max(frozen - 1, 0);
 
 

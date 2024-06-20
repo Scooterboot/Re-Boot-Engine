@@ -50,7 +50,7 @@ else
 	gravGlowAlpha = max(gravGlowAlpha - 0.05*(!global.gamePaused),0);
 	gravGlowNum = 10;
 }
-var hurtflag = (dmgFlash <= 0 && immuneTime > 0 && (immuneTime&1) && !global.roomTrans);
+var hurtflag = (dmgFlash <= 0 && invFrames > 0 && (invFrames&1) && !global.roomTrans);
 if(gravGlowAlpha > 0 && !hurtflag)
 {
 	var col = c_fuchsia,

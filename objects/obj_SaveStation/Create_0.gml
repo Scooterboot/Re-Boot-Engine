@@ -2,7 +2,7 @@
 
 image_speed = 0;
 
-back = instance_create_layer(x,y,"NPCs",obj_SaveStation_Back);
+back = instance_create_layer(x,y,"NPCs_bg",obj_SaveStation_Back);
 
 beginSave = 0;
 saving = 0;

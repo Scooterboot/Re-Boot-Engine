@@ -4,10 +4,10 @@ snd = noone;
 respawnTime = 0;
 asset_remove_tags(object_get_name(object_index),"ISolid",asset_object);
 
-damage = 15;
+damage = 16;
 knockBack = 10;//5;
 knockBackSpeed = 5;//7;
-damageImmuneTime = 60;
+damageInvFrames = 60;
 
 frame = 0;
 frameCounter = 0;

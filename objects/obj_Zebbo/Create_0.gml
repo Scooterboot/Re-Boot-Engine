@@ -6,6 +6,13 @@ lifeMax = 30;
 damage = 20;
 dmgMult[DmgType.Misc][1] = 1; // grapple beam
 
+dropChance[0] = 0; // nothing
+dropChance[1] = 0; // energy
+dropChance[2] = 56; // large energy
+dropChance[3] = 4; // missile
+dropChance[4] = 40; // super missile
+dropChance[5] = 2; // power bomb
+
 image_speed = 0;
 frame = 0;
 frameCounter = 0;

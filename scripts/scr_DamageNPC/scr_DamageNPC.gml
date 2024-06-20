@@ -1,5 +1,5 @@
-///scr_DamageNPC(x,y,damage,dmgType,freezeType,deathType,immuneTime)
-function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType,immuneTime)
+///scr_DamageNPC(x,y,damage,dmgType,freezeType,deathType,npcInvFrames)
+function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType,_invFrames)
 {
 	///@description scr_DamageNPC
 	///@param x
@@ -9,12 +9,12 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 	///@param damageSubType
 	///@param freezeType
 	///@param deathType
-	///@param npcImmuneTime
+	///@param npcInvFrames
 	
 	var isProjectile = object_is_ancestor(object_index,obj_Projectile);
 	if(isProjectile)
 	{
-		array_resize(npcImmuneTime,instance_number(obj_NPC));
+		array_resize(npcInvFrames,instance_number(obj_NPC));
 	}
 
 	var freezeMax = 500;
@@ -82,7 +82,7 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
                 
 	    if(dmg > 0)
 	    {
-	        if(!isProjectile || (npcImmuneTime[i] <= 0))// && impacted <= 0))
+	        if(!isProjectile || (npcInvFrames[i] <= 0))// && impacted <= 0))
 	        {
 	            var lifeEnd = 0;
 	            if(!npc.freezeImmune && ((freezeType == 1 && npc.life <= (dmg*2)) || freezeType == 2))
@@ -105,14 +105,14 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 						}
 	                }
 	            }
-	            if(npc.frozenImmuneTime <= 0)
+	            if(npc.frozenInvFrames <= 0)
 	            {
 	                if(!npc.freezeImmune && freezeType > 0 && npc.life <= (dmg*2))
 	                {
-	                    npc.frozenImmuneTime = immuneTime;
+	                    npc.frozenInvFrames = _invFrames;
 	                }
 	                
-					npc.StrikeNPC(dmg, lifeEnd, deathType);
+					npc.StrikeNPC(dmg, dmgType, dmgSubType, lifeEnd, deathType);
 								
 					npc.OnDamageTaken(dmg,id,isProjectile);
 					if(isProjectile)
@@ -192,9 +192,9 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 
 	    if(isProjectile && (dmg > 0 || !npc.dmgAbsorb))
 	    {
-	        if(dmg > 0 && npcImmuneTime[i] <= 0)
+	        if(dmg > 0 && npcInvFrames[i] <= 0)
 	        {
-	            npcImmuneTime[i] = immuneTime;
+	            npcInvFrames[i] = _invFrames;
 				
 				for(var j = 0; j < instance_number(obj_NPC); j++)
 				{
@@ -206,11 +206,11 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 					
 					if(rlnpc.realLife == npc)
 					{
-						npcImmuneTime[j] = immuneTime;
+						npcInvFrames[j] = _invFrames;
 					}
 					else if(instance_exists(npc.realLife) && rlnpc == npc.realLife)
 					{
-						npcImmuneTime[j] = immuneTime;
+						npcInvFrames[j] = _invFrames;
 						break;
 					}
 				}

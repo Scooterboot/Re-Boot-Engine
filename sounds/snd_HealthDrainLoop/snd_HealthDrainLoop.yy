@@ -1,6 +1,6 @@
 {
   "$GMSound":"",
-  "%Name":"snd_HeatDamageLoop",
+  "%Name":"snd_HealthDrainLoop",
   "audioGroupId":{
     "name":"audio_sound",
     "path":"audiogroups/audio_sound",
@@ -10,7 +10,7 @@
   "compression":0,
   "conversionMode":0,
   "duration":0.300249,
-  "name":"snd_HeatDamageLoop",
+  "name":"snd_HealthDrainLoop",
   "parent":{
     "name":"Player",
     "path":"folders/Sounds/Player.yy",
@@ -19,7 +19,7 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"snd_HeatDamageLoop",
+  "soundFile":"snd_HealthDrainLoop",
   "type":1,
   "volume":1.0,
 }

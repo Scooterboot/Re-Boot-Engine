@@ -27,10 +27,17 @@ dmgMult[DmgType.Misc][2] = 0; // speed booster / shine spark
 dmgMult[DmgType.Misc][3] = 0; // screw attack
 dmgMult[DmgType.Misc][5] = 0; // boost ball
 
+dropChance[0] = 0; // nothing
+dropChance[1] = 20; // energy
+dropChance[2] = 20; // large energy
+dropChance[3] = 20; // missile
+dropChance[4] = 20; // super missile
+dropChance[5] = 20; // power bomb
+
 //dmgAbsorb = true;
 
 damage = 20;
-spitDamage = 10;
+spitDamage = 5;
 spikeDamage = 10;
 fingerDamage = 10;
 
@@ -56,6 +63,10 @@ bellySpikePos[2] = new Vector2(16,-99);
 
 fingerFlung = false;
 
+haltArmMove = 0;
+haltArmMax = 90;
+armAnimSpeed = 0.1;
+
 function ModifyDamageTaken(damage,object,isProjectile)
 {
 	//dmgAbsorb = false;
@@ -79,6 +90,10 @@ function OnDamageAbsorbed(damage, object, isProjectile)
 		mouthCounter = 0;
 		//eyeGlowNum = 1;
 		//blinkCounter = blinkCounterMax;
+		if(isProjectile && object.damageType = DmgType.Charge)
+		{
+			haltArmMove = haltArmMax;
+		}
 	}
 }
 

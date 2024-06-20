@@ -13,6 +13,13 @@ freezeImmune = true;
 dmgMult[DmgType.Explosive][1] = 1;//2; // missile
 dmgMult[DmgType.Explosive][2] = 1;//2; // super missile
 
+dropChance[0] = 0; // nothing
+dropChance[1] = 10; // energy
+dropChance[2] = 30; // large energy
+dropChance[3] = 20; // missile
+dropChance[4] = 40; // super missile
+dropChance[5] = 2; // power bomb
+
 dir = image_xscale;
 image_xscale = 1;
 image_yscale = 1;

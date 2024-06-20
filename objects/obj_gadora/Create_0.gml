@@ -21,6 +21,13 @@ dmgMult[DmgType.Misc][2] = 0; // speed booster / shine spark
 dmgMult[DmgType.Misc][3] = 0; // screw attack
 dmgMult[DmgType.Misc][5] = 0; // boost ball
 
+dropChance[0] = 0; // nothing
+dropChance[1] = 2; // energy
+dropChance[2] = 30; // large energy
+dropChance[3] = 20; // missile
+dropChance[4] = 30; // super missile
+dropChance[5] = 20; // power bomb
+
 lhc_inherit_interface("ISolid");
 
 eyeState = 0; // 0 = closed, 1 = open, 2 = attack
@@ -49,4 +56,12 @@ function ModifyDamageTaken(damage,object,isProjectile)
 function DmgColPlayer()
 {
 	return collision_rectangle(bbox_left-2,bbox_top-2,bbox_right+2,bbox_bottom+2,obj_Player,false,true);
+}
+
+function NPCDropItem(_x,_y)
+{
+	for(var i = 0; i < 3; i++)
+	{
+		_NPCDropItem(_x+irandom_range(-4,4),_y+irandom_range(-4,4));
+	}
 }

@@ -12,7 +12,7 @@ if((scr_WithinCamRange() || ignoreCamera) && exploProj != noone)
 	}
     var explo = instance_create_layer(x,y,"Projectiles_fg",exploProj);
     explo.damage = damage * exploDmgMult;
-	explo.npcImmuneTime = npcImmuneTime;
+	explo.npcInvFrames = npcInvFrames;
 	
 	var pblockList = ds_list_create();
 	var pbnum = instance_place_list(x,y,obj_PushBlock,pblockList,true);

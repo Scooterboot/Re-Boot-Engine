@@ -13,26 +13,22 @@ for(var i = 0; i < 360; i+= 90)
 }
 if(instance_exists(player))
 {
-	if (player.immuneTime <= 0)// && !player.immune)
-    {
-        //var ang = point_direction(x,y,obj_Samus.x,obj_Samus.y);
-        var ang = 45;
-        if(player.y > bbox_top+(bbox_bottom-bbox_top)/2)
-        {
-            ang = 315;
-        }
-        if(player.dir == 1)
-        {
-            ang = 135;
-            if(player.y > bbox_top+(bbox_bottom-bbox_top)/2)
-            {
-                ang = 225;
-            }
-        }
-        var knockX = lengthdir_x(knockBackSpeed,ang),
-            knockY = lengthdir_y(knockBackSpeed,ang);
-        scr_DamagePlayer(damage,knockBack,knockX,knockY,damageImmuneTime);
-    }
+	var ang = 45;
+	if(player.y > bbox_top+(bbox_bottom-bbox_top)/2)
+	{
+		ang = 315;
+	}
+	if(player.dir == 1)
+	{
+		ang = 135;
+		if(player.y > bbox_top+(bbox_bottom-bbox_top)/2)
+		{
+			ang = 225;
+		}
+	}
+	var knockX = lengthdir_x(knockBackSpeed,ang),
+		knockY = lengthdir_y(knockBackSpeed,ang);
+	player.StrikePlayer(damage,knockBack,knockX,knockY,damageInvFrames,true);
 }
 
 frameCounter++;

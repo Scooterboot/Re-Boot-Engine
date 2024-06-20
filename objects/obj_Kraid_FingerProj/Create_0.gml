@@ -6,6 +6,13 @@ lifeMax = 5;
 damage = 10;
 freezeImmune = true;
 
+dropChance[0] = 0; // nothing
+dropChance[1] = 4; // energy
+dropChance[2] = 14; // large energy
+dropChance[3] = 80; // missile
+dropChance[4] = 4; // super missile
+dropChance[5] = 0; // power bomb
+
 function PauseAI()
 {
 	return (global.gamePaused || frozen > 0 || dmgFlash > 0);

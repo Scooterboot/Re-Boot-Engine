@@ -247,7 +247,7 @@ climbY = [0,6,6,6,5,5,4,0,0,0,0,0,0,0,0,0,0,0,0];
 
 quickClimbTarget = 0;
 
-immuneTime = 0;
+invFrames = 0;
 //96 default, 60 spikes
 hurtTime = 0; //45
 hurtSpeedX = 0;
@@ -812,6 +812,8 @@ somerUWSndCounter = 0;
 speedSoundPlayed = false;
 
 screwSoundPlayed = false;
+
+heatDmgSnd = noone;
 
 #endregion
 #region Item Vars
@@ -2499,83 +2501,129 @@ function Set_Beams()
 		plasmaDelay = 3;
 	if(beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1))
 	{
-		// Ice
 		beamDmg = 30;
 		beamDelay += iceDelay;
 		beamChargeDelay += iceDelay;
-		if(beam[Beam.Wave])
-		{
-			// Ice Wave
-			beamDmg = 60;
-			beamDelay += waveDelay;
-			beamChargeDelay += waveDelay;
-			if(beam[Beam.Plasma])
-			{
-				// Ice Wave Plasma
-				beamDmg = 300;
-				beamDelay += plasmaDelay;
-				beamChargeDelay += plasmaDelay;
-			}
-		}
-		else if(beam[Beam.Plasma])
-		{
-			// Ice Plasma
-			beamDmg = 200;
-			beamDelay += plasmaDelay;
-			beamChargeDelay += plasmaDelay;
-		}
 	}
-	else if(beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2))
+	if(beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2))
 	{
-		// Wave
 		beamDmg = 50;
 		beamDelay += waveDelay;
 		beamChargeDelay += waveDelay;
-		if(beam[Beam.Plasma])
-		{
-			// Wave Plasma
-			beamDmg = 250;
-			beamDelay += plasmaDelay;
-			beamChargeDelay += plasmaDelay;
-		}
 	}
-	else if(beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4))
+	if(beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3))
 	{
-		// Plasma
+		beamDmg = 40;
+		beamDelay += spazerDelay;
+		beamChargeDelay += spazerDelay;
+	}
+	if(beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4))
+	{
 		beamDmg = 150;
 		beamDelay += plasmaDelay;
 		beamChargeDelay += plasmaDelay;
 	}
-	if(beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3))
+	
+	// ice, wave, spazer
+	if(beam[Beam.Ice] && beam[Beam.Wave])
 	{
-		// Spazer
-		beamDmg *= (2/3);
-		beamDelay += spazerDelay;
-		beamChargeDelay += spazerDelay;
+		beamDmg = 60;
+	}
+	if(beam[Beam.Ice] && beam[Beam.Spazer])
+	{
+		beamDmg = 60;
+	}
+	if(beam[Beam.Wave] && beam[Beam.Spazer])
+	{
+		beamDmg = 70;
+	}
+	if(beam[Beam.Ice] && beam[Beam.Wave] && beam[Beam.Spazer])
+	{
+		beamDmg = 100;
+	}
+	
+	// ice, wave, plasma
+	if(beam[Beam.Ice] && beam[Beam.Plasma])
+	{
+		beamDmg = 200;
+	}
+	if(beam[Beam.Wave] && beam[Beam.Plasma])
+	{
+		beamDmg = 250;
+	}
+	if(beam[Beam.Ice] && beam[Beam.Wave] && beam[Beam.Plasma])
+	{
+		beamDmg = 300;
+	}
+	
+	// ice, wave, spazer+plasma
+	if(beam[Beam.Ice] && beam[Beam.Spazer] && beam[Beam.Plasma])
+	{
+		beamDmg = 300;
+	}
+	if(beam[Beam.Wave] && beam[Beam.Spazer] && beam[Beam.Plasma])
+	{
+		beamDmg = 350;
+	}
+	if(beam[Beam.Ice] && beam[Beam.Wave] && beam[Beam.Spazer] && beam[Beam.Plasma])
+	{
+		beamDmg = 400;
 	}
 }
 #endregion
 
+#region StrikePlayer
+function StrikePlayer(damage,knockTime,knockSpeedX,knockSpeedY,iframes,ignoreImmunity = false)
+{
+	//var dmg = scr_round(damage * (1-(0.5*suit[0])) * (1-(0.5*suit[1]))),
+	var dmg = scr_round(damage * damageReduct);
+    
+	if(!global.gamePaused && !godmode && invFrames <= 0 && (!immune || ignoreImmunity))
+	{
+		energy = max(energy - dmg,0);
+		if(energy <= 0)
+		{
+			state = State.Death;
+		}
+		else
+		{
+			if(knockTime > 0 && dir != 0 && state != State.Hurt && state != State.Grapple)
+			{
+				lastState = state;
+				state = State.Hurt;
+				hurtTime = knockTime;
+				hurtSpeedX = knockSpeedX;
+				hurtSpeedY = knockSpeedY;
+				jump = 0;
+				jumping = false;
+			}
+			
+			if(!audio_is_playing(snd_Hurt))
+			{
+				audio_play_sound(snd_Hurt,0,false);
+			}
+			dmgFlash = 2;
+			
+			if(iframes > 0)
+			{
+				invFrames = iframes;
+			}
+		}
+	}
+}
+#endregion
 #region ConstantDamage
 function ConstantDamage(damage,delay)
 {
 	if(!godmode)
 	{
-		// heat 0.25 dmg per frame
-		// lava 0.5 dmg per frame
-		// acid 1.5 dmg per frame
-		
 		if(constantDamageDelay <= 0)
 		{
 			if(damage >= energy)
 			{
-				energy = max(energy - damage, 0);
 				state = State.Death;
 			}
-			else
-			{
-				energy = max(energy - damage, 0);
-			}
+			energy = max(energy - damage, 0);
 			constantDamageDelay = delay;
 		}
 		constantDamageDelay = max(constantDamageDelay - 1,0);
@@ -3391,7 +3439,7 @@ function PaletteSurface()
 		{
 			DrawPalSprite(palSprite2,PlayerPal2.White,0.8);
 		}
-		else if(immuneTime > 0 && (immuneTime&1) && !global.roomTrans)
+		else if(invFrames > 0 && (invFrames&1) && !global.roomTrans)
 		{
 			DrawPalSprite(palSprite2,PlayerPal2.Black,1);
 		}

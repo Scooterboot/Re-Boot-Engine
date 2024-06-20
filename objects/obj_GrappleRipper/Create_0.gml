@@ -1,9 +1,9 @@
 /// @description Initialize
 event_inherited();
 
-life = 10;
-lifeMax = 10;
-damage = 5;
+life = 200;
+lifeMax = 200;
+damage = 10;
 
 dmgMult[DmgType.Beam][0] = 0; // all
 dmgMult[DmgType.Charge][0] = 0; // all
@@ -15,6 +15,13 @@ dmgMult[DmgType.Explosive][4] = 1; // power bomb
 //dmgMult[DmgType.Misc][2] = 0; // speed booster / shine spark
 //dmgMult[DmgType.Misc][3] = 0; // screw attack
 dmgMult[DmgType.Misc][5] = 0; // boost ball
+
+dropChance[0] = 0; // nothing
+dropChance[1] = 0; // energy
+dropChance[2] = 1; // large energy
+dropChance[3] = 0; // missile
+dropChance[4] = 254; // super missile
+dropChance[5] = 0; // power bomb
 
 mSpeed2 = 1;
 mSpeed = mSpeed2;

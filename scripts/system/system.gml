@@ -1,16 +1,6 @@
 
 #region Vector2
 
-// for the love of god, why are vectors not built in?
-// why do i have to define this shit myself?
-// if vectors were built in, i could probably just add them via '+' or whatevs
-// but no. i have to create math methods for everything.
-// if this turns out terribly, i'm going back to separate x and y vars, despite how attrocious that is.
-
-
-// TO DO: Implement vectors into collision code, if they turn out right
-
-
 function Vector2(_x = 0, _y = 0) constructor
 {
 	X = _x;

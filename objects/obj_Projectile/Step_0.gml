@@ -240,7 +240,7 @@ if(aiStyle == 1 || aiStyle == 2)
 #region Damage to enemies & tiles
 
 var deathType = npcDeathType,
-    immuneTime = 10;//4;
+    invFrames = 10;//4;
 
 if(impacted > 0)
 {
@@ -292,7 +292,7 @@ if(projLength > 0)
 			}
 			else
 			{
-				scr_DamageNPC(xw,yw,damage,damageType,damageSubType,freezeType,deathType,immuneTime);
+				scr_DamageNPC(xw,yw,damage,damageType,damageSubType,freezeType,deathType,invFrames);
 			}
 		}
 	}
@@ -310,37 +310,33 @@ if(dmgDelay <= 0)
 			}
 			if(instance_exists(player))
 	        {
-	            if (player.immuneTime <= 0 && !player.immune)
-	            {
-	                //var ang = point_direction(x,y,obj_Player.x,obj_Player.y);
-	                var ang = 45;
-	                if(player.y > y)
-	                {
-	                    ang = 315;
-	                }
-	                if(player.x < x)
-	                {
-	                    ang = 135;
-	                    if(player.y > y)
-	                    {
-	                        ang = 225;
-	                    }
-	                }
-	                var knockX = lengthdir_x(knockBackSpeed,ang),
-	                    knockY = lengthdir_y(knockBackSpeed,ang);
-	                scr_DamagePlayer(damage,knockBack,knockX,knockY,damageImmuneTime);
-	                if(!multiHit)
-	                {
-	                    //instance_destroy();
-						impacted = 1;
-						damage = 0;
-	                }
-	            }
+				var ang = 45;
+				if(player.y > y)
+				{
+					ang = 315;
+				}
+				if(player.x < x)
+				{
+					ang = 135;
+					if(player.y > y)
+					{
+						ang = 225;
+					}
+				}
+				var knockX = lengthdir_x(knockBackSpeed,ang),
+					knockY = lengthdir_y(knockBackSpeed,ang);
+				player.StrikePlayer(damage,knockBack,knockX,knockY,damageInvFrames)
+				if(!multiHit)
+				{
+					//instance_destroy();
+					impacted = 1;
+					damage = 0;
+				}
 	        }
 		}
 		else
 		{
-			scr_DamageNPC(x,y,damage,damageType,damageSubType,freezeType,deathType,immuneTime);
+			scr_DamageNPC(x,y,damage,damageType,damageSubType,freezeType,deathType,invFrames);
 		}
 	}
 }
@@ -349,9 +345,9 @@ else
 	dmgDelay--;
 }
 
-for(var i = 0; i < array_length(npcImmuneTime); i++)
+for(var i = 0; i < array_length(npcInvFrames); i++)
 {
-	npcImmuneTime[i]--;
+	npcInvFrames[i] = max(npcInvFrames[i]-1,0);
 }
 #endregion
 

@@ -10,7 +10,7 @@ if(coolDown <= 0)
 	{
 		if(npcType[i] != noone)
 		{
-			var _npc = instance_create_layer(x,y,"NPCs",npcType[i]);
+			var _npc = instance_create_layer(x,y,spawnLayer,npcType[i]);
 			_npc.spawnerObj = id;
 			ModifyNPC(_npc,i);
 			spawnedNPC[i] = _npc;

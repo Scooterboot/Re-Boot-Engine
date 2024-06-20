@@ -2518,7 +2518,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				mbTrailColor_End = merge_color(mbTrailColor_End, c_olive, boostBallFX);
 			}
 		
-			if(immuneTime > 0 && !(immuneTime&1) && !global.roomTrans)
+			if(invFrames > 0 && !(invFrames&1) && !global.roomTrans)
 			{
 				mbTrailColor_Start = c_black;
 				mbTrailColor_End = c_black;
@@ -2569,7 +2569,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		shootPosY = y+sprtOffsetY+runYOffset+shotOffsetY;
 	
 		var shotIndex = beamShot,
-			damage = beamDmg,
+			damage = beamDmg / beamAmt,
 			sSpeed = shootSpeed,
 			delay = beamDelay,
 			amount = beamAmt,
@@ -2741,7 +2741,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				if(itemSelected == 1 && (itemHighlighted[1] == 2 || global.HUD > 0) && powerBombStat > 0 && item[Item.PBomb])
 				{
 					var pBomb = instance_create_layer(x,y+11,"Projectiles_fg",obj_PowerBomb);
-					pBomb.damage = 20;
+					pBomb.damage = 40;
 					bombDelayTime = 30;
 					powerBombStat--;
 					cFlashStartCounter++;
@@ -2868,7 +2868,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 								flareDir = angle_difference(shootDir,180);
 							}
 							var flare = instance_create_layer(shootPosX+lengthdir_x(5,shootDir),shootPosY+lengthdir_y(5,shootDir),layer_get_id("Projectiles_fg"),obj_ChargeFlare);
-							flare.damage = (damage*chargeMult*beamChargeAmt);// / 2;
+							flare.damage = (beamDmg*chargeMult);
 							flare.sprite_index = beamFlare;
 							flare.damageSubType[2] = (beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1));
 							flare.damageSubType[3] = (beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2));
@@ -2884,8 +2884,10 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 								flare.freezeKill = true;
 							}
 							
+							damage = (beamDmg*chargeMult) / beamChargeAmt;
+							Shoot(beamCharge,damage,sSpeed,beamChargeDelay,beamChargeAmt,beamChargeSound,beamIsWave,beamWaveStyleOffset);
+							
 							chargeReleaseFlash = 4;
-							Shoot(beamCharge,damage*chargeMult,sSpeed,beamChargeDelay,beamChargeAmt,beamChargeSound,beamIsWave,beamWaveStyleOffset);
 							recoil = true;
 						}
 						else if(statCharge >= 20)
@@ -3001,11 +3003,11 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		}
 		else if(isChargeSomersaulting)
 		{
-		    var psDmg = beamDmg*chargeMult;
-		    if(beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3))
+		    var psDmg = beamDmg*chargeMult * 2;
+		    /*if(beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3))
 		    {
 		        psDmg *= 2;
-		    }
+		    }*/
 			var dmgST;
 			dmgST[0] = true;
 			dmgST[1] = true;
@@ -3038,24 +3040,24 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		{
 			ConstantDamage(1, 4 + (2 * suit[Suit.Gravity]));
 			
-			if(!audio_is_playing(snd_HeatDamageLoop))
+			if(!audio_is_playing(snd_HealthDrainLoop) && !audio_is_playing(heatDmgSnd))
 	        {
-	            var snd = audio_play_sound(snd_HeatDamageLoop,0,true);
-	            audio_sound_gain(snd,0.7,0);
+	            heatDmgSnd = audio_play_sound(snd_HealthDrainLoop,0,true);
+				audio_sound_gain(heatDmgSnd,0.7,0);
 	        }
 			
 			palFlag = true;
 		}
 		else
 		{
-			audio_stop_sound(snd_HeatDamageLoop);
+			audio_stop_sound(heatDmgSnd);
 		}
 		
 		var sndFlag2 = false;
 		var sndFlag3 = false;
 		if(liquid && liquid.liquidType == LiquidType.Lava && !suit[Suit.Gravity])
 	    {
-	        ConstantDamage(1, 2 + (1 * (suit[Suit.Varia])));
+	        ConstantDamage(1, 2 + (2 * (suit[Suit.Varia])));
 			
 	        palFlag = true;
 	        sndFlag2 = true;
@@ -3066,7 +3068,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	    }
 		if(liquid && liquid.liquidType == LiquidType.Acid)
 		{
-			ConstantDamage(1, 2 + (1 * (suit[Suit.Varia] + suit[Suit.Gravity])));
+			ConstantDamage(3, 2 + (2 * (suit[Suit.Varia] + suit[Suit.Gravity])));
 			
 			palFlag = true;
 			sndFlag2 = true;
@@ -3141,7 +3143,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	
 		outOfLiquid = (liquidState <= 0);
 	
-		immuneTime = max(immuneTime - 1, 0);
+		invFrames = max(invFrames - 1, 0);
 	
 		grappleOldDist = grappleDist;
 		grapWJCounter = max(grapWJCounter-1,0);
@@ -3177,7 +3179,7 @@ else
 
 if(sndFlag)
 {
-	audio_stop_sound(snd_HeatDamageLoop);
+	audio_stop_sound(heatDmgSnd);
     audio_stop_sound(snd_LavaDamageLoop);
 	audio_stop_sound(snd_LiquidTopDmgLoop);
 	
