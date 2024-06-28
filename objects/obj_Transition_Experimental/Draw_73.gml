@@ -11,7 +11,7 @@ if(room != goal)
 		var appSurfScale = 1;
 		if(global.upscale == 7)
 		{
-			appSurfScale = 1/obj_Main.screenScale;
+			appSurfScale = 1/obj_Display.screenScale;
 		}
 		draw_surface_ext(application_surface,0,0,appSurfScale,appSurfScale,0,c_white,1);
 	    surface_reset_target();

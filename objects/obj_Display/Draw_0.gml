@@ -256,9 +256,9 @@ if(debug == 1)
 			yy = camera_get_view_y(view_camera[0]),
 			marginX = 10,
 			marginY = 10;
-        draw_text(xx+marginX,yy+30+marginY,"state: "+obj_Main.stateText[state]);
-        draw_text(xx+marginX,yy+30+marginY*2,"stateFrame: "+obj_Main.stateText[stateFrame]);
-        draw_text(xx+marginX,yy+30+marginY*3,"lastState: "+obj_Main.stateText[lastState]);
+        draw_text(xx+marginX,yy+30+marginY,"state: "+obj_Display.stateText[state]);
+        draw_text(xx+marginX,yy+30+marginY*2,"stateFrame: "+obj_Display.stateText[stateFrame]);
+        draw_text(xx+marginX,yy+30+marginY*3,"lastState: "+obj_Display.stateText[lastState]);
         draw_text(xx+marginX,yy+30+marginY*4,"vel (x.y): "+string(velX)+" x "+string(velY));
         draw_text(xx+marginX,yy+30+marginY*5,"fVel (x.y): "+string(fVelX)+" x "+string(fVelY));
         draw_text(xx+marginX,yy+30+marginY*6,"pos diff (x.y): "+string(position.X-oldPosition.X)+" x "+string(position.Y-oldPosition.Y));
@@ -292,9 +292,9 @@ if(debug == 1)
         //draw_text(xx+marginX,yy+30+marginY*10,"cam centerX: "+string(obj_Camera.x+global.resWidth/2));
         //draw_text(xx+marginX,yy+30+marginY*11,"cam centerY: "+string(obj_Camera.y+global.resHeight/2));
 		
-        draw_text(xx+marginX,yy+30+marginY*14,"colEdge: "+obj_Main.edgeText[colEdge]);
-        draw_text(xx+marginX,yy+30+marginY*15,"spiderEdge: "+string(obj_Main.edgeText[spiderEdge]));
-        draw_text(xx+marginX,yy+30+marginY*16,"prevSpiderEdge: "+string(obj_Main.edgeText[prevSpiderEdge]));
+        draw_text(xx+marginX,yy+30+marginY*14,"colEdge: "+obj_Display.edgeText[colEdge]);
+        draw_text(xx+marginX,yy+30+marginY*15,"spiderEdge: "+string(obj_Display.edgeText[spiderEdge]));
+        draw_text(xx+marginX,yy+30+marginY*16,"prevSpiderEdge: "+string(obj_Display.edgeText[prevSpiderEdge]));
         draw_text(xx+marginX,yy+30+marginY*17,"spiderSpeed: "+string(spiderSpeed));
 		
 		draw_text(xx+marginX,yy+30+marginY*19,"speedBoostWJCounter: "+string(speedBoostWJCounter));

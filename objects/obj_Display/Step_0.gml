@@ -1,8 +1,5 @@
 /// @description Main
 
-global.currentItemPercent = (ds_list_size(global.collectedItemList) / global.totalItems) * 100;
-
-
 if(global.widescreenEnabled)
 {
 	global.resWidth = global.wideResWidth;
@@ -81,15 +78,6 @@ if(room == rm_MainMenu)
 		instance_create_depth(0,0,0,obj_MainMenu);
 	}
 }
-else if(!global.gamePaused)
-{
-	global.currentPlayTime += (1 / game_get_speed(gamespeed_fps)) * (oldDelta / delta_time);
-	
-	/*if(keyboard_check(vk_shift))
-	{
-		global.currentPlayTime += 3600;
-	}*/
-}
 
 var gameSpeed = 60;
 if(debug > 0)
@@ -157,7 +145,5 @@ if(keyboard_check_pressed(vk_f12))
     screen_save_part("screenshot.png",global.screenX,global.screenY,global.resWidth*screenScale,global.resHeight*screenScale);
 }
 
-
-oldDelta = delta_time;
 
 hyperRainbowCycle = scr_wrap(hyperRainbowCycle+0.5,0,10);

@@ -54,7 +54,7 @@ for(var i = 0; i < 5; i++)
 		yscale = dist2;
 	}
 	
-	chameleon_set(sprt_HyperBeamPalette,obj_Main.hyperRainbowCycle,0,0,11);
+	chameleon_set(sprt_HyperBeamPalette,obj_Display.hyperRainbowCycle,0,0,11);
 	draw_sprite_ext(sprite_index,image_index,scr_round(xx),scr_round(yy),xscale,yscale,oldRot[i],c_white,alpha);
 	shader_reset();
 }
@@ -71,7 +71,7 @@ if(rFrame != 0)
 	yscale = dist;
 }
 
-chameleon_set(sprt_HyperBeamPalette,obj_Main.hyperRainbowCycle,0,0,11);
+chameleon_set(sprt_HyperBeamPalette,obj_Display.hyperRainbowCycle,0,0,11);
 draw_sprite_ext(sprite_index,image_index,scr_round(x),scr_round(y),xscale,yscale,angle,c_white,image_alpha);
 shader_reset();
 
@@ -90,7 +90,7 @@ if(fired < 4)
 	
 	with(obj_Player)
 	{
-		chameleon_set(sprt_HyperBeamPalette,obj_Main.hyperRainbowCycle,0,0,11);
+		chameleon_set(sprt_HyperBeamPalette,obj_Display.hyperRainbowCycle,0,0,11);
 		draw_sprite_ext(sSprt,hObj.firedFrame,scr_round(shootPosX),scr_round(shootPosY),1,1,0,c_white,1);
 		shader_reset();
 		

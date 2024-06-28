@@ -49,7 +49,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			var appSurfScale = 1;
 			if(global.upscale == 7)
 			{
-				appSurfScale = 1/obj_Main.screenScale;
+				appSurfScale = 1/obj_Display.screenScale;
 			}
 			surface_resize(pauseSurf,global.resWidth,global.resHeight);
 			surface_set_target(pauseSurf);
@@ -566,7 +566,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			draw_text(ww/2-110,30,tStr);
 			
 			draw_set_halign(fa_right);
-			var percent = global.currentItemPercent;
+			var percent = (ds_list_size(global.collectedItemList) / global.totalItems) * 100;
 			var pStr = string_format(percent,2,0)+"%";
 			pStr = string_replace_all(pStr," ","0");
 			draw_text(ww/2+118,30,"ITEMS: "+pStr);

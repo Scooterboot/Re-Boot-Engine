@@ -51,9 +51,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 	#endregion
 	
-	if(instance_exists(obj_Main))
+	if(instance_exists(obj_Display))
 	{
-		debug = (obj_Main.debug > 0);
+		debug = (obj_Display.debug > 0);
 	}
 	#region debug keys
 	if(debug)

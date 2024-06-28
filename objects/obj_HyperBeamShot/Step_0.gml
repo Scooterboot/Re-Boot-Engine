@@ -1,7 +1,7 @@
 /// @description 
 
-//particleType = scr_floor(obj_Main.hyperRainbowCycle/2);
-particleType = 7+scr_floor(obj_Main.hyperRainbowCycle);
+//particleType = scr_floor(obj_Display.hyperRainbowCycle/2);
+particleType = 7+scr_floor(obj_Display.hyperRainbowCycle);
 
 event_inherited();
 

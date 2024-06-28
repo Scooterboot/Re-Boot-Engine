@@ -1,9 +1,5 @@
 /// @description Initialize
 
-scr_MainInitialize();
-
-depth = -1;
-
 debug = 0;
 
 screenScale = 1;

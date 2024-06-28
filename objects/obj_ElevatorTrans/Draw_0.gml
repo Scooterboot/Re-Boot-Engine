@@ -7,7 +7,7 @@ if(surface_exists(transSurf))
 	var appSurfScale = 1;
 	if(global.upscale == 7)
 	{
-		appSurfScale = 1/obj_Main.screenScale;
+		appSurfScale = 1/obj_Display.screenScale;
 	}
 	draw_surface_ext(application_surface,0,0,appSurfScale,appSurfScale,0,c_white,1-alpha);
     surface_reset_target();

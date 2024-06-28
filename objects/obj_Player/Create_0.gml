@@ -6,7 +6,7 @@ image_index = 0;
 
 #region Gameplay Tweaks
 
-// enable/disable debug controls - synced with obj_Main's debug variable
+// enable/disable debug controls - synced with obj_Display's debug variable
 debug = false;
 // press 0 to refill health & ammo
 // press 9 to face toward screen / activate elevator pose
@@ -3394,7 +3394,7 @@ function PaletteSurface()
 		}
 		if(hyperPal > 0)
 		{
-			var hyperInd = PlayerPal2.HyperStart + obj_Main.hyperRainbowCycle;
+			var hyperInd = PlayerPal2.HyperStart + obj_Display.hyperRainbowCycle;
 			DrawPalSprite(palSprite2,scr_wrap(scr_floor(hyperInd), PlayerPal2.HyperStart, PlayerPal2.HyperEnd), hyperPal);
 			DrawPalSprite(palSprite2,scr_wrap(scr_ceil(hyperInd), PlayerPal2.HyperStart, PlayerPal2.HyperEnd), hyperPal*frac(hyperInd));
 		}
@@ -4099,7 +4099,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		
 		if(hyperFiredFrame >= 0)
 		{
-			pal_swap_set(sprt_HyperBeamPalette,1+obj_Main.hyperRainbowCycle,0,0,false);
+			pal_swap_set(sprt_HyperBeamPalette,1+obj_Display.hyperRainbowCycle,0,0,false);
 			draw_sprite_ext(sprt_HyperBeamStartParticle,hyperFiredFrame,scr_round(xx+sprtOffsetX+armOffsetX),scr_round(yy+sprtOffsetY+runYOffset+armOffsetY),image_xscale,image_yscale,0,c_white,alph);
 			shader_reset();
 		}*/
@@ -4112,7 +4112,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		
 		if(hyperFiredFrame <= 5)
 		{
-			pal_swap_set(sprt_HyperBeamPalette,1+obj_Main.hyperRainbowCycle,0,0,false);
+			pal_swap_set(sprt_HyperBeamPalette,1+obj_Display.hyperRainbowCycle,0,0,false);
 			draw_sprite_ext(sprt_HyperBeamStartParticle,hyperFiredFrame,scr_round(xx+sprtOffsetX+armOffsetX),scr_round(yy+sprtOffsetY+runYOffset+armOffsetY),image_xscale,image_yscale,0,c_white,alph);
 			shader_reset();
 		}

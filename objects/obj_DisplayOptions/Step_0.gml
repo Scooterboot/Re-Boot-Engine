@@ -13,7 +13,7 @@ if(room != rm_MainMenu && (global.roomTrans || !global.gamePaused || !obj_PauseM
 	menuClosing = true;
 }
 
-var resText = "("+string(global.resWidth*obj_Main.screenScale)+"x"+string(global.resHeight*obj_Main.screenScale)+")";
+var resText = "("+string(global.resWidth*obj_Display.screenScale)+"x"+string(global.resHeight*obj_Display.screenScale)+")";
 currentOptionName[1,0] = "STRETCH "+resText;
 currentOptionName[1,1] = string(global.screenScale)+"x "+resText;
 
@@ -96,7 +96,7 @@ if(screenFade >= 1 && !menuClosing)
 					clamp(camera_get_view_x(view_camera[0])+camMoveX,0,room_width-rWidth),
 					clamp(camera_get_view_y(view_camera[0]),0,room_height-global.resHeight));
 				}
-				var winMoveX = (global.wideResWidth*obj_Main.screenScale - global.ogResWidth*obj_Main.screenScale)/2;
+				var winMoveX = (global.wideResWidth*obj_Display.screenScale - global.ogResWidth*obj_Display.screenScale)/2;
 				if(global.widescreenEnabled)
 				{
 					winMoveX = -winMoveX;

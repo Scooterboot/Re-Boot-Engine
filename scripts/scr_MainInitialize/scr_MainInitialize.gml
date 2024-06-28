@@ -50,19 +50,20 @@ function scr_MainInitialize()
 	global.currentPlayFile = 0; //file that is selected and will be saved over during gameplay
 
 	global.currentPlayTime = 0;
-	global.currentItemPercent = 0;
+	//global.currentItemPercent = 0;
 
 	global.rmHeated = false;
 
 	randomize(); //randomize seed for various random numbers
 
+	instance_create_depth(0,0,-1,obj_Display);
+	instance_create_depth(0,0,0,obj_Audio);
+	instance_create_depth(0,0,0,obj_Control);
+	instance_create_depth(0,0,0,obj_Progression);
+	instance_create_depth(0,0,0,obj_Map);
+	instance_create_depth(0,0,0,obj_Particles);
 	instance_create_depth(mouse_x,mouse_y,-2,obj_Mouse);
 	instance_create_depth(0,0,0,obj_PauseMenu);
-	instance_create_depth(0,0,0,obj_Particles);
-	instance_create_depth(0,0,0,obj_Control);
-	instance_create_depth(0,0,0,obj_Audio);
-	instance_create_depth(0,0,0,obj_Map);
-	instance_create_depth(0,0,0,obj_Progression);
 	
 	instance_create_depth(0,0,0,obj_TileFadeHandler);
 	instance_create_depth(0,0,0,obj_ScreenShaker);
