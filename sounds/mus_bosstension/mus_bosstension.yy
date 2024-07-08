@@ -12,8 +12,8 @@
   "duration":73.03837,
   "name":"mus_BossTension",
   "parent":{
-    "name":"Music",
-    "path":"folders/Sounds/Music.yy",
+    "name":"Boss",
+    "path":"folders/Sounds/Music/Boss.yy",
   },
   "preload":true,
   "resourceType":"GMSound",

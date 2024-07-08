@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"scr_CorrectKeyboardString",
   "isCompatibility":false,
   "isDnD":false,

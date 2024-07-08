@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"discord_free",
   "isCompatibility":false,
   "isDnD":false,

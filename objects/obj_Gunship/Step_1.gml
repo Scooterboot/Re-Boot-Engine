@@ -23,7 +23,7 @@ if(state == ShipState.Idle)
 }
 
 var xx = x,
-	yy = y-18;
+	yy = y-17;
 
 var player = instance_place(x,y,obj_Player);
 if (instance_exists(player) && player.state == State.Elevator &&

@@ -16,7 +16,7 @@ if(room == rm_MainMenu)
 	var debug = false;
 	if(debug)
 	{
-		room_goto(rm_debug01_Start);
+		room_goto(rm_debugRedBrin_Start);
 		var sx = 80,
 			sy = 694;
 		instance_create_layer(sx,sy,"Player",obj_Player);

@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"scr_DrawHUD_Energy",
   "isCompatibility":false,
   "isDnD":false,

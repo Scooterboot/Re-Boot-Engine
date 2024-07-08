@@ -55,11 +55,9 @@ grounded = false;
 
 function DmgCollide(posX,posY,object,isProjectile)
 {
-	/*var npc = id;
-	with(object)
-	{
-		return place_meeting(posX,posY,npc);
-	}
-	return false;*/
-	return collision_rectangle(bbox_left-4,bbox_top-2,bbox_right+4,bbox_bottom+1,object,true,true);
+	if(!instance_exists(object)) { return false; }
+	
+	var offX = object.x-posX,
+		offY = object.y-posY;
+	return collision_rectangle(bbox_left-4 + offX,bbox_top-2 + offY,bbox_right+4 + offX,bbox_bottom+1 + offY,object,true,true);
 }

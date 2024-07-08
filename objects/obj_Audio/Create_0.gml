@@ -25,18 +25,8 @@ function LoopedSong(_snd, _loopStart, _loopEnd) constructor
 	loopLength = loopEnd-loopStart;
 	
 	song = songID;
-	function Play()
+	function Play(priority = 1, loops = true)
 	{
-		var priority = 1,
-			loops = true;
-		if(argument_count > 0)
-		{
-			priority = argument[0];
-		}
-		if(argument_count > 1)
-		{
-			loops = argument[1];
-		}
 		song = audio_play_sound(songID,priority,loops);
 		audio_sound_gain(song,1,0);
 		
@@ -101,8 +91,12 @@ global.SilenceMusic = function()
 }
 
 global.music_Title = new LoopedSong(mus_Title, 58.090, 90.858);
+global.music_Prologue = new LoopedSong(mus_Prologue, 5.448, 139.500);
+
 global.music_ItemRoom = new LoopedSong(mus_ItemRoom, 13.962, 34.698);
 global.music_AmbientSilence = new LoopedSong(mus_AmbientSilence, 10.562, 27.901);
+
+global.music_Ceres = new LoopedSong(mus_Ceres, 5.031, 19.205);
 global.music_CrateriaArrival = new LoopedSong(mus_CrateriaArrival, 19.352, 86.059);
 global.music_CrateriaActive = new LoopedSong(mus_CrateriaActive, 0.495, 208.025);
 global.music_CrateriaMain = new LoopedSong(mus_CrateriaMain, 28.602, 238.914);
@@ -110,8 +104,23 @@ global.music_BrinstarGreen = new LoopedSong(mus_BrinstarGreen, 64.806, 166.750);
 global.music_BrinstarRed = new LoopedSong(mus_BrinstarRed, 106.264, 218.838);
 //global.music_UpperNorfair = new LoopedSong(mus_UpperNorfair, 49.169, 107.423);
 global.music_UpperNorfair = new LoopedSong(mus_UpperNorfair, 22.855, 101.109);
-global.music_BossTension = new LoopedSong(mus_BossTension,0.027,62.945);
-global.music_Boss1 = new LoopedSong(mus_Boss1,13.712,39.692);
+global.music_LowerNorfair = new LoopedSong(mus_LowerNorfair, 130.679, 269.051);
+global.music_WreckedShip = new LoopedSong(mus_WreckedShip, 2.100, 269.217);
+global.music_WreckedShip_Active = new LoopedSong(mus_WreckedShip_Active, 3.563, 270.975);
+global.music_UpperMaridia = new LoopedSong(mus_UpperMaridia, 5.802, 119.178);
+global.music_LowerMaridia = new LoopedSong(mus_LowerMaridia, 37.870, 115.695);
+global.music_TourianGateway = new LoopedSong(mus_TourianGateway, 0.041, 88.986);
+global.music_Tourian = new LoopedSong(mus_Tourian, 0.041, 221.223);
+
+global.music_BossTension = new LoopedSong(mus_BossTension, 0.027, 62.945);
+global.music_BossAwakening = new LoopedSong(mus_BossAwakening, 31.557, 63.015);
+global.music_Boss1 = new LoopedSong(mus_Boss1, 0.037, 64.490);
+global.music_Boss2 = new LoopedSong(mus_Boss2, 13.712, 39.692);
+global.music_Boss3 = new LoopedSong(mus_Boss3, 4.830, 69.342);
+global.music_MiniBoss = new LoopedSong(mus_MiniBoss, 0.295, 123.175);
+
+global.music_Escape = new LoopedSong(mus_Escape, 26.452, 57.994);
+global.music_Ending = new LoopedSong(mus_Ending, 0, 0);
 
 global.ambiance_Rain = new LoopedSong(amb_Rain, 19.352, 86.059);
 

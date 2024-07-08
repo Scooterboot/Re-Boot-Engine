@@ -28,11 +28,17 @@ if(instance_exists(player))
 		OnPlayerPickup();
 		instance_destroy();
 	}
-	else if(player.statCharge >= 20 && point_distance(x,y,player.x,player.y) < radius)
+	else if((player.statCharge >= 20 || (player.hyperBeam && player.cShoot)) && point_distance(x,y,player.x,player.y) < radius)
 	{
 		var mult = max((1 - (point_distance(x,y,player.x,player.y)/radius))*2,0.25);
 		var mspeed = (player.statCharge/player.maxCharge) * 10 * mult,
 			playerDir = point_direction(x,y,player.x,player.y);
+		
+		if(player.hyperBeam && player.cShoot)
+		{
+			mspeed = 10 * mult;
+		}
+		
 		var xspeed = lengthdir_x(mspeed,playerDir),
 			yspeed = lengthdir_y(mspeed,playerDir);
 		

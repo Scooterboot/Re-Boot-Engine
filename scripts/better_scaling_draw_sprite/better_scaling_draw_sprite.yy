@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"better_scaling_draw_sprite",
   "isCompatibility":false,
   "isDnD":false,

@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"scr_GetLayersFromString",
   "isCompatibility":false,
   "isDnD":false,

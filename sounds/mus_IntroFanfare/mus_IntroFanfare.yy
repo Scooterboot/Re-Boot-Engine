@@ -12,8 +12,8 @@
   "duration":5.71,
   "name":"mus_IntroFanfare",
   "parent":{
-    "name":"Music",
-    "path":"folders/Sounds/Music.yy",
+    "name":"Misc",
+    "path":"folders/Sounds/Music/Misc.yy",
   },
   "preload":true,
   "resourceType":"GMSound",

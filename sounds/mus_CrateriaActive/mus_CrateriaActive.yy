@@ -12,8 +12,8 @@
   "duration":219.0106,
   "name":"mus_CrateriaActive",
   "parent":{
-    "name":"Music",
-    "path":"folders/Sounds/Music.yy",
+    "name":"Areas",
+    "path":"folders/Sounds/Music/Areas.yy",
   },
   "preload":false,
   "resourceType":"GMSound",

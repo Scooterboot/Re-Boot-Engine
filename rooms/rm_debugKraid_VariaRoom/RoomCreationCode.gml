@@ -1,0 +1,1 @@
+scr_InitRoom(global.music_ItemRoom,MapArea.Brinstar,48,11,96,0);

@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"scr_ConvertToAcidSprite",
   "isCompatibility":false,
   "isDnD":false,

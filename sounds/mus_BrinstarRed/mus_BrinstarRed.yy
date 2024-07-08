@@ -12,8 +12,8 @@
   "duration":247.04,
   "name":"mus_BrinstarRed",
   "parent":{
-    "name":"Music",
-    "path":"folders/Sounds/Music.yy",
+    "name":"Areas",
+    "path":"folders/Sounds/Music/Areas.yy",
   },
   "preload":true,
   "resourceType":"GMSound",

@@ -99,6 +99,12 @@ if(debug == 1)
 				//DrawBreakable(x,y,0);
 				draw_sprite_ext(sprite_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,1);
 			}
+			if(mask_index != sprite_index && sprite_exists(mask_index))
+			{
+				//gpu_set_fog(true,c_red,0,0);
+				draw_sprite_ext(mask_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,0.75);
+				//gpu_set_fog(false,0,0,0);
+			}
 			else if(!visible)
 			{
 				draw_self();

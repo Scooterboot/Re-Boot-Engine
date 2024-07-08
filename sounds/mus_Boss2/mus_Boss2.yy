@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"mus_Boss2",
+  "audioGroupId":{
+    "name":"audio_music",
+    "path":"audiogroups/audio_music",
+  },
+  "bitDepth":1,
+  "bitRate":192,
+  "compression":1,
+  "conversionMode":0,
+  "duration":65.0449,
+  "name":"mus_Boss2",
+  "parent":{
+    "name":"Boss",
+    "path":"folders/Sounds/Music/Boss.yy",
+  },
+  "preload":true,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"mus_Boss2.mp3",
+  "type":1,
+  "volume":1.0,
+}

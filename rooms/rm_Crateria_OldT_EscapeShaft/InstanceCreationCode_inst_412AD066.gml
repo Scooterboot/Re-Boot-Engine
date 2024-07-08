@@ -1,3 +1,3 @@
-nextroom = rm_debug02_Jungle01;
-doorID = 4;
-nextDoorID = 4;
+//nextroom = rm_debugGreenBrin_Jungle01;
+//doorID = 4;
+//nextDoorID = 4;

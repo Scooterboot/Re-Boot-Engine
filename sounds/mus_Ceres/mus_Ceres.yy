@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"mus_Ceres",
+  "audioGroupId":{
+    "name":"audio_music",
+    "path":"audiogroups/audio_music",
+  },
+  "bitDepth":1,
+  "bitRate":192,
+  "compression":1,
+  "conversionMode":0,
+  "duration":30.000181,
+  "name":"mus_Ceres",
+  "parent":{
+    "name":"Areas",
+    "path":"folders/Sounds/Music/Areas.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"mus_Ceres.wav",
+  "type":1,
+  "volume":1.0,
+}

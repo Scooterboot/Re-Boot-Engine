@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"mus_TourianGateway",
+  "audioGroupId":{
+    "name":"audio_music",
+    "path":"audiogroups/audio_music",
+  },
+  "bitDepth":1,
+  "bitRate":192,
+  "compression":1,
+  "conversionMode":0,
+  "duration":99.00989,
+  "name":"mus_TourianGateway",
+  "parent":{
+    "name":"Areas",
+    "path":"folders/Sounds/Music/Areas.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"mus_TourianGateway.wav",
+  "type":1,
+  "volume":1.0,
+}

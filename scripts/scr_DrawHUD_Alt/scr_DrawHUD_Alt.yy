@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"scr_DrawHUD_Alt",
   "isCompatibility":false,
   "isDnD":false,

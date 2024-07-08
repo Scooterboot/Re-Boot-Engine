@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"mus_WreckedShip_Active",
+  "audioGroupId":{
+    "name":"audio_music",
+    "path":"audiogroups/audio_music",
+  },
+  "bitDepth":1,
+  "bitRate":192,
+  "compression":1,
+  "conversionMode":0,
+  "duration":283.00482,
+  "name":"mus_WreckedShip_Active",
+  "parent":{
+    "name":"Areas",
+    "path":"folders/Sounds/Music/Areas.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"mus_WreckedShip_Active.wav",
+  "type":1,
+  "volume":1.0,
+}

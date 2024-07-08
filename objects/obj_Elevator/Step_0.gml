@@ -1,13 +1,4 @@
 /// @description Logic
-/*if(!global.gamePaused)
-{
-    image_speed = 0.5;
-}
-else
-{
-    image_speed = 0;
-    exit;
-}*/
 if(global.gamePaused)
 {
     exit;
@@ -25,13 +16,22 @@ if(activeDir != 0)
     {
         obj_Player.position.X = min(obj_Player.position.X+3,x);
     }
-    if(activeDir == dir)
+    //if(activeDir == dir)
+	if(!incoming)
     {
         y += eleSpeed*activeDir;
-        if((activeDir == 1 && obj_Player.bbox_top > room_height+8) || (activeDir == -1 && obj_Player.bbox_bottom < -8))
+        /*if((activeDir == 1 && obj_Player.bbox_top > room_height+8) || (activeDir == -1 && obj_Player.bbox_bottom < -8))
         {
             scr_ElevatorTrans(nextroom,elevatorID,nextElevatorID,activeDir);
-        }
+        }*/
+		if(activeDir == 1 && obj_Player.bbox_top > room_height+8 && down_nextElevatorID != -1 && down_nextRoom != noone)
+		{
+			scr_ElevatorTrans(down_nextRoom,elevatorID,down_nextElevatorID,activeDir);
+		}
+		if(activeDir == -1 && obj_Player.bbox_bottom < -8 && up_nextElevatorID != -1 && up_nextRoom != noone)
+		{
+			scr_ElevatorTrans(up_nextRoom,elevatorID,up_nextElevatorID,activeDir);
+		}
     }
     else
     {
@@ -46,6 +46,7 @@ if(activeDir != 0)
         if(y == ystart)
         {
             activeDir = 0;
+			incoming = false;
             resetState = true;
         }
     }

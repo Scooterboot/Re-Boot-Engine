@@ -48,8 +48,8 @@
   },
   "origin":9,
   "parent":{
-    "name":"SpecialTiles",
-    "path":"folders/Sprites/Room Elements/SpecialTiles.yy",
+    "name":"InteractStations",
+    "path":"folders/Sprites/Room Elements/SpecialTiles/InteractStations.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

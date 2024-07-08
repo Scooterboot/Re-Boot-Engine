@@ -1,0 +1,1 @@
+scr_InitRoom(global.rmMusic,MapArea.Crateria, 23,6, 96,0);

@@ -121,6 +121,10 @@ function xray_redraw_alpha()
 	{
 	    draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
 	}
+	with(obj_InteractStation)
+	{
+		draw_sprite_ext(mask_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
+	}
 
 	surface_reset_target();
 }
@@ -140,7 +144,10 @@ function xray_redraw_break()
 	}
 	with (obj_Pickup)
 	{
-		draw_sprite_ext(sprite_index,image_index,x-camera_get_view_x(view_camera[0]),y-camera_get_view_y(view_camera[0]),image_xscale,image_yscale,image_angle,c_white,1);
+		if(!visible)
+		{
+			draw_sprite_ext(sprite_index,image_index,x-camera_get_view_x(view_camera[0]),y-camera_get_view_y(view_camera[0]),image_xscale,image_yscale,image_angle,c_white,1);
+		}
 	}
 
 	surface_reset_target();
@@ -188,6 +195,10 @@ function xray_redraw_outline()
 		{
 			draw_sprite_ext(sprt_Tile,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
 		}
+	}
+	with(obj_InteractStation)
+	{
+		draw_sprite_ext(mask_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
 	}
 
 	surface_reset_target();

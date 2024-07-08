@@ -897,7 +897,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		{
 			speedBoost = true;
 		}
-		else if(!speedBoost && (abs(velX) >= minBoostSpeed || abs(spiderSpeed) >= minBoostSpeed) && state != State.Grapple && !grapBoost && state != State.Dodge)
+		else if(!speedBoost && (abs(velX) >= minBoostSpeed || abs(spiderSpeed) >= minBoostSpeed) && state != State.Dodge && state != State.Grapple && !grapBoost && !spiderJump)
 		{
 			speedCounter = speedCounterMax;
 			speedBoost = true;
@@ -1235,6 +1235,8 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				spiderEdge = Edge.None;
 				prevSpiderEdge = Edge.None;
 				notGrounded = true;
+				
+				spiderJump = true;
 			}
 			else
 			{
@@ -1453,6 +1455,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				audio_play_sound(snd_BoostBall,0,false);
 				boostBallDmgCounter = bbMult;
 				boostBallFXFlash = true;
+				
+				spiderJump = false;
+				grapBoost = false;
 			}
 			
 			boostBallCharge = 0;
@@ -1472,11 +1477,40 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 #region Spider Ball Movement
 	if(spiderBall)
 	{
-		if(spiderEdge != Edge.None &&
-		!entity_place_collide(2,0) && !entity_place_collide(-2,0) && !entity_place_collide(0,2) && !entity_place_collide(0,-2) &&
-		!entity_place_collide(2,2) && !entity_place_collide(-2,2) && !entity_place_collide(2,-2) && !entity_place_collide(-2,-2))
+		switch(spiderEdge)
 		{
-			spiderEdge = Edge.None;
+			case Edge.Bottom:
+			{
+				if(!entity_place_collide(0,2) && !entity_place_collide(2,2) && !entity_place_collide(-2,2))
+				{
+					spiderEdge = Edge.None;
+				}
+				break;
+			}
+			case Edge.Left:
+			{
+				if(!entity_place_collide(-2,0) && !entity_place_collide(-2,2) && !entity_place_collide(-2,-2))
+				{
+					spiderEdge = Edge.None;
+				}
+				break;
+			}
+			case Edge.Top:
+			{
+				if(!entity_place_collide(0,-2) && !entity_place_collide(2,-2) && !entity_place_collide(-2,-2))
+				{
+					spiderEdge = Edge.None;
+				}
+				break;
+			}
+			case Edge.Right:
+			{
+				if(!entity_place_collide(2,0) && !entity_place_collide(2,2) && !entity_place_collide(2,-2))
+				{
+					spiderEdge = Edge.None;
+				}
+				break;
+			}
 		}
 		
 		if(state == State.BallSpark)
@@ -1491,6 +1525,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		else
 		{
 			canMorphBounce = false;
+			spiderJump = false;
 			
 			var moveX = (cRight-cLeft),
 		        moveY = (cDown-cUp);
@@ -1624,6 +1659,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		spiderJumpDir = 90;
 		spiderJump_SpeedAddX = 0;
 		spiderJump_SpeedAddY = 0;
+		
+		if(grounded || abs(velX) < maxSpeed[6,liquidState])
+		{
+			spiderJump = false;
+		}
 	}
 #endregion
 
@@ -2104,11 +2144,23 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		var ele = instance_position(x,bbox_bottom+1,obj_Elevator);
 		if(instance_exists(ele))
 		{
-			if(ele.dir == 1)
+			/*if(ele.dir == 1)
 			{
 				canCrouch = false;
 			}
 			if(ele.activeDir == 0 && ele.dir != 0 && (cDown-cUp) == ele.dir && (gbaAimPreAngle == gbaAimAngle || global.aimStyle != 1) && move2 == 0 && velX == 0 && dir != 0 && grounded && !xRayActive)
+			{
+				ele.activeDir = (cDown-cUp);
+				state = State.Elevator;
+				dir = 0;
+				aimAngle = 0;
+			}*/
+			
+			if(ele.downward)
+			{
+				canCrouch = false;
+			}
+			if(ele.activeDir == 0 && ((ele.upward && cUp && rUp) || (ele.downward && cDown && rDown)) && (gbaAimPreAngle == gbaAimAngle || global.aimStyle != 1) && move2 == 0 && velX == 0 && dir != 0 && grounded && !xRayActive)
 			{
 				ele.activeDir = (cDown-cUp);
 				state = State.Elevator;
@@ -2232,7 +2284,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		velY = 0;
 		aimAngle = 0;
 		
-		var flag = true;
+		/*var flag = true;
 		if(instance_exists(obj_EnergyStation) && obj_EnergyStation.activeDir != 0)
 		{
 			flag = false;
@@ -2243,6 +2295,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		
 		if(flag)
+		{
+			state = State.Stand;
+		}*/
+		if(!instance_exists(activeStation) || activeStation.activeDir == 0)
 		{
 			state = State.Stand;
 		}
@@ -3573,7 +3629,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 	else
 	{
-		if(grounded || abs(x - xprevious) <= maxSpeed[4,liquidState])
+		if(grounded || abs(velX) < maxSpeed[1,liquidState])
 		{
 			grapBoost = false;
 		}

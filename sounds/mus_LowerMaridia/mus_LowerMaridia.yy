@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"mus_LowerMaridia",
+  "audioGroupId":{
+    "name":"audio_music",
+    "path":"audiogroups/audio_music",
+  },
+  "bitDepth":1,
+  "bitRate":192,
+  "compression":1,
+  "conversionMode":0,
+  "duration":177.0057,
+  "name":"mus_LowerMaridia",
+  "parent":{
+    "name":"Areas",
+    "path":"folders/Sounds/Music/Areas.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"mus_LowerMaridia.wav",
+  "type":1,
+  "volume":1.0,
+}

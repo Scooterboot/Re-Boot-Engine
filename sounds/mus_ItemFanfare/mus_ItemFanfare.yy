@@ -12,8 +12,8 @@
   "duration":5.694694,
   "name":"mus_ItemFanfare",
   "parent":{
-    "name":"Music",
-    "path":"folders/Sounds/Music.yy",
+    "name":"Misc",
+    "path":"folders/Sounds/Music/Misc.yy",
   },
   "preload":false,
   "resourceType":"GMSound",

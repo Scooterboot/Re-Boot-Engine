@@ -96,6 +96,12 @@ headerText = array(
 "SAMUS",
 "OPTIONS",
 "LOG BOOK");
+mapAreaText[MapArea.Crateria] = "CRATERIA";
+mapAreaText[MapArea.WreckedShip] = "WRECKED SHIP";
+mapAreaText[MapArea.Brinstar] = "BRINSTAR";
+mapAreaText[MapArea.Norfair] = "NORFAIR";
+mapAreaText[MapArea.Maridia] = "MARIDIA";
+mapAreaText[MapArea.Tourian] = "TOURIAN";
 
 itemHeaderText = array(
 "SUIT",

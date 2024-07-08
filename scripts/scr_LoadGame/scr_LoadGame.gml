@@ -89,11 +89,17 @@ function scr_LoadGame()
 			}
 	
 			var _map_map = _list[| 1];
-			var dsWidth = ds_grid_width(global.mapReveal_Debug),
-				dsHeight = ds_grid_height(global.mapReveal_Debug);
-			ds_grid_clear(global.mapReveal_Debug,false);
-			ds_grid_read(global.mapReveal_Debug, _map_map[? "mapReveal_Debug"]);
-			ds_grid_resize(global.mapReveal_Debug,dsWidth,dsHeight);
+			for(var i = 0; i < array_length(global.mapArea); i++)
+			{
+				var dsWidth = ds_grid_width(global.mapArea[i].grid),
+					dsHeight = ds_grid_height(global.mapArea[i].grid);
+				ds_grid_clear(global.mapArea[i].grid,false);
+				ds_grid_read(global.mapArea[i].grid, _map_map[? "mapReveal_"+global.mapArea[i].name]);
+				ds_grid_resize(global.mapArea[i].grid,dsWidth,dsHeight);
+				
+				global.mapArea[i].visited = _map_map[? "mapVisited_"+global.mapArea[i].name];
+				global.mapArea[i].stationUsed = _map_map[? "mapStationUsed_"+global.mapArea[i].name];
+			}
 	
 			var _worldFlags_map = _list[| 2];
 			global.currentPlayTime = _worldFlags_map[? "currentPlayTime"];
@@ -127,7 +133,7 @@ function scr_LoadGame()
 	}
 	else
 	{
-		room_goto(rm_debug01_Start);
+		room_goto(rm_debugRedBrin_Start);
 		var sx = 80,
 			sy = 694;
 		//instance_create_layer(sx,sy,"Player",obj_Player);
@@ -137,9 +143,13 @@ function scr_LoadGame()
 		}
 		instance_create_layer(sx-(global.resWidth/2),sy-(global.resHeight/2),"Camera",obj_Camera);
 		
-		//ds_grid_clear(global.mapReveal_Debug,false);
-		ds_grid_destroy(global.mapReveal_Debug);
-		global.mapReveal_Debug = obj_Map.CreateMapRevealGrid(sprt_Map_DebugRooms);
+		for(var i = 0; i < array_length(global.mapArea); i++)
+		{
+			ds_grid_clear(global.mapArea[i].grid,false);
+			global.mapArea[i].visited = false;
+			global.mapArea[i].stationUsed = false;
+		}
+		
 		global.currentPlayTime = 0;
 		ds_list_clear(global.openHatchList);
 		ds_list_clear(global.collectedItemList);

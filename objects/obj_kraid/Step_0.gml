@@ -57,7 +57,7 @@ if(phase == 0) // spawn anim
 		head.immune = false;
 		rHand.immune = false;
 		
-		global.rmMusic = global.music_Boss1;
+		global.rmMusic = global.music_Boss2;
 		
 		if(ai[0] == 0)
 		{

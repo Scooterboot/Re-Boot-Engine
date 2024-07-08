@@ -22,8 +22,8 @@ for(var i = 0; i < ds_list_size(afterImageList); i++)
 		
 	if(aftImg._delete)
 	{
-		delete aftImg;
 		ds_list_delete(afterImageList,i);
+		delete aftImg;
 	}
 	else
 	{

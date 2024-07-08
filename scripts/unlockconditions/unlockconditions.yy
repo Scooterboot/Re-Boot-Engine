@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"UnlockConditions",
   "isCompatibility":false,
   "isDnD":false,

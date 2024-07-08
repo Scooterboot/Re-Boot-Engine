@@ -12,8 +12,8 @@
   "duration":162.00563,
   "name":"mus_CrateriaArrival",
   "parent":{
-    "name":"Music",
-    "path":"folders/Sounds/Music.yy",
+    "name":"Areas",
+    "path":"folders/Sounds/Music/Areas.yy",
   },
   "preload":false,
   "resourceType":"GMSound",

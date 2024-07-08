@@ -149,12 +149,11 @@ function DamagePlayer()
 
 function DmgCollide(posX,posY,object,isProjectile)
 {
-	var npc = id;
-	with(object)
-	{
-		return place_meeting(posX,posY,npc);
-	}
-	return false;
+	if(!instance_exists(object)) { return false; }
+	
+	var offX = object.x-posX,
+		offY = object.y-posY;
+	return place_meeting(x+offX,y+offY,object);
 }
 function StrikeNPC(damage, dmgType, dmgSubType, lifeEnd = 0, dethType = -1)
 {

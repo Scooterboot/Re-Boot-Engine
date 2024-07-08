@@ -12,8 +12,8 @@
   "duration":34.31333,
   "name":"mus_AmbientSilence",
   "parent":{
-    "name":"Music",
-    "path":"folders/Sounds/Music.yy",
+    "name":"Misc",
+    "path":"folders/Sounds/Music/Misc.yy",
   },
   "preload":false,
   "resourceType":"GMSound",

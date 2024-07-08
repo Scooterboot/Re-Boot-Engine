@@ -1,4 +1,4 @@
-if(!global.roomTrans)
+if(!global.roomTrans && nextroom != -1 && doorID != -1 && nextDoorID != -1)
 {
     global.gamePaused = true;
     if(!entered)

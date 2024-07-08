@@ -194,6 +194,7 @@ spiderEdge = Edge.None;
 prevSpiderEdge = spiderEdge;
 spiderMove = 0;
 spiderSpeed = 0;
+spiderJump = false;
 spiderJumpDir = 0;
 spiderJump_SpeedAddX = 0;
 spiderJump_SpeedAddY = 0;
@@ -275,6 +276,8 @@ pushBlock = noone;
 pushMove = array(2, 2, 3, 4, 2, 1, 0, 0, 1, 1, 3, 4, 3, 4, 3, 2);
 pushSnd = noone;
 pushSndPlayed = false;
+
+activeStation = noone;
 
 liquidState = 0;
 outOfLiquid = (liquidState == 0);
@@ -985,7 +988,7 @@ itemHighlighted[1] = 0;
 
 pauseSelect = false;
 
-currentMap = global.rmMapSprt;
+currentMap = global.rmMapArea;
 playerMapX = (scr_floor(x/global.resWidth) + global.rmMapX) * 8;
 playerMapY = (scr_floor(y/global.resWidth) + global.rmMapY) * 8;
 prevPlayerMapX = playerMapX;

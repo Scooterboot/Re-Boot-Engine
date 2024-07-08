@@ -21,11 +21,11 @@ function scr_DrawMiniMap() {
 	draw_set_alpha(1);
     
 	draw_sprite_ext(sprt_HMapBase,0,mapX,mapY,1,1,0,c_white,0.5);
-	if(global.rmMapSprt != noone)
+	if(global.rmMapArea != noone)
 	{
 		//if(!instance_exists(obj_Transition) || obj_Transition.transitionComplete)
 		//{
-		    currentMap = global.rmMapSprt;
+		    currentMap = global.rmMapArea;
 			//playerMapX = (scr_floor(x/global.rmMapSize) + global.rmMapX) * 8;
 			//playerMapY = (scr_floor(y/global.rmMapSize) + global.rmMapY) * 8;
 			playerMapX = obj_Map.playerMapX * 8;

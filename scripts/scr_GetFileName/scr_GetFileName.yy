@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"scr_GetFileName",
   "isCompatibility":false,
   "isDnD":false,

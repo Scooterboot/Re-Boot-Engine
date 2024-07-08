@@ -33,6 +33,7 @@ if(instance_exists(obj_Player))
 		var offset = 14;
 		//p.state = State.Recharge;
 		p.ChangeState(State.Recharge,State.Stand,mask_Stand,true,false);
+		p.activeStation = id;
 		p.dir = -activeDir;
 		var xPos = bbox_right+offset;
 		if(activeDir == -1)
@@ -54,7 +55,8 @@ if(instance_exists(obj_Player))
 		{
 			Interact();
 		}
-		if(activeTime == activeTimeMax-10)
+		//if(activeTime == activeTimeMax-10)
+		if(activeTime == 11)
 		{
 			//audio_play_sound(snd_Save,0,false);
 			obj_UI.CreateMessageBox(stationMessage,"",Message.Simple);

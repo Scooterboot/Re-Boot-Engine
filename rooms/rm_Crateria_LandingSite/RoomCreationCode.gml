@@ -1,4 +1,4 @@
-scr_InitRoom(global.music_CrateriaMain,noone,0,0);
+scr_InitRoom(global.music_CrateriaMain,MapArea.Crateria, 14,2);
 
 scr_SetParallax("Backgrounds_0",0.75,0);
 scr_SetParallax("Backgrounds_1",0.75,0);

@@ -12,8 +12,8 @@
   "duration":54.047348,
   "name":"mus_ItemRoom",
   "parent":{
-    "name":"Music",
-    "path":"folders/Sounds/Music.yy",
+    "name":"Misc",
+    "path":"folders/Sounds/Music/Misc.yy",
   },
   "preload":false,
   "resourceType":"GMSound",

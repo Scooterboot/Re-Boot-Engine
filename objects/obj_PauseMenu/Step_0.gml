@@ -33,28 +33,26 @@ if(canPause)
 	}
 	else if(!loadGame && !gameEnd)
 	{
-		if(cStart && rStart && (pauseFade <= 0 || pauseFade >= 1))
+		if(cStart && rStart && (pauseFade <= 0 || pauseFade >= 1) && (obj_Player.state != State.Recharge || obj_Player.activeStation.object_index != obj_MapStation || isPaused))
 		{
 			isPaused = !isPaused;
 		}
 	}
-	if(isPaused)
-	{
-		pauseFade = min(pauseFade + 0.075, 1);
-	}
-	else
-	{
-		pauseFade = max(pauseFade - 0.075, 0);
-	}
-	
-	pause = (pauseFade > 0);
 }
 else
 {
 	isPaused = false;
-	pause = false;
-	pauseFade = 0;
 }
+
+if(isPaused)
+{
+	pauseFade = min(pauseFade + 0.075, 1);
+}
+else
+{
+	pauseFade = max(pauseFade - 0.075, 0);
+}
+pause = (pauseFade > 0);
 
 if(pause)
 {
@@ -204,31 +202,15 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 		{
 			var mapMoveX = (cRight) - (cLeft),
 				mapMoveY = (cDown) - (cUp);
+			var spd = 0.1,
+				fct = 0.2;
 			
-			/*if(mapMoveX != 0 || mapMoveY != 0)
+			if(mapMoveX != 0)
 			{
-				mapMove = min(mapMove + 0.1, 2);
-			}
-			else
-			{
-				mapMove = max(mapMove - 0.1, 0);
-			}
-			
-			if(global.rmMapSprt != noone)
-			{
-				mapX = clamp(mapX+mapMoveX*mapMove,16,sprite_get_width(global.rmMapSprt)-16);
-				mapY = clamp(mapY+mapMoveY*mapMove,16,sprite_get_height(global.rmMapSprt)-16);
-			}*/
-			
-			if(mapMoveX != 0 || mapMoveY != 0)
-			{
-				var spd = 0.1;
 				mapMoveVelX = clamp(mapMoveVelX+spd*mapMoveX*(1+(sign(mapMoveVelX) != mapMoveX)),-2,2);
-				mapMoveVelY = clamp(mapMoveVelY+spd*mapMoveY*(1+(sign(mapMoveVelY) != mapMoveY)),-2,2);
 			}
 			else
 			{
-				var fct = 0.2;
 				if(mapMoveVelX > 0)
 				{
 					mapMoveVelX = max(mapMoveVelX-fct,0);
@@ -237,6 +219,13 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 				{
 					mapMoveVelX = min(mapMoveVelX+fct,0);
 				}
+			}
+			if(mapMoveY != 0)
+			{
+				mapMoveVelY = clamp(mapMoveVelY+spd*mapMoveY*(1+(sign(mapMoveVelY) != mapMoveY)),-2,2);
+			}
+			else
+			{
 				if(mapMoveVelY > 0)
 				{
 					mapMoveVelY = max(mapMoveVelY-fct,0);
@@ -247,20 +236,20 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 				}
 			}
 			
-			if(global.rmMapSprt != noone)
+			if(global.rmMapArea != noone)
 			{
-				mapX = clamp(mapX+mapMoveVelX,16,sprite_get_width(global.rmMapSprt)-16);
-				mapY = clamp(mapY+mapMoveVelY,16,sprite_get_height(global.rmMapSprt)-16);
+				mapX = clamp(mapX+mapMoveVelX,16,sprite_get_width(global.rmMapArea.sprt)-16);
+				mapY = clamp(mapY+mapMoveVelY,16,sprite_get_height(global.rmMapArea.sprt)-16);
 			}
 		}
 		else
 		{
 			mapX = (scr_floor(obj_Player.x/global.rmMapSize) + global.rmMapX) * 8 + 4;
 			mapY = (scr_floor(obj_Player.y/global.rmMapSize) + global.rmMapY) * 8 + 4;
-			if(global.rmMapSprt != noone)
+			if(global.rmMapArea != noone)
 			{
-				mapX = clamp(mapX,16,sprite_get_width(global.rmMapSprt)-16);
-				mapY = clamp(mapY,16,sprite_get_height(global.rmMapSprt)-16);
+				mapX = clamp(mapX,16,sprite_get_width(global.rmMapArea.sprt)-16);
+				mapY = clamp(mapY,16,sprite_get_height(global.rmMapArea.sprt)-16);
 			}
 			mapMove = 0;
 		}
@@ -623,10 +612,10 @@ else
 			mapX = (scr_floor(obj_Player.x/global.rmMapSize) + global.rmMapX) * 8 + 4;
 			mapY = (scr_floor(obj_Player.y/global.rmMapSize) + global.rmMapY) * 8 + 4;
 		}
-		if(global.rmMapSprt != noone)
+		if(global.rmMapArea != noone)
 		{
-			mapX = clamp(mapX,16,sprite_get_width(global.rmMapSprt)-16);
-			mapY = clamp(mapY,16,sprite_get_height(global.rmMapSprt)-16);
+			mapX = clamp(mapX,16,sprite_get_width(global.rmMapArea.sprt)-16);
+			mapY = clamp(mapY,16,sprite_get_height(global.rmMapArea.sprt)-16);
 		}
 		mapMove = 0;
 

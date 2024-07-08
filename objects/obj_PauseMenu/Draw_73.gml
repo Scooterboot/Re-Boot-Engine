@@ -71,7 +71,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			if(currentScreen == Screen.Map)
 			{
 				// now we're actually drawing the map
-				if(global.rmMapSprt != noone)// && surface_exists(mapSurf))
+				if(global.rmMapArea != noone)// && surface_exists(mapSurf))
 				{
 					var mx = ww/2 - mapX,
 						my = hh/2 - mapY;
@@ -80,7 +80,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 						bgy = -8 + scr_wrap(scr_round(my),0,8);
 					draw_sprite_stretched_ext(sprt_HMapBase,0,bgx,bgy,ww+16,hh+16,c_white,0.25);
 					
-					obj_Map.DrawMap(global.rmMapSprt,scr_round(mx),scr_round(my),0,0,sprite_get_width(global.rmMapSprt),sprite_get_height(global.rmMapSprt));
+					obj_Map.DrawMap(global.rmMapArea,scr_round(mx),scr_round(my),0,0,sprite_get_width(global.rmMapArea.sprt),sprite_get_height(global.rmMapArea.sprt));
 					
 					//var pX = mx + (scr_floor(P.x/global.rmMapSize) + global.rmMapX) * 8,
 					//	pY = my + (scr_floor(P.y/global.rmMapSize) + global.rmMapY) * 8;
@@ -543,7 +543,13 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				draw_set_halign(fa_center);
 				draw_set_valign(fa_top);
 				draw_set_font(fnt_Menu);
-				draw_text(global.resWidth/2,36,headerText[currentScreen]);
+				
+				var headText = headerText[currentScreen];
+				if(currentScreen == Screen.Map && global.rmMapIndex >= 0)
+				{
+					headText = mapAreaText[global.rmMapIndex];
+				}
+				draw_text(global.resWidth/2,36,headText);
 			}
 			
 			draw_sprite_ext(sprt_Sub_Clock,0,global.resWidth/2-117,31,1,1,0,c_white,1);

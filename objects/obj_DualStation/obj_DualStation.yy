@@ -2,14 +2,14 @@
   "$GMObject":"",
   "%Name":"obj_DualStation",
   "eventList":[
-    {"$GMEvent":"","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
   "name":"obj_DualStation",
   "overriddenProperties":[],
   "parent":{
-    "name":"SpecialTiles",
-    "path":"folders/Objects/Room Elements/SpecialTiles.yy",
+    "name":"InteractStations",
+    "path":"folders/Objects/Room Elements/SpecialTiles/InteractStations.yy",
   },
   "parentObjectId":{
     "name":"obj_InteractStation",

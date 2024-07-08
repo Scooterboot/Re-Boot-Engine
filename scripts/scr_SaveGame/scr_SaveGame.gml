@@ -97,7 +97,12 @@ function scr_SaveGame()
 	ds_list_add(_root_list,_map_map);
 	ds_list_mark_as_map(_root_list,ds_list_size(_root_list)-1);
 
-	ds_map_add(_map_map,"mapReveal_Debug", ds_grid_write(global.mapReveal_Debug));
+	for(var i = 0; i < array_length(global.mapArea); i++)
+	{
+		ds_map_add(_map_map,"mapReveal_"+global.mapArea[i].name, ds_grid_write(global.mapArea[i].grid));
+		ds_map_add(_map_map,"mapVisited_"+global.mapArea[i].name, global.mapArea[i].visited);
+		ds_map_add(_map_map,"mapStationUsed_"+global.mapArea[i].name, global.mapArea[i].stationUsed);
+	}
 
 	var _worldFlags_map = ds_map_create();
 	ds_list_add(_root_list,_worldFlags_map);
