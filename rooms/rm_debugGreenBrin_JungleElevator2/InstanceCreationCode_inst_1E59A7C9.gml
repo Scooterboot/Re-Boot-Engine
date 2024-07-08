@@ -1,4 +1,5 @@
-nextroom = rm_Crateria_Elevator;
 elevatorID = 0;
-nextElevatorID = 0;
-dir = -1;
+
+upward = true;
+up_nextElevatorID = 0;
+up_nextRoom = rm_Crateria_Elevator;

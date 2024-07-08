@@ -1,4 +1,5 @@
-nextroom = rm_debugNorfair_LavaElevator;
 elevatorID = 0;
-nextElevatorID = 0;
-dir = 1;
+
+downward = true;
+down_nextElevatorID = 0;
+down_nextRoom = rm_debugNorfair_LavaElevator;

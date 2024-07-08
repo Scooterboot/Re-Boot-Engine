@@ -1,4 +1,5 @@
-nextroom = rm_debugGreenBrin_JungleElevator;
 elevatorID = 0;
-nextElevatorID = 0;
-dir = -1;
+
+upward = true;
+up_nextElevatorID = 0;
+up_nextRoom = rm_debugGreenBrin_JungleElevator;
