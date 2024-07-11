@@ -26,5 +26,6 @@ elevatorID = -1;
 
 activeDir = 0;
 incoming = false;
+singleRoom = false;
 
 resetState = false;

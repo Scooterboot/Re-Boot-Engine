@@ -17,7 +17,7 @@ if(activeDir != 0)
         obj_Player.position.X = min(obj_Player.position.X+3,x);
     }
     //if(activeDir == dir)
-	if(!incoming)
+	if(!incoming && !singleRoom)
     {
         y += eleSpeed*activeDir;
         /*if((activeDir == 1 && obj_Player.bbox_top > room_height+8) || (activeDir == -1 && obj_Player.bbox_bottom < -8))
@@ -50,7 +50,7 @@ if(activeDir != 0)
             resetState = true;
         }
     }
-    obj_Player.position.Y = y - (obj_Player.bbox_bottom-obj_Player.y);
+    obj_Player.position.Y = y - (obj_Player.bbox_bottom-obj_Player.y) - 1;
 	
 	obj_Player.x = scr_round(obj_Player.position.X);
 	obj_Player.y = scr_round(obj_Player.position.Y);

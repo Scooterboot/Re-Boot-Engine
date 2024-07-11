@@ -1,9 +1,6 @@
 /// @description Initialize
-mapSurf = surface_create(8,8);
 
-playerMapX = 0;
-playerMapY = 0;
-
+global.mapSquareSize = 10;//8;
 global.rmMapSize = 256;
 
 global.rmMapIndex = -1;
@@ -14,13 +11,20 @@ global.rmMapY = 0;
 global.rmMapPixX = 0;
 global.rmMapPixY = 0;
 
+mapSurf = surface_create(global.mapSquareSize,global.mapSquareSize);
+
+playerMapX = 0;
+playerMapY = 0;
+prevPlayerMapX = 0;
+prevPlayerMapY = 0;
+
 #region AreaMap
 function AreaMap(_mapSprite, _name) constructor
 {
 	sprt = _mapSprite;
 	name = _name;
 	
-	grid = ds_grid_create(scr_floor(sprite_get_width(sprt)/8),scr_floor(sprite_get_height(sprt)/8));
+	grid = ds_grid_create(scr_floor(sprite_get_width(sprt)/global.mapSquareSize),scr_floor(sprite_get_height(sprt)/global.mapSquareSize));
 	ds_grid_clear(grid,false);
 	
 	visited = false;
@@ -47,7 +51,7 @@ global.mapArea[MapArea.Tourian] = new AreaMap(sprt_Map_DebugTourian, "Tourian");
 prevArea = noone;
 
 #region DrawMap()
-function DrawMap(mapArea,posX,posY,mapX,mapY,mapWidth,mapHeight)
+function DrawMap(mapArea,posX,posY,mapX,mapY,mapWidth,mapHeight,baseAlpha = 0)
 {
 	if(mapArea != noone)
 	{
@@ -72,12 +76,19 @@ function DrawMap(mapArea,posX,posY,mapX,mapY,mapWidth,mapHeight)
 
 		mapWidth = min(mapWidth,sprite_get_width(mapSprt)-mapX);
 		mapHeight = min(mapHeight,sprite_get_height(mapSprt)-mapY);
+		
+		var msSize = global.mapSquareSize;
 
 		if(surface_exists(mapSurf))
 		{
 			surface_resize(mapSurf,sprite_get_width(mapSprt),sprite_get_height(mapSprt));
 			surface_set_target(mapSurf);
 			draw_clear_alpha(c_black,0);
+			
+			if(baseAlpha > 0)
+			{
+				draw_sprite_stretched_ext(sprt_HMapBase,0,0,0,sprite_get_width(mapSprt),sprite_get_height(mapSprt),c_white,baseAlpha);
+			}
 		
 			if(ds_exists(mapGrid,ds_type_grid))
 			{
@@ -87,11 +98,11 @@ function DrawMap(mapArea,posX,posY,mapX,mapY,mapWidth,mapHeight)
 					{
 						if(mapGrid[# i,j])
 						{
-							draw_sprite_part_ext(mapSprt,0,i*8,j*8,8,8,i*8,j*8,1,1,c_white,1);
+							draw_sprite_part_ext(mapSprt,0,i*msSize,j*msSize,msSize,msSize,i*msSize,j*msSize,1,1,c_white,1);
 						}
 						else if(grey)
 						{
-							draw_sprite_part_ext(mapSprt,1,i*8,j*8,8,8,i*8,j*8,1,1,c_white,1);
+							draw_sprite_part_ext(mapSprt,1,i*msSize,j*msSize,msSize,msSize,i*msSize,j*msSize,1,1,c_white,1);
 						}
 					}
 				}

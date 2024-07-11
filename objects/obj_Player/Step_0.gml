@@ -2144,23 +2144,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		var ele = instance_position(x,bbox_bottom+1,obj_Elevator);
 		if(instance_exists(ele))
 		{
-			/*if(ele.dir == 1)
-			{
-				canCrouch = false;
-			}
-			if(ele.activeDir == 0 && ele.dir != 0 && (cDown-cUp) == ele.dir && (gbaAimPreAngle == gbaAimAngle || global.aimStyle != 1) && move2 == 0 && velX == 0 && dir != 0 && grounded && !xRayActive)
-			{
-				ele.activeDir = (cDown-cUp);
-				state = State.Elevator;
-				dir = 0;
-				aimAngle = 0;
-			}*/
-			
 			if(ele.downward)
 			{
 				canCrouch = false;
 			}
-			if(ele.activeDir == 0 && ((ele.upward && cUp && rUp) || (ele.downward && cDown && rDown)) && (gbaAimPreAngle == gbaAimAngle || global.aimStyle != 1) && move2 == 0 && velX == 0 && dir != 0 && grounded && !xRayActive)
+			if(ele.activeDir == 0 && (ele.elevatorID != -1 || ele.singleRoom) && ((ele.upward && cUp && rUp) || (ele.downward && cDown && rDown)) && (gbaAimPreAngle == gbaAimAngle || global.aimStyle != 1) && move2 == 0 && velX == 0 && dir != 0 && grounded && !xRayActive)
 			{
 				ele.activeDir = (cDown-cUp);
 				state = State.Elevator;

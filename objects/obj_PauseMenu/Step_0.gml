@@ -244,8 +244,11 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 		}
 		else
 		{
-			mapX = (scr_floor(obj_Player.x/global.rmMapSize) + global.rmMapX) * 8 + 4;
-			mapY = (scr_floor(obj_Player.y/global.rmMapSize) + global.rmMapY) * 8 + 4;
+			//mapX = (scr_floor(obj_Player.x/global.rmMapSize) + global.rmMapX) * 8 + 4;
+			//mapY = (scr_floor(obj_Player.y/global.rmMapSize) + global.rmMapY) * 8 + 4;
+			var msSize = global.mapSquareSize;
+			mapX = obj_Map.playerMapX * msSize + (msSize/2);
+			mapY = obj_Map.playerMapY * msSize + (msSize/2);
 			if(global.rmMapArea != noone)
 			{
 				mapX = clamp(mapX,16,sprite_get_width(global.rmMapArea.sprt)-16);
@@ -607,10 +610,14 @@ else
 		screenSelectAnim = 0;
 		currentScreen = Screen.Map;
 		
-		if(instance_exists(obj_Player))
+		//if(instance_exists(obj_Player))
+		if(instance_exists(obj_Map))
 		{
-			mapX = (scr_floor(obj_Player.x/global.rmMapSize) + global.rmMapX) * 8 + 4;
-			mapY = (scr_floor(obj_Player.y/global.rmMapSize) + global.rmMapY) * 8 + 4;
+			//mapX = (scr_floor(obj_Player.x/global.rmMapSize) + global.rmMapX) * 8 + 4;
+			//mapY = (scr_floor(obj_Player.y/global.rmMapSize) + global.rmMapY) * 8 + 4;
+			var msSize = global.mapSquareSize;
+			mapX = obj_Map.playerMapX * msSize + (msSize/2);
+			mapY = obj_Map.playerMapY * msSize + (msSize/2);
 		}
 		if(global.rmMapArea != noone)
 		{

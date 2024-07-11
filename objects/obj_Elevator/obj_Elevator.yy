@@ -15,8 +15,8 @@
     "path":"folders/Objects/Room Elements/SpecialTiles.yy",
   },
   "parentObjectId":{
-    "name":"obj_Tile",
-    "path":"objects/obj_Tile/obj_Tile.yy",
+    "name":"obj_Platform",
+    "path":"objects/obj_Platform/obj_Platform.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,

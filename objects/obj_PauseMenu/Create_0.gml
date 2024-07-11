@@ -27,7 +27,6 @@ mapY = 0;
 mapMove = 0;
 mapMoveVelX = 0;
 mapMoveVelY = 0;
-mapSurf = surface_create(8,8);
 
 pMapIconFrame = 0;
 pMapIconFrameCounter = 0;
