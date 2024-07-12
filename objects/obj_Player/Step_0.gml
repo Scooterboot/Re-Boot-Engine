@@ -1879,6 +1879,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 
 #region Collision
 	
+	if(!PlayerGrounded() && !PlayerOnPlatform())
+	{
+		grounded = false;
+	}
+	
 	colEdge = Edge.Bottom;
 	if(spiderBall)
 	{
@@ -2001,11 +2006,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	if(!onPlatform && velY == 0 && PlayerOnPlatform())
 	{
 		onPlatform = true;
-	}
-	
-	if(!PlayerGrounded() && !PlayerOnPlatform())
-	{
-		grounded = false;
 	}
 	
 	if(speedKill)
@@ -2366,7 +2366,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					audio_stop_sound(snd_Land);
 					audio_play_sound(snd_Land,0,false);
 					
-					if((speedKeep == 0 || (speedKeep == 2 && liquidMovement)) && canMorphBounce)
+					if((speedKeep == 0 || (speedKeep == 2 && liquidMovement)) && !justBounced)
 					{
 						velX = min(abs(velX),maxSpeed[0,liquidState])*sign(velX);
 						speedCounter = 0;
@@ -2571,7 +2571,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		wallJumpDelay = max(wallJumpDelay - 1, 0);
 		
-		if(grounded || PlayerGrounded())
+		if(grounded )//|| PlayerGrounded())
 		{
 			if(!slopeGrounded)
 			{
@@ -2820,41 +2820,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			stallCamera = true;
 			if(climbIndex > 0)
 			{
-				/*var cX = climbX[climbIndex] / (1+liquidMovement) * dir,
-					cY = climbY[climbIndex] / (1+liquidMovement);
-				position.X += cX;
-				position.Y -= cY;
-				
-				if(climbIndex >= 8 && move == dir)
-				{
-					velX += max((1+(stateFrame == State.Morph)) / (1+liquidMovement) - abs(cX),0)*move;
-				}
-				
-				var cynum = 2,
-					cyframe = 8;
-				if(stateFrame == State.Morph)
-				{
-					cynum = 4+abs(velX)+abs(cX);
-					cyframe = 6;
-				}
-				for(var i = cynum; i > 0; i--)
-				{
-					if(climbIndex > cyframe && entity_place_collide(0,0) && !entity_position_collide(5*dir,bbox_top-scr_round(position.Y)-1))
-					{
-						position.Y -= 1;
-					}
-				}
-				
-				for(var i = 8; i > 0; i--)
-				{
-					if(climbIndex > 8 && !entity_place_collide(0,1))
-					{
-						position.Y += 1;
-					}
-				}
-				
-				x = scr_round(position.X);
-				y = scr_round(position.Y);*/
 				if(climbIndex <= 7)
 				{
 					velY = 0;
@@ -2889,14 +2854,14 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					}
 				}
 				//else if(climbIndex > 9 && !entity_place_collide(0,0))
-				else if(climbIndex > 11 && !entity_place_collide(0,0))
+				/*else if(climbIndex > 11 && !entity_place_collide(0,0))
 				{
 					ChangeState(State.Morph,State.Morph,mask_Morph,true);
 					if(move == dir)
 					{
 						//velX += cX;
 					}
-				}
+				}*/
 			}
 		}
 		else
@@ -2975,7 +2940,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		ds_list_clear(blockList);
 		
-		if((!entity_place_collide(2*dir,0) && !entity_place_collide(2*dir,8)) || (entity_position_collide(6*dir,-19) && !startClimb) || (colFlag && !startClimb) || (cDown && cJump && rJump) || (lhc_place_meeting(x,y,"IMovingSolid") && !startClimb))
+		if((!entity_place_collide(2*dir,0) && !entity_place_collide(2*dir,4) && !entity_place_collide(0,2)) || (entity_position_collide(6*dir,-19) && !startClimb) || (colFlag && !startClimb) || (cDown && cJump && rJump) || (lhc_place_meeting(x,y,"IMovingSolid") && !startClimb))
 		{
 			if(stateFrame == State.Morph)
 			{
@@ -4053,15 +4018,19 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		grapWallBounceCounter = min(grapWallBounceCounter+1,0);
 	}
-	
+	justBounced = false;
 	prevSpiderEdge = spiderEdge;
 	
+	notGrounded = !grounded;
+	if(!PlayerGrounded() && !PlayerOnPlatform())
+	{
+		grounded = false;
+	}
 	if(!PlayerOnPlatform())
 	{
 		onPlatform = false;
 	}
 	
-	notGrounded = !grounded;
 	slopeGrounded = false;
 	
 	if(((!cUp && !cDown) || (move != 0 && state == State.Stand)) && aimAngle == gbaAimAngle)

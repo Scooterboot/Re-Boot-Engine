@@ -110,6 +110,7 @@ uncrouch = 0;
 //uncrouched = true;
 
 canMorphBounce = true;
+justBounced = false;
 mockBall = false;
 
 aimAngle = 0; //2 = verticle up, 1 = diagonal up, 0 = forward, -1 = diagonal down, -2 = vertical down
@@ -1430,12 +1431,12 @@ function OnYCollision(fVY)
 	}
 	
 	// Ball Bounce
-	if(canMorphBounce && bFlag && velY > (2.5 + fGrav) && state == State.Morph && morphFrame <= 0 && shineRampFix <= 0)
+	if(canMorphBounce && !justBounced && bFlag && velY > (2.5 + fGrav) && state == State.Morph && morphFrame <= 0 && shineRampFix <= 0)
 	{
-		audio_stop_sound(snd_Land);
-		audio_play_sound(snd_Land,0,false);
+		//audio_stop_sound(snd_Land);
+		//audio_play_sound(snd_Land,0,false);
 		
-		var bounceVelY = -velY*0.25;
+		var bounceVelY = -abs(velY)*0.25;
 		if(abs(bounceVelY) < fGrav*4)
 		{
 			bounceVelY = 0;
@@ -1443,6 +1444,7 @@ function OnYCollision(fVY)
 		velY = min(bounceVelY,0);
 		
 		justFell = false;
+		justBounced = true;
 	}
 	else if(sign(velY) == sign(fVelY))
 	{
