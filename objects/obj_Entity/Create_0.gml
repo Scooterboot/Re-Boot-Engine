@@ -102,6 +102,10 @@ function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
 {
 	return entity_collision(collision_line_list(x1,y1,x2,y2,all,prec,notme,blockList,true));
 }
+function entity_collision_rectangle(x1,y1,x2,y2, prec = true, notme = true)
+{
+	return entity_collision(collision_rectangle_list(x1,y1,x2,y2,all,prec,notme,blockList,true));
+}
 
 function entity_collision(listNum)
 {

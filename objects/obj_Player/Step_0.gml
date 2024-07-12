@@ -1234,7 +1234,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				}
 				spiderEdge = Edge.None;
 				prevSpiderEdge = Edge.None;
-				notGrounded = true;
 				
 				spiderJump = true;
 			}
@@ -1246,6 +1245,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			
 			ledgeFall = false;
 			ledgeFall2 = false;
+			
+			grounded = false;
+			prevGrounded = false;
 		}
 		
 		if(velY <= -(fJumpSpeed*0.3) && !liquidMovement && !outOfLiquid)
@@ -1363,6 +1365,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		gunReady = true;
 		jumping = false;
+		
+		grounded = false;
+		prevGrounded = false;
 		
 		bombJump--;
 	}
@@ -1699,7 +1704,63 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	{
 		if(!entity_place_collide(0,-4) && ((state == State.Jump && !entity_place_collide(0,3)) || (state == State.Somersault && !entity_place_collide(0,13))))
 		{
+			var canGrip = true;
 			var num = instance_place_list(x+move2,y,all,blockList,true);
+				num += collision_line_list(x,y-17,x+6*move2,y-17,all,true,true,blockList,true);
+			for(var i = 0; i < num; i++)
+			{
+				if (instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object))
+				{
+					var block = blockList[| i];
+					if (block.object_index == obj_Tile || object_is_ancestor(block.object_index,obj_Tile) ||
+						block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
+					{
+						canGrip = block.canGrip;
+					}
+					if(canGrip)
+					{
+						break;
+					}
+				}
+			}
+			ds_list_clear(blockList);
+			
+			if(entity_collision_line(x,y-17,x+6*move2,y-17) && !entity_collision_line(x+6*move2,y-22,x+6*move2,y-26) && entity_place_collide(move2,0) && dir == move2)
+			{
+				var slopeOffset = 0;
+				while(slopeOffset >= -8 && entity_collision_line(x+6*move2,y-17+slopeOffset,x+14*move2,y-25+slopeOffset))
+				{
+					slopeOffset -= 1;
+				}
+				if(slopeOffset <= -8)
+				{
+					canGrip = false;
+				}
+				
+				if(canGrip)
+				{
+					audio_play_sound(snd_Grip,0,false);
+					jump = 0;
+					fVelY = 0;
+					velY = 0;
+					dir = move2;
+					
+					ChangeState(State.Grip,State.Grip,mask_Jump,false);
+					
+					position.Y = scr_ceil(position.Y);
+					for(var j = 10; j > 0; j--)
+					{
+						if(entity_collision_line(x,position.Y-18,x+6*move2,position.Y-18))
+						{
+							position.Y -= 1;
+						}
+					}
+					y = scr_round(position.Y);
+					
+					instance_destroy(grapple);
+				}
+			}
+			/*var num = instance_place_list(x+move2,y,all,blockList,true);
 				num += collision_line_list(x,y-17,x+6*move2,y-17,all,true,true,blockList,true);
 			for(var i = 0; i < num; i++)
 			{
@@ -1746,7 +1807,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					}
 				}
 			}
-			ds_list_clear(blockList);
+			ds_list_clear(blockList);*/
 		}
 	}
 #endregion
@@ -1767,22 +1828,21 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			// then again, 'if it looks stupid, but works, it isn't stupid.'
 			for(var i = 0; i < 2; i++)
 			{
-				if(i == 0 && lhc_collision_rectangle(x,bbottom-8,x+7*dir,bbottom-5,solids,true,true))
+				if(i == 0 && entity_collision_rectangle(x,bbottom-8,x+7*dir,bbottom-5))
 				{
-					while(qcHeight > -heightMax && lhc_collision_line(x,bbottom+qcHeight,x+7*dir,bbottom+qcHeight,solids,true,true))
+					while(qcHeight > -heightMax && entity_collision_line(x,bbottom+qcHeight,x+7*dir,bbottom+qcHeight))
 					{
 						qcHeight--;
 					}
-					//qcHeight += 1;
 				}
 				else if(i == 1)
 				{
 					qcHeight = -heightMax;
-					while(qcHeight < -5 && lhc_collision_line(x,bbottom+qcHeight,x+7*dir,bbottom+qcHeight,solids,true,true))
+					while(qcHeight < -5 && entity_collision_line(x,bbottom+qcHeight,x+7*dir,bbottom+qcHeight))
 					{
 						qcHeight++;
 					}
-					while(qcHeight < -5 && !lhc_collision_line(x,bbottom+qcHeight,x+7*dir,bbottom+qcHeight,solids,true,true))
+					while(qcHeight < -5 && !entity_collision_line(x,bbottom+qcHeight,x+7*dir,bbottom+qcHeight))
 					{
 						qcHeight++;
 					}
@@ -1793,26 +1853,18 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				if(qcHeight <= -7)
 				{
 					var yHeight = bbottom+qcHeight;
-			
+					
 					var slopeOffset = 0;
-					while(slopeOffset > -16 && collision_rectangle(x+7*dir,yHeight+slopeOffset-8,x+17*dir,yHeight+slopeOffset,obj_Slope,true,true))
+					while(slopeOffset > -16 && entity_collision_line(x+7*dir,yHeight+slopeOffset,x+15*dir,yHeight+slopeOffset))
 					{
-						var slopeCol = collision_rectangle(x+7*dir,yHeight+slopeOffset-8,x+17*dir,yHeight+slopeOffset,obj_Slope,true,true);
-						if(slopeCol != noone && slopeCol.image_yscale > 0 && slopeCol.image_yscale <= 1 && sign(slopeCol.image_xscale) == -dir)
-						{
-							slopeOffset -= 1;
-						}
-						else
-						{
-							break;
-						}
+						slopeOffset -= 1;
 					}
-			
+					
 					yHeight += slopeOffset;
-			
-					if(!lhc_collision_rectangle(x-4*dir,yHeight-15,x+17*dir,yHeight-2,solids,true,true))
+					
+					if(!entity_collision_rectangle(x-4*dir,yHeight-15,x+17*dir,yHeight-2))
 					{
-						if(!lhc_collision_rectangle(x-4*dir,yHeight-31,x+17*dir,yHeight-2,solids,true,true))
+						if(!entity_collision_rectangle(x-4*dir,yHeight-31,x+17*dir,yHeight-2))
 						{
 							quickClimbTarget = 2;
 						}
@@ -1836,9 +1888,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			velY = 0;
 			ledgeFall = false;
 			justFell = false;
-			
-			//stateFrame = State.Grip;
-			//mask_index = mask_Crouch;
 			
 			audio_play_sound(snd_Climb,0,false);
 			gripGunReady = false;
@@ -2357,7 +2406,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		{
 			mockBall = false;
 		}
-		if(grounded && notGrounded)
+		if(grounded && !prevGrounded)
 		{
 			if(morphFrame <= 0 && shineRampFix <= 0 && !slopeGrounded)
 			{
@@ -2366,7 +2415,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					audio_stop_sound(snd_Land);
 					audio_play_sound(snd_Land,0,false);
 					
-					if((speedKeep == 0 || (speedKeep == 2 && liquidMovement)) && !justBounced)
+					if((speedKeep == 0 || (speedKeep == 2 && liquidMovement)) && canMorphBounce && !justBounced)
 					{
 						velX = min(abs(velX),maxSpeed[0,liquidState])*sign(velX);
 						speedCounter = 0;
@@ -2508,7 +2557,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		}
 		else if(state == State.Morph)
 		{
-			if(spiderEdge != Edge.None && prevSpiderEdge == Edge.None && grounded && notGrounded)
+			if(spiderEdge != Edge.None && prevSpiderEdge == Edge.None && grounded && !prevGrounded)
 			{
 				if(morphFrame <= 0 && shineRampFix <= 0)
 				{
@@ -2853,15 +2902,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 						}
 					}
 				}
-				//else if(climbIndex > 9 && !entity_place_collide(0,0))
-				/*else if(climbIndex > 11 && !entity_place_collide(0,0))
+				else if(climbIndex > 11 && !entity_place_collide(0,0))
 				{
 					ChangeState(State.Morph,State.Morph,mask_Morph,true);
-					if(move == dir)
-					{
-						//velX += cX;
-					}
-				}*/
+				}
 			}
 		}
 		else
@@ -2884,7 +2928,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			if(!entity_place_collide(0,-8))
 			{
 				var ctStart = 0;
-				while(ctStart >= -16 && lhc_collision_line(x,bbox_top+ctStart,x+18*dir,bbox_top+ctStart,solids,true,true))
+				while(ctStart >= -16 && entity_collision_line(x,bbox_top+ctStart,x+9*dir,bbox_top+ctStart))
 				{
 					ctStart--;
 				}
@@ -2894,7 +2938,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 						crouchH = 29;
 				
 					var ctHeight = -(crouchH+1);
-					while(ctHeight <= -morphH && lhc_collision_line(x,bbox_top+ctStart+ctHeight,x+18*dir,bbox_top+ctStart+ctHeight,solids,true,true))
+					while(ctHeight <= -morphH && entity_collision_line(x,bbox_top+ctStart+ctHeight,x+9*dir,bbox_top+ctStart+ctHeight))
 					{
 						ctHeight++;
 					}
@@ -4021,7 +4065,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	justBounced = false;
 	prevSpiderEdge = spiderEdge;
 	
-	notGrounded = !grounded;
 	if(!PlayerGrounded() && !PlayerOnPlatform())
 	{
 		grounded = false;
@@ -4032,6 +4075,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 	
 	slopeGrounded = false;
+	prevGrounded = grounded;
 	
 	if(((!cUp && !cDown) || (move != 0 && state == State.Stand)) && aimAngle == gbaAimAngle)
 	{

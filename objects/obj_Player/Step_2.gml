@@ -2462,17 +2462,17 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				afterImageNum = min((point_distance(xprevious,yprevious,x,y)-3),10);
 			}
 		}
-		else if(notGrounded && boots[Boots.SpaceJump] && state == State.Somersault && !liquidMovement)
+		else if(!grounded && boots[Boots.SpaceJump] && state == State.Somersault && !liquidMovement)
 		{
 			drawAfterImage = true;
 			afterImageNum = 10;
 		}
-		else if(notGrounded && fVelY < 0)
+		else if(!grounded && fVelY < 0)
 		{
 			drawAfterImage = true;
 			afterImageNum = min(abs(fVelY)*1.5, 10);
 		}
-		else if(notGrounded && fVelY >= 3)
+		else if(!grounded && fVelY >= 3)
 		{
 			drawAfterImage = true;
 			afterImageNum = min((abs(fVelY)-3),10);
@@ -3113,7 +3113,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		
 		#endregion
 	
-		if(aimAngle != 0 || velX == 0 || notGrounded || abs(dirFrame) < 4 || state == State.Morph)
+		if(aimAngle != 0 || velX == 0 || !grounded || abs(dirFrame) < 4 || state == State.Morph)
 		{
 			justShot = 0;
 		}

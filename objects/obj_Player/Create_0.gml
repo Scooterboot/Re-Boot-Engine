@@ -100,7 +100,7 @@ prevState = state;
 lastState = prevState;
 
 grounded = true;
-notGrounded = !grounded;
+prevGrounded = grounded;
 slopeGrounded = false;
 
 wallJumpDelay = 6;
@@ -1284,8 +1284,11 @@ function CanMoveUpSlope_Bottom()
 }
 function OnSlopeXCollision_Bottom(fVX, yShift)
 {
-	grounded = true;
-	if(entityPlatformCheck(0,1))
+	if(!grounded && velY == 0 && PlayerGrounded())
+	{
+		grounded = true;
+	}
+	if(!onPlatform && velY == 0 && PlayerOnPlatform())
 	{
 		onPlatform = true;
 	}

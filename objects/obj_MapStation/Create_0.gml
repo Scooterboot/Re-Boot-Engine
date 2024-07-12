@@ -10,7 +10,9 @@ mapAreaText[MapArea.Brinstar] = "BRINSTAR";
 mapAreaText[MapArea.Norfair] = "NORFAIR";
 mapAreaText[MapArea.Maridia] = "MARIDIA";
 mapAreaText[MapArea.Tourian] = "TOURIAN";
-stationMessage = mapAreaText[mapIndex]+" MAP UPDATED";
+
+initMessage = false;
+stationMessage = " MAP UPDATED";
 
 Condition = function()
 {
@@ -18,6 +20,11 @@ Condition = function()
 }
 Interact = function()
 {
+	if(!initMessage)
+	{
+		stationMessage = mapAreaText[mapIndex]+stationMessage;
+		initMessage = true;
+	}
 	if(map != noone && mapIndex >= 0)
 	{
 		if(activeTime == activeTimeMax-1)
