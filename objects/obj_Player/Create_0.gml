@@ -1322,11 +1322,11 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		var bbottom = position.Y + (bbox_bottom-y),
 			bright = position.X + (bbox_right-x),
 			bleft = position.X + (bbox_left-x);
-		if(fVelX > 0 && !entity_collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1))
+		if(fVelX > 0 && !entity_collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1) && !lhc_collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1,"IPlatform",true,true))
 		{
 			flag = true;
 		}
-		if(fVelX < 0 && !entity_collision_line(bleft+fVX+fVelX,y+yShift,bleft+fVX+fVelX,bbottom+yShift+1))
+		if(fVelX < 0 && !entity_collision_line(bleft+fVX+fVelX,y+yShift,bleft+fVX+fVelX,bbottom+yShift+1) && !lhc_collision_line(bleft+fVX+fVelX,y+yShift,bleft+fVX+fVelX,bbottom+yShift+1,"IPlatform",true,true))
 		{
 			flag = true;
 		}

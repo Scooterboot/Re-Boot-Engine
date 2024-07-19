@@ -4,16 +4,23 @@ if(room == rm_MainMenu)
 {
 	global.rmMapArea = noone;
 	prevArea = noone;
+	
+	for(var i = 0; i < array_length(global.mapArea); i++)
+	{
+		ds_grid_clear(global.mapArea[i].grid,false);
+		ds_list_clear(global.mapArea[i].icons);
+			
+		global.mapArea[i].visited = false;
+		global.mapArea[i].stationUsed = false;
+	}
 }
 
 if(instance_exists(obj_Player) && room != rm_MainMenu && global.rmMapArea != noone && (!instance_exists(obj_Transition) || obj_Transition.transitionComplete || prevArea != global.rmMapArea))
 {
-	var roomSizeW = scr_floor(room_width / global.rmMapSize)-1,
-		roomSizeH = scr_floor(room_height / global.rmMapSize)-1;
 	var msSize = global.mapSquareSize;
 	
-	playerMapX = clamp(scr_floor((obj_Player.x-global.rmMapPixX)/global.rmMapSize),0,roomSizeW) + global.rmMapX;
-	playerMapY = clamp(scr_floor((obj_Player.y-global.rmMapPixY)/global.rmMapSize),0,roomSizeH) + global.rmMapY;
+	playerMapX = GetMapPosX(obj_Player.x);
+	playerMapY = GetMapPosY(obj_Player.y);
 	
 	if(prevArea == global.rmMapArea)
 	{

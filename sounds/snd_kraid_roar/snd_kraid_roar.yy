@@ -12,8 +12,8 @@
   "duration":1.110354,
   "name":"snd_Kraid_Roar",
   "parent":{
-    "name":"Kraig",
-    "path":"folders/Sounds/NPCs/Bosses/Kraig.yy",
+    "name":"Kraid",
+    "path":"folders/Sounds/NPCs/Bosses/Kraid.yy",
   },
   "preload":false,
   "resourceType":"GMSound",

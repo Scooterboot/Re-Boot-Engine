@@ -97,6 +97,9 @@ function scr_LoadGame()
 				ds_grid_read(global.mapArea[i].grid, _map_map[? "mapReveal_"+global.mapArea[i].name]);
 				ds_grid_resize(global.mapArea[i].grid,dsWidth,dsHeight);
 				
+				ds_list_clear(global.mapArea[i].icons);
+				ds_list_read(global.mapArea[i].icons, _map_map[? "mapIcons_"+global.mapArea[i].name]);
+				
 				global.mapArea[i].visited = _map_map[? "mapVisited_"+global.mapArea[i].name];
 				global.mapArea[i].stationUsed = _map_map[? "mapStationUsed_"+global.mapArea[i].name];
 			}
@@ -136,7 +139,6 @@ function scr_LoadGame()
 		room_goto(rm_debugRedBrin_Start);
 		var sx = 80,
 			sy = 694;
-		//instance_create_layer(sx,sy,"Player",obj_Player);
 		with(instance_create_layer(sx,sy,"Player",obj_Player))
 		{
 			lhc_activate();
@@ -146,6 +148,8 @@ function scr_LoadGame()
 		for(var i = 0; i < array_length(global.mapArea); i++)
 		{
 			ds_grid_clear(global.mapArea[i].grid,false);
+			ds_list_clear(global.mapArea[i].icons);
+			
 			global.mapArea[i].visited = false;
 			global.mapArea[i].stationUsed = false;
 		}

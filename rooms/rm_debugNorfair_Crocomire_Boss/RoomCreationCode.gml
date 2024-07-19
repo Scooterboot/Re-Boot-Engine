@@ -1,8 +1,8 @@
 var music = global.music_Boss2;
-//if
-//{
+if(global.BossDowned("Crocomire"))
+{
 	music = global.music_UpperNorfair;
-//}
+}
 
 scr_InitRoom(music,MapArea.Norfair,9,6);
 

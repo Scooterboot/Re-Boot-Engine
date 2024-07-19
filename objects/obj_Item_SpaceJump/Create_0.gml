@@ -7,11 +7,10 @@ itemID = 0;
 itemHeader = "SPACE JUMP";
 itemDesc = "Jump continously in the air.";
 
-CollectItem = function()
+isMajorItem = true;
+
+function CollectItem(player)
 {
-	if(instance_exists(obj_Player))
-	{
-		obj_Player.hasBoots[Boots.SpaceJump] = true;
-		obj_Player.boots[Boots.SpaceJump] = true;
-	}
+	player.hasBoots[Boots.SpaceJump] = true;
+	player.boots[Boots.SpaceJump] = true;
 }

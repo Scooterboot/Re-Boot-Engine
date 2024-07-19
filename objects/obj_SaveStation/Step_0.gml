@@ -33,6 +33,8 @@ if (instance_exists(player) && (player.state == State.Stand || player.state == S
 				yy = bbox_bottom-25;
 			if(saving == maxSave)
 			{
+				UpdateMapIcon();
+				
 				player.state = State.Elevator;
 				player.saveAnimCounter = maxSave;
 				scr_SaveGame(global.currentPlayFile,xx,yy);

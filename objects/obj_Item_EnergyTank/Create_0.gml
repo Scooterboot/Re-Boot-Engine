@@ -11,12 +11,9 @@ itemDesc = "Maximum energy increased by "+string(energyAmount)+" units.";
 expanHeader = "ENERGY TANK";
 expanDesc = "+"+string(energyAmount)+" Energy Capacity";
 
-CollectItem = function()
+function CollectItem(player)
 {
-	if(instance_exists(obj_Player))
-	{
-		isExpansion = (obj_Player.energyMax > 99);
-		obj_Player.energyMax += energyAmount;
-		obj_Player.energy = obj_Player.energyMax;
-	}
+	isExpansion = (player.energyMax > 99);
+	player.energyMax += energyAmount;
+	player.energy = obj_Player.energyMax;
 }

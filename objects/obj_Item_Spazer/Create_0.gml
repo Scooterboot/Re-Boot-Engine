@@ -7,11 +7,10 @@ itemID = 0;
 itemHeader = "SPAZER";
 itemDesc = "Fire 3 beams at once.";
 
-CollectItem = function()
+isMajorItem = true;
+
+function CollectItem(player)
 {
-	if(instance_exists(obj_Player))
-	{
-		obj_Player.hasBeam[Beam.Spazer] = true;
-		obj_Player.beam[Beam.Spazer] = true;
-	}
+	player.hasBeam[Beam.Spazer] = true;
+	player.beam[Beam.Spazer] = true;
 }

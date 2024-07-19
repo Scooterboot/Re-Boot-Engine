@@ -12,8 +12,8 @@
   "duration":0.659167,
   "name":"snd_Kraid_SpikeShoot",
   "parent":{
-    "name":"Kraig",
-    "path":"folders/Sounds/NPCs/Bosses/Kraig.yy",
+    "name":"Kraid",
+    "path":"folders/Sounds/NPCs/Bosses/Kraid.yy",
   },
   "preload":false,
   "resourceType":"GMSound",

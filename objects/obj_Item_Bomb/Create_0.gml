@@ -7,11 +7,10 @@ itemID = 0;
 itemHeader = "BOMB";
 itemDesc = "[sprt_Text_MiniPlayer] [sprt_Text_Arrow] [sprt_Text_MiniMorph] and press ${shootButton} to set.";
 
-CollectItem = function()
+isMajorItem = true;
+
+function CollectItem(player)
 {
-	if(instance_exists(obj_Player))
-	{
-		obj_Player.hasMisc[Misc.Bomb] = true;
-		obj_Player.misc[Misc.Bomb] = true;
-	}
+	player.hasMisc[Misc.Bomb] = true;
+	player.misc[Misc.Bomb] = true;
 }

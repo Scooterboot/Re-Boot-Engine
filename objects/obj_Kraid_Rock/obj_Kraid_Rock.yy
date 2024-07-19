@@ -9,8 +9,8 @@
   "name":"obj_Kraid_Rock",
   "overriddenProperties":[],
   "parent":{
-    "name":"Karid-X",
-    "path":"folders/Objects/Entities/NPCs/Bosses/Karid-X.yy",
+    "name":"Kraid",
+    "path":"folders/Objects/Entities/NPCs/Bosses/Kraid.yy",
   },
   "parentObjectId":null,
   "persistent":false,

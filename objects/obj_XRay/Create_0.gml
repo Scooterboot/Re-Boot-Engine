@@ -142,7 +142,7 @@ function xray_redraw_break()
 			DrawBreakable(x-camera_get_view_x(view_camera[0]),y-camera_get_view_y(view_camera[0]),image_index);
 		}
 	}
-	with (obj_Pickup)
+	with (obj_Item)
 	{
 		if(!visible)
 		{

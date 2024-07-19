@@ -12,14 +12,11 @@ itemDesc = "Select ${hudIcon_1} and press ${shootButton} to fire a Super Missile
 expanHeader = "SUPER MISSILE EXPANSION";
 expanDesc = "+"+string(sMissileAmount)+" Super Missile Capacity";
 
-CollectItem = function()
+function CollectItem(player)
 {
-	if(instance_exists(obj_Player))
-	{
-		isExpansion = (obj_Player.hasItem[Item.SMissile]);
-		obj_Player.hasItem[Item.SMissile] = true;
-		obj_Player.item[Item.SMissile] = true;
-		obj_Player.superMissileMax += sMissileAmount;
-		obj_Player.superMissileStat += sMissileAmount;
-	}
+	isExpansion = (player.hasItem[Item.SMissile]);
+	player.hasItem[Item.SMissile] = true;
+	player.item[Item.SMissile] = true;
+	player.superMissileMax += sMissileAmount;
+	player.superMissileStat += sMissileAmount;
 }

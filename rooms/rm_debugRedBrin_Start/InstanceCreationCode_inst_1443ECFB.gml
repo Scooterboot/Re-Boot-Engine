@@ -1,1 +1,0 @@
-respawnTime = 0;

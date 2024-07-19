@@ -5,7 +5,6 @@ if(global.gamePaused)
 	exit;
 }
 
-var player = obj_Player;
 if(instance_exists(player))
 {
 	player.state = State.Elevator;

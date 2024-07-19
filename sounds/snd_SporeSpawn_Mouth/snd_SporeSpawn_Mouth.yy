@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"snd_SporeSpawn_Mouth",
+  "audioGroupId":{
+    "name":"audio_sound",
+    "path":"audiogroups/audio_sound",
+  },
+  "bitDepth":1,
+  "bitRate":128,
+  "compression":0,
+  "conversionMode":0,
+  "duration":1.380333,
+  "name":"snd_SporeSpawn_Mouth",
+  "parent":{
+    "name":"SporeSpawn",
+    "path":"folders/Sounds/NPCs/Bosses/SporeSpawn.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"snd_SporeSpawn_Mouth.wav",
+  "type":1,
+  "volume":1.0,
+}

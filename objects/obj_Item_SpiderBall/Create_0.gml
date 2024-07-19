@@ -7,11 +7,10 @@ itemID = 0;
 itemHeader = "SPIDER BALL";
 itemDesc = "Press ${angleUpButton} or ${angleDownButton} during [sprt_Text_MiniMorph] to climb walls.";
 
-CollectItem = function()
+isMajorItem = true;
+
+function CollectItem(player)
 {
-	if(instance_exists(obj_Player))
-	{
-		obj_Player.hasMisc[Misc.Spider] = true;
-		obj_Player.misc[Misc.Spider] = true;
-	}
+	player.hasMisc[Misc.Spider] = true;
+	player.misc[Misc.Spider] = true;
 }

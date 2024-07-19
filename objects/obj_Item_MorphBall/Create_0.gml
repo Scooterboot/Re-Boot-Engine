@@ -7,11 +7,10 @@ itemID = 0;
 itemHeader = "MORPH BALL";
 itemDesc = "Press ${controlPad} down twice to morph into a ball.";
 
-CollectItem = function()
+isMajorItem = true;
+
+function CollectItem(player)
 {
-	if(instance_exists(obj_Player))
-	{
-		obj_Player.hasMisc[Misc.Morph] = true;
-		obj_Player.misc[Misc.Morph] = true;
-	}
+	player.hasMisc[Misc.Morph] = true;
+	player.misc[Misc.Morph] = true;
 }

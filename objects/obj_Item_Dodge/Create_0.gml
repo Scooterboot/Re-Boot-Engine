@@ -7,11 +7,10 @@ itemID = 0;
 itemHeader = "ACCEL DASH";
 itemDesc = "Tap ${aimLockButton} to perform a dash.\n" + "Dashing grants invulnerability.";
 
-CollectItem = function()
+isMajorItem = true;
+
+function CollectItem(player)
 {
-	if(instance_exists(obj_Player))
-	{
-		obj_Player.hasBoots[Boots.Dodge] = true;
-		obj_Player.boots[Boots.Dodge] = true;
-	}
+	player.hasBoots[Boots.Dodge] = true;
+	player.boots[Boots.Dodge] = true;
 }

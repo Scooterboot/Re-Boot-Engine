@@ -13,8 +13,8 @@
   "name":"obj_Kraid",
   "overriddenProperties":[],
   "parent":{
-    "name":"Karid-X",
-    "path":"folders/Objects/Entities/NPCs/Bosses/Karid-X.yy",
+    "name":"Kraid",
+    "path":"folders/Objects/Entities/NPCs/Bosses/Kraid.yy",
   },
   "parentObjectId":{
     "name":"obj_NPC_Boss",

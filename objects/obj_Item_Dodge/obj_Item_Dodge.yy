@@ -13,8 +13,8 @@
     "path":"folders/Objects/Room Elements/ItemPickups/BootsItems.yy",
   },
   "parentObjectId":{
-    "name":"obj_Pickup",
-    "path":"objects/obj_Pickup/obj_Pickup.yy",
+    "name":"obj_Item",
+    "path":"objects/obj_Item/obj_Item.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,

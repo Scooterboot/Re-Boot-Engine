@@ -623,9 +623,10 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 		maxSpeedY = abs(vY);
 	while(maxSpeedX > 0 || maxSpeedY > 0)
 	{
-		var fVX = ModifyFinalVelX(min(maxSpeedX,1)*sign(vX));
-		if(fVX != 0)
+		if(maxSpeedX > 0)
 		{
+			var fVX = ModifyFinalVelX(min(maxSpeedX,1)*sign(vX));
+			
 			#region X Collision
 		
 			DestroyBlock(position.X+fVX,position.Y);
@@ -709,8 +710,8 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 				DestroyBlock(position.X+xnum,position.Y+steepness);
 				DestroyBlock(position.X+xnum,position.Y-steepness);
 			
-				var moveDownSlope_Bottom = (entity_place_collide(0,1) && entity_place_collide(xnum,steepness) && CanMoveDownSlope_Bottom());
-				var moveDownSlope_Top = (entity_place_collide(0,-1) && entity_place_collide(xnum,-steepness) && CanMoveDownSlope_Top());
+				var moveDownSlope_Bottom = (entity_place_collide(0,1.1) && entity_place_collide(xnum,steepness) && CanMoveDownSlope_Bottom());
+				var moveDownSlope_Top = (entity_place_collide(0,-1.1) && entity_place_collide(xnum,-steepness) && CanMoveDownSlope_Top());
 			
 				if(moveDownSlope_Bottom || moveDownSlope_Top)
 				{
@@ -757,13 +758,14 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 			#endregion
 			
 			position.X += fVX;
+			
+			maxSpeedX--;
 		}
 		
-		maxSpeedX = max(maxSpeedX-1,0);
-		
-		var fVY = ModifyFinalVelY(min(maxSpeedY,1)*sign(vY));
-		if(fVY != 0)
+		if(maxSpeedY > 0)
 		{
+			var fVY = ModifyFinalVelY(min(maxSpeedY,1)*sign(vY));
+			
 			#region Y Collision
 		
 			DestroyBlock(position.X,position.Y+fVY);
@@ -847,8 +849,8 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 				DestroyBlock(position.X+steepness,position.Y+ynum);
 				DestroyBlock(position.X-steepness,position.Y+ynum);
 			
-				var moveDownSlope_Right = (entity_place_collide(1,0) && entity_place_collide(steepness,ynum) && CanMoveDownSlope_Right());
-				var moveDownSlope_Left = (entity_place_collide(-1,0) && entity_place_collide(-steepness,ynum) && CanMoveDownSlope_Left());
+				var moveDownSlope_Right = (entity_place_collide(1.1,0) && entity_place_collide(steepness,ynum) && CanMoveDownSlope_Right());
+				var moveDownSlope_Left = (entity_place_collide(-1.1,0) && entity_place_collide(-steepness,ynum) && CanMoveDownSlope_Left());
 			
 				if(moveDownSlope_Right || moveDownSlope_Left)
 				{
@@ -896,9 +898,9 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 			#endregion
 			
 			position.Y += fVY;
+			
+			maxSpeedY--;
 		}
-		
-		maxSpeedY = max(maxSpeedY-1,0);
 	}
 	
 	x = scr_round(position.X);
@@ -1189,8 +1191,8 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 				DestroyBlock(position.X+xnum,position.Y+steepness);
 				DestroyBlock(position.X+xnum,position.Y-steepness);
 			
-				var moveDownSlope_Bottom = (entity_place_collide(0,1) && entity_place_collide(xnum,steepness) && Crawler_CanMoveDownSlope_Bottom());
-				var moveDownSlope_Top = (entity_place_collide(0,-1) && entity_place_collide(xnum,-steepness) && Crawler_CanMoveDownSlope_Top());
+				var moveDownSlope_Bottom = (entity_place_collide(0,1.1) && entity_place_collide(xnum,steepness) && Crawler_CanMoveDownSlope_Bottom());
+				var moveDownSlope_Top = (entity_place_collide(0,-1.1) && entity_place_collide(xnum,-steepness) && Crawler_CanMoveDownSlope_Top());
 			
 				var ydir = 1;
 				if(colEdge == Edge.Top)
@@ -1383,8 +1385,8 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 				DestroyBlock(position.X+steepness,position.Y+ynum);
 				DestroyBlock(position.X-steepness,position.Y+ynum);
 			
-				var moveDownSlope_Right = (entity_place_collide(1,0) && entity_place_collide(steepness,ynum) && Crawler_CanMoveDownSlope_Right());
-				var moveDownSlope_Left = (entity_place_collide(-1,0) && entity_place_collide(-steepness,ynum) && Crawler_CanMoveDownSlope_Left());
+				var moveDownSlope_Right = (entity_place_collide(1.1,0) && entity_place_collide(steepness,ynum) && Crawler_CanMoveDownSlope_Right());
+				var moveDownSlope_Left = (entity_place_collide(-1.1,0) && entity_place_collide(-steepness,ynum) && Crawler_CanMoveDownSlope_Left());
 			
 				var xdir = 1;
 				if(colEdge == Edge.Left)

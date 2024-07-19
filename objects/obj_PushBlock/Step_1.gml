@@ -101,11 +101,7 @@ fVelX = velX;
 fVelY = velY;
 
 Collision_Normal(fVelX,fVelY,true);
-/*
-var downSlope = GetEdgeSlope(Edge.Bottom);
-var downSlopeFlag = (place_meeting(x,y+2,downSlope) && downSlope.image_yscale > 1 && 
-					((downSlope.image_xscale > 0 && bbox_left > downSlope.bbox_left) || (downSlope.image_xscale < 0 && bbox_right < downSlope.bbox_right)));
-*/
+
 var downAng = GetEdgeAngle(Edge.Bottom);
 var downSlopeFlag = (downAng >= 60 && downAng <= 300);
 if(!entity_place_collide(0,2) || downSlopeFlag)

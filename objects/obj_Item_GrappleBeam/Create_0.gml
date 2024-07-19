@@ -7,11 +7,10 @@ itemID = 0;
 itemHeader = "GRAPPLE BEAM";
 itemDesc = "Select ${hudIcon_3} and press ${shootButton} to fire a Grapple Beam.";
 
-CollectItem = function()
+isMajorItem = true;
+
+function CollectItem(player)
 {
-	if(instance_exists(obj_Player))
-	{
-		obj_Player.hasItem[Item.Grapple] = true;
-		obj_Player.item[Item.Grapple] = true;
-	}
+	player.hasItem[Item.Grapple] = true;
+	player.item[Item.Grapple] = true;
 }

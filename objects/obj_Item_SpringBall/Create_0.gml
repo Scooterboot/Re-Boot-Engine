@@ -7,11 +7,10 @@ itemID = 0;
 itemHeader = "SPRING BALL";
 itemDesc = "You can now jump during [sprt_Text_MiniMorph]";
 
-CollectItem = function()
+isMajorItem = true;
+
+function CollectItem(player)
 {
-	if(instance_exists(obj_Player))
-	{
-		obj_Player.hasMisc[Misc.Spring] = true;
-		obj_Player.misc[Misc.Spring] = true;
-	}
+	player.hasMisc[Misc.Spring] = true;
+	player.misc[Misc.Spring] = true;
 }

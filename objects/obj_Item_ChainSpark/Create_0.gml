@@ -8,11 +8,10 @@ itemHeader = "CHAIN SPARK";
 itemDesc = "Allows Wall Jumping during Shine Spark.\n" +
 "Allows downward Shine Sparking.";
 
-CollectItem = function()
+isMajorItem = true;
+
+function CollectItem(player)
 {
-	if(instance_exists(obj_Player))
-	{
-		obj_Player.hasBoots[Boots.ChainSpark] = true;
-		obj_Player.boots[Boots.ChainSpark] = true;
-	}
+	player.hasBoots[Boots.ChainSpark] = true;
+	player.boots[Boots.ChainSpark] = true;
 }

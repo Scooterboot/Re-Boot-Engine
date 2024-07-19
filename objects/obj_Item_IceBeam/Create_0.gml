@@ -7,11 +7,10 @@ itemID = 0;
 itemHeader = "ICE BEAM";
 itemDesc = "Your beam can now freeze most enemies.";
 
-CollectItem = function()
+isMajorItem = true;
+
+function CollectItem(player)
 {
-	if(instance_exists(obj_Player))
-	{
-		obj_Player.hasBeam[Beam.Ice] = true;
-		obj_Player.beam[Beam.Ice] = true;
-	}
+	player.hasBeam[Beam.Ice] = true;
+	player.beam[Beam.Ice] = true;
 }

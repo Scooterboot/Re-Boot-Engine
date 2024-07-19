@@ -439,7 +439,7 @@ if(moveDir != 0)
 		}
 		position.X = scr_round(position.X);
 		
-		audio_play_sound(snd_Kraid_Footstep,1,false);
+		audio_play_sound(snd_Boss_Quake,1,false);
 	}
 }
 #endregion

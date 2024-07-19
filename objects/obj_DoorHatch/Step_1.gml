@@ -1,4 +1,5 @@
 /// @description Logic
+
 var player = noone;
 for(var i = 0; i < (room_width+room_height)/2; i+= 16)
 {
@@ -27,6 +28,7 @@ if(instance_exists(player) && frame >= 4)
 	htc.hatchID = hatchID;
 	htc.hatchID_Global = hatchID_Global;
 	htc.UnlockCondition = UnlockCondition;
+	htc.mapIcon = mapIcon;
     falseDestroy = true;
     instance_destroy();
 }

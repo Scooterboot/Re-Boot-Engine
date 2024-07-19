@@ -18,14 +18,41 @@ playerMapY = 0;
 prevPlayerMapX = 0;
 prevPlayerMapY = 0;
 
+function GetMapPosX(_x)
+{
+	var roomSizeW = scr_floor(room_width / global.rmMapSize)-1
+	return clamp(scr_floor((_x-global.rmMapPixX)/global.rmMapSize),0,roomSizeW) + global.rmMapX;
+}
+function GetMapPosY(_y)
+{
+	var roomSizeH = scr_floor(room_height / global.rmMapSize)-1;
+	return clamp(scr_floor((_y-global.rmMapPixY)/global.rmMapSize),0,roomSizeH) + global.rmMapY;
+}
+
 #region AreaMap
 function AreaMap(_mapSprite, _name) constructor
 {
 	sprt = _mapSprite;
 	name = _name;
 	
-	grid = ds_grid_create(scr_floor(sprite_get_width(sprt)/global.mapSquareSize),scr_floor(sprite_get_height(sprt)/global.mapSquareSize));
+	var gridWidth = scr_floor(sprite_get_width(sprt)/global.mapSquareSize),
+		gridHeight = scr_floor(sprite_get_height(sprt)/global.mapSquareSize);
+	grid = ds_grid_create(gridWidth,gridHeight);
 	ds_grid_clear(grid,false);
+	
+	icons = ds_list_create();
+	
+	/* map icons are arrays
+	mapIcon[0] = sprite
+	mapIcon[1] = image index
+	mapIcon[2] = x pos in map pixels (not squares)
+	mapIcon[3] = y pos in map pixels
+	mapIcon[4] = xscale
+	mapIcon[5] = yscale
+	mapIcon[6] = rotation
+	mapIcon[7] = whether to show on mini map (defaults to true)
+	mapIcon[8] = whether to show independantly of discovered map tile (default false)
+	*/
 	
 	visited = false;
 	stationUsed = false;
@@ -51,12 +78,13 @@ global.mapArea[MapArea.Tourian] = new AreaMap(sprt_Map_DebugTourian, "Tourian");
 prevArea = noone;
 
 #region DrawMap()
-function DrawMap(mapArea,posX,posY,mapX,mapY,mapWidth,mapHeight,baseAlpha = 0)
+function DrawMap(mapArea,posX,posY,mapX,mapY,mapWidth,mapHeight,isMinimap = false,baseAlpha = 0)
 {
 	if(mapArea != noone)
 	{
 		var mapSprt = mapArea.sprt;
 		var mapGrid = mapArea.grid;
+		var mapIcons = mapArea.icons;
 		var grey = mapArea.stationUsed;
 		
 		var diffX = mapX,
@@ -103,6 +131,34 @@ function DrawMap(mapArea,posX,posY,mapX,mapY,mapWidth,mapHeight,baseAlpha = 0)
 						else if(grey)
 						{
 							draw_sprite_part_ext(mapSprt,1,i*msSize,j*msSize,msSize,msSize,i*msSize,j*msSize,1,1,c_white,1);
+						}
+					}
+				}
+			}
+			
+			if(ds_exists(mapIcons,ds_type_list))
+			{
+				for(var i = 0; i < ds_list_size(mapIcons); i++)
+				{
+					if(is_array(mapIcons[| i]) && array_length(mapIcons[| i]) > 6)
+					{
+						var icon = mapIcons[| i];
+						var iconMapX = clamp(scr_floor(icon[2] / msSize), 0, ds_grid_width(mapGrid)),
+							iconMapY = clamp(scr_floor(icon[3] / msSize), 0, ds_grid_height(mapGrid));
+						
+						var canShowOnMini = true;
+						if(array_length(icon) > 7)
+						{
+							canShowOnMini = icon[7];
+						}
+						var alwaysShow = false;
+						if(array_length(icon) > 8)
+						{
+							alwaysShow = icon[8];
+						}
+						if((!isMinimap || canShowOnMini) && (mapGrid[# iconMapX,iconMapY] || alwaysShow))
+						{
+							draw_sprite_ext(icon[0],icon[1],icon[2],icon[3],icon[4],icon[5],icon[6],c_white,1);
 						}
 					}
 				}

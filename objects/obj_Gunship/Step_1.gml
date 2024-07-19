@@ -110,6 +110,8 @@ if (instance_exists(player) && player.state == State.Elevator &&
 				player.superMissileStat = player.superMissileMax;
 				player.powerBombStat = player.powerBombMax;
 				
+				UpdateMapIcon();
+				
 				scr_SaveGame(global.currentPlayFile,x,ystart-18);
 				audio_play_sound(snd_Save,0,false);
 				obj_UI.CreateMessageBox(gameSavedText,"",Message.Simple);

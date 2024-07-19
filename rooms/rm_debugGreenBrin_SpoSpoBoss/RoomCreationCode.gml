@@ -1,8 +1,8 @@
 var music = global.music_MiniBoss;
 
-//if( spo spo dead as hell )
-//{
+if(global.BossDowned("SporeSpawn"))
+{
 	music = global.music_ItemRoom;
-//}
+}
 
-scr_InitRoom(music,MapArea.Brinstar, 33,2, 96);
+scr_InitRoom(music,MapArea.Brinstar, 33,2, 96,-16);

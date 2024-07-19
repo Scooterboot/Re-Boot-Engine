@@ -26,5 +26,6 @@ if(!instance_exists(player) && doorRespawnObj != noone)
 	htc.hatchID = hatchID;
 	htc.hatchID_Global = hatchID_Global;
 	htc.UnlockCondition = UnlockCondition;
+	htc.mapIcon = mapIcon;
     instance_destroy();
 }

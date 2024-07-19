@@ -11,3 +11,5 @@ function UnlockCondition()
 {
 	return false;
 }
+
+mapIcon = array_create(0);

@@ -23,4 +23,8 @@ if(!falseDestroy)
     prt.image_angle = image_angle;
     prt.image_xscale = image_xscale;
     prt.image_yscale = image_yscale;
+	
+	mapIconIndex = 0;
+	mapIcon[1] = mapIconIndex;
+	UpdateMapIcon();
 }

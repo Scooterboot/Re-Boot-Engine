@@ -30,7 +30,7 @@ function scr_DrawMiniMap()
 		playerMapX = obj_Map.playerMapX * msSize;
 		playerMapY = obj_Map.playerMapY * msSize;
 		
-		obj_Map.DrawMap(currentMap, mapX,mapY, playerMapX-mapDifX+pMapOffsetX,playerMapY-mapDifY+pMapOffsetY, mapWidth,mapHeight, 0.75);
+		obj_Map.DrawMap(currentMap, mapX,mapY, playerMapX-mapDifX+pMapOffsetX,playerMapY-mapDifY+pMapOffsetY, mapWidth,mapHeight, true,0.75);
 		
 		if(pMapOffsetX > 0)
 		{
