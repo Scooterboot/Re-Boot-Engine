@@ -1168,7 +1168,6 @@ function ModifyFinalVelY(fVY)
 
 function ModifySlopeXSteepness_Up()
 {
-	//if((speedBoost && grounded) || state == State.Grapple || ((state == State.Spark || state == State.BallSpark) && abs(shineDir) != 2))
 	if((speedBoost && grounded) || state == State.Grapple || ((state == State.Spark || state == State.BallSpark) && !SparkDir_Hori()))
 	{
 		return 4;
@@ -1253,12 +1252,9 @@ function OnXCollision(fVX)
 	move = 0;
 	bombJumpX = 0;
 	
-	//var diagSparkSlide = (diagSparkSlideOnWalls && (abs(shineDir) == 1 || abs(shineDir) == 3) && !boots[Boots.ChainSpark]);
-	//var diagSparkSlide = (diagSparkSlideOnWalls && (SparkDir_DiagUp() || SparkDir_DiagDown()) && !boots[Boots.ChainSpark]);
 	var diagSparkSlide = (diagSparkSlideOnWalls && (SparkDir_DiagUp() || SparkDir_DiagDown()) && (cRight - cLeft) != dir);
 	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0 && !diagSparkSlide)
 	{
-		//if(boots[Boots.ChainSpark] && !instance_exists(pBlock) && (abs(shineDir) == 2 || (!entity_place_collide(0,3) && abs(shineDir) > 2) || (!entity_place_collide(0,-3) && abs(shineDir) < 2)))
 		if(boots[Boots.ChainSpark] && !instance_exists(pBlock) && (abs(GetSparkDir()) == 90 || (!entity_place_collide(0,3) && abs(GetSparkDir()) < 90) || (!entity_place_collide(0,-3) && abs(GetSparkDir()) > 90)))
 		{
 			shineRestart = true;
@@ -1275,7 +1271,6 @@ function OnXCollision(fVX)
 
 function CanMoveUpSlope_Bottom()
 {
-	//if((state == State.Spark || state == State.BallSpark) && abs(shineDir) > 2)
 	if((state == State.Spark || state == State.BallSpark) && abs(GetSparkDir()) < 90)
 	{
 		return false;
@@ -1293,7 +1288,6 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		onPlatform = true;
 	}
 	
-	//if((state == State.Spark || state == State.BallSpark) && abs(shineDir) <= 2 && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0 && move != 0 && yShift < 0)
 	if((state == State.Spark || state == State.BallSpark) && abs(GetSparkDir()) >= 90 && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0 && move != 0 && yShift < 0)
 	{
 		shineEnd = 0;
@@ -1349,7 +1343,6 @@ function CanMoveDownSlope_Bottom()
 
 function CanMoveUpSlope_Top()
 {
-	//return (((state == State.Spark || state == State.BallSpark) && abs(shineDir) >= 2) || state == State.Dodge || state == State.Grapple);
 	return (((state == State.Spark || state == State.BallSpark) && abs(GetSparkDir()) <= 90) || state == State.Dodge || state == State.Grapple);
 }
 function OnSlopeXCollision_Top(fVX, yShift)
@@ -1376,7 +1369,6 @@ function OnYCollision(fVY)
 {
 	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0)
 	{
-		//if(abs(shineDir) >= 2 && abs(shineDir) != 4 && !entity_place_collide(3*sign(velX),0))
 		if(abs(GetSparkDir()) <= 90 && !SparkDir_VertDown() && !entity_place_collide(3*sign(velX),0))
 		{
 			shineEnd = 0;
@@ -1550,7 +1542,6 @@ function Crawler_OnXCollision(fVX)
 {
 	if(state == State.BallSpark && shineStart <= 0 && shineLauncherStart <= 0)
 	{
-		//if(abs(shineDir) != 2 && !entity_place_collide(0,2*sign(velY)) && shineEnd <= 0)
 		if(!SparkDir_Hori() && !entity_place_collide(0,2*sign(velY)) && shineEnd <= 0)
 		{
 			//shineEnd = 0;
@@ -1587,7 +1578,6 @@ function Crawler_CanMoveUpSlope_Bottom()
 {
 	if(state == State.BallSpark)
 	{
-		//if(shineStart <= 0 && shineLauncherStart <= 0 && abs(shineDir) <= 2)
 		if(shineStart <= 0 && shineLauncherStart <= 0 && abs(GetSparkDir()) >= 90)
 		{
 			return true;
@@ -1632,7 +1622,6 @@ function Crawler_CanMoveUpSlope_Top()
 {
 	if(state == State.BallSpark)
 	{
-		//if(shineStart <= 0 && shineLauncherStart <= 0 && abs(shineDir) >= 2)
 		if(shineStart <= 0 && shineLauncherStart <= 0 && abs(GetSparkDir()) <= 90)
 		{
 			return true;
@@ -1701,7 +1690,6 @@ function Crawler_OnYCollision(fVY)
 {
 	if(state == State.BallSpark && shineStart <= 0 && shineLauncherStart <= 0)
 	{
-		//if(abs(shineDir) != 0 && abs(shineDir) != 4 && !entity_place_collide(2*sign(velX),0) && shineEnd <= 0)
 		if(!SparkDir_VertUp() && !SparkDir_VertDown() && !entity_place_collide(2*sign(velX),0) && shineEnd <= 0)
 		{
 			//shineEnd = 0;
@@ -1731,7 +1719,6 @@ function Crawler_CanMoveUpSlope_Right()
 {
 	if(state == State.BallSpark)
 	{
-		//if(shineStart <= 0 && shineLauncherStart <= 0 && (abs(shineDir) == 0 || abs(shineDir) == 4 || sign(shineDir) == -1))
 		if(shineStart <= 0 && shineLauncherStart <= 0 && GetSparkDir() <= 0 && (GetSparkDir() > -180 || abs(GetSparkDir()) == 180))
 		{
 			return true;
@@ -1776,7 +1763,6 @@ function Crawler_CanMoveUpSlope_Left()
 {
 	if(state == State.BallSpark)
 	{
-		//if(shineStart <= 0 && shineLauncherStart <= 0 && (abs(shineDir) == 0 || abs(shineDir) == 4 || sign(shineDir) == 1))
 		if(shineStart <= 0 && shineLauncherStart <= 0 && GetSparkDir() >= 0 && (GetSparkDir() < 180 || abs(GetSparkDir()) == 180))
 		{
 			return true;

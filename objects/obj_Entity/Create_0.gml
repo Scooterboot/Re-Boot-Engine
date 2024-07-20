@@ -623,10 +623,9 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 		maxSpeedY = abs(vY);
 	while(maxSpeedX > 0 || maxSpeedY > 0)
 	{
-		if(maxSpeedX > 0)
+		var fVX = ModifyFinalVelX(min(maxSpeedX,1)*sign(vX));
+		if(fVX != 0)
 		{
-			var fVX = ModifyFinalVelX(min(maxSpeedX,1)*sign(vX));
-			
 			#region X Collision
 		
 			DestroyBlock(position.X+fVX,position.Y);
@@ -758,14 +757,11 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 			#endregion
 			
 			position.X += fVX;
-			
-			maxSpeedX--;
 		}
 		
-		if(maxSpeedY > 0)
+		var fVY = ModifyFinalVelY(min(maxSpeedY,1)*sign(vY));
+		if(fVY != 0)
 		{
-			var fVY = ModifyFinalVelY(min(maxSpeedY,1)*sign(vY));
-			
 			#region Y Collision
 		
 			DestroyBlock(position.X,position.Y+fVY);
@@ -898,9 +894,10 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 			#endregion
 			
 			position.Y += fVY;
-			
-			maxSpeedY--;
 		}
+		
+		maxSpeedX = max(maxSpeedX-1,0);
+		maxSpeedY = max(maxSpeedY-1,0);
 	}
 	
 	x = scr_round(position.X);

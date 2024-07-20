@@ -1,0 +1,1 @@
+mapIconHidden = true;

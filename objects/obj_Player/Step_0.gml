@@ -2175,6 +2175,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			}
 		}
 		
+		if(!PlayerGrounded() && !PlayerOnPlatform())
+		{
+			grounded = false;
+		}
+		
 		var canCrouch = true;
 		
 		var ship = instance_position(x,bbox_bottom+1,obj_Gunship);
