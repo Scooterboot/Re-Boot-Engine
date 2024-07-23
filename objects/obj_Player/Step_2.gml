@@ -263,7 +263,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				((itemHighlighted[1] != 0 || missileStat > 0) && (itemHighlighted[1] != 1 || superMissileStat > 0)))));
 	sprtOffsetX = 0;
 	sprtOffsetY = 0;
-	torsoR = sprt_StandCenter;
+	torsoR = sprt_Player_StandCenter;
 	torsoL = torsoR;
 	legs = -1;
 	bodyFrame = 0;
@@ -397,7 +397,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	if((dir == 0 || lastDir == 0) && dirFrameF == 0 && stateFrame == State.Stand)
 	{
 		fDir = 1;
-		torsoR = sprt_StandCenter;
+		torsoR = sprt_Player_StandCenter;
 		torsoL = torsoR;
 		bodyFrame = suit[Suit.Varia];
 		
@@ -434,24 +434,24 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		
 		if((lastDir == 0 || dir == 0) && aimFrame == 0 && (state == State.Stand || state == State.Elevator))
 		{
-			torsoR = sprt_TurnCenter;
+			torsoR = sprt_Player_TurnCenter;
 			bodyFrame = 3 + dirFrameF;
 		}
 		else
 		{
 			if(aimFrame > 0 && aimFrame < 3)
 			{
-				torsoR = sprt_TurnAimUp;
+				torsoR = sprt_Player_TurnAimUp;
 				ArmPos(turnArmPosX[3,dirFrameF+3], turnArmPosY[3]);
 			}
 			else if(aimFrame < 0 && aimFrame > -3)
 			{
-				torsoR = sprt_TurnAimDown;
+				torsoR = sprt_Player_TurnAimDown;
 				ArmPos(turnArmPosX[1,dirFrameF+3], turnArmPosY[1]);
 			}
 			else if(aimFrame >= 3)
 			{
-				torsoR = sprt_TurnAimUpV;
+				torsoR = sprt_Player_TurnAimUpV;
 				ArmPos(turnArmPosX[4,dirFrameF+3], turnArmPosY[4]);
 				
 				armDir = 1;
@@ -463,7 +463,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			}
 			else if(aimFrame <= -3)
 			{
-				torsoR = sprt_TurnAimDownV;
+				torsoR = sprt_Player_TurnAimDownV;
 				ArmPos(turnArmPosX[0,dirFrameF+3], turnArmPosY[0]);
 				
 				armDir = 1;
@@ -480,18 +480,18 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			}
 			else
 			{
-				torsoR = sprt_Turn;
+				torsoR = sprt_Player_Turn;
 				ArmPos(turnArmPosX[2,dirFrameF+3], turnArmPosY[2,dirFrameF+3]);
 			}
-			legs = sprt_TurnLeg;
+			legs = sprt_Player_TurnLeg;
 			if(stateFrame == State.Crouch || stateFrame == State.Jump || !grounded)
 			{
-				legs = sprt_TurnCrouchLeg;
+				legs = sprt_Player_TurnCrouchLeg;
 			}
 			if(stateFrame == State.Stand && crouchFrame < 5)
 			{
 				sprtOffsetY = 11;
-				legs = sprt_TurnCrouchLeg;
+				legs = sprt_Player_TurnCrouchLeg;
 			}
 			bodyFrame = 3 + dirFrameF;
 			legFrame = 3 + dirFrameF;
@@ -507,8 +507,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			case State.Stand:
 			{
 				drawMissileArm = true;
-				torsoR = sprt_StandRight;
-				torsoL = sprt_StandLeft;
+				torsoR = sprt_Player_StandRight;
+				torsoL = sprt_Player_StandLeft;
 				for(var i = 0; i < array_length(frame); i++)
 				{
 					if(i != Frame.Idle)
@@ -537,28 +537,28 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				{
 					frame[Frame.Idle] = 0;
 					frameCounter[Frame.Idle] = 0;
-					torsoR = sprt_StandAimRight;
-					torsoL = sprt_StandAimLeft;
+					torsoR = sprt_Player_StandAimRight;
+					torsoL = sprt_Player_StandAimLeft;
 					if(recoilCounter > 0 && aimFrame == (scr_round(aimFrame/2)*2) && transFrame <= 0)
 					{
-						torsoR = sprt_StandFireRight;
-						torsoL = sprt_StandFireLeft;
+						torsoR = sprt_Player_StandFireRight;
+						torsoL = sprt_Player_StandFireLeft;
 						bodyFrame = 2 + scr_round(aimFrame/2);
 					}
 					else
 					{
 						if(transFrame > 0)
 						{
-							torsoR = sprt_TransAimRight;
-							torsoL = sprt_TransAimLeft;
+							torsoR = sprt_Player_TransAimRight;
+							torsoL = sprt_Player_TransAimLeft;
 							SetArmPosTrans();
 						}
 						if((aimAngle == 2 && (lastAimAngle == 0 || (lastAimAngle == -1 && aimFrame >= 0))) ||
 							(lastAimAngle == 2 && (aimAngle == 0 || (aimAngle == -1 && aimFrame >= 0))) ||
 							(lastAimAngle == -2 && aimAngle != -1 && (aimAngle != 1 || aimFrame <= 0)))
 						{
-							torsoR = sprt_JumpAimRight;
-							torsoL = sprt_JumpAimLeft;
+							torsoR = sprt_Player_JumpAimRight;
+							torsoL = sprt_Player_JumpAimLeft;
 							SetArmPosJump();
 						}
 						bodyFrame = 4 + aimFrame;
@@ -567,30 +567,30 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					{
 						if(runToStandFrame[1] > 0)
 						{
-							torsoR = sprt_RunAimRight;
-							torsoL = sprt_RunAimLeft;
+							torsoR = sprt_Player_RunAimRight;
+							torsoL = sprt_Player_RunAimLeft;
 							bodyFrame = scr_round(runToStandFrame[1])-1;
 							ArmPos((19+(2*bodyFrame))*dir,-(1+bodyFrame));
 						}
 						else if(runToStandFrame[0] > 0)
 						{
-							torsoR = sprt_RunRight;
-							torsoL = sprt_RunLeft;
+							torsoR = sprt_Player_RunRight;
+							torsoL = sprt_Player_RunLeft;
 							bodyFrame = scr_round(runToStandFrame[0])-1;
 							drawMissileArm = false;
 							runYOffset = -(scr_round(runToStandFrame[0]) == 1);
 						}
 						else if(walkToStandFrame > 0)
 						{
-							torsoR = sprt_MoonWalkRight;
-							torsoL = sprt_MoonWalkLeft;
+							torsoR = sprt_Player_MoonWalkRight;
+							torsoL = sprt_Player_MoonWalkLeft;
 							bodyFrame = scr_round(walkToStandFrame)-1;
 							ArmPos((18+(3*bodyFrame))*dir,-(1+bodyFrame));
 						}
 						else if(instance_exists(obj_XRay))
 						{
-							torsoR = sprt_XRayRight;
-							torsoL = sprt_XRayLeft;
+							torsoR = sprt_Player_XRayRight;
+							torsoL = sprt_Player_XRayLeft;
 							bodyFrame = scr_round(XRay.coneDir/45)+2;
 							if(dir == -1)
 							{
@@ -600,7 +600,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					}
 					if(landFrame > 0)
 					{
-						legs = sprt_LandLeg;
+						legs = sprt_Player_LandLeg;
 						if(smallLand)
 						{
 							landFinal = smallLandSequence[scr_round(landFrame)];
@@ -614,7 +614,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					}
 					else
 					{
-						legs = sprt_StandLeg;
+						legs = sprt_Player_StandLeg;
 						legFrame = min(abs(aimFrame),2);
 					}
 				}
@@ -623,8 +623,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					bodyFrame = iSeq[frame[Frame.Idle]];
 					if(crouchFrame < 5)
 					{
-						torsoR = sprt_CrouchRight;
-						torsoL = sprt_CrouchLeft;
+						torsoR = sprt_Player_CrouchRight;
+						torsoL = sprt_Player_CrouchLeft;
 					}
 				}
 				if(crouchFrame < 5)
@@ -639,7 +639,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						legFrame = 0;
 					}
 					sprtOffsetY = 11-crouchYOffset[legFrame];
-					legs = sprt_CrouchLeg;
+					legs = sprt_Player_CrouchLeg;
 				}
 				transFrame = max(transFrame - 1, 0);
 				frame[Frame.JAim] = 6;
@@ -717,20 +717,20 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				
 				if(aimFrame != 0)
 				{
-					torsoR = sprt_JumpAimRight;
-					torsoL = sprt_JumpAimLeft;
+					torsoR = sprt_Player_JumpAimRight;
+					torsoL = sprt_Player_JumpAimLeft;
 					if(transFrame < 2)
 					{
-						torsoR = sprt_TransAimRight;
-						torsoL = sprt_TransAimLeft;
+						torsoR = sprt_Player_TransAimRight;
+						torsoL = sprt_Player_TransAimLeft;
 						SetArmPosTrans();
 					}
 					bodyFrame = 4 + aimFrame;
 				}
 				else
 				{
-					torsoR = sprt_MoonWalkRight;
-					torsoL = sprt_MoonWalkLeft;
+					torsoR = sprt_Player_MoonWalkRight;
+					torsoL = sprt_Player_MoonWalkLeft;
 					bodyFrame = min(floor(walkToStandFrame),1);
 					if(bodyFrame == 0)
 					{
@@ -741,7 +741,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						ArmPos(21*dir,-2);
 					}
 				}
-				legs = sprt_MoonWalkLeg;
+				legs = sprt_Player_MoonWalkLeg;
 				legFrame = frame[Frame.Walk];
 				drawMissileArm = true;
 				
@@ -768,8 +768,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				runToStandFrame[0] = 0;
 				runToStandFrame[1] = 0;
 				
-				torsoR = sprt_BrakeRight;
-				torsoL = sprt_BrakeLeft;
+				torsoR = sprt_Player_BrakeRight;
+				torsoL = sprt_Player_BrakeLeft;
 				
 				bodyFrame = 4 - floor(frame[Frame.Moon]);
 				switch bodyFrame
@@ -960,14 +960,14 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				{
 					if(frame[Frame.Run] < 2)
 					{
-						torsoR = sprt_TransAimRight;
-						torsoL = sprt_TransAimLeft;
+						torsoR = sprt_Player_TransAimRight;
+						torsoL = sprt_Player_TransAimLeft;
 						SetArmPosTrans();
 					}
 					else
 					{
-						torsoR = sprt_JumpAimRight;
-						torsoL = sprt_JumpAimLeft;
+						torsoR = sprt_Player_JumpAimRight;
+						torsoL = sprt_Player_JumpAimLeft;
 					}
 					bodyFrame = 4 + aimFrame;
 					drawMissileArm = true;
@@ -978,14 +978,14 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					{
 						if(shootFrame2)
 						{
-							torsoR = sprt_RunAimRight;
-							torsoL = sprt_RunAimLeft;
+							torsoR = sprt_Player_RunAimRight;
+							torsoL = sprt_Player_RunAimLeft;
 							drawMissileArm = true;
 						}
 						else
 						{
-							torsoR = sprt_RunRight;
-							torsoL = sprt_RunLeft;
+							torsoR = sprt_Player_RunRight;
+							torsoL = sprt_Player_RunLeft;
 						}
 						if(frame[Frame.Run] == 0)
 						{
@@ -1012,17 +1012,17 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					}
 					if(aimFrame == 2)
 					{
-						torsoR = sprt_RunAimUpRight;
-						torsoL = sprt_RunAimUpLeft;
+						torsoR = sprt_Player_RunAimUpRight;
+						torsoL = sprt_Player_RunAimUpLeft;
 						ArmPos(19*dir,-21);
 					}
 					if(aimFrame == -2)
 					{
-						torsoR = sprt_RunAimDownRight;
-						torsoL = sprt_RunAimDownLeft;
+						torsoR = sprt_Player_RunAimDownRight;
+						torsoL = sprt_Player_RunAimDownLeft;
 					}
 				}
-				legs = sprt_RunLeg;
+				legs = sprt_Player_RunLeg;
 				legFrame = frame[Frame.Run];
 				
 				transFrame = 2;
@@ -1044,8 +1044,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				runToStandFrame[0] = 0;
 				runToStandFrame[1] = 0;
 				
-				torsoR = sprt_BrakeRight;
-				torsoL = sprt_BrakeLeft;
+				torsoR = sprt_Player_BrakeRight;
+				torsoL = sprt_Player_BrakeLeft;
 				if(move != 0 && move != dir)
 				{
 					brakeFrame = max(brakeFrame - 2, 0);
@@ -1120,9 +1120,9 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			#region Crouch
 			case State.Crouch:
 			{
-				torsoR = sprt_CrouchRight;
-				torsoL = sprt_CrouchLeft;
-				legs = sprt_CrouchLeg;
+				torsoR = sprt_Player_CrouchRight;
+				torsoL = sprt_Player_CrouchLeft;
+				legs = sprt_Player_CrouchLeg;
 				for(var i = 0; i < array_length(frame); i++)
 				{
 					if(i != Frame.Idle)
@@ -1154,8 +1154,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					frameCounter[Frame.Idle] = 0;
 					if(recoilCounter > 0 && aimFrame == (scr_round(aimFrame/2)*2) && transFrame <= 0)
 					{
-						torsoR = sprt_StandFireRight;
-						torsoL = sprt_StandFireLeft;
+						torsoR = sprt_Player_StandFireRight;
+						torsoL = sprt_Player_StandFireLeft;
 						bodyFrame = 2 + scr_round(aimFrame/2);
 					}
 					else
@@ -1164,8 +1164,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						{
 							if(instance_exists(obj_XRay))
 							{
-								torsoR = sprt_XRayRight;
-								torsoL = sprt_XRayLeft;
+								torsoR = sprt_Player_XRayRight;
+								torsoL = sprt_Player_XRayLeft;
 								bodyFrame = scr_round(XRay.coneDir/45)+2;
 								if(dir == -1)
 								{
@@ -1174,27 +1174,27 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 							}
 							else
 							{
-								torsoR = sprt_CrouchRight;
-								torsoL = sprt_CrouchLeft;
+								torsoR = sprt_Player_CrouchRight;
+								torsoL = sprt_Player_CrouchLeft;
 								bodyFrame = iSeq[frame[Frame.Idle]];
 							}
 						}
 						else
 						{
-							torsoR = sprt_StandAimRight;
-							torsoL = sprt_StandAimLeft;
+							torsoR = sprt_Player_StandAimRight;
+							torsoL = sprt_Player_StandAimLeft;
 							if(transFrame > 0)
 							{
-								torsoR = sprt_TransAimRight;
-								torsoL = sprt_TransAimLeft;
+								torsoR = sprt_Player_TransAimRight;
+								torsoL = sprt_Player_TransAimLeft;
 								SetArmPosTrans();
 							}
 							if ((aimAngle == 2 && (lastAimAngle == 0 || (lastAimAngle == -1 && aimFrame >= 0))) ||
 								(lastAimAngle == 2 && (aimAngle == 0 || (aimAngle == -1 && aimFrame >= 0))) || 
 								(lastAimAngle == -2 && aimAngle != -1 && (aimAngle != 1 || aimFrame <= 0)))
 							{
-								torsoR = sprt_JumpAimRight;
-								torsoL = sprt_JumpAimLeft;
+								torsoR = sprt_Player_JumpAimRight;
+								torsoL = sprt_Player_JumpAimLeft;
 								SetArmPosJump();
 							}
 							bodyFrame = 4 + aimFrame;
@@ -1225,7 +1225,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			{
 				aimFrame = 0;
 				ArmPos(0,0);
-				torsoR = sprt_MorphFade;
+				torsoR = sprt_Player_MorphFade;
 				
 				ballAnimDir = dir;
 				if(sign(velX) != 0)
@@ -1284,13 +1284,13 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				
 				if(unmorphing && scr_round(morphFrame) <= 5)
 				{
-					torsoR = sprt_MorphOut;
+					torsoR = sprt_Player_MorphOut;
 					morphFinal = scr_round(morphFrame)-1;
 					bodyFrame = morphFinal;
 				}
 				else if(scr_round(morphFrame) >= 4 && !unmorphing)
 				{
-					torsoR = sprt_MorphOut;
+					torsoR = sprt_Player_MorphOut;
 					morphFinal = 8-scr_round(morphFrame);
 					bodyFrame = morphFinal;
 					frame[Frame.Morph] = 0;
@@ -1343,8 +1343,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				{
 					if(recoilCounter > 0 && aimFrame == (scr_round(aimFrame/2)*2) && transFrame >= 0)
 					{
-						torsoR = sprt_JumpFireRight;
-						torsoL = sprt_JumpFireLeft;
+						torsoR = sprt_Player_JumpFireRight;
+						torsoL = sprt_Player_JumpFireLeft;
 						bodyFrame = 2 + scr_round(aimFrame/2);
 						
 						if(bodyFrame <= 0)
@@ -1356,14 +1356,14 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					{
 						if(transFrame < 2)
 						{
-							torsoR = sprt_TransAimRight;
-							torsoL = sprt_TransAimLeft;
+							torsoR = sprt_Player_TransAimRight;
+							torsoL = sprt_Player_TransAimLeft;
 							SetArmPosTrans();
 						}
 						else
 						{
-							torsoR = sprt_JumpAimRight;
-							torsoL = sprt_JumpAimLeft;
+							torsoR = sprt_Player_JumpAimRight;
+							torsoL = sprt_Player_JumpAimLeft;
 						}
 						bodyFrame = 4 + aimFrame;
 						
@@ -1377,7 +1377,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						}
 					}
 					
-					legs = sprt_JumpAimLeg;
+					legs = sprt_Player_JumpAimLeg;
 					if(!global.roomTrans)
 					{
 						if(velY <= 0)
@@ -1424,9 +1424,9 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						}
 						frame[Frame.JAim] = 6;
 						
-						torsoR = sprt_FallRight;
-						torsoL = sprt_FallLeft;
-						legs = sprt_JumpAimLeg;
+						torsoR = sprt_Player_FallRight;
+						torsoL = sprt_Player_FallLeft;
+						legs = sprt_Player_JumpAimLeg;
 						
 						if(frameCounter[Frame.Jump] < 30)
 						{
@@ -1466,8 +1466,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 								frame[Frame.JAim] = 6;
 							}
 						}
-						torsoR = sprt_JumpRight;
-						torsoL = sprt_JumpLeft;
+						torsoR = sprt_Player_JumpRight;
+						torsoL = sprt_Player_JumpLeft;
 						bodyFrame = frame[Frame.Jump];
 					}
 				}
@@ -1490,12 +1490,12 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				frame[Frame.JAim] = 6 * (velY <= 0);
 				if(wjFrame > 0 || (canWallJump && entity_place_collide(-8*move,0) && !entity_place_collide(0,16) && wjAnimDelay <= 0))
 				{
-					torsoR = sprt_WallJumpRight;
-					torsoL = sprt_WallJumpLeft;
+					torsoR = sprt_Player_WallJumpRight;
+					torsoL = sprt_Player_WallJumpLeft;
 					if(wjGripAnim)
 					{
-						torsoR = sprt_GripWallJumpRight;
-						torsoL = sprt_GripWallJumpLeft;
+						torsoR = sprt_Player_GripWallJumpRight;
+						torsoL = sprt_Player_GripWallJumpLeft;
 					}
 					if(wjFrame > 0)
 					{
@@ -1536,15 +1536,15 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				}
 				else
 				{
-					torsoR = sprt_SomersaultRight;
-					torsoL = sprt_SomersaultLeft;
+					torsoR = sprt_Player_SomersaultRight;
+					torsoL = sprt_Player_SomersaultLeft;
 					var sFrameMax = 18;
 					if(boots[Boots.SpaceJump] && !liquidMovement)
 					{
 						if(spaceJump <= 0)
 						{
-							torsoR = sprt_SpaceJumpRight;
-							torsoL = sprt_SpaceJumpLeft;
+							torsoR = sprt_Player_SpaceJumpRight;
+							torsoL = sprt_Player_SpaceJumpLeft;
 						}
 						sFrameMax = 10;
 					}
@@ -1602,8 +1602,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				var gripAimTarget = aimFrameTarget+4;
 				if(climbIndex <= 0)
 				{
-					torsoR = sprt_GripRight;
-					torsoL = sprt_GripLeft;
+					torsoR = sprt_Player_GripRight;
+					torsoL = sprt_Player_GripLeft;
 					var gSpeed = 1/(1+liquidMovement);
 					if(recoilCounter > 0)
 					{
@@ -1655,16 +1655,16 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					}
 					if(recoilCounter > 0 && gripAimFrame == (scr_round(gripAimFrame/2)*2) && gripFrame >= 3)
 					{
-						torsoR = sprt_GripFireRight;
-						torsoL = sprt_GripFireLeft;
+						torsoR = sprt_Player_GripFireRight;
+						torsoL = sprt_Player_GripFireLeft;
 						bodyFrame = scr_round(gripAimFrame/2);
 					}
 				}
 				else
 				{
 					aimFrame = 0;
-					torsoR = sprt_ClimbRight;
-					torsoL = sprt_ClimbLeft;
+					torsoR = sprt_Player_ClimbRight;
+					torsoL = sprt_Player_ClimbLeft;
 					if(climbIndexCounter > liquidMovement)
 					{
 						climbFrame = climbSequence[climbIndex];
@@ -1694,8 +1694,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					{
 						frame[Frame.SparkStart] = min(frame[Frame.SparkStart] + 0.25, 3);
 					}
-					torsoR = sprt_SparkStartRight;
-					torsoL = sprt_SparkStartLeft;
+					torsoR = sprt_Player_SparkStartRight;
+					torsoL = sprt_Player_SparkStartLeft;
 					bodyFrame = floor(frame[Frame.SparkStart]);
 					frame[Frame.SparkV] = 0;
 					frameCounter[Frame.SparkV] = 0;
@@ -1749,8 +1749,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 								frameCounter[Frame.SparkV] = 0;
 							}
 						}
-						torsoR = sprt_SparkVRight;
-						torsoL = sprt_SparkVLeft;
+						torsoR = sprt_Player_SparkVRight;
+						torsoL = sprt_Player_SparkVLeft;
 						bodyFrame = frame[Frame.SparkV];
 						
 						SetArmPosSpark(0);
@@ -1762,8 +1762,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						{
 							shineDownRot = clamp(shineDownRot - 45*dir, -180, 180);
 
-							torsoR = sprt_SomersaultRight;
-							torsoL = sprt_SomersaultLeft;
+							torsoR = sprt_Player_SomersaultRight;
+							torsoL = sprt_Player_SomersaultLeft;
 							bodyFrame = scr_round(abs(shineDownRot)/45)*2;
 							sprtOffsetY = 8*(abs(shineDownRot)/180);
 							
@@ -1789,8 +1789,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 									frameCounter[Frame.SparkV] = 0;
 								}
 							}
-							torsoR = sprt_SparkVRight;
-							torsoL = sprt_SparkVLeft;
+							torsoR = sprt_Player_SparkVRight;
+							torsoL = sprt_Player_SparkVLeft;
 							bodyFrame = frame[Frame.SparkV];
 							rotation = shineDownRot;
 							rotReAlignStep = 4;
@@ -1806,8 +1806,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						{
 							frame[Frame.SparkH] = 0;
 						}
-						torsoR = sprt_SparkHRight;
-						torsoL = sprt_SparkHLeft;
+						torsoR = sprt_Player_SparkHRight;
+						torsoL = sprt_Player_SparkHLeft;
 						bodyFrame = floor(frame[Frame.SparkH]);
 						
 						switch(bodyFrame)
@@ -1867,19 +1867,19 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	            }
 	            if(grapWJCounter > 0)
 	            {
-	                torsoR = sprt_GrappleWJRight;
-	                torsoL = sprt_GrappleWJLeft;
+	                torsoR = sprt_Player_GrappleWJRight;
+	                torsoL = sprt_Player_GrappleWJLeft;
 	                bodyFrame = 0;
 	                ArmPos(-15*dir,-22);
 					rotation = 0;
 	            }
 				else if(aimFrame != aimFrameTarget)
 				{
-					torsoR = sprt_JumpAimRight;
-					torsoL = sprt_JumpAimLeft;
+					torsoR = sprt_Player_JumpAimRight;
+					torsoL = sprt_Player_JumpAimLeft;
 					bodyFrame = 4 + scr_round(aimFrame);
 					
-					legs = sprt_JumpAimLeg;
+					legs = sprt_Player_JumpAimLeg;
 					legFrame = frame[Frame.JAim];
 					
 					var aimF = scr_round(aimFrame)-aimFrameTarget;
@@ -1894,8 +1894,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				}
 	            else if(instance_exists(grapple))
 	            {
-	                torsoR = sprt_GrappleRight;
-	                torsoL = sprt_GrappleLeft;
+	                torsoR = sprt_Player_GrappleRight;
+	                torsoL = sprt_Player_GrappleLeft;
 					
 					if(speedBoost)
 					{
@@ -1907,7 +1907,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					}
 					bodyFrame = frame[Frame.GrappleBody];
 					
-					legs = sprt_GrappleLeg;
+					legs = sprt_Player_GrappleLeg;
 	                rotation = scr_round(grapAngle/2.8125)*2.8125;
 					rotReAlignStep = 4;
 
@@ -1983,8 +1983,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				}
 				frame[Frame.JAim] = 6;
 				
-				torsoR = sprt_HurtRight;
-				torsoL = sprt_HurtLeft;
+				torsoR = sprt_Player_HurtRight;
+				torsoL = sprt_Player_HurtLeft;
 				bodyFrame = floor(hurtFrame);
 				hurtFrame = min(hurtFrame + 0.34, 1);
 				ArmPos(11,-11);
@@ -2020,8 +2020,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						frameCounter[i] = 0;
 					}
 				}
-				torsoR = sprt_DamageBoostRight;
-				torsoL = sprt_DamageBoostLeft;
+				torsoR = sprt_Player_DamageBoostRight;
+				torsoL = sprt_Player_DamageBoostLeft;
 				if(dBoostFrame < 19)
 				{
 					frame[Frame.JAim] = 6;
@@ -2057,26 +2057,26 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					{
 						if(recoilCounter > 0 && aimFrame == (scr_round(aimFrame/2)*2) && transFrame >= 2)
 						{
-							torsoR = sprt_JumpFireRight;
-							torsoL = sprt_JumpFireLeft;
+							torsoR = sprt_Player_JumpFireRight;
+							torsoL = sprt_Player_JumpFireLeft;
 							bodyFrame = 2 + scr_round(aimFrame/2);
 						}
 						else
 						{
 							if(transFrame < 2)
 							{
-								torsoR = sprt_TransAimRight;
-								torsoL = sprt_TransAimLeft;
+								torsoR = sprt_Player_TransAimRight;
+								torsoL = sprt_Player_TransAimLeft;
 								SetArmPosTrans();
 							}
 							else
 							{
-								torsoR = sprt_JumpAimRight;
-								torsoL = sprt_JumpAimLeft;
+								torsoR = sprt_Player_JumpAimRight;
+								torsoL = sprt_Player_JumpAimLeft;
 							}
 							bodyFrame = 4 + aimFrame;
 						}
-						legs = sprt_JumpAimLeg;
+						legs = sprt_Player_JumpAimLeg;
 						if(velY <= 0)
 						{
 							frame[Frame.JAim] = max(frame[Frame.JAim] - 0.3, 0);
@@ -2101,9 +2101,9 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					{
 						frame[Frame.JAim] = 6;
 						frame[Frame.Jump] = max(min(frame[Frame.Jump] + max(0.5/max(frame[Frame.Jump],1),0.125), 4),1);
-						torsoR = sprt_FallRight;
-						torsoL = sprt_FallLeft;
-						legs = sprt_JumpAimLeg;
+						torsoR = sprt_Player_FallRight;
+						torsoL = sprt_Player_FallLeft;
+						legs = sprt_Player_JumpAimLeg;
 						bodyFrame = frame[Frame.Jump];
 						legFrame = floor((frame[Frame.Jump]+0.5)*2);
 					}
@@ -2124,12 +2124,12 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					}
 				}
 				
-				torsoR = sprt_SparkHRight;
-				torsoL = sprt_SparkHLeft;
+				torsoR = sprt_Player_SparkHRight;
+				torsoL = sprt_Player_SparkHLeft;
 				if(dodgeDir != dir)
 				{
-					torsoR = sprt_DodgeBack_Right;
-					torsoL = sprt_DodgeBack_Left;
+					torsoR = sprt_Player_DodgeBack_Right;
+					torsoL = sprt_Player_DodgeBack_Left;
 				}
 				if(dodgeLength <= dodgeLengthMax-2)
 				{
@@ -2226,7 +2226,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				
 				if(frame[Frame.CFlash] < 5)
 				{
-					torsoR = sprt_MorphOut;
+					torsoR = sprt_Player_MorphOut;
 					bodyFrame = 4-frame[Frame.CFlash];
 					sprtOffsetY = 8;
 					
@@ -2241,7 +2241,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						frameCounter[Frame.CFlash] = 0;
 					}
 					
-					torsoR = sprt_CrystalFlash;
+					torsoR = sprt_Player_CrystalFlash;
 					bodyFrame = cFlashFrameSequence[frame[Frame.CFlash]-5];
 					
 					sprtOffsetY = -bodyFrame;
@@ -2268,8 +2268,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	            runToStandFrame[0] = 0;
 	            runToStandFrame[1] = 0;
 
-	            torsoR = sprt_PushRight;
-	            torsoL = sprt_PushLeft;
+	            torsoR = sprt_Player_PushRight;
+	            torsoL = sprt_Player_PushLeft;
 
 	            if(grounded && move2 != 0 && instance_exists(pushBlock) && pushBlock.grounded)
 	            {

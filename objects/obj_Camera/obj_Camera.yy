@@ -33,8 +33,8 @@
   "solid":false,
   "spriteId":null,
   "spriteMaskId":{
-    "name":"mask_Stand",
-    "path":"sprites/mask_Stand/mask_Stand.yy",
+    "name":"mask_Player_Stand",
+    "path":"sprites/mask_Player_Stand/mask_Player_Stand.yy",
   },
   "visible":false,
 }

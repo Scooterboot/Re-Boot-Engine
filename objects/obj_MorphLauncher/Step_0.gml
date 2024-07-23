@@ -31,7 +31,7 @@ if(state == 0)
 			//player.shineStart = 30;
 			player.shineLauncherStart = 45;//30;
 			player.shineRestart = false;
-			player.ChangeState(State.BallSpark,State.Morph,mask_Morph,false);
+			player.ChangeState(State.BallSpark,State.Morph,mask_Player_Morph,false);
 			player.bombJump = 0;
 			player.velX = 0;
 			player.velY = 0;

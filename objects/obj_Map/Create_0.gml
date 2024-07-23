@@ -143,22 +143,35 @@ function DrawMap(mapArea,posX,posY,mapX,mapY,mapWidth,mapHeight,isMinimap = fals
 					if(is_array(mapIcons[| i]) && array_length(mapIcons[| i]) > 6)
 					{
 						var icon = mapIcons[| i];
-						var iconMapX = clamp(scr_floor(icon[2] / msSize), 0, ds_grid_width(mapGrid)),
-							iconMapY = clamp(scr_floor(icon[3] / msSize), 0, ds_grid_height(mapGrid));
+						var _sprt = asset_get_index(icon[0]);
+						if(!sprite_exists(_sprt))
+						{
+							continue;
+						}
+						var _subimg = icon[1],
+							_x = icon[2],
+							_y = icon[3],
+							_xscale = icon[4],
+							_yscale = icon[5],
+							_rot = icon[6],
+							canShowOnMini = true,
+							alwaysShow = false;
 						
-						var canShowOnMini = true;
 						if(array_length(icon) > 7)
 						{
 							canShowOnMini = icon[7];
 						}
-						var alwaysShow = false;
 						if(array_length(icon) > 8)
 						{
 							alwaysShow = icon[8];
 						}
+						
+						var iconMapX = clamp(scr_floor(icon[2] / msSize), 0, ds_grid_width(mapGrid)),
+							iconMapY = clamp(scr_floor(icon[3] / msSize), 0, ds_grid_height(mapGrid));
+						
 						if((!isMinimap || canShowOnMini) && (mapGrid[# iconMapX,iconMapY] || alwaysShow))
 						{
-							draw_sprite_ext(icon[0],icon[1],icon[2],icon[3],icon[4],icon[5],icon[6],c_white,1);
+							draw_sprite_ext(_sprt,_subimg,_x,_y,_xscale,_yscale,_rot,c_white,1);
 						}
 					}
 				}

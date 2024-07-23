@@ -42,7 +42,7 @@ mapIconIndex = 0;
 var msSize = global.mapSquareSize;
 
 mapIcon = array_create(7);
-mapIcon[0] = sprt_MapIcon_Door;
+mapIcon[0] = sprite_get_name(sprt_MapIcon_Door);
 mapIcon[1] = mapIconIndex;
 mapIcon[2] = obj_Map.GetMapPosX(x) * msSize + msSize/2;
 mapIcon[3] = obj_Map.GetMapPosY(y) * msSize + msSize/2;

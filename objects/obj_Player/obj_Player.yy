@@ -40,12 +40,12 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"sprt_StandCenter",
-    "path":"sprites/sprt_StandCenter/sprt_StandCenter.yy",
+    "name":"sprt_Player_StandCenter",
+    "path":"sprites/sprt_Player_StandCenter/sprt_Player_StandCenter.yy",
   },
   "spriteMaskId":{
-    "name":"mask_Stand",
-    "path":"sprites/mask_Stand/mask_Stand.yy",
+    "name":"mask_Player_Stand",
+    "path":"sprites/mask_Player_Stand/mask_Player_Stand.yy",
   },
   "visible":true,
 }

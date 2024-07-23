@@ -36,8 +36,8 @@
   "nineSlice":null,
   "origin":4,
   "parent":{
-    "name":"Effects",
-    "path":"folders/Sprites/Player/Effects.yy",
+    "name":"Beams",
+    "path":"folders/Sprites/Projectiles/Beams.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

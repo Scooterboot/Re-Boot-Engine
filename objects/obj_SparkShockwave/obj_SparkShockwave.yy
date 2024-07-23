@@ -35,8 +35,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"sprt_ShineSparkFX",
-    "path":"sprites/sprt_ShineSparkFX/sprt_ShineSparkFX.yy",
+    "name":"sprt_Player_ShineSparkFX",
+    "path":"sprites/sprt_Player_ShineSparkFX/sprt_Player_ShineSparkFX.yy",
   },
   "spriteMaskId":null,
   "visible":true,

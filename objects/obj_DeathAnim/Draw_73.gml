@@ -11,24 +11,24 @@ draw_set_alpha(min(screenFade[1],1));
 draw_set_color(c_white);
 draw_rectangle(vx,vy,vx+vw,vy+vh,false);
 
-var sIndex = sprt_DeathRight;
+var sIndex = sprt_Player_DeathRight;
 if(dir == -1)
 {
-    sIndex = sprt_DeathLeft;
+    sIndex = sprt_Player_DeathLeft;
 }
 if(instance_exists(obj_Player))
 {
 	//pal_swap_set(obj_Player.palShader,obj_Player.palIndex,obj_Player.palIndex2,obj_Player.palDif,false);
 	if(animSequence[frame] <= 0)
 	{
-		var palSprite = pal_PowerSuit;
+		var palSprite = pal_Player_PowerSuit;
 		if(obj_Player.suit[Suit.Varia])
 		{
-			palSprite = pal_VariaSuit;
+			palSprite = pal_Player_VariaSuit;
 		}
 		if(obj_Player.suit[Suit.Gravity])
 		{
-			palSprite = pal_GravitySuit;
+			palSprite = pal_Player_GravitySuit;
 		}
 		chameleon_set(palSprite,0,0,0,1);
 	}

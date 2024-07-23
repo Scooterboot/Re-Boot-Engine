@@ -20,7 +20,7 @@ else
 	draw_set_alpha(1);
 	draw_ellipse(sw/2-animW,sh/2-animH-8,sw/2+animW,sh/2+animH-8,false);
 	
-	draw_sprite_ext(sprt_StandSuitAnimZS,0,sw/2,sh/2,1,1,0,c_white,1);
+	draw_sprite_ext(sprt_Player_StandSuitAnimZS,0,sw/2,sh/2,1,1,0,c_white,1);
 	
 	surface_reset_target();
 	

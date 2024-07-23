@@ -657,7 +657,7 @@ hurtFrame = 0;
 
 pushFrameSequence = array(0,1,2,3,4,5,5,6,7,8,9,9,10,11,12,13,14,15);
 
-torsoR = sprt_StandCenter;
+torsoR = sprt_Player_StandCenter;
 torsoL = torsoR;
 legs = -1;
 
@@ -1294,12 +1294,12 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		shineDir = 0;
 		if(state == State.BallSpark)
 		{
-			ChangeState(State.Morph,State.Morph,mask_Morph,true);
+			ChangeState(State.Morph,State.Morph,mask_Player_Morph,true);
 			mockBall = true;
 		}
 		else
 		{
-			ChangeState(State.Stand,State.Stand,mask_Stand,true);
+			ChangeState(State.Stand,State.Stand,mask_Player_Stand,true);
 		}
 		speedBoost = true;
 		speedCounter = speedCounterMax;
@@ -1375,12 +1375,12 @@ function OnYCollision(fVY)
 			shineDir = 0;
 			if(state == State.BallSpark)
 			{
-				ChangeState(State.Morph,State.Morph,mask_Morph,true);
+				ChangeState(State.Morph,State.Morph,mask_Player_Morph,true);
 				mockBall = true;
 			}
 			else
 			{
-				ChangeState(State.Stand,State.Stand,mask_Stand,true);
+				ChangeState(State.Stand,State.Stand,mask_Player_Stand,true);
 			}
 			speedBoost = true;
 			speedCounter = speedCounterMax;
@@ -3131,7 +3131,7 @@ chargeReleaseFlash = 0;
 shaderFlash = 0;
 shaderFlashMax = 4;
 
-palSurface = surface_create(sprite_get_width(pal_PowerSuit),sprite_get_height(pal_PowerSuit));
+palSurface = surface_create(sprite_get_width(pal_Player_PowerSuit),sprite_get_height(pal_Player_PowerSuit));
 
 enum PlayerPal
 {
@@ -3175,7 +3175,7 @@ screwPalNum = 1;
 hyperFired = 0;
 hyperPal = 0;
 
-cFlashPalSurf = surface_create(sprite_get_width(pal_CrystalFlash),sprite_get_height(pal_CrystalFlash));
+cFlashPalSurf = surface_create(sprite_get_width(pal_Player_CrystalFlash),sprite_get_height(pal_Player_CrystalFlash));
 cFlashPal = 0;
 cFlashPal2 = 0;
 cFlashPalDiff = 0;
@@ -3190,15 +3190,15 @@ function PaletteSurface()
 		
 		var liquidMovement = (liquidState > 0);
 		
-		var palSprite = pal_PowerSuit,
-			palSprite2 = pal_MiscSuit;
+		var palSprite = pal_Player_PowerSuit,
+			palSprite2 = pal_Player_MiscSuit;
 		if(suit[Suit.Varia])
 		{
-			palSprite = pal_VariaSuit;
+			palSprite = pal_Player_VariaSuit;
 		}
 		if(suit[Suit.Gravity])
 		{
-			palSprite = pal_GravitySuit;
+			palSprite = pal_Player_GravitySuit;
 		}
 		DrawPalSprite(palSprite,PlayerPal.Default,1);
 		
@@ -3261,8 +3261,8 @@ function PaletteSurface()
             }
             xRayVisorFlash = clamp(xRayVisorFlash + 0.125*xRayVisorNum,0,1);
 			
-			DrawPalSprite(pal_Visor_XRay,0,XRay.alpha);
-			DrawPalSprite(pal_Visor_XRay,1,XRay.alpha*xRayVisorFlash);
+			DrawPalSprite(pal_Player_Visor_XRay,0,XRay.alpha);
+			DrawPalSprite(pal_Player_Visor_XRay,1,XRay.alpha*xRayVisorFlash);
 		}
 		#endregion
 		#region -- Intro fanfare / saving --
@@ -3456,24 +3456,24 @@ function PaletteSurface()
 	}
 	else
 	{
-		palSurface = surface_create(sprite_get_width(pal_PowerSuit),sprite_get_height(pal_PowerSuit));
+		palSurface = surface_create(sprite_get_width(pal_Player_PowerSuit),sprite_get_height(pal_Player_PowerSuit));
 	}
 	
 	if(surface_exists(cFlashPalSurf))
 	{
 		surface_set_target(cFlashPalSurf);
 		
-		DrawPalSprite(pal_CrystalFlash,0,1);
+		DrawPalSprite(pal_Player_CrystalFlash,0,1);
 		
 		gpu_set_colorwriteenable(1,1,1,0);
 		
 		if(cFlashPal2 > 0)
 		{
-			DrawPalSprite(pal_CrystalFlash,1,cFlashPal2);
+			DrawPalSprite(pal_Player_CrystalFlash,1,cFlashPal2);
 		}
 		if(cFlashPalDiff > 0)
 		{
-			DrawPalSprite(pal_CrystalFlash,2,cFlashPalDiff);
+			DrawPalSprite(pal_Player_CrystalFlash,2,cFlashPalDiff);
 		}
 		
 		gpu_set_colorwriteenable(1,1,1,1);
@@ -3482,7 +3482,7 @@ function PaletteSurface()
 	}
 	else
 	{
-		cFlashPalSurf = surface_create(sprite_get_width(pal_CrystalFlash),sprite_get_height(pal_CrystalFlash));
+		cFlashPalSurf = surface_create(sprite_get_width(pal_Player_CrystalFlash),sprite_get_height(pal_Player_CrystalFlash));
 	}
 }
 function DrawPalSprite(_sprt,_index,_alpha)
@@ -3600,8 +3600,8 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 			cBubblePal = scr_wrap(cBubblePal-0.1,0,7);
 		}
 		
-		chameleon_set(pal_CrystalBubble,cBubblePal,0,0,7);
-		draw_sprite_ext(sprt_CrystalBubble,0,scr_round(xx),scr_round(yy),cBubbleScale,cBubbleScale,0,c_white,alpha);
+		chameleon_set(pal_Player_CrystalBubble,cBubblePal,0,0,7);
+		draw_sprite_ext(sprt_Player_CrystalBubble,0,scr_round(xx),scr_round(yy),cBubbleScale,cBubbleScale,0,c_white,alpha);
 		shader_reset();
 	}
 	else
@@ -3666,17 +3666,17 @@ function UpdatePlayerSurface(_palSurface)
 					morphAlpha = 1;
 				}
 			}
-			var ballSprtIndex = sprt_MorphBall;
+			var ballSprtIndex = sprt_Player_MorphBall;
 			//if(misc[Misc.Spring])
 			if(misc[Misc.Spider])
 			{
-				ballSprtIndex = sprt_SpringBall;
+				ballSprtIndex = sprt_Player_SpringBall;
 			}
 			draw_sprite_ext(ballSprtIndex,ballFrame,scr_round(surfW/2),scr_round(surfH/2),1,1,0,c_white,morphAlpha);
 			//if(misc[Misc.Spring])
 			if(misc[Misc.Spider])
 			{
-				draw_sprite_ext(sprt_SpringBall_Shine,0,scr_round(surfW/2),scr_round(surfH/2),1,1,0,c_white,morphAlpha);
+				draw_sprite_ext(sprt_Player_SpringBall_Shine,0,scr_round(surfW/2),scr_round(surfH/2),1,1,0,c_white,morphAlpha);
 			}
 		}
 	
@@ -3691,7 +3691,7 @@ function UpdatePlayerSurface(_palSurface)
 		
 		if(drawMissileArm && missileArmFrame > 0)
 		{
-			draw_sprite_ext(sprt_MissileArm,finalArmFrame+(9*(missileArmFrame-1)),scr_round((surfW/2)+scr_round(armOffsetX)),scr_round((surfH/2 + runYOffset)+scr_round(armOffsetY)),armDir,1,0,c_white,1);
+			draw_sprite_ext(sprt_Player_MissileArm,finalArmFrame+(9*(missileArmFrame-1)),scr_round((surfW/2)+scr_round(armOffsetX)),scr_round((surfH/2 + runYOffset)+scr_round(armOffsetY)),armDir,1,0,c_white,1);
 		}
 		if(!drawMissileArm)
 		{
@@ -3700,7 +3700,7 @@ function UpdatePlayerSurface(_palSurface)
 	
 		if(stateFrame == State.Grip && climbIndex <= 0 && gripAimFrame == 0 && dir == -1 && dirFrame == -4)
 		{
-			draw_sprite_ext(sprt_ArmGripOverlay,gripFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),fDir,1,0,c_white,1);
+			draw_sprite_ext(sprt_Player_ArmGripOverlay,gripFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),fDir,1,0,c_white,1);
 		}
 		
 		shader_reset();
@@ -3791,7 +3791,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		if(introAnimFrameCounter < 2)
 		{
 			gpu_set_blendmode(bm_add);
-			draw_sprite_ext(sprt_IntroFX,introAnimFrame,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,0,make_color_rgb(0,255,114),alph);
+			draw_sprite_ext(sprt_Player_IntroFX,introAnimFrame,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,0,make_color_rgb(0,255,114),alph);
 			gpu_set_blendmode(bm_normal);
 		}
 	}
@@ -3820,7 +3820,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		if(saveAnimFrameCounter < 2)
 		{
 			gpu_set_blendmode(bm_add);
-			draw_sprite_ext(sprt_IntroFX,saveAnimFrame,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,0,make_color_rgb(0,255,114),alph);
+			draw_sprite_ext(sprt_Player_IntroFX,saveAnimFrame,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,0,make_color_rgb(0,255,114),alph);
 			gpu_set_blendmode(bm_normal);
 		}
 	}
@@ -3837,14 +3837,14 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		//{
 		//	glowSpeed = -0.45;
 		//}
-		var palSet = pal_BallGlow;
+		var palSet = pal_Player_BallGlow;
 		if(suit[0])
 		{
-			palSet = pal_BallGlow_Varia;
+			palSet = pal_Player_BallGlow_Varia;
 		}
 		if(suit[1])
 		{
-			palSet = pal_BallGlow_Gravity;
+			palSet = pal_Player_BallGlow_Gravity;
 		}
 		if(global.roomTrans)
 		{
@@ -3864,7 +3864,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		}
 		
 		chameleon_set(palSet,ballGlowIndex,spiderPal,spiderPalDiff,20);
-		draw_sprite_ext(sprt_SpringBall_Glow,ballFrame,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,rot,c_white,morphAlpha*alph);
+		draw_sprite_ext(sprt_Player_SpringBall_Glow,ballFrame,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,rot,c_white,morphAlpha*alph);
 		shader_reset();
 	}
 	else
@@ -3906,7 +3906,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 				maxGlow2 = 0.75;
 			}
 			gpu_set_blendmode(bm_add);
-			draw_sprite_ext(sprt_SpiderBallFX,0,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,rot,c_white,min(spiderGlowAlpha,maxGlow2)*alph);
+			draw_sprite_ext(sprt_Player_SpiderBallFX,0,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,rot,c_white,min(spiderGlowAlpha,maxGlow2)*alph);
 			gpu_set_blendmode(bm_normal);
 		}
 	}
@@ -3918,10 +3918,10 @@ function PostDrawPlayer(posX, posY, rot, alph)
 	
 	if(cBubbleScale > 0)
 	{
-		chameleon_set(pal_CrystalBubble,cBubblePal,0,0,7);
+		chameleon_set(pal_Player_CrystalBubble,cBubblePal,0,0,7);
 		
 		gpu_set_colorwriteenable(1,1,1,0);
-		draw_sprite_ext(sprt_CrystalBubble,0,scr_round(xx),scr_round(yy),cBubbleScale,cBubbleScale,0,c_white,alph*0.375);
+		draw_sprite_ext(sprt_Player_CrystalBubble,0,scr_round(xx),scr_round(yy),cBubbleScale,cBubbleScale,0,c_white,alph*0.375);
 		gpu_set_colorwriteenable(1,1,1,1);
 		
 		shader_reset();
@@ -3937,7 +3937,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 				offset = 0;
 			}
 			gpu_set_blendmode(bm_add);
-			draw_sprite_ext(sprt_ShineSparkFX,shineFrame,xx+offset+sprtOffsetX,yy+sprtOffsetY,dodgeDir,1,0,c_lime,alph*0.75);
+			draw_sprite_ext(sprt_Player_ShineSparkFX,shineFrame,xx+offset+sprtOffsetX,yy+sprtOffsetY,dodgeDir,1,0,c_lime,alph*0.75);
 			gpu_set_blendmode(bm_normal);
 			shineFrameCounter += 1*(!global.gamePaused);
 			if(shineFrameCounter >= 2)
@@ -3968,7 +3968,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 				shineRot -= 180;
 			}
 			gpu_set_blendmode(bm_add);
-			draw_sprite_ext(sprt_ShineSparkFX,sFrame,shineX+sprtOffsetX,shineY+sprtOffsetY,dir*0.75,0.75,shineRot,c_white,alph*0.9);
+			draw_sprite_ext(sprt_Player_ShineSparkFX,sFrame,shineX+sprtOffsetX,shineY+sprtOffsetY,dir*0.75,0.75,shineRot,c_white,alph*0.9);
 			gpu_set_blendmode(bm_normal);
 			
 			shineFrameCounter += 1*(!global.gamePaused);
@@ -4008,7 +4008,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 			shineRot -= 180;
 		}
 		gpu_set_blendmode(bm_add);
-		draw_sprite_ext(sprt_ShineSparkFX,sFrame,shineX+sprtOffsetX,shineY+sprtOffsetY,dir,1,shineRot,c_white,alph*0.9);
+		draw_sprite_ext(sprt_Player_ShineSparkFX,sFrame,shineX+sprtOffsetX,shineY+sprtOffsetY,dir,1,shineRot,c_white,alph*0.9);
 		gpu_set_blendmode(bm_normal);
 	}
 	else
@@ -4031,7 +4031,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 			a = 0.5;
 		}
 		gpu_set_blendmode(bm_add);
-		draw_sprite_ext(sprt_ScrewAttackFX,screwFrame,xx,yy,dir,1,0,make_color_rgb(0,255,114),alph*a);
+		draw_sprite_ext(sprt_Player_ScrewAttackFX,screwFrame,xx,yy,dir,1,0,make_color_rgb(0,255,114),alph*a);
 		gpu_set_blendmode(bm_normal);
 	}
 	else

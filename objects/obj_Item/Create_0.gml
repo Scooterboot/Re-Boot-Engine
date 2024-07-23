@@ -18,7 +18,7 @@ isMajorItem = false;
 
 var msSize = global.mapSquareSize;
 mapIcon = array_create(7);
-mapIcon[0] = sprt_MapIcon_Item;
+mapIcon[0] = sprite_get_name(sprt_MapIcon_Item);
 mapIcon[1] = 1;
 mapIcon[2] = obj_Map.GetMapPosX(x) * msSize + msSize/2;
 mapIcon[3] = obj_Map.GetMapPosY(y) * msSize + msSize/2;

@@ -4,7 +4,7 @@ var liquidMovement = (liquidState > 0);
 
 PaletteSurface();
 var palSurf = palSurface;
-if(stateFrame == State.CrystalFlash && torsoR == sprt_CrystalFlash)
+if(stateFrame == State.CrystalFlash && torsoR == sprt_Player_CrystalFlash)
 {
 	palSurf = cFlashPalSurf;
 }
