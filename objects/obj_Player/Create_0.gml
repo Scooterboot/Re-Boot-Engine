@@ -427,16 +427,19 @@ moveSpeed[0,0] = 0.1875;	// Normal
 moveSpeed[1,0] = 0.1;		// Morph
 moveSpeed[2,0] = 0.0625;	// Dash/Speedboost
 moveSpeed[3,0] = 0.109375;	// Shine Spark
+moveSpeed[4,0] = 0.125;		// Grapple
 // Underwater (no grav suit)
 moveSpeed[0,1] = 0.015625;	// Normal
 moveSpeed[1,1] = 0.02;		// Morph
 moveSpeed[2,1] = 0.015625;	// Dash/Speedboost
 moveSpeed[3,1] = 0.03125;	// Shine Spark
+moveSpeed[4,1] = 0.0225;	// Grapple
 // In lava/acid (no grav suit)
 moveSpeed[0,2] = 0.015625;	// Normal
 moveSpeed[1,2] = 0.02;		// Morph
 moveSpeed[2,2] = 0.015625;	// Dash/Speedboost
 moveSpeed[3,2] = 0.03125;	// Shine Spark
+moveSpeed[4,2] = 0.0225;	// Grapple
 
 frict[0] = 0.5;		// Out of water
 frict[1] = 0.5;		// Underwater
@@ -488,6 +491,10 @@ jumpHeight[1,2] = 2; // Hi Jump
 grav[0] = 0.109375;		// Out of water
 grav[1] = 0.03125;		// Underwater
 grav[2] = 0.03515625;	// In lava/acid
+
+grapGrav[0] = 0.21875;		// Out of water
+grapGrav[1] = 0.0546;		// Underwater
+grapGrav[2] = 0.0615;	// In lava/acid
 
 fallSpeedMax = 5; // Maximum fall speed - soft cap
 moonFallMax = 32;
@@ -2089,7 +2096,7 @@ function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWav
 #endregion
 
 #region PlayerGrounded
-function PlayerGrounded(ydiff = 1.1)
+function PlayerGrounded(ydiff = 1)
 {
 	var bottomCollision = (entity_collision_line(bbox_left,bbox_bottom+ydiff,bbox_right,bbox_bottom+ydiff) || (y+ydiff) >= room_height);
 	var downSlopeFlag = abs(GetEdgeAngle(Edge.Bottom,0,0)) >= 60;
@@ -2331,92 +2338,25 @@ function Set_Beams()
 	
 	var noBeamsActive = ((beam[Beam.Ice]+beam[Beam.Wave]+beam[Beam.Spazer]+beam[Beam.Plasma]) <= 0);
 	
-	if(beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2))
+	var beamSelected = array_create(5);
+	for(var i = 1; i < 5; i++)
+	{
+		beamSelected[i] = (beam[i] || (noBeamsActive && itemHighlighted[0] == i));
+	}
+	
+	if(beamSelected[Beam.Wave])
 	{
 		beamIsWave = true;
 	}
-	
-	if(beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3))
+	if(beamSelected[Beam.Spazer])
 	{
-		// Spazer
-		beamShot = obj_SpazerBeamShot;
-		beamCharge = obj_SpazerBeamChargeShot;
-		beamChargeAnim = sprt_SpazerChargeAnim;
-		beamSound = snd_Spazer_Shot;
-		beamChargeSound = snd_Spazer_ChargeShot;
-		beamAmt = 3;
-		beamChargeAmt = 3;
-		beamIconIndex = 4;
-		beamFlare = sprt_SpazerChargeFlare;
-		
 		beamWaveStyleOffset = 0;
-		if(beam[Beam.Ice])
-		{
-			// Ice Spazer
-			beamShot = obj_IceSpazerBeamShot;
-			beamCharge = obj_IceSpazerBeamChargeShot;
-			beamChargeAnim = sprt_IceBeamChargeAnim;
-			beamSound = snd_IceComboShot;
-			beamChargeSound = snd_IceBeam_ChargeShot;
-			beamIconIndex = 5;
-			beamFlare = sprt_IceBeamChargeFlare;
-			if(beam[Beam.Wave])
-			{
-				// Ice Wave Spazer
-				beamShot = obj_IceWaveSpazerBeamShot;
-				beamCharge = obj_IceWaveSpazerBeamChargeShot;
-				beamIconIndex = 7;
-				if(beam[Beam.Plasma])
-				{
-					// Ice Wave Spazer Plasma
-					beamShot = obj_IceWaveSpazerPlasmaBeamShot;
-					beamCharge = obj_IceWaveSpazerPlasmaBeamChargeShot;
-					beamIconIndex = 15;
-				}
-			}
-			else if(beam[Beam.Plasma])
-			{
-				// Ice Spazer Plasma
-				beamShot = obj_IceSpazerPlasmaBeamShot;
-				beamCharge = obj_IceSpazerPlasmaBeamChargeShot;
-				beamIconIndex = 13;
-			}
-		}
-		else if(beam[Beam.Wave])
-		{
-			// Wave Spazer
-			beamShot = obj_WaveSpazerBeamShot;
-			beamCharge = obj_WaveSpazerBeamChargeShot;
-			beamChargeAnim = sprt_WaveBeamChargeAnim;
-			beamIconIndex = 6;
-			beamFlare = sprt_WaveBeamChargeFlare;
-			if(beam[Beam.Plasma])
-			{
-				// Wave Spazer Plasma
-				beamShot = obj_WaveSpazerPlasmaBeamShot;
-				beamCharge = obj_WaveSpazerPlasmaBeamChargeShot;
-				beamChargeAnim = sprt_PlasmaBeamChargeAnim;
-				beamSound = snd_PlasmaBeam_Shot;
-				beamChargeSound = snd_PlasmaBeam_ChargeShot;
-				beamIconIndex = 14;
-				beamFlare = sprt_PlasmaBeamChargeFlare;
-			}
-		}
-		else if(beam[Beam.Plasma])
-		{
-			// Spazer Plasma
-			beamShot = obj_SpazerPlasmaBeamShot;
-			beamCharge = obj_SpazerPlasmaBeamChargeShot;
-			beamChargeAnim = sprt_PlasmaBeamChargeAnim;
-			beamSound = snd_PlasmaBeam_Shot;
-			beamChargeSound = snd_PlasmaBeam_ChargeShot;
-			beamIconIndex = 12;
-			beamFlare = sprt_PlasmaBeamChargeFlare;
-		}
 	}
-	else if(beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1))
+	
+	#region Shot Type & FX
+	
+	if(beamSelected[Beam.Ice]) // Ice
 	{
-		// Ice
 		beamShot = obj_IceBeamShot;
 		beamCharge = obj_IceBeamChargeShot;
 		beamChargeAnim = sprt_IceBeamChargeAnim;
@@ -2424,59 +2364,57 @@ function Set_Beams()
 		beamChargeSound = snd_IceBeam_ChargeShot;
 		beamIconIndex = 1;
 		beamFlare = sprt_IceBeamChargeFlare;
-		if(beam[Beam.Wave])
+		
+		if(beam[Beam.Plasma]) // Ice Plasma
 		{
-			// Ice Wave
-			beamShot = obj_IceWaveBeamShot;
-			beamCharge = obj_IceWaveBeamChargeShot;
-			beamChargeAmt = 2;
-			beamIconIndex = 3;
-			if(beam[Beam.Plasma])
-			{
-				// Ice Wave Plasma
-				beamShot = obj_IceWavePlasmaBeamShot;
-				beamCharge = obj_IceWavePlasmaBeamChargeShot;
-				beamSound = snd_IceComboShot;
-				beamAmt = 2;
-				beamIconIndex = 11;
-			}
-		}
-		else if(beam[Beam.Plasma])
-		{
-			// Ice Plasma
 			beamShot = obj_IcePlasmaBeamShot;
 			beamCharge = obj_IcePlasmaBeamChargeShot;
 			beamSound = snd_IceComboShot;
 			beamIconIndex = 9;
+			
+			if(beam[Beam.Wave]) // Ice Wave Plasma
+			{
+				beamShot = obj_IceWavePlasmaBeamShot;
+				beamCharge = obj_IceWavePlasmaBeamChargeShot;
+				beamIconIndex = 11;
+				
+				if(beam[Beam.Spazer]) // Ice Wave Spazer Plasma
+				{
+					beamShot = obj_IceWaveSpazerPlasmaBeamShot;
+					beamCharge = obj_IceWaveSpazerPlasmaBeamChargeShot;
+					beamIconIndex = 15;
+				}
+			}
+			else if(beam[Beam.Spazer]) // Ice Spazer Plasma
+			{
+				beamShot = obj_IceSpazerPlasmaBeamShot;
+				beamCharge = obj_IceSpazerPlasmaBeamChargeShot;
+				beamIconIndex = 13;
+			}
 		}
-	}
-	else if(beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2))
-	{
-		// Wave
-		beamShot = obj_WaveBeamShot;
-		beamCharge = obj_WaveBeamChargeShot;
-		beamChargeAnim = sprt_WaveBeamChargeAnim;
-		beamSound = snd_WaveBeam_Shot;
-		beamChargeSound = snd_WaveBeam_ChargeShot;
-		beamChargeAmt = 2;
-		beamIconIndex = 2;
-		beamFlare = sprt_WaveBeamChargeFlare;
-		if(beam[Beam.Plasma])
+		else if(beam[Beam.Spazer]) // Ice Spazer
 		{
-			// Wave Plasma
-			beamShot = obj_WavePlasmaBeamShot;
-			beamCharge = obj_WavePlasmaBeamChargeShot;
-			beamChargeAnim = sprt_PlasmaBeamChargeAnim;
-			beamSound = snd_PlasmaBeam_Shot;
-			beamChargeSound = snd_PlasmaBeam_ChargeShot;
-			beamAmt = 2;
-			beamIconIndex = 10;
-			beamFlare = sprt_PlasmaBeamChargeFlare;
+			beamShot = obj_IceSpazerBeamShot;
+			beamCharge = obj_IceSpazerBeamChargeShot;
+			beamSound = snd_IceComboShot;
+			beamIconIndex = 5;
+			
+			if(beam[Beam.Wave]) // Ice Wave Spazer
+			{
+				beamShot = obj_IceWaveSpazerBeamShot;
+				beamCharge = obj_IceWaveSpazerBeamChargeShot;
+				beamIconIndex = 7;
+			}
+		}
+		else if(beam[Beam.Wave]) // Ice Wave
+		{
+			beamShot = obj_IceWaveBeamShot;
+			beamCharge = obj_IceWaveBeamChargeShot;
+			beamIconIndex = 3;
 		}
 	}
-	else if(beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4))
+	else if(beamSelected[Beam.Plasma]) // Plasma
 	{
-		// Plasma
 		beamShot = obj_PlasmaBeamShot;
 		beamCharge = obj_PlasmaBeamChargeShot;
 		beamChargeAnim = sprt_PlasmaBeamChargeAnim;
@@ -2484,7 +2422,76 @@ function Set_Beams()
 		beamChargeSound = snd_PlasmaBeam_ChargeShot;
 		beamIconIndex = 8;
 		beamFlare = sprt_PlasmaBeamChargeFlare;
+		
+		if(beam[Beam.Wave]) // Wave Plasma
+		{
+			beamShot = obj_WavePlasmaBeamShot;
+			beamCharge = obj_WavePlasmaBeamChargeShot;
+			beamIconIndex = 10;
+			
+			if(beam[Beam.Spazer]) // Wave Spazer Plasma
+			{
+				beamShot = obj_WaveSpazerPlasmaBeamShot;
+				beamCharge = obj_WaveSpazerPlasmaBeamChargeShot;
+				beamIconIndex = 14;
+			}
+		}
+		else if(beam[Beam.Spazer]) // Spazer Plasma
+		{
+			beamShot = obj_SpazerPlasmaBeamShot;
+			beamCharge = obj_SpazerPlasmaBeamChargeShot;
+			beamIconIndex = 12;
+		}
 	}
+	else if(beamSelected[Beam.Wave]) // Wave
+	{
+		beamShot = obj_WaveBeamShot;
+		beamCharge = obj_WaveBeamChargeShot;
+		beamChargeAnim = sprt_WaveBeamChargeAnim;
+		beamSound = snd_WaveBeam_Shot;
+		beamChargeSound = snd_WaveBeam_ChargeShot;
+		beamIconIndex = 2;
+		beamFlare = sprt_WaveBeamChargeFlare;
+		
+		if(beam[Beam.Spazer]) // Wave Spazer
+		{
+			beamShot = obj_WaveSpazerBeamShot;
+			beamCharge = obj_WaveSpazerBeamChargeShot;
+			beamSound = snd_Spazer_Shot;
+			beamChargeSound = snd_Spazer_ChargeShot;
+			beamIconIndex = 6;
+		}
+	}
+	else if(beamSelected[Beam.Spazer]) // Spazer
+	{
+		beamShot = obj_SpazerBeamShot;
+		beamCharge = obj_SpazerBeamChargeShot;
+		beamChargeAnim = sprt_SpazerChargeAnim;
+		beamSound = snd_Spazer_Shot;
+		beamChargeSound = snd_Spazer_ChargeShot;
+		beamIconIndex = 4;
+		beamFlare = sprt_SpazerChargeFlare;
+	}
+	
+	#endregion
+	#region Shot Amount
+	
+	if(beamSelected[Beam.Spazer])
+	{
+		beamAmt = 3;
+		beamChargeAmt = 3;
+	}
+	else if(beamSelected[Beam.Wave])
+	{
+		beamChargeAmt = 2;
+		if(beam[Beam.Plasma])
+		{
+			//beamAmt = 2; // <- uncomment to make wave plasma shoot dual shots
+		}
+	}
+	
+	#endregion
+	#region Damage & Firerate
 	
 	beamDmg = 20;
 	beamDelay = 8;
@@ -2493,25 +2500,25 @@ function Set_Beams()
 		waveDelay = 0,//2,
 		spazerDelay = 0,//-2,
 		plasmaDelay = 3;
-	if(beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1))
+	if(beamSelected[Beam.Ice])
 	{
 		beamDmg = 30;
 		beamDelay += iceDelay;
 		beamChargeDelay += iceDelay;
 	}
-	if(beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2))
+	if(beamSelected[Beam.Wave])
 	{
 		beamDmg = 50;
 		beamDelay += waveDelay;
 		beamChargeDelay += waveDelay;
 	}
-	if(beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3))
+	if(beamSelected[Beam.Spazer])
 	{
 		beamDmg = 40;
 		beamDelay += spazerDelay;
 		beamChargeDelay += spazerDelay;
 	}
-	if(beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4))
+	if(beamSelected[Beam.Plasma])
 	{
 		beamDmg = 150;
 		beamDelay += plasmaDelay;
@@ -2563,6 +2570,8 @@ function Set_Beams()
 	{
 		beamDmg = 400;
 	}
+	
+	#endregion
 }
 #endregion
 

@@ -105,32 +105,38 @@ function DrawMap(mapArea,posX,posY,mapX,mapY,mapWidth,mapHeight,isMinimap = fals
 		mapWidth = min(mapWidth,sprite_get_width(mapSprt)-mapX);
 		mapHeight = min(mapHeight,sprite_get_height(mapSprt)-mapY);
 		
+		var offX = -mapX, offY = -mapY;
+		
 		var msSize = global.mapSquareSize;
 
 		if(surface_exists(mapSurf))
 		{
-			surface_resize(mapSurf,sprite_get_width(mapSprt),sprite_get_height(mapSprt));
+			surface_resize(mapSurf,mapWidth,mapHeight);
 			surface_set_target(mapSurf);
 			draw_clear_alpha(c_black,0);
 			
 			if(baseAlpha > 0)
 			{
-				draw_sprite_stretched_ext(sprt_HMapBase,0,0,0,sprite_get_width(mapSprt),sprite_get_height(mapSprt),c_white,baseAlpha);
+				draw_sprite_stretched_ext(sprt_UI_HMapBase,0,offX,offY,sprite_get_width(mapSprt),sprite_get_height(mapSprt),c_white,baseAlpha);
 			}
 		
 			if(ds_exists(mapGrid,ds_type_grid))
 			{
-				for(var i = 0; i < ds_grid_width(mapGrid); i++)
+				var startX = max(floor(mapX/msSize),0), 
+					endX = min(startX+ceil(mapWidth/msSize)+1,ds_grid_width(mapGrid)),
+					startY = max(floor(mapY/msSize),0), 
+					endY = min(startY+ceil(mapHeight/msSize)+1,ds_grid_height(mapGrid));
+				for(var i = startX; i < endX; i++)
 				{
-					for(var j = 0; j < ds_grid_height(mapGrid); j++)
+					for(var j = startY; j < endY; j++)
 					{
 						if(mapGrid[# i,j])
 						{
-							draw_sprite_part_ext(mapSprt,0,i*msSize,j*msSize,msSize,msSize,i*msSize,j*msSize,1,1,c_white,1);
+							draw_sprite_part_ext(mapSprt,0,i*msSize,j*msSize,msSize,msSize,offX+i*msSize,offY+j*msSize,1,1,c_white,1);
 						}
 						else if(grey)
 						{
-							draw_sprite_part_ext(mapSprt,1,i*msSize,j*msSize,msSize,msSize,i*msSize,j*msSize,1,1,c_white,1);
+							draw_sprite_part_ext(mapSprt,1,i*msSize,j*msSize,msSize,msSize,offX+i*msSize,offY+j*msSize,1,1,c_white,1);
 						}
 					}
 				}
@@ -149,8 +155,8 @@ function DrawMap(mapArea,posX,posY,mapX,mapY,mapWidth,mapHeight,isMinimap = fals
 							continue;
 						}
 						var _subimg = icon[1],
-							_x = icon[2],
-							_y = icon[3],
+							_x = icon[2] + offX,
+							_y = icon[3] + offY,
 							_xscale = icon[4],
 							_yscale = icon[5],
 							_rot = icon[6],
@@ -178,12 +184,12 @@ function DrawMap(mapArea,posX,posY,mapX,mapY,mapWidth,mapHeight,isMinimap = fals
 			}
 		
 			surface_reset_target();
-		
-			draw_surface_part_ext(mapSurf,mapX,mapY,mapWidth,mapHeight,posX,posY,1,1,c_white,1);
+			
+			draw_surface_ext(mapSurf,posX,posY,1,1,0,c_white,1);
 		}
 		else
 		{
-			mapSurf = surface_create(sprite_get_width(mapSprt),sprite_get_height(mapSprt));
+			mapSurf = surface_create(mapWidth,mapHeight);
 			surface_set_target(mapSurf);
 			draw_clear_alpha(c_black,0);
 			surface_reset_target();

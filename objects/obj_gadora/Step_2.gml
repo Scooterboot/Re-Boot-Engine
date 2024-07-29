@@ -1,14 +1,5 @@
 /// @description 
 
-
-if(justHit)
-{
-	eyeState = 0;
-	eyeTimer = 0;
-	eyeChance++;
-	justHit = false;
-}
-
 if(dead)
 {
     //NPCDeath(x+deathOffsetX,y+deathOffsetY);

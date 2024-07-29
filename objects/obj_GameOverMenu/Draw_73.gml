@@ -49,7 +49,7 @@ if(room == rm_GameOver)
 				alph = 0.15;
 				indent = 0;//4;
 		
-				draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX+indent-4,oY2+string_height(option[i])/2,1,1,0,c_white,1);
+				draw_sprite_ext(sprt_UI_SelectCursor,cursorFrame,oX+indent-4,oY2+string_height(option[i])/2,1,1,0,c_white,1);
 			}
 			scr_DrawOptionText(oX+indent,oY2,option[i],c_white,1,string_width(option[i])+1,col,alph);
 		}
@@ -80,7 +80,7 @@ if(room == rm_GameOver)
 				alph = 0.15;
 				indent = 4;
 							
-				draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX2-4,oY2+string_height(text)/2,1,1,0,c_white,1);
+				draw_sprite_ext(sprt_UI_SelectCursor,cursorFrame,oX2-4,oY2+string_height(text)/2,1,1,0,c_white,1);
 			}
 			scr_DrawOptionText(oX2,oY2,text,c_white,1,string_width(text)+1,col,alph);
 		}

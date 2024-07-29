@@ -27,7 +27,7 @@
   "origin":0,
   "parent":{
     "name":"Map",
-    "path":"folders/Sprites/Map.yy",
+    "path":"folders/Sprites/UI/Map.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",
@@ -85,8 +85,8 @@
   "swatchColours":null,
   "swfPrecision":0.5,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"UserInterface",
+    "path":"texturegroups/UserInterface",
   },
   "type":0,
   "VTile":false,

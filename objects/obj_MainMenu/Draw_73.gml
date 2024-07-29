@@ -89,7 +89,7 @@ if(currentScreen == MainScreen.FileSelect || currentScreen == MainScreen.FileCop
 				alph = 0.15;
 				indent = 4;
 			
-				draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX+indent-4,oY2+string_height(fOption[o])/2,1,1,0,c_white,1);
+				draw_sprite_ext(sprt_UI_SelectCursor,cursorFrame,oX+indent-4,oY2+string_height(fOption[o])/2,1,1,0,c_white,1);
 			}
 			scr_DrawOptionText(oX+indent,oY2,fOption[o],c_white,1,string_width(fOption[o])+1,col,alph);
 		}
@@ -138,7 +138,7 @@ if(currentScreen == MainScreen.FileSelect || currentScreen == MainScreen.FileCop
 				alph = 0.15;
 				indent = 4;
 				
-				draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX2-4,oY2+string_height(text)/2,1,1,0,c_white,1);
+				draw_sprite_ext(sprt_UI_SelectCursor,cursorFrame,oX2-4,oY2+string_height(text)/2,1,1,0,c_white,1);
 			}
 			scr_DrawOptionText(oX2,oY2,text,c_white,1,string_width(text)+1,col,alph);
 		}
@@ -167,7 +167,7 @@ if(currentScreen == MainScreen.FileSelect || currentScreen == MainScreen.FileCop
 			
 			if(selectedFile != i)
 			{
-				draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX-4,oY2+string_height(fOption[i])/2,1,1,0,c_white,1);
+				draw_sprite_ext(sprt_UI_SelectCursor,cursorFrame,oX-4,oY2+string_height(fOption[i])/2,1,1,0,c_white,1);
 			}
 		}
 		
@@ -182,7 +182,7 @@ if(currentScreen == MainScreen.FileSelect || currentScreen == MainScreen.FileCop
 		draw_roundrect(oX-3,oY2-14,ww-oX+1,oY2+string_height(fOption[i])+12,false);
 		
 		draw_set_font(fnt_Menu);
-		draw_sprite_ext(sprt_FileIcon,frame,oX+string_width(fOption[i])+8,oY2+(string_height(fOption[i])/2),1,1,0,c_white,1);
+		draw_sprite_ext(sprt_UI_FileIcon,frame,oX+string_width(fOption[i])+8,oY2+(string_height(fOption[i])/2),1,1,0,c_white,1);
 		
 		scr_DrawOptionText(oX+2,oY2,fOption[i],c_white,1,0,c_black,0);
 		
@@ -264,7 +264,7 @@ if(currentScreen == MainScreen.FileSelect || currentScreen == MainScreen.FileCop
 							eX = tx + (7*(j-1))/2;
 							eY = ty+7;
 						}
-						draw_sprite_ext(sprt_HETank,(statEnergyTanks > j),floor(eX),floor(eY),1,1,0,c_white,1);
+						draw_sprite_ext(sprt_UI_HETank,(statEnergyTanks > j),floor(eX),floor(eY),1,1,0,c_white,1);
 					}
 				}
 			}
@@ -292,7 +292,7 @@ if(currentScreen == MainScreen.FileSelect || currentScreen == MainScreen.FileCop
 						alph2 = 0.5;
 						sx += 4;
 			
-						draw_sprite_ext(sprt_SelectCursor,cursorFrame,sx-4,sy+string_height(subOption[j])/2,1,1,0,c_white,1);
+						draw_sprite_ext(sprt_UI_SelectCursor,cursorFrame,sx-4,sy+string_height(subOption[j])/2,1,1,0,c_white,1);
 					}
 					
 					scr_DrawOptionText(sx,sy,subOption[j],c_white,1,scr_ceil(string_width(subOption[j])+2),col2,alph2);

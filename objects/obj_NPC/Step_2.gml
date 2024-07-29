@@ -17,10 +17,6 @@ shiftY = 0;
 movedVelX = 0;
 movedVelY = 0;
 
-if(justHit)
-{
-	justHit = false;
-}
 if(dead)
 {
     NPCDeath(x+deathOffsetX,y+deathOffsetY);

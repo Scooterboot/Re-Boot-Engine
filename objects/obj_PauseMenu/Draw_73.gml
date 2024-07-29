@@ -80,9 +80,9 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					
 					var bgx = -msSize + scr_wrap(scr_round(mx),0,msSize),
 						bgy = -msSize + scr_wrap(scr_round(my),0,msSize);
-					draw_sprite_stretched_ext(sprt_HMapBase,0,bgx,bgy,ww+(msSize*2),hh+(msSize*2),c_white,0.25);
+					draw_sprite_stretched_ext(sprt_UI_HMapBase,0,bgx,bgy,ww+(msSize*2),hh+(msSize*2),c_white,0.25);
 					
-					obj_Map.DrawMap(global.rmMapArea,scr_round(mx),scr_round(my),0,0,sprite_get_width(global.rmMapArea.sprt),sprite_get_height(global.rmMapArea.sprt));
+					obj_Map.DrawMap(global.rmMapArea,0,0,-scr_round(mx),-scr_round(my),global.resWidth,global.resHeight);
 					
 					var pX = mx + obj_Map.playerMapX * msSize + (msSize/2),
 						pY = my + obj_Map.playerMapY * msSize + (msSize/2);
@@ -94,7 +94,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 						pMapIconFrameCounter = 0;
 					}
 					
-					draw_sprite_ext(sprt_PlayerMapIcon,pMapIconSeq[pMapIconFrame],scr_round(pX),scr_round(pY),1,1,0,c_white,1);
+					draw_sprite_ext(sprt_MapIcon_Player,pMapIconSeq[pMapIconFrame],scr_round(pX),scr_round(pY),1,1,0,c_white,1);
 				}
 			}
 			#endregion
@@ -298,106 +298,6 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					draw_surface_ext(textSurface,iBoxX-66,iBoxY,1,1,0,textBGColor,0.5);
 					draw_text(iBoxX-65,iBoxY+1,subTxt);
 				}
-				
-				/*textAnim = min(textAnim + 1.5, 62);
-				var xL1 = global.resWidth/2 - 121,
-					xL2 = global.resWidth/2 - 119,
-					xL3 = global.resWidth/2 - 113,
-					xR1 = global.resWidth/2 + 48,
-					xR2 = global.resWidth/2 + 50,
-					xR3 = global.resWidth/2 + 56;
-				var textH = 7;
-				draw_sprite(sprt_Sub_ItemHeader,0,xL1-1,53);
-				var yoff = 2;
-				for(var i = 0; i < array_length(P.hasBeam); i++)
-				{
-					if(P.hasBeam[i])
-					{
-						draw_sprite(sprt_Sub_ItemBox,0+2*(!P.beam[i]),xL1,59+10*i+yoff);
-						if(beamSelect == i)
-						{
-							gpu_set_blendmode(bm_add);
-							draw_sprite_ext(sprt_Sub_ItemNav_Box,0+2*(!P.beam[i]),xL1,59+10*i+yoff,1,1,0,c_white,selectorAlpha*1.25);
-							gpu_set_blendmode(bm_normal);
-							draw_sprite_ext(sprt_Sub_ItemNav_Dot,0,xL2,61+10*i+yoff,1,1,0,c_white,1);
-							draw_sprite_ext(sprt_Sub_ItemNav_Dot,1,xL2,61+10*i+yoff,1,1,0,c_white,(1-selectorAlpha)*1.25);
-						}
-						draw_sprite_part(sprt_Sub_ItemName_Beam,i+array_length(P.hasBeam)*(!P.beam[i]),0,0,textAnim,textH,xL3,60+10*i+yoff);
-					}
-					else
-					{
-						yoff -= 10;
-					}
-				}
-				
-				draw_sprite(sprt_Sub_ItemHeader,1,xL1-1,133);
-				yoff = 2;
-				for(var i = 0; i < array_length(P.hasBoots); i++)
-				{
-					if(P.hasBoots[i])
-					{
-						draw_sprite(sprt_Sub_ItemBox,0+2*(!P.boots[i]),xL1,139+10*i+yoff);
-						if(bootsSelect == i)
-						{
-							gpu_set_blendmode(bm_add);
-							draw_sprite_ext(sprt_Sub_ItemNav_Box,0+2*(!P.boots[i]),xL1,139+10*i+yoff,1,1,0,c_white,selectorAlpha*1.25);
-							gpu_set_blendmode(bm_normal);
-							draw_sprite_ext(sprt_Sub_ItemNav_Dot,1,xL2,141+10*i+yoff,1,1,0,c_white,1);
-							draw_sprite_ext(sprt_Sub_ItemNav_Dot,0,xL2,141+10*i+yoff,1,1,0,c_white,selectorAlpha);
-						}
-						draw_sprite_part(sprt_Sub_ItemName_Boots,i+array_length(P.hasBoots)*(!P.boots[i]),0,0,textAnim,textH,xL3,140+10*i+yoff);
-					}
-					else
-					{
-						yoff -= 10;
-					}
-				}
-				
-				draw_sprite(sprt_Sub_ItemHeader,2,xR1-2,53);
-				yoff = 2;
-				for(var i = 0; i < array_length(P.hasSuit); i++)
-				{
-					if(P.hasSuit[i])
-					{
-						draw_sprite(sprt_Sub_ItemBox,1+2*(!P.suit[i]),xR1,59+10*i+yoff);
-						if(suitSelect == i)
-						{
-							gpu_set_blendmode(bm_add);
-							draw_sprite_ext(sprt_Sub_ItemNav_Box,1+2*(!P.suit[i]),xR1,59+10*i+yoff,1,1,0,c_white,selectorAlpha*1.25);
-							gpu_set_blendmode(bm_normal);
-							draw_sprite_ext(sprt_Sub_ItemNav_Dot,1,xR2,61+10*i+yoff,1,1,0,c_white,1);
-							draw_sprite_ext(sprt_Sub_ItemNav_Dot,0,xR2,61+10*i+yoff,1,1,0,c_white,selectorAlpha);
-						}
-						draw_sprite_part(sprt_Sub_ItemName_Suit,i+array_length(P.hasSuit)*(!P.suit[i]),0,0,textAnim,textH,xR3,60+10*i+yoff);
-					}
-					else
-					{
-						yoff -= 10;
-					}
-				}
-				
-				draw_sprite(sprt_Sub_ItemHeader,3,xR1-2,113);
-				yoff = 2;
-				for(var i = 0; i < array_length(P.hasMisc); i++)
-				{
-					if(P.hasMisc[i])
-					{
-						draw_sprite(sprt_Sub_ItemBox,1+2*(!P.misc[i]),xR1,119+10*i+yoff);
-						if(miscSelect == i)
-						{
-							gpu_set_blendmode(bm_add);
-							draw_sprite_ext(sprt_Sub_ItemNav_Box,1+2*(!P.misc[i]),xR1,119+10*i+yoff,1,1,0,c_white,selectorAlpha*1.25);
-							gpu_set_blendmode(bm_normal);
-							draw_sprite_ext(sprt_Sub_ItemNav_Dot,1,xR2,121+10*i+yoff,1,1,0,c_white,1);
-							draw_sprite_ext(sprt_Sub_ItemNav_Dot,0,xR2,121+10*i+yoff,1,1,0,c_white,selectorAlpha);
-						}
-						draw_sprite_part(sprt_Sub_ItemName_Misc,i+array_length(P.hasMisc)*(!P.misc[i]),0,0,textAnim,textH,xR3,120+10*i+yoff);
-					}
-					else
-					{
-						yoff -= 10;
-					}
-				}*/
 			}
 			else
 			{
@@ -451,7 +351,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 							alph = 0.15;
 							indent = 4;
 							
-							draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX+indent-4,oY2+string_height(option[o])/2,1,1,0,c_white,1);
+							draw_sprite_ext(sprt_UI_SelectCursor,cursorFrame,oX+indent-4,oY2+string_height(option[o])/2,1,1,0,c_white,1);
 						}
 						scr_DrawOptionText(oX+indent,oY2,option[o],c_white,1,string_width(option[o])+1,col,alph);
 					}
@@ -482,7 +382,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 							alph = 0.15;
 							indent = 4;
 							
-							draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX2-4,oY2+string_height(text)/2,1,1,0,c_white,1);
+							draw_sprite_ext(sprt_UI_SelectCursor,cursorFrame,oX2-4,oY2+string_height(text)/2,1,1,0,c_white,1);
 						}
 						scr_DrawOptionText(oX2,oY2,text,c_white,1,string_width(text)+1,col,alph);
 					}

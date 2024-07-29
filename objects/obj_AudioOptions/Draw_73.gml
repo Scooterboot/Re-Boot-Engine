@@ -73,7 +73,7 @@ if(surface_exists(surf))
 			bA = talph2;
 			indent = 4;
 		
-			draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX+indent-4,oYY+string_height(option[i])/2,1,1,0,c_white,1);
+			draw_sprite_ext(sprt_UI_SelectCursor,cursorFrame,oX+indent-4,oYY+string_height(option[i])/2,1,1,0,c_white,1);
 		}
 	
 		var bW = string_width(option[i]);

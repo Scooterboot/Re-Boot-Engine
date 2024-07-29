@@ -6,15 +6,18 @@ if(PauseAI())
 }
 
 phase = 0;
-if(life < 770)
+//if(life < 770)
+if(life < lifeMax*0.8)
 {
 	phase = 1;
 }
-if(life < 410)
+//if(life < 410)
+if(life < lifeMax*0.43)
 {
 	phase = 2;
 }
-if(life < 70)
+//if(life < 70)
+if(life < lifeMax*0.073)
 {
 	phase = 3;
 }
@@ -42,24 +45,22 @@ else if(ai[0] < 3)
 	if(ai[0] == 1)
 	{
 		var spd = moveAngleSpd*moveDir;
-		if(life < 400)
+		//if(life < 400)
+		if(life < lifeMax*0.417)
 		{
 			spd *= 2;
 		}
 		moveAngle += spd;
 		
+		mouthOpen = false;
+		
 		ai[1]++;
 		var thresh = 840;
 		if(ai[1] > thresh-30)
 		{
-			image_yscale = min(image_yscale + 2/sprite_get_height(sprite_index), 1);
+			mouthOpen = true;
 		}
-		else
-		{
-			image_yscale = max(image_yscale - 2/sprite_get_height(sprite_index), 0);
-		}
-		
-		if(ai[1] > thresh)
+		if(ai[1] > thresh && image_yscale >= 1)
 		{
 			ai[0] = 2;
 			ai[1] = 0;
@@ -67,11 +68,17 @@ else if(ai[0] < 3)
 	}
 	if(ai[0] == 2)
 	{
+		mouthOpen = true;
+		
 		ai[1]++;
 		if(ai[1] > 240)
 		{
-			ai[0] = 1;
-			ai[1] = 0;
+			mouthOpen = false;
+			if(image_yscale <= 0)
+			{
+				ai[0] = 1;
+				ai[1] = 0;
+			}
 		}
 	}
 	
@@ -81,6 +88,15 @@ else if(ai[0] < 3)
 
 x = scr_round(position.X);
 y = scr_round(position.Y);
+
+if(mouthOpen)
+{
+	image_yscale = min(image_yscale + 2/height, 1);
+}
+else
+{
+	image_yscale = max(image_yscale - 1.5/height, 0);
+}
 
 if(instance_exists(mouthTop))
 {

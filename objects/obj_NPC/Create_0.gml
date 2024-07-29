@@ -38,7 +38,6 @@ ignorePlayerImmunity = false;
 
 boss = false;
 
-justHit = false;
 dmgFlash = 0;
 dead = false;
 //deathPersistant = false;
@@ -143,9 +142,12 @@ function DamagePlayer()
 			var knockX = lengthdir_x(knockBackSpeed,ang),
 				knockY = lengthdir_y(knockBackSpeed,ang);
 			player.StrikePlayer(damage,knockBack,knockX,knockY,damageInvFrames,ignorePlayerImmunity);
+			
+			OnDamagePlayer();
 	    }
 	}
 }
+function OnDamagePlayer() {}
 
 function DmgCollide(posX,posY,object,isProjectile)
 {
@@ -164,7 +166,6 @@ function StrikeNPC(damage, dmgType, dmgSubType, lifeEnd = 0, dethType = -1)
 		lifeMax = realLife.lifeMax;
 		
 		realLife.dmgFlash = 8;
-		realLife.justHit = true;
 		
 		if(realLife.life <= 0)
 		{
@@ -191,7 +192,6 @@ function StrikeNPC(damage, dmgType, dmgSubType, lifeEnd = 0, dethType = -1)
 	}
 	
 	dmgFlash = 8;
-	justHit = true;
 
 	if(hurtSound != noone && (dmgType != DmgType.Explosive || !dmgSubType[4]))
 	{

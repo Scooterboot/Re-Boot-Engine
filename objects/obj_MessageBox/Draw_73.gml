@@ -23,10 +23,10 @@ switch (messageType)
 			
 			//draw_set_font(GUIFontSmall);
 			var str2W = descScrib.get_width(),//string_width(str2),
-				boxW = sprite_get_width(sprt_MessageBox),
+				boxW = sprite_get_width(sprt_UI_MessageBox),
 				//boxW2 = 190,
 				str2H = descScrib.get_height(),
-				boxH = sprite_get_height(sprt_MessageBox),
+				boxH = sprite_get_height(sprt_UI_MessageBox),
 				boxH2 = 34;
 			//	boxScaleX = 1;
 			//if(str2W > boxW2)
@@ -38,13 +38,13 @@ switch (messageType)
 			
 			var fWidth = max(boxW,str2W+56),
 				scaleW = fWidth/boxW,
-				offX = sprite_get_xoffset(sprt_MessageBox) * scaleW,
+				offX = sprite_get_xoffset(sprt_UI_MessageBox) * scaleW,
 				fHeight = lerp(boxH2,max(boxH,str2H+20),messageAlpha),
 				fHeight2 = max(boxH,str2H+20)/2,
 				scaleH = fHeight/boxH,
-				offY = sprite_get_yoffset(sprt_MessageBox) * scaleH;
+				offY = sprite_get_yoffset(sprt_UI_MessageBox) * scaleH;
 			
-			draw_sprite_stretched_ext(sprt_MessageBox,0,xx+(ww/2)-offX,yy+(hh/2)-offY,fWidth,fHeight,c_white,messageAlpha)
+			draw_sprite_stretched_ext(sprt_UI_MessageBox,0,xx+(ww/2)-offX,yy+(hh/2)-offY,fWidth,fHeight,c_white,messageAlpha)
 			
 			draw_set_font(fnt_Menu2);
 			//scr_DrawOptionText(xx+(ww/2),yy+(hh/2)-string_height(str)-4,str,c_yellow,messageAlpha,0,c_black,0);

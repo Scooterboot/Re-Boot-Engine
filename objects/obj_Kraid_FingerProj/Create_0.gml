@@ -18,6 +18,11 @@ function PauseAI()
 	return (global.gamePaused || frozen > 0 || dmgFlash > 0);
 }
 
+function OnDamagePlayer()
+{
+	dead = true;
+}
+
 _kill = false;
 bounceNum = 5;
 function BounceLimit()

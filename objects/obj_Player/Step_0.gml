@@ -673,7 +673,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	fMoveSpeed = moveSpeed[(state == State.Morph),liquidState];
 	fFrict = frict[liquidState];
 	
-	if(moveState == 1 || moveState == 2 || state == State.Grapple)
+	if(moveState == 1 || moveState == 2)
 	{
 		var runMaxSpd = maxSpeed[0,liquidState],
 			dashMaxSpd = maxSpeed[1,liquidState],
@@ -1700,13 +1700,23 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 
 #region Grip Collision
 
-	if(misc[Misc.PowerGrip] && (state == State.Jump || state == State.Somersault) && morphFrame <= 0 && !grounded && abs(dirFrame) >= 4 && velY >= 0)
+	if(misc[Misc.PowerGrip] && (state == State.Jump || state == State.Somersault) && morphFrame <= 0 && !grounded && abs(dirFrame) >= 4 && velY >= 0 && move2 != 0)
 	{
 		if(!entity_place_collide(0,-4) && ((state == State.Jump && !entity_place_collide(0,3)) || (state == State.Somersault && !entity_place_collide(0,13))))
 		{
+			var vcheck = x+6 - 1,
+				rcheck = x+6 - 1,
+				lcheck = x - 1;
+			if(move2 == -1)
+			{
+				vcheck = x-6;
+				rcheck = x;
+				lcheck = x-6;
+			}
+			
 			var canGrip = true;
 			var num = instance_place_list(x+move2,y,all,blockList,true);
-				num += collision_line_list(x,y-17,x+6*move2,y-17,all,true,true,blockList,true);
+				num += collision_line_list(lcheck,y-17,rcheck,y-17,all,true,true,blockList,true);
 			for(var i = 0; i < num; i++)
 			{
 				if (instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object))
@@ -1725,10 +1735,21 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			}
 			ds_list_clear(blockList);
 			
-			if(entity_collision_line(x,y-17,x+6*move2,y-17) && !entity_collision_line(x+6*move2,y-22,x+6*move2,y-26) && entity_place_collide(move2,0) && dir == move2)
+			if(entity_collision_line(lcheck,y-17,rcheck,y-17) && !entity_collision_line(vcheck,y-22,vcheck,y-26) && entity_place_collide(move2,0) && dir == move2)
 			{
+				var rslopeX = x+14 - 1,
+					rslopeY = y-25,
+					lslopeX = x+6 - 1,
+					lslopeY = y-17;
+				if(move2 == -1)
+				{
+					rslopeX = x-6;
+					rslopeY = y-17;
+					lslopeX = x-14;
+					lslopeY = y-25;
+				}
 				var slopeOffset = 0;
-				while(slopeOffset >= -8 && entity_collision_line(x+6*move2,y-17+slopeOffset,x+14*move2,y-25+slopeOffset))
+				while(slopeOffset >= -8 && entity_collision_line(lslopeX,lslopeY+slopeOffset,rslopeX,rslopeY+slopeOffset))
 				{
 					slopeOffset -= 1;
 				}
@@ -1750,7 +1771,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					position.Y = scr_ceil(position.Y);
 					for(var j = 10; j > 0; j--)
 					{
-						if(entity_collision_line(x,position.Y-18,x+6*move2,position.Y-18))
+						if(entity_collision_line(lcheck,position.Y-18,rcheck,position.Y-18))
 						{
 							position.Y -= 1;
 						}
@@ -1760,54 +1781,6 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					instance_destroy(grapple);
 				}
 			}
-			/*var num = instance_place_list(x+move2,y,all,blockList,true);
-				num += collision_line_list(x,y-17,x+6*move2,y-17,all,true,true,blockList,true);
-			for(var i = 0; i < num; i++)
-			{
-				if (instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object) && 
-					(!asset_has_any_tag(blockList[| i].object_index,"ISlope",asset_object) || sign(blockList[| i].image_xscale) == dir))
-				{
-					var block = blockList[| i];
-					var canGrip = true;
-					if (block.object_index == obj_Tile || object_is_ancestor(block.object_index,obj_Tile) ||
-						block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
-					{
-						canGrip = block.canGrip;
-					}
-					var slope = collision_line(x,block.bbox_top-2,x+8*move2,block.bbox_top-2,all,true,true);
-					if(instance_exists(slope) && asset_has_any_tag(slope.object_index,solids,asset_object) && asset_has_any_tag(slope.object_index,"ISlope",asset_object) && slope.image_yscale > 1)
-					{
-						canGrip = false;
-					}
-					if(canGrip && lhc_collision_line(x,y-17,x+6*move2,y-17,solids,true,true) && !lhc_collision_line(x+6*move2,y-22,x+6*move2,y-26,solids,true,true) && lhc_place_meeting(x+move2,y,solids) && dir == move2)
-					{
-						audio_play_sound(snd_Grip,0,false);
-						jump = 0;
-						fVelY = 0;
-						velY = 0;
-						dir = move2;
-				
-						ChangeState(State.Grip,State.Grip,mask_Jump,false);
-						
-						position.Y = scr_ceil(position.Y);
-						for(var j = 10; j > 0; j--)
-						{
-							//if(lhc_position_meeting(x+6*move2,position.Y-18,solids))
-							if(lhc_collision_line(x,position.Y-18,x+6*move2,position.Y-18,solids,true,true))
-							{
-								position.Y -= 1;
-							}
-						}
-						y = scr_round(position.Y);
-				
-						instance_destroy(grapple);
-						
-						ds_list_clear(blockList);
-						break;
-					}
-				}
-			}
-			ds_list_clear(blockList);*/
 		}
 	}
 #endregion
@@ -1828,9 +1801,17 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			// then again, 'if it looks stupid, but works, it isn't stupid.'
 			for(var i = 0; i < 2; i++)
 			{
-				if(i == 0 && entity_collision_rectangle(x,bbottom-8,x+7*dir,bbottom-5))
+				var lcheck = x - 1,
+					rcheck = x+7 - 1;
+				if(dir == -1)
 				{
-					while(qcHeight > -heightMax && entity_collision_line(x,bbottom+qcHeight,x+7*dir,bbottom+qcHeight))
+					lcheck = x-7;
+					rcheck = x;
+				}
+				
+				if(i == 0 && entity_collision_rectangle(lcheck,bbottom-8,rcheck,bbottom-5))
+				{
+					while(qcHeight > -heightMax && entity_collision_line(lcheck,bbottom+qcHeight,rcheck,bbottom+qcHeight))
 					{
 						qcHeight--;
 					}
@@ -1838,33 +1819,60 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				else if(i == 1)
 				{
 					qcHeight = -heightMax;
-					while(qcHeight < -5 && entity_collision_line(x,bbottom+qcHeight,x+7*dir,bbottom+qcHeight))
+					while(qcHeight < -5 && entity_collision_line(lcheck,bbottom+qcHeight,rcheck,bbottom+qcHeight))
 					{
 						qcHeight++;
 					}
-					while(qcHeight < -5 && !entity_collision_line(x,bbottom+qcHeight,x+7*dir,bbottom+qcHeight))
+					while(qcHeight < -5 && !entity_collision_line(lcheck,bbottom+qcHeight,rcheck,bbottom+qcHeight))
 					{
 						qcHeight++;
 					}
 					qcHeight -= 1;
 				}
+				debugthing = bbottom+qcHeight;
 				
 				quickClimbTarget = 0;
 				if(qcHeight <= -7)
 				{
 					var yHeight = bbottom+qcHeight;
+					debugthing2 = yHeight;
 					
-					var slopeOffset = 0;
-					while(slopeOffset > -16 && entity_collision_line(x+7*dir,yHeight+slopeOffset,x+15*dir,yHeight+slopeOffset))
+					lcheck = x+6 - 1;
+					rcheck = x+14 - 1;
+					var rcheckY = yHeight-9,
+						lcheckY = yHeight-1;
+					if(dir == -1)
 					{
-						slopeOffset -= 1;
+						lcheck = x-14;
+						rcheck = x-6;
+						
+						rcheckY = yHeight-1;
+						lcheckY = yHeight-9;
 					}
 					
-					yHeight += slopeOffset;
-					
-					if(!entity_collision_rectangle(x-4*dir,yHeight-15,x+17*dir,yHeight-2))
+					if(entity_collision_line(lcheck,yHeight,rcheck,yHeight) && !entity_collision_line(lcheck,lcheckY,rcheck,rcheckY))
 					{
-						if(!entity_collision_rectangle(x-4*dir,yHeight-31,x+17*dir,yHeight-2))
+						var slopeOffset = 0;
+						while(slopeOffset > -16 && entity_collision_line(lcheck,yHeight+slopeOffset,rcheck,yHeight+slopeOffset))
+						{
+							slopeOffset -= 1;
+						}
+					
+						yHeight += slopeOffset;
+					}
+					debugthing3 = yHeight;
+					
+					lcheck = x-4 - 1;
+					rcheck = x+14 - 1;
+					if(dir == -1)
+					{
+						lcheck = x-14;
+						rcheck = x+4;
+					}
+					
+					if(!entity_collision_rectangle(lcheck,yHeight-15,rcheck,yHeight-2))
+					{
+						if(!entity_collision_rectangle(lcheck,yHeight-31,rcheck,yHeight-2))
 						{
 							quickClimbTarget = 2;
 						}
@@ -3482,14 +3490,14 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				
 				if(!speedBoost)
 				{
-					var grapMoveSpeed = fMoveSpeed / 1.25,
-						angleGrav = fGrav*2 * dcos(grapAngle+90);
-					
-					if(liquidMovement)
+					var angCurv = dcos(grapAngle+90);
+					if(angCurv != 0)
 					{
-						grapMoveSpeed = fMoveSpeed*1.5;
-						angleGrav = fGrav*1.75 * dcos(grapAngle+90);
+						angCurv = sqrt(abs(angCurv)) * sign(angCurv);
 					}
+					
+					var grapMoveSpeed = moveSpeed[4,liquidState],
+						angleGrav = grapGrav[liquidState] * angCurv;
 					
 					velX += lengthdir_x(grapMoveSpeed * move + angleGrav,grapAngle);
 					velY += lengthdir_y(grapMoveSpeed * move + angleGrav,grapAngle);
@@ -3513,17 +3521,14 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					}
 				}
 				
-				var kickDir = move2;
-				if(move2 == 0)
+				var kickDir = dir;
+				if(move2 != 0)
 				{
-					if(sign(grapAngVel) == 0)
-					{
-						kickDir = dir;
-					}
-					else
-					{
-						kickDir = sign(grapAngVel);
-					}
+					kickDir = move2;
+				}
+				if(sign(grapAngVel) != 0)
+				{
+					kickDir = sign(grapAngVel);
 				}
 				var grapVelocity = point_distance(x,y,xprevious,yprevious),
 				kickCheckX = lengthdir_x(kickDir*max(grapVelocity,2),grapAngle),

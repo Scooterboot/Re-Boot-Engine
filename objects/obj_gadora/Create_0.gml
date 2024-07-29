@@ -52,6 +52,12 @@ function ModifyDamageTaken(damage,object,isProjectile)
 	}
 	return 0;
 }
+function OnDamageTaken(damage, object, isProjectile)
+{
+	eyeState = 0;
+	eyeTimer = 0;
+	eyeChance++;
+}
 
 function DmgColPlayer()
 {

@@ -107,7 +107,7 @@ if(surface_exists(surf))
 				bA = talph2;
 				indent = 4;
 			
-				draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX+indent-4,oYY+string_height(option[i])/2,1,1,0,c_white,alpha);
+				draw_sprite_ext(sprt_UI_SelectCursor,cursorFrame,oX+indent-4,oYY+string_height(option[i])/2,1,1,0,c_white,alpha);
 			}
 			var bW = string_width(option[i])+1;
 			if(i < 4)
@@ -158,7 +158,7 @@ if(surface_exists(surf))
 				bA = talph2;
 				indent = 4;
 			
-				draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX+indent-4,oYY+string_height(advOption[i])/2,1,1,0,c_white,alpha);
+				draw_sprite_ext(sprt_UI_SelectCursor,cursorFrame,oX+indent-4,oYY+string_height(advOption[i])/2,1,1,0,c_white,alpha);
 			}
 			var bW = string_width(advOption[i])+1;
 			if(i < 3)
@@ -208,7 +208,7 @@ if(surface_exists(surf))
 					bA = talph2;
 					indent = 4;
 				
-					draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX+indent-4,oYY+string_height(controlKey[i])/2,1,1,0,c_white,alpha);
+					draw_sprite_ext(sprt_UI_SelectCursor,cursorFrame,oX+indent-4,oYY+string_height(controlKey[i])/2,1,1,0,c_white,alpha);
 				}
 				var bW = string_width(controlKey[i])+1;
 				if(i < array_length(currentControlKey))
@@ -276,7 +276,7 @@ if(surface_exists(surf))
 					bA = talph2;
 					indent = 4;
 				
-					draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX+indent-4,oYY+string_height(controlButton[i])/2,1,1,0,c_white,alpha);
+					draw_sprite_ext(sprt_UI_SelectCursor,cursorFrame,oX+indent-4,oYY+string_height(controlButton[i])/2,1,1,0,c_white,alpha);
 				}
 				var bW = string_width(controlButton[i])+1;
 				if(i < array_length(currentControlButton))

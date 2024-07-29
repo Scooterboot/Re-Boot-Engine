@@ -1,14 +1,16 @@
 /// @description 
 
+var pal = phase;
 if(dmgFlash > 4)
 {
-    shader_set(shd_WhiteFlash);
+    pal = 5;
 }
+chameleon_set(pal_SporeSpawn,pal,0,0,6);
 
 for(var i = 0; i < 4; i++)
 {
 	var stemX = lerp(xstart,x,i/4),
-		stemY = lerp(ystart,y-48,i/4);
+		stemY = lerp(ystart,y-40,i/4);
 	draw_sprite_ext(sprt_SporeSpawn_Stem,0,stemX,stemY,1,1,0,c_white,1);
 }
 

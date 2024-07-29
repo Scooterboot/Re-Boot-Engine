@@ -33,8 +33,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"sprt_MouseCursor",
-    "path":"sprites/sprt_MouseCursor/sprt_MouseCursor.yy",
+    "name":"sprt_UI_MouseCursor",
+    "path":"sprites/sprt_UI_MouseCursor/sprt_UI_MouseCursor.yy",
   },
   "spriteMaskId":null,
   "visible":true,

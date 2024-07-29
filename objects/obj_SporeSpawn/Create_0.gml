@@ -13,6 +13,8 @@ image_yscale = 0;
 coreFrame = 0;
 coreFrameCounter = 0;
 coreFrameSeq = [1,2,3,2];
+height = sprite_get_height(sprite_index);
+mouthOpen = false;
 
 npcID = "SporeSpawn";
 

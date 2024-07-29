@@ -54,7 +54,7 @@ function scr_DrawMiniMap()
 		pMapOffsetX = 0;
 		pMapOffsetY = 0;
 		
-		draw_sprite_ext(sprt_HMapBase,0,mapX,mapY,1,1,0,c_white,0.5);
+		draw_sprite_ext(sprt_UI_HMapBase,0,mapX,mapY,1,1,0,c_white,0.5);
 	}
     
 	draw_set_color(c_white);

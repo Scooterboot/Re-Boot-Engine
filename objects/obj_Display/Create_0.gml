@@ -2,6 +2,8 @@
 
 debug = 0;
 
+gpu_set_zwriteenable(false);
+
 screenScale = 1;
 if(global.screenScale > 0)
 {
@@ -28,10 +30,8 @@ view_set_wport(0,global.resWidth);
 view_set_hport(0,global.resHeight);
 camera_set_view_size(view_camera[0],global.resWidth,global.resHeight);
 
-
 global.screenX = (window_get_width() - (surface_get_width(application_surface)*screenScale)) / 2;
 global.screenY = (window_get_height() - (surface_get_height(application_surface)*screenScale)) / 2;
-
 
 window_set_fullscreen(global.fullScreen);
 display_reset(0, global.vsync);

@@ -1,9 +1,5 @@
 /// @description 
 
-if(justHit)
-{
-	justHit = false;
-}
 if(dead && phase != 4)
 {
     //NPCDeath(x+deathOffsetX,y+deathOffsetY);

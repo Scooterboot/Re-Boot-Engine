@@ -413,8 +413,8 @@ if(debug > 0)
 	}
 	
 	draw_set_halign(fa_right);
-	draw_text(xx+global.resWidth-10,yy+30,"fps_real: "+string(fps_real));
-	draw_text(xx+global.resWidth-10,yy+40,"fps: "+string(fps));
+	draw_text(xx+global.resWidth-10,yy+40,"fps_real: "+string(fps_real));
+	draw_text(xx+global.resWidth-10,yy+50,"fps: "+string(fps));
 	
 	//show_debug_message("delta_time: "+string(delta_time));
 }

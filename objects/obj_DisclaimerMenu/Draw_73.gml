@@ -56,7 +56,7 @@ if(room == rm_Disclaimer)
 				alph = 0.15;
 				indent = 0;//4;
 		
-				draw_sprite_ext(sprt_SelectCursor,cursorFrame,oX+indent-4,oY+string_height(option[i])/2,1,1,0,c_white,revealText[5]);
+				draw_sprite_ext(sprt_UI_SelectCursor,cursorFrame,oX+indent-4,oY+string_height(option[i])/2,1,1,0,c_white,revealText[5]);
 			}
 			scr_DrawOptionText(oX+indent,oY,option[i],c_white,revealText[5],string_width(option[i])+1,col,revealText[5]*alph);
 		}

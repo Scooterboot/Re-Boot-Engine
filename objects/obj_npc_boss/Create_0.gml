@@ -2,6 +2,8 @@
 event_inherited();
 
 boss = true;
+tileCollide = false;
+passthroughMovingSolids = true;
 
 camPosX = x;
 camPosY = y;

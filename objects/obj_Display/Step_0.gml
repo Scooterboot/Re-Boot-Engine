@@ -97,7 +97,7 @@ if(debug > 0)
 			}
 			else
 			{
-				zoomScale = max(zoomScale-zoomspd,0.5);
+				zoomScale = max(zoomScale-zoomspd,0.25);
 			}
 		}
 	}
@@ -116,7 +116,7 @@ if(debug > 0)
 			}
 			else
 			{
-				zoomScale = min(zoomScale+zoomspd,2);
+				zoomScale = min(zoomScale+zoomspd,3);
 			}
 		}
 	}

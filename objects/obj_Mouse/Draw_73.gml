@@ -28,7 +28,7 @@ else
 	image_alpha = max(image_alpha-0.1,0);
 }
 
-var sprt = sprt_MouseCursor;
+var sprt = sprt_UI_MouseCursor;
 draw_sprite_ext(sprt,0,x,y,1,1,0,make_color_rgb(51,109,174),image_alpha);
 
 if(!surface_exists(mouseGlowSurf))
