@@ -2098,10 +2098,16 @@ function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWav
 #region PlayerGrounded
 function PlayerGrounded(ydiff = 1)
 {
-	var bottomCollision = (entity_collision_line(bbox_left,bbox_bottom+ydiff,bbox_right,bbox_bottom+ydiff) || (y+ydiff) >= room_height);
+	var bbottom = bbox_bottom-y + position.Y,
+		bright = bbox_right-x + position.X,
+		bleft = bbox_left-x + position.X;
+	var bottomCollision = entity_collision_line(bleft,bbottom+ydiff,bright,bbottom+ydiff);
+	var bottomCollision2 = entity_collision_line(bbox_left,bbox_bottom+ydiff,bbox_right,bbox_bottom+ydiff);
+	
+	var bottomCollision3 = (bottomCollision || bottomCollision2 || (y+ydiff) >= room_height);
 	var downSlopeFlag = abs(GetEdgeAngle(Edge.Bottom,0,0)) >= 60;
 	
-	return (((bottomCollision && (!downSlopeFlag || speedBoost) && velY >= 0 && velY <= fGrav) || (spiderBall && spiderEdge != Edge.None)) && jump <= 0);
+	return (((bottomCollision3 && (!downSlopeFlag || speedBoost) && velY >= 0 && velY <= fGrav) || (spiderBall && spiderEdge != Edge.None)) && jump <= 0);
 }
 #endregion
 #region PlayerOnPlatform

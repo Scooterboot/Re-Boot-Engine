@@ -1683,6 +1683,9 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		{
 			position.X += (keyboard_check(vk_numpad6) - keyboard_check(vk_numpad4)) * 3;
 			velX = 0;
+			
+			position.X = scr_round(position.X) + 0.5;
+			
 			x = scr_round(position.X);
 		}
 		if(keyboard_check(vk_numpad5) || keyboard_check(vk_numpad8))
