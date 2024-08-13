@@ -3,6 +3,7 @@ event_inherited();
 
 var camX = camera_get_view_x(view_camera[0]),
 	camY = camera_get_view_y(view_camera[0]);
+var pos = SurfPos();
 
 draw_set_alpha(gradAlpha);
 gpu_set_blendmode(bm_add);
@@ -31,24 +32,27 @@ if(!global.gamePaused)
 	imgIndex = scr_wrap(imgIndex + 0.2, 0, 8);
 }
 
-surfWidth = scaledW() + spriteW;
-surfHeight = scaledH() + spriteH;
+if(SurfWidth() < 1 || SurfHeight() + extraDistH < 1)
+{
+	exit;
+}
+
 LavaSurface();
 
 if(surface_exists(finalSurface))
 {
-	surface_resize(finalSurface, ceil(scaledW()), ceil(scaledH() + extraDistH));
+	surface_resize(finalSurface, SurfWidth(), SurfHeight() + extraDistH);
 	surface_set_target(finalSurface);
 	
-	draw_surface_ext(application_surface,-(x-camX),extraDistH-(y-camY),1,1,0,c_white,1);
+	draw_surface_ext(application_surface,camX-pos.X,camY-pos.Y + extraDistH,1,1,0,c_white,1);
 	
 	if(global.waterDistortion)
 	{
 		var fW = surface_get_width(finalSurface),
 			fH = surface_get_height(finalSurface);
 		
-		var _x = (x-camX),
-			_y = (y-camY)-extraDistH;
+		var _x = -(camX-pos.X),
+			_y = -(camY-pos.Y)-extraDistH;
 		var tex = surface_get_texture(application_surface),
 		sW = surface_get_width(application_surface),
 		sH = surface_get_height(application_surface);
@@ -58,7 +62,7 @@ if(surface_exists(finalSurface))
 		for (var i = 0; i < fH; i += 6)
 		{
 			var mult = -min(1.5,i/6);
-			var spread = mult * sin(time+i/4+y/4);
+			var spread = mult * sin(time + (i+pos.Y) / 4);
 			if(i < extraDistH)
 			{
 				spread *= i/extraDistH;
@@ -74,13 +78,31 @@ if(surface_exists(finalSurface))
 	draw_surface_ext(lavaSurface,-spriteW/2,extraDistH,1,1,0,c_white,fAlpha);
 	gpu_set_blendmode(bm_normal);
 	
+	if(instance_exists(obj_XRay))
+	{
+		var px = pos.X,
+			py = pos.Y-extraDistH;
+		with(obj_XRay)
+		{
+			gpu_set_blendmode_ext(bm_dest_alpha, bm_src_alpha);
+
+			draw_primitive_begin(pr_trianglelist);
+			draw_vertex_colour(visorX-px,visorY-py,0,0);
+			draw_vertex_colour(visorX-px+lengthdir_x(500,coneDir + coneSpread),visorY-py+lengthdir_y(500,coneDir + coneSpread),0,0);
+			draw_vertex_colour(visorX-px+lengthdir_x(500,coneDir - coneSpread),visorY-py+lengthdir_y(500,coneDir - coneSpread),0,0);
+			draw_primitive_end();
+
+			gpu_set_blendmode(bm_normal);
+		}
+	}
+	
 	surface_reset_target();
 	
-	draw_surface_ext(finalSurface,scr_round(x),scr_round(y)-extraDistH,1,1,0,image_blend,image_alpha);
+	draw_surface_ext(finalSurface,pos.X,pos.Y-extraDistH,1,1,0,image_blend,image_alpha);
 }
 else
 {
-	finalSurface = surface_create(ceil(scaledW()), ceil(scaledH() + extraDistH));
+	finalSurface = surface_create(SurfWidth(), SurfHeight() + extraDistH);
 	surface_set_target(finalSurface);
 	draw_clear_alpha(c_black,0);
 	surface_reset_target();

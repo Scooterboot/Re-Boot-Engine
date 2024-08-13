@@ -1,19 +1,12 @@
 /// @description 
-var camx = camera_get_view_x(view_camera[0]),
-	camy = camera_get_view_y(view_camera[0]);
-if(!kill)
+if(!instance_exists(obj_Camera))
 {
-    coneSpread = min(coneSpread + 2, 30);
+	exit;
 }
-else
-{
-    coneSpread = max(coneSpread - 2, 0);
-    
-    if (coneSpread <= 0)
-    {
-        instance_destroy();
-    }
-}
+
+var camx = obj_Camera.playerXRayX - width/2, //camera_get_view_x(view_camera[0]),
+	camy = obj_Camera.playerXRayY - height/2; //camera_get_view_y(view_camera[0]);
+
 alpha = clamp(coneSpread/20,0,1);
 darkAlpha = alpha*0.55;
 
@@ -67,7 +60,7 @@ if !(surface_exists(outlineSurf2))
     outlineSurf2 = surface_create(width,height);
     xray_redraw_outline2();
 }
-else
+else if (refresh)
 {
     xray_redraw_outline2();
 }

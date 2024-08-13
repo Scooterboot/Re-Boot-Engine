@@ -774,6 +774,7 @@ hudIOffsetX = 0;
 
 dBoostFrame = 0;
 dBoostFrameCounter = 0;
+dBoostFrameSeq = [0,1,17,16,15,14,12,11,10,9,8,7,6,5,4,3,2,1,0];
 
 shineFrame = 0;
 shineFrameCounter = 0;
@@ -3368,7 +3369,8 @@ function PaletteSurface()
 			{
 				if(statCharge >= maxCharge)
 				{
-					if(state == State.Somersault || state == State.Dodge)
+					//if(state == State.Somersault || state == State.Dodge)
+					if(isChargeSomersaulting)
 					{
 						DrawPalSprite(palSprite2,beamPalInd,1);
 					}
@@ -3386,7 +3388,8 @@ function PaletteSurface()
 					DrawPalSprite(palSprite,PlayerPal.Spark,0.35);
 				}
 			}
-			else if((state == State.Somersault || state == State.Dodge) && statCharge >= maxCharge)
+			//else if((state == State.Somersault || state == State.Dodge) && statCharge >= maxCharge)
+			else if(isChargeSomersaulting)
 			{
 				DrawPalSprite(palSprite2,beamPalInd,0.375);
 			}

@@ -45,6 +45,8 @@ deathType = 0;
 friendly = false;
 immune = false;
 
+respawning = false;
+
 enum DmgType
 {
 	Beam = 0,

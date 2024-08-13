@@ -10,8 +10,8 @@ var camx = obj_Camera.x,//camera_get_view_x(view_camera[0]),
 	camw = global.resWidth,
 	camh = global.resHeight;
 
-posX += layer_get_hspeed(layerID);
-posY += layer_get_vspeed(layerID);
+posX += layer_get_hspeed(layerID) * (!global.gamePaused);
+posY += layer_get_vspeed(layerID) * (!global.gamePaused);
 
 if(multX > 0)
 {

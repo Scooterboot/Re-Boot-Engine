@@ -16,45 +16,19 @@ camLimit_Right = camLimitMax_Right;
 camLimit_Top = camLimitMax_Top;
 camLimit_Bottom = camLimitMax_Bottom;
 
-function LimitCamX()
+function CamLimitIncr(_limit, _max, _spd, _pos)
 {
-	var xx = x + (global.resWidth/2);
-	if((xx+fVelX) < (playerX + camLimit_Left))
+	if(_limit < _max)
 	{
-		fVelX = min((playerX+camLimit_Left) - xx, 1 + max((playerX-prevPlayerX) + sign(velX),0));
-		if(global.roomTrans)
-		{
-			fVelX = (playerX+camLimit_Left) - xx;
-		}
+		_limit = max(_limit,min(_pos,0));
+		_limit = min(_limit+_spd,_max);
 	}
-	if((xx+fVelX) > (playerX + camLimit_Right))
+	if(_limit > _max)
 	{
-		fVelX = max((playerX+camLimit_Right) - xx, -1 + min((playerX-prevPlayerX) + sign(velX),0));
-		if(global.roomTrans)
-		{
-			fVelX = (playerX+camLimit_Right) - xx;
-		}
+		_limit = min(_limit,max(_pos,0));
+		_limit = max(_limit-_spd,_max);
 	}
-}
-function LimitCamY()
-{
-	var yy = y + (global.resHeight/2);
-	if((yy+fVelY) < (playerY + camLimit_Top))
-	{
-		fVelY = min((playerY+camLimit_Top) - yy, 1 + max((playerY-prevPlayerY) + sign(velY),0));
-		if(global.roomTrans)
-		{
-			fVelY = (playerY+camLimit_Top) - yy;
-		}
-	}
-	if((yy+fVelY) > (playerY + camLimit_Bottom))
-	{
-		fVelY = max((playerY+camLimit_Bottom) - yy, -1 + min((playerY-prevPlayerY) + sign(velY),0));
-		if(global.roomTrans)
-		{
-			fVelY = (playerY+camLimit_Bottom) - yy;
-		}
-	}
+	return _limit;
 }
 
 velX = 0;
@@ -68,6 +42,8 @@ yDir = 0;
 camKey = false;
 playerX = x + (global.resWidth/2);
 playerY = y + (global.resHeight/2);
+playerXRayX = playerX;
+playerXRayY = playerY;
 targetX = playerX;
 targetY = playerY;
 if(instance_exists(obj_Player))

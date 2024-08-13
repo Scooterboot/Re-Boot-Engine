@@ -262,7 +262,7 @@ function Impact()
 
 #endregion
 
-function OnImpact() {}
+function OnImpact(posX,posY) {}
 
 function TileInteract(_x,_y)
 {

@@ -131,7 +131,7 @@ if(debug > 0)
 	}
 	if(keyboard_check(vk_control))
 	{
-		gameSpeed = 600;
+		gameSpeed = 999;
 	}
 }
 else

@@ -14,7 +14,7 @@ if(moveY)
 	bobSpeed += bobAcc;
 	y += bobSpeed;
 	
-	image_yscale = scr_ceil(bottom-y + 1) / sprite_get_height(sprite_index);
+	image_yscale = scr_round(bottom-y + 1) / sprite_get_height(sprite_index);
 }
 
 if(velX != 0)

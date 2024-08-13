@@ -1,5 +1,6 @@
 /// @description Camera movement
-if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
+//if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
+if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj_PauseMenu.pause)) && instance_exists(obj_Player))
 {
 	var player = obj_Player;
 	var xx = x + (global.resWidth/2),
@@ -7,35 +8,29 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 	
 	var xsp = player.x - player.xprevious,
 		ysp = player.y - player.yprevious;
-	/*if(((player.state == State.Stand || player.state == State.Crouch || player.state == State.Dodge || player.state == State.Grip) && player.prevState != player.state)
-		|| (player.prevState == State.Stand && player.state == State.Morph) || player.stallCamera)*/
 	if(player.stallCamera)
 	{
 		ysp = 0;
 	}
-	/*if(player.state == State.Grip && player.startClimb)
-	{
-		xsp = 0;
-		ysp = 0;
-	}*/
 	
 	var fxsp = xsp,
 		fysp = ysp;
 	
-	var num = 1 + scr_floor(abs(player.x-playerX) / 7);
-	if(playerX < player.x)
-	{
-		fxsp = min(xsp+num,player.x-playerX);
-	}
-	if(playerX > player.x)
-	{
-		fxsp = max(xsp-num,player.x-playerX);
-	}
-	
-	var pY = player.y;
+	var pX = player.x,
+		pY = player.y;
 	if(player.stateFrame == State.Morph)
 	{
 		pY = player.y+8;
+	}
+	
+	var num = 1 + scr_floor(abs(pX-playerX) / 7);
+	if(playerX < pX)
+	{
+		fxsp = min(xsp+num,pX-playerX);
+	}
+	if(playerX > pX)
+	{
+		fxsp = max(xsp-num,pX-playerX);
 	}
 	
 	num = 1 + scr_floor(abs(pY-playerY) / 7);
@@ -53,10 +48,12 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 	
 	if(global.roomTrans)
 	{
-		playerX = player.x;
+		playerX = pX;
 		playerY = pY;
 	}
 	
+	playerXRayX = clamp(pX,xx-32,xx+32);
+	playerXRayY = clamp(pY,yy-32,yy+32);
 	targetX = playerX;
 	targetY = playerY;
 	velX = 0;
@@ -104,10 +101,27 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 		xDir *= -1;
 	}
 	
+	targetX = playerX + camLimit_Right;
+	if(xDir <= -1)
+	{
+		targetX = playerX + camLimit_Left;
+	}
+	if(player.state == State.Somersault && !camKey)
+	{
+		targetX = playerX;
+	}
+	targetY = playerY + camLimit_Bottom;
+	if(yDir <= -1)
+	{
+		targetY = playerY + camLimit_Top;
+	}
+	
+	var camLimSpd = 1;
 	camLimitMax_Left = camLimitDefault_Left;
 	camLimitMax_Right = camLimitDefault_Right;
 	camLimitMax_Top = camLimitDefault_Top;
 	camLimitMax_Bottom = camLimitDefault_Bottom;
+	
 	var bossNum = instance_number(obj_NPC_Boss);
 	if(bossNum > 0)
 	{
@@ -123,88 +137,114 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 		}
 	}
 	
-	targetX = playerX + camLimit_Right;
-	if(xDir <= -1)
-	{
-		targetX = playerX + camLimit_Left;
-	}
-	if(player.state == State.Somersault && !camKey)
-	{
-		targetX = playerX;
-	}
-	targetY = playerY + camLimit_Bottom;
-	if(yDir <= -1)
-	{
-		targetY = playerY + camLimit_Top;
-	}
 	if(player.state == State.Grapple || player.state == State.Elevator || (player.state == State.Morph && player.spiderBall && player.spiderEdge != Edge.None))
 	{
 		xDir = 0;
 		yDir = 0;
 		targetX = playerX;
 		targetY = playerY;
-		var clspd = 0.5;
-		if(player.state == State.Grapple || player.state == State.Elevator)
+		if(player.state == State.Morph && player.spiderBall && player.spiderEdge != Edge.None)
 		{
-			clspd = 1;
+			camLimSpd = 0.5;
 		}
 		
-		camLimit_Left = min(camLimit_Left + clspd, 0);
-		camLimit_Right = max(camLimit_Right - clspd, 0);
-		camLimit_Top = min(camLimit_Top + clspd, 0);
-		camLimit_Bottom = max(camLimit_Bottom - clspd, 0);
+		camLimitMax_Left = 0;
+		camLimitMax_Right = 0;
+		camLimitMax_Top = 0;
+		camLimitMax_Bottom = 0;
+	}
+	if(instance_exists(player.XRay))
+	{
+		camLimitMax_Left = -32;
+		camLimitMax_Right = 32;
+		camLimitMax_Top = -32;
+		camLimitMax_Bottom = 32;
+	}
+	
+	camLimit_Left = CamLimitIncr(camLimit_Left, camLimitMax_Left, camLimSpd, xx-prevPlayerX);
+	camLimit_Right = CamLimitIncr(camLimit_Right, camLimitMax_Right, camLimSpd, xx-prevPlayerX);
+	camLimit_Top = CamLimitIncr(camLimit_Top, camLimitMax_Top, camLimSpd, yy-prevPlayerY);
+	camLimit_Bottom = CamLimitIncr(camLimit_Bottom, camLimitMax_Bottom, camLimSpd, yy-prevPlayerY);
+	
+	if(instance_exists(player.XRay))
+	{
+		targetX = playerX + lengthdir_x(32,player.XRay.coneDir);
+		targetY = playerY + lengthdir_y(32,player.XRay.coneDir);
+		
+		var num2 = 1 + scr_floor(abs(targetX-xx) / 7);
+		if(abs(targetX-xx) < 2)
+		{
+			num2 = 10;
+		}
+		if(targetX > xx)
+		{
+			velX = min(num2,targetX-xx);
+		}
+		if(targetX < xx)
+		{
+			velX = max(-num2,targetX-xx);
+		}
+		
+		num2 = 1 + scr_floor(abs(targetY-yy) / 7);
+		if(abs(targetY-yy) < 2)
+		{
+			num2 = 10;
+		}
+		if(targetY > yy)
+		{
+			velY = min(num2,targetY-yy);
+		}
+		if(targetY < yy)
+		{
+			velY = max(-num2,targetY-yy);
+		}
 	}
 	else
 	{
-		camLimit_Left = max(camLimit_Left - 1, camLimitMax_Left);
-		camLimit_Right = min(camLimit_Right + 1, camLimitMax_Right);
-		camLimit_Top = max(camLimit_Top - 1, camLimitMax_Top);
-		camLimit_Bottom = min(camLimit_Bottom + 1, camLimitMax_Bottom);
-	}
-	
-	var speedMult = 2,
-		speedMax = 3,
-		distX = abs(targetX - xx),
-		distY = abs(targetY - yy),
-		pointDistX = distX/16,
-		pointDistY = distY/16;
-	
-	camSpeedX = playerMoveX + max(abs(speedX*pointDistX)/4,1) * sign(speedX);
-	if(playerMoveX == 0 || camKey)
-	{
-		camSpeedX = playerMoveX + max(speedMult*pointDistX,1)*xDir;
-	}
-	
-	camSpeedX = clamp(camSpeedX,playerMoveX-speedMax,playerMoveX+speedMax);
-	if(playerMoveX != 0 || camKey || xDir == 0)
-	{
-		velX = camSpeedX;
-	}
-	
-	camSpeedY = playerMoveY + (max(abs(speedY*pointDistY)/4,1) * yDir);
-	if(scr_round(playerMoveY) == 0)
-	{
-		camSpeedY = max(speedMult*pointDistY,1) * yDir;
-	}
-	camSpeedY = clamp(camSpeedY,playerMoveY-speedMax,playerMoveY+speedMax);
-	if(angle != 0 && camKey)
-	{
-		if(sign(scr_round(playerMoveY)) != yDir && scr_round(playerMoveY) != 0)
+		var speedMult = 2,
+			speedMax = 3,
+			distX = abs(targetX - xx),
+			distY = abs(targetY - yy),
+			pointDistX = distX/16,
+			pointDistY = distY/16;
+		
+		camSpeedX = playerMoveX + max(abs(speedX*pointDistX)/4,1) * sign(speedX);
+		if(playerMoveX == 0 || camKey)
 		{
-			velY = playerMoveY + speedMult*yDir;
+			camSpeedX = playerMoveX + max(speedMult*pointDistX,1)*xDir;
+		}
+		
+		camSpeedX = clamp(camSpeedX,playerMoveX-speedMax,playerMoveX+speedMax);
+		if(playerMoveX != 0 || camKey || xDir == 0)
+		{
+			velX = camSpeedX;
+		}
+		
+		camSpeedY = playerMoveY + max(abs(speedY*pointDistY)/4,1) * yDir;
+		if(scr_round(playerMoveY) == 0)
+		{
+			camSpeedY = max(speedMult*pointDistY,1) * yDir;
+		}
+		camSpeedY = clamp(camSpeedY,playerMoveY-speedMax,playerMoveY+speedMax);
+		if(angle != 0 && camKey)
+		{
+			if(sign(scr_round(playerMoveY)) != yDir && scr_round(playerMoveY) != 0)
+			{
+				velY = playerMoveY + speedMult*yDir;
+			}
+			else if(scr_round(playerMoveY) != 0)
+			{
+				velY = abs(camSpeedY+(yDir*speedMult)) * yDir;
+			}
+			else
+			{
+				velY = abs(camSpeedY) * yDir;
+			}
 		}
 		else if(scr_round(playerMoveY) != 0)
 		{
-			velY = abs(camSpeedY+(yDir*speedMult)) * yDir;
+			velY = camSpeedY;
 		}
-		else
-		{
-			velY = abs(camSpeedY) * yDir;
-		}
-	}
-	else if(scr_round(playerMoveY) != 0)
-	{
-		velY = camSpeedY;
 	}
 	
 	#region Collision
@@ -216,10 +256,29 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 		}
 	
 		fVelX = velX;
-	
+		fVelY = velY;
+		
 		#region X Collision
-	
-			//var _list = ds_list_create();
+		
+			var _leftEdge = playerX + camLimit_Left,
+				_rightEdge = playerX + camLimit_Right;
+			if((xx+fVelX) < _leftEdge)
+			{
+				fVelX = min(_leftEdge - xx, 1 + max((playerX-prevPlayerX) + sign(velX),0));
+				if(global.roomTrans)
+				{
+					fVelX = _leftEdge - xx;
+				}
+			}
+			if((xx+fVelX) > _rightEdge)
+			{
+				fVelX = max(_rightEdge - xx, -1 + min((playerX-prevPlayerX) + sign(velX),0));
+				if(global.roomTrans)
+				{
+					fVelX = _rightEdge - xx;
+				}
+			}
+			
 			var _num = camera_collide(0,0,colList);
 			if(_num > 0)
 			{
@@ -251,15 +310,7 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 						}
 						break;
 					}
-					else
-					{
-						LimitCamX();
-					}
 				}
-			}
-			else
-			{
-				LimitCamX();
 			}
 			ds_list_clear(colList);
 	
@@ -315,13 +366,30 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 				}
 				x += fVelX;
 			}
-	
+		
 		#endregion
-	
-		fVelY = velY;
-	
+		
 		#region Y Collision
-	
+		
+			var _topEdge = playerY + camLimit_Top,
+				_bottomEdge = playerY + camLimit_Bottom;
+			if((yy+fVelY) < _topEdge)
+			{
+				fVelY = min(_topEdge - yy, 1 + max((playerY-prevPlayerY) + sign(velY),0));
+				if(global.roomTrans)
+				{
+					fVelY = _topEdge - yy;
+				}
+			}
+			if((yy+fVelY) > _bottomEdge)
+			{
+				fVelY = max(_bottomEdge - yy, -1 + min((playerY-prevPlayerY) + sign(velY),0));
+				if(global.roomTrans)
+				{
+					fVelY = _bottomEdge - yy;
+				}
+			}
+			
 			_num = camera_collide(0,0,colList);
 			if(_num > 0)
 			{
@@ -346,15 +414,7 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 						}
 						break;
 					}
-					else
-					{
-						LimitCamY();
-					}
 				}
-			}
-			else
-			{
-				LimitCamY();
 			}
 			ds_list_clear(colList);
 	
@@ -410,7 +470,7 @@ if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
 				}
 				y += fVelY;
 			}
-	
+		
 		#endregion
 	
 	#endregion

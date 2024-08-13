@@ -12,6 +12,7 @@ if(coolDown <= 0)
 		{
 			var _npc = instance_create_layer(x,y,spawnLayer,npcType[i]);
 			_npc.spawnerObj = id;
+			_npc.respawning = true;
 			ModifyNPC(_npc,i);
 			spawnedNPC[i] = _npc;
 		}

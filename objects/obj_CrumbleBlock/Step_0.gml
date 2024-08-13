@@ -1,6 +1,11 @@
 /// @description Crumble Logic
 event_inherited();
 
+if(global.gamePaused)
+{
+	exit;
+}
+
 if(instance_exists(obj_Player) && !obj_Player.spiderBall)
 {
     if((obj_Player.fVelY >= 0 && place_meeting(x,y-(1+abs(obj_Player.fVelY)),obj_Player)) ||

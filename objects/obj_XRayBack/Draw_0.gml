@@ -15,6 +15,10 @@ else
 			surfaceBack = surface_create(width,height);
 			xray_redraw_back();
 		}
+		else if (refresh)
+		{
+		    xray_redraw_back();
+		}
  
 		if !(surface_exists(surfaceBackTemp))
 		{

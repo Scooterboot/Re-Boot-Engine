@@ -373,7 +373,7 @@ if(impacted == 1)
 			part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.impact[particleType],1);
 		}
 	}
-	OnImpact();
+	OnImpact(x,y);
 }
 
 if(impacted > 0)

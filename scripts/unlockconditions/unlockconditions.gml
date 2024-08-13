@@ -8,7 +8,7 @@ function Condition_ClearRoomEnemies()
 		for(var i = 0; i < n; i++)
 		{
 			var npc = instance_find(obj_NPC,i);
-			if(instance_exists(npc) && !npc.dead && !npc.friendly)
+			if(instance_exists(npc) && !npc.dead && !npc.friendly && !npc.respawning)
 			{
 				flag = false;
 				break;

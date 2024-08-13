@@ -9,6 +9,7 @@ backAlphaNum = 1;
 
 coneDir = 0;
 coneSpread = 0;
+coneSpreadMax = 30;
 visorX = x;
 visorY = y;
 
@@ -33,8 +34,8 @@ for(var i = 0; i < array_length(bgTileLayers); i++)
 xRaySound = noone;
 xRaySoundPlayed = false;
 
-width = surface_get_width(application_surface);
-height = surface_get_height(application_surface);
+width = surface_get_width(application_surface) + 64;
+height = surface_get_height(application_surface) + 64;
 
 surfaceFront = surface_create(width,height);
 surfaceBack = surface_create(width,height);
@@ -62,6 +63,9 @@ function xray_refresh()
 #region xray_redraw_front()
 function xray_redraw_front()
 {
+	var camx = obj_Camera.playerXRayX - width/2, //camera_get_view_x(view_camera[0]),
+		camy = obj_Camera.playerXRayY - height/2; //camera_get_view_y(view_camera[0]);
+	
 	surface_set_target(surfaceFront);
 	draw_clear_alpha(0,0);
 
@@ -70,7 +74,7 @@ function xray_redraw_front()
 		var TilesFront = layer_tilemap_get_id(tileLayers[i]);
 		if(layer_tilemap_exists(tileLayers[i],TilesFront))
 		{
-			draw_tilemap(TilesFront,layer_get_x(tileLayers[i])-camera_get_view_x(view_camera[0]),layer_get_y(tileLayers[i])-camera_get_view_y(view_camera[0]));
+			draw_tilemap(TilesFront,layer_get_x(tileLayers[i])-camx,layer_get_y(tileLayers[i])-camy);
 		}
 	}
 
@@ -80,6 +84,9 @@ function xray_redraw_front()
 #region xray_redraw_back()
 function xray_redraw_back()
 {
+	var camx = obj_Camera.playerXRayX - width/2, //camera_get_view_x(view_camera[0]),
+		camy = obj_Camera.playerXRayY - height/2; //camera_get_view_y(view_camera[0]);
+	
 	surface_set_target(surfaceBack);
 	draw_clear_alpha(0,0);
 
@@ -88,7 +95,7 @@ function xray_redraw_back()
 		var TilesBack = layer_tilemap_get_id(bgTileLayers[i]);
 		if(layer_tilemap_exists(bgTileLayers[i],TilesBack))
 		{
-			draw_tilemap(TilesBack,layer_get_x(bgTileLayers[i])-camera_get_view_x(view_camera[0]),layer_get_y(bgTileLayers[i])-camera_get_view_y(view_camera[0]));
+			draw_tilemap(TilesBack,layer_get_x(bgTileLayers[i])-camx,layer_get_y(bgTileLayers[i])-camy);
 		}
 	}
 
@@ -98,8 +105,8 @@ function xray_redraw_back()
 #region xray_redraw_alpha()
 function xray_redraw_alpha()
 {
-	var camx = camera_get_view_x(view_camera[0]),
-		camy = camera_get_view_y(view_camera[0]);
+	var camx = obj_Camera.playerXRayX - width/2, //camera_get_view_x(view_camera[0]),
+		camy = obj_Camera.playerXRayY - height/2; //camera_get_view_y(view_camera[0]);
 	
 	surface_set_target(alphaMask);
 	draw_clear_alpha(c_black,0);
@@ -132,6 +139,9 @@ function xray_redraw_alpha()
 #region xray_redraw_break()
 function xray_redraw_break()
 {
+	var camx = obj_Camera.playerXRayX - width/2, //camera_get_view_x(view_camera[0]),
+		camy = obj_Camera.playerXRayY - height/2; //camera_get_view_y(view_camera[0]);
+	
 	surface_set_target(breakMask);
 	draw_clear_alpha(c_black,0);
 
@@ -139,14 +149,14 @@ function xray_redraw_break()
 	{
 		if(object_index != obj_Spikes && object_index != obj_NPCBreakable)
 		{
-			DrawBreakable(x-camera_get_view_x(view_camera[0]),y-camera_get_view_y(view_camera[0]),image_index);
+			DrawBreakable(x-camx,y-camy,image_index);
 		}
 	}
 	with (obj_Item)
 	{
 		if(!visible)
 		{
-			draw_sprite_ext(sprite_index,image_index,x-camera_get_view_x(view_camera[0]),y-camera_get_view_y(view_camera[0]),image_xscale,image_yscale,image_angle,c_white,1);
+			draw_sprite_ext(sprite_index,image_index,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
 		}
 	}
 
@@ -156,8 +166,8 @@ function xray_redraw_break()
 #region xray_redraw_outline()
 function xray_redraw_outline()
 {
-	var camx = camera_get_view_x(view_camera[0]),
-		camy = camera_get_view_y(view_camera[0]);
+	var camx = obj_Camera.playerXRayX - width/2, //camera_get_view_x(view_camera[0]),
+		camy = obj_Camera.playerXRayY - height/2; //camera_get_view_y(view_camera[0]);
 	
 	surface_set_target(outlineSurf);
 	draw_clear_alpha(c_black,0);
@@ -170,6 +180,20 @@ function xray_redraw_outline()
 			object_index != obj_Elevator)
 		{
 			draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
+		}
+	}
+	with(obj_Platform)
+	{
+		if(!xRayHide)
+		{
+			draw_set_color(c_black);
+			draw_set_alpha(1);
+			
+			draw_line(bbox_left-camx-1,bbox_top-camy,bbox_right-camx,bbox_top-camy);
+			for(var i = bbox_left-camx; i < bbox_right-camx-1; i+= 4)
+			{
+				draw_line(i,bbox_top-camy+1,i+2,bbox_top-camy+1);
+			}
 		}
 	}
 	with (obj_MovingTile)
@@ -207,26 +231,11 @@ function xray_redraw_outline()
 #region xray_redraw_outline2()
 function xray_redraw_outline2()
 {
-	var camx = camera_get_view_x(view_camera[0]),
-		camy = camera_get_view_y(view_camera[0]);
+	//var camx = camera_get_view_x(view_camera[0]),
+	//	camy = camera_get_view_y(view_camera[0]);
 	
 	surface_set_target(outlineSurf2);
 	draw_clear_alpha(c_black,0);
-	
-	with(obj_Platform)
-	{
-		if(!xRayHide)
-		{
-			draw_set_color(c_white);
-			draw_set_alpha(1);
-			
-			draw_line(bbox_left-camx-1,bbox_top-camy,bbox_right-camx,bbox_top-camy);
-			for(var i = bbox_left-camx; i < bbox_right-camx-1; i+= 4)
-			{
-				draw_line(i,bbox_top-camy+1,i+2,bbox_top-camy+1);
-			}
-		}
-	}
 
 	if(surface_exists(outlineSurf))
 	{

@@ -606,6 +606,11 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 #endregion
 
+if(xRayActive)
+{
+	exit;
+}
+
 #region Horizontal Movement
 
 	var dash = (cDash || global.autoDash);
@@ -1672,7 +1677,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	}
 #endregion
 
-	isChargeSomersaulting = (statCharge >= maxCharge && (state == State.Somersault || state == State.Dodge));
+	isChargeSomersaulting = (statCharge >= maxCharge && (state == State.Somersault || state == State.Dodge || (state == State.DmgBoost && dBoostFrame < 18)));
 	isSpeedBoosting = (speedBoost || state == State.Spark || state == State.BallSpark);
 	isScrewAttacking = (misc[Misc.ScrewAttack] && !liquidMovement && state == State.Somersault && stateFrame == State.Somersault);
 	

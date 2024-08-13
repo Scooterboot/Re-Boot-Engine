@@ -26,6 +26,9 @@ for(var i = 0; i < instance_number(obj_MessageBox); i++)
 order = max(order, order2+1);
 
 messageDuration = 0;
+messageDurMax_Item = audio_sound_length(mus_ItemFanfare) * 60;
+messageDurMax_Expan = 90;
+messageDurMax_Simple = 60;
 messageAlpha = 0;
 kill = false;
 
