@@ -2,7 +2,7 @@
 event_inherited();
 crumble = false;
 time = 0;
-timeLeft = 4;
+timeLeft = 3;
 respawnTime = 45;
 
 respawnSprt = sprt_CrumbleBlockBreak;

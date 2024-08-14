@@ -9,42 +9,71 @@ var sndFlag = false;
 if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTrans && stateFrame != State.Grapple)) && !obj_PauseMenu.pause && !pauseSelect))
 {
 	#region X-Ray
-	if((cDash || global.HUD == 1) && itemSelected == 1 && itemHighlighted[1] == 4 && dir != 0 && fVelX == 0 && fVelY == 0 && (state == State.Stand || state == State.Crouch) && grounded && (move2 == 0 || instance_exists(XRay)))
+	if((cDash || global.HUD == 1) && itemSelected == 1 && itemHighlighted[1] == 4 && dir != 0 && fVelX == 0 && fVelY == 0 && (move2 == 0 || instance_exists(XRay)) && 
+		(((state == State.Stand || state == State.Crouch) && grounded) || state == State.Grip))
     {
 		stateFrame = state;
+		
+		var _dir = dir;
+		var gripflag = gripGunReady;
+		if(state == State.Grip)
+		{
+			if(move2 != 0 && (!gripGunReady || gripGunCounter <= 0))
+			{
+				gripflag = (move2 != dir);
+			}
+			if(gripflag)
+			{
+				_dir *= -1;
+			}
+		}
+		
         if(instance_exists(XRay))
         {
             if(cUp)
             {
-                XRay.coneDir += 3*dir;
+                XRay.coneDir += 3*_dir;
             }
             if(cDown)
             {
-                XRay.coneDir -= 3*dir;
+                XRay.coneDir -= 3*_dir;
             }
             
-            if(dir != oldDir)
+            if(dir != oldDir || gripGunReady != gripflag)
             {
                 XRay.coneDir = (180 - XRay.coneDir);
             }
             
-            if(abs(angle_difference(XRay.coneDir,90-(90*dir))) >= 80)
+            if(abs(angle_difference(XRay.coneDir,90-(90*_dir))) >= 80)
             {
-                XRay.coneDir = 90-(90*dir) + 80*sign(angle_difference(XRay.coneDir,90-(90*dir)));
+                XRay.coneDir = 90-(90*_dir) + 80*sign(angle_difference(XRay.coneDir,90-(90*_dir)));
             }
             
-            XRay.x = x + dir*3 + lengthdir_x(-1,XRay.coneDir);
-            XRay.y = y - 12 + lengthdir_y(-1,XRay.coneDir);
+			var xpos = new Vector2(x + 3*_dir, y - 12);
+			if(state == State.Grip)
+			{
+				if(_dir == dir)
+				{
+					xpos.X = x;
+				}
+				else
+				{
+					xpos.X = x + 5*_dir;
+				}
+			}
+            XRay.x = xpos.X + lengthdir_x(-1,XRay.coneDir);
+            XRay.y = xpos.Y + lengthdir_y(-1,XRay.coneDir);
         }
         else
         {
 			var xrayDepth = layer_get_depth(layer_get_id("Tiles_fade0")) - 1;
-            XRay = instance_create_depth(x+3*dir,y-12,xrayDepth,obj_XRay);
+            XRay = instance_create_depth(x+3*_dir,y-12,xrayDepth,obj_XRay);
             XRay.kill = 0;
-            XRay.coneDir = 90-(dir*90);
+            XRay.coneDir = 90-(_dir*90);
             global.gamePaused = true;
         }
-        //shineCharge = 0;
+		
+		gripGunReady = gripflag;
     }
     else
     {
@@ -52,13 +81,13 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
         {
             XRay.kill = 1;
         }
-        if((state != State.Stand && state != State.Crouch) || !grounded)
+        /*if((state != State.Stand && state != State.Crouch) || !grounded)
         {
             with(XRay)
             {
                 instance_destroy();
             }
-        }
+        }*/
     }
 	#endregion
 
@@ -272,6 +301,10 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	runYOffset = 0;
 	fDir = dir;
 	armDir = fDir;
+	
+	gripOverlay = -1;
+	gripOverlayFrame = 0;
+	
 	//rotation = 0;
 	if(rotation != 0 && rotReAlignStep > 0)
 	{
@@ -1659,6 +1692,37 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						torsoR = sprt_Player_GripFireRight;
 						torsoL = sprt_Player_GripFireLeft;
 						bodyFrame = scr_round(gripAimFrame/2);
+					}
+					if(dir == -1 && dirFrame == -4)
+					{
+						gripOverlay = sprt_Player_ArmGripOverlay;
+						gripOverlayFrame = gripFrame;
+					}
+					
+					if(xRayActive && (gripFrame <= 0 || gripFrame >= 3))
+					{
+						torsoR = sprt_Player_GripXRayRight;
+						torsoL = sprt_Player_GripXRayLeft;
+						var _dir = dir;
+						if(gripFrame > 0)
+						{
+							_dir *= -1;
+						}
+						bodyFrame = scr_round(scr_wrap(XRay.coneDir,-180,180)/45)+2;
+						if(_dir == -1)
+						{
+							bodyFrame = 4-scr_round(scr_wrap(XRay.coneDir-90,-180,180)/45);
+						}
+						if(gripFrame > 0)
+						{
+							bodyFrame += 5;
+						}
+						
+						if(dir == -1 && dirFrame == -4)
+						{
+							gripOverlay = sprt_Player_ArmGripOverlay_XRay;
+							gripOverlayFrame = bodyFrame;
+						}
 					}
 				}
 				else

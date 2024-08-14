@@ -6,13 +6,24 @@ if(global.gamePaused)
 	exit;
 }
 
-if(instance_exists(obj_Player) && !obj_Player.spiderBall)
+var player = instance_place(x,y-2,obj_Player);
+if(instance_exists(player) && player.fVelY >= 0 && player.grounded)
 {
-    if((obj_Player.fVelY >= 0 && place_meeting(x,y-(1+abs(obj_Player.fVelY)),obj_Player)) ||
-    (obj_Player.state == State.Grip && (place_meeting(x-1,y,obj_Player) || place_meeting(x+1,y,obj_Player))))
-    {
-        crumble = true;
-    }
+	crumble = true;
+	if(abs(player.velX) > player.maxSpeed[5,player.liquidState])
+	{
+		timeLeft = 4; // yes im actually doing this
+	}
+}
+
+player = instance_place(x+1,y,obj_Player);
+if(!instance_exists(player))
+{
+	player = instance_place(x-1,y,obj_Player);
+}
+if(instance_exists(player) && player.state == State.Grip)
+{
+	crumble = true;
 }
 
 var pushBlock = instance_place(x,y-1,obj_PushBlock);

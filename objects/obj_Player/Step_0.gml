@@ -626,7 +626,7 @@ if(xRayActive)
 	{
 		if(grounded)
 		{
-			if(mockBall)
+			if(abs(velX) > maxSpeed[5,liquidState])
 			{
 				moveState = 6;
 				if(speedBoost && dash)
@@ -735,7 +735,7 @@ if(xRayActive)
 		fMaxSpeed = maxSpeed[13,liquidState];
 	}
 	
-	maxSpeed2 = maxSpeed[2,liquidState];
+	var maxSpeed2 = maxSpeed[2,liquidState];
 	if(abs(velX) > maxSpeed2 && state != State.Spark && state != State.BallSpark && state != State.Grapple && state != State.Dodge && state != State.DmgBoost && (speedCounter > 0 || grounded))
 	{
 		if(sign(velX) == 1)
@@ -902,7 +902,8 @@ if(xRayActive)
 		{
 			speedBoost = true;
 		}
-		else if(!speedBoost && (abs(velX) >= minBoostSpeed || abs(spiderSpeed) >= minBoostSpeed) && state != State.Dodge && state != State.Grapple && !grapBoost && !spiderJump)
+		//else if(!speedBoost && (abs(velX) >= minBoostSpeed || abs(spiderSpeed) >= minBoostSpeed) && state != State.Dodge && state != State.Grapple && !grapBoost && !spiderJump)
+		else if(!speedBoost && (abs(velX) >= minBoostSpeed || abs(spiderSpeed) >= minBoostSpeed) && (state == State.Stand || speedKeep == 1 || (speedKeep == 2 && !liquidMovement)))
 		{
 			speedCounter = speedCounterMax;
 			speedBoost = true;
@@ -1968,16 +1969,9 @@ if(xRayActive)
 		{
 			fVelX = velX;
 	
-			if(!SpiderActive())
+			if(armPumping && prAngle && fVelX != 0 && move == dir && grounded && state == State.Stand)
 			{
-				if(armPumping && prAngle && fVelX != 0 && move == dir && grounded && state == State.Stand)
-				{
-					fVelX += move;
-				}
-				if(globalSpeedMod > 0 && fVelX != 0 && move == dir)
-				{
-					fVelX += globalSpeedMod*move;
-				}
+				fVelX += move;
 			}
 	
 			if(state == State.Grapple)
@@ -2413,20 +2407,7 @@ if(xRayActive)
 		ledgeFall = true;
 		ledgeFall2 = true;
 		landFrame = 0;
-		if(grounded)
-		{
-			if(mockBall)
-			{
-				if(move2 == 0 || move2 != sign(velX) || liquidMovement)
-				{
-					mockBall = false;
-				}
-			}
-		}
-		else
-		{
-			mockBall = false;
-		}
+		
 		if(grounded && !prevGrounded)
 		{
 			if(morphFrame <= 0 && shineRampFix <= 0 && !slopeGrounded)
@@ -2441,13 +2422,6 @@ if(xRayActive)
 						velX = min(abs(velX),maxSpeed[0,liquidState])*sign(velX);
 						speedCounter = 0;
 					}
-				}
-			}
-			else
-			{
-				if(abs(velX) > maxSpeed[5,liquidState])
-				{
-					mockBall = true;
 				}
 			}
 		}
@@ -2540,7 +2514,6 @@ if(xRayActive)
 	else
 	{
 		unmorphing = false;
-		mockBall = false;
 		cFlashStartCounter = 0;
 	}
 	
@@ -2593,13 +2566,6 @@ if(xRayActive)
 						speedCounter = 0;
 					}
 					jump = 0;
-				}
-				else
-				{
-					if(abs(spiderSpeed) > maxSpeed[5,liquidState])
-					{
-						mockBall = true;
-					}
 				}
 			}
 		}

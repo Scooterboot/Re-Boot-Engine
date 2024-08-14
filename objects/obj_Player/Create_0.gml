@@ -25,10 +25,6 @@ godmode = false;
 //Tapping any aim button will shift the player forward one pixel during grounded movement.
 armPumping = true;
 
-// Global speed modifier for horizontal movement. Acts as a flat addition and does not necessarily affect momentum.
-//Set to 0.5 as an alternative to 30hz frame-perfect Arm Pumping. Note: Unlike arm pumping, this will affect jump and morph movement.
-globalSpeedMod = 0; // default: 0
-
 // Continue speed boosting/keep momentum after landing (also applies to spider ball)
 // 0 = disabled
 // 1 = enabled always
@@ -111,7 +107,6 @@ uncrouch = 0;
 
 canMorphBounce = true;
 justBounced = false;
-mockBall = false;
 
 aimAngle = 0; //2 = verticle up, 1 = diagonal up, 0 = forward, -1 = diagonal down, -2 = vertical down
 prevAimAngle = aimAngle;
@@ -667,6 +662,8 @@ pushFrameSequence = array(0,1,2,3,4,5,5,6,7,8,9,9,10,11,12,13,14,15);
 torsoR = sprt_Player_StandCenter;
 torsoL = torsoR;
 legs = -1;
+gripOverlay = -1;
+gripOverlayFrame = 0;
 
 sprtOffsetX = 0;
 sprtOffsetY = 0;
@@ -1303,7 +1300,6 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		if(state == State.BallSpark)
 		{
 			ChangeState(State.Morph,State.Morph,mask_Player_Morph,true);
-			mockBall = true;
 		}
 		else
 		{
@@ -1384,7 +1380,6 @@ function OnYCollision(fVY)
 			if(state == State.BallSpark)
 			{
 				ChangeState(State.Morph,State.Morph,mask_Player_Morph,true);
-				mockBall = true;
 			}
 			else
 			{
@@ -1555,7 +1550,6 @@ function Crawler_OnXCollision(fVX)
 			//shineEnd = 0;
 			shineDir = 0;
 			state = State.Morph;
-			mockBall = true;
 			speedFXCounter = 1;
 			speedCounter = speedCounterMax;
 			speedCatchCounter = 6;
@@ -1604,7 +1598,6 @@ function Crawler_OnSlopeXCollision_Bottom(fVX, yShift)
 		shineEnd = 0;
 		shineDir = 0;
 		state = State.Morph;
-		mockBall = true;
 		speedFXCounter = 1;
 		speedCounter = speedCounterMax;
 		speedCatchCounter = 6;
@@ -1648,7 +1641,6 @@ function Crawler_OnSlopeXCollision_Top(fVX, yShift)
 		shineEnd = 0;
 		shineDir = 0;
 		state = State.Morph;
-		mockBall = true;
 		speedFXCounter = 1;
 		speedCounter = speedCounterMax;
 		speedCatchCounter = 6;
@@ -1703,7 +1695,6 @@ function Crawler_OnYCollision(fVY)
 			//shineEnd = 0;
 			shineDir = 0;
 			state = State.Morph;
-			mockBall = true;
 			speedFXCounter = 1;
 			speedCounter = speedCounterMax;
 			speedCatchCounter = 6;
@@ -1745,7 +1736,6 @@ function Crawler_OnSlopeYCollision_Right(fVY, xShift)
 		shineEnd = 0;
 		shineDir = 0;
 		state = State.Morph;
-		mockBall = true;
 		speedFXCounter = 1;
 		speedCounter = speedCounterMax;
 		speedCatchCounter = 6;
@@ -1789,7 +1779,6 @@ function Crawler_OnSlopeYCollision_Left(fVY, xShift)
 		shineEnd = 0;
 		shineDir = 0;
 		state = State.Morph;
-		mockBall = true;
 		speedFXCounter = 1;
 		speedCounter = speedCounterMax;
 		speedCatchCounter = 6;
@@ -3716,9 +3705,10 @@ function UpdatePlayerSurface(_palSurface)
 			missileArmFrame = 0;
 		}
 	
-		if(stateFrame == State.Grip && climbIndex <= 0 && gripAimFrame == 0 && dir == -1 && dirFrame == -4)
+		//if(stateFrame == State.Grip && climbIndex <= 0 && gripAimFrame == 0 && dir == -1 && dirFrame == -4)
+		if(gripOverlay != -1)
 		{
-			draw_sprite_ext(sprt_Player_ArmGripOverlay,gripFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),fDir,1,0,c_white,1);
+			draw_sprite_ext(gripOverlay,gripOverlayFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),fDir,1,0,c_white,1);
 		}
 		
 		shader_reset();

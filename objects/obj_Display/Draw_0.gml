@@ -297,6 +297,8 @@ if(debug == 1)
 		
         //draw_text(xx+marginX,yy+30+marginY*10,"cam centerX: "+string(obj_Camera.x+global.resWidth/2));
         //draw_text(xx+marginX,yy+30+marginY*11,"cam centerY: "+string(obj_Camera.y+global.resHeight/2));
+        //draw_text(xx+marginX,yy+30+marginY*13,"torsoR: "+sprite_get_name(torsoR)+" | torsoL: "+sprite_get_name(torsoL));
+        //draw_text(xx+marginX,yy+30+marginY*13,"bodyFrame: "+string(bodyFrame));
 		
         draw_text(xx+marginX,yy+30+marginY*14,"colEdge: "+obj_Display.edgeText[colEdge]);
         draw_text(xx+marginX,yy+30+marginY*15,"spiderEdge: "+string(obj_Display.edgeText[spiderEdge]));
