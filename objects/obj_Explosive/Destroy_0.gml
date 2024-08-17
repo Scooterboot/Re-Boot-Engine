@@ -14,14 +14,5 @@ if((scr_WithinCamRange() || ignoreCamera) && exploProj != noone)
     explo.damage = damage * exploDmgMult;
 	explo.npcInvFrames = npcInvFrames;
 	
-	var pblockList = ds_list_create();
-	var pbnum = instance_place_list(x,y,obj_PushBlock,pblockList,true);
-	for(var i = 0; i < pbnum; i++)
-	{
-		var pblock = pblockList[| i];
-		if(instance_exists(pblock))
-		{
-			pblock.explodePush(id,velX);
-		}
-	}
+	MovePushBlock();
 }

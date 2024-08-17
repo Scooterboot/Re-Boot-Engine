@@ -46,7 +46,7 @@ function explodePush(_proj,_velX)
 		{
 			_spd = 10;
 		}
-		if(_proj.x > bbox_left && _proj.x < bbox_right)
+		if(_proj.x > bbox_left && _proj.x < bbox_right && (_proj.y < bbox_top || _proj.y > bbox_bottom))
 		{
 			_spd *= abs(x - _proj.x) / (bbox_right-x);
 			if(_spd <= 1 || (_velX != 0 && sign(_velX) != sign(x - _proj.x)))
@@ -88,19 +88,19 @@ function ModifyFinalVelY(fVY)
 	return fVY;
 }
 
-function ModifySlopeXSteepness_Up(steepness)
+function ModifySlopeXSteepness_Up()
 {
 	return 2;
 }
-function ModifySlopeXSteepness_Down(steepness)
+function ModifySlopeXSteepness_Down()
 {
 	return 3;
 }
-function ModifySlopeYSteepness_Up(steepness)
+function ModifySlopeYSteepness_Up()
 {
 	return 1;
 }
-function ModifySlopeYSteepness_Down(steepness)
+function ModifySlopeYSteepness_Down()
 {
 	return 2;
 }

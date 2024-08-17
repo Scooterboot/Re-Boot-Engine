@@ -14,7 +14,7 @@ if(!global.gamePaused)
 	imgIndex = scr_wrap(imgIndex + 0.075, 0, 6);
 }
 
-if(SurfWidth() < 1 || SurfHeight() < 1)
+if(_SurfWidth() < 1 || _SurfHeight() < 1)
 {
 	exit;
 }
@@ -63,12 +63,7 @@ if(surface_exists(finalSurface))
 		
 		draw_primitive_end();
 	}
-	
-	gpu_set_blendmode(bm_add);
-	DrawDistortSurf(waterSurface,-spriteW/2,0,fAlpha);
-	DrawDistortSurf(waterSurfaceRefract,-spriteW/2,0,1);
-	gpu_set_blendmode(bm_normal);
-	
+		
 	if(instance_exists(obj_XRay))
 	{
 		with(obj_XRay)
@@ -84,6 +79,11 @@ if(surface_exists(finalSurface))
 			gpu_set_blendmode(bm_normal);
 		}
 	}
+	
+	gpu_set_blendmode(bm_add);
+	DrawDistortSurf(waterSurface,-spriteW/2,0,fAlpha);
+	DrawDistortSurf(waterSurfaceRefract,-spriteW/2,0,1);
+	gpu_set_blendmode(bm_normal);
 	
 	surface_reset_target();
 	

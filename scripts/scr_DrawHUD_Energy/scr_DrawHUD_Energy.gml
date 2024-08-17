@@ -104,7 +104,7 @@ function scr_DrawHUD_Energy() {
 	if(boots[Boots.Dodge])
 	{
 		var _meterY = yy+yDiff+8;
-		if(boots[Boots.SpeedBoost])
+		if(boots[Boots.SpeedBoost] || (stateFrame == State.Morph && misc[Misc.Boost]))
 		{
 			_meterY += 5;
 		}
@@ -127,7 +127,7 @@ function scr_DrawHUD_Energy() {
 		}
 	}
 	
-	if(boots[Boots.SpeedBoost])
+	if(boots[Boots.SpeedBoost] || (stateFrame == State.Morph && misc[Misc.Boost]))
 	{
 		var _meterY = yy+yDiff+8;
 		var width = sprite_get_width(sprt_UI_SpeedMeter);
@@ -137,13 +137,26 @@ function scr_DrawHUD_Energy() {
 		
 		if(shineCharge > 0)
 		{
-			width *= shineCharge / shineChargeMax;
+			width = sprite_get_width(sprt_UI_SpeedMeter) * (shineCharge / shineChargeMax);
 			for(var j = 0; j < height; j++)
 			{
 				var rw = min(width-j+1,width);
 				if(rw > 0)
 				{
 					draw_sprite_part_ext(sprt_UI_SpeedMeter,1,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
+				}
+			}
+		}
+		
+		if(stateFrame == State.Morph && misc[Misc.Boost] && boostBallCharge > 0)
+		{
+			width = sprite_get_width(sprt_UI_SpeedMeter) * (boostBallCharge / boostBallChargeMax);
+			for(var j = 0; j < height; j++)
+			{
+				var rw = min(width-j+1,width);
+				if(rw > 0)
+				{
+					draw_sprite_part_ext(sprt_UI_SpeedMeter,2,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
 				}
 			}
 		}
@@ -168,7 +181,7 @@ function scr_DrawHUD_Energy() {
 			}
 		}
 		
-		if(!walkState)
+		if(!walkState && (state == State.Stand || !restrictSBToRun))
 		{
 			width = sprite_get_width(sprt_UI_SpeedMeter);
 			if(SpiderActive())

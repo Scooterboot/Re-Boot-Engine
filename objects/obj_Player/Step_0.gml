@@ -481,6 +481,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			{
 				velX = min(abs(velX),maxSpeed[0,liquidState])*sign(velX);
 				speedCounter = 0;
+				speedBoost = false;
 			}
 		}
 		ChangeState(State.Morph,State.Morph,mask_Player_Morph,grounded);
@@ -873,6 +874,10 @@ if(xRayActive)
 	{
 		speedBuffer = 0;
 		speedBufferCounter = 0;
+		if(!speedBoost && (speedKeep == 0 || (speedKeep == 2 && liquidMovement)))
+		{
+			speedCounter = 0;
+		}
 	}
 	
 	var sBoostWJFlag = (speedBoost && state == State.Somersault && entity_place_collide(dir*8,0) && speedBoostWallJump);
@@ -902,8 +907,7 @@ if(xRayActive)
 		{
 			speedBoost = true;
 		}
-		//else if(!speedBoost && (abs(velX) >= minBoostSpeed || abs(spiderSpeed) >= minBoostSpeed) && state != State.Dodge && state != State.Grapple && !grapBoost && !spiderJump)
-		else if(!speedBoost && (abs(velX) >= minBoostSpeed || abs(spiderSpeed) >= minBoostSpeed) && (state == State.Stand || speedKeep == 1 || (speedKeep == 2 && !liquidMovement)))
+		else if(!speedBoost && (abs(velX) >= minBoostSpeed || abs(spiderSpeed) >= minBoostSpeed) && (state == State.Stand || !restrictSBToRun) && state != State.Dodge && state != State.Grapple && !grapBoost && !spiderJump)
 		{
 			speedCounter = speedCounterMax;
 			speedBoost = true;
@@ -912,6 +916,7 @@ if(xRayActive)
 	else
 	{
 		speedCounter = 0;
+		speedBoost = false;
 	}
 	
 	if(speedBoost && state != State.Spark && state != State.BallSpark)
@@ -930,6 +935,7 @@ if(xRayActive)
 				velX = speedNum*sign(velX);
 			}
 			speedCounter = 0;
+			speedBoost = false;
 		}
 		speedCatchCounter = 6*grounded;
 		
@@ -975,12 +981,13 @@ if(xRayActive)
 	{
 		shineCharge = shineChargeMax;
 		speedCounter = 0;
-	}
-	
-	if(speedCounter < speedCounterMax)
-	{
 		speedBoost = false;
 	}
+	
+	/*if(speedCounter < speedCounterMax)
+	{
+		speedBoost = false;
+	}*/
 	
 	#endregion
 	
@@ -1524,7 +1531,7 @@ if(xRayActive)
 			}
 		}
 		
-		if(state == State.BallSpark)
+		if(state == State.BallSpark && (shineStart > 0 || shineLauncherStart > 0))
 		{
 			spiderEdge = Edge.None;
 		}
@@ -2421,6 +2428,7 @@ if(xRayActive)
 					{
 						velX = min(abs(velX),maxSpeed[0,liquidState])*sign(velX);
 						speedCounter = 0;
+						speedBoost = false;
 					}
 				}
 			}
@@ -2481,6 +2489,7 @@ if(xRayActive)
 						{
 							velX = min(abs(velX),maxSpeed[0,liquidState])*sign(velX);
 							speedCounter = 0;
+							speedBoost = false;
 						}
 					}
 				}
@@ -2564,6 +2573,7 @@ if(xRayActive)
 					{
 						spiderSpeed = min(abs(spiderSpeed),maxSpeed[0,liquidState])*sign(spiderSpeed);
 						speedCounter = 0;
+						speedBoost = false;
 					}
 					jump = 0;
 				}
@@ -2615,6 +2625,7 @@ if(xRayActive)
 				{
 					velX = min(abs(velX) * (power(abs(velX),0.1) - 1),maxSpeed[0,liquidState])*sign(velX);
 					speedCounter = 0;
+					speedBoost = false;
 				}
 				audio_play_sound(snd_Land,0,false);
 			}
@@ -2770,6 +2781,7 @@ if(xRayActive)
 				{
 					velX = min(abs(velX) * (power(abs(velX),0.1) - 1),maxSpeed[0,liquidState])*sign(velX);
 					speedCounter = 0;
+					speedBoost = false;
 				}
 				audio_play_sound(snd_Land,0,false);
 			}
@@ -3021,7 +3033,8 @@ if(xRayActive)
 			stateFrame = State.Spark;
 			mask_index = mask_Player_Jump;
 		}
-		speedCounter = 0;
+		speedCounter = speedCounterMax;
+		speedBoost = true;
 		gunReady = false;
 		ledgeFall = true;
 		ledgeFall2 = true;
@@ -3435,6 +3448,7 @@ if(xRayActive)
 			    grapDisVel = 0;
 			    speedBoost = false;
 			    speedCounter = 0;
+				speedBoost = false;
 
 			    grapAngle = scr_wrap(34*dir,0,360);
 			    grappleDist = 31;
@@ -3723,6 +3737,7 @@ if(xRayActive)
 			{
 				velX = min(abs(velX),maxSpeed[0,liquidState])*sign(velX);
 				speedCounter = 0;
+				speedBoost = false;
 				audio_play_sound(snd_Land,0,false);
 				if(!CanChangeState(mask_Player_Stand))
 				{

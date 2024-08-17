@@ -2862,6 +2862,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						{
 							var explo = instance_create_layer(bombposx,bombposy,"Projectiles_fg",obj_MBBombExplosion);
 							explo.damage = 50;
+							explo.MovePushBlock();
 							scr_PlayExplodeSnd(0,false);
 						}
 						else

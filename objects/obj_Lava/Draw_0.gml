@@ -32,7 +32,7 @@ if(!global.gamePaused)
 	imgIndex = scr_wrap(imgIndex + 0.2, 0, 8);
 }
 
-if(SurfWidth() < 1 || SurfHeight() + extraDistH < 1)
+if(_SurfWidth() < 1 || _SurfHeight() + extraDistH < 1)
 {
 	exit;
 }
@@ -74,9 +74,6 @@ if(surface_exists(finalSurface))
 		
 		draw_primitive_end();
 	}
-	gpu_set_blendmode(bm_add);
-	draw_surface_ext(lavaSurface,-spriteW/2,extraDistH,1,1,0,c_white,fAlpha);
-	gpu_set_blendmode(bm_normal);
 	
 	if(instance_exists(obj_XRay))
 	{
@@ -95,6 +92,10 @@ if(surface_exists(finalSurface))
 			gpu_set_blendmode(bm_normal);
 		}
 	}
+	
+	gpu_set_blendmode(bm_add);
+	draw_surface_ext(lavaSurface,-spriteW/2,extraDistH,1,1,0,c_white,fAlpha);
+	gpu_set_blendmode(bm_normal);
 	
 	surface_reset_target();
 	

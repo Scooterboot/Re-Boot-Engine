@@ -13,25 +13,6 @@ imgIndex = 0;
 waterColor = merge_color(c_aqua,c_blue,0.85);
 waterColorAlpha = 0.25;
 
-function SurfPos()
-{
-	return new Vector2(scr_round(max(x,camera_get_view_x(view_camera[0]))),scr_round(max(y,camera_get_view_y(view_camera[0]))));
-}
-
-function SurfWidth()
-{
-	var pos = SurfPos();
-	return max(scr_round(min(surface_get_width(application_surface),bbox_right-pos.X + 1)), 0);
-}
-function SurfHeight()
-{
-	var pos = SurfPos();
-	return max(scr_round(min(surface_get_height(application_surface),bbox_bottom-pos.Y + 1)), 0);
-}
-
-function SurfWidth2() { return SurfWidth() + spriteW; }
-function SurfHeight2() { return SurfHeight() + spriteH; }
-
 waterSurface = surface_create(SurfWidth2(),SurfHeight2());
 waterSurfaceRefractGlow = surface_create(SurfWidth2(),SurfHeight2());
 waterSurfaceRefractMask = surface_create(SurfWidth2(),SurfHeight2());

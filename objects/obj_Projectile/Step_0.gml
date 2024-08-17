@@ -141,10 +141,13 @@ if(tileCollide && impacted == 0)
 	var fVX = fVelX,
 		fVY = fVelY;
 	
+	var _dir = point_direction(x,y,x+fVelX,y+fVelY);
+	var _tailX = lengthdir_x(10,_dir),
+		_tailY = lengthdir_y(10,_dir);
 	var counter = abs(fVelX)+abs(fVelY);
-	if(entity_position_collide(fVelX,fVelY,x,y) || entity_position_collide(0,0,x,y) || entity_collision_line(x-fVelX,y-fVelY,x+fVelX,y+fVelY,true,true))
+	if(entity_position_collide(fVelX,fVelY,x,y) || entity_position_collide(0,0,x,y) || entity_collision_line(x-_tailX,y-_tailY,x+fVelX,y+fVelY,true,true))
 	{
-		while(!entity_position_collide(sign(fVelX),sign(fVelY),x,y) && !entity_position_collide(0,0,x,y) && !entity_collision_line(x-fVelX,y-fVelY,x+sign(fVelX),y+sign(fVelY),true,true) && counter > 0)
+		while(!entity_position_collide(sign(fVelX),sign(fVelY),x,y) && !entity_position_collide(0,0,x,y) && !entity_collision_line(x-_tailX,y-_tailY,x+sign(fVelX),y+sign(fVelY),true,true) && counter > 0)
 		{
 			x += sign(fVelX);
 			y += sign(fVelY);

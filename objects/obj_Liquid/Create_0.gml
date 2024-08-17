@@ -667,3 +667,26 @@ spriteW = sprite_get_width(sprite_index);
 spriteH = sprite_get_height(sprite_index);
 function scaledW() { return spriteW * image_xscale; }
 function scaledH() { return spriteH * image_yscale; }
+
+function SurfPos()
+{
+	return new Vector2(scr_round(max(x,camera_get_view_x(view_camera[0]))),scr_round(max(y,camera_get_view_y(view_camera[0]))));
+}
+
+function _SurfWidth()
+{
+	var pos = SurfPos();
+	var camX = camera_get_view_x(view_camera[0]);
+	return scr_round(min(surface_get_width(application_surface)-(pos.X-camX),bbox_right-pos.X + 1));
+}
+function _SurfHeight()
+{
+	var pos = SurfPos();
+	var camY = camera_get_view_y(view_camera[0]);
+	return scr_round(min(surface_get_height(application_surface)-(pos.Y-camY),bbox_bottom-pos.Y + 1));
+}
+
+function SurfWidth() { return max(_SurfWidth(),1); }
+function SurfHeight() { return max(_SurfHeight(),1); }
+function SurfWidth2() { return SurfWidth() + spriteW; }
+function SurfHeight2() { return SurfHeight() + spriteH; }

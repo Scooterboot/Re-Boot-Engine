@@ -16,3 +16,5 @@ exploDmgMult = 1;
 exploSnd = snd_PowerBombExplode;
 
 ignoreCamera = true;
+
+function MovePushBlock() {}

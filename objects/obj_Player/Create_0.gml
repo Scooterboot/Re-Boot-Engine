@@ -31,6 +31,10 @@ armPumping = true;
 // 2 = enabled, but disabled during Gravity-less underwater movement
 speedKeep = 0;
 
+// Restricts speed boost activation to require the run state.
+// Setting to false allows boost ball and other things to activate it.
+restrictSBToRun = true;
+
 // Run animation tweak
 // Set to true (default) to use a smooth run anim speed
 // Set to false to use an anim speed that is much more closely tied to the speed counter
@@ -1173,6 +1177,10 @@ function ModifyFinalVelY(fVY)
 
 function ModifySlopeXSteepness_Up()
 {
+	if(spiderBall)
+	{
+		return 2;
+	}
 	if((speedBoost && grounded) || state == State.Grapple || ((state == State.Spark || state == State.BallSpark) && !SparkDir_Hori()))
 	{
 		return 4;
@@ -1181,10 +1189,18 @@ function ModifySlopeXSteepness_Up()
 }
 function ModifySlopeXSteepness_Down()
 {
+	if(spiderBall)
+	{
+		return 3;
+	}
 	return 3;
 }
 function ModifySlopeYSteepness_Up()
 {
+	if(spiderBall)
+	{
+		return 2;
+	}
 	if(fVelY < 0)
 	{
 		return 2;
@@ -1193,6 +1209,10 @@ function ModifySlopeYSteepness_Up()
 }
 function ModifySlopeYSteepness_Down()
 {
+	if(spiderBall)
+	{
+		return 3;
+	}
 	return 2;
 }
 
@@ -1527,6 +1547,7 @@ function Crawler_OnRightCollision(fVX)
 			spiderMove = sign(spiderSpeed);
 		}
 		spiderEdge = Edge.Right;
+		colEdge = spiderEdge;
 	}
 }
 function Crawler_OnLeftCollision(fVX)
@@ -1539,6 +1560,7 @@ function Crawler_OnLeftCollision(fVX)
 			spiderMove = sign(spiderSpeed);
 		}
 		spiderEdge = Edge.Left;
+		colEdge = spiderEdge;
 	}
 }
 function Crawler_OnXCollision(fVX)
@@ -1552,6 +1574,7 @@ function Crawler_OnXCollision(fVX)
 			state = State.Morph;
 			speedFXCounter = 1;
 			speedCounter = speedCounterMax;
+			speedBoost = true;
 			speedCatchCounter = 6;
 			audio_stop_sound(snd_ShineSpark);
 		}
@@ -1600,6 +1623,7 @@ function Crawler_OnSlopeXCollision_Bottom(fVX, yShift)
 		state = State.Morph;
 		speedFXCounter = 1;
 		speedCounter = speedCounterMax;
+		speedBoost = true;
 		speedCatchCounter = 6;
 		audio_stop_sound(snd_ShineSpark);
 	}
@@ -1608,11 +1632,12 @@ function Crawler_OnSlopeXCollision_Bottom(fVX, yShift)
 		spiderSpeed = velX;
 		spiderMove = sign(spiderSpeed);
 		spiderEdge = Edge.Bottom;
+		colEdge = spiderEdge;
 	}
-	if(colEdge == Edge.None)
-	{
-		colEdge = Edge.Bottom;
-	}
+	//if(colEdge == Edge.None)
+	//{
+		//colEdge = Edge.Bottom;
+	//}
 }
 function Crawler_CanMoveDownSlope_Bottom()
 {
@@ -1643,6 +1668,7 @@ function Crawler_OnSlopeXCollision_Top(fVX, yShift)
 		state = State.Morph;
 		speedFXCounter = 1;
 		speedCounter = speedCounterMax;
+		speedBoost = true;
 		speedCatchCounter = 6;
 		audio_stop_sound(snd_ShineSpark);
 	}
@@ -1651,11 +1677,12 @@ function Crawler_OnSlopeXCollision_Top(fVX, yShift)
 		spiderSpeed = -velX;
 		spiderMove = sign(spiderSpeed);
 		spiderEdge = Edge.Top;
+		colEdge = spiderEdge;
 	}
-	if(colEdge == Edge.None)
-	{
-		colEdge = Edge.Top;
-	}
+	//if(colEdge == Edge.None)
+	//{
+		//colEdge = Edge.Top;
+	//}
 }
 function Crawler_CanMoveDownSlope_Top()
 {
@@ -1672,6 +1699,7 @@ function Crawler_OnBottomCollision(fVY)
 			spiderMove = sign(spiderSpeed);
 		}
 		spiderEdge = Edge.Bottom;
+		colEdge = spiderEdge;
 	}
 }
 function Crawler_OnTopCollision(fVY)
@@ -1684,6 +1712,7 @@ function Crawler_OnTopCollision(fVY)
 			spiderMove = sign(spiderSpeed);
 		}
 		spiderEdge = Edge.Top;
+		colEdge = spiderEdge;
 	}
 }
 function Crawler_OnYCollision(fVY)
@@ -1697,6 +1726,7 @@ function Crawler_OnYCollision(fVY)
 			state = State.Morph;
 			speedFXCounter = 1;
 			speedCounter = speedCounterMax;
+			speedBoost = true;
 			speedCatchCounter = 6;
 			audio_stop_sound(snd_ShineSpark);
 		}
@@ -1718,7 +1748,8 @@ function Crawler_CanMoveUpSlope_Right()
 {
 	if(state == State.BallSpark)
 	{
-		if(shineStart <= 0 && shineLauncherStart <= 0 && GetSparkDir() <= 0 && (GetSparkDir() > -180 || abs(GetSparkDir()) == 180))
+		//if(shineStart <= 0 && shineLauncherStart <= 0 && GetSparkDir() <= 0 && (GetSparkDir() > -180 || abs(GetSparkDir()) == 180))
+		if(shineStart <= 0 && shineLauncherStart <= 0 && (GetSparkDir() <= 0 || abs(GetSparkDir()) == 180))
 		{
 			return true;
 		}
@@ -1738,6 +1769,7 @@ function Crawler_OnSlopeYCollision_Right(fVY, xShift)
 		state = State.Morph;
 		speedFXCounter = 1;
 		speedCounter = speedCounterMax;
+		speedBoost = true;
 		speedCatchCounter = 6;
 		audio_stop_sound(snd_ShineSpark);
 	}
@@ -1746,11 +1778,12 @@ function Crawler_OnSlopeYCollision_Right(fVY, xShift)
 		spiderSpeed = -velY;
 		spiderMove = sign(spiderSpeed);
 		spiderEdge = Edge.Right;
+		colEdge = spiderEdge;
 	}
-	if(colEdge == Edge.None)
-	{
-		colEdge = Edge.Right;
-	}
+	//if(colEdge == Edge.None)
+	//{
+		//colEdge = Edge.Right;
+	//}
 }
 function Crawler_CanMoveDownSlope_Right()
 {
@@ -1761,7 +1794,8 @@ function Crawler_CanMoveUpSlope_Left()
 {
 	if(state == State.BallSpark)
 	{
-		if(shineStart <= 0 && shineLauncherStart <= 0 && GetSparkDir() >= 0 && (GetSparkDir() < 180 || abs(GetSparkDir()) == 180))
+		//if(shineStart <= 0 && shineLauncherStart <= 0 && GetSparkDir() >= 0 && (GetSparkDir() < 180 || abs(GetSparkDir()) == 180))
+		if(shineStart <= 0 && shineLauncherStart <= 0 && (GetSparkDir() >= 0 || abs(GetSparkDir()) == 180))
 		{
 			return true;
 		}
@@ -1781,6 +1815,7 @@ function Crawler_OnSlopeYCollision_Left(fVY, xShift)
 		state = State.Morph;
 		speedFXCounter = 1;
 		speedCounter = speedCounterMax;
+		speedBoost = true;
 		speedCatchCounter = 6;
 		audio_stop_sound(snd_ShineSpark);
 	}
@@ -1789,11 +1824,12 @@ function Crawler_OnSlopeYCollision_Left(fVY, xShift)
 		spiderSpeed = velY;
 		spiderMove = sign(spiderSpeed);
 		spiderEdge = Edge.Left;
+		colEdge = spiderEdge;
 	}
-	if(colEdge == Edge.None)
-	{
-		colEdge = Edge.Left;
-	}
+	//if(colEdge == Edge.None)
+	//{
+	//	colEdge = Edge.Left;
+	//}
 }
 function Crawler_CanMoveDownSlope_Left()
 {
