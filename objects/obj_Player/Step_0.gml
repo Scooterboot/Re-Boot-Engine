@@ -1128,7 +1128,7 @@ if(xRayActive)
 							{
 								dir = move;
 							}
-							velX = abs(velX)*dir;
+							velX = max(abs(velX),maxSpeed[2,liquidState])*dir;
 							dirFrame = 4*dir;
 						}
 						else
@@ -2076,7 +2076,12 @@ if(xRayActive)
 	
 	if(speedKill)
 	{
-		speedKillCounter = min(speedKillCounter+1,speedKillMax);
+		var _max = speedKillMax;
+		if(speedBoostWallJump && speedBoostWJ && speedBoostWJCounter < speedBoostWJMax)
+		{
+			_max -= 1;
+		}
+		speedKillCounter = min(speedKillCounter+1,_max);
 	}
 	else
 	{

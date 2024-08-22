@@ -1254,10 +1254,6 @@ function OnXCollision(fVX)
 	if(speedBoost && speedKillCounter < speedKillMax)
 	{
 		speedKill = true;
-		if(speedBoostWJ && speedBoostWallJump)
-		{
-			speedKillCounter = min(speedKillCounter,speedKillMax-1);
-		}
 	}
 	else
 	{
@@ -1532,10 +1528,10 @@ function Crawler_ModifyFinalVelY(fVY)
 	return fVY;
 }
 
-function Crawler_SlopeCheck(slope)
+/*function Crawler_SlopeCheck(slope)
 {
 	return colEdge != Edge.None;
-}
+}*/
 
 function Crawler_OnRightCollision(fVX)
 {
@@ -1547,7 +1543,6 @@ function Crawler_OnRightCollision(fVX)
 			spiderMove = sign(spiderSpeed);
 		}
 		spiderEdge = Edge.Right;
-		colEdge = spiderEdge;
 	}
 }
 function Crawler_OnLeftCollision(fVX)
@@ -1560,7 +1555,6 @@ function Crawler_OnLeftCollision(fVX)
 			spiderMove = sign(spiderSpeed);
 		}
 		spiderEdge = Edge.Left;
-		colEdge = spiderEdge;
 	}
 }
 function Crawler_OnXCollision(fVX)
@@ -1569,7 +1563,6 @@ function Crawler_OnXCollision(fVX)
 	{
 		if(!SparkDir_Hori() && !entity_place_collide(0,2*sign(velY)) && shineEnd <= 0)
 		{
-			//shineEnd = 0;
 			shineDir = 0;
 			state = State.Morph;
 			speedFXCounter = 1;
@@ -1632,12 +1625,11 @@ function Crawler_OnSlopeXCollision_Bottom(fVX, yShift)
 		spiderSpeed = velX;
 		spiderMove = sign(spiderSpeed);
 		spiderEdge = Edge.Bottom;
-		colEdge = spiderEdge;
 	}
-	//if(colEdge == Edge.None)
-	//{
-		//colEdge = Edge.Bottom;
-	//}
+	if(colEdge == Edge.None)
+	{
+		colEdge = Edge.Bottom;
+	}
 }
 function Crawler_CanMoveDownSlope_Bottom()
 {
@@ -1677,12 +1669,11 @@ function Crawler_OnSlopeXCollision_Top(fVX, yShift)
 		spiderSpeed = -velX;
 		spiderMove = sign(spiderSpeed);
 		spiderEdge = Edge.Top;
-		colEdge = spiderEdge;
 	}
-	//if(colEdge == Edge.None)
-	//{
-		//colEdge = Edge.Top;
-	//}
+	if(colEdge == Edge.None)
+	{
+		colEdge = Edge.Top;
+	}
 }
 function Crawler_CanMoveDownSlope_Top()
 {
@@ -1699,7 +1690,6 @@ function Crawler_OnBottomCollision(fVY)
 			spiderMove = sign(spiderSpeed);
 		}
 		spiderEdge = Edge.Bottom;
-		colEdge = spiderEdge;
 	}
 }
 function Crawler_OnTopCollision(fVY)
@@ -1712,7 +1702,6 @@ function Crawler_OnTopCollision(fVY)
 			spiderMove = sign(spiderSpeed);
 		}
 		spiderEdge = Edge.Top;
-		colEdge = spiderEdge;
 	}
 }
 function Crawler_OnYCollision(fVY)
@@ -1721,7 +1710,6 @@ function Crawler_OnYCollision(fVY)
 	{
 		if(!SparkDir_VertUp() && !SparkDir_VertDown() && !entity_place_collide(2*sign(velX),0) && shineEnd <= 0)
 		{
-			//shineEnd = 0;
 			shineDir = 0;
 			state = State.Morph;
 			speedFXCounter = 1;
@@ -1748,7 +1736,6 @@ function Crawler_CanMoveUpSlope_Right()
 {
 	if(state == State.BallSpark)
 	{
-		//if(shineStart <= 0 && shineLauncherStart <= 0 && GetSparkDir() <= 0 && (GetSparkDir() > -180 || abs(GetSparkDir()) == 180))
 		if(shineStart <= 0 && shineLauncherStart <= 0 && (GetSparkDir() <= 0 || abs(GetSparkDir()) == 180))
 		{
 			return true;
@@ -1778,12 +1765,11 @@ function Crawler_OnSlopeYCollision_Right(fVY, xShift)
 		spiderSpeed = -velY;
 		spiderMove = sign(spiderSpeed);
 		spiderEdge = Edge.Right;
-		colEdge = spiderEdge;
 	}
-	//if(colEdge == Edge.None)
-	//{
-		//colEdge = Edge.Right;
-	//}
+	if(colEdge == Edge.None)
+	{
+		colEdge = Edge.Right;
+	}
 }
 function Crawler_CanMoveDownSlope_Right()
 {
@@ -1794,7 +1780,6 @@ function Crawler_CanMoveUpSlope_Left()
 {
 	if(state == State.BallSpark)
 	{
-		//if(shineStart <= 0 && shineLauncherStart <= 0 && GetSparkDir() >= 0 && (GetSparkDir() < 180 || abs(GetSparkDir()) == 180))
 		if(shineStart <= 0 && shineLauncherStart <= 0 && (GetSparkDir() >= 0 || abs(GetSparkDir()) == 180))
 		{
 			return true;
@@ -1824,12 +1809,11 @@ function Crawler_OnSlopeYCollision_Left(fVY, xShift)
 		spiderSpeed = velY;
 		spiderMove = sign(spiderSpeed);
 		spiderEdge = Edge.Left;
-		colEdge = spiderEdge;
 	}
-	//if(colEdge == Edge.None)
-	//{
-	//	colEdge = Edge.Left;
-	//}
+	if(colEdge == Edge.None)
+	{
+		colEdge = Edge.Left;
+	}
 }
 function Crawler_CanMoveDownSlope_Left()
 {

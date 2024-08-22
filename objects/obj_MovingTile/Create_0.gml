@@ -11,10 +11,42 @@ entityList = ds_list_create();
 
 ignoredEntity = noone;
 
-function IsEntity_Top(entity) { return place_meeting(x,y-1,entity); }
-function IsEntity_Bottom(entity) { return place_meeting(x,y+1,entity); }
-function IsEntity_Left(entity) { return place_meeting(x-1,y,entity); }
-function IsEntity_Right(entity) { return place_meeting(x+1,y,entity); }
+function IsEntity_Top(entity)
+{
+	var this = id;
+	with(entity)
+	{
+		return place_meeting(x,y+1,this) || place_meeting(position.X,position.Y+1,this);
+	}
+	return place_meeting(x,y-1,entity);
+}
+function IsEntity_Bottom(entity)
+{
+	var this = id;
+	with(entity)
+	{
+		return place_meeting(x,y-1,this) || place_meeting(position.X,position.Y-1,this);
+	}
+	return place_meeting(x,y+1,entity);
+}
+function IsEntity_Left(entity)
+{
+	var this = id;
+	with(entity)
+	{
+		return place_meeting(x+1,y,this) || place_meeting(position.X+1,position.Y,this);
+	}
+	return place_meeting(x-1,y,entity);
+}
+function IsEntity_Right(entity)
+{
+	var this = id;
+	with(entity)
+	{
+		return place_meeting(x-1,y,this) || place_meeting(position.X-1,position.Y,this);
+	}
+	return place_meeting(x+1,y,entity);
+}
 
 function UpdatePosition(_x,_y, avoidClipping = false)
 {
@@ -29,10 +61,10 @@ function UpdatePosition(_x,_y, avoidClipping = false)
 		bVelY = newPosY-y;
 	
 	collision_rectangle_list(
-		min(bbox_left-1,bbox_left+bVelX),
-		min(bbox_top-1,bbox_top+bVelY),
-		max(bbox_right+1,bbox_right+bVelX),
-		max(bbox_bottom+1,bbox_bottom+bVelY),
+		min(bbox_left-2,bbox_left+bVelX),
+		min(bbox_top-2,bbox_top+bVelY),
+		max(bbox_right+2,bbox_right+bVelX),
+		max(bbox_bottom+2,bbox_bottom+bVelY),
 		obj_Entity,true,true,entityList,false);
 	
 	for(var i = 0; i < ds_list_size(entityList); i++)

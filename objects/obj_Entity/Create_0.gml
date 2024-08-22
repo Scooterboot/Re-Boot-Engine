@@ -989,7 +989,7 @@ function Crawler_OnYCollision(fVY) {} // same as both above
 //	  | \
 function Crawler_CanMoveUpSlope_Right()
 {
-	return (colEdge == Edge.Right);
+	return (colEdge == Edge.Right || colEdge == Edge.None);
 }
 function Crawler_OnSlopeYCollision_Right(fVY, xShift)
 {
@@ -1014,7 +1014,7 @@ function Crawler_CanMoveDownSlope_Right()
 //	/ |
 function Crawler_CanMoveUpSlope_Left()
 {
-	return (colEdge == Edge.Left);
+	return (colEdge == Edge.Left || colEdge == Edge.None);
 }
 function Crawler_OnSlopeYCollision_Left(fVY, xShift)
 {
