@@ -48,8 +48,8 @@ shift = 0;
 t = 0;
 t2 = 0;
 increment = pi*2 / 60;
-xx = xstart;
-yy = ystart;
+xx = x;
+yy = y;
 dir = 1;
 
 waveStyle = 0;

@@ -28,8 +28,6 @@ dropChance[3] = 20; // missile
 dropChance[4] = 30; // super missile
 dropChance[5] = 20; // power bomb
 
-lhc_inherit_interface("ISolid");
-
 eyeState = 0; // 0 = closed, 1 = open, 2 = attack
 eyeTimer = 0;
 eyeChance = 0;

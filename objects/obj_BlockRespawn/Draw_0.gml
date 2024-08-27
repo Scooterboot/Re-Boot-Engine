@@ -1,4 +1,9 @@
 
+if(!scr_RectangleWithinCam(bbox_left,bbox_top,bbox_right,bbox_bottom))
+{
+	exit;
+}
+
 for(var i = 0; i < image_xscale; i++)
 {
     for(var j = 0; j < image_yscale; j++)

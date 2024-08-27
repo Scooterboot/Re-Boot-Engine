@@ -32,6 +32,7 @@ function OnXCollision(fVX)
 	{
 		velX = 0;
 	}
+	ImpactBreak();
 }
 function OnYCollision(fVY)
 {
@@ -43,7 +44,22 @@ function OnYCollision(fVY)
 	{
 		velY = 0;
 	}
+	ImpactBreak();
 }
+function ImpactBreak()
+{
+	var btop = bbox_top-y + position.Y,
+		bbottom = bbox_bottom-y + position.Y,
+		bright = bbox_right-x + position.X,
+		bleft = bbox_left-x + position.X;
+	var arr = [obj_ShotBlock,obj_BombBlock];
+	
+	if(impacted <= 0 && collision_rectangle(bleft-2,btop-2,bright+2,bbottom+2,arr,false,true))
+	{
+		impacted = 1;
+	}
+}
+
 function OnBottomCollision(fVY)
 {
 	if(spreadType == 0)

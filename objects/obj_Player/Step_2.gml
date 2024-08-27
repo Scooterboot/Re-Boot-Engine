@@ -2616,10 +2616,10 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				mbTrailPosY[i] = mbTrailPosY[i+1];
 				mbTrailDir[i] = mbTrailDir[i+1];
 			}
-			mbTrailPosX[mbTrailLength-1] = x + sprtOffsetX;
-			mbTrailPosY[mbTrailLength-1] = y + sprtOffsetY;
-			var trailDir = point_direction(scr_round(x),scr_round(y),scr_round(xprevious),scr_round(yprevious));
-			if(point_distance(scr_round(x),scr_round(y),scr_round(xprevious),scr_round(yprevious)) > 0)
+			mbTrailPosX[mbTrailLength-1] = position.X + sprtOffsetX;
+			mbTrailPosY[mbTrailLength-1] = position.Y + sprtOffsetY;
+			var trailDir = point_direction(position.X,position.Y,oldPosition.X,oldPosition.Y);
+			if(point_distance(position.X,position.Y,oldPosition.X,oldPosition.Y) > 0)
 			{
 				mbTrailDir[mbTrailLength-1] = trailDir;
 			}

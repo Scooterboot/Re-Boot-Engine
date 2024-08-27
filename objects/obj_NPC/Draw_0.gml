@@ -1,4 +1,10 @@
 /// @description 
+var sprX = x-sprite_xoffset, sprY = y-sprite_yoffset,
+	sprW = sprite_width, sprH = sprite_height;
+if(!scr_RectangleWithinCam(sprX-16,sprY-16,sprX+sprW+16,sprY+sprH+16))
+{
+	exit;
+}
 
 if(dmgFlash > 4)
 {

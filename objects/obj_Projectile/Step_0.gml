@@ -28,7 +28,7 @@ fVelY = velY + speed_y;
 
 var _x = x,
 	_y = y;
-if(aiStyle == 1 || aiStyle == 2)
+if(aiStyle == 1 || (aiStyle == 2 && t < pi/2))
 {
 	_x = xx;
 	_y = yy;
@@ -38,7 +38,7 @@ var reflec = noone;
 collision_line_list(_x,_y,_x+fVelX,_y+fVelY,obj_Reflec,true,true,reflecList,true);
 if(tileCollide && doorOpenType >= 0)
 {
-	collision_line_list(_x,_y,_x+fVelX,_y+fVelY,obj_DoorHatch,true,true,reflecList,true);
+	collision_line_list(x,y,x+fVelX,y+fVelY,obj_DoorHatch,true,true,reflecList,true);
 }
 for(var i = 0; i < ds_list_size(reflecList); i++)
 {
@@ -124,6 +124,16 @@ if(instance_exists(reflec) && lastReflec != reflec)
 	fVelY = vY;
 	
 	direction = _ang;
+	waveDir *= -1;
+	if(aiStyle == 2 && t >= pi/2)
+	{
+		amplitude = 0;
+	}
+	else
+	{
+		t = 0;
+		t2 = 0;
+	}
 	
 	speed_x = 0;
 	speed_y = 0;
@@ -131,44 +141,6 @@ if(instance_exists(reflec) && lastReflec != reflec)
 	lastReflec = reflec;
 }
 
-#endregion
-
-#region Collision
-if(tileCollide && impacted == 0)
-{
-	//Collision_Normal(fVelX,fVelY,16,16,false,false);
-	
-	var fVX = fVelX,
-		fVY = fVelY;
-	
-	var _dir = point_direction(x,y,x+fVelX,y+fVelY);
-	var _tailX = lengthdir_x(10,_dir),
-		_tailY = lengthdir_y(10,_dir);
-	var counter = abs(fVelX)+abs(fVelY);
-	if(entity_position_collide(fVelX,fVelY,x,y) || entity_position_collide(0,0,x,y) || entity_collision_line(x-_tailX,y-_tailY,x+fVelX,y+fVelY,true,true))
-	{
-		while(!entity_position_collide(sign(fVelX),sign(fVelY),x,y) && !entity_position_collide(0,0,x,y) && !entity_collision_line(x-_tailX,y-_tailY,x+sign(fVelX),y+sign(fVelY),true,true) && counter > 0)
-		{
-			x += sign(fVelX);
-			y += sign(fVelY);
-			counter--;
-		}
-		speed_x = 0;
-		speed_y = 0;
-		fVX = 0;
-		fVY = 0;
-		
-		impacted = 1;
-	}
-		
-	x += fVX;
-	y += fVY;
-}
-else if(impacted == 0)
-{
-	x += fVelX;
-	y += fVelY;
-}
 #endregion
 
 #region AI Styles
@@ -186,57 +158,91 @@ if(aiStyle == 1 || aiStyle == 2)
 		instance_destroy();
 	}
 	
-	if(!global.gamePaused)
+	var i = 0;
+	if(waveStyle > 0)
 	{
-		var i = 0;
-		if(waveStyle > 0)
+		i = scr_ceil(waveStyle/2);
+		if(waveStyle%2 == 0)
 		{
-			i = scr_ceil(waveStyle/2);
-			if(waveStyle%2 == 0)
-			{
-				i *= -1;
-			}
+			i *= -1;
 		}
-		delay = max(delay - 1, 0);
-		if(delay <= 0)
+	}
+	delay = max(delay - 1, 0);
+	if(delay <= 0)
+	{
+		if(aiStyle == 2)
 		{
-			if(aiStyle == 2)
-			{
-				t = min(t + increment * wavesPerSecond, pi/2);
-			}
-			else
-			{
-				t += increment * wavesPerSecond;
-			}
-			if(t >= pi*2)
-			{
-				t -= pi*2;
-			}
-			
-			if(waveStyle >= 3 && aiStyle == 1)
-			{
-				t2 = min(t2 + increment * (wavesPerSecond / 2) * (abs(i)-1), (pi / 2) * (abs(i)-1));
-			}
+			t = min(t + increment * wavesPerSecond, pi/2);
 		}
-		i *= dir;
-		if(isWave && !isSpazer)
+		else
 		{
-			i *= waveDir;
+			t += increment * wavesPerSecond;
 		}
-		shift = amplitude * sin(t - t2) * i;
+		if(t >= pi*2)
+		{
+			t -= pi*2;
+		}
 		
-		//xx += xspeed;
-		//yy += yspeed;
-		xx += fVelX;
-		yy += fVelY;
+		if(waveStyle >= 3 && aiStyle == 1)
+		{
+			t2 = min(t2 + increment * (wavesPerSecond / 2) * (abs(i)-1), (pi / 2) * (abs(i)-1));
+		}
 	}
-	if(impacted <= 0)
+	i *= dir;
+	i *= waveDir;
+	shift = amplitude * sin(t - t2) * i;
+	
+	var fVX = fVelX,
+		fVY = fVelY;
+	if(shift != 0)
 	{
-		x = xx + lengthdir_x(shift, direction + 90);
-		y = yy + lengthdir_y(shift, direction + 90);
-		//fVelX += lengthdir_x(shift, direction + 90);
-		//fVelY += lengthdir_y(shift, direction + 90);
+		var destX = xx + lengthdir_x(shift, direction + 90),
+			destY = yy + lengthdir_y(shift, direction + 90);
+		fVelX += destX - x;
+		fVelY += destY - y;
 	}
+	xx += fVX;
+	yy += fVY;
+}
+#endregion
+
+#region Collision
+if(tileCollide && impacted == 0)
+{
+	//Collision_Normal(fVelX,fVelY,16,16,false,false);
+	
+	var fVX = fVelX,
+		fVY = fVelY;
+	
+	var _dir = point_direction(x,y,x+fVelX,y+fVelY);
+	var _tailX = lengthdir_x(10,_dir),
+		_tailY = lengthdir_y(10,_dir);
+	var _signX = lengthdir_x(1,_dir),
+		_signY = lengthdir_y(1,_dir);
+	var counter = abs(fVelX)+abs(fVelY);
+	if(entity_position_collide(fVelX,fVelY,x,y) || entity_position_collide(0,0,x,y) || entity_collision_line(x-_tailX,y-_tailY,x+fVelX,y+fVelY,true,true))
+	{
+		while(!entity_position_collide(_signX,_signY,x,y) && !entity_position_collide(0,0,x,y) && !entity_collision_line(x-_tailX,y-_tailY,x+_signX,y+_signY,true,true) && counter > 0)
+		{
+			x += _signX;
+			y += _signY;
+			counter--;
+		}
+		speed_x = 0;
+		speed_y = 0;
+		fVX = 0;
+		fVY = 0;
+		
+		impacted = 1;
+	}
+		
+	x += fVX;
+	y += fVY;
+}
+else if(impacted == 0)
+{
+	x += fVelX;
+	y += fVelY;
 }
 #endregion
 

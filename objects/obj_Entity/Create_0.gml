@@ -109,28 +109,31 @@ function entity_collision_rectangle(x1,y1,x2,y2, prec = true, notme = true)
 
 function entity_collision(listNum)
 {
-	for(var i = 0; i < listNum; i++)
+	if(listNum > 0)
 	{
-		if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object))
+		for(var i = 0; i < listNum; i++)
 		{
-			var block = blockList[| i];
-			var isSolid = true;
-			if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
+			if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object))
 			{
-				isSolid = block.isSolid;
-				if(block.ignoredEntity == id)
+				var block = blockList[| i];
+				var isSolid = true;
+				if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
 				{
-					isSolid = false;
+					isSolid = block.isSolid;
+					if(block.ignoredEntity == id)
+					{
+						isSolid = false;
+					}
+				}
+				if(isSolid)
+				{
+					ds_list_clear(blockList);
+					return true;
 				}
 			}
-			if(isSolid)
-			{
-				ds_list_clear(blockList);
-				return true;
-			}
 		}
+		ds_list_clear(blockList);
 	}
-	ds_list_clear(blockList);
 	return false;
 }
 
@@ -307,7 +310,7 @@ function GetEdgeAngle(edge, offsetX = 0, offsetY = 0)
 			ySign = -1;
 		}
 		
-		if(entity_place_collide(offsetX,offsetY+ySign) || (entity_place_collide(offsetX+1,offsetY) ^^ entity_place_collide(offsetX-1,offsetY)))
+		if(entity_place_collide(offsetX,offsetY+ySign) || ((entity_place_collide(offsetX+1,offsetY) ^^ entity_place_collide(offsetX-1,offsetY)) && entity_place_collide(offsetX,offsetY+ySign*maxY)))
 		{
 			while(!entity_place_collide(pos1.X+offsetX,pos1.Y+ySign+offsetY) && abs(pos1.Y) < maxY)
 			{
@@ -404,7 +407,7 @@ function GetEdgeAngle(edge, offsetX = 0, offsetY = 0)
 			xSign = -1;
 		}
 		
-		if(entity_place_collide(offsetX+xSign,offsetY) || (entity_place_collide(offsetX,offsetY+1) ^^ entity_place_collide(offsetX,offsetY-1)))
+		if(entity_place_collide(offsetX+xSign,offsetY) || ((entity_place_collide(offsetX,offsetY+1) ^^ entity_place_collide(offsetX,offsetY-1)) && entity_place_collide(offsetX+xSign*maxX,offsetY)))
 		{
 			while(!entity_place_collide(pos1.X+xSign+offsetX,pos1.Y+offsetY) && abs(pos1.X) < maxX)
 			{

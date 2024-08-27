@@ -89,11 +89,11 @@ function scr_MainInitialize()
 
 	lhc_assign_interface("IPlayer", obj_Player);
 
-	lhc_assign_interface("ISolid", obj_Tile);
+	lhc_assign_interface("ISolid", obj_Tile, obj_Gadora);
 	lhc_assign_interface("INPCSolid", obj_NPCTile, obj_SaveStation);
 	lhc_assign_interface("IMovingSolid", obj_MovingTile);
 	lhc_assign_interface("ISlope", obj_Slope, obj_Slope_4th, obj_NPCSlope, obj_NPCSlope_4th, obj_MovingSlope, obj_MovingSlope_4th);
-	lhc_assign_interface("IPlatform", obj_Platform);//, obj_NPC_MovingPlatform);
+	lhc_assign_interface("IPlatform", obj_Platform);
 	lhc_assign_interface("IGrapplePoint", obj_GrappleBlock, obj_GrappleBlockCracked, obj_PushBlock_Grapple, obj_PushBall_Grapple, obj_GrappleRipper);
 	lhc_assign_interface("IBreakable", obj_Breakable);
 	lhc_assign_interface("ISpeedBlock", obj_ShotBlock, obj_BombBlock, obj_SpeedBlock);
