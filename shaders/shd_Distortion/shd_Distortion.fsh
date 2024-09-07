@@ -3,6 +3,7 @@ varying vec2 v_vTexcoord;
 varying vec4 v_vColour;
 
 uniform sampler2D distortion_texture_page; // the name of the surface in the shader	
+uniform vec2 texelSize;
 
 void main()
 {
@@ -17,7 +18,8 @@ void main()
 	distort_amount -= 0.5;//128.0;
 	if (distort_amount.x > 0.5) {distort_amount.x -= 1.0;}// wrap around
 	if (distort_amount.y > 0.5) {distort_amount.y -= 1.0;}// wrap around
-	distort_amount /= 4.0;
+	//distort_amount /= 4.0;
+	distort_amount *= texelSize * 100.0;
 
 	gl_FragColor = v_vColour * texture2D( gm_BaseTexture, v_vTexcoord+distort_amount);
 }

@@ -1,5 +1,6 @@
 if(surface_exists(transSurf))
 {
+	surface_resize(transSurf,ceil(global.zoomResWidth),ceil(global.zoomResHeight));
     surface_set_target(transSurf);
     draw_clear_alpha(c_black,1);
     if(transSprtDraw)
@@ -29,12 +30,8 @@ if(surface_exists(transSurf))
 			PostDrawPlayer(sx,sy,0,1);
         }
     }
-	var appSurfScale = 1;
-	if(global.upscale == 7)
-	{
-		appSurfScale = 1/obj_Display.screenScale;
-	}
-	draw_surface_ext(application_surface,0,0,appSurfScale,appSurfScale,0,c_white,1-alpha);
+	
+	draw_surface_ext(application_surface,0,0,1,1,0,c_white,1-alpha);
     surface_reset_target();
 
 	gpu_set_blendenable(false);
@@ -43,7 +40,7 @@ if(surface_exists(transSurf))
 }
 else
 {
-    transSurf = surface_create(global.resWidth,global.resHeight);
+    transSurf = surface_create(ceil(global.zoomResWidth),ceil(global.zoomResHeight));
     surface_set_target(transSurf);
     draw_clear_alpha(c_black,1);
     surface_reset_target();

@@ -1,4 +1,4 @@
-function scr_WithinCamRange(xx = -1, yy = -1, extraRng = 32)
+function scr_WithinCamRange(xx = -1, yy = -1, extraRng = 48)
 {
 	var bleft = bbox_left, bright = bbox_right,
 		btop = bbox_top, bbottom = bbox_bottom;

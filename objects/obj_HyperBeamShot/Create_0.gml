@@ -36,5 +36,19 @@ function OnImpact(posX,posY)
 	{
 		var explo = instance_create_layer(posX,posY,"Projectiles_fg",impactObj);
 	    explo.damage = damage;
+		
+		if(impactObj == obj_HyperBeamImpact)
+		{
+			var dist = instance_create_depth(0,0,0,obj_Distort);
+			dist.left = x-18;
+			dist.right = x+18;
+			dist.top = y-18;
+			dist.bottom = y+18;
+			dist.alpha = 0;
+			dist.alphaNum = 1;
+			dist.alphaRate = 0.25;
+			dist.alphaMult = 0.5;
+			dist.spread = 0.625;
+		}
 	}
 }

@@ -278,6 +278,7 @@ function DrawInventoryPlayer()
 	}
 	else
 	{
+		surface_resize(playerInvSurf,global.resWidth,global.resHeight);
 		surface_set_target(playerInvSurf);
 		draw_clear_alpha(c_black,0);
 		
@@ -416,6 +417,7 @@ function DrawInventoryPlayer()
 		}
 		else
 		{
+			surface_resize(playerGlowSurf,global.resWidth,global.resHeight);
 			surface_set_target(playerGlowSurf);
 			draw_clear_alpha(c_black,0);
 			
@@ -515,6 +517,7 @@ function DrawInventoryPlayer()
 		}
 		else
 		{
+			surface_resize(playerGlowSurf2,global.resWidth,global.resHeight);
 			surface_set_target(playerGlowSurf2);
 			draw_clear_alpha(c_black,0);
 		
@@ -745,6 +748,7 @@ function DrawInventoryPlayer_Retro()
 	}
 	else
 	{
+		surface_resize(playerInvSurf,global.resWidth,global.resHeight);
 		surface_set_target(playerInvSurf);
 		draw_clear_alpha(c_black,0);
 		
@@ -878,6 +882,7 @@ function DrawInventoryPlayer_Retro()
 		}
 		else
 		{
+			surface_resize(playerGlowSurf,global.resWidth,global.resHeight);
 			surface_set_target(playerGlowSurf);
 			draw_clear_alpha(c_black,0);
 			
@@ -982,6 +987,7 @@ function DrawInventoryPlayer_Retro()
 		}
 		else
 		{
+			surface_resize(playerGlowSurf2,global.resWidth,global.resHeight);
 			surface_set_target(playerGlowSurf2);
 			draw_clear_alpha(c_black,0);
 		

@@ -10,6 +10,7 @@ backAlphaNum = 1;
 coneDir = 0;
 coneSpread = 0;
 coneSpreadMax = 30;
+coneLength = global.zoomResWidth*0.75;
 visorX = x;
 visorY = y;
 

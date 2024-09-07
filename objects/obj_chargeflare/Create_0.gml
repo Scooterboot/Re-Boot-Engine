@@ -36,3 +36,14 @@ function OnDamageNPC(damage,npc)
 		posY = npc.y+npc.deathOffsetY;
 	part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.partFlareFX,1);
 }
+
+dist = instance_create_depth(0,0,0,obj_Distort);
+dist.left = x-20;
+dist.right = x+20;
+dist.top = y-20;
+dist.bottom = y+20;
+dist.alpha = 0.5;
+dist.alphaNum = 1;
+dist.alphaRate = 0.25;
+dist.alphaMult = 0.5;
+dist.spread = 0.625;

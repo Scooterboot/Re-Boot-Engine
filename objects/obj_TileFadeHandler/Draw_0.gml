@@ -8,14 +8,14 @@ if(!instance_exists(obj_TileFadeBlock))
 else
 {
 
-	var camx = camera_get_view_x(view_camera[0]),
-		camy = camera_get_view_y(view_camera[0]),
-		appWidth = surface_get_width(application_surface),
-		appHeight = surface_get_height(application_surface);
+	var camX = camera_get_view_x(view_camera[0]),
+		camY = camera_get_view_y(view_camera[0]),
+		camW = camera_get_view_width(view_camera[0]),
+		camH = camera_get_view_height(view_camera[0]);
 
 	if(!surface_exists(fadeTileSurface))
 	{
-		fadeTileSurface = surface_create(appWidth,appHeight);
+		fadeTileSurface = surface_create(camW,camH);
 		redraw_fade_layer();
 	}
 	else
@@ -24,20 +24,21 @@ else
 	}
 	if !(surface_exists(fadeTileSurfaceTemp))
 	{
-	    fadeTileSurfaceTemp = surface_create(appWidth,appHeight);
+	    fadeTileSurfaceTemp = surface_create(camW,camH);
 	}
 
 	if !(surface_exists(alphaMask))
 	{
-	    alphaMask = surface_create(appWidth,appHeight);
+	    alphaMask = surface_create(camW,camH);
 	    redraw_alpha();
 	}
 	else
 	{
 	    redraw_alpha();
 	}
-
-
+	
+	surface_resize(fadeTileSurfaceTemp,camW,camH);
+	
 	surface_set_target(fadeTileSurfaceTemp);
 	//draw_clear_alpha(0,0);
 	if(surface_exists(application_surface))
@@ -60,9 +61,9 @@ else
 			gpu_set_blendmode_ext(bm_dest_alpha, bm_src_alpha);
 
 			draw_primitive_begin(pr_trianglelist);
-			draw_vertex_colour(visorX-camx,visorY-camy,0,0);
-			draw_vertex_colour(visorX-camx+lengthdir_x(500,coneDir + coneSpread),visorY-camy+lengthdir_y(500,coneDir + coneSpread),0,0);
-			draw_vertex_colour(visorX-camx+lengthdir_x(500,coneDir - coneSpread),visorY-camy+lengthdir_y(500,coneDir - coneSpread),0,0);
+			draw_vertex_colour(visorX-camX,visorY-camY,0,0);
+			draw_vertex_colour(visorX-camX+lengthdir_x(coneLength,coneDir + coneSpread),visorY-camY+lengthdir_y(coneLength,coneDir + coneSpread),0,0);
+			draw_vertex_colour(visorX-camX+lengthdir_x(coneLength,coneDir - coneSpread),visorY-camY+lengthdir_y(coneLength,coneDir - coneSpread),0,0);
 			draw_primitive_end();
 
 			gpu_set_blendmode(bm_normal);
@@ -71,7 +72,7 @@ else
 
 	surface_reset_target();
 	
-	draw_surface(fadeTileSurfaceTemp,camx,camy);
+	draw_surface(fadeTileSurfaceTemp,camX,camY);
 }
 
 if(instance_exists(obj_XRay))
@@ -83,10 +84,10 @@ if(instance_exists(obj_XRay))
 		{
 		    var Dar = coneDir + coneSpread + i;
 		    draw_vertex_colour(visorX,visorY,0,darkAlpha);
-		    draw_vertex_colour(visorX+lengthdir_x(500,Dar),visorY+lengthdir_y(500,Dar),0,darkAlpha);
+		    draw_vertex_colour(visorX+lengthdir_x(coneLength,Dar),visorY+lengthdir_y(coneLength,Dar),0,darkAlpha);
 		}
 		draw_vertex_colour(visorX,visorY,0,darkAlpha);
-		draw_vertex_colour(visorX+lengthdir_x(500,coneDir - coneSpread),visorY+lengthdir_y(500,coneDir - coneSpread),0,darkAlpha);
+		draw_vertex_colour(visorX+lengthdir_x(coneLength,coneDir - coneSpread),visorY+lengthdir_y(coneLength,coneDir - coneSpread),0,darkAlpha);
 		draw_primitive_end();
 	}
 

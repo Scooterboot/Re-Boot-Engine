@@ -146,8 +146,8 @@ function entityPlatformCheck()
 	/// @param baseY=y
 	var offsetX = argument[0],
 		offsetY = argument[1],
-		xx = scr_round(position.X),
-		yy = scr_round(position.Y);
+		xx = position.X,//scr_round(position.X),
+		yy = position.Y;//scr_round(position.Y);
 	if(argument_count > 2)
 	{
 		xx = argument[2];

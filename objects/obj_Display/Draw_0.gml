@@ -1,38 +1,100 @@
 /// @description Debug (when enabled) & black outside room
 
-#region Draw black outside room
-
 var camX = camera_get_view_x(view_camera[0]),
 	camY = camera_get_view_y(view_camera[0]),
-	camW = global.resWidth,
-	camH = global.resHeight;
+	camW = camera_get_view_width(view_camera[0]),
+	camH = camera_get_view_height(view_camera[0]);
 
-if (camX < 0 || camX+camW > room_width ||
-	camY < 0 || camY+camH > room_height)
+#region Draw black outside room
+
+if (camX < 0 || camY < 0)
 {
-	draw_set_alpha(1)
+	draw_set_alpha(1);
 	draw_set_color(c_black);
 	
-	var x1 = room_width,
-		x2 = camX+camW;
-	if(camX < 0)
-	{
-		x1 = camX;
+	var x1 = camX,
 		x2 = 0;
-	}
 	draw_rectangle(x1,camY-2,x2-1,camY+camH+2,false);
 	
-	var y1 = room_height,
-		y2 = camY+camH;
-	if(camY < 0)
-	{
-		y1 = camY;
+	var y1 = camY,
 		y2 = 0;
-	}
 	draw_rectangle(camX-2,y1,camX+camW+2,y2-1,false);
 	
 	draw_set_color(c_white);
 }
+if (camX+camW > room_width || camY+camH > room_height)
+{
+	draw_set_alpha(1);
+	draw_set_color(c_black);
+	
+	var x1 = room_width,
+		x2 = camX+camW;
+	draw_rectangle(x1,camY-2,x2-1,camY+camH+2,false);
+	
+	var y1 = room_height,
+		y2 = camY+camH;
+	draw_rectangle(camX-2,y1,camX+camW+2,y2-1,false);
+	
+	draw_set_color(c_white);
+}
+
+#endregion
+
+#region Distortion shader
+
+if(!surface_exists(surfDistort))
+{
+	surfDistort = surface_create(camW,camH);
+}
+else
+{
+	surface_resize(surfDistort,camW,camH);
+	
+	surface_set_target(surfDistort);
+	draw_clear_alpha(make_color_rgb(127,127,255),1);
+	
+	gpu_set_colorwriteenable(1,1,1,0);
+	with(obj_Distort)
+	{
+		DrawDistort(-camX,-camY);
+	}
+	gpu_set_colorwriteenable(1,1,1,1);
+	
+	surface_reset_target();
+}
+
+if(!surface_exists(finalAppSurface))
+{
+	finalAppSurface = surface_create(camW,camH);
+}
+else
+{
+	surface_resize(finalAppSurface,camW,camH);
+	
+	surface_set_target(finalAppSurface);
+	draw_clear_alpha(c_black,0);
+	
+	gpu_set_blendenable(false);
+	draw_surface_ext(application_surface,0,0,1,1,0,c_white,1);
+	gpu_set_blendenable(true);
+	
+	surface_reset_target();
+}
+
+shader_set(shd_Distortion);
+
+var tex = surface_get_texture(surfDistort);
+
+texture_set_stage(distortStage,tex);
+gpu_set_texfilter_ext(distortStage, false);
+
+var texel_x = texture_get_texel_width(tex);
+var texel_y = texture_get_texel_height(tex);
+shader_set_uniform_f(distortTexel, texel_x, texel_y);
+
+draw_surface_ext(finalAppSurface,camX,camY,1,1,0,c_white,1);
+
+shader_reset();
 
 #endregion
 
@@ -41,7 +103,7 @@ if (camX < 0 || camX+camW > room_width ||
 if(keyboard_check_pressed(vk_divide))
 {
 	//debug = !debug;
-	debug = scr_wrap(debug+1,0,3);
+	debug = scr_wrap(debug+1,0,4);
 }
 
 if(debug == 1)
@@ -50,12 +112,15 @@ if(debug == 1)
 	{
 		for(var j = 0; j < room_height; j += global.rmMapSize)
 		{
-			draw_set_color(c_white);
-			draw_set_alpha(0.33);
+			if(i+global.rmMapPixX+global.rmMapSize <= room_width && j+global.rmMapPixY+global.rmMapSize <= room_height)
+			{
+				draw_set_color(c_white);
+				draw_set_alpha(0.33);
 			
-			draw_rectangle(i+global.rmMapPixX, j+global.rmMapPixY, i+global.rmMapPixX+global.rmMapSize-1, j+global.rmMapPixY+global.rmMapSize-1, true);
+				draw_rectangle(i+global.rmMapPixX, j+global.rmMapPixY, i+global.rmMapPixX+global.rmMapSize-1, j+global.rmMapPixY+global.rmMapSize-1, true);
 			
-			draw_set_alpha(1);
+				draw_set_alpha(1);
+			}
 		}
 	}
 	
@@ -352,8 +417,8 @@ if(debug == 1)
 	
 	with(obj_Camera)
 	{
-		var xx = camera_get_view_x(view_camera[0]) + global.resWidth/2,
-			yy = camera_get_view_y(view_camera[0]) + global.resHeight/2;
+		var xx = x + (global.resWidth/2),
+			yy = y + (global.resHeight/2);
 		
 		draw_set_color(c_white);
         draw_set_alpha(0.5);
@@ -362,6 +427,37 @@ if(debug == 1)
 		draw_rectangle(scr_round(playerX),scr_round(playerY),scr_round(playerX)-1,scr_round(playerY)-1,true);
 		
 		draw_set_alpha(1);
+	}
+}
+if(debug == 2)
+{
+	draw_surface_ext(surfDistort,camX,camY,1,1,0,c_white,1);
+	
+	with(obj_Tile)
+	{
+		if(object_is_ancestor(object_index,obj_Breakable))
+		{
+			draw_sprite_ext(sprite_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,1);
+		}
+		else if(mask_index != sprite_index && sprite_exists(mask_index))
+		{
+			draw_sprite_ext(mask_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,0.75);
+		}
+		else if(!visible)
+		{
+			draw_self();
+		}
+	}
+	
+	with(obj_Player)
+    {
+		draw_set_color(c_aqua);
+        draw_set_alpha(0.75);
+        
+		draw_rectangle(bbox_left,bbox_top,bbox_right,bbox_bottom,0);
+        
+        draw_set_color(c_white);
+        draw_set_alpha(1);
 	}
 }
 
@@ -421,8 +517,8 @@ if(debug > 0)
 	}
 	
 	draw_set_halign(fa_right);
-	draw_text(xx+global.resWidth-10,yy+40,"fps_real: "+string(fps_real));
-	draw_text(xx+global.resWidth-10,yy+50,"fps: "+string(fps));
+	draw_text(xx+camW-10,yy+40,"fps_real: "+string(fps_real));
+	draw_text(xx+camW-10,yy+50,"fps: "+string(fps));
 	
 	//show_debug_message("delta_time: "+string(delta_time));
 }

@@ -97,8 +97,8 @@ gpu_set_blendmode_ext(bm_dest_alpha, bm_src_alpha);
 
 draw_primitive_begin(pr_trianglelist);
 draw_vertex_colour(visorX,visorY,0,0);
-draw_vertex_colour(visorX+lengthdir_x(500,coneDir + coneSpread),visorY+lengthdir_y(500,coneDir + coneSpread),0,0);
-draw_vertex_colour(visorX+lengthdir_x(500,coneDir - coneSpread),visorY+lengthdir_y(500,coneDir - coneSpread),0,0);
+draw_vertex_colour(visorX+lengthdir_x(coneLength,coneDir + coneSpread),visorY+lengthdir_y(coneLength,coneDir + coneSpread),0,0);
+draw_vertex_colour(visorX+lengthdir_x(coneLength,coneDir - coneSpread),visorY+lengthdir_y(coneLength,coneDir - coneSpread),0,0);
 draw_primitive_end();
 
 gpu_set_blendmode(bm_normal);
@@ -135,10 +135,10 @@ for(var i = 0; i < 360-(coneSpread*2); i = min(i+45,360-(coneSpread*2)))
 {
     var dir = coneDir + coneSpread + i;
     draw_vertex_colour(visorX,visorY,0,0);
-    draw_vertex_colour(visorX+lengthdir_x(500,dir),visorY+lengthdir_y(500,dir),0,0);
+    draw_vertex_colour(visorX+lengthdir_x(coneLength,dir),visorY+lengthdir_y(coneLength,dir),0,0);
 }
 draw_vertex_colour(visorX,visorY,0,0);
-draw_vertex_colour(visorX+lengthdir_x(500,coneDir - coneSpread),visorY+lengthdir_y(500,coneDir - coneSpread),0,0);
+draw_vertex_colour(visorX+lengthdir_x(coneLength,coneDir - coneSpread),visorY+lengthdir_y(coneLength,coneDir - coneSpread),0,0);
 draw_primitive_end();
 
 gpu_set_blendmode(bm_normal);
@@ -185,10 +185,10 @@ for(var i = 0; i < 360-(coneSpread*2); i = min(i+45,360-(coneSpread*2)))
 {
     var dir = coneDir + coneSpread + i;
     draw_vertex_colour(visorX,visorY,0,0);
-    draw_vertex_colour(visorX+lengthdir_x(500,dir),visorY+lengthdir_y(500,dir),0,0);
+    draw_vertex_colour(visorX+lengthdir_x(coneLength,dir),visorY+lengthdir_y(coneLength,dir),0,0);
 }
 draw_vertex_colour(visorX,visorY,0,0);
-draw_vertex_colour(visorX+lengthdir_x(500,coneDir - coneSpread),visorY+lengthdir_y(500,coneDir - coneSpread),0,0);
+draw_vertex_colour(visorX+lengthdir_x(coneLength,coneDir - coneSpread),visorY+lengthdir_y(coneLength,coneDir - coneSpread),0,0);
 draw_primitive_end();
 
 gpu_set_blendmode(bm_normal);

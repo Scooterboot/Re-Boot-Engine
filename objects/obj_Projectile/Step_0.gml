@@ -376,6 +376,17 @@ if(impacted == 1)
 		if(isCharge)
 		{
 			part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.cImpact[particleType],1);
+			
+			var dist = instance_create_depth(0,0,0,obj_Distort);
+			dist.left = x-18;
+			dist.right = x+18;
+			dist.top = y-18;
+			dist.bottom = y+18;
+			dist.alpha = 0;
+			dist.alphaNum = 1;
+			dist.alphaRate = 0.25;
+			dist.alphaMult = 0.5;
+			dist.spread = 0.625;
 		}
 		else
 		{
@@ -406,7 +417,7 @@ if(timeLeft > -1)
 	}
 }
 
-if(!scr_WithinCamRange() && !ignoreCamera)
+if(!scr_WithinCamRange(-1,-1,96) && !ignoreCamera)
 {
 	instance_destroy();
 }

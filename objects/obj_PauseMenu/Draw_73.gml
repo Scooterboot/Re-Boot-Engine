@@ -46,11 +46,6 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		
 	    if(surface_exists(pauseSurf))
 		{
-			var appSurfScale = 1;
-			if(global.upscale == 7)
-			{
-				appSurfScale = 1/obj_Display.screenScale;
-			}
 			surface_resize(pauseSurf,global.resWidth,global.resHeight);
 			surface_set_target(pauseSurf);
 			
@@ -60,7 +55,9 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				texel_x = texture_get_texel_width(tex),
 				texel_y = texture_get_texel_height(tex);
 			shader_set_uniform_f(shader_get_uniform(shd_PauseBlur,"texelSize"),texel_x,texel_y);
-			draw_surface_ext(application_surface,0,0,appSurfScale,appSurfScale,0,c_white,1);
+			gpu_set_blendenable(false);
+			draw_surface_ext(application_surface,0,0,1,1,0,c_white,1);
+			gpu_set_blendenable(true);
 			shader_reset();
 			
 			draw_set_alpha(0.25);
@@ -514,7 +511,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			
 			//scr_DrawMouse(mouse_x-xx,mouse_y-yy);
 			
-			draw_surface_ext(application_surface,0,0,appSurfScale,appSurfScale,0,c_white,1-pauseFade);
+			draw_surface_ext(application_surface,0,0,1,1,0,c_white,1-pauseFade);
 			
 			surface_reset_target();
 			

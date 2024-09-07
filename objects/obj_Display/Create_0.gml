@@ -10,28 +10,28 @@ if(global.screenScale > 0)
 	screenScale = global.screenScale;
 }
 
+global.resWidth = global.ogResWidth;
 if(global.widescreenEnabled)
 {
 	global.resWidth = global.wideResWidth;
 }
-else
-{
-	global.resWidth = global.ogResWidth;
-}
 
-surface_resize(application_surface,global.resWidth,global.resHeight);
+global.screenX = (window_get_width() - (global.resWidth*screenScale)) / 2;
+global.screenY = (window_get_height() - (global.resHeight*screenScale)) / 2;
+
+global.zoomResWidth = global.resWidth*global.zoomScale;
+global.zoomResHeight = global.resHeight*global.zoomScale;
+
+surface_resize(application_surface,ceil(global.zoomResWidth),ceil(global.zoomResHeight));
 
 if (view_camera[0] == -1)
 {
-	view_camera[0] = camera_create_view(0, 0, global.resWidth, global.resHeight);
+	view_camera[0] = camera_create_view(0, 0, ceil(global.zoomResWidth), ceil(global.zoomResHeight));
 }
 
-view_set_wport(0,global.resWidth);
-view_set_hport(0,global.resHeight);
-camera_set_view_size(view_camera[0],global.resWidth,global.resHeight);
-
-global.screenX = (window_get_width() - (surface_get_width(application_surface)*screenScale)) / 2;
-global.screenY = (window_get_height() - (surface_get_height(application_surface)*screenScale)) / 2;
+view_set_wport(0,ceil(global.zoomResWidth));
+view_set_hport(0,ceil(global.zoomResHeight));
+camera_set_view_size(view_camera[0],ceil(global.zoomResWidth),ceil(global.zoomResHeight));
 
 window_set_fullscreen(global.fullScreen);
 display_reset(0, global.vsync);
@@ -72,5 +72,9 @@ edgeText[2] = "Top";
 edgeText[3] = "Left";
 edgeText[4] = "Right";
 
-zoomScale = 1;
 zoomTempFlag = false;
+
+distortStage = shader_get_sampler_index(shd_Distortion,"distortion_texture_page");
+distortTexel = shader_get_uniform(shd_Distortion,"texelSize");
+surfDistort = surface_create(global.zoomResWidth,global.zoomResHeight);
+finalAppSurface = surface_create(global.zoomResWidth,global.zoomResHeight);

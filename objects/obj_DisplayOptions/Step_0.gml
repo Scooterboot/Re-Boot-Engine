@@ -121,7 +121,7 @@ if(screenFade >= 1 && !menuClosing)
 			case 4:
 			{
 				//Upscale mode
-				global.upscale = scr_wrap(global.upscale+select+moveX,0,7);//6);
+				global.upscale = scr_wrap(global.upscale+select+moveX,0,7);
 				break;
 			}
 			case 5:
@@ -147,6 +147,12 @@ if(screenFade >= 1 && !menuClosing)
 				menuClosing = true;
 				break;
 			}
+		}
+		
+		global.resWidth = global.ogResWidth;
+		if(global.widescreenEnabled)
+		{
+			global.resWidth = global.wideResWidth;
 		}
 		window_set_size(global.resWidth*global.screenScale,global.resHeight*global.screenScale);
 		

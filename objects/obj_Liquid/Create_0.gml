@@ -487,11 +487,8 @@ function Bubble(_liq, _x, _y, _velX, _velY) constructor
 	
 	function Update()
 	{
-		var extraRng = 64,
-			cam = obj_Camera;
-		if (!instance_exists(cam) || 
-			posX < cam.x-extraRng || posX > cam.x+global.resWidth+extraRng || 
-			posY < cam.y-extraRng || posY > cam.y+global.resHeight+extraRng)
+		var extraRng = 64;
+		if(!scr_RectangleWithinCam(posX-extraRng,posY-extraRng,posX+extraRng,posY+extraRng))
 		{
 			_delete = true;
 			exit;
@@ -676,14 +673,16 @@ function SurfPos()
 function _SurfWidth()
 {
 	var pos = SurfPos();
-	var camX = camera_get_view_x(view_camera[0]);
-	return scr_round(min(surface_get_width(application_surface)-(pos.X-camX),bbox_right-pos.X + 1));
+	var camX = camera_get_view_x(view_camera[0]),
+		camW = camera_get_view_width(view_camera[0]);
+	return scr_round(min(camW-(pos.X-camX),bbox_right-pos.X + 1));
 }
 function _SurfHeight()
 {
 	var pos = SurfPos();
-	var camY = camera_get_view_y(view_camera[0]);
-	return scr_round(min(surface_get_height(application_surface)-(pos.Y-camY),bbox_bottom-pos.Y + 1));
+	var camY = camera_get_view_y(view_camera[0]),
+		camH = camera_get_view_height(view_camera[0]);
+	return scr_round(min(camH-(pos.Y-camY),bbox_bottom-pos.Y + 1));
 }
 
 function SurfWidth() { return max(_SurfWidth(),1); }

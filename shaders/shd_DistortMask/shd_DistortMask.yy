@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"shd_DistortMask",
+  "name":"shd_DistortMask",
+  "parent":{
+    "name":"Distortion",
+    "path":"folders/Shaders/Distortion.yy",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}

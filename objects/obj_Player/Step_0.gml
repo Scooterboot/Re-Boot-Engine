@@ -4,8 +4,6 @@ var xRayActive = instance_exists(XRay);
 
 if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.pause && !pauseSelect))
 {
-	oldPosition.Equals(position);
-	
 	grappleActive = instance_exists(grapple);
 	
 	#region Appearance Fanfare Anim & Save Anim
@@ -864,11 +862,6 @@ if(xRayActive)
 		{
 			speedBuffer = 0;
 		}
-		
-		if(speedCounter > 0 && move != dir)
-		{
-			speedCounter = 0;
-		}
 	}
 	else
 	{
@@ -893,7 +886,22 @@ if(xRayActive)
 
 	minBoostSpeed = maxSpeed[1,liquidState] + ((maxSpeed[2,liquidState] - maxSpeed[1,liquidState])*0.75);
 
-	var stopBoosting = !speedBoostWJ && ((sign(velX) != dir && sign(prevVelX) != dir) || speedKillCounter >= speedKillMax || (move != dir && (aimAngle > -2 || !cJump) && ((state != State.Somersault && state != State.Morph) || (state == State.Morph && abs(velX) <= maxSpeed[5,liquidState]) || grounded) && morphFrame <= 0));
+	var stopBoosting = false;
+	if(!speedBoostWJ)
+	{
+		if((sign(velX) != dir && sign(prevVelX) != dir) || (speedKillCounter >= speedKillMax))
+		{
+			stopBoosting = true;
+		}
+		if(move != dir && (speedCounter > 0 || !grounded) && morphFrame <= 0 && (aimAngle > -2 || !cJump))
+		{
+			if((state != State.Somersault && state != State.Morph) || (state == State.Morph && abs(velX) <= maxSpeed[5,liquidState]) || grounded)
+			{
+				stopBoosting = true;
+			}
+		}
+	}
+	
 	var spiderBoosting = (SpiderActive() && sign(spiderSpeed) == spiderMove && abs(spiderSpeed) > maxSpeed[5,liquidState]);
 	if(state != State.Grapple && (!boots[Boots.SpeedBoost] || abs(dirFrame) < 4 || stopBoosting) && !spiderBoosting)
 	{
@@ -2447,6 +2455,12 @@ if(xRayActive)
 				unmorphing = true;
 				morphFrame = 8;
 				aimUpDelay = 10;
+				
+				if(cUp && rUp && morphStall <= 0)
+				{
+					velY = min(velY, 0);
+					morphStall = morphStallMax;
+				}
 			}
 			else
 			{
@@ -2611,15 +2625,7 @@ if(xRayActive)
 			ChangeState(state,stateFrame,mask_Player_Jump,false);
 		}
 		
-		canWallJump = false;
-		if ((entity_place_collide(-8*move2,0) && entity_place_collide(-8*move2,8)) || 
-			(lhc_place_meeting(x-8*move2,y,"IPlatform") && lhc_place_meeting(x-8*move2,y+8,"IPlatform")))
-		{
-			if(!lhc_collision_line(x-4*move2,y+9,x-4*move2,y+25,solids,true,true) && wallJumpDelay <= 0 && move2 != 0 && wjFrame <= 0)
-			{
-				canWallJump = true;
-			}
-		}
+		canWallJump = (entity_place_collide(-8*move2,0) || lhc_place_meeting(position.X-8*move2,position.Y,"IPlatform") && wallJumpDelay <= 0 && move2 != 0 && wjFrame <= 0);
 		wallJumpDelay = max(wallJumpDelay - 1, 0);
 		
 		if(grounded )//|| PlayerGrounded())
@@ -2766,16 +2772,7 @@ if(xRayActive)
 			}
 		}
 		
-		canWallJump = false;
-		if ((entity_place_collide(-8*move2,0) && entity_place_collide(-8*move2,8)) || 
-			(lhc_place_meeting(x-8*move2,y,"IPlatform") && lhc_place_meeting(x-8*move2,y+8,"IPlatform")))
-		{
-			if(!lhc_collision_line(x-4*move2,y+9,x-4*move2,y+25,solids,true,true) && wallJumpDelay <= 0 && move2 != 0 && wjFrame <= 0)
-			{
-				canWallJump = true;
-			}
-		}
-		
+		canWallJump = (entity_place_collide(-8*move2,0) || lhc_place_meeting(position.X-8*move2,position.Y,"IPlatform") && wallJumpDelay <= 0 && move2 != 0 && wjFrame <= 0);
 		wallJumpDelay = max(wallJumpDelay - 1, 0);
 		
 		if(grounded)
@@ -3166,7 +3163,7 @@ if(xRayActive)
 					shineRestart = false;
 					shineEnd = 0;
 				}
-				else if(cDown && move2 == -dir)
+				else if(cDown && move2 == -dir && chainSparkReCharge)
 				{
 					shineCharge = shineChargeMax;
 					shineEnd = 1;
@@ -4068,6 +4065,8 @@ if(xRayActive)
 	}
 	justBounced = false;
 	prevSpiderEdge = spiderEdge;
+	
+	morphStall = max(morphStall-1,0);
 	
 	if(!PlayerGrounded() && !PlayerOnPlatform())
 	{

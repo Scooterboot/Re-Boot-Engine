@@ -23,7 +23,7 @@
   ],
   "name":"mask_Player_Somersault",
   "nineSlice":null,
-  "origin":9,
+  "origin":4,
   "parent":{
     "name":"Mask",
     "path":"folders/Sprites/Player/Mask.yy",
@@ -76,7 +76,7 @@
     "visibleRange":null,
     "volume":1.0,
     "xorigin":5,
-    "yorigin":11,
+    "yorigin":12,
   },
   "swatchColours":null,
   "swfPrecision":2.525,

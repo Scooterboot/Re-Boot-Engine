@@ -15,15 +15,15 @@ if(instance_exists(player))
 	var grap = obj_GrappleBeamShot;
 	if(instance_exists(grap))
 	{
-		var colLine = collision_line(player.x,player.y,grap.x,grap.y,self,false,false);
-		if(place_meeting(x,y,grap) || colLine || point_distance(x,y,grap.x,grap.y) < 25)
+		var colLine = collision_line(player.x,player.y,grap.x,grap.y,self,true,false);
+		if(place_meeting(x,y,grap) || colLine)
 		{
 			OnPlayerPickup();
 			instance_destroy();
 		}
 	}
 	
-	if(place_meeting(x,y,player) || point_distance(x,y,player.x,player.y) < 25)
+	if(place_meeting(x,y,player))
 	{
 		OnPlayerPickup();
 		instance_destroy();

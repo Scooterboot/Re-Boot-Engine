@@ -494,6 +494,6 @@ if(instance_exists(obj_ScreenShaker) && obj_ScreenShaker.active)// && !global.ga
 	shakeY += obj_ScreenShaker.shakeY;
 }
 
-var xDiff = scr_round(x-playerX),
-	yDiff = scr_round(y-playerY);
-camera_set_view_pos(view_camera[0], scr_round(playerX+shakeX)+xDiff, scr_round(playerY+shakeY)+yDiff);
+var camX = scr_round(playerX+shakeX + (global.resWidth-global.zoomResWidth)/2) + scr_round(x-playerX),
+	camY = scr_round(playerY+shakeY + (global.resHeight-global.zoomResHeight)/2) + scr_round(y-playerY);
+camera_set_view_pos(view_camera[0], camX, camY);

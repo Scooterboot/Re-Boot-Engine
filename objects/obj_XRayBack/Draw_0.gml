@@ -44,8 +44,8 @@ else
 		
 		draw_primitive_begin(pr_trianglelist);
 		draw_vertex_colour(visorX,visorY,0,0.375);
-		draw_vertex_colour(visorX+lengthdir_x(500,coneDir + coneSpread),visorY+lengthdir_y(500,coneDir + coneSpread),0,0.5);
-		draw_vertex_colour(visorX+lengthdir_x(500,coneDir - coneSpread),visorY+lengthdir_y(500,coneDir - coneSpread),0,0.5);
+		draw_vertex_colour(visorX+lengthdir_x(coneLength,coneDir + coneSpread),visorY+lengthdir_y(coneLength,coneDir + coneSpread),0,0.5);
+		draw_vertex_colour(visorX+lengthdir_x(coneLength,coneDir - coneSpread),visorY+lengthdir_y(coneLength,coneDir - coneSpread),0,0.5);
 		draw_primitive_end();
 		
 		gpu_set_colorwriteenable(1,1,1,1);
@@ -61,8 +61,8 @@ else
 		
 		draw_primitive_begin(pr_trianglelist);
 		draw_vertex_colour(visorX,visorY,0,0.375);
-		draw_vertex_colour(visorX+lengthdir_x(500,coneDir + coneSpread),visorY+lengthdir_y(500,coneDir + coneSpread),0,0.5);
-		draw_vertex_colour(visorX+lengthdir_x(500,coneDir - coneSpread),visorY+lengthdir_y(500,coneDir - coneSpread),0,0.5);
+		draw_vertex_colour(visorX+lengthdir_x(coneLength,coneDir + coneSpread),visorY+lengthdir_y(coneLength,coneDir + coneSpread),0,0.5);
+		draw_vertex_colour(visorX+lengthdir_x(coneLength,coneDir - coneSpread),visorY+lengthdir_y(coneLength,coneDir - coneSpread),0,0.5);
 		draw_primitive_end();
 		
 		if(backAlphaNum > 0)
@@ -88,8 +88,8 @@ else
 		gpu_set_blendmode(bm_add);
 		draw_primitive_begin(pr_trianglelist);
 		draw_vertex_colour(visorX,visorY,c_dkgray,backAlpha*0.5);
-		draw_vertex_colour(visorX+lengthdir_x(500,coneDir + coneSpread),visorY+lengthdir_y(500,coneDir + coneSpread),c_dkgray,0);
-		draw_vertex_colour(visorX+lengthdir_x(500,coneDir - coneSpread),visorY+lengthdir_y(500,coneDir - coneSpread),c_dkgray,0);
+		draw_vertex_colour(visorX+lengthdir_x(coneLength,coneDir + coneSpread),visorY+lengthdir_y(coneLength,coneDir + coneSpread),c_dkgray,0);
+		draw_vertex_colour(visorX+lengthdir_x(coneLength,coneDir - coneSpread),visorY+lengthdir_y(coneLength,coneDir - coneSpread),c_dkgray,0);
 		draw_primitive_end();
 		gpu_set_blendmode(bm_normal);
 	}

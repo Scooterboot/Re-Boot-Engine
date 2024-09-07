@@ -60,7 +60,6 @@ colList = ds_list_create();
 
 function camera_collide(colX, colY, dsList)
 {
-	//return collision_rectangle_list(x+colX, y+colY, x+colX+global.resWidth-1, y+colY+global.resHeight-1,obj_CamTile,false,true,dsList,true);
 	var col = collision_rectangle_list(x+colX, y+colY, x+colX+global.resWidth-1, y+colY+global.resHeight-1,obj_CamTile,false,true,dsList,true);
 	
 	var wDiff = abs(global.resWidth - global.ogResWidth)/2;
@@ -68,26 +67,3 @@ function camera_collide(colX, colY, dsList)
 	
 	return col;
 }
-
-/*
-function CamTileFacing_Down(camTile)
-{
-	return ((angle_difference(camTile.image_angle,0) == 0 && camTile.image_yscale > 0) || 
-			(angle_difference(camTile.image_angle,180) == 0 && camTile.image_yscale < 0));
-}
-function CamTileFacing_Up(camTile)
-{
-	return ((angle_difference(camTile.image_angle,180) == 0 && camTile.image_yscale > 0) || 
-			(angle_difference(camTile.image_angle,0) == 0 && camTile.image_yscale < 0));
-}
-function CamTileFacing_Right(camTile)
-{
-	return ((angle_difference(camTile.image_angle,90) == 0 && camTile.image_yscale > 0) || 
-			(angle_difference(camTile.image_angle,-90) == 0 && camTile.image_yscale < 0));
-}
-function CamTileFacing_Left(camTile)
-{
-	return ((angle_difference(camTile.image_angle,-90) == 0 && camTile.image_yscale > 0) || 
-			(angle_difference(camTile.image_angle,90) == 0 && camTile.image_yscale < 0));
-}
-*/

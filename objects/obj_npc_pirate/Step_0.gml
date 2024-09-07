@@ -173,7 +173,7 @@ if(state == PirateState.Shoot)
 	        {
 	            shot.direction = 180;
 	        }
-	        shot.creator = object_index;
+	        shot.creator = id;
 			shot.xstart = shot.x;
 			shot.ystart = shot.y;
 			

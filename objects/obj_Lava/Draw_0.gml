@@ -44,7 +44,9 @@ if(surface_exists(finalSurface))
 	surface_resize(finalSurface, SurfWidth(), SurfHeight() + extraDistH);
 	surface_set_target(finalSurface);
 	
+	gpu_set_blendenable(false);
 	draw_surface_ext(application_surface,camX-pos.X,camY-pos.Y + extraDistH,1,1,0,c_white,1);
+	gpu_set_blendenable(true);
 	
 	if(global.waterDistortion)
 	{
@@ -59,7 +61,7 @@ if(surface_exists(finalSurface))
 		
 		draw_primitive_begin_texture(pr_trianglestrip, tex);
 		
-		for (var i = 0; i < fH; i += 6)
+		for (var i = 0; i <= fH+6; i += 6)
 		{
 			var mult = -min(1.5,i/6);
 			var spread = mult * sin(time + (i+pos.Y) / 4);

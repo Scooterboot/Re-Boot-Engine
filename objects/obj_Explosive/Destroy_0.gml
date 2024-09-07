@@ -1,6 +1,6 @@
 /// @description Explode
 event_inherited();
-if((scr_WithinCamRange() || ignoreCamera) && exploProj != noone)
+if((scr_WithinCamRange(-1,-1,96) || ignoreCamera) && exploProj != noone)
 {
 	if(exploSnd == -1)
 	{

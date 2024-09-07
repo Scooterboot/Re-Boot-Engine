@@ -23,7 +23,7 @@ function scr_MainInitialize()
 
 	global.fullScreen = ini_read_real("Display", "fullscreen", false);				//load fullscreen setting
 	global.screenScale = ini_read_real("Display", "scale", 3);						//load display scale setting
-	global.widescreenEnabled = ini_read_real("Display", "widescreen", false);		//load widescreen setting
+	global.widescreenEnabled = ini_read_real("Display", "widescreen", true);		//load widescreen setting
 	global.vsync = ini_read_real("Display", "vsync", true);							//load vsync setting
 	global.upscale = ini_read_real("Display", "upscale", 0);						//load upscale setting
 	global.hudDisplay = ini_read_real("Display", "hud display", true);				//load display HUD setting
@@ -37,12 +37,16 @@ function scr_MainInitialize()
 #endregion
 
 	global.maxScreenScale = 1;
-
-	global.resWidth = 320;//256;
-	global.resHeight = 240;//224;
+	global.zoomScale = 1;
 	
-	global.wideResWidth = 426;//400;
-	global.ogResWidth = 320;//256;
+	// res: 320x240, widescreen: 426x240 (SM res: 256x224, widescreen: 400x224)
+	global.wideResWidth = 426;
+	global.ogResWidth = 320;
+	
+	global.resWidth = global.ogResWidth;
+	global.resHeight = 240;
+	global.zoomResWidth = global.resWidth*global.zoomScale;
+	global.zoomResHeight = global.resHeight*global.zoomScale;
 
 	global.roomTrans = false;	//variable that checks whether the player is transitioning from room to room
 	global.gamePaused = false;	//variable that checks if the game is paused

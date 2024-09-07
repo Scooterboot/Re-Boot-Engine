@@ -7,7 +7,7 @@ if(global.gamePaused)
 }
 
 var player = instance_place(x,y-2,obj_Player);
-if(instance_exists(player) && player.fVelY >= 0 && player.grounded)
+if(instance_exists(player) && player.fVelY >= 0)// && player.grounded)
 {
 	crumble = true;
 	if(abs(player.velX) > player.maxSpeed[5,player.liquidState])

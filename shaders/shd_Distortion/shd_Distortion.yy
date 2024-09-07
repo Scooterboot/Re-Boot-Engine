@@ -3,8 +3,8 @@
   "%Name":"shd_Distortion",
   "name":"shd_Distortion",
   "parent":{
-    "name":"Shaders",
-    "path":"folders/Shaders.yy",
+    "name":"Distortion",
+    "path":"folders/Shaders/Distortion.yy",
   },
   "resourceType":"GMShader",
   "resourceVersion":"2.0",

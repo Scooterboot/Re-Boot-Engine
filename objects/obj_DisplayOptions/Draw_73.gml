@@ -163,12 +163,7 @@ if(surface_exists(surf))
 	draw_set_alpha(1);
 	draw_set_color(c_black);
 	
-	var appSurfScale = 1;
-	if(global.upscale == 7)
-	{
-		appSurfScale = 1/obj_Display.screenScale;
-	}
-	draw_surface_ext(application_surface,0,0,appSurfScale,appSurfScale,0,c_white,1-alpha);
+	draw_surface_ext(application_surface,0,0,1,1,0,c_white,1-alpha);
 	
 	surface_reset_target();
 	

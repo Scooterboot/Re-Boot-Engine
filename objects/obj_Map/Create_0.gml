@@ -20,7 +20,7 @@ prevPlayerMapY = 0;
 
 function GetMapPosX(_x)
 {
-	var roomSizeW = scr_floor(room_width / global.rmMapSize)-1
+	var roomSizeW = scr_floor(room_width / global.rmMapSize)-1;
 	return clamp(scr_floor((_x-global.rmMapPixX)/global.rmMapSize),0,roomSizeW) + global.rmMapX;
 }
 function GetMapPosY(_y)

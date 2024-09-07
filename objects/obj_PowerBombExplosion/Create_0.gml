@@ -2,7 +2,8 @@
 event_inherited();
 image_speed = 0;
 scaleTimer = 0;
-scale = 0.05*scaleTimer;
+scaleMult = 0.0375; //0.05;
+scale = scaleMult*scaleTimer;
 image_xscale = scale;
 image_yscale = scale;
 pAlpha = 1;
@@ -21,3 +22,5 @@ type = ProjType.Bomb;
 damageSubType[3] = true;
 damageSubType[4] = true;
 damageSubType[5] = true;
+
+distort = instance_create_depth(x,y,0,obj_Distort);

@@ -2802,7 +2802,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 										flare.direction = flareDir;
 										flare.image_angle = flareDir;
 										flare.image_xscale = dir2;
-										flare.creator = object_index;
+										flare.creator = id;
 									
 										hyperFired = delay+2;
 									}
@@ -2979,7 +2979,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 								flare.direction = flareDir;
 								flare.image_angle = flareDir;
 								flare.image_xscale = dir2;
-								flare.creator = object_index;
+								flare.creator = id;
 								if(beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1))
 								{
 									flare.freezeType = 2;
