@@ -242,7 +242,7 @@ moonFall = false;
 ledgeFall = false;
 ledgeFall2 = false;
 justFell = false;
-//fellVel = 0;
+fell = false;
 
 onPlatform = false;
 
@@ -1131,7 +1131,7 @@ function AfterImage(_player, _alpha, _num) constructor
 
 function CanPlatformCollide()
 {
-	return (grounded || !cDown) && (!spiderBall || spiderEdge == Edge.None || spiderEdge == Edge.Bottom);
+	return (grounded || !cDown) && (!spiderBall || spiderEdge == Edge.None || spiderEdge == Edge.Bottom) && !fell;
 }
 
 function entity_collision(listNum)
@@ -1173,22 +1173,6 @@ function ModifyFinalVelX(fVX)
 }
 function ModifyFinalVelY(fVY)
 {
-	var fellVel = 1;
-	var shouldForceDown = (state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Dodge && jump <= 0 && bombJump <= 0);
-	//if((entity_place_collide(0,fVY+fellVel) || (bbox_bottom+fVY+fellVel) >= room_height) && fVY >= 0)
-	if(PlayerGrounded(fVY+fellVel) && fVY >= 0)
-	{
-		justFell = shouldForceDown;
-	}
-	else
-	{
-		if(justFell && ledgeFall && fVY >= 0 && fVY <= fGrav)// && state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Dodge)
-		{
-			fVY += fellVel;
-			stallCamera = true;
-		}
-		justFell = false;
-	}
 	return fVY;
 }
 
@@ -2154,9 +2138,9 @@ function PlayerGrounded(ydiff = 1)
 }
 #endregion
 #region PlayerOnPlatform
-function PlayerOnPlatform()
+function PlayerOnPlatform(ydiff = 1)
 {
-	return (entityPlatformCheck(0,1) && fVelY >= 0 && state != State.Spark && state != State.BallSpark);
+	return ((entityPlatformCheck(0,ydiff) || entityPlatformCheck(0,ydiff,x,y)) && fVelY >= 0 && state != State.Spark && state != State.BallSpark);
 }
 #endregion
 

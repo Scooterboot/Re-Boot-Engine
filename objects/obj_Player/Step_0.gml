@@ -2129,14 +2129,29 @@ if(xRayActive)
 		onPlatform = true;
 	}
 	
+	fell = false;
+	var shouldForceDown = (state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Dodge && jump <= 0 && bombJump <= 0);
+	if((PlayerGrounded() || PlayerOnPlatform()) && fVelY >= 0)
+	{
+		justFell = shouldForceDown;
+	}
+	else
+	{
+		if(justFell && ledgeFall && fVelY >= 0 && fVelY <= fGrav)
+		{
+			fell = true;
+			if(!entity_place_collide(0,1))
+			{
+				position.Y += 1;
+				y = scr_round(position.Y);
+			}
+			stallCamera = true;
+		}
+		justFell = false;
+	}
+	
 	if(speedKill)
 	{
-		/*var _max = speedKillMax;
-		if(speedBoostWallJump && speedBoostWJ && speedBoostWJCounter < speedBoostWJMax)
-		{
-			_max -= 1;
-		}
-		speedKillCounter = min(speedKillCounter+1,_max);*/
 		speedKillCounter = min(speedKillCounter+1,speedKillMax);
 	}
 	else
