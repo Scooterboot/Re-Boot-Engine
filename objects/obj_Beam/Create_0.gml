@@ -110,13 +110,15 @@ if(isPlasma)
 {
 	if(isWave || isSpazer)
 	{
-		delay += 3 + (3*isCharge);
+		//delay += 3 + (3*isCharge);
+		delay = 2 + (2*isCharge);
 	}
 	multiHit = true;
 }
 else if(isSpazer)
 {
-	delay += 2 + (1*isCharge);
+	//delay += 2 + (1*isCharge);
+	delay = 1 + isCharge;
 }
 //wavesPerSecond *= 1.25;
 wavesPerSecond *= 1.5;
@@ -136,3 +138,49 @@ if(object_index == obj_PowerBeamShot)
 image_speed = 0;//(image_number > 1 && rotFrame == 0);
 
 #endregion
+
+function OnImpact(posX,posY,waveImpact = false)
+{
+	if(impactSnd != noone && !waveImpact)
+	{
+		if(audio_is_playing(impactSnd))
+		{
+			audio_stop_sound(impactSnd);
+		}
+		audio_play_sound(impactSnd,0,false);
+	}
+	if(particleType != -1 && particleType <= 4)
+	{
+		part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.bTrails[particleType],7*(1+isCharge));
+		if(isCharge)
+		{
+			part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.cImpact[particleType],1);
+			
+			var dist = instance_create_depth(0,0,0,obj_Distort);
+			dist.left = posX-18;
+			dist.right = posX+18;
+			dist.top = posY-18;
+			dist.bottom = posY+18;
+			dist.alpha = 0;
+			dist.alphaNum = 1;
+			dist.alphaRate = 0.25;
+			dist.colorMult = 0.5;
+			dist.spread = 0.625;
+		}
+		else
+		{
+			part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.impact[particleType],1);
+			
+			var dist = instance_create_depth(0,0,0,obj_Distort);
+			dist.left = posX-7;
+			dist.right = posX+7;
+			dist.top = posY-7;
+			dist.bottom = posY+7;
+			dist.alpha = 0;
+			dist.alphaNum = 1;
+			dist.alphaRate = 1/7;
+			dist.alphaRateMultDecr = 4;
+			dist.colorMult = 0.05;
+		}
+	}
+}

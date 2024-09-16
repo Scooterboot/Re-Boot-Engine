@@ -45,6 +45,7 @@ impacted = 0;
 reflected = false;
 
 shift = 0;
+prevShift = 0;
 t = 0;
 t2 = 0;
 increment = pi*2 / 60;
@@ -82,19 +83,6 @@ for(var i = 0; i < 11; i++)
 }
 oldPositionsSet = false;
 
-/*
-isBomb = false;
-isMissile = false;
-isSuperMissile = false;
-isBeam = false;
-isGrapple = false;
-
-isCharge = false;
-isIce = false;
-isWave = false;
-isSpazer = false;
-isPlasma = false;
-*/
 enum ProjType
 {
 	Beam,
@@ -162,7 +150,7 @@ function entity_collision(listNum)
 		{
 			var block = blockList[| i];
 			var isSolid = true;
-			if(type != ProjType.Bomb)
+			if(type != ProjType.Bomb && doorOpenType >= 0 && tileCollide)
 			{
 				if(block.object_index == obj_DoorHatch || object_is_ancestor(block.object_index,obj_DoorHatch))
 				{
@@ -192,77 +180,30 @@ function entity_collision(listNum)
 }
 
 #endregion
-#region Collision (Unused atm)
 
-function ModifyFinalVelX(fVX)
+function OnImpact(posX,posY,waveImpact = false)
 {
-	if(impacted > 0)
+	if(impactSnd != noone && !waveImpact)
 	{
-		return 0;
-	}
-	return fVX;
-}
-function ModifyFinalVelY(fVY)
-{
-	if(impacted > 0)
-	{
-		return 0;
-	}
-	return fVY;
-}
-
-function CanMoveUpSlope_Bottom() { return false; }
-function CanMoveUpSlope_Top() { return false; }
-function CanMoveUpSlope_Left() { return false; }
-function CanMoveUpSlope_Right() { return false; }
-
-function CanMoveDownSlope_Bottom() { return false; }
-function CanMoveDownSlope_Top() { return false; }
-function CanMoveDownSlope_Left() { return false; }
-function CanMoveDownSlope_Right() { return false; }
-
-function OnXCollision(fVX)
-{
-	Impact();
-}
-function OnYCollision(fVY)
-{
-	Impact();
-}
-function Impact()
-{
-	//velX = 0;
-	//velY = 0;
-	//fVelX = 0;
-	//fVelY = 0;
-	//speed_x = 0;
-	//speed_y = 0;
-	if(impacted <= 0)
-	{
-		if(impactSnd != noone)
+		if(audio_is_playing(impactSnd))
 		{
 			audio_stop_sound(impactSnd);
-			audio_play_sound(impactSnd,0,false);
 		}
-		if(particleType != -1 && particleType <= 4)
+		audio_play_sound(impactSnd,0,false);
+	}
+	if(particleType != -1 && particleType <= 4)
+	{
+		part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.bTrails[particleType],7*(1+isCharge));
+		if(isCharge)
 		{
-			part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.bTrails[particleType],7*(1+isCharge));
-			if(isCharge)
-			{
-				part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.cImpact[particleType],1);
-			}
-			else
-			{
-				part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.impact[particleType],1);
-			}
+			part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.cImpact[particleType],1);
 		}
-		impacted = 1;
+		else
+		{
+			part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.impact[particleType],1);
+		}
 	}
 }
-
-#endregion
-
-function OnImpact(posX,posY) {}
 
 function TileInteract(_x,_y)
 {

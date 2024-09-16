@@ -168,7 +168,7 @@ function scr_DrawHUD_Energy() {
 			_prevWidth += _widths[i];
 		}
 		
-		if(speedCounter < 4)
+		if(speedCounter < 4 && (state == State.Stand || speedKeep == 1 || (speedKeep == 2 && liquidState <= 0)))
 		{
 			width = _prevWidth + _widths[speedCounter] * ((speedBuffer+1) / speedBufferMax);
 			for(var j = 0; j < height; j++)

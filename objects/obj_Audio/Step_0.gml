@@ -147,14 +147,20 @@ else if(global.gamePaused)
 {
 	for(var i = 0; i < array_length(sndPauseArray); i++)
 	{
-		audio_pause_sound(sndPauseArray[i]);
+		if(audio_is_playing(sndPauseArray[i]))
+		{
+			audio_pause_sound(sndPauseArray[i]);
+		}
 	}
 }
 else
 {
 	for(var i = 0; i < array_length(sndPauseArray); i++)
 	{
-		audio_resume_sound(sndPauseArray[i]);
+		if(audio_is_playing(sndPauseArray[i]))
+		{
+			audio_resume_sound(sndPauseArray[i]);
+		}
 	}
 }
 

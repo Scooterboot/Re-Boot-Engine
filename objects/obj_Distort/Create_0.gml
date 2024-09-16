@@ -7,33 +7,33 @@ top = 0;
 
 alpha = 1;
 alphaRate = 0;
+alphaRateMultIncr = 1;
+alphaRateMultDecr = 1;
 alphaNum = -1;
+alphaMult = 1;
 function Step()
 {
-	if(!global.gamePaused)
+	if(alphaNum > 0)
 	{
-		if(alphaNum > 0)
+		alpha += alphaRate * alphaRateMultIncr;
+		if(alpha >= 1)
 		{
-			alpha += alphaRate;
-			if(alpha >= 1)
-			{
-				alpha = 1;
-				alphaNum *= -1;
-			}
+			alpha = 1;
+			alphaNum *= -1;
 		}
-		else
+	}
+	else
+	{
+		alpha -= alphaRate * alphaRateMultDecr;
+		if(alpha <= 0)
 		{
-			alpha -= alphaRate;
-			if(alpha <= 0)
-			{
-				alpha = 0;
-				instance_destroy();
-			}
+			alpha = 0;
+			instance_destroy();
 		}
 	}
 }
 
-alphaMult = 1;
+colorMult = 1;
 spread = 1;
 width = 1;
 
@@ -56,7 +56,7 @@ function UpdateSurface()
 			draw_vertex_color((_width/2),(_height/2),make_color_rgb(127,127,255),1);
 			for(var i = 0; i <= 360; i += 5)
 			{
-				var col = make_color_rgb(127+lengthdir_x(127,i),127-lengthdir_y(127,i),127);
+				var col = make_color_rgb(127+lengthdir_x(127,i)*colorMult,127-lengthdir_y(127,i)*colorMult,127);
 				
 				var x1 = (_width/2)+lengthdir_x((_width/2),i),
 					y1 = (_height/2)+lengthdir_y((_height/2),i);
@@ -77,7 +77,7 @@ function DrawDistort(_xoff = 0, _yoff = 0)
 {
 	var _width = right-left,
 		_height = bottom-top;
-	if(_width > 0 && _width > 0 && surface_exists(surf))
+	if(visible && _width > 0 && _width > 0 && surface_exists(surf))
 	{
 		shader_set(shd_DistortMask);
 		shader_set_uniform_f(distSpread,spread);

@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"snd_PerfectFastWJ",
+  "audioGroupId":{
+    "name":"audio_sound",
+    "path":"audiogroups/audio_sound",
+  },
+  "bitDepth":1,
+  "bitRate":128,
+  "compression":0,
+  "conversionMode":0,
+  "duration":0.537868,
+  "name":"snd_PerfectFastWJ",
+  "parent":{
+    "name":"Player",
+    "path":"folders/Sounds/Player.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"snd_PerfectFastWJ.wav",
+  "type":1,
+  "volume":1.0,
+}

@@ -262,7 +262,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.8.0.169",
+    "IDEVersion":"2024.8.1.171",
   },
   "name":"ReBootEngine",
   "resources":[
@@ -804,6 +804,7 @@
     {"id":{"name":"snd_Elevator","path":"sounds/snd_Elevator/snd_Elevator.yy",},},
     {"id":{"name":"snd_ExpansionGet","path":"sounds/snd_ExpansionGet/snd_ExpansionGet.yy",},},
     {"id":{"name":"snd_Explode","path":"sounds/snd_Explode/snd_Explode.yy",},},
+    {"id":{"name":"snd_FastWallJump","path":"sounds/snd_FastWallJump/snd_FastWallJump.yy",},},
     {"id":{"name":"snd_FreezeNPC","path":"sounds/snd_FreezeNPC/snd_FreezeNPC.yy",},},
     {"id":{"name":"snd_Gadora_Charge","path":"sounds/snd_Gadora_Charge/snd_Gadora_Charge.yy",},},
     {"id":{"name":"snd_Gadora_EyeBeam","path":"sounds/snd_Gadora_EyeBeam/snd_Gadora_EyeBeam.yy",},},
@@ -861,6 +862,7 @@
     {"id":{"name":"snd_Morph","path":"sounds/snd_Morph/snd_Morph.yy",},},
     {"id":{"name":"snd_MorphLauncher","path":"sounds/snd_MorphLauncher/snd_MorphLauncher.yy",},},
     {"id":{"name":"snd_MorphLocked","path":"sounds/snd_MorphLocked/snd_MorphLocked.yy",},},
+    {"id":{"name":"snd_PerfectFastWJ","path":"sounds/snd_PerfectFastWJ/snd_PerfectFastWJ.yy",},},
     {"id":{"name":"snd_Pickup_EnergyDrop","path":"sounds/snd_Pickup_EnergyDrop/snd_Pickup_EnergyDrop.yy",},},
     {"id":{"name":"snd_Pickup_MissileDrop","path":"sounds/snd_Pickup_MissileDrop/snd_Pickup_MissileDrop.yy",},},
     {"id":{"name":"snd_PlasmaBeam_ChargeShot","path":"sounds/snd_PlasmaBeam_ChargeShot/snd_PlasmaBeam_ChargeShot.yy",},},
@@ -1165,6 +1167,7 @@
     {"id":{"name":"sprt_MorphLauncher_Back","path":"sprites/sprt_MorphLauncher_Back/sprt_MorphLauncher_Back.yy",},},
     {"id":{"name":"sprt_MorphLauncher_Light","path":"sprites/sprt_MorphLauncher_Light/sprt_MorphLauncher_Light.yy",},},
     {"id":{"name":"sprt_MorphLauncher","path":"sprites/sprt_MorphLauncher/sprt_MorphLauncher.yy",},},
+    {"id":{"name":"sprt_MorphTrail","path":"sprites/sprt_MorphTrail/sprt_MorphTrail.yy",},},
     {"id":{"name":"sprt_MovingSlope_4th","path":"sprites/sprt_MovingSlope_4th/sprt_MovingSlope_4th.yy",},},
     {"id":{"name":"sprt_MovingSlope","path":"sprites/sprt_MovingSlope/sprt_MovingSlope.yy",},},
     {"id":{"name":"sprt_MovingTile","path":"sprites/sprt_MovingTile/sprt_MovingTile.yy",},},

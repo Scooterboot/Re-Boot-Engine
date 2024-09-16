@@ -86,18 +86,13 @@ if(fired < 4)
 		fired++;
 	}
 	
-	var hObj = id;
-	
-	with(obj_Player)
-	{
-		chameleon_set(sprt_HyperBeamPalette,obj_Display.hyperRainbowCycle,0,0,11);
-		draw_sprite_ext(sSprt,hObj.firedFrame,scr_round(shootPosX),scr_round(shootPosY),1,1,0,c_white,1);
-		shader_reset();
+	chameleon_set(sprt_HyperBeamPalette,obj_Display.hyperRainbowCycle,0,0,11);
+	draw_sprite_ext(sSprt,firedFrame,scr_round(firedX),scr_round(firedY),1,1,0,c_white,1);
+	shader_reset();
 		
-		gpu_set_blendmode(bm_add);
-		draw_sprite_ext(sprt_HyperBeamStartParticle_Glow,hObj.firedFrame,scr_round(shootPosX),scr_round(shootPosY),1,1,0,c_white,0.75);
-		gpu_set_blendmode(bm_normal);
-	}
+	gpu_set_blendmode(bm_add);
+	draw_sprite_ext(sprt_HyperBeamStartParticle_Glow,firedFrame,scr_round(firedX),scr_round(firedY),1,1,0,c_white,0.75);
+	gpu_set_blendmode(bm_normal);
 }
 
 if(!global.gamePaused)

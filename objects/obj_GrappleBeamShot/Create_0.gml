@@ -72,3 +72,31 @@ function CanDamageNPC(damage,npc)
 	}
 	return true;
 }
+
+function OnImpact(posX,posY,waveImpact = false)
+{
+	if(impactSnd != noone && !waveImpact)
+	{
+		if(audio_is_playing(impactSnd))
+		{
+			audio_stop_sound(impactSnd);
+		}
+		audio_play_sound(impactSnd,0,false);
+	}
+	if(particleType != -1 && particleType <= 4)
+	{
+		part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.gTrail,7);
+		part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.gImpact,1);
+		
+		var dist = instance_create_depth(0,0,0,obj_Distort);
+		dist.left = posX-7;
+		dist.right = posX+7;
+		dist.top = posY-7;
+		dist.bottom = posY+7;
+		dist.alpha = 0;
+		dist.alphaNum = 1;
+		dist.alphaRate = 0.125;
+		dist.alphaRateMultDecr = 3;
+		dist.colorMult = 0.0625;
+	}
+}

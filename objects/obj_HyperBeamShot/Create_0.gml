@@ -16,6 +16,8 @@ rFrame = 0;
 fired = 0;
 firedFrame = 0;
 firedFrameCounter = 0;
+firedX = xstart;
+firedY = ystart;
 
 setWave = true;
 
@@ -30,9 +32,18 @@ blockDestroyType = 7;
 doorOpenType = 4;
 
 impactObj = obj_HyperBeamImpact;
-function OnImpact(posX,posY)
+function OnImpact(posX,posY,waveImpact = false)
 {
-	if((scr_WithinCamRange() || ignoreCamera) && impactObj != noone)
+	if(impactSnd != noone && !waveImpact)
+	{
+		if(audio_is_playing(impactSnd))
+		{
+			audio_stop_sound(impactSnd);
+		}
+		audio_play_sound(impactSnd,0,false);
+	}
+	
+	if(impactObj != noone)
 	{
 		var explo = instance_create_layer(posX,posY,"Projectiles_fg",impactObj);
 	    explo.damage = damage;
@@ -40,15 +51,28 @@ function OnImpact(posX,posY)
 		if(impactObj == obj_HyperBeamImpact)
 		{
 			var dist = instance_create_depth(0,0,0,obj_Distort);
-			dist.left = x-18;
-			dist.right = x+18;
-			dist.top = y-18;
-			dist.bottom = y+18;
+			dist.left = posX-18;
+			dist.right = posX+18;
+			dist.top = posY-18;
+			dist.bottom = posY+18;
 			dist.alpha = 0;
 			dist.alphaNum = 1;
 			dist.alphaRate = 0.25;
-			dist.alphaMult = 0.5;
+			dist.colorMult = 0.5;
 			dist.spread = 0.625;
+		}
+		else
+		{
+			var dist = instance_create_depth(0,0,0,obj_Distort);
+			dist.left = posX-7;
+			dist.right = posX+7;
+			dist.top = posY-7;
+			dist.bottom = posY+7;
+			dist.alpha = 0;
+			dist.alphaNum = 1;
+			dist.alphaRate = 0.125;
+			dist.alphaRateMultDecr = 3;
+			dist.colorMult = 0.0625;
 		}
 	}
 }

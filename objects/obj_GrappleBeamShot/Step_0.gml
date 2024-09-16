@@ -167,10 +167,7 @@ else
 			if(impactFlag)
 			{
 				TileInteract(x+grapSignX,y+grapSignY);
-				audio_stop_sound(snd_BeamImpact);
-				audio_play_sound(snd_BeamImpact,0,false);
-				part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.gTrail,7);
-				part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.gImpact,1);
+				OnImpact(x,y);
 				impacted = 1;
 			}
 			else if(point_distance(player.x, player.y, x, y) > player.grappleMaxDist-(grapSpeedMax/2))

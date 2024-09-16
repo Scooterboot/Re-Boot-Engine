@@ -2398,12 +2398,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		}
 	}
 	
-	if(stateFrame != State.Push)
-	{
-		audio_sound_loop(pushSnd,false);
-		pushSndPlayed = false;
-	}
-	
 	if(rotation == 0)
 	{
 		rotReAlignStep = 4;
@@ -2628,6 +2622,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				mbTrailDir[mbTrailLength-1] = noone;
 			}
 			
+			mbTrailNum = scr_wrap(mbTrailNum + mbTrailNumRate, 0, mbTrailLength);
 			mbTrailAlpha = min(mbTrailAlpha+0.1, 1);
 		}
 		else
@@ -3285,7 +3280,4 @@ if(sndFlag)
 	audio_stop_sound(heatDmgSnd);
     audio_stop_sound(snd_LavaDamageLoop);
 	audio_stop_sound(snd_LiquidTopDmgLoop);
-	
-	audio_sound_loop(pushSnd,false);
-	pushSndPlayed = false;
 }

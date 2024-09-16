@@ -158,6 +158,9 @@ global.SilenceAudio = function()
 {
 	for(var i = 0; i < array_length(sndPauseArray); i++)
 	{
-		audio_stop_sound(sndPauseArray[i]);
+		if(audio_is_playing(sndPauseArray[i]))
+		{
+			audio_stop_sound(sndPauseArray[i]);
+		}
 	}
 }

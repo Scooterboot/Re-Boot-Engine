@@ -41,11 +41,14 @@ restrictSBToRun = true;
 // The latter is much better at giving feedback for super short charging
 smoothRunAnim = true;
 
-// Wall jump during speed booster
+// Allows reflecting horizontal speed via wall jump
+fastWallJump = true;
+
+// Preserve speed boost/blue suit during fast wall jump (requires fastWallJump = true)
 speedBoostWallJump = true;
 
 // Cancel Shine Spark mid-flight by pressing jump
-shineSparkCancel = true;
+shineSparkCancel = false;//true;
 
 // Low-level Shine Spark flight control / Shine Spark steering
 //press directions or angle buttons to slightly change flight direction
@@ -109,6 +112,7 @@ slopeGrounded = false;
 
 wallJumpDelay = 6;
 canWallJump = false;
+fastWJCheckVel = 0;
 
 uncrouch = 0;
 //uncrouched = true;
@@ -281,8 +285,6 @@ pushBlock = noone;
 //pushMove = array(0,0,1,1,1,0,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,1,1,0,1,0,0,0,0,1,0,1,0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,0,1,0,0,0,0,0,0,0,0,0);
 //pushMove = array(2, 2, 3, 4, 2, 1, 0, 3, 4, 1, 1, 3, 4, 3, 4, 3, 2, 0);
 pushMove = array(2, 2, 3, 4, 2, 1, 0, 0, 1, 1, 3, 4, 3, 4, 3, 2);
-pushSnd = noone;
-pushSndPlayed = false;
 
 activeStation = noone;
 
@@ -1044,6 +1046,9 @@ mbTrailPosX = array_create(mbTrailLength, noone);
 mbTrailPosY = array_create(mbTrailLength, noone);
 mbTrailDir = array_create(mbTrailLength, noone);
 
+mbTrailNum = 0;
+mbTrailNumRate = 0.625;
+
 mbTrailSurface = surface_create(global.resWidth,global.resHeight);
 mbTrailAlpha = 0;
 
@@ -1263,17 +1268,18 @@ function OnXCollision(fVX)
 		pBlock.velX = vx;
 	}
 	
-	if(speedBoost && speedKillCounter < speedKillMax)
+	if(speedBoost && speedKillCounter < speedKillMax && !speedBoostWJ)
 	{
 		speedKill = true;
 	}
 	else
 	{
-		if(!speedBoost)
+		if(!speedBoost || speedBoostWJ)
 		{
 			speedBufferCounter = 0;
 			speedBuffer = 0;
 			speedCounter = 0;
+			speedBoost = false;
 		}
 		
 		if(sign(velX) == sign(fVelX))
@@ -1321,7 +1327,7 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		onPlatform = true;
 	}
 	
-	if((state == State.Spark || state == State.BallSpark) && abs(GetSparkDir()) >= 90 && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0 && move != 0 && yShift < 0)
+	if((state == State.Spark || state == State.BallSpark) && abs(GetSparkDir()) >= 90 && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0 && move == dir && yShift < 0)
 	{
 		shineEnd = 0;
 		shineDir = 0;
@@ -1988,7 +1994,16 @@ function CanChangeState(newMask)
 			}
 		}
 		
-		var flag = (!entity_place_collide(0,checkYBottom) || !entity_place_collide(0,checkYTop)) && (!onPlatform || !lhc_place_meeting(position.X,position.Y+checkYBottom,"IPlatform"));
+		var flag = false;
+		if(!entity_place_collide(0,checkYBottom))
+		{
+			flag = true;
+		}
+		if(!entity_place_collide(0,checkYTop) && (!onPlatform || !lhc_place_meeting(position.X,position.Y+checkYTop,"IPlatform")))
+		{
+			flag = true;
+		}
+		
 		mask_index = curMask;
 		
 		return flag;
@@ -2141,7 +2156,7 @@ function PlayerGrounded(ydiff = 1)
 #region PlayerOnPlatform
 function PlayerOnPlatform()
 {
-	return (entityPlatformCheck(0,3) && fVelY >= 0 && state != State.Spark && state != State.BallSpark);
+	return (entityPlatformCheck(0,1) && fVelY >= 0 && state != State.Spark && state != State.BallSpark);
 }
 #endregion
 
@@ -3225,6 +3240,8 @@ cFlashPalDiff = 0;
 cFlashPalNum = 1;
 cBubblePal = 0;
 
+fastWJFlash = 0;
+
 function PaletteSurface()
 {
 	if(surface_exists(palSurface))
@@ -3421,6 +3438,14 @@ function PaletteSurface()
 				DrawPalSprite(palSprite2,beamPalInd,0.375);
 			}
 		}
+		if(fastWJFlash > 0)
+		{
+			DrawPalSprite(palSprite2,PlayerPal2.White,fastWJFlash);
+			if(!global.gamePaused)
+			{
+				fastWJFlash = max(fastWJFlash-0.2,0);
+			}
+		}
 		#endregion
 		#region -- Beam charge shot flash & Hyper beam --
 		if(hyperFired > 0)
@@ -3542,92 +3567,75 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 {
 	if(drawBallTrail)
 	{
+		var camX = camera_get_view_x(view_camera[0]),
+			camY = camera_get_view_y(view_camera[0]),
+			camW = camera_get_view_width(view_camera[0]),
+			camH = camera_get_view_height(view_camera[0]);
+		
 		if(stateFrame == State.Morph || mbTrailAlpha > 0)
 		{
 			if(surface_exists(mbTrailSurface) && mbTrailSurface != -1)
 			{
+				surface_resize(mbTrailSurface,camW,camH);
 				surface_set_target(mbTrailSurface);
 				draw_clear_alpha(c_black,1);
 				
-				for(var k = 0; k < 3; k++)
+				var tex = sprite_get_texture(sprt_MorphTrail,0);
+				draw_primitive_begin_texture(pr_trianglestrip,tex);
+				
+				for(var i = 0; i < mbTrailLength; i++)
 				{
-					draw_primitive_begin(pr_trianglestrip);
-					
-					for(var i = 0; i < mbTrailLength; i++)
-					{
-						var tRatio = i/mbTrailLength;
-						var tAlpha = tRatio,
-							tColor = mbTrailColor_Start;
+					var tRatio = i/mbTrailLength;
+					var tAlpha = tRatio,
+						tColor = mbTrailColor_Start;
     
-						if(tRatio < 0.5)
-						{
-							tColor = merge_colour(c_black,mbTrailColor_End,tRatio*2);
-							if(k > 0)
-							{
-								tColor = merge_colour(c_black,mbTrailColor_Start,tRatio*2);
-							}
-						}
-						else
-						{
-							tColor = merge_colour(mbTrailColor_End,mbTrailColor_Start,tRatio*2-1);
-							if(k > 0)
-							{
-								tColor = mbTrailColor_Start;
-							}
-						}
-
-						var dist = min(i,7);
-						if(mbTrailDir[i] == noone)
-						{
-							dist = 0;
-							tColor = c_black;
-						}
-						if(k > 0)
-						{
-							dist = 7;
-						}
-						
-						if(mbTrailPosX[i] != noone && mbTrailPosY[i] != noone)
-						{
-							var trailX1 = mbTrailPosX[i] + lengthdir_x(dist,mbTrailDir[i]-90),
-								trailY1 = mbTrailPosY[i] + lengthdir_y(dist,mbTrailDir[i]-90),
-								trailX2 = mbTrailPosX[i] + lengthdir_x(dist,mbTrailDir[i]+90),
-								trailY2 = mbTrailPosY[i] + lengthdir_y(dist,mbTrailDir[i]+90);
-						
-							if(k == 1)
-							{
-								trailX1 = mbTrailPosX[i] + lengthdir_x(dist-1,mbTrailDir[i]-90);
-								trailY1 = mbTrailPosY[i] + lengthdir_y(dist-1,mbTrailDir[i]-90);
-								trailX2 = mbTrailPosX[i] + lengthdir_x(dist,mbTrailDir[i]-90);
-								trailY2 = mbTrailPosY[i] + lengthdir_y(dist,mbTrailDir[i]-90);
-							}
-							if(k == 2)
-							{
-								trailX1 = mbTrailPosX[i] + lengthdir_x(dist-1,mbTrailDir[i]+90);
-								trailY1 = mbTrailPosY[i] + lengthdir_y(dist-1,mbTrailDir[i]+90);
-								trailX2 = mbTrailPosX[i] + lengthdir_x(dist,mbTrailDir[i]+90);
-								trailY2 = mbTrailPosY[i] + lengthdir_y(dist,mbTrailDir[i]+90);
-							}
-							if(k == 0 || mbTrailDir[i] != noone)
-							{
-								draw_vertex_colour(surface_get_width(mbTrailSurface)/2 + trailX1-position.X, surface_get_height(mbTrailSurface)/2 + trailY1-position.Y, tColor, tAlpha*mbTrailAlpha);
-								draw_vertex_colour(surface_get_width(mbTrailSurface)/2 + trailX2-position.X, surface_get_height(mbTrailSurface)/2 + trailY2-position.Y, tColor, tAlpha*mbTrailAlpha);
-							}
-						}
+					if(tRatio < 0.5)
+					{
+						tColor = merge_colour(c_black,mbTrailColor_End,tRatio*2);
 					}
-					
-					draw_primitive_end();
+					else
+					{
+						tColor = merge_colour(mbTrailColor_End,mbTrailColor_Start,tRatio*2-1);
+					}
+
+					var dist = min(i*1.5,8);
+					if(mbTrailDir[i] == noone)
+					{
+						dist = 0;
+						tColor = c_black;
+					}
+						
+					if(mbTrailPosX[i] != noone && mbTrailPosY[i] != noone)
+					{
+						var trailX1 = mbTrailPosX[i]-camX + lengthdir_x(dist,mbTrailDir[i]-90),
+							trailY1 = mbTrailPosY[i]-camY + lengthdir_y(dist,mbTrailDir[i]-90),
+							trailX2 = mbTrailPosX[i]-camX + lengthdir_x(dist,mbTrailDir[i]+90),
+							trailY2 = mbTrailPosY[i]-camY + lengthdir_y(dist,mbTrailDir[i]+90);
+						
+						var ytex = scr_wrap(mbTrailNum + i*mbTrailNumRate, 0, mbTrailLength) / mbTrailLength;
+						ytex *= 2;
+						ytex -= 1;
+						ytex = abs(ytex);
+						
+						draw_vertex_texture_color(trailX1, trailY1, 0, ytex, tColor, tAlpha*mbTrailAlpha);
+						draw_vertex_texture_color(trailX2, trailY2, 1, ytex, tColor, tAlpha*mbTrailAlpha);
+					}
 				}
+				
+				draw_primitive_end();
 				
 				surface_reset_target();
    
 				gpu_set_blendmode(bm_add);
-				draw_surface_ext(mbTrailSurface, scr_round(xx)-surface_get_width(mbTrailSurface)/2, scr_round(yy)-surface_get_height(mbTrailSurface)/2, 1, 1, 0, c_white, alpha);
+				for(var i = 1; i <= 2; i++)
+				{
+					draw_surface_ext(mbTrailSurface, camX, camY, 1, 1, 0, c_white, alpha/i);
+				}
 				gpu_set_blendmode(bm_normal);
 			}
 			else
 			{
-				mbTrailSurface = surface_create(global.wideResWidth,global.resHeight);
+				mbTrailSurface = surface_create(camW,camH);
 			}
 		}
 		else

@@ -45,5 +45,5 @@ dist.bottom = y+20;
 dist.alpha = 0.5;
 dist.alphaNum = 1;
 dist.alphaRate = 0.25;
-dist.alphaMult = 0.5;
+dist.colorMult = 0.5;
 dist.spread = 0.625;

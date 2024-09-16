@@ -28,7 +28,7 @@ fVelY = velY + speed_y;
 
 var _x = x,
 	_y = y;
-if(aiStyle == 1 || (aiStyle == 2 && t < pi/2))
+if(aiStyle == 1)
 {
 	_x = xx;
 	_y = yy;
@@ -125,11 +125,7 @@ if(instance_exists(reflec) && lastReflec != reflec)
 	
 	direction = _ang;
 	waveDir *= -1;
-	if(aiStyle == 2 && t >= pi/2)
-	{
-		amplitude = 0;
-	}
-	else
+	if(aiStyle == 1)
 	{
 		t = 0;
 		t2 = 0;
@@ -149,6 +145,7 @@ if(aiStyle == 0)
 	if(x <= -abs(velX)*2 || x >= room_width+abs(velX)*2 || y <= -abs(velY)*2 || y >= room_height+abs(velY)*2)
 	{
 		instance_destroy();
+		exit;
 	}
 }
 if(aiStyle == 1 || aiStyle == 2)
@@ -156,6 +153,7 @@ if(aiStyle == 1 || aiStyle == 2)
 	if(x <= -(amplitude*2) || x >= room_width+(amplitude*2) || y <= -(amplitude*2) || y >= room_height+(amplitude*2))
 	{
 		instance_destroy();
+		exit;
 	}
 	
 	var i = 0;
@@ -190,54 +188,65 @@ if(aiStyle == 1 || aiStyle == 2)
 	}
 	i *= dir;
 	i *= waveDir;
-	shift = amplitude * sin(t - t2) * i;
+	shift = amplitude * sin(t - t2);
 	
 	var fVX = fVelX,
 		fVY = fVelY;
-	if(shift != 0)
+	if(aiStyle == 1)
 	{
-		var destX = xx + lengthdir_x(shift, direction + 90),
-			destY = yy + lengthdir_y(shift, direction + 90);
+		var destX = xx + lengthdir_x(shift * i, direction + 90),
+			destY = yy + lengthdir_y(shift * i, direction + 90);
 		fVelX += destX - x;
 		fVelY += destY - y;
 	}
-	xx += fVX;
-	yy += fVY;
+	else
+	{
+		fVelX += lengthdir_x((shift - prevShift) * i, direction + 90);
+		fVelY += lengthdir_y((shift - prevShift) * i, direction + 90);
+	}
+	if(impacted == 0)
+	{
+		xx += fVX;
+		yy += fVY;
+	}
+	
+	prevShift = shift;
 }
 #endregion
 
 #region Collision
 if(tileCollide && impacted == 0)
 {
-	//Collision_Normal(fVelX,fVelY,16,16,false,false);
+	var velocity = point_distance(0,0,fVelX,fVelY);
 	
-	var fVX = fVelX,
-		fVY = fVelY;
+	var _len = max(10,velocity);
+	if(instance_exists(creator) && lastReflec == noone)
+	{
+		_len = min(_len, point_distance(x,y,creator.x,creator.y));
+	}
+	var _tailX = lengthdir_x(_len,direction),
+		_tailY = lengthdir_y(_len,direction);
 	
-	var _dir = point_direction(x,y,x+fVelX,y+fVelY);
-	var _tailX = lengthdir_x(10,_dir),
-		_tailY = lengthdir_y(10,_dir);
+	var _dir = point_direction(0,0,fVelX,fVelY);
 	var _signX = lengthdir_x(1,_dir),
 		_signY = lengthdir_y(1,_dir);
-	var counter = abs(fVelX)+abs(fVelY);
-	if(entity_position_collide(fVelX,fVelY,x,y) || entity_position_collide(0,0,x,y) || entity_collision_line(x-_tailX,y-_tailY,x+fVelX,y+fVelY,true,true))
+	
+	if(entity_position_collide(fVelX,fVelY,x,y) || entity_collision_line(x-_tailX,y-_tailY,x+fVelX,y+fVelY,true,true))
 	{
-		while(!entity_position_collide(_signX,_signY,x,y) && !entity_position_collide(0,0,x,y) && !entity_collision_line(x-_tailX,y-_tailY,x+_signX,y+_signY,true,true) && counter > 0)
+		while(!entity_position_collide(_signX,_signY,x,y) && !entity_collision_line(x-_tailX,y-_tailY,x+_signX,y+_signY,true,true) && velocity >= 0)
 		{
 			x += _signX;
 			y += _signY;
-			counter--;
+			velocity--;
 		}
-		speed_x = 0;
-		speed_y = 0;
-		fVX = 0;
-		fVY = 0;
 		
 		impacted = 1;
 	}
-		
-	x += fVX;
-	y += fVY;
+	else
+	{
+		x += fVelX;
+		y += fVelY;
+	}
 }
 else if(impacted == 0)
 {
@@ -362,37 +371,6 @@ for(var i = 0; i < array_length(npcInvFrames); i++)
 
 if(impacted == 1)
 {
-	if(impactSnd != noone)
-	{
-		if(audio_is_playing(impactSnd))
-		{
-			audio_stop_sound(impactSnd);
-		}
-		audio_play_sound(impactSnd,0,false);
-	}
-	if(particleType != -1 && particleType <= 4)
-	{
-		part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.bTrails[particleType],7*(1+isCharge));
-		if(isCharge)
-		{
-			part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.cImpact[particleType],1);
-			
-			var dist = instance_create_depth(0,0,0,obj_Distort);
-			dist.left = x-18;
-			dist.right = x+18;
-			dist.top = y-18;
-			dist.bottom = y+18;
-			dist.alpha = 0;
-			dist.alphaNum = 1;
-			dist.alphaRate = 0.25;
-			dist.alphaMult = 0.5;
-			dist.spread = 0.625;
-		}
-		else
-		{
-			part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.impact[particleType],1);
-		}
-	}
 	OnImpact(x,y);
 }
 
