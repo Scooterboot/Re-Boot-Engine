@@ -41,7 +41,7 @@ if(surface_exists(finalSurface))
 		
 		draw_primitive_begin_texture(pr_trianglestrip, tex);
 		
-		for (var i = bbox_top-y; i <= fH+6; i += 6)
+		for (var i = bb_top()-y; i <= fH+6; i += 6)
 		{
 			var mult = -min(1.5,i/6);
 			var spread = mult * sin(time + (i+pos.Y) / 4);

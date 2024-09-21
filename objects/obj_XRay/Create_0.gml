@@ -190,7 +190,7 @@ function xray_redraw_outline()
 			draw_set_color(c_black);
 			draw_set_alpha(1);
 			
-			draw_line(bbox_left-camx-1,bbox_top-camy,bbox_right-camx,bbox_top-camy);
+			draw_line(bbox_left-camx-1,bbox_top-camy,bbox_right-camx-1,bbox_top-camy);
 			for(var i = bbox_left-camx; i < bbox_right-camx-1; i+= 4)
 			{
 				draw_line(i,bbox_top-camy+1,i+2,bbox_top-camy+1);

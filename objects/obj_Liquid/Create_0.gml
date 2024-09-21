@@ -1,5 +1,52 @@
 /// @description Initialize
 
+#region BBox vars
+function bb_left()
+{
+	/// @description bb_left
+	/// @param baseX=x
+	var xx = x;
+	if(argument_count > 0)
+	{
+		xx = argument[0];
+	}
+	return bbox_left-x + xx;
+}
+function bb_right()
+{
+	/// @description bb_right
+	/// @param baseX=x
+	var xx = x;
+	if(argument_count > 0)
+	{
+		xx = argument[0];
+	}
+	return bbox_right-x + xx - 1;
+}
+function bb_top()
+{
+	/// @description bb_top
+	/// @param baseY=y
+	var yy = y;
+	if(argument_count > 0)
+	{
+		yy = argument[0];
+	}
+	return bbox_top-y + yy;
+}
+function bb_bottom()
+{
+	/// @description bb_bottom
+	/// @param baseY=y
+	var yy = y;
+	if(argument_count > 0)
+	{
+		yy = argument[0];
+	}
+	return bbox_bottom-y + yy - 1;
+}
+#endregion
+
 enum LiquidType
 {
 	Water,
@@ -14,7 +61,7 @@ posX = 0;
 velX = 0;
 
 moveY = false;
-bottom = bbox_bottom;
+bottom = bb_bottom();
 bobAcc = -(1 / 256);//-0.0125/4;
 bobSpeed = 0;//-0.05;
 bobBtm = 0.25;
@@ -48,7 +95,7 @@ function CreateSplash(_entity, _mass, _velX, _velY, _into, _sound = true, _isBea
 	}
 	
 	var splX = _entity.x,
-		splY = bbox_top;
+		splY = bb_top();
 	
 	#region mass of 2 (indicates player-sized objects)
 	if(_mass == 2)
@@ -370,8 +417,8 @@ function CreateSplash_Extra(_entity, _size, _velX, _velY, _sound = true, _skidSo
 		_count = 4;
 	}
 	
-	var splX = irandom_range(_entity.bbox_left+1,_entity.bbox_right-1),
-		splY = bbox_top;
+	var splX = irandom_range(_entity.bb_left()+1,_entity.bb_right()-1),
+		splY = bb_top();
 	
 	var splash = instance_create_layer(splX,splY,layer,obj_SplashFXAnim);
 	splash.liquid = id;
@@ -675,14 +722,14 @@ function _SurfWidth()
 	var pos = SurfPos();
 	var camX = camera_get_view_x(view_camera[0]),
 		camW = camera_get_view_width(view_camera[0]);
-	return scr_round(min(camW-(pos.X-camX),bbox_right-pos.X + 1));
+	return scr_round(min(camW-(pos.X-camX),bb_right()-pos.X + 1));
 }
 function _SurfHeight()
 {
 	var pos = SurfPos();
 	var camY = camera_get_view_y(view_camera[0]),
 		camH = camera_get_view_height(view_camera[0]);
-	return scr_round(min(camH-(pos.Y-camY),bbox_bottom-pos.Y + 1));
+	return scr_round(min(camH-(pos.Y-camY),bb_bottom()-pos.Y + 1));
 }
 
 function SurfWidth() { return max(_SurfWidth(),1); }

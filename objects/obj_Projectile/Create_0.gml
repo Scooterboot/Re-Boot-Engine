@@ -1,6 +1,53 @@
 /// @description Initialize
 event_inherited();
 
+#region BBox vars
+function bb_left()
+{
+	/// @description bb_left
+	/// @param baseX=x
+	var xx = x;
+	if(argument_count > 0)
+	{
+		xx = argument[0];
+	}
+	return bbox_left-x + xx;
+}
+function bb_right()
+{
+	/// @description bb_right
+	/// @param baseX=x
+	var xx = x;
+	if(argument_count > 0)
+	{
+		xx = argument[0];
+	}
+	return bbox_right-x + xx - 1;
+}
+function bb_top()
+{
+	/// @description bb_top
+	/// @param baseY=y
+	var yy = y;
+	if(argument_count > 0)
+	{
+		yy = argument[0];
+	}
+	return bbox_top-y + yy;
+}
+function bb_bottom()
+{
+	/// @description bb_bottom
+	/// @param baseY=y
+	var yy = y;
+	if(argument_count > 0)
+	{
+		yy = argument[0];
+	}
+	return bbox_bottom-y + yy - 1;
+}
+#endregion
+
 #region Initialize Base Variables
 
 image_speed = 0;

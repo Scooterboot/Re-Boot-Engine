@@ -2,7 +2,7 @@
 event_inherited();
 image_speed = 0;
 scaleTimer = 0;
-scaleMult = 0.0375; //0.05;
+scaleMult = 0.05;
 scale = scaleMult*scaleTimer;
 image_xscale = scale;
 image_yscale = scale;

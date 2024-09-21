@@ -43,15 +43,15 @@ else if(audio_is_playing(moveSnd))
 
 if(grounded && (nonPushFlag || dustFlag))
 {
-	var posX = irandom_range(bbox_left-2,x-5),
-		posY = irandom_range(bbox_bottom-2,bbox_bottom+1);
+	var posX = irandom_range(bb_left()-2,x-5),
+		posY = irandom_range(bb_bottom()-2,bb_bottom()+1);
 	if(sign(velX) == -1)
 	{
-		posX = irandom_range(x+5,bbox_right+2);
+		posX = irandom_range(x+5,bb_right()+2);
 	}
 	if(irandom(1) == 0)
 	{
-		posX = irandom_range(bbox_left-2,bbox_right+2);
+		posX = irandom_range(bb_left()-2,bb_right()+2);
 	}
 	if(liquid)
 	{
@@ -106,7 +106,7 @@ var downAng = GetEdgeAngle(Edge.Bottom);
 var downSlopeFlag = (downAng >= 60 && downAng <= 300);
 if(!entity_place_collide(0,2) || downSlopeFlag)
 {
-	grounded = ((bbox_bottom+2) >= room_height);
+	grounded = ((bb_bottom()+2) >= room_height);
 }
 
 EntityLiquid_Large(x-xprevious, y-yprevious);

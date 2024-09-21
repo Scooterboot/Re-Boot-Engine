@@ -5,9 +5,11 @@ if(global.gamePaused)
 	exit;
 }
 
+var bbottom = bbox_bottom-1;
+
 var player = instance_place(x,y,obj_Player);
 if (instance_exists(player) && (player.state == State.Stand || player.state == State.Elevator) &&
-	abs(player.x - x) < 12 && player.bbox_bottom < bbox_bottom+1 && player.bbox_bottom > bbox_bottom-1 && 
+	abs(player.x - x) < 12 && player.bb_bottom() < bbottom+1 && player.bb_bottom() > bbottom-1 && 
 	player.grounded && !player.grappleActive && !player.isPushing)
 {
 	if(saveCooldown <= 0)
@@ -30,7 +32,7 @@ if (instance_exists(player) && (player.state == State.Stand || player.state == S
 		else
 		{
 			var xx = x,
-				yy = bbox_bottom-25;
+				yy = bbottom-25;
 			if(saving == maxSave)
 			{
 				UpdateMapIcon();

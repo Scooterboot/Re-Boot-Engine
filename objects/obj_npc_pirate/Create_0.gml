@@ -59,5 +59,5 @@ function DmgCollide(posX,posY,object,isProjectile)
 	
 	var offX = object.x-posX,
 		offY = object.y-posY;
-	return collision_rectangle(bbox_left-4 + offX,bbox_top-2 + offY,bbox_right+4 + offX,bbox_bottom+1 + offY,object,true,true);
+	return collision_rectangle(bb_left()-4 + offX,bb_top()-2 + offY,bb_right()+4 + offX,bb_bottom()+1 + offY,object,true,true);
 }

@@ -339,7 +339,7 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 							x = scr_ceil(x);
 						}
 						var xnum = abs(fVelX)+2;
-						while(!collision_rectangle(x+wDiff+sign(fVelX),y,x+wDiff+sign(fVelX)+resWidth-1,y+global.resHeight-1,colX,false,true) && xnum > 0)
+						while(!collision_rectangle(x+wDiff+sign(fVelX),y,x+wDiff+sign(fVelX)+resWidth,y+global.resHeight,colX,false,true) && xnum > 0)
 						{
 							x += sign(fVelX);
 							xnum--;
@@ -443,7 +443,7 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 							y = scr_ceil(y);
 						}
 						var ynum = abs(fVelY)+2;
-						while(!collision_rectangle(x+wDiff,y+sign(fVelY),x+wDiff+resWidth-1,y+sign(fVelY)+global.resHeight-1,colY,false,true) && ynum > 0)
+						while(!collision_rectangle(x+wDiff,y+sign(fVelY),x+wDiff+resWidth,y+sign(fVelY)+global.resHeight,colY,false,true) && ynum > 0)
 						{
 							y += sign(fVelY);
 							ynum--;

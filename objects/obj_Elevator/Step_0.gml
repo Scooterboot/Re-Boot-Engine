@@ -20,15 +20,11 @@ if(activeDir != 0)
 	if(!incoming && !singleRoom)
     {
         y += eleSpeed*activeDir;
-        /*if((activeDir == 1 && obj_Player.bbox_top > room_height+8) || (activeDir == -1 && obj_Player.bbox_bottom < -8))
-        {
-            scr_ElevatorTrans(nextroom,elevatorID,nextElevatorID,activeDir);
-        }*/
-		if(activeDir == 1 && obj_Player.bbox_top > room_height+8 && down_nextElevatorID != -1 && down_nextRoom != noone)
+        if(activeDir == 1 && obj_Player.bb_top() > room_height+8 && down_nextElevatorID != -1 && down_nextRoom != noone)
 		{
 			scr_ElevatorTrans(down_nextRoom,elevatorID,down_nextElevatorID,activeDir);
 		}
-		if(activeDir == -1 && obj_Player.bbox_bottom < -8 && up_nextElevatorID != -1 && up_nextRoom != noone)
+		if(activeDir == -1 && obj_Player.bb_bottom() < -8 && up_nextElevatorID != -1 && up_nextRoom != noone)
 		{
 			scr_ElevatorTrans(up_nextRoom,elevatorID,up_nextElevatorID,activeDir);
 		}
@@ -50,7 +46,7 @@ if(activeDir != 0)
             resetState = true;
         }
     }
-    obj_Player.position.Y = y - (obj_Player.bbox_bottom-obj_Player.y) - 1;
+    obj_Player.position.Y = y - obj_Player.bb_bottom(0) - 1;
 	
 	obj_Player.x = scr_round(obj_Player.position.X);
 	obj_Player.y = scr_round(obj_Player.position.Y);

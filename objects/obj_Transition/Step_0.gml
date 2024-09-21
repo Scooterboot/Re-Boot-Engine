@@ -74,8 +74,8 @@ else
 					trailY[i] = mbTrailPosY[i] - (position.Y+sprtOffsetY);
 				}
 				
-				position.X = this.nextDoor.x + this.difX + lengthdir_x(this.spawnDist, this.nextDoor.image_angle) + lengthdir_x(bbox_right - bbox_left, this.nextDoor.image_angle);
-				position.Y = this.nextDoor.y + this.difY + lengthdir_y(this.spawnDist, this.nextDoor.image_angle) + lengthdir_y(bbox_bottom - bbox_top, this.nextDoor.image_angle);
+				position.X = this.nextDoor.x + this.difX + lengthdir_x(this.spawnDist, this.nextDoor.image_angle) + lengthdir_x(bb_right() - bb_left(), this.nextDoor.image_angle);
+				position.Y = this.nextDoor.y + this.difY + lengthdir_y(this.spawnDist, this.nextDoor.image_angle) + lengthdir_y(bb_bottom() - bb_top(), this.nextDoor.image_angle);
 				
 				oldPosition.X = position.X + oldDiffX;
 				oldPosition.Y = position.Y + oldDiffY;
@@ -105,8 +105,8 @@ else
 				liquidTop = liquid_top();
 				liquidTopPrev = liquidTop;
 				
-				prevTop = bbox_top;
-				prevBottom = bbox_bottom;
+				prevTop = bb_top();
+				prevBottom = bb_bottom();
 			}
 			
 			transTimer++;

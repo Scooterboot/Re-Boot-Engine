@@ -137,7 +137,7 @@ if(debug == 1)
 		}
 		else
 		{
-	        draw_rectangle(bbox_left,bbox_top,bbox_right,bbox_bottom,0);
+	        draw_rectangle(bb_left(),bb_top(),bb_right(),bb_bottom(),0);
 		}
 		
 		draw_set_color(c_white);
@@ -150,8 +150,6 @@ if(debug == 1)
 		{
 			draw_set_color(c_white);
 	        draw_set_alpha(0.5);
-        
-	        //draw_rectangle(bbox_left,bbox_top,bbox_right,bbox_bottom,true);
 		
 			var pos = SurfPos();
 			draw_rectangle(pos.X+1,pos.Y+1,pos.X+SurfWidth()-2,pos.Y+SurfHeight()-2,true);
@@ -269,9 +267,9 @@ if(debug == 1)
 			
 			if(projLength > 0)
 			{
-				var numw = max(abs(bbox_right - bbox_left),1),
+				var numw = max(abs(bb_right() - bb_left()),1),
 			        numd = clamp(point_distance(x,y,xstart,ystart),1,projLength);
-				for(var j = 0; j < numd; j += numw)
+				for(var j = numw; j < numd; j += numw)
 				{
 					var xw = x-lengthdir_x(j,direction),
 						yw = y-lengthdir_y(j,direction);
@@ -284,10 +282,10 @@ if(debug == 1)
 					}
 					else
 					{
-					    var bleft = bbox_left-x+xw,
-							btop = bbox_top-y+yw,
-							bright = bbox_right-x+xw,
-							bbottom = bbox_bottom-y+yw;
+					    var bleft = bb_left(xw),
+							btop = bb_top(yw),
+							bright = bb_right(xw),
+							bbottom = bb_bottom(yw);
 						draw_rectangle(bleft,btop,bright,bbottom,0);
 					}
 				}
@@ -301,7 +299,7 @@ if(debug == 1)
 			}
 			else
 			{
-				draw_rectangle(bbox_left,bbox_top,bbox_right,bbox_bottom,0);
+				draw_rectangle(bb_left(),bb_top(),bb_right(),bb_bottom(),0);
 			}
 		}
 	}
@@ -320,8 +318,7 @@ if(debug == 1)
         //draw_rectangle(x+6*dir,y-21,x+19*dir,y-8,0);
         //draw_rectangle(x+6*dir,y-37,x+19*dir,y-24,0);
         
-        //draw_rectangle(scr_round(bbox_left),scr_round(bbox_top),scr_round(bbox_right),scr_round(bbox_bottom),0);
-		draw_rectangle(bbox_left,bbox_top,bbox_right,bbox_bottom,0);
+        draw_rectangle(bb_left(),bb_top(),bb_right(),bb_bottom(),0);
         
         draw_set_color(c_white);
         draw_set_alpha(1);
@@ -403,14 +400,14 @@ if(debug == 1)
 			draw_set_halign(fa_left);
 			draw_set_valign(fa_middle);
 			edgeAng = GetEdgeAngle(Edge.Right);
-			draw_text(bbox_right,y,string(edgeAng));
+			draw_text(bb_right(),y,string(edgeAng));
 		}
 		if(entity_place_collide(-2,0))
 		{
 			draw_set_halign(fa_right);
 			draw_set_valign(fa_middle);
 			edgeAng = GetEdgeAngle(Edge.Left);
-			draw_text(bbox_left,y,string(edgeAng));
+			draw_text(bb_left(),y,string(edgeAng));
 		}
 		draw_set_alpha(1);
     }
@@ -454,7 +451,7 @@ if(debug == 2)
 		draw_set_color(c_aqua);
         draw_set_alpha(0.75);
         
-		draw_rectangle(bbox_left,bbox_top,bbox_right,bbox_bottom,0);
+		draw_rectangle(bb_left(),bb_top(),bb_right(),bb_bottom(),0);
         
         draw_set_color(c_white);
         draw_set_alpha(1);

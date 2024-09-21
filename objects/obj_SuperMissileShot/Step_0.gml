@@ -16,8 +16,8 @@ if(!global.gamePaused)
 		}
 		else
 		{
-			var x1 = bbox_left+2, x2 = bbox_right-1,
-				y1 = bbox_top+2, y2 = bbox_bottom-1;
+			var x1 = bb_left()+2, x2 = bb_right()-2,
+				y1 = bb_top()+2, y2 = bb_bottom()-2;
 			var bub = liquid.CreateBubble(random_range(x1,x2),random_range(y1,y2),0,0);
 			bub.spriteIndex = sprt_WaterBubble;
 			bub.kill = true;

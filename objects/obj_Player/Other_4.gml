@@ -15,5 +15,5 @@ liquidPrev = liquid;
 liquidTop = liquid_top();
 liquidTopPrev = liquidTop;
 
-prevTop = bbox_top;
-prevBottom = bbox_bottom;
+prevTop = bb_top();
+prevBottom = bb_bottom();

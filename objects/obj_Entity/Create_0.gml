@@ -2,9 +2,57 @@
 
 position = new Vector2(x,y);
 oldPosition = new Vector2(position.X,position.Y);
+
+#region BBox vars
+function bb_left()
+{
+	/// @description bb_left
+	/// @param baseX=position.X
+	var xx = position.X;
+	if(argument_count > 0)
+	{
+		xx = argument[0];
+	}
+	return bbox_left-x + xx;
+}
+function bb_right()
+{
+	/// @description bb_right
+	/// @param baseX=position.X
+	var xx = position.X;
+	if(argument_count > 0)
+	{
+		xx = argument[0];
+	}
+	return bbox_right-x + xx - 1;
+}
+function bb_top()
+{
+	/// @description bb_top
+	/// @param baseY=position.Y
+	var yy = position.Y;
+	if(argument_count > 0)
+	{
+		yy = argument[0];
+	}
+	return bbox_top-y + yy;
+}
+function bb_bottom()
+{
+	/// @description bb_bottom
+	/// @param baseY=position.Y
+	var yy = position.Y;
+	if(argument_count > 0)
+	{
+		yy = argument[0];
+	}
+	return bbox_bottom-y + yy - 1;
+}
+#endregion
+
 function Center()
 {
-	return new Vector2(bbox_left + (bbox_right-bbox_left)/2, bbox_top + (bbox_bottom-bbox_top)/2);
+	return new Vector2(bb_left() + (bb_right()-bb_left())/2, bb_top() + (bb_bottom()-bb_top())/2);
 }
 
 velX = 0; // velocity x
@@ -165,7 +213,7 @@ function entityPlatformCheck()
 			if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,"IPlatform",asset_object))
 			{
 				var platform = blockList[| i];
-				if(platform.isSolid && place_meeting(xx+offsetX,yy+offsetY,platform) && !place_meeting(xx,yy,platform) && bbox_bottom < platform.bbox_top)
+				if(platform.isSolid && place_meeting(xx+offsetX,yy+offsetY,platform) && !place_meeting(xx,yy,platform) && bb_bottom(yy) < platform.bbox_top)
 				{
 					ds_list_clear(blockList);
 					return true;
@@ -177,106 +225,6 @@ function entityPlatformCheck()
 	return false;
 }
 
-#endregion
-#region GetEdgeSlope (old)
-/*function GetEdgeSlope()
-{
-	/// @description GetEdgeSlope
-	/// @param edge
-	/// @param margin=0
-	var edge = argument[0];
-	
-	var xcheck = 0,
-		ycheck = 2;
-	switch (edge)
-	{
-		case Edge.Top:
-		{
-			xcheck = 0;
-			ycheck = -2;
-			break;
-		}
-		case Edge.Left:
-		{
-			xcheck = -2;
-			ycheck = 0;
-			break;
-		}
-		case Edge.Right:
-		{
-			xcheck = 2;
-			ycheck = 0;
-			break;
-		}
-		default:
-		{
-			break;
-		}
-	}
-	
-	var margin = 0;
-	if(argument_count > 1)
-	{
-		margin = argument[1];
-	}
-		
-	var col = instance_place_list(scr_round(position.X)+xcheck,scr_round(position.Y)+ycheck,all,edgeSlope,true);
-	if(col > 0)
-	{
-		for(var i = 0; i < col; i++)
-		{
-			if(!instance_exists(edgeSlope[| i]) || !asset_has_any_tag(edgeSlope[| i].object_index,solids,asset_object) || !asset_has_any_tag(edgeSlope[| i].object_index,"ISlope",asset_object))
-			{
-				continue;
-			}
-			var slope = edgeSlope[| i];
-			if(instance_exists(slope))
-			{
-				var withinX = (slope.image_xscale > 0 && bbox_left >= slope.bbox_left-margin) || (slope.image_xscale < 0 && bbox_right <= slope.bbox_right+margin),
-					withinY = (slope.image_yscale > 0 && bbox_bottom <= slope.bbox_bottom+margin) || (slope.image_yscale < 0 && bbox_top >= slope.bbox_top-margin);
-				var checkHor = ((edge == Edge.Bottom && slope.image_yscale > 0) || (edge == Edge.Top && slope.image_yscale < 0)) && withinX,
-					checkVer = ((edge == Edge.Left && slope.image_xscale > 0) || (edge == Edge.Right && slope.image_xscale < 0)) && withinY;
-				if(checkHor || checkVer)
-				{
-					ds_list_clear(edgeSlope);
-					return slope;
-				}
-			}
-		}
-	}
-	ds_list_clear(edgeSlope);
-	
-	return noone;
-}*/
-#endregion
-#region GetSlopeAngle (old)
-/*function GetSlopeAngle(slope)
-{
-	var ang = 315;
-	if(sign(slope.image_yscale) > 0)
-	{
-		if(sign(slope.image_xscale) > 0)
-		{
-			ang = 360 - ((45 / slope.image_xscale) * (1 + (1 - 1 / slope.image_yscale)));
-		}
-		else
-		{
-			ang = (45 / abs(slope.image_xscale)) * (1 + (1 - 1 / slope.image_yscale));
-		}
-	}
-	else
-	{
-		if(sign(slope.image_xscale) > 0)
-		{
-			ang = 180 + ((45 / slope.image_xscale) * (1 + (1 - 1 / abs(slope.image_yscale))));
-		}
-		else
-		{
-			ang = 180 - ((45 / abs(slope.image_xscale)) * (1 + (1 - 1 / abs(slope.image_yscale))));
-		}
-	}
-	return ang;
-}*/
 #endregion
 #region GetEdgeAngle
 
@@ -510,13 +458,6 @@ function ModifySlopeXSteepness_Down() { return 4; }
 function ModifySlopeYSteepness_Up() { return 3; }
 function ModifySlopeYSteepness_Down() { return 4; }
 
-// check if slope speed adjustments are applicable
-/*function SlopeCheck(slope) // old
-{
-	return (slope.image_yscale > 0 && slope.image_yscale <= 1 && 
-	((slope.image_xscale > 0 && bbox_left >= slope.bbox_left) || (slope.image_xscale < 0 && bbox_right <= slope.bbox_right)));
-}*/
-
 // called on horizontal collision
 function OnRightCollision(fVX) {} // -->|
 function OnLeftCollision(fVX) {} // |<--
@@ -633,8 +574,8 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 		
 			DestroyBlock(position.X+fVX,position.Y);
 		
-			var colR = entity_collision_line(bbox_right+fVX,bbox_top,bbox_right+fVX,bbox_bottom),
-				colL = entity_collision_line(bbox_left+fVX,bbox_top,bbox_left+fVX,bbox_bottom);
+			var colR = entity_collision_line(bb_right()+fVX,bb_top(),bb_right()+fVX,bb_bottom()),
+				colL = entity_collision_line(bb_left()+fVX,bb_top(),bb_left()+fVX,bb_bottom());
 			if(entity_place_collide(sign(fVX),0) && (!entity_place_collide(0,0) || (fVX > 0 && colR) || (fVX < 0 && colL)))
 			{
 				var steepness = ModifySlopeXSteepness_Up();
@@ -761,6 +702,7 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 			
 			position.X += fVX;
 		}
+		x = scr_round(position.X);
 		
 		var fVY = ModifyFinalVelY(min(maxSpeedY,1)*sign(vY));
 		if(fVY != 0)
@@ -769,8 +711,8 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 		
 			DestroyBlock(position.X,position.Y+fVY);
 		
-			var colB = entity_collision_line(bbox_left,bbox_bottom+fVY,bbox_right,bbox_bottom+fVY),
-				colT = entity_collision_line(bbox_left,bbox_top+fVY,bbox_right,bbox_top+fVY);
+			var colB = entity_collision_line(bb_left(),bb_bottom()+fVY,bb_right(),bb_bottom()+fVY),
+				colT = entity_collision_line(bb_left(),bb_top()+fVY,bb_right(),bb_top()+fVY);
 			if(entity_place_collide(0,sign(fVY)) && (!entity_place_collide(0,0) || (fVY > 0 && colB) || (fVY < 0 && colT)))
 			{
 				var steepness = ModifySlopeYSteepness_Up();
@@ -898,13 +840,11 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 			
 			position.Y += fVY;
 		}
+		y = scr_round(position.Y);
 		
 		maxSpeedX = max(maxSpeedX-1,0);
 		maxSpeedY = max(maxSpeedY-1,0);
 	}
-	
-	x = scr_round(position.X);
-	y = scr_round(position.Y);
 	
 	shiftX = 0;
 	shiftY = 0;
@@ -1088,8 +1028,8 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 		
 			DestroyBlock(position.X+fVX,position.Y);
 		
-			var colR = entity_collision_line(bbox_right+fVX,bbox_top,bbox_right+fVX,bbox_bottom),
-				colL = entity_collision_line(bbox_left+fVX,bbox_top,bbox_left+fVX,bbox_bottom);
+			var colR = entity_collision_line(bb_right()+fVX,bb_top(),bb_right()+fVX,bb_bottom()),
+				colL = entity_collision_line(bb_left()+fVX,bb_top(),bb_left()+fVX,bb_bottom());
 			if(entity_place_collide(sign(fVX),0) && (!entity_place_collide(0,0) || (fVX > 0 && colR) || (fVX < 0 && colL)))
 			{
 				var steepness = ModifySlopeXSteepness_Up();
@@ -1274,6 +1214,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 			
 			position.X += fVX;
 		}
+		x = scr_round(position.X);
 		
 		var fVY = Crawler_ModifyFinalVelY(min(maxSpeedY,1)*sign(vY));
 		if(fVY != 0)
@@ -1282,8 +1223,8 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 		
 			DestroyBlock(position.X,position.Y+fVY);
 		
-			var colB = entity_collision_line(bbox_left,bbox_bottom+fVY,bbox_right,bbox_bottom+fVY),
-				colT = entity_collision_line(bbox_left,bbox_top+fVY,bbox_right,bbox_top+fVY);
+			var colB = entity_collision_line(bb_left(),bb_bottom()+fVY,bb_right(),bb_bottom()+fVY),
+				colT = entity_collision_line(bb_left(),bb_top()+fVY,bb_right(),bb_top()+fVY);
 			if(entity_place_collide(0,sign(fVY)) && (!entity_place_collide(0,0) || (fVY > 0 && colB) || (fVY < 0 && colT)))
 			{
 				var steepness = ModifySlopeYSteepness_Up();
@@ -1469,13 +1410,11 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 			
 			position.Y += fVY;
 		}
+		y = scr_round(position.Y);
 		
 		maxSpeedX = max(maxSpeedX-1,0);
 		maxSpeedY = max(maxSpeedY-1,0);
 	}
-	
-	x = scr_round(position.X);
-	y = scr_round(position.Y);
 	
 	shiftX = 0;
 	shiftY = 0;
@@ -1527,8 +1466,8 @@ function Collision_MovingSolid(vX, vY)
 		
 		DestroyBlock(position.X+fVX,position.Y);
 		
-		var colR = entity_collision_line(bbox_right+fVX,bbox_top,bbox_right+fVX,bbox_bottom),
-			colL = entity_collision_line(bbox_left+fVX,bbox_top,bbox_left+fVX,bbox_bottom);
+		var colR = entity_collision_line(bb_right()+fVX,bb_top(),bb_right()+fVX,bb_bottom()),
+			colL = entity_collision_line(bb_left()+fVX,bb_top(),bb_left()+fVX,bb_bottom());
 		if(entity_place_collide(sign(fVX),0) && (!entity_place_collide(0,0) || (fVX > 0 && colR) || (fVX < 0 && colL)))
 		{
 			var steepness = upSlopeSteepness_X;
@@ -1652,6 +1591,7 @@ function Collision_MovingSolid(vX, vY)
 		#endregion
 		
 		position.X += fVX;
+		x = scr_round(position.X);
 		
 		maxSpeedX = max(maxSpeedX-1,0);
 	
@@ -1662,8 +1602,8 @@ function Collision_MovingSolid(vX, vY)
 		
 		DestroyBlock(position.X,position.Y+fVY);
 		
-		var colB = entity_collision_line(bbox_left,bbox_bottom+fVY,bbox_right,bbox_bottom+fVY),
-			colT = entity_collision_line(bbox_left,bbox_top+fVY,bbox_right,bbox_top+fVY);
+		var colB = entity_collision_line(bb_left(),bb_bottom()+fVY,bb_right(),bb_bottom()+fVY),
+			colT = entity_collision_line(bb_left(),bb_top()+fVY,bb_right(),bb_top()+fVY);
 		if(entity_place_collide(0,sign(fVY)) && (!entity_place_collide(0,0) || (fVY > 0 && colB) || (fVY < 0 && colT)))
 		{
 			var steepness = upSlopeSteepness_Y;
@@ -1788,12 +1728,10 @@ function Collision_MovingSolid(vX, vY)
 		#endregion
 		
 		position.Y += fVY;
+		y = scr_round(position.Y);
 		
 		maxSpeedY = max(maxSpeedY-1,0);
 	}
-	
-	x = scr_round(position.X);
-	y = scr_round(position.Y);
 }
 #endregion
 
@@ -1977,13 +1915,13 @@ function ToggleSwitch(_x,_y,_objIndex)
 #region liquid_place
 function liquid_place()
 {
-	return instance_place(x,y,obj_Liquid);
+	return instance_place(position.X,position.Y,obj_Liquid);
 }
 #endregion
 #region liquid_top
 function liquid_top()
 {
-	return collision_line(bbox_left, bbox_top, bbox_right, bbox_top, obj_Liquid, true, true);
+	return collision_line(bb_left(), bb_top(), bb_right(), bb_top(), obj_Liquid, true, true);
 }
 #endregion
 
@@ -2002,8 +1940,8 @@ canSplash = 1;
 breathTimer = 180;
 stepSplash = 0;
 
-prevTop = bbox_top;
-prevBottom = bbox_bottom;
+prevTop = bb_top();
+prevBottom = bb_bottom();
 
 #region EntityLiquid
 
@@ -2019,12 +1957,12 @@ function EntityLiquid(_mass, _velX, _velY, _sound = true, _isBeam = false, _isMi
 	
 	if(liquid != liquidPrev)
 	{
-		if(liquid && prevBottom < liquid.bbox_top)
+		if(liquid && prevBottom < liquid.bb_top())
 		{
 			liquid.CreateSplash(id,_mass,_velX,_velY,true,_sound,_isBeam)
 			enteredLiquid = (_mass+1) * 15;
 		}
-		else if(liquidPrev && bbox_bottom < liquidPrev.bbox_top && !_isBeam && !_isMissile)
+		else if(liquidPrev && bb_bottom() < liquidPrev.bb_top() && !_isBeam && !_isMissile)
 		{
 			liquidPrev.CreateSplash(id,_mass,_velX,0,false,_sound,false);
 			returnLiq = liquidPrev;
@@ -2036,7 +1974,7 @@ function EntityLiquid(_mass, _velX, _velY, _sound = true, _isBeam = false, _isMi
 	
 	if(liquidTop != liquidTopPrev)
 	{
-		if(!liquidTop && liquidTopPrev && bbox_top < liquidTopPrev.bbox_top)
+		if(!liquidTop && liquidTopPrev && bb_top() < liquidTopPrev.bb_top())
 		{
 			liquidTopPrev.CreateSplash(id,_mass,_velX,_velY,false,_sound,_isBeam);
 			returnLiq = liquidTopPrev;
@@ -2046,8 +1984,8 @@ function EntityLiquid(_mass, _velX, _velY, _sound = true, _isBeam = false, _isMi
 		liquidTopPrev = liquidTop;
 	}
 	
-	prevTop = bbox_top;
-	prevBottom = bbox_bottom;
+	prevTop = bb_top();
+	prevBottom = bb_bottom();
 	
 	return returnLiq;
 }
@@ -2072,7 +2010,7 @@ function EntityLiquid_Large(_velX, _velY)
 	
 	if(liquid && enteredLiquid > 0 && choose(1,1,1,0) == 1)
 	{
-		var bub = liquid.CreateBubble(x-8+random(16),bbox_top+random(bbox_bottom-bbox_top),0,0);
+		var bub = liquid.CreateBubble(x-8+random(16),y+random_range(bb_top(0),bb_bottom(0)),0,0);
 		bub.spriteIndex = sprt_WaterBubble;
 
 		if (_velY > 0)
@@ -2102,7 +2040,7 @@ function EntityLiquid_Large(_velX, _velY)
 	}
 	if (leftLiquidTop && choose(1,1,1,0,0) == 1)
 	{
-		var drop = instance_create_depth(x-8+random(16),bbox_bottom+random(bbox_top-y+4),depth-1,obj_WaterDrop);
+		var drop = instance_create_depth(x-8+random(16),bb_bottom()+random(bb_top(0)+4),depth-1,obj_WaterDrop);
 		drop.liquidType = leftLiquidTopType;
 		with (drop)
 		{

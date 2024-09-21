@@ -37,7 +37,7 @@ if(!PauseAI())
 		velX = 0;
 	}
 
-	grounded = (entity_place_collide(0,1) || (bbox_bottom+1) >= room_height);// && velY == 0);
+	grounded = (entity_place_collide(0,1) || (bb_bottom()+1) >= room_height);// && velY == 0);
 	fGrav = grav[instance_exists(liquid)];
 
 	if(!grounded)

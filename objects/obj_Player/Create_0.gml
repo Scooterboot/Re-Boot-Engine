@@ -110,7 +110,6 @@ grounded = true;
 prevGrounded = grounded;
 slopeGrounded = false;
 
-wallJumpDelay = 6;
 canWallJump = false;
 fastWJCheckVel = 0;
 
@@ -220,8 +219,8 @@ boostBallFX = 0;
 boostBallFXFlash = false;
 boostBallSnd = noone;
 
-morphStallMax = 14;
-morphStall = 0;
+//morphStallMax = 14;
+//morphStall = 0;
 
 
 isChargeSomersaulting = false;
@@ -1047,7 +1046,7 @@ mbTrailPosY = array_create(mbTrailLength, noone);
 mbTrailDir = array_create(mbTrailLength, noone);
 
 mbTrailNum = 0;
-mbTrailNumRate = 0.625;
+mbTrailNumRate = 1;
 
 mbTrailSurface = surface_create(global.resWidth,global.resHeight);
 mbTrailAlpha = 0;
@@ -1217,16 +1216,6 @@ function ModifySlopeYSteepness_Down()
 	return 2;
 }
 
-function SlopeCheck(slope)
-{
-	var slopeCheck = (slope.image_yscale > 0 && (
-		(sign(slope.image_xscale) == -sign(velX) && (slope.image_yscale <= 1 || abs(velX) < 1.5 || speedBoost)) ||
-		(sign(slope.image_xscale) == sign(velX) && (slope.image_yscale <= 1 || abs(velX) < 1.5)))
-		&& ((slope.image_xscale > 0 && bbox_left >= slope.bbox_left) || (slope.image_xscale < 0 && bbox_right <= slope.bbox_right)));
-	
-	return slopeCheck;
-}
-
 function OnRightCollision(fVX)
 {
 	
@@ -1335,9 +1324,9 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 	{
 		var flag = false;
 		
-		var bbottom = position.Y + (bbox_bottom-y),
-			bright = position.X + (bbox_right-x),
-			bleft = position.X + (bbox_left-x);
+		var bbottom = bb_bottom(),
+			bright = bb_right(),
+			bleft = bb_left();
 		if(fVelX > 0 && !entity_collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1) && !lhc_collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1,"IPlatform",true,true))
 		{
 			flag = true;
@@ -1950,16 +1939,16 @@ function CanChangeState(newMask)
 {
 	if(mask_index != newMask)
 	{
-		var bright = bbox_right-x + position.X,
-			bleft = bbox_left-x + position.X;
+		var bright = scr_round(bb_right()),
+			bleft = scr_round(bb_left());
 		
 		var curMask = mask_index,
-			curTop = bbox_top-y + position.Y,
-			curBottom = bbox_bottom-y + position.Y;
+			curTop = scr_round(bb_top()),
+			curBottom = scr_round(bb_bottom());
 		
 		mask_index = newMask;
-		var newTop = bbox_top-y + position.Y,
-			newBottom = bbox_bottom-y + position.Y;
+		var newTop = scr_round(bb_top()),
+			newBottom = scr_round(bb_bottom());
 		
 		var checkYTop = 0,
 			checkYBottom = 0;
@@ -2003,16 +1992,16 @@ function ChangeState(newState,newStateFrame,newMask,isGrounded,stallCam = true)
 	
 	if(mask_index != newMask)
 	{
-		var bright = bbox_right-x + position.X,
-			bleft = bbox_left-x + position.X;
+		var bright = scr_round(bb_right()),
+			bleft = scr_round(bb_left());
 		
 		var curMask = mask_index,
-			curTop = bbox_top-y + position.Y,
-			curBottom = bbox_bottom-y + position.Y;
+			curTop = scr_round(bb_top()),
+			curBottom = scr_round(bb_bottom());
 		
 		mask_index = newMask;
-		var newTop = bbox_top-y + position.Y,
-			newBottom = bbox_bottom-y + position.Y;
+		var newTop = scr_round(bb_top()),
+			newBottom = scr_round(bb_bottom());
 		
 		var checkYTop = 0,
 			checkYBottom = 0;
@@ -2123,22 +2112,28 @@ function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWav
 #endregion
 
 #region PlayerGrounded
-function PlayerGrounded(ydiff = 1)
+function PlayerGrounded(ydiff = 2)
 {
-	var bbottom = bbox_bottom-y + position.Y,
-		bright = bbox_right-x + position.X,
-		bleft = bbox_left-x + position.X;
-	var bottomCollision = entity_collision_line(bleft,bbottom+ydiff,bright,bbottom+ydiff);
-	var bottomCollision2 = entity_collision_line(bbox_left,bbox_bottom+ydiff,bbox_right,bbox_bottom+ydiff);
+	if(spiderBall && spiderEdge != Edge.None && jump <= 0)
+	{
+		return true;
+	}
 	
-	var bottomCollision3 = (bottomCollision || bottomCollision2 || (y+ydiff) >= room_height);
-	var downSlopeFlag = abs(GetEdgeAngle(Edge.Bottom,0,0)) >= 60;
+	var bbottom = scr_round(bb_bottom()),
+		bright = scr_round(bb_right()),
+		bleft = scr_round(bb_left());
+	var bottomCollision = entity_collision_line(bleft,bbottom+ydiff,bright,bbottom+ydiff) || (y+ydiff) >= room_height;
+	var downSlopeFlag = abs(GetEdgeAngle(Edge.Bottom,0,0)) >= 60 && !speedBoost;
 	
-	return (((bottomCollision3 && (!downSlopeFlag || speedBoost) && velY >= 0 && velY <= fGrav) || (spiderBall && spiderEdge != Edge.None)) && jump <= 0);
+	if(velY >= 0 && velY <= fGrav && jump <= 0)
+	{
+		return (bottomCollision && !downSlopeFlag);
+	}
+	return false;
 }
 #endregion
 #region PlayerOnPlatform
-function PlayerOnPlatform(ydiff = 1)
+function PlayerOnPlatform(ydiff = 2)
 {
 	return ((entityPlatformCheck(0,ydiff) || entityPlatformCheck(0,ydiff,x,y)) && fVelY >= 0 && state != State.Spark && state != State.BallSpark);
 }
@@ -2218,8 +2213,8 @@ function EntityLiquid_Large(_velX, _velY)
 			
 			repeat(3)
 			{
-				var splX = irandom_range(bbox_left+1,bbox_right-1),
-					splY = liquid.bbox_top;
+				var splX = irandom_range(bb_left()+1,bb_right()-1),
+					splY = liquid.bb_top();
 				var spl = instance_create_layer(splX - 1 + irandom(2), splY, "Liquids_fg", obj_SplashFXFade);
 				spl.liquid = liquid;
 				spl.image_index = irandom(2);
@@ -2234,8 +2229,7 @@ function EntityLiquid_Large(_velX, _velY)
 	
 	if (liquid && (enteredLiquid > 0 || speedBoost) && choose(1,1,1,0) == 1)
 	{
-		//var bub = liquid.CreateBubble(x-8+random(16),bbox_top+random(bbox_bottom-bbox_top),0,0);
-		var bub = liquid.CreateBubble(random_range(bbox_left-3,bbox_right+3),random_range(bbox_top-3,bbox_bottom+3),0,0);
+		var bub = liquid.CreateBubble(random_range(bb_left()-3,bb_right()+3),random_range(bb_top()-3,bb_bottom()+3),0,0);
 		bub.spriteIndex = sprt_WaterBubble;
 
 		if (_velY > 0)
@@ -2270,7 +2264,7 @@ function EntityLiquid_Large(_velX, _velY)
 	}
 	if (leftLiquidTop && choose(1,1,1,0,0) == 1)
 	{
-		var drop = instance_create_depth(x-8+random(16),bbox_bottom+random(bbox_top-y+4),depth-1,obj_WaterDrop);
+		var drop = instance_create_depth(x-8+random(16),bb_bottom()+random(bb_top()-y+4),depth-1,obj_WaterDrop);
 		drop.liquidType = leftLiquidTopType;
 		if (state == State.Somersault)
 		{
@@ -2304,7 +2298,7 @@ function EntityLiquid_Large(_velX, _velY)
      
 			if (liquidTop && (breathTimer mod 8 == 0))
 			{
-				var bub = liquid.CreateBubble(x + 4*dir, bbox_top + 7, dir/2 -0.15 + random(0.3), 0.2+random(0.1));
+				var bub = liquid.CreateBubble(x + 4*dir, bb_top() + 7, dir/2 -0.15 + random(0.3), 0.2+random(0.1));
 				bub.spriteIndex = sprt_WaterBubbleSmall;
 				bub.breathed = 0.15;
 				bub.velX += _velX/2;
@@ -2328,21 +2322,21 @@ function EntityLiquid_Large(_velX, _velY)
 		{
 			repeat(3)
 			{
-				var bub = liquid.CreateBubble(random_range(bbox_left-3,bbox_right+3),random_range(bbox_top-3,bbox_bottom+3),0,0);
+				var bub = liquid.CreateBubble(random_range(bb_left()-3,bb_right()+3),random_range(bb_top()-3,bb_bottom()+3),0,0);
 				bub.kill = true;
 				bub.canSpread = false;
 			}
 		}
 		else if(liquid.liquidType == LiquidType.Acid)
 		{
-			var bub = liquid.CreateBubble(random_range(bbox_left-3,bbox_right+3),random_range(bbox_top-3,bbox_bottom+3),0,0);
+			var bub = liquid.CreateBubble(random_range(bb_left()-3,bb_right()+3),random_range(bb_top()-3,bb_bottom()+3),0,0);
 			bub.kill = true;
 			bub.canSpread = false;
 		}
 		
 		if(stateFrame == State.Brake && brakeFrame >= 9)
 		{
-			var bub = liquid.CreateBubble(x-random(12)*dir,bbox_bottom+4-random(8),0,0);
+			var bub = liquid.CreateBubble(x-random(12)*dir,bb_bottom()+4-random(8),0,0);
 			bub.kill = true;
 			bub.canSpread = false;
 		}
@@ -3582,8 +3576,8 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 						tColor = merge_colour(mbTrailColor_End,mbTrailColor_Start,tRatio*2-1);
 					}
 
-					var dist = min(i*1.5,8);
-					if(mbTrailDir[i] == noone)
+					var dist = min(i+2,8);
+					if(mbTrailDir[i] == noone || (i >= mbTrailLength-1 && stateFrame != State.Morph))
 					{
 						dist = 0;
 						tColor = c_black;
@@ -3597,12 +3591,15 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 							trailY2 = mbTrailPosY[i]-camY + lengthdir_y(dist,mbTrailDir[i]+90);
 						
 						var ytex = scr_wrap(mbTrailNum + i*mbTrailNumRate, 0, mbTrailLength) / mbTrailLength;
-						ytex *= 2;
-						ytex -= 1;
-						ytex = abs(ytex);
 						
 						draw_vertex_texture_color(trailX1, trailY1, 0, ytex, tColor, tAlpha*mbTrailAlpha);
 						draw_vertex_texture_color(trailX2, trailY2, 1, ytex, tColor, tAlpha*mbTrailAlpha);
+						
+						if(ytex >= 1 - mbTrailNumRate / mbTrailLength)
+						{
+							draw_vertex_texture_color(trailX1, trailY1, 0, 0, tColor, tAlpha*mbTrailAlpha);
+							draw_vertex_texture_color(trailX2, trailY2, 1, 0, tColor, tAlpha*mbTrailAlpha);
+						}
 					}
 				}
 				

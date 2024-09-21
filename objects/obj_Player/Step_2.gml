@@ -1093,7 +1093,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				}
 				if(brakeFrame >= 10 && !liquid)
 				{
-					part_particles_create(obj_Particles.partSystemB,x-(8+random(4))*dir,bbox_bottom+random(4),obj_Particles.bDust[1],1);
+					part_particles_create(obj_Particles.partSystemB,x-(8+random(4))*dir,bb_bottom()+random(4),obj_Particles.bDust[1],1);
 				}
 				bodyFrame = clamp(5 - ceil(brakeFrame/2), 0, 4);
 				switch bodyFrame

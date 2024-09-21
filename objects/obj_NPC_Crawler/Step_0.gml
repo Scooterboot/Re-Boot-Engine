@@ -53,19 +53,19 @@ if(colEdge == Edge.None)
 	}
 }
 
-var colL = entity_collision_line(bbox_left,bbox_top,bbox_left,bbox_bottom),
-	colR = entity_collision_line(bbox_right,bbox_top,bbox_right,bbox_bottom),
-	colT = entity_collision_line(bbox_left,bbox_top,bbox_right,bbox_top),
-	colB = entity_collision_line(bbox_left,bbox_bottom,bbox_right,bbox_bottom);
+var colL = entity_collision_line(bb_left(),bb_top(),bb_left(),bb_bottom()),
+	colR = entity_collision_line(bb_right(),bb_top(),bb_right(),bb_bottom()),
+	colT = entity_collision_line(bb_left(),bb_top(),bb_right(),bb_top()),
+	colB = entity_collision_line(bb_left(),bb_bottom(),bb_right(),bb_bottom());
 if(entity_place_collide(0,0) && colL+colR+colT+colB >= 3)
 {
 	var flag3 = false;
 	var dirX = 0, dirY = 0;
-	if(!entity_collision_line(bbox_right+1,bbox_top,bbox_right+1,bbox_bottom))
+	if(!entity_collision_line(bb_right()+1,bb_top(),bb_right()+1,bb_bottom()))
 	{
 		dirX = 1;
 	}
-	else if(!entity_collision_line(bbox_left-1,bbox_top,bbox_left-1,bbox_bottom))
+	else if(!entity_collision_line(bb_left()-1,bb_top(),bb_left()-1,bb_bottom()))
 	{
 		dirX = -1;
 	}
@@ -75,11 +75,11 @@ if(entity_place_collide(0,0) && colL+colR+colT+colB >= 3)
 		flag3 = true;
 	}
 	
-	if(!entity_collision_line(bbox_left,bbox_bottom+1,bbox_right,bbox_bottom+1))
+	if(!entity_collision_line(bb_left(),bb_bottom()+1,bb_right(),bb_bottom()+1))
 	{
 		dirY = 1;
 	}
-	else if(!entity_collision_line(bbox_left,bbox_top-1,bbox_right,bbox_top-1) || flag3)
+	else if(!entity_collision_line(bb_left(),bb_top()-1,bb_right(),bb_top()-1) || flag3)
 	{
 		dirY = -1;
 	}

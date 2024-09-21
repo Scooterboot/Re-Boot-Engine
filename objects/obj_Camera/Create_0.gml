@@ -60,10 +60,10 @@ colList = ds_list_create();
 
 function camera_collide(colX, colY, dsList)
 {
-	var col = collision_rectangle_list(x+colX, y+colY, x+colX+global.resWidth-1, y+colY+global.resHeight-1,obj_CamTile,false,true,dsList,true);
+	var col = collision_rectangle_list(x+colX, y+colY, x+colX+global.resWidth, y+colY+global.resHeight,obj_CamTile,false,true,dsList,true);
 	
 	var wDiff = abs(global.resWidth - global.ogResWidth)/2;
-	col += collision_rectangle_list(x+wDiff+colX, y+colY, x+wDiff+colX+global.ogResWidth-1, y+colY+global.resHeight-1,obj_CamTile_NonWScreen,false,true,dsList,true);
+	col += collision_rectangle_list(x+wDiff+colX, y+colY, x+wDiff+colX+global.ogResWidth, y+colY+global.resHeight,obj_CamTile_NonWScreen,false,true,dsList,true);
 	
 	return col;
 }

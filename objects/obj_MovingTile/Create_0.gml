@@ -63,8 +63,8 @@ function UpdatePosition(_x,_y, avoidClipping = false)
 	collision_rectangle_list(
 		min(bbox_left-2,bbox_left+bVelX),
 		min(bbox_top-2,bbox_top+bVelY),
-		max(bbox_right+2,bbox_right+bVelX),
-		max(bbox_bottom+2,bbox_bottom+bVelY),
+		max(bbox_right+1,bbox_right-1+bVelX),
+		max(bbox_bottom+1,bbox_bottom-1+bVelY),
 		obj_Entity,true,true,entityList,false);
 	
 	for(var i = 0; i < ds_list_size(entityList); i++)

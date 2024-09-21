@@ -129,14 +129,14 @@ function DamagePlayer()
 	    if(instance_exists(player))
 	    {
 	        var ang = 45;
-			if(player.bbox_bottom > bbox_bottom)
+			if(player.bb_bottom() > bb_bottom())
 			{
 				ang = 315;
 			}
 			if(player.x < x)
 			{
 				ang = 135;
-				if(player.bbox_bottom > bbox_bottom)
+				if(player.bb_bottom() > bb_bottom())
 				{
 					ang = 225;
 				}

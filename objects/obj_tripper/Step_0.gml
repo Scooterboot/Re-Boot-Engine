@@ -8,7 +8,7 @@ if(!PauseAI())
 		moveY = y-oldPosY[0];
 
 	var player = obj_Player;
-	if (instance_exists(player) && (player.bbox_bottom <= bbox_top || player.bbox_bottom <= (bbox_top-moveY)) &&
+	if (instance_exists(player) && (player.bb_bottom() <= bb_top() || player.bb_bottom() <= (bb_top()-moveY)) &&
 		player.grounded && (place_meeting(x,y-2,player) || place_meeting(x-moveX,y-moveY-2,player)))
 	{
 		gravCounter++;

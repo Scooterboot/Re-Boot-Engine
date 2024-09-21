@@ -8,18 +8,18 @@ var pos = SurfPos();
 draw_set_alpha(gradAlpha);
 gpu_set_blendmode(bm_add);
 
-draw_rectangle_color(bbox_left,bbox_top-32,bbox_right,bbox_top,0,0,gradCol,gradCol,false);
-draw_rectangle_color(bbox_left,bbox_top+64,bbox_right,bbox_top,gradCol,gradCol,0,0,false);
+draw_rectangle_color(bb_left(),bb_top()-32,bb_right(),bb_top(),0,0,gradCol,gradCol,false);
+draw_rectangle_color(bb_left(),bb_top()+64,bb_right(),bb_top(),gradCol,gradCol,0,0,false);
 
 for(var i = 1; i < 16; i++)
 {
 	draw_set_alpha(gradAlpha*((17-i)/16));
 	
-	draw_line_color(bbox_left-i,bbox_top-32,bbox_left-i,bbox_top,0,gradCol);
-	draw_line_color(bbox_right+i,bbox_top-32,bbox_right+i,bbox_top,0,gradCol);
+	draw_line_color(bb_left()-i,bb_top()-32,bb_left()-i,bb_top(),0,gradCol);
+	draw_line_color(bb_right()+i,bb_top()-32,bb_right()+i,bb_top(),0,gradCol);
 	
-	draw_line_color(bbox_left-i,bbox_top+64,bbox_left-i,bbox_top,0,gradCol);
-	draw_line_color(bbox_right+i,bbox_top+64,bbox_right+i,bbox_top,0,gradCol);
+	draw_line_color(bb_left()-i,bb_top()+64,bb_left()-i,bb_top(),0,gradCol);
+	draw_line_color(bb_right()+i,bb_top()+64,bb_right()+i,bb_top(),0,gradCol);
 }
 
 gpu_set_blendmode(bm_normal);

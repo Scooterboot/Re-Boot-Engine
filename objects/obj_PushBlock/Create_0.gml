@@ -30,7 +30,7 @@ sndStopped = false;
 
 function explodePush(_proj,_velX)
 {
-	if(!place_meeting(x,y-2,obj_Player) || _proj.y > bbox_top)
+	if(!place_meeting(x,y-2,obj_Player) || _proj.y > bb_top())
 	{
 		var _dir = sign(_velX);
 		if(_velX == 0)
@@ -46,9 +46,9 @@ function explodePush(_proj,_velX)
 		{
 			_spd = 10;
 		}
-		if(_proj.x > bbox_left && _proj.x < bbox_right && (_proj.y < bbox_top || _proj.y > bbox_bottom))
+		if(_proj.x > bb_left() && _proj.x < bb_right() && (_proj.y < bb_top() || _proj.y > bb_bottom()))
 		{
-			_spd *= abs(x - _proj.x) / (bbox_right-x);
+			_spd *= abs(x - _proj.x) / (bb_right(x)-x);
 			if(_spd <= 1 || (_velX != 0 && sign(_velX) != sign(x - _proj.x)))
 			{
 				_spd = 0;
@@ -73,7 +73,7 @@ mBlock.ignoredEntity = id;
 function ModifyFinalVelY(fVY)
 {
 	var fellVel = 1;
-	if((entity_place_collide(0,fVY+fellVel) || (bbox_bottom+fVY+fellVel) >= room_height) && fVY >= 0)
+	if((entity_place_collide(0,fVY+fellVel) || (bb_bottom()+fVY+fellVel) >= room_height) && fVY >= 0)
 	{
 		justFell = true;
 	}
@@ -117,14 +117,11 @@ function OnBottomCollision(fVY)
 	{
 		audio_play_sound(snd_PushBlock_Land,0,false);
 		
-		var bbleft = position.X + (bbox_left-x),
-			bbright = position.X + (bbox_right-x),
-			bbbottom = position.Y + (bbox_bottom-y) + fVY;
 		if(liquid)
 		{
 			repeat(8)
 			{
-				var bub = liquid.CreateBubble(irandom_range(bbleft,bbright),bbbottom,0,0);
+				var bub = liquid.CreateBubble(irandom_range(bb_left(),bb_right()), bb_bottom()+fVY, 0, 0);
 				bub.canSpread = false;
 				bub.kill = true;
 			}
@@ -133,7 +130,7 @@ function OnBottomCollision(fVY)
 		{
 			repeat(8)
 			{
-				part_particles_create(obj_Particles.partSystemB,irandom_range(bbleft,bbright),bbbottom,obj_Particles.bDust[1],1);
+				part_particles_create(obj_Particles.partSystemB, irandom_range(bb_left(),bb_right()), bb_bottom()+fVY, obj_Particles.bDust[1], 1);
 			}
 		}
 			

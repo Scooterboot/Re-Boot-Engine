@@ -2,9 +2,9 @@
 
 if(!init && (!instance_exists(obj_Transition) || obj_Transition.transitionComplete))
 {
-	if(instance_exists(obj_Player) && obj_Player.bbox_bottom > y)
+	if(instance_exists(obj_Player) && obj_Player.bb_bottom() > y)
 	{
-		ele.y = bbox_bottom-15;
+		ele.y = bbox_bottom-15 - 1;
 		ele.ystart = y;
 		ele.upward = true;
 		ele.downward = false;
@@ -21,7 +21,7 @@ if(ele.y == ele.ystart)
 	}
 	else if(ele.upward)
 	{
-		ele.ystart = bbox_bottom-15;
+		ele.ystart = bbox_bottom-15 - 1;
 	}
 	
 	ele.upward = !ele.upward;

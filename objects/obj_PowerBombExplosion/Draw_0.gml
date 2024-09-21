@@ -1,9 +1,9 @@
 /// @description Draw
 
-var x1 = bbox_left-x,
-	y1 = bbox_top-y,
-	x2 = bbox_right-x,
-	y2 = bbox_bottom-y;
+var x1 = bb_left(0),
+	y1 = bb_top(0),
+	x2 = bb_right(0),
+	y2 = bb_bottom(0);
 
 draw_set_color(c_yellow);
 

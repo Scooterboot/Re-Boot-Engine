@@ -383,10 +383,10 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 
 #region Liquid Movement
 	var liquidMovement = false;
-	var findLiquid = instance_place(x,y,obj_Liquid);
+	var findLiquid = liquid_place();
 	if(instance_exists(findLiquid))
 	{
-		liquidLevel = max(bbox_bottom - findLiquid.y,0);
+		liquidLevel = max(bb_bottom() - findLiquid.y,0);
 
 	    var dph = 10;
 	    if(stateFrame == State.Morph)
@@ -542,59 +542,63 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					}
 				}
 			}
-		
-			if(global.aimStyle == 0)// && !cAimLock)
-			{
-				if(cAngleUp)
-				{
-					aimAngle = cAngleUp + cAngleDown;
-				}
-				else if(cAngleDown)
-				{
-					aimAngle = -1;
-				}
 			
-				if(cAngleUp && cAngleDown && move != 0 && grounded && !walkState && sign(velX) == dir && abs(dirFrame) >= 4)
-				{
-					aimAngle = 1;
-				}
-			}
-	
-			if(global.aimStyle == 1)// && !cAimLock)
+			if(!spiderBall)
 			{
-				if(cAngleUp)
+				if(global.aimStyle == 0)// && !cAimLock)
 				{
-					if(cDown && !cUp)
+					if(cAngleUp)
 					{
-						gbaAimAngle = -1;
+						aimAngle = cAngleUp + cAngleDown;
 					}
-					else if((cUp && (stateFrame != State.Morph || entity_place_collide(0,-17))) || gbaAimAngle == 0)
+					else if(cAngleDown)
 					{
-						gbaAimAngle = 1;
+						aimAngle = -1;
 					}
-			
-					aimAngle = gbaAimAngle;
+						
+					/*if(cAngleUp && cAngleDown && move != 0 && grounded && !walkState && sign(velX) == dir && abs(dirFrame) >= 4)
+					{
+						aimAngle = 1;
+					}*/
 				}
-				else
+				
+				if(global.aimStyle == 1)// && !cAimLock)
+				{
+					if(cAngleUp)
+					{
+						if(cDown && !cUp)
+						{
+							gbaAimAngle = -1;
+						}
+						else if((cUp && (stateFrame != State.Morph || entity_place_collide(0,-17))) || gbaAimAngle == 0)
+						{
+							gbaAimAngle = 1;
+						}
+							
+						aimAngle = gbaAimAngle;
+					}
+					else
+					{
+						gbaAimAngle = 0;
+					}
+				}
+				else //if(!cAimLock)
 				{
 					gbaAimAngle = 0;
 				}
-			}
-			else //if(!cAimLock)
-			{
-				gbaAimAngle = 0;
-			}
-	
-			if(global.aimStyle == 2)
-			{
-				if(cAngleUp && !spiderBall)
+				
+				/*if(global.aimStyle == 2)
 				{
-					cUp = false;
-					cDown = false;
-					cLeft = false;
-					cRight = false;
-					move = 0;
-				}
+					if(cAngleUp && !spiderBall)
+					{
+						cUp = false;
+						cDown = false;
+						cLeft = false;
+						cRight = false;
+						move = 0;
+						move2 = 0;
+					}
+				}*/
 			}
 		}
 	}
@@ -1070,12 +1074,20 @@ if(xRayActive)
 	
 	if(state == State.Jump || state == State.Somersault)
 	{
-		canWallJump = (move != 0 && (entity_place_collide(velX+prevVelX-8*move,0) || lhc_place_meeting(position.X+velX+prevVelX-8*move,position.Y,"IPlatform")) && wallJumpDelay <= 0 && wjFrame <= 0);
-		wallJumpDelay = max(wallJumpDelay - 1, 0);
+		var detectRange = 8 + abs(prevVelX);
+		canWallJump = (move != 0 && (entity_place_collide(velX-detectRange*move,0) || lhc_place_meeting(position.X+velX-detectRange*move,position.Y,"IPlatform")) && wjFrame <= 0 && coyoteJump <= 0);
 	}
 	else
 	{
-		wallJumpDelay = 6;
+		if(state == State.Grip)
+		{
+			canWallJump = ((gripGunReady && move2 != dir && !cDown) || (move2 != 0 && move2 != dir));
+		}
+		else if(state != State.Grapple)
+		{
+			canWallJump = false;
+		}
+		wjAnimDelay = 10;
 	}
 	
 	#region Jump Logic
@@ -1182,10 +1194,10 @@ if(xRayActive)
 							if(fastWJFlash > 0)
 							{
 								var dist = instance_create_depth(0,0,0,obj_Distort);
-								dist.left = bbox_left-16 - velX;
-								dist.top = bbox_top-8;
-								dist.right = bbox_right+16 - velX;
-								dist.bottom = bbox_bottom+8;
+								dist.left = bb_left()-16 - velX;
+								dist.top = bb_top()-8;
+								dist.right = bb_right()+16 - velX;
+								dist.bottom = bb_bottom()+8;
 								dist.alpha = 0.5;
 								dist.alphaNum = 1;
 								dist.alphaRate = 0.5;
@@ -1210,9 +1222,29 @@ if(xRayActive)
 							dodgeRecharge = min(dodgeRecharge+dodgeRechargeRate,dodgeRechargeMax);
 						}
 						
-						if(!liquid)
+						if(liquid && liquid.liquidType != LiquidType.Lava)
 						{
-							part_particles_create(obj_Particles.partSystemB,x-6*dir,y+10,obj_Particles.bDust[0],3);
+							for(var i = 0; i < 3; i++)
+							{
+								var bub = liquid.CreateBubble(x-6*dir + random_range(-2,2), y+10 + random_range(-2,2), 0,0);
+								bub.kill = true;
+								bub.canSpread = false;
+								if(fastWJFlash > 0)
+								{
+									bub.spriteIndex = sprt_WaterBubble;
+								}
+							}
+						}
+						else if(!liquid)
+						{
+							if(fastWJFlash > 0)
+							{
+								part_particles_create(obj_Particles.partSystemB,x-6*dir,y+10,obj_Particles.lDust[0],3);
+							}
+							else
+							{
+								part_particles_create(obj_Particles.partSystemB,x-6*dir,y+10,obj_Particles.bDust[0],3);
+							}
 						}
 					}
 					else if(state == State.Grip && gripGunReady)
@@ -1625,7 +1657,7 @@ if(xRayActive)
 		        }
 		    }
 			
-			var fMaxSpeed2 = fMaxSpeed;
+			var fMaxSpeed2 = maxSpeed[5,liquidState];
 			if(speedBoost)
 			{
 				fMaxSpeed2 = maxSpeed[2,liquidState];
@@ -1860,8 +1892,8 @@ if(xRayActive)
 	if(global.quickClimb && state != State.Grip && !startClimb && state != State.Morph && morphFrame <= 0 && grounded && abs(dirFrame) >= 4 && entity_place_collide(2*move2,0) && !entity_place_collide(0,0))
 	{
 		var qcHeight = 0;
-		var bbottom = bbox_bottom;//scr_round(bbox_bottom);
-		var heightMax = 50;//47;
+		var bbottom = bb_bottom();
+		var heightMax = 50;
 		if(state == State.Crouch)
 		{
 			heightMax = 34;
@@ -2200,11 +2232,11 @@ if(xRayActive)
 		jump = 0;
 	}
 	
-	var colL = lhc_collision_line(bbox_left+1,bbox_top,bbox_left+1,bbox_bottom,"IMovingSolid",true,true),
-		colR = lhc_collision_line(bbox_right-1,bbox_top,bbox_right-1,bbox_bottom,"IMovingSolid",true,true),
-		colT = lhc_collision_line(bbox_left,bbox_top+1,bbox_right,bbox_top+1,"IMovingSolid",true,true),
-		colB = lhc_collision_line(bbox_left,bbox_bottom-1,bbox_right,bbox_bottom-1,"IMovingSolid",true,true);
-	if (lhc_place_meeting(x,y,"IMovingSolid") && (state != State.Grip || !startClimb) && colL+colR+colT+colB >= 4)
+	var colL = lhc_collision_line(bb_left()+1,bb_top(),bb_left()+1,bb_bottom(),"IMovingSolid",true,true),
+		colR = lhc_collision_line(bb_right()-1,bb_top(),bb_right()-1,bb_bottom(),"IMovingSolid",true,true),
+		colT = lhc_collision_line(bb_left(),bb_top()+1,bb_right(),bb_top()+1,"IMovingSolid",true,true),
+		colB = lhc_collision_line(bb_left(),bb_bottom()-1,bb_right(),bb_bottom()-1,"IMovingSolid",true,true);
+	if (lhc_place_meeting(position.X,position.Y,"IMovingSolid") && (state != State.Grip || !startClimb) && colL+colR+colT+colB >= 4)
 	{
 		passthru = min(passthru+1,passthruMax);
 	}
@@ -2275,7 +2307,7 @@ if(xRayActive)
 		
 		var canCrouch = true;
 		
-		var ship = instance_position(x,bbox_bottom+1,obj_Gunship);
+		var ship = instance_position(x,bb_bottom()+1,obj_Gunship);
 		if(instance_exists(ship) && ship.state == ShipState.Idle && abs(x - ship.x) <= 10 && y < ship.y)
 		{
 			canCrouch = false;
@@ -2288,7 +2320,7 @@ if(xRayActive)
 				aimAngle = 0;
 			}
 		}
-		var ele = instance_position(x,bbox_bottom+1,obj_Elevator);
+		var ele = instance_position(x,bb_bottom()+1,obj_Elevator);
 		if(instance_exists(ele))
 		{
 			if(ele.downward)
@@ -2519,11 +2551,11 @@ if(xRayActive)
 				morphFrame = 8;
 				aimUpDelay = 10;
 				
-				if(cUp && rUp && morphStall <= 0)
-				{
-					velY = min(velY, 0);
-					morphStall = morphStallMax;
-				}
+				//if(cUp && rUp && morphStall <= 0)
+				//{
+				//	velY = min(velY, 0);
+				//}
+				//morphStall = morphStallMax;
 			}
 			else
 			{
@@ -2898,10 +2930,6 @@ if(xRayActive)
 	}
 	else
 	{
-		if(state != State.Jump && state != State.Grip)
-		{
-			canWallJump = false;
-		}
 		audio_stop_sound(snd_Somersault_Loop);
 		audio_stop_sound(snd_Somersault);
 		audio_stop_sound(snd_Somersault_SJ);
@@ -2915,7 +2943,6 @@ if(xRayActive)
 		gunReady = false;
 		ledgeFall = false;
 		ledgeFall2 = false;
-		canWallJump = ((gripGunReady && move2 != dir && !cDown) || (move2 != 0 && move2 != dir));
 		
 		if(startClimb)
 		{
@@ -2981,7 +3008,7 @@ if(xRayActive)
 			if(!entity_place_collide(0,-8))
 			{
 				var ctStart = 0;
-				while(ctStart >= -16 && entity_collision_line(x,bbox_top+ctStart,x+9*dir,bbox_top+ctStart))
+				while(ctStart >= -16 && entity_collision_line(x,bb_top()+ctStart,x+9*dir,bb_top()+ctStart))
 				{
 					ctStart--;
 				}
@@ -2991,7 +3018,7 @@ if(xRayActive)
 						crouchH = 29;
 				
 					var ctHeight = -(crouchH+1);
-					while(ctHeight <= -morphH && entity_collision_line(x,bbox_top+ctStart+ctHeight,x+9*dir,bbox_top+ctStart+ctHeight))
+					while(ctHeight <= -morphH && entity_collision_line(x,bb_top()+ctStart+ctHeight,x+9*dir,bb_top()+ctStart+ctHeight))
 					{
 						ctHeight++;
 					}
@@ -3351,7 +3378,7 @@ if(xRayActive)
 				var vX = sign(velX)*k, vY = sign(velY)*k;
 				instance_place_list(x+vX,y+vY,obj_Reflec,reflecList,true);
 			}*/
-			collision_rectangle_list(bbox_left+min(velX,0),bbox_top+min(velY,0),bbox_right+max(velX,0),bbox_bottom+max(velY,0),obj_Reflec,true,true,reflecList,true);
+			collision_rectangle_list(bb_left()+min(velX,0),bb_top()+min(velY,0),bb_right()+max(velX,0),bb_bottom()+max(velY,0),obj_Reflec,true,true,reflecList,true);
 			for(var i = 0; i < ds_list_size(reflecList); i++)
 			{
 				var _ref = reflecList[| i];
@@ -3362,7 +3389,7 @@ if(xRayActive)
 					for(var k = 0; k < ceil(shineSparkSpeed); k++)
 					{
 						var vX = sign(velX)*k, vY = sign(velY)*k;
-						if(lastReflec != _ref && rectangle_intersect_line(bbox_left+vX,bbox_top+vY,bbox_right+vX,bbox_bottom+vY, p1.X,p1.Y,p2.X,p2.Y))
+						if(lastReflec != _ref && rectangle_intersect_line(bb_left()+vX,bb_top()+vY,bb_right()+vX,bb_bottom()+vY, p1.X,p1.Y,p2.X,p2.Y))
 						{
 							reflec = _ref;
 							break;
@@ -3387,7 +3414,7 @@ if(xRayActive)
 					vY = 0,
 					_c = 0,
 					_spd = ceil(shineSparkSpeed);
-				while(!rectangle_intersect_line(bbox_left+vX,bbox_top+vY,bbox_right+vX,bbox_bottom+vY, p1.X,p1.Y,p2.X,p2.Y) && _c < _spd)
+				while(!rectangle_intersect_line(bb_left()+vX,bb_top()+vY,bb_right()+vX,bb_bottom()+vY, p1.X,p1.Y,p2.X,p2.Y) && _c < _spd)
 				{
 					vX += sign(velX) * min(1,abs(velX)-abs(vX));
 					vY += sign(velY) * min(1,abs(velY)-abs(vY));
@@ -4137,7 +4164,7 @@ if(xRayActive)
 	justBounced = false;
 	prevSpiderEdge = spiderEdge;
 	
-	morphStall = max(morphStall-1,0);
+	//morphStall = max(morphStall-1,0);
 	
 	if(!PlayerGrounded() && !PlayerOnPlatform())
 	{

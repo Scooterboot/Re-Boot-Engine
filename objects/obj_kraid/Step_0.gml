@@ -586,7 +586,7 @@ if(phase < 4)
 	{
 		var num = 0;
 		while(num < 32 && (place_meeting(x+shiftX+kbody.dir,y,kbody) || place_meeting(x+shiftX+kbody.dir,y,khead) ||
-			(kbody.dir == 1 && x+shiftX < kbody.bbox_left+32) || (kbody.dir == -1 && x+shiftX > kbody.bbox_right-32)))
+			(kbody.dir == 1 && x+shiftX < kbody.bb_left()+32) || (kbody.dir == -1 && x+shiftX > kbody.bb_right()-32)))
 		{
 			shiftX += 1*kbody.dir;
 			num++;

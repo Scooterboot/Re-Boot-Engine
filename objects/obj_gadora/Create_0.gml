@@ -59,7 +59,7 @@ function OnDamageTaken(damage, object, isProjectile)
 
 function DmgColPlayer()
 {
-	return collision_rectangle(bbox_left-2,bbox_top-2,bbox_right+2,bbox_bottom+2,obj_Player,false,true);
+	return collision_rectangle(bb_left()-2,bb_top()-2,bb_right()+2,bb_bottom()+2,obj_Player,false,true);
 }
 
 function NPCDropItem(_x,_y)

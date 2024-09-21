@@ -10,17 +10,15 @@ if(frozen > 0 && !dead)
 {
 	if(!instance_exists(freezePlatform))
 	{
-	    freezePlatform = instance_create_layer(bbox_left,bbox_top,layer_get_id("Collision"),obj_Platform);
-	    freezePlatform.image_xscale = (bbox_right-bbox_left+1)/16;
-	    freezePlatform.image_yscale = (bbox_bottom-bbox_top+1)/16;
+	    freezePlatform = instance_create_layer(scr_round(bb_left()),scr_round(bb_top()),layer_get_id("Collision"),obj_Platform);
+	    freezePlatform.image_xscale = (bb_right()-bb_left()+1)/16;
+	    freezePlatform.image_yscale = (bb_bottom()-bb_top()+1)/16;
 		freezePlatform.xRayHide = true;
 	}
 	else
 	{
-		//freezePlatform.x = bbox_left;
-		//freezePlatform.y = bbox_top;
 		freezePlatform.isSolid = false;
-		freezePlatform.UpdatePosition(bbox_left,bbox_top);
+		freezePlatform.UpdatePosition(scr_round(bb_left()),scr_round(bb_top()));
 		freezePlatform.isSolid = true;
 	}
 }

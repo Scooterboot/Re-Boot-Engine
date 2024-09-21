@@ -9,7 +9,15 @@ entityList = ds_list_create();
 
 ignoredEntity = noone;
 
-function IsEntity_Top(entity) { return place_meeting(x,y-1,entity); }
+function IsEntity_Top(entity)
+{
+	var this = id;
+	with(entity)
+	{
+		return place_meeting(x,y+1,this) || place_meeting(position.X,position.Y+1,this);
+	}
+	return place_meeting(x,y-1,entity);
+}
 
 function UpdatePosition(_x,_y)
 {
@@ -26,8 +34,8 @@ function UpdatePosition(_x,_y)
 	collision_rectangle_list(
 		min(bbox_left,bbox_left+bVelX),
 		min(bbox_top-1,bbox_top+bVelY),
-		max(bbox_right,bbox_right+bVelX),
-		max(bbox_bottom,bbox_bottom+bVelY),
+		max(bbox_right-1,bbox_right-1+bVelX),
+		max(bbox_bottom-1,bbox_bottom-1+bVelY),
 		obj_Entity,true,true,entityList,false);
 	
 	for(var i = 0; i < ds_list_size(entityList); i++)
@@ -69,7 +77,7 @@ function UpdatePosition(_x,_y)
 					moveYFlag = true;
 				}
 				
-				if(entity.bbox_bottom <= bbox_top)
+				if(entity.bb_bottom() <= bbox_top)
 				{
 					if(place_meeting(newPosX,y,entity) || (place_meeting(newPosX,newPosY,entity) && !place_meeting(x,newPosY,entity)))
 					{

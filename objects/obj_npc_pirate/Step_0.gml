@@ -11,12 +11,12 @@ if(state != PirateState.Turn)
 {
     var xplus = 0;
     var num = 10;
-    while(!lhc_collision_rectangle(max(bbox_left+xplus,bbox_left),bbox_top,min(bbox_right+xplus,bbox_right),bbox_bottom-16,solids,false,true) && num > 0)
+    while(!lhc_collision_rectangle(max(bb_left()+xplus,bb_left()),bb_top(),min(bb_right()+xplus,bb_right()),bb_bottom()-16,solids,false,true) && num > 0)
     {
         xplus += 16*dir;
         num--;
     }
-    if(collision_rectangle(max(bbox_left+xplus,bbox_left),bbox_top,min(bbox_right+xplus,bbox_right),bbox_bottom-16,obj_Player,false,true))
+    if(collision_rectangle(max(bb_left()+xplus,bb_left()),bb_top(),min(bb_right()+xplus,bb_right()),bb_bottom()-16,obj_Player,false,true))
     {
         playerDetected = true;
     }
@@ -206,7 +206,7 @@ else
 	shotsFired = false;
 }
 
-grounded = (entity_place_collide(0,1) || (bbox_bottom+1) >= room_height);// && velY == 0);
+grounded = (entity_place_collide(0,1) || (bb_bottom()+1) >= room_height);// && velY == 0);
 fGrav = grav[instance_exists(liquid)];
 
 if(!grounded)

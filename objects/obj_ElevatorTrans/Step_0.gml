@@ -26,7 +26,7 @@ else
 	            nextEle = instance_find(obj_Elevator,i);
 	            nextEle.activeDir = activeDir;
 				nextEle.incoming = true;
-	            var playerHeight = (obj_Player.bbox_bottom-obj_Player.bbox_top);
+	            var playerHeight = (obj_Player.bb_bottom()-obj_Player.bb_top());
 	            if(activeDir == 1)
 	            {
 	                nextEle.y = -(playerHeight + 8);
@@ -50,7 +50,7 @@ else
 			camera_set_view_pos(view_camera[0], scr_round(obj_Camera.playerX)+xDiff, scr_round(obj_Camera.playerY)+yDiff);
 			
 		    obj_Player.position.X = nextEle.x;
-		    obj_Player.position.Y = nextEle.y - (obj_Player.bbox_bottom-obj_Player.y);
+		    obj_Player.position.Y = nextEle.y - obj_Player.bb_bottom(0);
 			with(obj_Player)
 	        {
 	            array_fill(mbTrailPosX, noone);
@@ -65,8 +65,8 @@ else
 				liquidTop = liquid_top();
 				liquidTopPrev = liquidTop;
 			
-				prevTop = bbox_top;
-				prevBottom = bbox_bottom;
+				prevTop = bb_top();
+				prevBottom = bb_bottom();
 	        }
 			
 		    transTimer++;

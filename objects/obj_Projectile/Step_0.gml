@@ -278,9 +278,9 @@ else
 var player = noone;
 if(projLength > 0)
 {
-	var numw = max(abs(bbox_right - bbox_left),1),
+	var numw = max(abs(bb_right(0) - bb_left(0)),1),
         numd = clamp(point_distance(x,y,xstart,ystart),1,projLength);
-	for(var j = 0; j < numd; j += numw)
+	for(var j = numw; j < numd; j += numw)
 	{
 		var xw = x-lengthdir_x(j,direction),
 			yw = y-lengthdir_y(j,direction);

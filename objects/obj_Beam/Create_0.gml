@@ -45,7 +45,7 @@ damageSubType[5] = isPlasma;
 if(isIce)
 {
     freezeType = 1 + isCharge;
-	freezeKill = isCharge;
+	freezeKill = isPlasma;//isCharge;
 }
 
 particleType = 0;

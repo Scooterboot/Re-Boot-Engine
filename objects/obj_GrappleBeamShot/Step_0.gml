@@ -29,7 +29,7 @@ if(grappleState != GrappleState.None)
 		}
 		else
 		{
-			x = scr_round(grapBlock.bbox_left + (grapBlock.bbox_right-grapBlock.bbox_left)/2);
+			x = scr_round(grapBlock.bbox_left + (grapBlock.bbox_right-1-grapBlock.bbox_left)/2);
 		}
 		
 		if(grapBlockPosY > -1)
@@ -38,7 +38,7 @@ if(grappleState != GrappleState.None)
 		}
 		else
 		{
-			y = scr_round(grapBlock.bbox_top + (grapBlock.bbox_bottom-grapBlock.bbox_top)/2);
+			y = scr_round(grapBlock.bbox_top + (grapBlock.bbox_bottom-1-grapBlock.bbox_top)/2);
 		}
 		
         drawGrapEffect = true;

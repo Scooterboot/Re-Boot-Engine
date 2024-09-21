@@ -17,7 +17,7 @@ else
 if(bombTimer <= 0)
 {
 	mask_index = sprt_MBBombExplosion;
-	var player = collision_circle(x,y,(bbox_right-bbox_left)/3,obj_Player,false,true);
+	var player = collision_circle(x,y,(bb_right()-bb_left())/3,obj_Player,false,true);
 	if(instance_exists(player))
 	{
 		if(!player.cDown || forceJump)

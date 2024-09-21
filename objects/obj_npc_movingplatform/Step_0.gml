@@ -25,7 +25,7 @@ if(!PauseAI())
 }
 
 platform.isSolid = false;
-platform.UpdatePosition(scr_round(bbox_left),scr_round(bbox_top));
+platform.UpdatePosition(scr_round(bb_left()),scr_round(bb_top()));
 platform.isSolid = true;
 
 DamagePlayer();
