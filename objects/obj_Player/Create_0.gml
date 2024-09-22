@@ -124,8 +124,8 @@ prevAimAngle = aimAngle;
 lastAimAngle = prevAimAngle;
 aimUpDelay = 0;
 
-gbaAimAngle = 0;
-gbaAimPreAngle = 0;
+extAimAngle = 0;
+extAimPreAngle = 0;
 
 move = 0;
 move2 = 0;
@@ -2112,30 +2112,32 @@ function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWav
 #endregion
 
 #region PlayerGrounded
-function PlayerGrounded(ydiff = 2)
+function PlayerGrounded(ydiff = 1)
 {
 	if(spiderBall && spiderEdge != Edge.None && jump <= 0)
 	{
 		return true;
 	}
 	
-	var bbottom = scr_round(bb_bottom()),
-		bright = scr_round(bb_right()),
-		bleft = scr_round(bb_left());
-	var bottomCollision = entity_collision_line(bleft,bbottom+ydiff,bright,bbottom+ydiff) || (y+ydiff) >= room_height;
-	var downSlopeFlag = abs(GetEdgeAngle(Edge.Bottom,0,0)) >= 60 && !speedBoost;
+	var downSlopeFlag = (abs(GetEdgeAngle(Edge.Bottom,0,0)) >= 60);
+	var bottomCollision = false;
+	var colB = entity_collision_line(bb_left(),bb_bottom()+ydiff,bb_right(),bb_bottom()+ydiff);
+	if(entity_place_collide(0,ydiff) && (!entity_place_collide(0,0) || colB))
+	{
+		bottomCollision = true;
+	}
 	
 	if(velY >= 0 && velY <= fGrav && jump <= 0)
 	{
-		return (bottomCollision && !downSlopeFlag);
+		return (bottomCollision && (!downSlopeFlag || speedBoost));
 	}
 	return false;
 }
 #endregion
 #region PlayerOnPlatform
-function PlayerOnPlatform(ydiff = 2)
+function PlayerOnPlatform(ydiff = 1)
 {
-	return ((entityPlatformCheck(0,ydiff) || entityPlatformCheck(0,ydiff,x,y)) && fVelY >= 0 && state != State.Spark && state != State.BallSpark);
+	return (entityPlatformCheck(0,ydiff) && fVelY >= 0 && state != State.Spark && state != State.BallSpark);
 }
 #endregion
 

@@ -496,28 +496,23 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			(prAngle && global.aimStyle != 2) || grounded || move != 0 || xRayActive || 
 			state == State.Morph || state == State.Somersault || state == State.Spark || state == State.BallSpark)
 		{
-			//if(!cAimLock)
-			//{
-				aimAngle = 0;
-			//}
+			aimAngle = 0;
 		}
 		if(!xRayActive)
 		{
-			if(!grounded && cDown && !cUp && (state != State.Somersault || rDown) && state != State.Morph)
+			if(!grounded && cDown && !cUp && state != State.Morph)
 			{
-				if(aimAngle == -2 && move == 0 && rDown && morphFrame <= 0 && state != State.Morph && misc[Misc.Morph] && state != State.Spark && state != State.BallSpark && state != State.Grip && !cAngleUp && !cAngleDown)
+				if(aimAngle == -2 && move == 0 && rDown && morphFrame <= 0 && state != State.Morph && misc[Misc.Morph] && state != State.Somersault && state != State.Spark && state != State.BallSpark && state != State.Grip && !cAngleUp && !cAngleDown)
 				{
 					audio_play_sound(snd_Morph,0,false);
 					ChangeState(State.Morph,State.Morph,mask_Player_Morph,false);
 					morphFrame = 8;
 				}
-				//if(!cAimLock)
-				//{
-					aimAngle = -2;
-				//}
+				
+				aimAngle = -2;
 			}
 			
-			if(((state != State.Morph && (state != State.Crouch || entity_place_collide(0,-11))) || (global.aimStyle == 2 && cAngleUp)) && morphFrame <= 0)// && !cAimLock)
+			if(((state != State.Morph && (state != State.Crouch || entity_place_collide(0,-11))) || (global.aimStyle == 2 && cAngleUp)) && morphFrame <= 0)
 			{
 				if(move != 0 && (state != State.Grip || move != dir) && sign(dirFrame) == dir)
 				{
@@ -545,7 +540,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			
 			if(!spiderBall)
 			{
-				if(global.aimStyle == 0)// && !cAimLock)
+				if(global.aimStyle == 0)
 				{
 					if(cAngleUp)
 					{
@@ -555,39 +550,112 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 					{
 						aimAngle = -1;
 					}
-						
-					/*if(cAngleUp && cAngleDown && move != 0 && grounded && !walkState && sign(velX) == dir && abs(dirFrame) >= 4)
+					
+					if(cAngleUp && cAngleDown && move != 0 && grounded && !walkState && sign(velX) == dir && abs(dirFrame) >= 4)
 					{
 						aimAngle = 1;
-					}*/
-				}
-				
-				if(global.aimStyle == 1)// && !cAimLock)
-				{
-					if(cAngleUp)
+					}
+					
+					/*if(cAngleUp)
 					{
-						if(cDown && !cUp)
+						if(extAimAngle == 0 || !cAngleDown)
 						{
-							gbaAimAngle = -1;
+							extAimAngle = 1;
 						}
-						else if((cUp && (stateFrame != State.Morph || entity_place_collide(0,-17))) || gbaAimAngle == 0)
+						else if(cAngleDown && extAimAngle > 0)
 						{
-							gbaAimAngle = 1;
+							extAimAngle = 2;
 						}
-							
-						aimAngle = gbaAimAngle;
+					}
+					if(cAngleDown)
+					{
+						if(extAimAngle == 0 || !cAngleUp)
+						{
+							extAimAngle = -1;
+						}
+						else if(cAngleDown && extAimAngle < 0)
+						{
+							extAimAngle = -2;
+						}
+					}
+					
+					if(!cAngleUp && !cAngleDown)
+					{
+						extAimAngle = 0;
+						extAimPreAngle = 0;
 					}
 					else
 					{
-						gbaAimAngle = 0;
-					}
-				}
-				else //if(!cAimLock)
-				{
-					gbaAimAngle = 0;
+						if((extAimAngle >= 2 && cDown && rDown) || (extAimAngle <= -2 && cUp && rUp))
+						{
+							extAimAngle *= -1;
+						}
+						
+						aimAngle = extAimAngle;
+						
+						if(!cUp && !cDown)
+						{
+							extAimPreAngle = extAimAngle;
+						}
+						
+						if(extAimAngle != extAimPreAngle && abs(extAimAngle) >= 2)
+						{
+							cUp = false;
+							cDown = false;
+						}
+					}*/
 				}
 				
-				/*if(global.aimStyle == 2)
+				if(global.aimStyle == 1)
+				{
+					if(cAngleUp)
+					{
+						if(extAimAngle == 0)
+						{
+							extAimAngle = 1;
+						}
+						
+						if(extAimAngle == extAimPreAngle)
+						{
+							if(cUp && rUp)
+							{
+								extAimAngle = min(extAimAngle+1,2);
+								if(extAimAngle == 0)
+								{
+									extAimAngle++;
+								}
+							}
+							if(cDown && rDown)
+							{
+								extAimAngle = max(extAimAngle-1,-1);
+								if(extAimAngle == 0)
+								{
+									extAimAngle--;
+								}
+							}
+						}
+						
+						aimAngle = extAimAngle;
+						
+						if(!cUp && !cDown)
+						{
+							extAimPreAngle = extAimAngle;
+						}
+						
+						if(extAimAngle != extAimPreAngle && abs(extAimAngle) >= 1)
+						{
+							cUp = false;
+							cDown = false;
+						}
+					}
+					else
+					{
+						extAimAngle = 0;
+						extAimPreAngle = 0;
+					}
+				}
+				
+				if(global.aimStyle == 2)
 				{
 					if(cAngleUp && !spiderBall)
 					{
@@ -598,7 +666,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 						move = 0;
 						move2 = 0;
 					}
-				}*/
+				}
 			}
 		}
 	}
@@ -2311,7 +2379,7 @@ if(xRayActive)
 		if(instance_exists(ship) && ship.state == ShipState.Idle && abs(x - ship.x) <= 10 && y < ship.y)
 		{
 			canCrouch = false;
-			if(cDown && (gbaAimPreAngle == gbaAimAngle || global.aimStyle != 1) && move2 == 0 && velX == 0 && dir != 0 && grounded && !xRayActive)
+			if(cDown && move2 == 0 && velX == 0 && dir != 0 && grounded && !xRayActive)
 			{
 				ship.state = ShipState.SaveDescend;
 				
@@ -2327,7 +2395,7 @@ if(xRayActive)
 			{
 				canCrouch = false;
 			}
-			if(ele.activeDir == 0 && (ele.elevatorID != -1 || ele.singleRoom) && ((ele.upward && cUp && rUp) || (ele.downward && cDown && rDown)) && (gbaAimPreAngle == gbaAimAngle || global.aimStyle != 1) && move2 == 0 && velX == 0 && dir != 0 && grounded && !xRayActive)
+			if(ele.activeDir == 0 && (ele.elevatorID != -1 || ele.singleRoom) && ((ele.upward && cUp && rUp) || (ele.downward && cDown && rDown)) && move2 == 0 && velX == 0 && dir != 0 && grounded && !xRayActive)
 			{
 				ele.activeDir = (cDown-cUp);
 				state = State.Elevator;
@@ -2336,7 +2404,7 @@ if(xRayActive)
 			}
 		}
 		
-		if(canCrouch && move2 == 0 && cDown && (gbaAimPreAngle == gbaAimAngle || global.aimStyle != 1) && dir != 0 && grounded && !xRayActive)
+		if(canCrouch && move2 == 0 && cDown && dir != 0 && grounded && !xRayActive)
 		{
 			crouchFrame = 5;
 			ChangeState(State.Crouch,State.Crouch,mask_Player_Crouch,true);
@@ -2493,12 +2561,12 @@ if(xRayActive)
 		{
 			uncrouch = 0;
 		}
-		if(((cUp && rUp && (gbaAimPreAngle == gbaAimAngle || global.aimStyle != 1)) || uncrouch >= 7) && CanChangeState(mask_Player_Stand) && crouchFrame <= 0 && !xRayActive)
+		if(((cUp && rUp) || uncrouch >= 7) && CanChangeState(mask_Player_Stand) && crouchFrame <= 0 && !xRayActive)
 		{
 			aimUpDelay = 10;
 			ChangeState(State.Stand,State.Stand,mask_Player_Stand,true);
 		}
-		if(crouchFrame <= 0 && (cDown || (cMorph && rMorph)) && (gbaAimAngle == gbaAimPreAngle || global.aimStyle != 1) && (rDown || !CanChangeState(mask_Player_Stand)) && move2 == 0 && misc[Misc.Morph] && !xRayActive && stateFrame != State.Morph && morphFrame <= 0)
+		if(crouchFrame <= 0 && (cDown || (cMorph && rMorph)) && (rDown || !CanChangeState(mask_Player_Stand)) && move2 == 0 && misc[Misc.Morph] && !xRayActive && stateFrame != State.Morph && morphFrame <= 0)
 		{
 			audio_play_sound(snd_Morph,0,false);
 			ChangeState(State.Morph,State.Morph,mask_Player_Morph,true);
@@ -3122,8 +3190,13 @@ if(xRayActive)
 		shineRampFix = 4;
 		shineFXCounter = min(shineFXCounter + 0.05, 1);
 		
-		var aUp = (cAngleUp && (global.aimStyle != 1 || gbaAimAngle == 1) && global.aimStyle != 2) && ((move2 == 0 && !cUp && !cDown) || !spiderBall),
-			aDown = (cAngleDown || (cAngleUp && global.aimStyle == 1 && gbaAimAngle == -1)) && ((move2 == 0 && !cUp && !cDown) || !spiderBall);
+		var aUp = false,
+			aDown = false;
+		if((move2 == 0 && !cUp && !cDown) || !spiderBall)
+		{
+			aUp = (aimAngle > 0);
+			aDown = (aimAngle < 0);
+		}
 		
 		if(shineStart > 0)
 		{
@@ -4177,11 +4250,6 @@ if(xRayActive)
 	
 	slopeGrounded = false;
 	prevGrounded = grounded;
-	
-	if(((!cUp && !cDown) || (move != 0 && state == State.Stand)) && aimAngle == gbaAimAngle)
-	{
-		gbaAimPreAngle = gbaAimAngle;
-	}
 	
 	var xVel = x - xprevious,
 		yVel = y - yprevious;

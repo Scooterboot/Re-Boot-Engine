@@ -90,7 +90,7 @@ if(screenFade >= 1 && !menuClosing)
 				case 1:
 				{
 					//Aim Style
-					global.aimStyle = scr_wrap(global.aimStyle+moveX+select,0,2);//3);
+					global.aimStyle = scr_wrap(global.aimStyle+moveX+select,0,3);
 					break;
 				}
 				case 2:
