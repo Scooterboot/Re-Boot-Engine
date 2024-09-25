@@ -6,3 +6,4 @@ timeLeft = 3;
 respawnTime = 45;
 
 respawnSprt = sprt_CrumbleBlockBreak;
+extSprt = sprt_CrumbleBlockExt;

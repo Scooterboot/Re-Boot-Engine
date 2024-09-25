@@ -1859,22 +1859,26 @@ function MoveStick_CheckPGrip(_dir, movingTile)
 {
 	if(state == State.Grip && dir == _dir)
 	{
+		var rcheck = x+6 - 1,
+			lcheck = x - 1;
+		if(_dir == -1)
+		{
+			rcheck = x;
+			lcheck = x-6;
+		}
 		if(startClimb)
 		{
-			var liquidMovement = (liquidState > 0);
 			var cX = 0, cY = 0;
 			for(var i = 0; i < climbIndex; i++)
 			{
 				cX -= climbX[floor(i)] * _dir;
 				cY += climbY[floor(i)];
 			}
-			//return lhc_position_meeting(x+6*_dir - cX, y-17 + cY, "IMovingSolid");
-			return lhc_collision_line(x+cX, y-17+cY, x+6*_dir+cX, y-17+cY, "IMovingSolid", true, true);
+			return lhc_collision_line(lcheck+cX, y-17+cY, rcheck+cX, y-17+cY, "IMovingSolid", true, true);
 		}
 		else
 		{
-			//return lhc_position_meeting(x+6*_dir,y-17,"IMovingSolid");
-			return lhc_collision_line(x, y-17, x+6*_dir, y-17, "IMovingSolid", true, true);
+			return lhc_collision_line(lcheck, y-17, rcheck, y-17, "IMovingSolid", true, true);
 		}
 	}
 	return false;

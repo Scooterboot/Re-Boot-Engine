@@ -10,7 +10,7 @@ backAlphaNum = 1;
 coneDir = 0;
 coneSpread = 0;
 coneSpreadMax = 30;
-coneLength = global.zoomResWidth*0.75;
+coneLength = global.zoomResWidth*1.5;
 visorX = x;
 visorY = y;
 
@@ -35,8 +35,8 @@ for(var i = 0; i < array_length(bgTileLayers); i++)
 xRaySound = noone;
 xRaySoundPlayed = false;
 
-width = surface_get_width(application_surface) + 64;
-height = surface_get_height(application_surface) + 64;
+width = surface_get_width(application_surface) + 80;
+height = surface_get_height(application_surface) + 80;
 
 surfaceFront = surface_create(width,height);
 surfaceBack = surface_create(width,height);
@@ -116,9 +116,13 @@ function xray_redraw_alpha()
 	{
 		if (!object_is_ancestor(object_index,obj_DoorHatch) && object_index != obj_DoorHatch && 
 			!object_is_ancestor(object_index,obj_InteractStation) &&
-			(!object_is_ancestor(object_index,obj_Breakable) || object_index == obj_NPCBreakable || object_index == obj_Spikes))
+			(!object_is_ancestor(object_index,obj_Breakable) || object_index == obj_NPCBreakable))
 		{
 			draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
+		}
+		if(object_index == obj_Spikes)
+		{
+			draw_sprite_ext(sprt_Tile,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
 		}
 	}
 	with (obj_DoorHatch)
@@ -219,6 +223,10 @@ function xray_redraw_outline()
 		if(object_index != obj_Spikes)
 		{
 			draw_sprite_ext(sprt_Tile,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
+		}
+		else
+		{
+			draw_sprite_ext(sprt_Spikes,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_red,1);
 		}
 	}
 	with(obj_InteractStation)

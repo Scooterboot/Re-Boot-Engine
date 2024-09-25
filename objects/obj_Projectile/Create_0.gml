@@ -79,6 +79,8 @@ damageInvFrames = 96;
 dmgDelay = 0;
 
 ignoreCamera = false;
+extCamRange = 48;
+outsideCam = 0;
 
 npcInvFrames[instance_number(obj_NPC)] = 0;
 npcDeathType = -1;

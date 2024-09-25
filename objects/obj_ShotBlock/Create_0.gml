@@ -1,7 +1,8 @@
 /// @description Initialize
 event_inherited();
 
-function DrawBreakable(_x,_y,_index)
+extSprt = sprt_ShotBlockExt;
+/*function DrawBreakable(_x,_y,_index)
 {
 	for(var i = min(image_xscale,0); i < max(image_xscale,0); i++)
 	{
@@ -45,4 +46,4 @@ function DrawBreakable(_x,_y,_index)
 			draw_sprite_ext(sprite_index,ind,bx,by,sign(image_xscale),sign(image_yscale),image_angle,c_white,1);
 	    }
 	}
-}
+}*/

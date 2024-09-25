@@ -2704,7 +2704,10 @@ if(xRayActive)
 	}
 	else
 	{
-		unmorphing = false;
+		if(state != State.Hurt)
+		{
+			unmorphing = false;
+		}
 		cFlashStartCounter = 0;
 	}
 	
@@ -3012,6 +3015,7 @@ if(xRayActive)
 		ledgeFall = false;
 		ledgeFall2 = false;
 		
+		var breakGrip = false;
 		if(startClimb)
 		{
 			stallCamera = true;
@@ -3114,6 +3118,18 @@ if(xRayActive)
 			{
 				ChangeState(State.Jump,State.Jump,mask_Player_Jump,true);
 			}
+			
+			var rcheck = x+6 - 1,
+				lcheck = x - 1;
+			if(dir == -1)
+			{
+				rcheck = x;
+				lcheck = x-6;
+			}
+			if(!entity_collision_line(lcheck,y-17,rcheck,y-17))
+			{
+				breakGrip = true;
+			}
 		}
 		
 		var colFlag = false;
@@ -3133,6 +3149,10 @@ if(xRayActive)
 		ds_list_clear(blockList);
 		
 		if((!entity_place_collide(2*dir,0) && !entity_place_collide(2*dir,4) && !entity_place_collide(0,2)) || (entity_position_collide(6*dir,-19) && !startClimb) || (colFlag && !startClimb) || (cDown && cJump && rJump) || (lhc_place_meeting(x,y,"IMovingSolid") && !startClimb))
+		{
+			breakGrip = true;
+		}
+		if(breakGrip)
 		{
 			if(stateFrame == State.Morph)
 			{
@@ -3813,13 +3833,13 @@ if(xRayActive)
 #region Hurt
 	if(state == State.Hurt)
 	{
-		if(stateFrame != State.Morph)
+		if(stateFrame != State.Morph || (unmorphing && morphFrame <= 0))
 		{
 			stateFrame = State.Hurt;
 		}
 		if(hurtTime <= 0)
 		{
-			if(lastState == State.Grip || lastState == State.Spark)
+			if(lastState == State.Grip || lastState == State.Spark || (lastState == State.Morph && unmorphing))
 			{
 				state = State.Jump;
 			}

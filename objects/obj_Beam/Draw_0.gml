@@ -24,7 +24,7 @@ if(projLength > 0)
 	}
 	var _x = x,
 		_y = y;
-	if(aiStyle == 1 || aiStyle == 2)
+	if(aiStyle == 1 || (aiStyle == 2 && lastReflec == noone))
 	{
 		_x = xx;
 		_y = yy;

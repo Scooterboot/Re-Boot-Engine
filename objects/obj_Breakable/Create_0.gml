@@ -52,25 +52,34 @@ function RevealTile()
 	}
 }
 
+extSprt = noone;
+
 function DrawBreakable(_x,_y,_index)
 {
-	for(var i = min(image_xscale,0); i < max(image_xscale,0); i++)
+	if(extSprt != noone && _index > 0)
 	{
-	    for(var j = min(image_yscale,0); j < max(image_yscale,0); j++)
-	    {
-			var k = i,
-				l = j;
-			if(image_xscale < 0)
-			{
-				k = i+1;
-			}
-			if(image_yscale < 0)
-			{
-				l = j+1;
-			}
-			var bx = _x+lengthdir_x(16*k,image_angle)+lengthdir_y(-16*l,image_angle),
-				by = _y+lengthdir_x(16*l,image_angle)+lengthdir_y(16*k,image_angle);
-			draw_sprite_ext(sprite_index,_index,bx,by,sign(image_xscale),sign(image_yscale),image_angle,c_white,1);
-	    }
+		draw_sprite_ext(extSprt,0,_x,_y,image_xscale/2,image_yscale/2,image_angle,c_white,1);
+	}
+	else
+	{
+		for(var i = min(image_xscale,0); i < max(image_xscale,0); i++)
+		{
+		    for(var j = min(image_yscale,0); j < max(image_yscale,0); j++)
+		    {
+				var k = i,
+					l = j;
+				if(image_xscale < 0)
+				{
+					k = i+1;
+				}
+				if(image_yscale < 0)
+				{
+					l = j+1;
+				}
+				var bx = _x+lengthdir_x(16*k,image_angle)+lengthdir_y(-16*l,image_angle),
+					by = _y+lengthdir_x(16*l,image_angle)+lengthdir_y(16*k,image_angle);
+				draw_sprite_ext(sprite_index,_index,bx,by,sign(image_xscale),sign(image_yscale),image_angle,c_white,1);
+		    }
+		}
 	}
 }

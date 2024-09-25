@@ -395,9 +395,13 @@ if(timeLeft > -1)
 	}
 }
 
-if(!scr_WithinCamRange(-1,-1,96) && !ignoreCamera)
+if(!scr_WithinCamRange(-1,-1,extCamRange) && !ignoreCamera)
 {
-	instance_destroy();
+	outsideCam++;
+	if(outsideCam > 1)
+	{
+		instance_destroy();
+	}
 }
 
 //#endregion

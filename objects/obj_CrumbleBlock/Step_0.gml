@@ -7,7 +7,7 @@ if(global.gamePaused)
 }
 
 var player = instance_place(x,y-2,obj_Player);
-if(instance_exists(player) && player.fVelY >= 0)// && player.grounded)
+if(instance_exists(player) && player.fVelY >= 0 && !player.spiderBall)
 {
 	crumble = true;
 	if(abs(player.velX) > player.maxSpeed[5,player.liquidState])
@@ -21,7 +21,7 @@ if(!instance_exists(player))
 {
 	player = instance_place(x-1,y,obj_Player);
 }
-if(instance_exists(player) && player.state == State.Grip)
+if(instance_exists(player) && player.state == State.Grip && player.bb_top() >= bbox_top)
 {
 	crumble = true;
 }
