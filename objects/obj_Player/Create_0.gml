@@ -66,6 +66,10 @@ diagSparkSlideOnWalls = true;
 // Press toward wall and down
 chainSparkReCharge = false;
 
+// Allows canceling accel dash by shooting
+// Can be utilized for easy super short charging
+cancelDashShoot = false;
+
 // Prime-like trail effect for Morph Ball
 // Disables normal after images for Morph while set to true
 drawBallTrail = true;
@@ -218,9 +222,6 @@ boostBallDmgCounter = 0;
 boostBallFX = 0;
 boostBallFXFlash = false;
 boostBallSnd = noone;
-
-//morphStallMax = 14;
-//morphStall = 0;
 
 
 isChargeSomersaulting = false;
@@ -1135,30 +1136,33 @@ function CanPlatformCollide()
 
 function entity_collision(listNum)
 {
-	for(var i = 0; i < listNum; i++)
+	if(listNum > 0)
 	{
-		if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object))
+		for(var i = 0; i < listNum; i++)
 		{
-			var block = blockList[| i];
-			var isSolid = true;
-			if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
+			if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object))
 			{
-				isSolid = block.isSolid;
-				if(block.ignoredEntity == id)
+				var block = blockList[| i];
+				var isSolid = true;
+				if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
 				{
-					isSolid = false;
+					isSolid = block.isSolid;
+					if(block.ignoredEntity == id)
+					{
+						isSolid = false;
+					}
+				}
+				var sp = (asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting && shineStart <= 0 && shineLauncherStart <= 0),
+					sc = (asset_has_any_tag(block.object_index, "IScrewBlock", asset_object) && isScrewAttacking);
+				if(isSolid && !sp && !sc)
+				{
+					ds_list_clear(blockList);
+					return true;
 				}
 			}
-			var sp = (asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting && shineStart <= 0 && shineLauncherStart <= 0),
-				sc = (asset_has_any_tag(block.object_index, "IScrewBlock", asset_object) && isScrewAttacking);
-			if(isSolid && !sp && !sc)
-			{
-				ds_list_clear(blockList);
-				return true;
-			}
 		}
+		ds_list_clear(blockList);
 	}
-	ds_list_clear(blockList);
 	return false;
 }
 
@@ -1859,8 +1863,8 @@ function MoveStick_CheckPGrip(_dir, movingTile)
 {
 	if(state == State.Grip && dir == _dir)
 	{
-		var rcheck = x+6 - 1,
-			lcheck = x - 1;
+		var rcheck = x+6,// - 1,
+			lcheck = x;// - 1;
 		if(_dir == -1)
 		{
 			rcheck = x;

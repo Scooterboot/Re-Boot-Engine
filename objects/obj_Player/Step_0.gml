@@ -1874,9 +1874,9 @@ if(xRayActive)
 	{
 		if(!entity_place_collide(0,-4) && ((state == State.Jump && !entity_place_collide(0,3)) || (state == State.Somersault && !entity_place_collide(0,13))))
 		{
-			var vcheck = x+6 - 1,
-				rcheck = x+6 - 1,
-				lcheck = x - 1;
+			var vcheck = x+6,// - 1,
+				rcheck = x+6,// - 1,
+				lcheck = x;// - 1;
 			if(move2 == -1)
 			{
 				vcheck = x-6;
@@ -1907,9 +1907,9 @@ if(xRayActive)
 			
 			if(entity_collision_line(lcheck,y-17,rcheck,y-17) && !entity_collision_line(vcheck,y-22,vcheck,y-26) && entity_place_collide(move2,0) && dir == move2)
 			{
-				var rslopeX = x+14 - 1,
+				var rslopeX = x+14,// - 1,
 					rslopeY = y-25,
-					lslopeX = x+6 - 1,
+					lslopeX = x+6,// - 1,
 					lslopeY = y-17;
 				if(move2 == -1)
 				{
@@ -1972,8 +1972,8 @@ if(xRayActive)
 			// then again, 'if it looks stupid, but works, it isn't stupid.'
 			for(var i = 0; i < 2; i++)
 			{
-				var lcheck = x - 1,
-					rcheck = x+7 - 1;
+				var lcheck = x,// - 1,
+					rcheck = x+7;// - 1;
 				if(dir == -1)
 				{
 					lcheck = x-7;
@@ -2008,8 +2008,8 @@ if(xRayActive)
 					var yHeight = bbottom+qcHeight;
 					debugthing2 = yHeight;
 					
-					lcheck = x+6 - 1;
-					rcheck = x+14 - 1;
+					lcheck = x+6;// - 1;
+					rcheck = x+14;// - 1;
 					var rcheckY = yHeight-9,
 						lcheckY = yHeight-1;
 					if(dir == -1)
@@ -2033,8 +2033,8 @@ if(xRayActive)
 					}
 					debugthing3 = yHeight;
 					
-					lcheck = x-4 - 1;
-					rcheck = x+14 - 1;
+					lcheck = x-4;// - 1;
+					rcheck = x+14;// - 1;
 					if(dir == -1)
 					{
 						lcheck = x-14;
@@ -2619,11 +2619,11 @@ if(xRayActive)
 				morphFrame = 8;
 				aimUpDelay = 10;
 				
-				//if(cUp && rUp && morphStall <= 0)
-				//{
-				//	velY = min(velY, 0);
-				//}
-				//morphStall = morphStallMax;
+				if(cUp && rUp && move2 == 0)
+				{
+					velX = min(abs(velX),maxSpeed[0,liquidState])*sign(velX);
+					velY = min(velY, 0);
+				}
 			}
 			else
 			{
@@ -2675,10 +2675,6 @@ if(xRayActive)
 						}
 					}
 				}
-				/*if(cUp)
-				{
-					velY = min(velY, 0);
-				}*/
 			}
 		}
 		else
@@ -3119,8 +3115,8 @@ if(xRayActive)
 				ChangeState(State.Jump,State.Jump,mask_Player_Jump,true);
 			}
 			
-			var rcheck = x+6 - 1,
-				lcheck = x - 1;
+			var rcheck = x+6,// - 1,
+				lcheck = x;// - 1;
 			if(dir == -1)
 			{
 				rcheck = x;
@@ -4018,7 +4014,7 @@ if(xRayActive)
 		ledgeFall2 = true;
 		
 		var unchargeable = ((itemSelected == 1 && (itemHighlighted[1] == 0 || itemHighlighted[1] == 1 || itemHighlighted[1] == 3)) || xRayActive || hyperBeam);
-		var shoot = (cShoot && rShoot) || (!cShoot && !rShoot && !unchargeable);
+		var shoot = cancelDashShoot && ((cShoot && rShoot) || (!cShoot && !rShoot && !unchargeable));
 		if(dodgeLength >= dodgeLengthMax || shoot)
 		{
 			if(grounded)
