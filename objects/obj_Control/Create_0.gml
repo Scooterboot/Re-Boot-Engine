@@ -8,7 +8,7 @@ enum KeyboardButton
 	Right,
 	Jump,
 	Shoot,
-	Dash,
+	Sprint,
 	AngleUp,
 	AngleDown,
 	AimLock,
@@ -30,7 +30,7 @@ kUp = false;
 kDown = false;
 kJump = false;
 kShoot = false;
-kDash = false;
+kSprint = false;
 kAngleUp = false;
 kAngleDown = false;
 kAimLock = false;
@@ -54,7 +54,7 @@ enum GamepadButton
 {
 	Jump,
 	Shoot,
-	Dash,
+	Sprint,
 	AngleUp,
 	AngleDown,
 	AimLock,
@@ -76,7 +76,7 @@ gUp = false;
 gDown = false;
 gJump = false;
 gShoot = false;
-gDash = false;
+gSprint = false;
 gAngleUp = false;
 gAngleDown = false;
 gAimLock = false;
@@ -104,7 +104,7 @@ up = false;
 down = false;
 jump = false;
 shoot = false;
-dash = false;
+sprint = false;
 angleUp = false;
 angleDown = false;
 aimLock = false;

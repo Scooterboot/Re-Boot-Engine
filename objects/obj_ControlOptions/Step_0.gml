@@ -95,8 +95,8 @@ if(screenFade >= 1 && !menuClosing)
 				}
 				case 2:
 				{
-					//Auto-Dash
-					global.autoDash = !global.autoDash;
+					//Auto-Sprint
+					global.autoSprint = !global.autoSprint;
 					break;
 				}
 				case 3:
@@ -143,13 +143,13 @@ if(screenFade >= 1 && !menuClosing)
 			currentOption = array(
 			global.HUD,
 			global.aimStyle,
-			global.autoDash,
+			global.autoSprint,
 			global.quickClimb);
 			
 			ini_open("settings.ini");
 			ini_write_real("Controls", "hud style", global.HUD);
 			ini_write_real("Controls", "aim style", global.aimStyle);
-			ini_write_real("Controls", "auto dash", global.autoDash);
+			ini_write_real("Controls", "auto sprint", global.autoSprint);
 			ini_write_real("Controls", "quick climb", global.quickClimb);
 			ini_close();
 		}

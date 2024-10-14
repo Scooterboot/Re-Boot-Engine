@@ -73,8 +73,3 @@ edgeText[3] = "Left";
 edgeText[4] = "Right";
 
 zoomTempFlag = false;
-
-distortStage = shader_get_sampler_index(shd_Distortion,"distortion_texture_page");
-distortTexel = shader_get_uniform(shd_Distortion,"texelSize");
-surfDistort = surface_create(global.zoomResWidth,global.zoomResHeight);
-finalAppSurface = surface_create(global.zoomResWidth,global.zoomResHeight);

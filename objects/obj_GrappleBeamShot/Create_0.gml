@@ -88,15 +88,18 @@ function OnImpact(posX,posY,waveImpact = false)
 		part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.gTrail,7);
 		part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.gImpact,1);
 		
-		var dist = instance_create_depth(0,0,0,obj_Distort);
-		dist.left = posX-7;
-		dist.right = posX+7;
-		dist.top = posY-7;
-		dist.bottom = posY+7;
+		var ddepth = layer_get_depth(layer_get_id("Projectiles_fg"))+1;
+		var dist = instance_create_depth(0,0,ddepth,obj_Distort);
+		dist.left = posX-8;
+		dist.right = posX+8;
+		dist.top = posY-8;
+		dist.bottom = posY+8;
 		dist.alpha = 0;
 		dist.alphaNum = 1;
 		dist.alphaRate = 0.125;
-		dist.alphaRateMultDecr = 3;
-		dist.colorMult = 0.0625;
+		dist.alphaRateMultDecr = 4;
+		dist.colorMult = 0.05;
+		dist.spread = 0.5;
+		dist.width = 0.5;
 	}
 }

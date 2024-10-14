@@ -9,7 +9,33 @@ var sndFlag = false;
 if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTrans && stateFrame != State.Grapple)) && !obj_PauseMenu.pause && !pauseSelect))
 {
 	#region X-Ray
-	if((cDash || global.HUD == 1) && itemSelected == 1 && itemHighlighted[1] == 4 && dir != 0 && fVelX == 0 && fVelY == 0 && (move2 == 0 || instance_exists(XRay)) && 
+	var canXRay = true;
+	if(state == State.Grip)
+	{
+		var rcheck = x+6,// - 1,
+			lcheck = x;// - 1;
+		if(dir == -1)
+		{
+			rcheck = x;
+			lcheck = x-6;
+		}
+		if(collision_line(lcheck,y-17,rcheck,y-17,obj_CrumbleBlock,false,true))
+		{
+			canXRay = false;
+		}
+	}
+	else if(grounded)
+	{
+		var block_bl = instance_position(bb_left(),bb_bottom()+1,obj_Tile),
+			block_br = instance_position(bb_right(),bb_bottom()+1,obj_Tile);
+		if ((!instance_exists(block_bl) || (instance_exists(block_bl) && block_bl.object_index == obj_CrumbleBlock)) && 
+			(!instance_exists(block_br) || (instance_exists(block_br) && block_br.object_index == obj_CrumbleBlock)))
+		{
+			canXRay = false;
+		}
+	}
+	
+	if(canXRay && (cSprint || global.HUD == 1) && itemSelected == 1 && itemHighlighted[1] == 4 && dir != 0 && fVelX == 0 && fVelY == 0 && (move2 == 0 || instance_exists(XRay)) && 
 		(((state == State.Stand || state == State.Crouch) && grounded) || state == State.Grip))
     {
 		stateFrame = state;
@@ -890,7 +916,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					if(!smoothRunAnim)
 					{
 						num = speedCounter;
-						if(((cDash || global.autoDash) && speedBuffer > 0) || speedCounter > 0)
+						if(((cSprint || global.autoSprint) && speedBuffer > 0) || speedCounter > 0)
 						{
 							num += 1;
 						}
@@ -2361,7 +2387,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	            {
 					var animSpStart = 0.375 / (1+liquidMovement),
 						animSp = 0.275 / (1+liquidMovement);
-					if(cDash || global.autoDash)
+					if(cSprint || global.autoSprint)
 					{
 						animSpStart = 0.5 / (1+liquidMovement);
 						animSp = 0.375 / (1+liquidMovement);
@@ -2494,7 +2520,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			if(state == State.Grip && startClimb)
 			{
 				var ciNum = 1;
-				if(climbIndex >= 10 && (cDash || global.autoDash) && move != 0)
+				if(climbIndex >= 10 && (cSprint || global.autoSprint) && move != 0)
 				{
 					ciNum = 2;
 				}
@@ -3229,7 +3255,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		rDown = !cDown;
 		rJump = !cJump;
 		rShoot = !cShoot;
-		rDash = !cDash;
+		rSprint = !cSprint;
 		rAngleUp = !cAngleUp;
 		rAngleDown = !cAngleDown;
 		rAimLock = !cAimLock;

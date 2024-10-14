@@ -25,6 +25,9 @@ godmode = false;
 //Tapping any aim button will shift the player forward one pixel during grounded movement.
 armPumping = true;
 
+// Allows vertical aiming via [Aim Up]+[Aim Down] (L+R) while moving
+allowMovingVertAim = true;
+
 // Continue speed boosting/keep momentum after landing (also applies to spider ball)
 // 0 = disabled
 // 1 = enabled always
@@ -320,7 +323,7 @@ cUp = false;
 cDown = false;
 cJump = false;
 cShoot = false;
-cDash = false;
+cSprint = false;
 cAngleUp = false;
 cAngleDown = false;
 cAimLock = false;
@@ -332,7 +335,7 @@ rUp = !cUp;
 rDown = !cDown;
 rJump = !cJump;
 rShoot = !cShoot;
-rDash = !cDash;
+rSprint = !cSprint;
 rAngleUp = !cAngleUp;
 rAngleDown = !cAngleDown;
 rAimLock = !cAimLock;
@@ -383,7 +386,7 @@ lastReflec = noone;
 // -- Horizontal speed values --
 // Out of water (or in water with grav suit)
 maxSpeed[0,0] = 2.75;	// Running
-maxSpeed[1,0] = 4.75;	// Dashing (no speed boost)
+maxSpeed[1,0] = 4.75;	// Sprinting (no speed boost)
 maxSpeed[2,0] = 9.75;	// Speed Boosting
 maxSpeed[3,0] = 1.25;	// Jump
 maxSpeed[4,0] = 1.375;	// Somersault
@@ -394,12 +397,12 @@ maxSpeed[8,0] = 1.25;	// Air Spring Ball
 maxSpeed[9,0] = 5.375;	// Damage Boost
 maxSpeed[10,0] = 7.25;	// Dodge
 maxSpeed[11,0] = 1.25;	// Moonwalk
-maxSpeed[12,0] = 2.125;	// Moonwalk (dash)
+maxSpeed[12,0] = 2.125;	// Moonwalk (sprint)
 maxSpeed[13,0] = 1.75;	// Moonfall
 maxSpeed[14,0] = 4.75;	// Boost Ball
 // Underwater (no grav suit)
 maxSpeed[0,1] = 2.75;	// Running
-maxSpeed[1,1] = 3.75;	// Dashing (no speed boost)
+maxSpeed[1,1] = 3.75;	// Sprinting (no speed boost)
 maxSpeed[2,1] = 6.75;	// Speed Boosting
 maxSpeed[3,1] = 1.25;	// Jump
 maxSpeed[4,1] = 1.375;	// Somersault
@@ -410,12 +413,12 @@ maxSpeed[8,1] = 1.25;	// Air Spring Ball
 maxSpeed[9,1] = 3.3;	// Damage Boost
 maxSpeed[10,1] = 3.25;	// Dodge
 maxSpeed[11,1] = 0.75;	// Moonwalk
-maxSpeed[12,1] = 1.25;	// Moonwalk (dash)
+maxSpeed[12,1] = 1.25;	// Moonwalk (sprint)
 maxSpeed[13,1] = 1.5;	// Moonfall
 maxSpeed[14,1] = 3.75;	// Boost Ball
 // In lava/acid (no grav suit)
 maxSpeed[0,2] = 1.75;	// Running
-maxSpeed[1,2] = 2.75;	// Dashing (no speed boost)
+maxSpeed[1,2] = 2.75;	// Sprinting (no speed boost)
 maxSpeed[2,2] = 5.75;	// Speed Boosting
 maxSpeed[3,2] = 1.25;	// Jump
 maxSpeed[4,2] = 1.375;	// Somersault
@@ -426,32 +429,38 @@ maxSpeed[8,2] = 1.25;	// Air Spring Ball
 maxSpeed[9,2] = 3.3;	// Damage Boost
 maxSpeed[10,2] = 3.25;	// Dodge
 maxSpeed[11,2] = 0.75;	// Moonwalk
-maxSpeed[12,2] = 1.25;	// Moonwalk (dash)
+maxSpeed[12,2] = 1.25;	// Moonwalk (sprint)
 maxSpeed[13,2] = 1.5;	// Moonfall
 maxSpeed[14,2] = 2.75;	// Boost Ball
 
 // Out of water
 moveSpeed[0,0] = 0.1875;	// Normal
 moveSpeed[1,0] = 0.1;		// Morph
-moveSpeed[2,0] = 0.0625;	// Dash/Speedboost
+moveSpeed[2,0] = 0.0625;	// Sprint/Speedboost
 moveSpeed[3,0] = 0.109375;	// Shine Spark
 moveSpeed[4,0] = 0.125;		// Grapple
 // Underwater (no grav suit)
 moveSpeed[0,1] = 0.015625;	// Normal
 moveSpeed[1,1] = 0.02;		// Morph
-moveSpeed[2,1] = 0.015625;	// Dash/Speedboost
+moveSpeed[2,1] = 0.015625;	// Sprint/Speedboost
 moveSpeed[3,1] = 0.03125;	// Shine Spark
 moveSpeed[4,1] = 0.0225;	// Grapple
 // In lava/acid (no grav suit)
 moveSpeed[0,2] = 0.015625;	// Normal
 moveSpeed[1,2] = 0.02;		// Morph
-moveSpeed[2,2] = 0.015625;	// Dash/Speedboost
+moveSpeed[2,2] = 0.015625;	// Sprint/Speedboost
 moveSpeed[3,2] = 0.03125;	// Shine Spark
 moveSpeed[4,2] = 0.0225;	// Grapple
 
 frict[0] = 0.5;		// Out of water
 frict[1] = 0.5;		// Underwater
 frict[2] = 0.25;	// In lava/acid
+
+// turn around speed is equal to moveSpeed + frict
+// this value gets added on top when holding run
+sprintTurnSpeed[0] = 1.575;		// Out of water
+sprintTurnSpeed[1] = 1.07125;		// Underwater
+sprintTurnSpeed[2] = 0.57125;		// In lava/acid
 
 //bombXSpeedMax[0] = 2.75;		// Out of water
 //bombXSpeedMax[1] = 1;		// Underwater

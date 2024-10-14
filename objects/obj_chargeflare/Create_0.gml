@@ -37,13 +37,15 @@ function OnDamageNPC(damage,npc)
 	part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.partFlareFX,1);
 }
 
-dist = instance_create_depth(0,0,0,obj_Distort);
-dist.left = x-20;
-dist.right = x+20;
-dist.top = y-20;
-dist.bottom = y+20;
+dist = instance_create_depth(0,0,depth+1,obj_Distort);
+dist.left = x-18;
+dist.right = x+18;
+dist.top = y-18;
+dist.bottom = y+18;
 dist.alpha = 0.5;
 dist.alphaNum = 1;
 dist.alphaRate = 0.25;
+dist.alphaRateMultDecr = 2;
 dist.colorMult = 0.5;
-dist.spread = 0.625;
+dist.spread = 0.5;
+dist.width = 0.5;

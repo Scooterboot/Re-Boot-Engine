@@ -11,9 +11,11 @@ type = ProjType.Bomb;
 damageSubType[3] = true;
 damageSubType[5] = true;
 
+explode = 0;
+
 part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.explosion[0],1);
 
-var dist = instance_create_depth(0,0,0,obj_Distort);
+var dist = instance_create_depth(0,0,depth-1,obj_Distort);
 dist.left = x-17;
 dist.right = x+17;
 dist.top = y-17;

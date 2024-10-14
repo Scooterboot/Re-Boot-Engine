@@ -7,7 +7,7 @@ function scr_LoadKeyboard()
 	global.key[3] = ini_read_real("Keyboard", "right", vk_right);
 	global.key[4] = ini_read_real("Keyboard", "jump", ord("Z"));
 	global.key[5] = ini_read_real("Keyboard", "shoot", ord("X"));
-	global.key[6] = ini_read_real("Keyboard", "dash", ord("C"));
+	global.key[6] = ini_read_real("Keyboard", "sprint", ord("C"));
 	global.key[7] = ini_read_real("Keyboard", "angle up", ord("S"));
 	global.key[8] = ini_read_real("Keyboard", "angle down", ord("A"));
 	global.key[9] = ini_read_real("Keyboard", "aim lock", ord("D"));

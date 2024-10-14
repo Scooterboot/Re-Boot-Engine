@@ -12,7 +12,7 @@ function scr_MainInitialize()
 	ini_open("settings.ini"); //load display, audio, and control settings
 	global.HUD = ini_read_real("Controls", "hud style", 0);							//load HUD control setting
 	global.aimStyle = ini_read_real("Controls", "aim style", 0);					//load aim control setting
-	global.autoDash = ini_read_real("Controls", "auto dash", false);				//load dash control setting
+	global.autoSprint = ini_read_real("Controls", "auto sprint", false);				//load sprint control setting
 	global.quickClimb = ini_read_real("Controls", "quick climb", true);				//load quick climb control setting
 
 	global.gripStyle = ini_read_real("Controls", "grip control", 0);				//load power grip control setting

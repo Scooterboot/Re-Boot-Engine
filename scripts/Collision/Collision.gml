@@ -1,37 +1,4 @@
 
-/*function lhc_position_collide(offsetX, offsetY)
-{
-	return lhc_position_meeting(x+offsetX,y+offsetY,"ISolid");
-}*/
-
-/*function scr_GetSlopeAngle(slope)
-{
-	var ang = 315;
-	if(sign(slope.image_yscale) > 0)
-	{
-		if(sign(slope.image_xscale) > 0)
-		{
-			ang = 360 - ((45 / slope.image_xscale) * (1 + (1 - 1 / slope.image_yscale)));
-		}
-		else
-		{
-			ang = (45 / abs(slope.image_xscale)) * (1 + (1 - 1 / slope.image_yscale));
-		}
-	}
-	else
-	{
-		if(sign(slope.image_xscale) > 0)
-		{
-			ang = 180 + ((45 / slope.image_xscale) * (1 + (1 - 1 / abs(slope.image_yscale))));
-		}
-		else
-		{
-			ang = 180 - ((45 / abs(slope.image_xscale)) * (1 + (1 - 1 / abs(slope.image_yscale))));
-		}
-	}
-	return ang;
-}*/
-
 function lines_intersect(x1,y1,x2,y2,x3,y3,x4,y4,segment)
 {
 	//  Returns a vector multiplier (t) for an intersection on the

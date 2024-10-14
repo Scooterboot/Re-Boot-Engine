@@ -36,7 +36,7 @@ function scr_SaveKeyboard(argument0, argument1) {
 	ini_write_real("Keyboard", "right", global.key[3]);
 	ini_write_real("Keyboard", "jump", global.key[4]);
 	ini_write_real("Keyboard", "shoot", global.key[5]);
-	ini_write_real("Keyboard", "dash", global.key[6]);
+	ini_write_real("Keyboard", "sprint", global.key[6]);
 	ini_write_real("Keyboard", "angle up", global.key[7]);
 	ini_write_real("Keyboard", "angle down", global.key[8]);
 	ini_write_real("Keyboard", "aim lock", global.key[9]);

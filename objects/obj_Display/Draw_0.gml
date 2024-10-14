@@ -40,70 +40,12 @@ if (camX+camW > room_width || camY+camH > room_height)
 
 #endregion
 
-#region Distortion shader
-
-if(!surface_exists(surfDistort))
-{
-	surfDistort = surface_create(camW,camH);
-}
-else
-{
-	surface_resize(surfDistort,camW,camH);
-	
-	surface_set_target(surfDistort);
-	draw_clear_alpha(make_color_rgb(127,127,255),1);
-	
-	gpu_set_colorwriteenable(1,1,1,0);
-	with(obj_Distort)
-	{
-		DrawDistort(-camX,-camY);
-	}
-	gpu_set_colorwriteenable(1,1,1,1);
-	
-	surface_reset_target();
-}
-
-if(!surface_exists(finalAppSurface))
-{
-	finalAppSurface = surface_create(camW,camH);
-}
-else
-{
-	surface_resize(finalAppSurface,camW,camH);
-	
-	surface_set_target(finalAppSurface);
-	draw_clear_alpha(c_black,0);
-	
-	gpu_set_blendenable(false);
-	draw_surface_ext(application_surface,0,0,1,1,0,c_white,1);
-	gpu_set_blendenable(true);
-	
-	surface_reset_target();
-}
-
-shader_set(shd_Distortion);
-
-var tex = surface_get_texture(surfDistort);
-
-texture_set_stage(distortStage,tex);
-gpu_set_texfilter_ext(distortStage, false);
-
-var texel_x = texture_get_texel_width(tex);
-var texel_y = texture_get_texel_height(tex);
-shader_set_uniform_f(distortTexel, texel_x, texel_y);
-
-draw_surface_ext(finalAppSurface,camX,camY,1,1,0,c_white,1);
-
-shader_reset();
-
-#endregion
-
 #region Debug
 
 if(keyboard_check_pressed(vk_divide))
 {
 	//debug = !debug;
-	debug = scr_wrap(debug+1,0,4);
+	debug = scr_wrap(debug+1,0,3);
 }
 
 if(debug == 1)
@@ -122,6 +64,13 @@ if(debug == 1)
 				draw_set_alpha(1);
 			}
 		}
+	}
+	
+	with(obj_Distort)
+	{
+		var surfX = (right < left) ? right : left,
+			surfY = (bottom < top) ? bottom : top;
+		draw_surface_ext(surf2, surfX, surfY, 1,1,0,c_white,image_alpha);
 	}
 	
 	with(obj_NPC)
@@ -344,7 +293,7 @@ if(debug == 1)
 		draw_text(xx+marginX,yy+30+marginY*11,"speedCounter: "+string(speedCounter));
 		
 		var num = speedCounter;
-		if(((cDash || global.autoDash) && speedBuffer > 0) || speedCounter > 0)
+		if(((cSprint || global.autoSprint) && speedBuffer > 0) || speedCounter > 0)
 		{
 			num += 1;
 		}
@@ -424,37 +373,6 @@ if(debug == 1)
 		draw_rectangle(scr_round(playerX),scr_round(playerY),scr_round(playerX)-1,scr_round(playerY)-1,true);
 		
 		draw_set_alpha(1);
-	}
-}
-if(debug == 2)
-{
-	draw_surface_ext(surfDistort,camX,camY,1,1,0,c_white,1);
-	
-	with(obj_Tile)
-	{
-		if(object_is_ancestor(object_index,obj_Breakable))
-		{
-			draw_sprite_ext(sprite_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,1);
-		}
-		else if(mask_index != sprite_index && sprite_exists(mask_index))
-		{
-			draw_sprite_ext(mask_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,0.75);
-		}
-		else if(!visible)
-		{
-			draw_self();
-		}
-	}
-	
-	with(obj_Player)
-    {
-		draw_set_color(c_aqua);
-        draw_set_alpha(0.75);
-        
-		draw_rectangle(bb_left(),bb_top(),bb_right(),bb_bottom(),0);
-        
-        draw_set_color(c_white);
-        draw_set_alpha(1);
 	}
 }
 

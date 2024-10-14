@@ -1,5 +1,12 @@
-TileInteract(x,y);
-
-scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,10);
-
-instance_destroy();
+if(explode <= 0)
+{
+	TileInteract(x,y);
+	
+	scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,10);
+	
+	explode++;
+}
+else
+{
+	instance_destroy();
+}

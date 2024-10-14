@@ -12,10 +12,10 @@ if(instance_exists(creator) && creator.object_index == obj_Player)
 	
 	if(instance_exists(dist))
 	{
-		dist.left = x-20;
-		dist.right = x+20;
-		dist.top = y-20;
-		dist.bottom = y+20;
+		dist.left = x-18;
+		dist.right = x+18;
+		dist.top = y-18;
+		dist.bottom = y+18;
 	}
 }
 

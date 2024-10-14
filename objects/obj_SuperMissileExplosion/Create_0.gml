@@ -9,9 +9,11 @@ damageSubType[1] = true;
 damageSubType[2] = true;
 damageSubType[5] = true;
 
+explode = 0;
+
 part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.explosion[2],1);
 
-var dist = instance_create_depth(0,0,0,obj_Distort);
+var dist = instance_create_depth(0,0,depth-1,obj_Distort);
 dist.left = x-36;
 dist.right = x+36;
 dist.top = y-36;

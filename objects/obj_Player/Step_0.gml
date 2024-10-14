@@ -416,7 +416,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	cDown = obj_Control.down;
 	cJump = obj_Control.jump;
 	cShoot = obj_Control.shoot;
-	cDash = obj_Control.dash;
+	cSprint = obj_Control.sprint;
 	cAngleUp = obj_Control.angleUp;
 	cAngleDown = (obj_Control.angleDown && global.aimStyle == 0);
 	cAimLock = obj_Control.aimLock;
@@ -430,7 +430,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	    cDown = false;
 	    cJump = false;
 	    cShoot = false;
-	    cDash = false;
+	    cSprint = false;
 	    cAngleUp = false;
 	    cAngleDown = false;
 	    cAimLock = false;
@@ -443,7 +443,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	pMove = ((cRight && rRight) - (cLeft && rLeft));
 	
 	if(move != 0 && !brake && morphFrame <= 0 && wjFrame <= 0 && state != State.Grip && 
-	(!cAimLock /*|| cDash*/ || state == State.Somersault || state == State.Morph || xRayActive || (global.aimStyle == 2 && cAngleUp)) && 
+	(!cAimLock /*|| cSprint*/ || state == State.Somersault || state == State.Morph || xRayActive || (global.aimStyle == 2 && cAngleUp)) && 
 	!grappleActive && state != State.Spark && state != State.BallSpark && state != State.Hurt && stateFrame != State.DmgBoost && dmgBoost <= 0 && state != State.Dodge)
 	{
 		dir = move;
@@ -551,7 +551,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 						aimAngle = -1;
 					}
 					
-					if(cAngleUp && cAngleDown && move != 0 && grounded && !walkState && sign(velX) == dir && abs(dirFrame) >= 4)
+					if(!allowMovingVertAim && cAngleUp && cAngleDown && move != 0 && grounded && !walkState && sign(velX) == dir && abs(dirFrame) >= 4)
 					{
 						aimAngle = 1;
 					}
@@ -684,12 +684,12 @@ if(xRayActive)
 
 #region Horizontal Movement
 
-	var dash = (cDash || global.autoDash);
+	var sprint = (cSprint || global.autoSprint);
 	
 	// basically free super short charge if you uncomment this
 	/*if(debug && speedBuffer >= speedBufferMax-1 && speedCounter < speedCounterMax)
 	{
-		dash = true;
+		sprint = true;
 	}*/
 	
 	var moveState = 0;
@@ -700,7 +700,7 @@ if(xRayActive)
 			if(abs(velX) > maxSpeed[5,liquidState])
 			{
 				moveState = 6;
-				if(speedBoost && dash)
+				if(speedBoost && sprint)
 				{
 					moveState = 2;
 				}
@@ -732,7 +732,7 @@ if(xRayActive)
 	}
 	else
 	{
-		if(dash && !liquidMovement)
+		if(sprint && !liquidMovement)
 		{
 			if(boots[Boots.SpeedBoost])
 			{
@@ -752,22 +752,22 @@ if(xRayActive)
 	if(moveState == 1 || moveState == 2)
 	{
 		var runMaxSpd = maxSpeed[0,liquidState],
-			dashMaxSpd = maxSpeed[1,liquidState],
+			sprintMaxSpd = maxSpeed[1,liquidState],
 			runMoveSpd = moveSpeed[0,liquidState],
-			dashMoveSpd = moveSpeed[2,liquidState],
+			sprintMoveSpd = moveSpeed[2,liquidState],
 			spd = abs(velX);
 		
 		if(spd < runMaxSpd)
 		{
-			fMoveSpeed = lerp(runMoveSpd+dashMoveSpd,runMoveSpd, clamp(spd / runMaxSpd,0,1));
+			fMoveSpeed = lerp(runMoveSpd+sprintMoveSpd,runMoveSpd, clamp(spd / runMaxSpd,0,1));
 		}
-		else if(spd < dashMaxSpd)
+		else if(spd < sprintMaxSpd)
 		{
-			fMoveSpeed = lerp(runMoveSpd,dashMoveSpd, (abs(velX)-runMaxSpd) / (dashMaxSpd-runMaxSpd));
+			fMoveSpeed = lerp(runMoveSpd,sprintMoveSpd, (abs(velX)-runMaxSpd) / (sprintMaxSpd-runMaxSpd));
 		}
 		else
 		{
-			fMoveSpeed = dashMoveSpd;
+			fMoveSpeed = sprintMoveSpd;
 		}
 	}
 	
@@ -778,7 +778,7 @@ if(xRayActive)
 		if((walkState && sign(velX) != dir) || moonFallState)
 		{
 			fMaxSpeed = maxSpeed[11,liquidState];
-			if(dash)
+			if(sprint)
 			{
 				fMaxSpeed = maxSpeed[12,liquidState];
 			}
@@ -818,6 +818,11 @@ if(xRayActive)
 			velX = min(velX + fFrict*0.25, -maxSpeed2);
 		}
 	}
+	var turnaroundSpd = fMoveSpeed + fFrict;
+	if(sprint && state == State.Stand)
+	{
+		turnaroundSpd += sprintTurnSpeed[liquidState];
+	}
 	
 	if(state != State.Crouch && (state != State.Grip || startClimb) && state != State.Spark && state != State.BallSpark && state != State.Grapple && 
 	state != State.Hurt && (!spiderBall || spiderEdge == Edge.None) && !xRayActive && state != State.Dodge)
@@ -830,7 +835,7 @@ if(xRayActive)
 			{
 				if(velX < 0)
 				{
-					velX = min(velX + fMoveSpeed + fFrict, 0);
+					velX = min(velX + turnaroundSpd, 0);
 				}
 				else if(sign(dirFrame) != dir && sign(dirFrame) != 0 && !speedBoost && state != State.Somersault)
 				{
@@ -849,7 +854,7 @@ if(xRayActive)
 			{
 				if(velX > 0)
 				{
-					velX = max(velX - fMoveSpeed - fFrict, 0);
+					velX = max(velX - turnaroundSpd, 0);
 				}
 				else if(sign(dirFrame) != dir && sign(dirFrame) != 0 && !speedBoost && state != State.Somersault)
 				{
@@ -940,7 +945,7 @@ if(xRayActive)
 		if(state == State.Stand && grounded && !liquidMovement && crouchFrame >= 5 && !brake && ((velX != 0 && sign(velX) == dir) || (prevVelX != 0 && sign(prevVelX) == dir)) && !xRayActive)
 		{
 			var num = speedCounter;
-			if((dash && speedBuffer > 0) || speedCounter > 0)
+			if((sprint && speedBuffer > 0) || speedCounter > 0)
 			{
 				num += 1;
 			}
@@ -949,7 +954,7 @@ if(xRayActive)
 			if(speedBufferCounter >= scr_floor(speedBufferCounterMax[num]))
 			{
 				speedBuffer++;
-				if(dash && speedBuffer >= speedBufferMax)
+				if(sprint && speedBuffer >= speedBufferMax)
 				{
 					speedCounter = min(speedCounter+1,speedCounterMax);
 				}
@@ -1112,7 +1117,7 @@ if(xRayActive)
 		coyoteJump = 0;
 		
 		canGripJump = true;
-		if(climbTarget > 0)
+		if(climbTarget > 0 && !startClimb)
 		{
 			var climbUp = (move2 == dir && cJump && rJump);
 			if(global.gripStyle == 0)
@@ -1193,7 +1198,7 @@ if(xRayActive)
 					ChangeState(State.Spark,State.Spark,mask_Player_Jump,false);
 				}
 			}
-			else if((rJump || (state == State.Morph && !spiderBall && rMorphJump) || bufferJump > 0) && quickClimbTarget <= 0 && climbIndex <= 0 && 
+			else if((rJump || (state == State.Morph && !spiderBall && rMorphJump) || bufferJump > 0) && quickClimbTarget <= 0 && //climbIndex <= 0 && 
 			(state != State.Morph || misc[Misc.Spring] || CanChangeState(mask_Player_Somersault)) && morphFrame <= 0 && state != State.DmgBoost)
 			{
 				if((grounded && !moonFallState) || coyoteJump > 0 || canWallJump || (state == State.Grip && canGripJump) || 
@@ -1222,8 +1227,10 @@ if(xRayActive)
 						
 						audio_play_sound(snd_WallJump,0,false);
 						
+						var baseVel = maxSpeed[4,liquidState];
 						if(state == State.Grip && gripGunReady)
 						{
+							baseVel = maxSpeed[0,liquidState];
 							dir *= -1;
 							dirFrame = dir;
 							wjGripAnim = true;
@@ -1242,7 +1249,7 @@ if(xRayActive)
 						
 						if(fastWallJump)
 						{
-							velX = max(maxSpeed[4,liquidState],abs(prevVelX))*m;
+							velX = max(baseVel,abs(prevVelX))*m;
 							
 							var spd = min(abs(velX) / max(abs(fastWJCheckVel), maxSpeed[1,liquidState]), 1);
 							if(abs(velX) >= max(abs(fastWJCheckVel), maxSpeed[1,liquidState]) && fastWJCheckVel != 0)
@@ -1261,11 +1268,13 @@ if(xRayActive)
 							
 							if(fastWJFlash > 0)
 							{
-								var dist = instance_create_depth(0,0,0,obj_Distort);
-								dist.left = bb_left()-16 - velX;
-								dist.top = bb_top()-8;
-								dist.right = bb_right()+16 - velX;
-								dist.bottom = bb_bottom()+8;
+								var _left = bb_left()-16 - velX, _top = bb_top()-8,
+									_right = bb_right()+16 - velX, _bottom = bb_bottom()+8;
+								var dist = instance_create_depth(0,0,layer_get_depth(layer_get_id("Projectiles_fg"))-1,obj_Distort);
+								dist.left = _left;
+								dist.top = _top;
+								dist.right = _right;
+								dist.bottom = _bottom;
 								dist.alpha = 0.5;
 								dist.alphaNum = 1;
 								dist.alphaRate = 0.5;
@@ -1273,11 +1282,19 @@ if(xRayActive)
 								dist.spread = 0.5;
 								dist.width = 0.5;
 								dist.colorMult = -fastWJFlash;
+								
+								var num = ceil(24*spd);
+								for(var i = 0; i < ceil(18*spd); i++)
+								{
+									var part = instance_create_depth(Center().X-velX,Center().Y,layer_get_depth(layer_get_id("Projectiles_fg"))-1,obj_FastWJParticle);
+									part.ang = 360*(i/num) + (irandom(30)-15);
+									part.alphaMult = fastWJFlash;
+								}
 							}
 						}
 						else
 						{
-							velX = maxSpeed[4,liquidState]*m;
+							velX = baseVel*m;
 						}
 						
 						ChangeState(State.Somersault,State.Somersault,mask_Player_Somersault,false);
@@ -1305,14 +1322,7 @@ if(xRayActive)
 						}
 						else if(!liquid)
 						{
-							if(fastWJFlash > 0)
-							{
-								part_particles_create(obj_Particles.partSystemB,x-6*dir,y+10,obj_Particles.lDust[0],3);
-							}
-							else
-							{
-								part_particles_create(obj_Particles.partSystemB,x-6*dir,y+10,obj_Particles.bDust[0],3);
-							}
+							part_particles_create(obj_Particles.partSystemB,x-6*dir,y+10,obj_Particles.bDust[0],3);
 						}
 					}
 					else if(state == State.Grip && gripGunReady)
@@ -1336,7 +1346,11 @@ if(xRayActive)
 					}
 					if((rJump || bufferJump > 0) && state != State.Morph)
 					{
-						if((abs(velX) > 0 && sign(velX) == dir) || (move != 0 && move == dir) || cDash || (!grounded && state != State.Grip) || (state == State.Crouch && !CanChangeState(mask_Player_Jump)))
+						if(state == State.Grip)
+						{
+							stallCamera = true;
+						}
+						if((abs(velX) > 0 && sign(velX) == dir) || (move != 0 && move == dir) || cSprint || (!grounded && state != State.Grip) || (state == State.Crouch && !CanChangeState(mask_Player_Jump)))
 						{
 							var mask = mask_Player_Jump;
 							if(!CanChangeState(mask_Player_Jump))
@@ -1350,7 +1364,7 @@ if(xRayActive)
 							ChangeState(State.Jump,State.Jump,mask_Player_Jump,false, false);
 						}
 					}
-					if((rJump || bufferJump > 0) && state == State.Morph &&  !misc[Misc.Spring])//(cDash || !misc[Misc.Spring]) && boostBallCharge < boostBallChargeMin)
+					if((rJump || bufferJump > 0) && state == State.Morph &&  !misc[Misc.Spring])//(cSprint || !misc[Misc.Spring]) && boostBallCharge < boostBallChargeMin)
 					{
 						morphSpinJump = true;
 					}
@@ -1368,7 +1382,7 @@ if(xRayActive)
 							moonFall = true;
 						}
 					}
-					if(state == State.Morph && (cDash || !misc[Misc.Spring]))
+					if(state == State.Morph && (cSprint || !misc[Misc.Spring]))
 					{
 						morphSpinJump = true;
 					}
@@ -1567,7 +1581,7 @@ if(xRayActive)
 #region Boost Ball Movement
 	if((state == State.Morph || state == State.BallSpark || state == State.Grip || state == State.Hurt) && stateFrame == State.Morph && misc[Misc.Boost] && !unmorphing)
 	{
-		if(cDash)
+		if(cSprint)
 		{
 			boostBallCharge = min(boostBallCharge + 1, boostBallChargeMax);
 			boostBallFX = max(boostBallFX - 0.025, boostBallCharge / boostBallChargeMax);
@@ -1585,7 +1599,7 @@ if(xRayActive)
 		}
 		else
 		{
-			if(!rDash && boostBallCharge >= boostBallChargeMin && state == State.Morph)
+			if(!rSprint && boostBallCharge >= boostBallChargeMin && state == State.Morph)
 			{
 				var bbMult = boostBallCharge / boostBallChargeMax;
 				var _dir = dir;
@@ -2191,7 +2205,7 @@ if(xRayActive)
 				if(climbIndex >= 7 && move == dir)
 				{
 					var msp = 0.5*(stateFrame == State.Morph) / (1+liquidMovement);
-					//if(cDash || global.autoDash)
+					//if(cSprint || global.autoSprint)
 					//{
 					//	msp = 1 + 0.5*(stateFrame == State.Morph) / (1+liquidMovement);
 					//}
@@ -2326,7 +2340,7 @@ if(xRayActive)
 	
 #endregion
 
-#region Stand, Walk, Run, Dash, Brake
+#region Stand, Walk, Run, Sprint, Brake
 	if(state == State.Stand)
 	{
 		stateFrame = State.Stand;
@@ -2436,7 +2450,7 @@ if(xRayActive)
             }
             
 			var animRate = 0.275 / (1+liquidMovement);
-			if(cDash || global.autoDash)
+			if(cSprint || global.autoSprint)
 			{
 				animRate = 0.375 / (1+liquidMovement);
 			}
@@ -2976,7 +2990,7 @@ if(xRayActive)
 		{
 			landFrame = 0;
 			var unchargeable = ((itemSelected == 1 && (itemHighlighted[1] == 0 || itemHighlighted[1] == 1 || itemHighlighted[1] == 3)) || xRayActive || hyperBeam);
-			if(prAngle || (cUp && rUp) || (cDown && rDown) || (cShoot && rShoot) || (!cShoot && !rShoot && !unchargeable))
+			if(prAngle || (cUp && rUp) || (cDown && rDown) || (cShoot && rShoot) || (!cShoot && !rShoot && !unchargeable) || (!cShoot && rShoot && statCharge >= 20))
 			{
 				if(!CanChangeState(mask_Player_Jump))
 				{
@@ -3266,7 +3280,7 @@ if(xRayActive)
 			shineCharge = 0;
 			shineSparkSpeed = shineSparkStartSpeed;
 			
-			if(cDash && (move2 != 0 || cUp || cDown || aUp || aDown))
+			if(cSprint && (move2 != 0 || cUp || cDown || aUp || aDown))
 			{
 				shineStart = min(shineStart, 1);
 			}
@@ -3375,7 +3389,7 @@ if(xRayActive)
 			var oldSDir = shineDir;
 			if (canDodge && shineSparkRedirect && (
 				(global.dodgeStyle == 0 && cAimLock && rAimLock) || 
-				(global.dodgeStyle == 1 && cDash && rDash)))
+				(global.dodgeStyle == 1 && cSprint && rSprint)))
 			{
 				if(move2 != 0 || aUp || (aDown && boots[Boots.ChainSpark]))
 				{
@@ -3963,7 +3977,7 @@ if(xRayActive)
 	if(boots[Boots.Dodge] && dir != 0 && (state == State.Stand || state == State.Crouch || state == State.Jump || state == State.Somersault || (state == State.Grip && !startClimb)))
 	{
 		if ((global.dodgeStyle == 0 && cAimLock) || 
-			(global.dodgeStyle == 1 && cDash && !global.autoDash))
+			(global.dodgeStyle == 1 && cSprint && !global.autoSprint))
 		{
 			dodgePress++;
 			if(xRayActive || prevState == State.Morph)
@@ -3974,8 +3988,8 @@ if(xRayActive)
 		else if(canDodge)
 		{
 			if ((global.dodgeStyle == 0 && !rAimLock && dodgePress <= 15) || 
-				(global.dodgeStyle == 1 && !global.autoDash && !rDash && dodgePress <= 15) || 
-				(global.dodgeStyle == 1 && global.autoDash && cDash && rDash))
+				(global.dodgeStyle == 1 && !global.autoSprint && !rSprint && dodgePress <= 15) || 
+				(global.dodgeStyle == 1 && global.autoSprint && cSprint && rSprint))
 			{
 				groundedDodge = 0;
 				if(state == State.Stand)

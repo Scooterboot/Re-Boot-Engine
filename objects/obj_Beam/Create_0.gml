@@ -152,35 +152,41 @@ function OnImpact(posX,posY,waveImpact = false)
 	if(particleType != -1 && particleType <= 4)
 	{
 		part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.bTrails[particleType],7*(1+isCharge));
+		
+		var ddepth = layer_get_depth(layer_get_id("Projectiles_fg"))+1;
 		if(isCharge)
 		{
 			part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.cImpact[particleType],1);
 			
-			var dist = instance_create_depth(0,0,0,obj_Distort);
+			var dist = instance_create_depth(0,0,ddepth,obj_Distort);
 			dist.left = posX-18;
 			dist.right = posX+18;
 			dist.top = posY-18;
 			dist.bottom = posY+18;
 			dist.alpha = 0;
 			dist.alphaNum = 1;
-			dist.alphaRate = 0.25;
+			dist.alphaRate = 0.125;
+			dist.alphaRateMultDecr = 4;
 			dist.colorMult = 0.5;
-			dist.spread = 0.625;
+			dist.spread = 0.5;
+			dist.width = 0.5;
 		}
 		else
 		{
 			part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.impact[particleType],1);
 			
-			var dist = instance_create_depth(0,0,0,obj_Distort);
-			dist.left = posX-7;
-			dist.right = posX+7;
-			dist.top = posY-7;
-			dist.bottom = posY+7;
+			var dist = instance_create_depth(0,0,ddepth,obj_Distort);
+			dist.left = posX-8;
+			dist.right = posX+8;
+			dist.top = posY-8;
+			dist.bottom = posY+8;
 			dist.alpha = 0;
 			dist.alphaNum = 1;
-			dist.alphaRate = 1/7;
+			dist.alphaRate = 0.125;
 			dist.alphaRateMultDecr = 4;
 			dist.colorMult = 0.05;
+			dist.spread = 0.5;
+			dist.width = 0.5;
 		}
 	}
 }

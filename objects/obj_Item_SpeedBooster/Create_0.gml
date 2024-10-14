@@ -5,7 +5,7 @@ itemName = "speedBooster";
 itemID = 0;
 
 itemHeader = "SPEED BOOSTER";
-itemDesc = "Hold ${dashButton} while moving to run extremely fast.\n" +
+itemDesc = "Hold ${sprintButton} while moving to run extremely fast.\n" +
 "Crouch during Speed Boost to charge a Shine Spark.";
 
 isMajorItem = true;

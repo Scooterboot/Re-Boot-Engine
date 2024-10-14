@@ -29,7 +29,7 @@ option = array(
 currentOption = array(
 global.HUD,
 global.aimStyle,
-global.autoDash,
+global.autoSprint,
 global.quickClimb);
 
 currentOptionName[0,0] = "DEFAULT";

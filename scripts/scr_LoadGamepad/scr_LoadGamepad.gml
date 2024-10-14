@@ -7,7 +7,7 @@ function scr_LoadGamepad()
 
 	global.gp[0] = ini_read_real("Gamepad", "jump", gp_face1);
 	global.gp[1] = ini_read_real("Gamepad", "shoot", gp_face3);
-	global.gp[2] = ini_read_real("Gamepad", "dash", gp_face2);
+	global.gp[2] = ini_read_real("Gamepad", "sprint", gp_face2);
 	global.gp[3] = ini_read_real("Gamepad", "angle up", gp_shoulderrb);
 	global.gp[4] = ini_read_real("Gamepad", "angle down", gp_shoulderlb);
 	global.gp[5] = ini_read_real("Gamepad", "aim lock", gp_shoulderl);

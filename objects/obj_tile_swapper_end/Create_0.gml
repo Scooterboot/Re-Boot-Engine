@@ -1,2 +1,0 @@
-/// @description Properties
-active=false;

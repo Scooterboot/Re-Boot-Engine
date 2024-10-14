@@ -36,7 +36,7 @@ function scr_SaveGamepad(argument0, argument1) {
 
 	ini_write_real("Gamepad", "jump", global.gp[0]);
 	ini_write_real("Gamepad", "shoot", global.gp[1]);
-	ini_write_real("Gamepad", "dash", global.gp[2]);
+	ini_write_real("Gamepad", "sprint", global.gp[2]);
 	ini_write_real("Gamepad", "angle up", global.gp[3]);
 	ini_write_real("Gamepad", "angle down", global.gp[4]);
 	ini_write_real("Gamepad", "aim lock", global.gp[5]);
