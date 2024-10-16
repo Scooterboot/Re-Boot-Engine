@@ -10,9 +10,9 @@ var player = instance_place(x,y-2,obj_Player);
 if(instance_exists(player) && player.fVelY >= 0 && !player.spiderBall)
 {
 	crumble = true;
-	if(abs(player.velX) > player.maxSpeed[5,player.liquidState])
+	if(abs(player.velX) > player.maxSpeed[MaxSpeed.MorphBall,player.liquidState])
 	{
-		timeLeft = 4; // yes im actually doing this
+		timeLeft = 4;
 	}
 }
 

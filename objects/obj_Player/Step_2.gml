@@ -742,7 +742,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				
 				frameCounter[Frame.Walk]++;
 				var numCounter = 2.5 * (1+liquidMovement);
-				if(abs(velX) > maxSpeed[11,liquidState])
+				if(abs(velX) > maxSpeed[MaxSpeed.MoonWalk,liquidState])
 				{
 					numCounter = 1.875 * (1+liquidMovement);
 				}
@@ -907,7 +907,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				
 				if(!global.roomTrans)
 				{
-					var num = clamp(4 * ((abs(velX)-maxSpeed[0,liquidState]) / (maxSpeed[2,liquidState]-maxSpeed[0,liquidState])), speedCounter, 4);
+					var num = clamp(4 * ((abs(velX)-maxSpeed[MaxSpeed.Run,liquidState]) / (maxSpeed[MaxSpeed.SpeedBoost,liquidState]-maxSpeed[MaxSpeed.Run,liquidState])), speedCounter, 4);
 					var num2 = runAnimCounterMax[0];
 					if(num > 0)
 					{
@@ -930,16 +930,16 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						{
 							num2 = 2.5;
 						}
-						if(abs(velX) > maxSpeed[0,liquidState])
+						if(abs(velX) > maxSpeed[MaxSpeed.Run,liquidState])
 						{
-							num2 = lerp(num2, 2, (abs(velX)-maxSpeed[0,liquidState]) / (maxSpeed[1,liquidState]-maxSpeed[0,liquidState]));
+							num2 = lerp(num2, 2, (abs(velX)-maxSpeed[MaxSpeed.Run,liquidState]) / (maxSpeed[MaxSpeed.Sprint,liquidState]-maxSpeed[MaxSpeed.Run,liquidState]));
 						}
 					}
 					
 					var numCounter = num2/2;
 					if(!smoothRunAnim)
 					{
-						var runSpdMult = 1 - abs(velX)/maxSpeed[2,liquidState];
+						var runSpdMult = 1 - abs(velX)/maxSpeed[MaxSpeed.SpeedBoost,liquidState];
 						numCounter = min(num2/2, 5*runSpdMult);
 					}
 					
@@ -1110,11 +1110,11 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				{
 					brakeFrame = max(brakeFrame - 2, 0);
 				}
-				else if(abs(velX) <= (maxSpeed[1,0]*0.75))
+				else if(abs(velX) <= (maxSpeed[MaxSpeed.Sprint,liquidState]*0.75))
 				{
-					if(abs(velX) < (maxSpeed[0,0]*0.75) || move != 0)
+					if(abs(velX) < (maxSpeed[MaxSpeed.Run,liquidState]*0.75) || move != 0)
 					{
-						brakeFrame = max(brakeFrame - ((abs(velX) < (maxSpeed[0,0]*0.75)) + (move != 0)), 0);
+						brakeFrame = max(brakeFrame - ((abs(velX) < (maxSpeed[MaxSpeed.Run,liquidState]*0.75)) + (move != 0)), 0);
 					}
 				}
 				if(brakeFrame >= 10 && !liquid)
@@ -2116,32 +2116,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				if(dBoostFrame < 19)
 				{
 					frame[Frame.JAim] = 6;
-					/*bodyFrame = dBoostFrame;
-					dBoostFrameCounter++;
-					if(dBoostFrameCounter > 5)
-					{
-						dBoostFrame++;
-						dBoostFrameCounter = 6;
-					}
-					if(velY < 0 && dBoostFrame >= 17)
-					{
-						dBoostFrame = 2;
-					}
-					if(bodyFrame == 0 || bodyFrame == 18)
-					{
-						ArmPos(2*dir,7);
-					}
-					if(bodyFrame == 1 || bodyFrame == 17)
-					{
-						ArmPos(6*dir,10);
-					}
-					
-					if(bodyFrame >= 2 && bodyFrame <= 16)
-					{
-						var rotPos = ((360/16) * max(bodyFrame-1,0) - 40);
-						ArmPos(lengthdir_x(10*dir,rotPos),lengthdir_y(10,rotPos));
-					}*/
-					
 					bodyFrame = dBoostFrameSeq[dBoostFrame];
 					if(dBoostFrame != 0)
 					{
@@ -2165,13 +2139,22 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				}
 				else
 				{
-					if(shootFrame || aimFrame != 0 || recoilCounter > 0)
+					if(shootFrame || cAimLock || aimFrame != 0 || recoilCounter > 0)
 					{
-						if(recoilCounter > 0 && aimFrame == (scr_round(aimFrame/2)*2) && transFrame >= 2)
+						aimAnimTweak = 2;
+					}
+					if(aimAnimTweak > 0)
+					{
+						if(recoilCounter > 0 && aimFrame == (scr_round(aimFrame/2)*2) && transFrame >= 0)
 						{
 							torsoR = sprt_Player_JumpFireRight;
 							torsoL = sprt_Player_JumpFireLeft;
 							bodyFrame = 2 + scr_round(aimFrame/2);
+						
+							if(bodyFrame <= 0)
+							{
+								sprtOffsetX = -4 * fDir;
+							}
 						}
 						else
 						{
@@ -2187,23 +2170,49 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 								torsoL = sprt_Player_JumpAimLeft;
 							}
 							bodyFrame = 4 + aimFrame;
-						}
-						legs = sprt_Player_JumpAimLeg;
-						if(velY <= 0)
-						{
-							frame[Frame.JAim] = max(frame[Frame.JAim] - 0.3, 0);
-							frame[Frame.Jump] = 0;
-						}
-						else
-						{
-							frame[Frame.JAim] = min(frame[Frame.JAim] + max(1/max(frame[Frame.JAim],1),0.25), 9);
-							if(ledgeFall2)
+						
+							if(bodyFrame <= 1)
 							{
+								sprtOffsetX = -4 / (1+bodyFrame) * fDir;
+								if(transFrame < 2)
+								{
+									sprtOffsetX /= 2;
+								}
+							}
+						}
+					
+						legs = sprt_Player_JumpAimLeg;
+						if(!global.roomTrans)
+						{
+							if(velY <= 0)
+							{
+								frame[Frame.JAim] = max(frame[Frame.JAim] - 0.3, 0);
 								frame[Frame.Jump] = 0;
 							}
 							else
 							{
-								frame[Frame.Jump] = 5;
+								var jAimFMax = 9;
+								if(bodyFrame <= 0)
+								{
+									jAimFMax = 6;
+								}
+								if(frame[Frame.JAim] < jAimFMax)
+								{
+									frame[Frame.JAim] = min(frame[Frame.JAim] + max(1/max(frame[Frame.JAim],1),0.25), jAimFMax);
+								}
+								else if(bodyFrame <= 0)
+								{
+									frame[Frame.JAim] = max(frame[Frame.JAim] - 1, jAimFMax);
+								}
+							
+								if(ledgeFall2)
+								{
+									frame[Frame.Jump] = 0;
+								}
+								else
+								{
+									frame[Frame.Jump] = 5;
+								}
 							}
 						}
 						legFrame = frame[Frame.JAim];
@@ -2212,12 +2221,33 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					else
 					{
 						frame[Frame.JAim] = 6;
-						frame[Frame.Jump] = max(min(frame[Frame.Jump] + max(0.5/max(frame[Frame.Jump],1),0.125), 4),1);
+						
 						torsoR = sprt_Player_FallRight;
 						torsoL = sprt_Player_FallLeft;
 						legs = sprt_Player_JumpAimLeg;
-						bodyFrame = frame[Frame.Jump];
-						legFrame = floor((frame[Frame.Jump]+0.5)*2);
+						
+						if(frameCounter[Frame.Jump] < 30)
+						{
+							if(!global.roomTrans)
+							{
+								frame[Frame.Jump] = min(frame[Frame.Jump] + max(0.5/max(frame[Frame.Jump],1),0.125), 4);
+								if(frame[Frame.Jump] >= 4)
+								{
+									frameCounter[Frame.Jump]++;
+								}
+							}
+							bodyFrame = scr_round(frame[Frame.Jump]);
+							legFrame = floor((frame[Frame.Jump]+0.5)*2);
+						}
+						else
+						{
+							if(!global.roomTrans)
+							{
+								frame[Frame.Jump] = clamp(frame[Frame.Jump] + 0.25,4,8);
+							}
+							bodyFrame = scr_floor(frame[Frame.Jump]);
+							legFrame = scr_ceil(12 - frame[Frame.Jump]);
+						}
 					}
 				}
 				break;

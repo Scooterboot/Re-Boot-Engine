@@ -477,7 +477,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		{
 			if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
 			{
-				velX = min(abs(velX),maxSpeed[0,liquidState])*sign(velX);
+				velX = min(abs(velX),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 				speedCounter = 0;
 				speedBoost = false;
 			}
@@ -692,43 +692,47 @@ if(xRayActive)
 		sprint = true;
 	}*/
 	
-	var moveState = 0;
+	var moveState = MaxSpeed.Run;
 	if(state == State.Morph)
 	{
 		if(grounded)
 		{
-			if(abs(velX) > maxSpeed[5,liquidState])
+			if(abs(velX) > maxSpeed[MaxSpeed.MorphBall,liquidState])
 			{
-				moveState = 6;
+				moveState = MaxSpeed.MockBall;
 				if(speedBoost && sprint)
 				{
-					moveState = 2;
+					moveState = MaxSpeed.SpeedBoost;
 				}
 			}
 			else
 			{
-				moveState = 5;
+				moveState = MaxSpeed.MorphBall;
 			}
 		}
 		else
 		{
 			if(misc[Misc.Spring])
 			{
-				moveState = 8;
+				moveState = MaxSpeed.AirSpring;
 			}
 			else
 			{
-				moveState = 7;
+				moveState = MaxSpeed.AirMorph;
 			}
 		}
 	}
 	else if(state == State.Jump)
 	{
-		moveState = 3;
+		moveState = MaxSpeed.Jump;
+		if(stateFrame == State.DmgBoost)
+		{
+			moveState = MaxSpeed.Somersault;
+		}
 	}
 	else if(state == State.Somersault)
 	{
-		moveState = 4;
+		moveState = MaxSpeed.Somersault;
 	}
 	else
 	{
@@ -736,25 +740,29 @@ if(xRayActive)
 		{
 			if(boots[Boots.SpeedBoost])
 			{
-				moveState = 2;
+				moveState = MaxSpeed.SpeedBoost;
 			}
 			else
 			{
-				moveState = 1;
+				moveState = MaxSpeed.Sprint;
 			}
 		}
 	}
 	
 	fMaxSpeed = maxSpeed[moveState,liquidState];
-	fMoveSpeed = moveSpeed[(state == State.Morph),liquidState];
+	fMoveSpeed = moveSpeed[MoveSpeed.Normal,liquidState];
+	if(state == State.Morph)
+	{
+		fMoveSpeed = moveSpeed[MoveSpeed.MorphBall,liquidState];
+	}
 	fFrict = frict[liquidState];
 	
 	if(moveState == 1 || moveState == 2)
 	{
-		var runMaxSpd = maxSpeed[0,liquidState],
-			sprintMaxSpd = maxSpeed[1,liquidState],
-			runMoveSpd = moveSpeed[0,liquidState],
-			sprintMoveSpd = moveSpeed[2,liquidState],
+		var runMaxSpd = maxSpeed[MaxSpeed.Run,liquidState],
+			sprintMaxSpd = maxSpeed[MaxSpeed.Sprint,liquidState],
+			runMoveSpd = moveSpeed[MoveSpeed.Normal,liquidState],
+			sprintMoveSpd = moveSpeed[MoveSpeed.Sprint,liquidState],
 			spd = abs(velX);
 		
 		if(spd < runMaxSpd)
@@ -777,10 +785,10 @@ if(xRayActive)
 	{
 		if((walkState && sign(velX) != dir) || moonFallState)
 		{
-			fMaxSpeed = maxSpeed[11,liquidState];
+			fMaxSpeed = maxSpeed[MaxSpeed.MoonWalk,liquidState];
 			if(sprint)
 			{
-				fMaxSpeed = maxSpeed[12,liquidState];
+				fMaxSpeed = maxSpeed[MaxSpeed.MoonSprint,liquidState];
 			}
 			var _frict = fFrict*0.25;
 			if(moonFallState)
@@ -803,10 +811,10 @@ if(xRayActive)
 	}
 	else if(moonFall && !grounded)
 	{
-		fMaxSpeed = maxSpeed[13,liquidState];
+		fMaxSpeed = maxSpeed[MaxSpeed.MoonFall,liquidState];
 	}
 	
-	var maxSpeed2 = maxSpeed[2,liquidState];
+	var maxSpeed2 = maxSpeed[MaxSpeed.SpeedBoost,liquidState];
 	if(abs(velX) > maxSpeed2 && state != State.Spark && state != State.BallSpark && state != State.Grapple && state != State.Dodge && state != State.DmgBoost && (speedCounter > 0 || grounded))
 	{
 		if(sign(velX) == 1)
@@ -828,7 +836,7 @@ if(xRayActive)
 	state != State.Hurt && (!spiderBall || spiderEdge == Edge.None) && !xRayActive && state != State.Dodge)
 	{
 		var moveflag = false;
-		if((move == 1 && !brake) || (state == State.Somersault && dir == 1 && velX > 1.1*moveSpeed[0,liquidState]))
+		if((move == 1 && !brake) || (state == State.Somersault && dir == 1 && velX > 1.1*moveSpeed[MoveSpeed.Normal,liquidState]))
 		{
 			moveflag = true;
 			if(velX <= fMaxSpeed)
@@ -847,7 +855,7 @@ if(xRayActive)
 				}
 			}
 		}
-		if((move == -1 && !brake) || (state == State.Somersault && dir == -1 && velX < -1.1*moveSpeed[0,liquidState]))
+		if((move == -1 && !brake) || (state == State.Somersault && dir == -1 && velX < -1.1*moveSpeed[MoveSpeed.Normal,liquidState]))
 		{
 			moveflag = true;
 			if(velX >= -fMaxSpeed)
@@ -870,7 +878,7 @@ if(xRayActive)
 		if(!moveflag)
 		{
 			if((aimAngle > -2 || !cJump) && 
-			(state != State.Morph || (state == State.Morph && abs(velX) <= maxSpeed[5,liquidState]) || grounded) && morphFrame <= 0)
+			(state != State.Morph || (state == State.Morph && abs(velX) <= maxSpeed[MaxSpeed.MorphBall,liquidState]) || grounded) && morphFrame <= 0)
 			{
 				if(velX > 0)
 				{
@@ -917,11 +925,11 @@ if(xRayActive)
 	
 	#region Speed Booster Logic
 	
-	minBoostSpeed = maxSpeed[1,liquidState] + ((maxSpeed[2,liquidState] - maxSpeed[1,liquidState])*0.75);
+	minBoostSpeed = maxSpeed[MaxSpeed.Sprint,liquidState] + ((maxSpeed[MaxSpeed.SpeedBoost,liquidState] - maxSpeed[MaxSpeed.Sprint,liquidState])*0.75);
 	
 	if(fastWallJump && speedBoostWallJump)
 	{
-		var sBoostWJFlag = (speedBoost && state == State.Somersault && !grounded && sign(prevVelX) != dir && abs(prevVelX) >= maxSpeed[1,liquidState]);
+		var sBoostWJFlag = (speedBoost && state == State.Somersault && !grounded && sign(prevVelX) != dir && abs(prevVelX) >= maxSpeed[MaxSpeed.Sprint,liquidState]);
 		if(sBoostWJFlag)
 		{
 			speedBoostWJCounter = min(speedBoostWJCounter+1,speedBoostWJMax);
@@ -937,7 +945,7 @@ if(xRayActive)
 		speedBoostWJ = false;
 	}
 	
-	var spiderBoosting = (SpiderActive() && sign(spiderSpeed) == spiderMove && abs(spiderSpeed) > maxSpeed[5,liquidState]);
+	var spiderBoosting = (SpiderActive() && sign(spiderSpeed) == spiderMove && abs(spiderSpeed) > maxSpeed[MaxSpeed.MorphBall,liquidState]);
 	var stopBoosting = false;
 	
 	if(!speedBoostWJ)
@@ -982,7 +990,7 @@ if(xRayActive)
 		}
 		if(move != dir && (speedCounter > 0 || !grounded) && morphFrame <= 0 && (aimAngle > -2 || !cJump))
 		{
-			if((state != State.Somersault && state != State.Morph) || (state == State.Morph && abs(velX) <= maxSpeed[5,liquidState]) || grounded)
+			if((state != State.Somersault && state != State.Morph) || (state == State.Morph && abs(velX) <= maxSpeed[MaxSpeed.MorphBall,liquidState]) || grounded)
 			{
 				stopBoosting = true;
 				
@@ -1097,9 +1105,9 @@ if(xRayActive)
 	fJumpSpeed = jumpSpeed[boots[Boots.HiJump],liquidState];
 	fJumpHeight = jumpHeight[boots[Boots.HiJump],liquidState];
 	
-	if(boots[Boots.SpeedBoost] && abs(velX) > maxSpeed[1,liquidState] && speedCounter > 0)
+	if(boots[Boots.SpeedBoost] && abs(velX) > maxSpeed[MaxSpeed.Sprint,liquidState] && speedCounter > 0)
 	{
-		fJumpSpeed += max((abs(velX) - maxSpeed[1,liquidState]) / 2, 0);
+		fJumpSpeed += max((abs(velX) - maxSpeed[MaxSpeed.Sprint,liquidState]) / 2, 0);
 	}
 	
 	canMorphBounce = true;
@@ -1227,10 +1235,10 @@ if(xRayActive)
 						
 						audio_play_sound(snd_WallJump,0,false);
 						
-						var baseVel = maxSpeed[4,liquidState];
-						if(state == State.Grip && gripGunReady)
+						var baseVel = moveSpeed[MoveSpeed.WallJump,liquidState];
+						if((state == State.Grip && gripGunReady) || state == State.Grapple)
 						{
-							baseVel = maxSpeed[0,liquidState];
+							baseVel = moveSpeed[MoveSpeed.ClingWallJump,liquidState];
 							dir *= -1;
 							dirFrame = dir;
 							wjGripAnim = true;
@@ -1251,15 +1259,15 @@ if(xRayActive)
 						{
 							velX = max(baseVel,abs(prevVelX))*m;
 							
-							var spd = min(abs(velX) / max(abs(fastWJCheckVel), maxSpeed[1,liquidState]), 1);
-							if(abs(velX) >= max(abs(fastWJCheckVel), maxSpeed[1,liquidState]) && fastWJCheckVel != 0)
+							var spd = min(abs(velX) / max(abs(fastWJCheckVel), maxSpeed[MaxSpeed.Sprint,liquidState]), 1);
+							if(abs(velX) >= max(abs(fastWJCheckVel), maxSpeed[MaxSpeed.Sprint,liquidState]) && fastWJCheckVel != 0)
 							{
 								spd = min(abs(velX) / minBoostSpeed, 1);
 								var snd = audio_play_sound(snd_PerfectFastWJ,0,false);
 								audio_sound_gain(snd, 0.5 + spd*0.5, 0);
 								fastWJFlash = 1;
 							}
-							else if(abs(velX) > maxSpeed[4,liquidState] && fastWJCheckVel != 0)
+							else if(abs(velX) > maxSpeed[MaxSpeed.Somersault,liquidState] && fastWJCheckVel != 0)
 							{
 								var snd = audio_play_sound(snd_FastWallJump,0,false);
 								audio_sound_gain(snd, spd*0.75, 0);
@@ -1378,7 +1386,6 @@ if(xRayActive)
 						ChangeState(State.Somersault,State.Somersault,mask_Player_Somersault,false);
 						if(moonFallState && !moonFall)
 						{
-							//velX -= maxSpeed[11,liquidState] * dir;
 							moonFall = true;
 						}
 					}
@@ -1607,7 +1614,7 @@ if(xRayActive)
 				{
 					_dir = move2;
 				}
-				var _spd = maxSpeed[14,liquidState] * bbMult;
+				var _spd = moveSpeed[MoveSpeed.BoostBall,liquidState] * bbMult;
 					
 				if(spiderBall && spiderEdge != Edge.None)
 				{
@@ -1739,10 +1746,10 @@ if(xRayActive)
 		        }
 		    }
 			
-			var fMaxSpeed2 = maxSpeed[5,liquidState];
+			var fMaxSpeed2 = maxSpeed[MaxSpeed.MorphBall,liquidState];
 			if(speedBoost)
 			{
-				fMaxSpeed2 = maxSpeed[2,liquidState];
+				fMaxSpeed2 = maxSpeed[MaxSpeed.SpeedBoost,liquidState];
 			}
 			if(spiderMove > 0)
 			{
@@ -1846,7 +1853,7 @@ if(xRayActive)
 		spiderJump_SpeedAddX = 0;
 		spiderJump_SpeedAddY = 0;
 		
-		if(grounded || abs(velX) < maxSpeed[6,liquidState])
+		if(grounded || abs(velX) < maxSpeed[MaxSpeed.MockBall,liquidState])
 		{
 			spiderJump = false;
 		}
@@ -2616,7 +2623,7 @@ if(xRayActive)
 					
 					if((speedKeep == 0 || (speedKeep == 2 && liquidMovement)) && canMorphBounce && !justBounced)
 					{
-						velX = min(abs(velX),maxSpeed[0,liquidState])*sign(velX);
+						velX = min(abs(velX),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 						speedCounter = 0;
 						speedBoost = false;
 					}
@@ -2635,7 +2642,7 @@ if(xRayActive)
 				
 				if(cUp && rUp && move2 == 0)
 				{
-					velX = min(abs(velX),maxSpeed[0,liquidState])*sign(velX);
+					velX = min(abs(velX),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 					velY = min(velY, 0);
 				}
 			}
@@ -2683,7 +2690,7 @@ if(xRayActive)
 						uncrouch = 7;
 						if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
 						{
-							velX = min(abs(velX),maxSpeed[0,liquidState])*sign(velX);
+							velX = min(abs(velX),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 							speedCounter = 0;
 							speedBoost = false;
 						}
@@ -2766,7 +2773,7 @@ if(xRayActive)
 					
 					if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
 					{
-						spiderSpeed = min(abs(spiderSpeed),maxSpeed[0,liquidState])*sign(spiderSpeed);
+						spiderSpeed = min(abs(spiderSpeed),maxSpeed[MaxSpeed.Run,liquidState])*sign(spiderSpeed);
 						speedCounter = 0;
 						speedBoost = false;
 					}
@@ -2807,7 +2814,7 @@ if(xRayActive)
 			{
 				if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
 				{
-					velX = min(abs(velX) * (power(abs(velX),0.1) - 1),maxSpeed[0,liquidState])*sign(velX);
+					velX = min(abs(velX) * (power(abs(velX),0.1) - 1),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 					speedCounter = 0;
 					speedBoost = false;
 				}
@@ -2951,7 +2958,7 @@ if(xRayActive)
 			{
 				if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
 				{
-					velX = min(abs(velX) * (power(abs(velX),0.1) - 1),maxSpeed[0,liquidState])*sign(velX);
+					velX = min(abs(velX) * (power(abs(velX),0.1) - 1),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 					speedCounter = 0;
 					speedBoost = false;
 				}
@@ -3447,7 +3454,7 @@ if(xRayActive)
 			}
 			shineCharge = 0;
 			
-			shineSparkSpeed = min(shineSparkSpeed+moveSpeed[3,liquidState], shineSparkSpeedMax);
+			shineSparkSpeed = min(shineSparkSpeed+moveSpeed[MoveSpeed.Spark,liquidState], shineSparkSpeedMax);
 			
 			shineDirDiff = 0;
 			if(shineSparkFlightAdjust)
@@ -3679,7 +3686,7 @@ if(xRayActive)
 						angCurv = sqrt(abs(angCurv)) * sign(angCurv);
 					}
 					
-					var grapMoveSpeed = moveSpeed[4,liquidState],
+					var grapMoveSpeed = moveSpeed[MoveSpeed.Grapple,liquidState],
 						angleGrav = grapGrav[liquidState] * angCurv;
 					
 					velX += lengthdir_x(grapMoveSpeed * move + angleGrav,grapAngle);
@@ -3691,7 +3698,7 @@ if(xRayActive)
 				{
 					if(point_distance(x,y,xprevious,yprevious) >= minBoostSpeed*0.75)
 					{
-						if(point_distance(x,y,xprevious,yprevious) < maxSpeed[2,liquidState]*1.25)
+						if(point_distance(x,y,xprevious,yprevious) < maxSpeed[MaxSpeed.SpeedBoost,liquidState]*1.25)
 						{
 							velX += lengthdir_x(moveSpeed[0,liquidState]*sign(grapAngVel),grapAngle);
 							velY += lengthdir_y(moveSpeed[0,liquidState]*sign(grapAngVel),grapAngle);
@@ -3729,11 +3736,7 @@ if(xRayActive)
 				{
 					if(cJump && rJump)
 			        {
-						var kickSpeed = maxSpeed[1,liquidState];
-						if(liquidMovement)
-						{
-							kickSpeed *= 0.75;
-						}
+						var kickSpeed = moveSpeed[MoveSpeed.GrappleKick,liquidState];
 						kickSpeed = max(kickSpeed,prevGrapVelocity);
 			            velX = lengthdir_x(kickSpeed * sign(grapWallBounceCounter),grapAngle);
 						velY = lengthdir_y(kickSpeed * sign(grapWallBounceCounter),grapAngle);
@@ -3819,7 +3822,7 @@ if(xRayActive)
 	}
 	else
 	{
-		if(grounded || abs(velX) < maxSpeed[1,liquidState])
+		if(grounded || abs(velX) < maxSpeed[MaxSpeed.Sprint,liquidState])
 		{
 			grapBoost = false;
 		}
@@ -3909,11 +3912,12 @@ if(xRayActive)
 		gunReady = false;
 		ledgeFall = true;
 		ledgeFall2 = true;
-		if(((cJump && move2 == -dir) || velY < 0) && !grounded)
+		//if(((cJump && move2 == -dir) || velY < 0) && !grounded)
+		if(cJump && move2 == -dir && !grounded)
 		{
 			if(move2 == -dir)
 			{
-				velX = maxSpeed[9,liquidState]*move2;
+				velX = moveSpeed[MoveSpeed.DmgBoost,liquidState]*move2;
 			}
 			if(!dmgBoostJump)
 			{
@@ -3930,7 +3934,7 @@ if(xRayActive)
 		{
 			if(grounded)
 			{
-				velX = min(abs(velX),maxSpeed[0,liquidState])*sign(velX);
+				velX = min(abs(velX),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 				speedCounter = 0;
 				speedBoost = false;
 				audio_play_sound(snd_Land,0,false);
@@ -4065,7 +4069,7 @@ if(xRayActive)
 		{
 			if(dodgeLength < dodgeLengthMax-5)
 			{
-				velX = max(maxSpeed[10,liquidState],abs(velX))*dodgeDir;
+				velX = max(moveSpeed[MoveSpeed.Dodge,liquidState],abs(velX))*dodgeDir;
 			}
 			dodgeLength += (1 / (1+liquidMovement));
 			
@@ -4245,7 +4249,7 @@ if(xRayActive)
 	{
 		fastWJCheckVel = prevVelX;
 	}
-	if(grounded || abs(prevVelX) <= maxSpeed[4,liquidState] || sign(prevVelX) != sign(fastWJCheckVel))
+	if(grounded || abs(prevVelX) <= maxSpeed[MaxSpeed.Somersault,liquidState] || sign(prevVelX) != sign(fastWJCheckVel))
 	{
 		fastWJCheckVel = 0;
 	}

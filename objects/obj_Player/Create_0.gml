@@ -384,6 +384,21 @@ lastReflec = noone;
 #region Physics Vars
 
 // -- Horizontal speed values --
+enum MaxSpeed
+{
+	Run = 0,
+	Sprint = 1,
+	SpeedBoost = 2,
+	Jump = 3,
+	Somersault = 4,
+	MorphBall = 5,
+	MockBall = 6,
+	AirMorph = 7,
+	AirSpring = 8,
+	MoonWalk = 9,
+	MoonSprint = 10,
+	MoonFall = 11
+}
 // Out of water (or in water with grav suit)
 maxSpeed[0,0] = 2.75;	// Running
 maxSpeed[1,0] = 4.75;	// Sprinting (no speed boost)
@@ -394,12 +409,9 @@ maxSpeed[5,0] = 3.25;	// Morph Ball
 maxSpeed[6,0] = 5.25;	// Mock Ball
 maxSpeed[7,0] = 1;		// Air Morph
 maxSpeed[8,0] = 1.25;	// Air Spring Ball
-maxSpeed[9,0] = 5.375;	// Damage Boost
-maxSpeed[10,0] = 7.25;	// Dodge
-maxSpeed[11,0] = 1.25;	// Moonwalk
-maxSpeed[12,0] = 2.125;	// Moonwalk (sprint)
-maxSpeed[13,0] = 1.75;	// Moonfall
-maxSpeed[14,0] = 4.75;	// Boost Ball
+maxSpeed[9,0] = 1.25;	// Moonwalk
+maxSpeed[10,0] = 2.125;	// Moonwalk (sprint)
+maxSpeed[11,0] = 1.75;	// Moonfall
 // Underwater (no grav suit)
 maxSpeed[0,1] = 2.75;	// Running
 maxSpeed[1,1] = 3.75;	// Sprinting (no speed boost)
@@ -410,12 +422,9 @@ maxSpeed[5,1] = 2.75;	// Morph Ball
 maxSpeed[6,1] = 4.75;	// Mock Ball
 maxSpeed[7,1] = 1;		// Air Morph
 maxSpeed[8,1] = 1.25;	// Air Spring Ball
-maxSpeed[9,1] = 3.3;	// Damage Boost
-maxSpeed[10,1] = 3.25;	// Dodge
-maxSpeed[11,1] = 0.75;	// Moonwalk
-maxSpeed[12,1] = 1.25;	// Moonwalk (sprint)
-maxSpeed[13,1] = 1.5;	// Moonfall
-maxSpeed[14,1] = 3.75;	// Boost Ball
+maxSpeed[9,1] = 0.75;	// Moonwalk
+maxSpeed[10,1] = 1.25;	// Moonwalk (sprint)
+maxSpeed[11,1] = 1.5;	// Moonfall
 // In lava/acid (no grav suit)
 maxSpeed[0,2] = 1.75;	// Running
 maxSpeed[1,2] = 2.75;	// Sprinting (no speed boost)
@@ -426,31 +435,60 @@ maxSpeed[5,2] = 2.75;	// Morph Ball
 maxSpeed[6,2] = 4.75;	// Mock Ball
 maxSpeed[7,2] = 1;		// Air Morph
 maxSpeed[8,2] = 1.25;	// Air Spring Ball
-maxSpeed[9,2] = 3.3;	// Damage Boost
-maxSpeed[10,2] = 3.25;	// Dodge
-maxSpeed[11,2] = 0.75;	// Moonwalk
-maxSpeed[12,2] = 1.25;	// Moonwalk (sprint)
-maxSpeed[13,2] = 1.5;	// Moonfall
-maxSpeed[14,2] = 2.75;	// Boost Ball
+maxSpeed[9,2] = 0.75;	// Moonwalk
+maxSpeed[10,2] = 1.25;	// Moonwalk (sprint)
+maxSpeed[11,2] = 1.5;	// Moonfall
 
+enum MoveSpeed
+{
+	Normal = 0,
+	Sprint = 1,
+	WallJump = 2,
+	ClingWallJump = 3,
+	Spark = 4,
+	Dodge = 5,
+	DmgBoost = 6,
+	MorphBall = 7,
+	BoostBall = 8,
+	Grapple = 9,
+	GrappleKick = 10
+}
 // Out of water
 moveSpeed[0,0] = 0.1875;	// Normal
-moveSpeed[1,0] = 0.1;		// Morph
-moveSpeed[2,0] = 0.0625;	// Sprint/Speedboost
-moveSpeed[3,0] = 0.109375;	// Shine Spark
-moveSpeed[4,0] = 0.125;		// Grapple
+moveSpeed[1,0] = 0.0625;	// Sprint/Speedboost
+moveSpeed[2,0] = 1.375;		// Wall Jump
+moveSpeed[3,0] = 2.75;		// Cling Wall Jump (from grip or grapple)
+moveSpeed[4,0] = 0.109375;	// Shine Spark
+moveSpeed[5,0] = 7.25;		// Dodge
+moveSpeed[6,0] = 5.375;		// Damage Boost
+moveSpeed[7,0] = 0.1;		// Morph
+moveSpeed[8,0] = 4.75;		// Boost Ball
+moveSpeed[9,0] = 0.125;		// Grapple
+moveSpeed[10,0] = 2.75;		// Grapple Kick
 // Underwater (no grav suit)
 moveSpeed[0,1] = 0.015625;	// Normal
-moveSpeed[1,1] = 0.02;		// Morph
-moveSpeed[2,1] = 0.015625;	// Sprint/Speedboost
-moveSpeed[3,1] = 0.03125;	// Shine Spark
-moveSpeed[4,1] = 0.0225;	// Grapple
+moveSpeed[1,1] = 0.015625;	// Sprint/Speedboost
+moveSpeed[2,1] = 1.125;		// Wall Jump
+moveSpeed[3,1] = 1.375;		// Cling Wall Jump (from grip or grapple)
+moveSpeed[4,1] = 0.03125;	// Shine Spark
+moveSpeed[5,1] = 3.25;		// Dodge
+moveSpeed[6,1] = 3.3;		// Damage Boost
+moveSpeed[7,1] = 0.02;		// Morph
+moveSpeed[8,1] = 3.75;		// Boost Ball
+moveSpeed[9,1] = 0.0225;	// Grapple
+moveSpeed[10,1] = 2.0;		// Grapple Kick
 // In lava/acid (no grav suit)
 moveSpeed[0,2] = 0.015625;	// Normal
-moveSpeed[1,2] = 0.02;		// Morph
-moveSpeed[2,2] = 0.015625;	// Sprint/Speedboost
-moveSpeed[3,2] = 0.03125;	// Shine Spark
-moveSpeed[4,2] = 0.0225;	// Grapple
+moveSpeed[1,2] = 0.015625;	// Sprint/Speedboost
+moveSpeed[2,2] = 1.125;		// Wall Jump
+moveSpeed[3,2] = 1.375;		// Cling Wall Jump (from grip or grapple)
+moveSpeed[4,2] = 0.03125;	// Shine Spark
+moveSpeed[5,2] = 3.25;		// Dodge
+moveSpeed[6,2] = 3.3;		// Damage Boost
+moveSpeed[7,2] = 0.02;		// Morph
+moveSpeed[8,2] = 2.75;		// Boost Ball
+moveSpeed[9,2] = 0.0225;	// Grapple
+moveSpeed[10,2] = 2.0;		// Grapple Kick
 
 frict[0] = 0.5;		// Out of water
 frict[1] = 0.5;		// Underwater
@@ -459,8 +497,8 @@ frict[2] = 0.25;	// In lava/acid
 // turn around speed is equal to moveSpeed + frict
 // this value gets added on top when holding run
 sprintTurnSpeed[0] = 1.575;		// Out of water
-sprintTurnSpeed[1] = 1.07125;		// Underwater
-sprintTurnSpeed[2] = 0.57125;		// In lava/acid
+sprintTurnSpeed[1] = 1.07125;	// Underwater
+sprintTurnSpeed[2] = 0.57125;	// In lava/acid
 
 //bombXSpeedMax[0] = 2.75;		// Out of water
 //bombXSpeedMax[1] = 1;		// Underwater
