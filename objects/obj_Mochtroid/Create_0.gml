@@ -55,6 +55,10 @@ function DamagePlayer()
 			dmgCounter = min(dmgCounter+0.1,dmgCounterMax);
 		}
 	}
+	else
+	{
+		audio_stop_sound(drainSnd);
+	}
 }
 
 function OnXCollision(fVX)

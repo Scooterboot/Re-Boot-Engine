@@ -149,19 +149,19 @@ if(room == rm_MainMenu)
 							}
 							case 3:
 							{
-								instance_create_depth(0,0,-1,obj_DisplayOptions);
+								instance_create_depth(0,0,-8,obj_DisplayOptions);
 								audio_play_sound(snd_MenuBoop,0,false);
 								break;
 							}
 							case 4:
 							{
-								instance_create_depth(0,0,-1,obj_AudioOptions);
+								instance_create_depth(0,0,-8,obj_AudioOptions);
 								audio_play_sound(snd_MenuBoop,0,false);
 								break;
 							}
 							case 5:
 							{
-								instance_create_depth(0,0,-1,obj_ControlOptions);
+								instance_create_depth(0,0,-8,obj_ControlOptions);
 								audio_play_sound(snd_MenuBoop,0,false);
 								break;
 							}

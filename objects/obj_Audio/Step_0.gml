@@ -53,7 +53,7 @@ if(global.musicVolume > 0)
 		else
 		{
 			global.musCurrent.Gain(1,0);
-			global.musCurrent.Loop();
+			//global.musCurrent.Loop();
 		}
 	}
 		

@@ -77,8 +77,9 @@ global.mapArea[MapArea.Tourian] = new AreaMap(sprt_Map_DebugTourian, "Tourian");
 
 prevArea = noone;
 
-#region DrawMap()
-function DrawMap(mapArea,posX,posY,mapX,mapY,mapWidth,mapHeight,isMinimap = false,baseAlpha = 0)
+#region DrawMap
+
+function PrepareMapSurf(mapArea,mapX,mapY,mapWidth,mapHeight,isMinimap = false,baseAlpha = 0)
 {
 	if(mapArea != noone)
 	{
@@ -91,13 +92,11 @@ function DrawMap(mapArea,posX,posY,mapX,mapY,mapWidth,mapHeight,isMinimap = fals
 			diffY = mapY;
 		if(diffX < 0)
 		{
-			posX -= diffX;
 			mapX -= diffX;
 			mapWidth += diffX;
 		}
 		if(diffY < 0)
 		{
-			posY -= diffY;
 			mapY -= diffY;
 			mapHeight += diffY;
 		}
@@ -184,8 +183,6 @@ function DrawMap(mapArea,posX,posY,mapX,mapY,mapWidth,mapHeight,isMinimap = fals
 			}
 		
 			surface_reset_target();
-			
-			draw_surface_ext(mapSurf,posX,posY,1,1,0,c_white,1);
 		}
 		else
 		{
@@ -194,6 +191,22 @@ function DrawMap(mapArea,posX,posY,mapX,mapY,mapWidth,mapHeight,isMinimap = fals
 			draw_clear_alpha(c_black,0);
 			surface_reset_target();
 		}
+	}
+}
+function DrawMap(posX,posY,mapX,mapY)
+{
+	if(mapX < 0)
+	{
+		posX -= mapX;
+	}
+	if(mapY < 0)
+	{
+		posY -= mapY;
+	}
+	
+	if(surface_exists(mapSurf))
+	{
+		draw_surface_ext(mapSurf,posX,posY,1,1,0,c_white,1);
 	}
 }
 #endregion

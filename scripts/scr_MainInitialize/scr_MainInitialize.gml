@@ -1,13 +1,5 @@
 function scr_MainInitialize()
 {
-	application_surface_draw_enable(false); //disable default application surface drawing
-
-	global.gpSlot = -1;			//gamepad slot variable
-	global.gpButtonNum = 19;	//number of gamepad buttons variable
-
-	scr_LoadKeyboard();	//load keyboard bindings
-	scr_LoadGamepad();	//load gamepad bindings
-
 #region Settings
 	ini_open("settings.ini"); //load display, audio, and control settings
 	global.HUD = ini_read_real("Controls", "hud style", 0);							//load HUD control setting
@@ -39,12 +31,15 @@ function scr_MainInitialize()
 	global.maxScreenScale = 1;
 	global.zoomScale = 1;
 	
-	// res: 320x240, widescreen: 426x240 (SM res: 256x224, widescreen: 400x224)
+	// Reference of resolutions from other games
+	// Super Metroid:	256 x 224 (widescreen: 400 x 224) | in tiles: 16 x 14		(ws: 25 x 14)
+	// AM2R:			320 x 240 (widescreen: 426 x 240) | in tiles: 20 x 15		(ws: 26.625 x 15)
+	// Axiom Verge:		360 x 270 (widescreen: 480 x 270) | in tiles: 22.5 x 16.875	(ws: 30 x 16.875)
 	global.wideResWidth = 426;
 	global.ogResWidth = 320;
+	global.resHeight = 240;
 	
 	global.resWidth = global.ogResWidth;
-	global.resHeight = 240;
 	global.zoomResWidth = global.resWidth*global.zoomScale;
 	global.zoomResHeight = global.resHeight*global.zoomScale;
 
@@ -53,28 +48,26 @@ function scr_MainInitialize()
 
 	global.currentPlayFile = 0; //file that is selected and will be saved over during gameplay
 
-	global.currentPlayTime = 0;
-	//global.currentItemPercent = 0;
-
 	global.rmHeated = false;
 
 	randomize(); //randomize seed for various random numbers
 
-	instance_create_depth(0,0,-1,obj_Display);
+	instance_create_depth(0,0,-10,obj_Display);
 	instance_create_depth(0,0,0,obj_Audio);
 	instance_create_depth(0,0,0,obj_Control);
 	instance_create_depth(0,0,0,obj_Progression);
 	instance_create_depth(0,0,0,obj_Map);
 	instance_create_depth(0,0,0,obj_Particles);
-	instance_create_depth(mouse_x,mouse_y,-2,obj_Mouse);
-	instance_create_depth(0,0,0,obj_PauseMenu);
-	
 	instance_create_depth(0,0,0,obj_TileFadeHandler);
 	instance_create_depth(0,0,0,obj_ScreenShaker);
+	
+	instance_create_depth(mouse_x,mouse_y,-9,obj_Mouse);
+	instance_create_depth(0,0,-6,obj_PauseMenu);
+	instance_create_depth(0,0,-5,obj_UI_HUD);
 
-	//room_goto(rm_MainMenu); //go to the main menu
-	//instance_create_depth(0,0,0,obj_MainMenu);
-	room_goto(rm_Disclaimer);
+	room_goto(rm_MainMenu); //go to the main menu
+	instance_create_depth(0,0,-7,obj_MainMenu);
+	//room_goto(rm_Disclaimer);
 	
 	
 	lhc_init();

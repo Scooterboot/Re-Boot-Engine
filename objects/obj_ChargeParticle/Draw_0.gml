@@ -1,7 +1,7 @@
 
 var angle = point_direction(x,y,destX,destY);
 alpha = abs(1 - (initDist/point_distance(x,y,destX,destY)));
-color = merge_colour(merge_colour(color1,color2,min(alpha*2,1)),color3,abs(max(alpha-0.5,0)*2));
+var color = merge_colour(merge_colour(color1,color2,min(alpha*2,1)),color3,abs(max(alpha-0.5,0)*2));
 gpu_set_blendmode(bm_add);
 var num = 5;//vel;
 for(var i = 1; i < num; i++)

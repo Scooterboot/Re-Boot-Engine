@@ -6,7 +6,7 @@
   "name":"scr_SaveStringToFile",
   "parent":{
     "name":"SaveFile",
-    "path":"folders/Scripts/Main/SaveFile.yy",
+    "path":"folders/Scripts/SaveFile.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

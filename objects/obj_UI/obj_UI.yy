@@ -10,8 +10,8 @@
   "name":"obj_UI",
   "overriddenProperties":[],
   "parent":{
-    "name":"UI",
-    "path":"folders/Objects/UI.yy",
+    "name":"UI_Old",
+    "path":"folders/Objects/UI_Old.yy",
   },
   "parentObjectId":null,
   "persistent":false,

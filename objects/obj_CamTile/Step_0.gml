@@ -23,7 +23,6 @@ if(instance_exists(obj_Player))
 		active = false;
 	}
 	
-	var _list = ds_list_create();
 	var _num = instance_place_list(x,y,obj_CamScroll,scrollList,true);
 	if(_num > 0)
 	{

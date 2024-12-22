@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"scr_MainInitialize",
   "parent":{
-    "name":"Main",
-    "path":"folders/Scripts/Main.yy",
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

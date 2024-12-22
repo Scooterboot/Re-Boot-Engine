@@ -1,23 +1,6 @@
 /// @description Set pos and draw mouse
 
-var xx = camera_get_view_x(view_camera[0]),
-	yy = camera_get_view_y(view_camera[0]),
-	ww = global.resWidth,
-	hh = global.resHeight;
-
-var screenScale = global.screenScale;
-if(global.screenScale == 0)
-{
-	screenScale = min(max(window_get_width()/ww,1),max(window_get_height()/hh,1));
-}
-
-posX = (mouse_x - xx) * (window_get_width() / (ww*screenScale)) - global.screenX/screenScale;
-posY = (mouse_y - yy) * (window_get_height() / (hh*screenScale)) - global.screenY/screenScale;
-
-x = posX + xx;
-y = posY + yy;
-
-hide = true; //(room != rm_MainMenu && !obj_PauseMenu.pause);
+hide = false; //(room != rm_MainMenu && !obj_PauseMenu.pause);
 
 if(!hide)
 {
@@ -29,7 +12,10 @@ else
 }
 
 var sprt = sprt_UI_MouseCursor;
+
+surface_set_target(obj_Display.surfUI);
 draw_sprite_ext(sprt,0,x,y,1,1,0,make_color_rgb(51,109,174),image_alpha);
+surface_reset_target();
 
 if(!surface_exists(mouseGlowSurf))
 {
@@ -67,7 +53,11 @@ else
 	
 	surface_reset_target();
 	
+	surface_set_target(obj_Display.surfUI);
 	gpu_set_blendmode(bm_add);
+	gpu_set_colorwriteenable(1,1,1,0);
 	draw_surface_ext(mouseGlowSurf,x,y,1,1,0,c_white,image_alpha);
+	gpu_set_colorwriteenable(1,1,1,1);
 	gpu_set_blendmode(bm_normal);
+	surface_reset_target();
 }

@@ -454,17 +454,17 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 					{
 						case 0:
 						{
-							instance_create_depth(0,0,-1,obj_DisplayOptions);
+							instance_create_depth(0,0,-8,obj_DisplayOptions);
 							break;
 						}
 						case 1:
 						{
-							instance_create_depth(0,0,-1,obj_AudioOptions);
+							instance_create_depth(0,0,-8,obj_AudioOptions);
 							break;
 						}
 						case 2:
 						{
-							instance_create_depth(0,0,-1,obj_ControlOptions);
+							instance_create_depth(0,0,-8,obj_ControlOptions);
 							break;
 						}
 						case 3:

@@ -118,7 +118,12 @@ prevGrounded = grounded;
 slopeGrounded = false;
 
 canWallJump = false;
+wallJumped = false;
 fastWJCheckVel = 0;
+fastWJGrace = false;
+fastWJGraceCounter = 0;
+fastWJGraceMax = 2;
+fastWJGraceVel = 0;
 
 uncrouch = 0;
 //uncrouched = true;
@@ -139,6 +144,7 @@ move2 = 0;
 pMove = 0;
 
 dir = 0; //0 = face screen, 1 = face right, -1 = face left
+dir2 = 0;
 fDir = dir;
 oldDir = dir;
 lastDir = oldDir;
@@ -154,9 +160,6 @@ speedBufferCounterMax = [2.5, 3, 2.5, 2, 1.5, 1];
 speedBoost = false;
 speedFXCounter = 0;
 speedCatchCounter = 0;
-speedKill = false;
-speedKillCounter = 0;
-speedKillMax = 6;
 
 speedBoostWJ = false;
 speedBoostWJCounter = 0;
@@ -342,6 +345,7 @@ rAimLock = !cAimLock;
 rMorph = !cMorph;
 
 rMorphJump = false;
+rSparkJump = false;
 
 XRay = noone;
 //XRayDying = 0;
@@ -404,7 +408,7 @@ maxSpeed[0,0] = 2.75;	// Running
 maxSpeed[1,0] = 4.75;	// Sprinting (no speed boost)
 maxSpeed[2,0] = 9.75;	// Speed Boosting
 maxSpeed[3,0] = 1.25;	// Jump
-maxSpeed[4,0] = 1.375;	// Somersault
+maxSpeed[4,0] = 1.875;	// Somersault	 - (SM: 1.375)
 maxSpeed[5,0] = 3.25;	// Morph Ball
 maxSpeed[6,0] = 5.25;	// Mock Ball
 maxSpeed[7,0] = 1;		// Air Morph
@@ -467,8 +471,8 @@ moveSpeed[9,0] = 0.125;		// Grapple
 moveSpeed[10,0] = 2.75;		// Grapple Kick
 // Underwater (no grav suit)
 moveSpeed[0,1] = 0.015625;	// Normal
-moveSpeed[1,1] = 0.015625;	// Sprint/Speedboost
-moveSpeed[2,1] = 1.125;		// Wall Jump
+moveSpeed[1,1] = 0.015625;	// Sprint/Speedboost (unused)
+moveSpeed[2,1] = 0.75;		// Wall Jump
 moveSpeed[3,1] = 1.375;		// Cling Wall Jump (from grip or grapple)
 moveSpeed[4,1] = 0.03125;	// Shine Spark
 moveSpeed[5,1] = 3.25;		// Dodge
@@ -479,7 +483,7 @@ moveSpeed[9,1] = 0.0225;	// Grapple
 moveSpeed[10,1] = 2.0;		// Grapple Kick
 // In lava/acid (no grav suit)
 moveSpeed[0,2] = 0.015625;	// Normal
-moveSpeed[1,2] = 0.015625;	// Sprint/Speedboost
+moveSpeed[1,2] = 0.015625;	// Sprint/Speedboost (unused)
 moveSpeed[2,2] = 1.125;		// Wall Jump
 moveSpeed[3,2] = 1.375;		// Cling Wall Jump (from grip or grapple)
 moveSpeed[4,2] = 0.03125;	// Shine Spark
@@ -490,9 +494,15 @@ moveSpeed[8,2] = 2.75;		// Boost Ball
 moveSpeed[9,2] = 0.0225;	// Grapple
 moveSpeed[10,2] = 2.0;		// Grapple Kick
 
-frict[0] = 0.5;		// Out of water
-frict[1] = 0.5;		// Underwater
-frict[2] = 0.25;	// In lava/acid
+// Out of water
+frict[0,0] = 0.5;	// Grounded
+frict[1,0] = 0.5;	// In Air
+// Underwater
+frict[0,1] = 0.0625;	// Grounded
+frict[1,1] = 0.03125;	// In Air
+// In lava/acid
+frict[0,2] = 0.25;	// Grounded
+frict[1,2] = 0.25;	// In Air
 
 // turn around speed is equal to moveSpeed + frict
 // this value gets added on top when holding run
@@ -519,19 +529,19 @@ jumpSpeed[0,0] = 4.875;	// Normal Jump
 jumpSpeed[1,0] = 6;		// Hi Jump
 jumpSpeed[2,0] = 4.625;	// Wall Jump
 jumpSpeed[3,0] = 5.5;	// Hi Wall Jump
-jumpSpeed[4,0] = 5;		// Damage Boost
+jumpSpeed[4,0] = 4;		// Damage Boost	 - (SM: 5)
 // Underwater
-jumpSpeed[0,1] = 1.75;			// Normal Jump
-jumpSpeed[1,1] = 2.5;			// Hi Jump
-jumpSpeed[2,1] = 0.375;//1.25;//0.25;	// Wall Jump
-jumpSpeed[3,1] = 0.625;//2.25;//0.5;	// Hi Wall Jump
-jumpSpeed[4,1] = 2;			// Damage Boost
+jumpSpeed[0,1] = 1.75;	// Normal Jump
+jumpSpeed[1,1] = 2.5;	// Hi Jump
+jumpSpeed[2,1] = 1.375;	// Wall Jump	 - (SM: 0.25)
+jumpSpeed[3,1] = 1.5;	// Hi Wall Jump	 - (SM: 0.5)
+jumpSpeed[4,1] = 2;		// Damage Boost
 // In lava/acid
-jumpSpeed[0,2] = 2;//2.75;	// Normal Jump
-jumpSpeed[1,2] = 2.75;//3.5;	// Hi Jump
-jumpSpeed[2,2] = 1.5;//2.625;	// Wall Jump
-jumpSpeed[3,2] = 2.5;//3.5;	// Hi Wall Jump
-jumpSpeed[4,2] = 2;	// Damage Boost
+jumpSpeed[0,2] = 2;		// Normal Jump	 - (SM: 2.75)
+jumpSpeed[1,2] = 2.75;	// Hi Jump		 - (SM: 3.5)
+jumpSpeed[2,2] = 1.375;	// Wall Jump	 - (SM: 2.625)
+jumpSpeed[3,2] = 1.5;	// Hi Wall Jump	 - (SM: 3.5)
+jumpSpeed[4,2] = 2;		// Damage Boost
 
 // Out of water
 jumpHeight[0,0] = 2; // Normal
@@ -580,7 +590,7 @@ jumpStop = !jumpStart;
 
 coyoteJumpMax = 3;
 coyoteJump = coyoteJumpMax;
-bufferJumpMax = 7;//5;
+bufferJumpMax = 10;//7;//5;
 bufferJump = bufferJumpMax;
 
 morphSpinJump = false;
@@ -856,7 +866,7 @@ saveAnimFrameCounter = 0;
 cBubbleScale = 0;
 cFlashFrameSequence = array(0,1,2,1);
 
-/*
+//
 memeDance = false;
 memeDanceFrame = 0;
 memeDanceFrameCounter = 0;
@@ -866,7 +876,7 @@ memeDanceSeq =
   3.6, 3.6, 3.6, 3.6,10.8, 3.6, 3.6, 7.2, 3.6, 3.6, 7.2, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6,
   3.6, 3.6, 3.6, 3.6, 3.6,10.8, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6, 3.6,
   3.6, 7.2, 3.6, 3.6, 3.6, 7.2, 3.6, 3.6, 3.6, 7.2, 7.2, 3.6, 3.6, 3.6,14.4];
-*/
+//
 
 #endregion
 #region Audio
@@ -1292,21 +1302,19 @@ function OnXCollision(fVX)
 		pBlock.velX = vx;
 	}
 	
-	if(speedBoost && speedKillCounter < speedKillMax && !speedBoostWJ)
+	fastWJGrace = (fastWallJump && state == State.Somersault && abs(velX) >= maxSpeed[MaxSpeed.Run,liquidState]);
+	var fwjGrace = (fastWJGrace && fastWJGraceCounter < fastWJGraceMax);
+	
+	if(sign(velX) == sign(fVelX))
 	{
-		speedKill = true;
-	}
-	else
-	{
-		if(!speedBoost || speedBoostWJ)
+		if(!speedBoostWJ && (!fwjGrace || abs(velX) < maxSpeed[MaxSpeed.Sprint,liquidState]))
 		{
 			speedBufferCounter = 0;
 			speedBuffer = 0;
 			speedCounter = 0;
 			speedBoost = false;
 		}
-		
-		if(sign(velX) == sign(fVelX))
+		if(!fwjGrace)
 		{
 			velX = 0;
 		}

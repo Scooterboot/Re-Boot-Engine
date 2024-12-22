@@ -68,5 +68,8 @@ if(state == 3)
 	velY = 0;
 }
 
-x += velX;
-y += velY;
+position.X += velX;
+position.Y += velY;
+
+x = scr_round(position.X);
+y = scr_round(position.Y);

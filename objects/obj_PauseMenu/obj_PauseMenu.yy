@@ -11,8 +11,8 @@
   "name":"obj_PauseMenu",
   "overriddenProperties":[],
   "parent":{
-    "name":"UI",
-    "path":"folders/Objects/UI.yy",
+    "name":"UI_Old",
+    "path":"folders/Objects/UI_Old.yy",
   },
   "parentObjectId":{
     "name":"obj_UI",

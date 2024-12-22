@@ -1,8 +1,10 @@
 /// @description Initialize
+application_surface_draw_enable(false); //disable default application surface drawing
 
 debug = 0;
 
 gpu_set_zwriteenable(false);
+surface_depth_disable(true);
 
 screenScale = 1;
 if(global.screenScale > 0)
@@ -73,3 +75,7 @@ edgeText[3] = "Left";
 edgeText[4] = "Right";
 
 zoomTempFlag = false;
+fastforwardtoggle = false;
+
+surfUI = surface_create(global.resWidth,global.resHeight);
+finalAppSurf = surface_create(global.resWidth,global.resHeight);

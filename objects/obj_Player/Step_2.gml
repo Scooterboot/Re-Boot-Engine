@@ -704,7 +704,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				transFrame = max(transFrame - 1, 0);
 				frame[Frame.JAim] = 6;
 				
-				/*if(memeDance)
+				if(memeDance)
 				{
 					if(memeDanceFrame < 94)
 					{
@@ -716,11 +716,11 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 							memeDanceFrameCounter -= seqNum
 						}
 					}
-					torsoR = sprt_Dance;
+					torsoR = sprt_Player_Dance;
 					torsoL = torsoR;
 					legs = -1;
 					bodyFrame = memeDanceFrame;
-				}*/
+				}
 				
 				break;
 			}
@@ -2550,7 +2550,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			if(state == State.Grip && startClimb)
 			{
 				var ciNum = 1;
-				if(climbIndex >= 10 && (cSprint || global.autoSprint) && move != 0)
+				if(!liquidMovement && climbIndex >= 10 && (cSprint || global.autoSprint) && move != 0)
 				{
 					ciNum = 2;
 				}

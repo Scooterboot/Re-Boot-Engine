@@ -9,7 +9,7 @@ var screenX = scr_round(global.screenX),
 	screenW = global.resWidth*screenScale,
 	screenH = global.resHeight*screenScale;
 
-var _scissor = gpu_get_scissor();
+/*var _scissor = gpu_get_scissor();
 gpu_set_scissor(screenX,screenY,screenW,screenH);
 
 gpu_set_blendenable(false);
@@ -29,7 +29,30 @@ else
 }
 gpu_set_blendenable(true);
 
-gpu_set_scissor(_scissor);
+gpu_set_scissor(_scissor);*/
+if(surface_exists(finalAppSurf))
+{
+	surface_resize(finalAppSurf,screenW,screenH);
+	surface_set_target(finalAppSurf);
+	
+	gpu_set_blendenable(false);
+	draw_surface_ext(application_surface,0,0,screenScale/global.zoomScale,screenScale/global.zoomScale,0,c_white,1);
+	gpu_set_blendenable(true);
+	
+	gpu_set_colorwriteenable(1,1,1,0);
+	draw_surface_ext(surfUI,0,0,screenScale,screenScale,0,c_white,1);
+	gpu_set_colorwriteenable(1,1,1,1);
+	
+	surface_reset_target();
+	
+	gpu_set_blendenable(false);
+	draw_surface_ext(finalAppSurf,screenX,screenY,1,1,0,c_white,1);
+	gpu_set_blendenable(true);
+}
+else
+{
+	finalAppSurf = surface_create(screenW,screenH);
+}
 
 if(keyboard_check_pressed(vk_f12))
 {

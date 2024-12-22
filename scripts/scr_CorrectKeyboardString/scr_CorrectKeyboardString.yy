@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"scr_CorrectKeyboardString",
   "parent":{
-    "name":"Main",
-    "path":"folders/Scripts/Main.yy",
+    "name":"Control",
+    "path":"folders/Scripts/Control.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -6,7 +6,7 @@
   "name":"scr_SaveKeyboard",
   "parent":{
     "name":"Save",
-    "path":"folders/Scripts/Main/Save.yy",
+    "path":"folders/Scripts/Control/Save.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

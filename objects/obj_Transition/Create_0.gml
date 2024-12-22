@@ -7,6 +7,8 @@ playerSpeedX = 0;
 playerSpeedY = 0;
 transSprtDraw = false;
 angle = 0;
+correctionTimer = 0;
+correctionMax = 30;
 
 screenPosX = 0;
 screenPosY = 0;

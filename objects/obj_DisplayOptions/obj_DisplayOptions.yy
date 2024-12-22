@@ -12,7 +12,7 @@
   "overriddenProperties":[],
   "parent":{
     "name":"Sub Menus",
-    "path":"folders/Objects/UI/Sub Menus.yy",
+    "path":"folders/Objects/UI_Old/Sub Menus.yy",
   },
   "parentObjectId":{
     "name":"obj_UI",

@@ -9,8 +9,8 @@
   "name":"obj_LayerParallax",
   "overriddenProperties":[],
   "parent":{
-    "name":"Misc",
-    "path":"folders/Objects/Misc.yy",
+    "name":"Effects",
+    "path":"folders/Objects/Misc/Effects.yy",
   },
   "parentObjectId":null,
   "persistent":false,

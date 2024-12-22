@@ -80,10 +80,19 @@ if(debug > 0)
 	{
 		gameSpeed = 2;
 	}
-	if(keyboard_check(vk_control))
+	if(keyboard_check_pressed(vk_control))
+	{
+		//gameSpeed = 999;
+		fastforwardtoggle = !fastforwardtoggle;
+	}
+	if(fastforwardtoggle)
 	{
 		gameSpeed = 999;
 	}
+}
+else
+{
+	fastforwardtoggle = false;
 }
 game_set_speed(gameSpeed, gamespeed_fps);
 

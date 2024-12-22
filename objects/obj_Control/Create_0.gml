@@ -123,7 +123,11 @@ mCancel = false;
 
 start = false;
 
+global.gpSlot = -1;			//gamepad slot variable
+global.gpButtonNum = 19;	//number of gamepad buttons variable
 
+scr_LoadKeyboard();	//load keyboard bindings
+scr_LoadGamepad();	//load gamepad bindings
 scr_LoadGamePadID();
 
 usingGamePad = (global.gpSlot != -1);

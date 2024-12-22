@@ -38,6 +38,7 @@ else
         global.roomTrans = false;
         global.gamePaused = false;
         instance_destroy();
+		exit;
     }
 	if(nextDoor == noone)
     {
@@ -67,7 +68,7 @@ else
 	        {
 				var oldDiffX = oldPosition.X - position.X,
 					oldDiffY = oldPosition.Y - position.Y;
-				var trailX, trailY;
+				var trailX = [0], trailY = [0];
 				for(var i = 0; i < mbTrailLength; i++)
 				{
 					trailX[i] = mbTrailPosX[i] - (position.X+sprtOffsetX);
@@ -123,31 +124,42 @@ else
         var nPlayerX = obj_Player.position.X - camera_get_view_x(view_camera[0]),
 			nPlayerY = obj_Player.position.Y - camera_get_view_y(view_camera[0]);
         angle = nextDoor.image_angle;
-        if((playerX != nPlayerX || playerY != nPlayerY) && transitionComplete)
-        {
-            playerSpeedX = min(playerSpeedX+1.5,max(abs(nPlayerX - playerX)*0.15,0.5));
-            if(playerX < nPlayerX)
-            {
-                playerX = min(playerX + playerSpeedX, nPlayerX);
-            }
-            else
-            {
-                playerX = max(playerX - playerSpeedX, nPlayerX);
-            }
+		if(transitionComplete)
+		{
+			if(point_distance(playerX,playerY,nPlayerX,nPlayerY) < 3)
+			{
+				correctionTimer++;
+			}
+			if(playerX == nPlayerX && playerY == nPlayerY)
+			{
+				correctionTimer = correctionMax;
+			}
+	        if(correctionTimer < correctionMax)
+	        {
+	            playerSpeedX = min(playerSpeedX+1.5,max(abs(nPlayerX - playerX)*0.15,0.5));
+	            if(playerX < nPlayerX)
+	            {
+	                playerX = min(playerX + playerSpeedX, nPlayerX);
+	            }
+	            else
+	            {
+	                playerX = max(playerX - playerSpeedX, nPlayerX);
+	            }
             
-            playerSpeedY = min(playerSpeedY+1.5,max(abs(playerY - nPlayerY)*0.15,0.5));
-            if(playerY < nPlayerY)
-            {
-                playerY = min(playerY + playerSpeedY, nPlayerY);
-            }
-            else
-            {
-                playerY = max(playerY - playerSpeedY, nPlayerY);
-            }
-        }
-        else if(transitionComplete)
-        {
-            alpha = max(alpha - 0.075, 0);
-        }
+	            playerSpeedY = min(playerSpeedY+1.5,max(abs(playerY - nPlayerY)*0.15,0.5));
+	            if(playerY < nPlayerY)
+	            {
+	                playerY = min(playerY + playerSpeedY, nPlayerY);
+	            }
+	            else
+	            {
+	                playerY = max(playerY - playerSpeedY, nPlayerY);
+	            }
+	        }
+	        else
+	        {
+	            alpha = max(alpha - 0.075, 0);
+	        }
+		}
     }
 }

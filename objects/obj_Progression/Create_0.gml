@@ -12,4 +12,5 @@ global.BossDowned = function(name)
 	return (ds_list_find_index(global.npcKillList,"BossDowned_"+name) != -1);
 }
 
+global.currentPlayTime = 0;
 oldDelta = delta_time;

@@ -30,7 +30,6 @@ losCheckOffsetY = -10;
 
 player = noone;
 
-blockList = ds_list_create();
 function GetPlayer()
 {
 	var _player = collision_rectangle(x+detect_Left,y+detect_Top,x+detect_Right,y+detect_Bottom,obj_Player,false,true);

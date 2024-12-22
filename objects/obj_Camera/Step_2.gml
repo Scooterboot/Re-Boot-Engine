@@ -485,6 +485,14 @@ if(clampCam)
 	y = clamp(y,0,room_height-global.resHeight);
 	clampCam = false;
 }
+if(room_width < global.resWidth)
+{
+	x = (room_width-global.resWidth)/2;
+}
+if(room_height < global.resHeight)
+{
+	y = (room_height-global.resHeight)/2;
+}
 
 var shakeX = 0,
 	shakeY = 0;

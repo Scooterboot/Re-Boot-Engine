@@ -12,7 +12,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 	
 	var P = obj_Player;
 	
-	with(obj_Player)
+	/*with(obj_Player)
 	{
 		if(global.hudMap)
 		{
@@ -31,7 +31,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			scr_DrawHUD();
 		}
 	}
-	draw_set_color(c_black);
+	draw_set_color(c_black);*/
 	
 	if(pauseFade > 0)
 	{
@@ -79,7 +79,9 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 						bgy = -msSize + scr_wrap(scr_round(my),0,msSize);
 					draw_sprite_stretched_ext(sprt_UI_HMapBase,0,bgx,bgy,ww+(msSize*2),hh+(msSize*2),c_white,0.25);
 					
-					obj_Map.DrawMap(global.rmMapArea,0,0,-scr_round(mx),-scr_round(my),global.resWidth,global.resHeight);
+					//obj_Map.DrawMap(global.rmMapArea,0,0,-scr_round(mx),-scr_round(my),global.resWidth,global.resHeight);
+					obj_Map.PrepareMapSurf(global.rmMapArea,-scr_round(mx),-scr_round(my),global.resWidth,global.resHeight);
+					obj_Map.DrawMap(0,0,-scr_round(mx),-scr_round(my));
 					
 					var pX = mx + obj_Map.playerMapX * msSize + (msSize/2),
 						pY = my + obj_Map.playerMapY * msSize + (msSize/2);
