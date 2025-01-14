@@ -17,7 +17,8 @@ if(room == rm_MainMenu)
 
 if(instance_exists(obj_Player) && room != rm_MainMenu && global.rmMapArea != noone && (!instance_exists(obj_Transition) || obj_Transition.transitionComplete || prevArea != global.rmMapArea))
 {
-	var msSize = global.mapSquareSize;
+	var msSizeW = global.mapSquareSizeW,
+		msSizeH = global.mapSquareSizeH;
 	
 	playerMapX = GetMapPosX(obj_Player.x);
 	playerMapY = GetMapPosY(obj_Player.y);
@@ -26,11 +27,11 @@ if(instance_exists(obj_Player) && room != rm_MainMenu && global.rmMapArea != noo
 	{
 		if(playerMapX != prevPlayerMapX)
 		{
-			obj_Player.pMapOffsetX = -msSize*sign(playerMapX-prevPlayerMapX);
+			obj_Player.pMapOffsetX = -msSizeW*sign(playerMapX-prevPlayerMapX);
 		}
 		if(playerMapY != prevPlayerMapY)
 		{
-			obj_Player.pMapOffsetY = -msSize*sign(playerMapY-prevPlayerMapY);
+			obj_Player.pMapOffsetY = -msSizeH*sign(playerMapY-prevPlayerMapY);
 		}
 	}
 	else

@@ -25,14 +25,14 @@ if(room == rm_MainMenu)
 		exit;
 	}
 	
-	if(currentScreen == MainScreen.TitleIntro || currentScreen == MainScreen.Title)
+	/*if(currentScreen == MainScreen.TitleIntro)
 	{
-		camera_set_view_pos(view_camera[0],room_width/2 - global.resWidth/2,0);
+		// do title intro animation
 	}
 	else
-	{
-		camera_set_view_pos(view_camera[0],0,0);
-	}
+	{*/
+		camera_set_view_pos(view_camera[0], room_width/2 - global.resWidth/2, room_height/2 - global.resHeight/2);
+	//}
 	
 	if(currentScreen != targetScreen)
 	{

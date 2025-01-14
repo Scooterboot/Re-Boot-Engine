@@ -29,7 +29,7 @@
     "guideColour":[4294902015,4294902015,4294902015,4294902015,],
     "highlightColour":1728023040,
     "highlightStyle":0,
-    "left":2,
+    "left":8,
     "resourceType":"GMNineSliceData",
     "resourceVersion":"2.0",
     "right":12,
@@ -45,7 +45,7 @@
   "origin":0,
   "parent":{
     "name":"Samus",
-    "path":"folders/Sprites/UI/Subscreens/Samus.yy",
+    "path":"folders/Sprites/UI/PauseMenu/Samus.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

@@ -19,13 +19,13 @@ if(!collected)
 		CollectItem(player);
 		if(!isExpansion)
 		{
-			obj_UI.CreateMessageBox(itemHeader,itemDesc,Message.Item);
+			obj_UI_Old.CreateMessageBox(itemHeader,itemDesc,Message.Item);
 			obj_Audio.playItemFanfare = true;
 			global.gamePaused = true;
 		}
 		else
 		{
-			obj_UI.CreateMessageBox(expanHeader,expanDesc,Message.Expansion);
+			obj_UI_Old.CreateMessageBox(expanHeader,expanDesc,Message.Expansion);
 			audio_stop_sound(snd_ExpansionGet);
 			audio_play_sound(snd_ExpansionGet,0,false);
 		}

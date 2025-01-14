@@ -11,12 +11,13 @@ saveCooldown = 0;
 
 gameSavedText = "GAME SAVED";
 
-var msSize = global.mapSquareSize;
+var msSizeW = global.mapSquareSizeW,
+	msSizeH = global.mapSquareSizeH;
 mapIcon = array_create(7);
 mapIcon[0] = sprite_get_name(sprt_MapIcon_Save);
 mapIcon[1] = 0;
-mapIcon[2] = obj_Map.GetMapPosX(x) * msSize + msSize/2;
-mapIcon[3] = obj_Map.GetMapPosY(y) * msSize + msSize/2;
+mapIcon[2] = obj_Map.GetMapPosX(x) * msSizeW + msSizeW/2;
+mapIcon[3] = obj_Map.GetMapPosY(y) * msSizeH + msSizeH/2;
 mapIcon[4] = 1;
 mapIcon[5] = 1;
 mapIcon[6] = 0;
@@ -36,9 +37,10 @@ function UpdateMapIcon()
 		}
 	}
 	
-	var msSize = global.mapSquareSize;
-	mapIcon[2] = obj_Map.GetMapPosX(x) * msSize + msSize/2;
-	mapIcon[3] = obj_Map.GetMapPosY(y) * msSize + msSize/2;
+	var msSizeW = global.mapSquareSizeW,
+		msSizeH = global.mapSquareSizeH;
+	mapIcon[2] = obj_Map.GetMapPosX(x) * msSizeW + msSizeW/2;
+	mapIcon[3] = obj_Map.GetMapPosY(y) * msSizeH + msSizeH/2;
 	
 	ds_list_add(global.rmMapArea.icons, mapIcon);
 }

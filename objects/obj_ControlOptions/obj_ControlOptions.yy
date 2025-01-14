@@ -15,8 +15,8 @@
     "path":"folders/Objects/UI_Old/Sub Menus.yy",
   },
   "parentObjectId":{
-    "name":"obj_UI",
-    "path":"objects/obj_UI/obj_UI.yy",
+    "name":"obj_UI_Old",
+    "path":"objects/obj_UI_Old/obj_UI_Old.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,

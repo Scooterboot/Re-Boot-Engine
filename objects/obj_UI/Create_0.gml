@@ -1,68 +1,133 @@
-/// @description Initialize
+/// @description 
 
-for(var i = 0; i < 13; i++)
+#region Set Controls
+cRight = false;
+cLeft = false;
+cUp = false;
+cDown = false;
+cSelect = false;
+cCancel = false;
+cStart = false;
+
+cClickL = false;
+cClickR = false;
+cScrollUp = false;
+cScrollDown = false;
+
+function SetControlVars_Press()
 {
-	textButton[i] = "";
+	cRight = obj_Control.mRight;
+	cLeft = obj_Control.mLeft;
+	cUp = obj_Control.mUp;
+	cDown = obj_Control.mDown;
+	cSelect = obj_Control.mSelect;
+	cCancel = obj_Control.mCancel;
+	cStart = obj_Control.start;
+	
+	cClickL = mouse_check_button(mb_left);
+	cClickR = mouse_check_button(mb_right);
+	cScrollUp = mouse_wheel_up();
+	cScrollDown = mouse_wheel_down();
 }
-textButton_string[0] = "${controlPad}";
-textButton_string[1] = "${jumpButton}";
-textButton_string[2] = "${shootButton}";
-textButton_string[3] = "${sprintButton}";
-textButton_string[4] = "${angleUpButton}";
-textButton_string[5] = "${angleDownButton}";
-textButton_string[6] = "${aimLockButton}";
-textButton_string[7] = "${quickMorphButton}";
-textButton_string[8] = "${itemSelectButton}";
-textButton_string[9] = "${itemCancelButton}";
-textButton_string[10] = "${menuStartButton}";
-textButton_string[11] = "${menuSelectButton}";
-textButton_string[12] = "${menuCancelButton}";
-function InsertButtonIcons(str)
+
+rRight = true;
+rLeft = true;
+rUp = true;
+rDown = true;
+rSelect = true;
+rCancel = true;
+rStart = true;
+
+rClickL = true;
+rClickR = true;
+rScrollUp = true;
+rScrollDown = true;
+
+function SetControlVars_Release()
 {
-	var str2 = str;
-	for(var i = 0; i < array_length(textButton); i++)
+	rRight = !cRight;
+	rLeft = !cLeft;
+	rUp = !cUp;
+	rDown = !cDown;
+	rSelect = !cSelect;
+	rCancel = !cCancel;
+	rStart = !cStart;
+	
+	rClickL = !cClickL;
+	rClickR = !cClickR;
+	rScrollUp = !cScrollUp;
+	rScrollDown = !cScrollDown;
+}
+#endregion
+
+function UIBlend() { gpu_set_blendmode_ext_sepalpha(bm_src_alpha,bm_inv_src_alpha,bm_src_alpha,bm_one); }
+
+selectedPanel = noone;
+panelList = ds_list_create();
+
+function CreatePanel(_x, _y, _width, _height, _scrollWidth = -1, _scrollHeight = -1, _scrollX = 0, _scrollY = 0)
+{
+	var pnl = instance_create_depth(_x, _y, depth, obj_UI_Panel);
+	
+	pnl.width = _width;
+	pnl.height = _height;
+	
+	pnl.scrollWidth = _width;
+	pnl.scrollHeight = _height;
+	if(_scrollWidth > _width)
 	{
-		str2 = string_replace_all(str2,textButton_string[i],textButton[i])
+		pnl.scrollWidth = _scrollWidth;
 	}
-	return str2;
-}
-
-for(var i = 0; i < 5; i++)
-{
-	hudIcon[i] = "[sprt_Text_HUDIcon_"+string(i)+"]";
-}
-hudIconText = "${hudIcon_";
-function InsertHUDIcon(str)
-{
-	var str2 = str;
-	for(var i = 0; i < 5; i++)
+	if(_scrollHeight > _height)
 	{
-		str2 = string_replace_all(str2,hudIconText+string(i)+"}",hudIcon[i])
+		pnl.scrollHeight = _scrollHeight;
 	}
-	return str2;
+	
+	pnl.scrollPosX = _scrollX;
+	pnl.scrollPosY = _scrollY;
+	
+	pnl.creator = id;
+	
+	ds_list_add(panelList, pnl);
+	return pnl;
 }
 
-function InsertIconsIntoString(str)
+function UpdateUI()
 {
-	var str2 = str;
-	str2 = InsertButtonIcons(str2);
-	str2 = InsertHUDIcon(str2);
-	return str2;
+	var pNum = ds_list_size(panelList);
+	if(pNum > 0)
+	{
+		for(var i = 0; i < pNum; i++)
+		{
+			var _pnl = panelList[| i];
+			if(selectedPanel == noone)
+			{
+				selectedPanel = _pnl;
+			}
+			
+			if(_pnl.active)
+			{
+				_pnl.UpdatePanel();
+			}
+		}
+	}
 }
 
-
-function CreateMessageBox(header,description,messageType)
+function DrawUI()
 {
-	var mbox = instance_create_depth(0,0,1,obj_MessageBox);
-	mbox.header = header;
-	mbox.description = description;
-	mbox.messageType = messageType;
-}
-
-function UI_Button(_x,_y,_width,_height) constructor
-{
-	x = _x;
-	y = _y;
-	width = _width;
-	height = _height;
+	surface_set_target(obj_Display.surfUI);
+	UIBlend();
+	
+	var pNum = ds_list_size(panelList);
+	if(pNum > 0)
+	{
+		for(var i = 0; i < pNum; i++)
+		{
+			var _pnl = panelList[| i];
+			_pnl.DrawPanel(_pnl.x,_pnl.y);
+		}
+	}
+	
+	gpu_set_blendmode(bm_normal);
+	surface_reset_target();
 }

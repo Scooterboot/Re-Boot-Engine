@@ -1,5 +1,8 @@
 /// @description Initialize
 
+velX = 0;
+velY = 0;
+
 posX = x;
 posY = y;
 

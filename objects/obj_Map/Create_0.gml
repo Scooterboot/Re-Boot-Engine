@@ -1,7 +1,9 @@
 /// @description Initialize
 
-global.mapSquareSize = 10;//8;
-global.rmMapSize = 256;
+global.mapSquareSizeW = 10;//8;
+global.mapSquareSizeH = 10;//8;
+global.rmMapSizeW = 256;
+global.rmMapSizeH = 256;
 
 global.rmMapIndex = -1;
 global.rmMapArea = noone;
@@ -11,7 +13,7 @@ global.rmMapY = 0;
 global.rmMapPixX = 0;
 global.rmMapPixY = 0;
 
-mapSurf = surface_create(global.mapSquareSize,global.mapSquareSize);
+mapSurf = surface_create(global.mapSquareSizeW,global.mapSquareSizeH);
 
 playerMapX = 0;
 playerMapY = 0;
@@ -20,13 +22,13 @@ prevPlayerMapY = 0;
 
 function GetMapPosX(_x)
 {
-	var roomSizeW = scr_floor(room_width / global.rmMapSize)-1;
-	return clamp(scr_floor((_x-global.rmMapPixX)/global.rmMapSize),0,roomSizeW) + global.rmMapX;
+	var roomSizeW = scr_floor(room_width / global.rmMapSizeW)-1;
+	return clamp(scr_floor((_x-global.rmMapPixX)/global.rmMapSizeW),0,roomSizeW) + global.rmMapX;
 }
 function GetMapPosY(_y)
 {
-	var roomSizeH = scr_floor(room_height / global.rmMapSize)-1;
-	return clamp(scr_floor((_y-global.rmMapPixY)/global.rmMapSize),0,roomSizeH) + global.rmMapY;
+	var roomSizeH = scr_floor(room_height / global.rmMapSizeH)-1;
+	return clamp(scr_floor((_y-global.rmMapPixY)/global.rmMapSizeH),0,roomSizeH) + global.rmMapY;
 }
 
 #region AreaMap
@@ -35,8 +37,8 @@ function AreaMap(_mapSprite, _name) constructor
 	sprt = _mapSprite;
 	name = _name;
 	
-	var gridWidth = scr_floor(sprite_get_width(sprt)/global.mapSquareSize),
-		gridHeight = scr_floor(sprite_get_height(sprt)/global.mapSquareSize);
+	var gridWidth = scr_floor(sprite_get_width(sprt)/global.mapSquareSizeW),
+		gridHeight = scr_floor(sprite_get_height(sprt)/global.mapSquareSizeH);
 	grid = ds_grid_create(gridWidth,gridHeight);
 	ds_grid_clear(grid,false);
 	
@@ -106,7 +108,8 @@ function PrepareMapSurf(mapArea,mapX,mapY,mapWidth,mapHeight,isMinimap = false,b
 		
 		var offX = -mapX, offY = -mapY;
 		
-		var msSize = global.mapSquareSize;
+		var msSizeW = global.mapSquareSizeW,
+			msSizeH = global.mapSquareSizeH;
 
 		if(surface_exists(mapSurf))
 		{
@@ -121,21 +124,21 @@ function PrepareMapSurf(mapArea,mapX,mapY,mapWidth,mapHeight,isMinimap = false,b
 		
 			if(ds_exists(mapGrid,ds_type_grid))
 			{
-				var startX = max(floor(mapX/msSize),0), 
-					endX = min(startX+ceil(mapWidth/msSize)+1,ds_grid_width(mapGrid)),
-					startY = max(floor(mapY/msSize),0), 
-					endY = min(startY+ceil(mapHeight/msSize)+1,ds_grid_height(mapGrid));
+				var startX = max(floor(mapX/msSizeW),0), 
+					endX = min(startX+ceil(mapWidth/msSizeW)+1,ds_grid_width(mapGrid)),
+					startY = max(floor(mapY/msSizeH),0), 
+					endY = min(startY+ceil(mapHeight/msSizeH)+1,ds_grid_height(mapGrid));
 				for(var i = startX; i < endX; i++)
 				{
 					for(var j = startY; j < endY; j++)
 					{
 						if(mapGrid[# i,j])
 						{
-							draw_sprite_part_ext(mapSprt,0,i*msSize,j*msSize,msSize,msSize,offX+i*msSize,offY+j*msSize,1,1,c_white,1);
+							draw_sprite_part_ext(mapSprt,0,i*msSizeW,j*msSizeH,msSizeW,msSizeH,offX+i*msSizeW,offY+j*msSizeH,1,1,c_white,1);
 						}
 						else if(grey)
 						{
-							draw_sprite_part_ext(mapSprt,1,i*msSize,j*msSize,msSize,msSize,offX+i*msSize,offY+j*msSize,1,1,c_white,1);
+							draw_sprite_part_ext(mapSprt,1,i*msSizeW,j*msSizeH,msSizeW,msSizeH,offX+i*msSizeW,offY+j*msSizeH,1,1,c_white,1);
 						}
 					}
 				}
@@ -171,8 +174,8 @@ function PrepareMapSurf(mapArea,mapX,mapY,mapWidth,mapHeight,isMinimap = false,b
 							alwaysShow = icon[8];
 						}
 						
-						var iconMapX = clamp(scr_floor(icon[2] / msSize), 0, ds_grid_width(mapGrid)),
-							iconMapY = clamp(scr_floor(icon[3] / msSize), 0, ds_grid_height(mapGrid));
+						var iconMapX = clamp(scr_floor(icon[2] / msSizeW), 0, ds_grid_width(mapGrid)),
+							iconMapY = clamp(scr_floor(icon[3] / msSizeH), 0, ds_grid_height(mapGrid));
 						
 						if((!isMinimap || canShowOnMini) && (mapGrid[# iconMapX,iconMapY] || alwaysShow))
 						{

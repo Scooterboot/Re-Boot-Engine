@@ -16,12 +16,13 @@ function CollectItem(player) {}
 
 isMajorItem = false;
 
-var msSize = global.mapSquareSize;
+var msSizeW = global.mapSquareSizeW,
+	msSizeH = global.mapSquareSizeH;
 mapIcon = array_create(7);
 mapIcon[0] = sprite_get_name(sprt_MapIcon_Item);
 mapIcon[1] = 1;
-mapIcon[2] = obj_Map.GetMapPosX(x) * msSize + msSize/2;
-mapIcon[3] = obj_Map.GetMapPosY(y) * msSize + msSize/2;
+mapIcon[2] = obj_Map.GetMapPosX(x) * msSizeW + msSizeW/2;
+mapIcon[3] = obj_Map.GetMapPosY(y) * msSizeH + msSizeH/2;
 mapIcon[4] = 1;
 mapIcon[5] = 1;
 mapIcon[6] = 0;

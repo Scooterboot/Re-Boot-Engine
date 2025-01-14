@@ -6,21 +6,23 @@ if(room == rm_MainMenu)
 	
 	if(global.musicVolume > 0 && global.musCurrent == global.musNext && global.musCurrent.IsPlaying())
 	{
-		with(obj_MainMenu)
+		if(skipTitleIntro)
 		{
-			if(skipIntro)
+			if(global.musCurrent.GetTrackPos() < 24.753)
 			{
-				if(global.musCurrent.GetTrackPos() < 24.753)
-				{
-					global.musCurrent.SetTrackPos(24.753);
-				}
-			}
-			else if(global.musCurrent.GetTrackPos > 25)
-			{
-				skipIntro = true;
+				global.musCurrent.SetTrackPos(24.753);
+				skipTitleIntro = false; // <- weirdly fixes a minor audio bug
 			}
 		}
+		else if(global.musCurrent.GetTrackPos > 25)
+		{
+			skipTitleIntro = true;
+		}
 	}
+}
+else
+{
+	skipTitleIntro = false;
 }
 	
 if(global.musicVolume > 0)

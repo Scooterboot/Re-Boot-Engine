@@ -246,9 +246,10 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 		{
 			//mapX = (scr_floor(obj_Player.x/global.rmMapSize) + global.rmMapX) * 8 + 4;
 			//mapY = (scr_floor(obj_Player.y/global.rmMapSize) + global.rmMapY) * 8 + 4;
-			var msSize = global.mapSquareSize;
-			mapX = obj_Map.playerMapX * msSize + (msSize/2);
-			mapY = obj_Map.playerMapY * msSize + (msSize/2);
+			var msSizeW = global.mapSquareSizeW,
+				msSizeH = global.mapSquareSizeH;
+			mapX = obj_Map.playerMapX * msSizeW + (msSizeW/2);
+			mapY = obj_Map.playerMapY * msSizeH + (msSizeH/2);
 			if(global.rmMapArea != noone)
 			{
 				mapX = clamp(mapX,16,sprite_get_width(global.rmMapArea.sprt)-16);
@@ -615,9 +616,10 @@ else
 		{
 			//mapX = (scr_floor(obj_Player.x/global.rmMapSize) + global.rmMapX) * 8 + 4;
 			//mapY = (scr_floor(obj_Player.y/global.rmMapSize) + global.rmMapY) * 8 + 4;
-			var msSize = global.mapSquareSize;
-			mapX = obj_Map.playerMapX * msSize + (msSize/2);
-			mapY = obj_Map.playerMapY * msSize + (msSize/2);
+			var msSizeW = global.mapSquareSizeW,
+				msSizeH = global.mapSquareSizeH;
+			mapX = obj_Map.playerMapX * msSizeW + (msSizeW/2);
+			mapY = obj_Map.playerMapY * msSizeH + (msSizeH/2);
 		}
 		if(global.rmMapArea != noone)
 		{

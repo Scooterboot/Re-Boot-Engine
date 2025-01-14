@@ -70,21 +70,22 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				// now we're actually drawing the map
 				if(global.rmMapArea != noone)
 				{
-					var msSize = global.mapSquareSize;
+					var msSizeW = global.mapSquareSizeW,
+						msSizeH = global.mapSquareSizeH;
 					
 					var mx = ww/2 - mapX,
 						my = hh/2 - mapY;
 					
-					var bgx = -msSize + scr_wrap(scr_round(mx),0,msSize),
-						bgy = -msSize + scr_wrap(scr_round(my),0,msSize);
-					draw_sprite_stretched_ext(sprt_UI_HMapBase,0,bgx,bgy,ww+(msSize*2),hh+(msSize*2),c_white,0.25);
+					var bgx = -msSizeW + scr_wrap(scr_round(mx),0,msSizeW),
+						bgy = -msSizeH + scr_wrap(scr_round(my),0,msSizeH);
+					draw_sprite_stretched_ext(sprt_UI_HMapBase,0,bgx,bgy,ww+(msSizeW*2),hh+(msSizeH*2),c_white,0.25);
 					
 					//obj_Map.DrawMap(global.rmMapArea,0,0,-scr_round(mx),-scr_round(my),global.resWidth,global.resHeight);
 					obj_Map.PrepareMapSurf(global.rmMapArea,-scr_round(mx),-scr_round(my),global.resWidth,global.resHeight);
 					obj_Map.DrawMap(0,0,-scr_round(mx),-scr_round(my));
 					
-					var pX = mx + obj_Map.playerMapX * msSize + (msSize/2),
-						pY = my + obj_Map.playerMapY * msSize + (msSize/2);
+					var pX = mx + obj_Map.playerMapX * msSizeW + (msSizeW/2),
+						pY = my + obj_Map.playerMapY * msSizeH + (msSizeH/2);
 					
 					pMapIconFrameCounter++;
 					if(pMapIconFrameCounter > pMapIconNumSeq[pMapIconFrame])

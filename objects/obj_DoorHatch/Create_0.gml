@@ -39,13 +39,14 @@ function UnlockCondition()
 
 mapIconIndex = 0;
 
-var msSize = global.mapSquareSize;
+var msSizeW = global.mapSquareSizeW,
+	msSizeH = global.mapSquareSizeH;
 
 mapIcon = array_create(7);
 mapIcon[0] = sprite_get_name(sprt_MapIcon_Door);
 mapIcon[1] = mapIconIndex;
-mapIcon[2] = obj_Map.GetMapPosX(x) * msSize + msSize/2;
-mapIcon[3] = obj_Map.GetMapPosY(y) * msSize + msSize/2;
+mapIcon[2] = obj_Map.GetMapPosX(x) * msSizeW + msSizeW/2;
+mapIcon[3] = obj_Map.GetMapPosY(y) * msSizeH + msSizeH/2;
 mapIcon[4] = image_xscale;
 mapIcon[5] = image_yscale;
 mapIcon[6] = image_angle;

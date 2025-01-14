@@ -12,22 +12,24 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				vY = 0,//camera_get_view_y(view_camera[0]),
 				vW = global.resWidth;
 	
-			var msSize = global.mapSquareSize;
+			var msSizeW = global.mapSquareSizeW,
+				msSizeH = global.mapSquareSizeH;
 
-			var mapX = floor(vX+vW-2-(msSize*5)),
+			var mapX = floor(vX+vW-2-(msSizeW*5)),
 			    mapY = floor(vY+2),
-				mapWidth = msSize*5,
-				mapHeight = msSize*3,
-				mapDifX = msSize*2,
-				mapDifY = msSize;
+				mapWidth = msSizeW*5,
+				mapHeight = msSizeH*3,
+				mapDifX = msSizeW*2,
+				mapDifY = msSizeH;
 			
-			gpu_set_blendmode_ext_sepalpha(bm_src_alpha,bm_inv_src_alpha,bm_src_alpha,bm_one);
+			//gpu_set_blendmode_ext_sepalpha(bm_src_alpha,bm_inv_src_alpha,bm_src_alpha,bm_one);
+			obj_UI.UIBlend();
 	
 			if(global.rmMapArea != noone)
 			{
 				currentMap = global.rmMapArea;
-				playerMapX = obj_Map.playerMapX * msSize;
-				playerMapY = obj_Map.playerMapY * msSize;
+				playerMapX = obj_Map.playerMapX * msSizeW;
+				playerMapY = obj_Map.playerMapY * msSizeH;
 		
 				obj_Map.PrepareMapSurf(currentMap, playerMapX-mapDifX+pMapOffsetX,playerMapY-mapDifY+pMapOffsetY, mapWidth,mapHeight, true,0.75);
 				
@@ -80,7 +82,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			draw_set_alpha(hudMapFlashAlpha);
 			var rectX = mapX+mapDifX,//-pMapOffsetX,
 				rectY = mapY+mapDifY;//-pMapOffsetY;
-			draw_rectangle(rectX,rectY,rectX+msSize-1,rectY+msSize-1,false);
+			draw_rectangle(rectX,rectY,rectX+msSizeW-1,rectY+msSizeH-1,false);
 			draw_set_alpha(1);
 			
 			surface_reset_target();
@@ -102,7 +104,8 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		if(global.hudDisplay)
 		{
 			surface_set_target(obj_Display.surfUI);
-			gpu_set_blendmode_ext_sepalpha(bm_src_alpha,bm_inv_src_alpha,bm_src_alpha,bm_one);
+			//gpu_set_blendmode_ext_sepalpha(bm_src_alpha,bm_inv_src_alpha,bm_src_alpha,bm_one);
+			obj_UI.UIBlend();
 			
 			#region HUD Energy
 			

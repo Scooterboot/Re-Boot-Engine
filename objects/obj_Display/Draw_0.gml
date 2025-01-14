@@ -50,16 +50,16 @@ if(keyboard_check_pressed(vk_divide))
 
 if(debug == 1)
 {
-	for(var i = 0; i < room_width; i += global.rmMapSize)
+	for(var i = 0; i < room_width; i += global.rmMapSizeW)
 	{
-		for(var j = 0; j < room_height; j += global.rmMapSize)
+		for(var j = 0; j < room_height; j += global.rmMapSizeH)
 		{
-			if(i+global.rmMapPixX+global.rmMapSize <= room_width && j+global.rmMapPixY+global.rmMapSize <= room_height)
+			if(i+global.rmMapPixX+global.rmMapSizeW <= room_width && j+global.rmMapPixY+global.rmMapSizeH <= room_height)
 			{
 				draw_set_color(c_white);
 				draw_set_alpha(0.33);
 			
-				draw_rectangle(i+global.rmMapPixX, j+global.rmMapPixY, i+global.rmMapPixX+global.rmMapSize-1, j+global.rmMapPixY+global.rmMapSize-1, true);
+				draw_rectangle(i+global.rmMapPixX, j+global.rmMapPixY, i+global.rmMapPixX+global.rmMapSizeW-1, j+global.rmMapPixY+global.rmMapSizeH-1, true);
 			
 				draw_set_alpha(1);
 			}

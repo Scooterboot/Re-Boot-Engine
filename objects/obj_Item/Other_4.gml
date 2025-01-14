@@ -6,9 +6,10 @@ if(itemID != -1 && !collected && ds_list_find_index(global.collectedItemList,roo
 	exit;
 }
 
-var msSize = global.mapSquareSize;
-mapIcon[2] = obj_Map.GetMapPosX(x) * msSize + msSize/2;
-mapIcon[3] = obj_Map.GetMapPosY(y) * msSize + msSize/2;
+var msSizeW = global.mapSquareSizeW,
+	msSizeH = global.mapSquareSizeH;
+mapIcon[2] = obj_Map.GetMapPosX(x) * msSizeW + msSizeW/2;
+mapIcon[3] = obj_Map.GetMapPosY(y) * msSizeH + msSizeH/2;
 
 if(isMajorItem)
 {

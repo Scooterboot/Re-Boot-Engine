@@ -4,74 +4,7 @@ if(instance_exists(obj_MainMenu) && obj_MainMenu.currentScreen != MainScreen.Tit
 	exit;
 }
 
-/*if(counter2 > 0)
-{
-    image_index = 3;
-    if(counter3 > 0)
-    {
-        frameSpeed = 3;
-    }
-    else
-    {
-        frameSpeed = 8;
-    }
-}
-else
-{
-    image_index = 0;
-    frameSpeed = 8;
-}
-
-frameCounter++;
-if(frameCounter > frameSpeed)
-{
-    frame += num;
-    frameCounter = 0;
-}
-if(frame >= frameMax - 1)
-{
-    num = -1;
-}
-if(frame <= 0)
-{
-    num = 1;
-}
-counter += 1;
-switch(counter)
-{
-    case 60:
-    {
-        snd = audio_play_sound(snd_MetroidScree0,0,false);
-        counter2 = audio_sound_length(snd)*60;
-        counter3 = audio_sound_length(snd)*30;
-        break;
-    }
-    case 200:
-    {
-        snd = audio_play_sound(snd_MetroidScree1,0,false);
-        counter2 = audio_sound_length(snd)*60;
-        counter3 = audio_sound_length(snd)*30;
-        break;
-    }
-    case 400:
-    {
-        snd = audio_play_sound(snd_MetroidScree2,0,false);
-        counter2 = audio_sound_length(snd)*60;
-        counter3 = audio_sound_length(snd)*30;
-        break;
-    }
-    default: break;
-}
-if(counter > 500)
-{
-    counter = 0;
-}
-counter2 = max(counter2 - 1, 0);
-counter3 = max(counter3 - 1, 0);
-
-image_index += frame;*/
-
-if(screeDelay <= 0)
+if(screeDelay <= 0) && false // temp disabled
 {
 	var snd;
 	switch(irandom(2))

@@ -46,7 +46,7 @@
   "origin":0,
   "parent":{
     "name":"Samus",
-    "path":"folders/Sprites/UI/Subscreens/Samus.yy",
+    "path":"folders/Sprites/UI/PauseMenu/Samus.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

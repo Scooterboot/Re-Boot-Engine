@@ -61,7 +61,7 @@ else
 }*/
 
 
-if(room == rm_MainMenu)
+/*if(room == rm_MainMenu)
 {
 	if(instance_exists(obj_Player))
 	{
@@ -69,9 +69,9 @@ if(room == rm_MainMenu)
 	}
 	if(!instance_exists(obj_MainMenu))
 	{
-		instance_create_depth(0,0,0,obj_MainMenu);
+		instance_create_depth(0,0,-7,obj_MainMenu);
 	}
-}
+}*/
 
 var gameSpeed = 60;
 if(debug > 0)

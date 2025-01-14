@@ -25,8 +25,8 @@
   "nineSlice":null,
   "origin":0,
   "parent":{
-    "name":"Subscreens",
-    "path":"folders/Sprites/UI/Subscreens.yy",
+    "name":"PauseMenu",
+    "path":"folders/Sprites/UI/PauseMenu.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

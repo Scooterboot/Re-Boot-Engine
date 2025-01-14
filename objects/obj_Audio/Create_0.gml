@@ -8,6 +8,8 @@ audio_group_set_gain(audio_music,global.musicVolume,0);
 audio_group_set_gain(audio_sound,global.soundVolume,0);
 audio_group_set_gain(audio_ambiance,global.ambianceVolume,0);
 
+skipTitleIntro = false;
+
 playItemFanfare = false;
 skipItemFanfare = false;
 fanfare = noone;

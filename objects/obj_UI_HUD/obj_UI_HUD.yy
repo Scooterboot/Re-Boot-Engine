@@ -12,10 +12,7 @@
     "name":"UI",
     "path":"folders/Objects/UI.yy",
   },
-  "parentObjectId":{
-    "name":"obj_UserInterface",
-    "path":"objects/obj_UserInterface/obj_UserInterface.yy",
-  },
+  "parentObjectId":null,
   "persistent":true,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,

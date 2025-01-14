@@ -422,7 +422,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 	cAimLock = obj_Control.aimLock;
 	cMorph = obj_Control.quickMorph;
 
-	if(state == State.Elevator || state == State.Recharge || state == State.CrystalFlash || instance_exists(obj_MainMenu) || introAnimState != -1)
+	if(state == State.Elevator || state == State.Recharge || state == State.CrystalFlash || introAnimState != -1)
 	{
 	    cRight = false;
 	    cLeft = false;

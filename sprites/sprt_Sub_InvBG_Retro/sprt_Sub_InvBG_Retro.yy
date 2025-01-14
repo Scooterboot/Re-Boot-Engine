@@ -26,7 +26,7 @@
   "origin":4,
   "parent":{
     "name":"Samus_Retro",
-    "path":"folders/Sprites/UI/Subscreens/Samus_Retro.yy",
+    "path":"folders/Sprites/UI/PauseMenu/Samus_Retro.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",
