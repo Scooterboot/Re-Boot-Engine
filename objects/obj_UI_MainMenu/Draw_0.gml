@@ -1,8 +1,7 @@
 /// @description 
 
 var ww = global.resWidth,
-	hh = global.resHeight,
-	alpha = min(screenFade,1);
+	hh = global.resHeight;
 
 surface_set_target(obj_Display.surfUI);
 UIBlend();
@@ -84,6 +83,14 @@ if(state == MMState.FileSelect || state == MMState.FileCopy)
 		}
 	}
 	
+	if(state == MMState.FileCopy && instance_exists(copyFilePanel))
+	{
+		for(var i = 0; i < ds_list_size(copyFilePanel.buttonList); i++)
+		{
+			var btn = copyFilePanel.buttonList[| i];
+			btn.DrawButton(btn.GetX(),btn.GetY());
+		}
+	}
 }
 
 if(state != MMState.TitleIntro && state != MMState.Title)
@@ -144,7 +151,7 @@ if(buttonTipY > 0)
 }
 
 draw_set_color(c_black);
-draw_set_alpha(alpha);
+draw_set_alpha(min(screenFade,1));
 draw_rectangle(-1,-1,ww+1,hh+1,false);
 draw_set_alpha(1);
 

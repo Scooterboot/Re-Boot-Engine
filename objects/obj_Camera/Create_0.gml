@@ -56,14 +56,27 @@ if(instance_exists(obj_Player))
 prevPlayerX = playerX;
 prevPlayerY = playerY;
 
+function camWidth()
+{
+	return global.resWidth*global.zoomScale;
+}
+function camWidth_NonWide()
+{
+	return global.ogResWidth*global.zoomScale;
+}
+function camHeight()
+{
+	return global.resHeight*global.zoomScale;
+}
+
 colList = ds_list_create();
 
 function camera_collide(colX, colY, dsList)
 {
-	var col = collision_rectangle_list(x+colX, y+colY, x+colX+global.resWidth, y+colY+global.resHeight,obj_CamTile,false,true,dsList,true);
+	var col = collision_rectangle_list(x+colX, y+colY, x+colX+camWidth(), y+colY+camHeight(),obj_CamTile,false,true,dsList,true);
 	
-	var wDiff = abs(global.resWidth - global.ogResWidth)/2;
-	col += collision_rectangle_list(x+wDiff+colX, y+colY, x+wDiff+colX+global.ogResWidth, y+colY+global.resHeight,obj_CamTile_NonWScreen,false,true,dsList,true);
+	var wDiff = abs(camWidth() - camWidth_NonWide())/2;
+	col += collision_rectangle_list(x+wDiff+colX, y+colY, x+wDiff+colX+camWidth_NonWide(), y+colY+camHeight(),obj_CamTile_NonWScreen,false,true,dsList,true);
 	
 	return col;
 }

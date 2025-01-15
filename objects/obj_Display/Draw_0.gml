@@ -367,8 +367,8 @@ if(debug == 1)
 	
 	with(obj_Camera)
 	{
-		var xx = x + (global.resWidth/2),
-			yy = y + (global.resHeight/2);
+		var xx = x + (camWidth()/2),
+			yy = y + (camHeight()/2);
 		
 		draw_set_color(c_white);
         draw_set_alpha(0.5);

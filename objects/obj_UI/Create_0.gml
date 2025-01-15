@@ -60,6 +60,24 @@ function SetControlVars_Release()
 }
 #endregion
 
+function MoveSelectX()
+{
+	return (cRight && rRight) - (cLeft && rLeft);
+}
+function MoveSelectY()
+{
+	return (cDown && rDown) - (cUp && rUp);
+}
+
+function ScrollX()
+{
+	return 0;
+}
+function ScrollY()
+{
+	return ((cScrollDown && rScrollDown) - (cScrollUp && rScrollUp));
+}
+
 function UIBlend() { gpu_set_blendmode_ext_sepalpha(bm_src_alpha,bm_inv_src_alpha,bm_src_alpha,bm_one); }
 
 selectedPanel = noone;
@@ -92,6 +110,7 @@ function CreatePanel(_x, _y, _width, _height, _scrollWidth = -1, _scrollHeight =
 	return pnl;
 }
 
+/*
 function UpdateUI()
 {
 	var pNum = ds_list_size(panelList);
@@ -131,3 +150,4 @@ function DrawUI()
 	gpu_set_blendmode(bm_normal);
 	surface_reset_target();
 }
+*/

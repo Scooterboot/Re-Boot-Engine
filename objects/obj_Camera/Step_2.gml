@@ -3,8 +3,8 @@
 if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj_PauseMenu.pause)) && instance_exists(obj_Player))
 {
 	var player = obj_Player;
-	var xx = x + (global.resWidth/2),
-		yy = y + (global.resHeight/2);
+	var xx = x + (camWidth()/2),
+		yy = y + (camHeight()/2);
 	
 	var xsp = player.x - player.xprevious,
 		ysp = player.y - player.yprevious;
@@ -286,11 +286,11 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 				{
 					var col = colList[| i];
 					var wDiff = 0;
-					var resWidth = global.resWidth;
+					var resWidth = camWidth();
 					if(col.object_index == obj_CamTile_NonWScreen || object_is_ancestor(col.object_index,obj_CamTile_NonWScreen))
 					{
-						wDiff = abs(global.resWidth - global.ogResWidth)/2;
-						resWidth = global.ogResWidth;
+						wDiff = abs(camWidth() - camWidth_NonWide())/2;
+						resWidth = camWidth_NonWide();
 					}
 					if(instance_exists(col) && col.active && col.facing == CamTileFacing.Right)
 					{
@@ -321,11 +321,11 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 				if(instance_exists(colX))
 				{
 					var wDiff = 0;
-					var resWidth = global.resWidth;
+					var resWidth = camWidth();
 					if(colX.object_index == obj_CamTile_NonWScreen || object_is_ancestor(colX.object_index,obj_CamTile_NonWScreen))
 					{
-						wDiff = abs(global.resWidth - global.ogResWidth)/2;
-						resWidth = global.ogResWidth;
+						wDiff = abs(camWidth() - camWidth_NonWide())/2;
+						resWidth = camWidth_NonWide();
 					}
 					if ((fVelX < 0 && colX.active && colX.facing == CamTileFacing.Right) ||
 						(fVelX > 0 && colX.active && colX.facing == CamTileFacing.Left))
@@ -339,7 +339,7 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 							x = scr_ceil(x);
 						}
 						var xnum = abs(fVelX)+2;
-						while(!collision_rectangle(x+wDiff+sign(fVelX),y,x+wDiff+sign(fVelX)+resWidth,y+global.resHeight,colX,false,true) && xnum > 0)
+						while(!collision_rectangle(x+wDiff+sign(fVelX),y,x+wDiff+sign(fVelX)+resWidth,y+camHeight(),colX,false,true) && xnum > 0)
 						{
 							x += sign(fVelX);
 							xnum--;
@@ -350,9 +350,9 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 			}
 			ds_list_clear(colList);
 	
-			if(x >= 0 && x <= room_width-global.resWidth)
+			if(x >= 0 && x <= room_width-camWidth())
 			{
-				x += clamp(fVelX, -x, room_width-global.resWidth-x);
+				x += clamp(fVelX, -x, room_width-camWidth()-x);
 			}
 			else
 			{
@@ -360,7 +360,7 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 				{
 					fVelX = max(5+abs(playerX-prevPlayerX) + velX,5);
 				}
-				if(x > room_width-global.resWidth)
+				if(x > room_width-camWidth())
 				{
 					fVelX = min(-(5+abs(playerX-prevPlayerX)) + velX,-5);
 				}
@@ -407,10 +407,10 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 					}
 					else if(instance_exists(col) && col.active && col.facing == CamTileFacing.Up)
 					{
-						fVelY = max(col.y-16 - (y+global.resHeight), -(1+abs(playerY-prevPlayerY)));
+						fVelY = max(col.y-16 - (y+camHeight()), -(1+abs(playerY-prevPlayerY)));
 						if(camSnap)
 						{
-							fVelY = col.y-16 - (y+global.resHeight);
+							fVelY = col.y-16 - (y+camHeight());
 						}
 						break;
 					}
@@ -425,11 +425,11 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 				if(instance_exists(colY))
 				{
 					var wDiff = 0;
-					var resWidth = global.resWidth;
+					var resWidth = camWidth();
 					if(colY.object_index == obj_CamTile_NonWScreen || object_is_ancestor(colY.object_index,obj_CamTile_NonWScreen))
 					{
-						wDiff = abs(global.resWidth - global.ogResWidth)/2;
-						resWidth = global.ogResWidth;
+						wDiff = abs(camWidth() - camWidth_NonWide())/2;
+						resWidth = camWidth_NonWide();
 					}
 					if ((fVelY < 0 && colY.active && colY.facing == CamTileFacing.Down) ||
 						(fVelY > 0 && colY.active && colY.facing == CamTileFacing.Up))
@@ -443,7 +443,7 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 							y = scr_ceil(y);
 						}
 						var ynum = abs(fVelY)+2;
-						while(!collision_rectangle(x+wDiff,y+sign(fVelY),x+wDiff+resWidth,y+sign(fVelY)+global.resHeight,colY,false,true) && ynum > 0)
+						while(!collision_rectangle(x+wDiff,y+sign(fVelY),x+wDiff+resWidth,y+sign(fVelY)+camHeight(),colY,false,true) && ynum > 0)
 						{
 							y += sign(fVelY);
 							ynum--;
@@ -454,9 +454,9 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 			}
 			ds_list_clear(colList);
 	
-			if(y >= 0 && y <= room_height-global.resHeight)
+			if(y >= 0 && y <= room_height-camHeight())
 			{
-				y += clamp(fVelY, -y, room_height-global.resHeight-y);
+				y += clamp(fVelY, -y, room_height-camHeight()-y);
 			}
 			else
 			{
@@ -464,7 +464,7 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 				{
 					fVelY = 1+abs(playerY-prevPlayerY);
 				}
-				if(y > room_height-global.resHeight)
+				if(y > room_height-camHeight())
 				{
 					fVelY = -(1+abs(playerY-prevPlayerY));
 				}
@@ -481,17 +481,17 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 
 if(clampCam)
 {
-	x = clamp(x,0,room_width-global.resWidth);
-	y = clamp(y,0,room_height-global.resHeight);
+	x = clamp(x,0,room_width-camWidth());
+	y = clamp(y,0,room_height-camHeight());
 	clampCam = false;
 }
-if(room_width < global.resWidth)
+if(room_width < camWidth())
 {
-	x = (room_width-global.resWidth)/2;
+	x = (room_width-camWidth())/2;
 }
-if(room_height < global.resHeight)
+if(room_height < camHeight())
 {
-	y = (room_height-global.resHeight)/2;
+	y = (room_height-camHeight())/2;
 }
 
 var shakeX = 0,
@@ -502,6 +502,8 @@ if(instance_exists(obj_ScreenShaker) && obj_ScreenShaker.active)// && !global.ga
 	shakeY += obj_ScreenShaker.shakeY;
 }
 
-var camX = scr_round(playerX+shakeX + (global.resWidth-global.zoomResWidth)/2) + scr_round(x-playerX),
-	camY = scr_round(playerY+shakeY + (global.resHeight-global.zoomResHeight)/2) + scr_round(y-playerY);
+//var camX = scr_round(playerX+shakeX + (camWidth()-global.zoomResWidth)/2) + scr_round(x-playerX),
+//	camY = scr_round(playerY+shakeY + (camHeight()-global.zoomResHeight)/2) + scr_round(y-playerY);
+var camX = scr_round(playerX+shakeX) + scr_round(x-playerX),
+	camY = scr_round(playerY+shakeY) + scr_round(y-playerY);
 camera_set_view_pos(view_camera[0], camX, camY);

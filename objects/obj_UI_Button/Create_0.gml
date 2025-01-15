@@ -17,15 +17,6 @@ button_down = noone;
 button_left = noone;
 button_right = noone;
 
-function SelectControlVert()
-{
-	return (creator.cDown && creator.rDown) - (creator.cUp && creator.rUp);
-}
-function SelectControlHori()
-{
-	return (creator.cRight && creator.rRight) - (creator.cLeft && creator.rLeft);
-}
-
 function GetX() { return panel.x + (x + panel.scrollPosX) * panel.scaleX; }
 function GetY() { return panel.y + (y + panel.scrollPosY) * panel.scaleY; }
 
@@ -33,16 +24,21 @@ function GetMouse()
 {
 	var _x = GetX(),
 		_y = GetY();
-	var mouse = noone;
+	var mouse = panel.GetMouse();
+	var flag = false;
 	if(mask_index != -1)
 	{
-		mouse = instance_place(_x, _y, obj_Mouse);
+		flag = place_meeting(_x, _y, mouse);
 	}
 	else
 	{
-		mouse = collision_rectangle(_x, _y, _x+width*image_xscale, _y+height*image_yscale, obj_Mouse, true, true);
+		var btnL = min(_x, _x+width*image_xscale),
+			btnR = max(_x, _x+width*image_xscale),
+			btnT = min(_y, _y+height*image_yscale),
+			btnB = max(_y, _y+height*image_yscale);
+		flag = instance_exists(collision_rectangle(btnL, btnT, btnR, btnB, mouse, false, true));
 	}
-	if(instance_exists(mouse) && mouse.x == clamp(mouse.x, panel.x, panel.x+panel.width*panel.scaleX) && mouse.y == clamp(mouse.y, panel.y, panel.y+panel.height*panel.scaleY))
+	if(instance_exists(mouse) && flag)
 	{
 		return mouse;
 	}
@@ -83,6 +79,16 @@ function ChangeSelection(newBtn, moveFlag)
 justSelected = false;
 function UpdateButton()
 {
+	if(!instance_exists(creator))
+	{
+		instance_destroy();
+		exit;
+	}
+	if(!instance_exists(panel))
+	{
+		instance_destroy();
+		exit;
+	}
 	if(justSelected)
 	{
 		justSelected = false;
@@ -97,12 +103,12 @@ function UpdateButton()
 		{
 			WhileSelected();
 		
-			var moveY = SelectControlVert(),
-				moveX = SelectControlHori();
-			ChangeSelection(button_up, (moveY < 0));
-			ChangeSelection(button_down, (moveY > 0));
+			var moveX = creator.MoveSelectX(),
+				moveY = creator.MoveSelectY();
 			ChangeSelection(button_left, (moveX < 0));
 			ChangeSelection(button_right, (moveX > 0));
+			ChangeSelection(button_up, (moveY < 0));
+			ChangeSelection(button_down, (moveY > 0));
 		}
 		else
 		{
@@ -117,7 +123,4 @@ function UpdateButton()
 }
 
 buttonSurf = noone;
-function DrawButton(_x, _y)
-{
-	
-}
+function DrawButton(_x, _y) {}

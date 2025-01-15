@@ -22,8 +22,8 @@ if(room != goal)
 		}
 
         transSprtDraw = true;
-        screenPosX = (obj_Camera.x+(global.resWidth/2)) - door.x;
-        screenPosY = (obj_Camera.y+(global.resHeight/2)) - door.y;
+        screenPosX = (obj_Camera.x+(obj_Camera.camWidth()/2)) - door.x;
+        screenPosY = (obj_Camera.y+(obj_Camera.camHeight()/2)) - door.y;
     }
     if(alpha >= 1)
     {
@@ -55,10 +55,10 @@ else
     {
 		if(!transitionComplete)
 		{
-			obj_Camera.x = nextDoor.x + screenPosX + lengthdir_x(global.resWidth/2, nextDoor.image_angle) - (global.resWidth/2);
-			obj_Camera.y = nextDoor.y + screenPosY + lengthdir_y(global.resHeight/2, nextDoor.image_angle) - (global.resHeight/2);
-			obj_Camera.x = clamp(obj_Camera.x,0,room_width-global.resWidth);
-			obj_Camera.y = clamp(obj_Camera.y,0,room_height-global.resHeight);
+			obj_Camera.x = nextDoor.x + screenPosX + lengthdir_x(obj_Camera.camWidth()/2, nextDoor.image_angle) - (obj_Camera.camWidth()/2);
+			obj_Camera.y = nextDoor.y + screenPosY + lengthdir_y(obj_Camera.camHeight()/2, nextDoor.image_angle) - (obj_Camera.camHeight()/2);
+			obj_Camera.x = clamp(obj_Camera.x,0,room_width-obj_Camera.camWidth());
+			obj_Camera.y = clamp(obj_Camera.y,0,room_height-obj_Camera.camHeight());
 			var xDiff = scr_round(obj_Camera.x-obj_Camera.playerX),
 				yDiff = scr_round(obj_Camera.y-obj_Camera.playerY);
 			camera_set_view_pos(view_camera[0], scr_round(obj_Camera.playerX)+xDiff, scr_round(obj_Camera.playerY)+yDiff);

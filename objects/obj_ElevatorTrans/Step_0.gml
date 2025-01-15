@@ -43,8 +43,8 @@ else
 	{
 	    if(!transitionComplete)
 		{
-			obj_Camera.x = clamp(nextEle.x-global.resWidth/2,0,room_width-global.resWidth);
-			obj_Camera.y = clamp(nextEle.y-global.resHeight/2,0,room_height-global.resHeight);
+			obj_Camera.x = clamp(nextEle.x-obj_Camera.camWidth()/2,0,room_width-obj_Camera.camWidth());
+			obj_Camera.y = clamp(nextEle.y-obj_Camera.camHeight()/2,0,room_height-obj_Camera.camHeight());
 			var xDiff = scr_round(obj_Camera.x-obj_Camera.playerX),
 				yDiff = scr_round(obj_Camera.y-obj_Camera.playerY);
 			camera_set_view_pos(view_camera[0], scr_round(obj_Camera.playerX)+xDiff, scr_round(obj_Camera.playerY)+yDiff);

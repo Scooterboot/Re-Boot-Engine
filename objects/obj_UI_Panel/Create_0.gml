@@ -36,18 +36,13 @@ function CreateButton(_x, _y, _width, _height, _text = "")
 	return btn;
 }
 
-function ScrollMoveX()
-{
-	return 0;
-}
-function ScrollMoveY()
-{
-	return ((creator.cScrollDown && creator.rScrollDown) - (creator.cScrollUp && creator.rScrollUp));
-}
-
 function GetMouse()
 {
-	return collision_rectangle(x, y, x+width*scaleX, y+height*scaleY, obj_Mouse, true, true);
+	var panelL = min(x, x+width*scaleX),
+		panelR = max(x, x+width*scaleX),
+		panelT = min(y, y+height*scaleY),
+		panelB = max(y, y+height*scaleY);
+	return collision_rectangle(panelL, panelT, panelR, panelB, obj_Mouse, true, true);
 }
 
 function UpdatePanel()
@@ -74,27 +69,24 @@ function UpdatePanel()
 	{
 		if(scrollWidth > width)
 		{
-			var moveX = ScrollMoveX();
+			var moveX = creator.ScrollX();
 			scrollPosX = clamp(scrollPosX + scrollStepX*moveX, 0, max(scrollWidth-width, 0));
 		}
 		if(scrollHeight > height)
 		{
-			var moveY = ScrollMoveY();
+			var moveY = creator.ScrollY();
 			scrollPosY = clamp(scrollPosY + scrollStepY*moveY, 0, max(scrollHeight-height, 0));
 		}
 	}
-	else
+	/*else
 	{
 		var mouse = GetMouse();
 		if(instance_exists(mouse) && (mouse.velX != 0 || mouse.velY != 0))
 		{
 			creator.selectedPanel = id;
 		}
-	}
+	}*/
 }
 
 panelSurf = noone;
-function DrawPanel(_x, _y)
-{
-	
-}
+function DrawPanel(_x, _y) {}
