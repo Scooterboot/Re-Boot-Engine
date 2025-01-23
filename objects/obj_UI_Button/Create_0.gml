@@ -67,7 +67,7 @@ function OnClick()
 
 function ChangeSelection(newBtn, moveFlag)
 {
-	if(instance_exists(newBtn) && newBtn.active && newBtn.panel.active && moveFlag)
+	if(instance_exists(newBtn) && newBtn.active && instance_exists(newBtn.panel) && newBtn.panel.active && moveFlag)
 	{
 		creator.selectedPanel = newBtn.panel;
 		newBtn.panel.selectedButton = newBtn;
@@ -102,13 +102,16 @@ function UpdateButton()
 		if(panel.selectedButton == id)
 		{
 			WhileSelected();
-		
-			var moveX = creator.MoveSelectX(),
-				moveY = creator.MoveSelectY();
-			ChangeSelection(button_left, (moveX < 0));
-			ChangeSelection(button_right, (moveX > 0));
-			ChangeSelection(button_up, (moveY < 0));
-			ChangeSelection(button_down, (moveY > 0));
+			
+			if(instance_exists(panel))
+			{
+				var moveX = panel.MoveSelectX(),
+					moveY = panel.MoveSelectY();
+				ChangeSelection(button_left, (moveX < 0));
+				ChangeSelection(button_right, (moveX > 0));
+				ChangeSelection(button_up, (moveY < 0));
+				ChangeSelection(button_down, (moveY > 0));
+			}
 		}
 		else
 		{

@@ -1,14 +1,12 @@
 /// @description Set pos and draw mouse
 
-hide = false; //(room != rm_MainMenu && !obj_PauseMenu.pause);
-
 if(!hide)
 {
 	image_alpha = min(image_alpha+0.1,1);
 }
 else
 {
-	image_alpha = max(image_alpha-0.1,0);
+	image_alpha = max(image_alpha-0.05,0);
 }
 
 var sprt = sprt_UI_MouseCursor;

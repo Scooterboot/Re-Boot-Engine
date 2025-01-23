@@ -7,11 +7,6 @@ if(room == rm_MainMenu)
 {
 	camera_set_view_pos(view_camera[0], room_width/2 - global.resWidth/2, room_height/2 - global.resHeight/2);
 	
-	if(state == targetState)
-	{
-		screenFade = max(screenFade-screenFadeRate,0);
-	}
-	
 	var select = (cSelect && rSelect) || (cClickL && rClickL),
 		cancel = (cCancel && rCancel) || (cClickR && rClickR);
 	if(state != MMState.TitleIntro && state != MMState.Title)
@@ -33,6 +28,11 @@ if(room == rm_MainMenu)
 		{
 			moveCounterY = 0;
 		}
+	}
+	
+	if(state == targetState)
+	{
+		screenFade = max(screenFade-screenFadeRate,0);
 	}
 	
 	if(state == MMState.TitleIntro)
@@ -99,35 +99,129 @@ if(room == rm_MainMenu)
 		}
 	}
 	
-	if(state == MMState.FileSelect || state == MMState.FileCopy)
+	if(state == MMState.FileMenu)
 	{
-		if(state == MMState.FileSelect)
+		if(state == targetState)
 		{
-			if(state == targetState)
+			if(!instance_exists(fileMenuPanel))
 			{
-				if(!instance_exists(fileMenuPanel))
+				CreateFileMenuPanel();
+			}
+			
+			switch(subState)
+			{
+				case MMSubState.None:
 				{
-					CreateFileMenuPanel();
+					selectedFile = -1;
+					instance_destroy(selectedFilePanel);
+					instance_destroy(copyFilePanel);
+					instance_destroy(confirmCopyPanel);
+					
+					if(instance_exists(fileMenuPanel))
+					{
+						selectedPanel = fileMenuPanel;
+						fileMenuPanel.UpdatePanel();
+						
+						if(cancel)
+						{
+							targetState = MMState.MainMenu;
+							audio_play_sound(snd_MenuTick,0,false);
+						}
+					}
+					break;
+				}
+				case MMSubState.FileSelected:
+				{
+					if(instance_exists(selectedFilePanel) && selectedFile != -1)
+					{
+						selectedPanel = selectedFilePanel;
+						selectedFilePanel.UpdatePanel();
+						
+						if(cancel)
+						{
+							selectedFile = -1;
+							subState = MMSubState.None;
+							instance_destroy(selectedFilePanel);
+							audio_play_sound(snd_MenuTick,0,false);
+						}
+					}
+					else
+					{
+						subState = MMSubState.None;
+					}
+					break;
+				}
+				case MMSubState.FileCopy:
+				{
+					if(instance_exists(copyFilePanel) && selectedFile != -1)
+					{
+						selectedPanel = copyFilePanel;
+						copyFilePanel.UpdatePanel();
+						
+						if(cancel)
+						{
+							subState = MMSubState.FileSelected;
+							instance_destroy(copyFilePanel);
+							audio_play_sound(snd_MenuTick,0,false);
+						}
+					}
+					else
+					{
+						subState = MMSubState.FileSelected;
+					}
+					break;
+				}
+				case MMSubState.ConfirmCopy:
+				{
+					if(instance_exists(confirmCopyPanel))
+					{
+						selectedPanel = confirmCopyPanel;
+						confirmCopyPanel.UpdatePanel();
+						
+						if(cancel)
+						{
+							subState = MMSubState.FileCopy;
+							instance_destroy(confirmCopyPanel);
+							audio_play_sound(snd_MenuTick,0,false);
+						}
+					}
+					else
+					{
+						subState = MMSubState.FileCopy;
+					}
+					break;
+				}
+				case MMSubState.ConfirmDelete:
+				{
+					if(instance_exists(confirmDeletePanel))
+					{
+						selectedPanel = confirmDeletePanel;
+						confirmDeletePanel.UpdatePanel();
+						
+						if(cancel)
+						{
+							subState = MMSubState.FileSelected;
+							instance_destroy(confirmDeletePanel);
+							audio_play_sound(snd_MenuTick,0,false);
+						}
+					}
+					else
+					{
+						subState = MMSubState.FileSelected;
+					}
+					break;
 				}
 			}
-			else if(targetState == MMState.LoadGame)
+		}
+		else
+		{
+			if(targetState == MMState.LoadGame && fileIconFrame < 7)
 			{
-				if(fileIconFrame < 7)
+				fileIconFrameCounter++;
+				if(fileIconFrameCounter > 6)
 				{
-					fileIconFrameCounter++;
-					if(fileIconFrameCounter > 6)
-					{
-						fileIconFrame++;
-						fileIconFrameCounter = 0;
-					}
-				}
-				else
-				{
-					if(screenFade > 1)
-					{
-						state = targetState;
-					}
-					screenFade += screenFadeRate;
+					fileIconFrame++;
+					fileIconFrameCounter = 0;
 				}
 			}
 			else
@@ -139,68 +233,6 @@ if(room == rm_MainMenu)
 				screenFade += screenFadeRate;
 			}
 		}
-		
-		if(state == MMState.FileCopy)
-		{
-			if(cancel || !instance_exists(copyFilePanel))
-			{
-				targetState = MMState.FileSelect;
-				state = targetState;
-			}
-		}
-		else
-		{
-			instance_destroy(copyFilePanel);
-		}
-		
-		if(state == targetState)
-		{
-			/*if confirm dialog panel exists
-			{
-				
-			}
-			else*/ if(instance_exists(copyFilePanel))
-			{
-				selectedPanel = copyFilePanel;
-				copyFilePanel.UpdatePanel();
-				
-				if(cancel)
-				{
-					instance_destroy(copyFilePanel);
-					audio_play_sound(snd_MenuTick,0,false);
-				}
-			}
-			else if(instance_exists(selectedFilePanel))
-			{
-				selectedPanel = selectedFilePanel;
-				selectedFilePanel.UpdatePanel();
-					
-				if(cancel || selectedFile == -1)
-				{
-					instance_destroy(selectedFilePanel);
-					if(cancel)
-					{
-						audio_play_sound(snd_MenuTick,0,false);
-					}
-				}
-			}
-			else if(instance_exists(fileMenuPanel))
-			{
-				selectedPanel = fileMenuPanel;
-				fileMenuPanel.UpdatePanel();
-				
-				if(cancel)
-				{
-					targetState = MMState.MainMenu;
-					audio_play_sound(snd_MenuTick,0,false);
-				}
-			}
-		}
-		if(!instance_exists(selectedFilePanel))
-		{
-			selectedFile = -1;
-		}
-		
 		
 		for(var i = 0; i < array_length(fileTime); i++)
 		{
@@ -245,6 +277,7 @@ if(room == rm_MainMenu)
 	}
 	else
 	{
+		subState = MMSubState.None;
 		if(instance_exists(fileMenuPanel))
 		{
 			instance_destroy(fileMenuPanel);
@@ -282,6 +315,7 @@ else
 	
 	state = MMState.TitleIntro;
 	targetState = state;
+	subState = MMSubState.None;
 	selectedFile = -1;
 	
 	moveCounterX = 0;

@@ -461,7 +461,7 @@ enum MoveSpeed
 moveSpeed[0,0] = 0.1875;	// Normal
 moveSpeed[1,0] = 0.0625;	// Sprint/Speedboost
 moveSpeed[2,0] = 1.375;		// Wall Jump
-moveSpeed[3,0] = 2.75;		// Cling Wall Jump (from grip or grapple)
+moveSpeed[3,0] = 2.25;		// Cling Wall Jump (from grip or grapple)
 moveSpeed[4,0] = 0.109375;	// Shine Spark
 moveSpeed[5,0] = 7.25;		// Dodge
 moveSpeed[6,0] = 5.375;		// Damage Boost

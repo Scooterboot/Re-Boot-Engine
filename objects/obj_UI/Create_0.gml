@@ -60,15 +60,6 @@ function SetControlVars_Release()
 }
 #endregion
 
-function MoveSelectX()
-{
-	return (cRight && rRight) - (cLeft && rLeft);
-}
-function MoveSelectY()
-{
-	return (cDown && rDown) - (cUp && rUp);
-}
-
 function ScrollX()
 {
 	return 0;

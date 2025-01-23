@@ -45,23 +45,43 @@ function GetMouse()
 	return collision_rectangle(panelL, panelT, panelR, panelB, obj_Mouse, true, true);
 }
 
+function MoveSelectX()
+{
+	return (creator.cRight && creator.rRight) - (creator.cLeft && creator.rLeft);
+}
+function MoveSelectY()
+{
+	return (creator.cDown && creator.rDown) - (creator.cUp && creator.rUp);
+}
+
+function ScrollX()
+{
+	return 0;
+}
+function ScrollY()
+{
+	return ((creator.cScrollDown && creator.rScrollDown) - (creator.cScrollUp && creator.rScrollUp));
+}
+
 function UpdatePanel()
 {
-	var bNum = ds_list_size(buttonList);
-	if(bNum > 0)
+	for(var i = 0; i < ds_list_size(buttonList); i++)
 	{
-		for(var i = 0; i < bNum; i++)
+		var _btn = buttonList[| i];
+		if(instance_exists(_btn))
 		{
-			var _btn = buttonList[| i];
 			if(selectedButton == noone)
 			{
 				selectedButton = _btn;
 			}
-			
 			if(_btn.active)
 			{
 				_btn.UpdateButton();
 			}
+		}
+		if(!ds_exists(buttonList, ds_type_list))
+		{
+			break;
 		}
 	}
 	
@@ -69,12 +89,12 @@ function UpdatePanel()
 	{
 		if(scrollWidth > width)
 		{
-			var moveX = creator.ScrollX();
+			var moveX = ScrollX();
 			scrollPosX = clamp(scrollPosX + scrollStepX*moveX, 0, max(scrollWidth-width, 0));
 		}
 		if(scrollHeight > height)
 		{
-			var moveY = creator.ScrollY();
+			var moveY = ScrollY();
 			scrollPosY = clamp(scrollPosY + scrollStepY*moveY, 0, max(scrollHeight-height, 0));
 		}
 	}

@@ -289,8 +289,8 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					}
 				}
 				
-				if(!walkState && (state == State.Stand || !restrictSBToRun))
-				{
+				//if(!walkState && (state == State.Stand || !restrictSBToRun))
+				//{
 					width = sprite_get_width(sprt_UI_SpeedMeter);
 					if(SpiderActive())
 					{
@@ -308,7 +308,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 							draw_sprite_part_ext(sprt_UI_SpeedMeter,3,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
 						}
 					}
-				}
+				//}
 				
 				if(speedCounter >= 4 || state == State.Spark || state == State.BallSpark)
 				{

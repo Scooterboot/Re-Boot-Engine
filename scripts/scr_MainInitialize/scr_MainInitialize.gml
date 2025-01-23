@@ -1,48 +1,5 @@
 function scr_MainInitialize()
 {
-#region Settings
-	ini_open("settings.ini"); //load display, audio, and control settings
-	global.HUD = ini_read_real("Controls", "hud style", 0);							//load HUD control setting
-	global.aimStyle = ini_read_real("Controls", "aim style", 0);					//load aim control setting
-	global.autoSprint = ini_read_real("Controls", "auto sprint", false);				//load sprint control setting
-	global.quickClimb = ini_read_real("Controls", "quick climb", true);				//load quick climb control setting
-
-	global.gripStyle = ini_read_real("Controls", "grip control", 0);				//load power grip control setting
-	global.grappleStyle = ini_read_real("Controls", "grapple control", 0);			//load grapple beam control setting
-	global.spiderBallStyle = ini_read_real("Controls", "spiderball control", 0);	//load spider ball control setting
-	global.dodgeStyle = ini_read_real("Controls", "dodge control", 0);				//load dodge control setting
-
-
-	global.fullScreen = ini_read_real("Display", "fullscreen", false);				//load fullscreen setting
-	global.screenScale = ini_read_real("Display", "scale", 3);						//load display scale setting
-	global.widescreenEnabled = ini_read_real("Display", "widescreen", true);		//load widescreen setting
-	global.vsync = ini_read_real("Display", "vsync", true);							//load vsync setting
-	global.upscale = ini_read_real("Display", "upscale", 0);						//load upscale setting
-	global.hudDisplay = ini_read_real("Display", "hud display", true);				//load display HUD setting
-	global.hudMap = ini_read_real("Display", "hud map", true);						//load display map setting
-	global.waterDistortion = ini_read_real("Display", "water distortion", true);	//load water distortion display setting
-
-	global.musicVolume = ini_read_real("Audio", "music", 0.75);						//load music volume config
-	global.soundVolume = ini_read_real("Audio", "sound", 0.75);						//load sound volume config
-	global.ambianceVolume = ini_read_real("Audio", "ambiance", 0.75);				//load ambiance volume config
-	ini_close(); //done loading display, audio, and control settings
-#endregion
-
-	global.maxScreenScale = 1;
-	global.zoomScale = 1;
-	
-	// Reference of resolutions from other games
-	// Super Metroid:	256 x 224 (widescreen: 400 x 224) | in tiles: 16 x 14		(ws: 25 x 14)
-	// AM2R:			320 x 240 (widescreen: 426 x 240) | in tiles: 20 x 15		(ws: 26.625 x 15)
-	// Axiom Verge:		360 x 270 (widescreen: 480 x 270) | in tiles: 22.5 x 16.875	(ws: 30 x 16.875)
-	global.wideResWidth = 426;
-	global.ogResWidth = 320;
-	global.resHeight = 240;
-	
-	global.resWidth = global.ogResWidth;
-	global.zoomResWidth = global.resWidth*global.zoomScale;
-	global.zoomResHeight = global.resHeight*global.zoomScale;
-
 	global.roomTrans = false;	//variable that checks whether the player is transitioning from room to room
 	global.gamePaused = false;	//variable that checks if the game is paused
 
@@ -50,7 +7,7 @@ function scr_MainInitialize()
 
 	global.rmHeated = false;
 
-	randomize(); //randomize seed for various random numbers
+	randomize();
 
 	instance_create_depth(0,0,-10,obj_Display);
 	instance_create_depth(0,0,0,obj_Audio);
@@ -71,11 +28,9 @@ function scr_MainInitialize()
 	//instance_create_depth(0,0,-7,obj_MainMenu);
 	//room_goto(rm_Disclaimer);
 	
-	
 	lhc_init();
 
 	lhc_create_interface("IPlayer");
-
 	lhc_create_interface("ISolid");
 	lhc_create_interface("INPCSolid");
 	lhc_create_interface("IMovingSolid");
@@ -87,7 +42,6 @@ function scr_MainInitialize()
 	lhc_create_interface("IScrewBlock");
 
 	lhc_assign_interface("IPlayer", obj_Player);
-
 	lhc_assign_interface("ISolid", obj_Tile, obj_Gadora);
 	lhc_assign_interface("INPCSolid", obj_NPCTile, obj_SaveStation);
 	lhc_assign_interface("IMovingSolid", obj_MovingTile);

@@ -1,5 +1,11 @@
 /// @description Initialize
 
+ini_open("settings.ini");
+	global.musicVolume = ini_read_real("Audio", "music", 0.75);
+	global.soundVolume = ini_read_real("Audio", "sound", 0.75);
+	global.ambianceVolume = ini_read_real("Audio", "ambiance", 0.75);
+ini_close();
+
 audio_group_load(audio_music);
 audio_group_load(audio_sound);
 audio_group_load(audio_ambiance);

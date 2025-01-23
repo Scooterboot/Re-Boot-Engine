@@ -5,10 +5,7 @@
   "macroPageTiles":{
     "SerialiseHeight":11,
     "SerialiseWidth":8,
-    "TileCompressedData":[
-      -88,
-      0,
-    ],
+    "TileCompressedData":[-88,0,],
     "TileDataFormat":1,
   },
   "name":"ts_Chrome",

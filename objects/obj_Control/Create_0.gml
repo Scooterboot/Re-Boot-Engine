@@ -1,4 +1,17 @@
 /// @description Initialize
+
+ini_open("settings.ini");
+	global.HUD = ini_read_real("Controls", "hud style", 0);
+	global.aimStyle = ini_read_real("Controls", "aim style", 0);
+	global.autoSprint = ini_read_real("Controls", "auto sprint", false);
+	global.quickClimb = ini_read_real("Controls", "quick climb", true);
+
+	global.gripStyle = ini_read_real("Controls", "grip control", 0);
+	global.grappleStyle = ini_read_real("Controls", "grapple control", 0);
+	global.spiderBallStyle = ini_read_real("Controls", "spiderball control", 0);
+	global.dodgeStyle = ini_read_real("Controls", "dodge control", 0);
+ini_close();
+
 // --- Keyboard ---
 enum KeyboardButton
 {

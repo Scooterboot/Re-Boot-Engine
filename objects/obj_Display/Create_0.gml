@@ -1,4 +1,31 @@
 /// @description Initialize
+
+ini_open("settings.ini");
+	global.fullScreen = ini_read_real("Display", "fullscreen", false);
+	global.screenScale = ini_read_real("Display", "scale", 3);
+	global.widescreenEnabled = ini_read_real("Display", "widescreen", true);
+	global.vsync = ini_read_real("Display", "vsync", true);
+	global.upscale = ini_read_real("Display", "upscale", 0);
+	global.hudDisplay = ini_read_real("Display", "hud display", true);
+	global.hudMap = ini_read_real("Display", "hud map", true);
+	global.waterDistortion = ini_read_real("Display", "water distortion", true);
+ini_close();
+
+global.maxScreenScale = 1;
+global.zoomScale = 1;
+
+// Reference of resolutions from other games
+// Super Metroid:	256 x 224 (widescreen: 400 x 224) | in tiles: 16 x 14		(ws: 25 x 14)
+// AM2R:			320 x 240 (widescreen: 426 x 240) | in tiles: 20 x 15		(ws: 26.625 x 15)
+// Axiom Verge:		360 x 270 (widescreen: 480 x 270) | in tiles: 22.5 x 16.875	(ws: 30 x 16.875)
+global.wideResWidth = 426;
+global.ogResWidth = 320;
+global.resHeight = 240;
+	
+global.resWidth = global.ogResWidth;
+global.zoomResWidth = global.resWidth*global.zoomScale;
+global.zoomResHeight = global.resHeight*global.zoomScale;
+
 application_surface_draw_enable(false); //disable default application surface drawing
 
 debug = 0;
