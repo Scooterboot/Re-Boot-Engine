@@ -36,6 +36,9 @@
     "name":"sprt_GrappleReticle",
     "path":"sprites/sprt_GrappleReticle/sprt_GrappleReticle.yy",
   },
-  "spriteMaskId":null,
+  "spriteMaskId":{
+    "name":"sprt_GrappleBeamEnd",
+    "path":"sprites/sprt_GrappleBeamEnd/sprt_GrappleBeamEnd.yy",
+  },
   "visible":true,
 }

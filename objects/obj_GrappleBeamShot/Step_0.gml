@@ -160,7 +160,7 @@ else
 						impactFlag = col.grappleCollision;
 					}
 					
-					if(object_is_in_array(col.object_index, global.colArr_GrapplePoint))
+					if(object_is_in_array(col.object_index, ColType_GrapplePoint))
 					{
 						gPoint = col;
 						impactFlag = false;
@@ -189,7 +189,7 @@ else
 				var ang = shootDir;
 				var xx = player.shootPosX+lengthdir_x(i,ang),
 					yy = player.shootPosY+lengthdir_y(i,ang);
-				var gp = collision_rectangle_list(xx-4,yy-4,xx+4,yy+4,global.colArr_GrapplePoint,true,true,gp_list,true);
+				var gp = collision_rectangle_list(xx-4,yy-4,xx+4,yy+4,ColType_GrapplePoint,true,true,gp_list,true);
 				for(var j = 0; j < gp; j++)
 				{
 					var point = gp_list[| j];

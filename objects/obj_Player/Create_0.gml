@@ -1215,8 +1215,8 @@ function entity_collision(listNum)
 						isSolid = false;
 					}
 				}
-				var sp = (object_is_in_array(block.object_index, global.colArr_SpeedBlock) && isSpeedBoosting && shineStart <= 0 && shineLauncherStart <= 0),
-					sc = (object_is_in_array(block.object_index, global.colArr_ScrewBlock) && isScrewAttacking);
+				var sp = (object_is_in_array(block.object_index, ColType_SpeedBlock) && isSpeedBoosting && shineStart <= 0 && shineLauncherStart <= 0),
+					sc = (object_is_in_array(block.object_index, ColType_ScrewBlock) && isScrewAttacking);
 				if(isSolid && !sp && !sc)
 				{
 					ds_list_clear(blockList);
@@ -1392,11 +1392,11 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		var bbottom = bb_bottom(),
 			bright = bb_right(),
 			bleft = bb_left();
-		if(fVelX > 0 && !entity_collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1) && !collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1,global.colArr_Platform,true,true))
+		if(fVelX > 0 && !entity_collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1) && !collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1,ColType_Platform,true,true))
 		{
 			flag = true;
 		}
-		if(fVelX < 0 && !entity_collision_line(bleft+fVX+fVelX,y+yShift,bleft+fVX+fVelX,bbottom+yShift+1) && !collision_line(bleft+fVX+fVelX,y+yShift,bleft+fVX+fVelX,bbottom+yShift+1,global.colArr_Platform,true,true))
+		if(fVelX < 0 && !entity_collision_line(bleft+fVX+fVelX,y+yShift,bleft+fVX+fVelX,bbottom+yShift+1) && !collision_line(bleft+fVX+fVelX,y+yShift,bleft+fVX+fVelX,bbottom+yShift+1,ColType_Platform,true,true))
 		{
 			flag = true;
 		}
@@ -1939,11 +1939,11 @@ function MoveStick_CheckPGrip(_dir, movingTile)
 				cX -= climbX[floor(i)] * _dir;
 				cY += climbY[floor(i)];
 			}
-			return collision_line(lcheck+cX, y-17+cY, rcheck+cX, y-17+cY, global.colArr_MovingSolid, true, true);
+			return collision_line(lcheck+cX, y-17+cY, rcheck+cX, y-17+cY, ColType_MovingSolid, true, true);
 		}
 		else
 		{
-			return collision_line(lcheck, y-17, rcheck, y-17, global.colArr_MovingSolid, true, true);
+			return collision_line(lcheck, y-17, rcheck, y-17, ColType_MovingSolid, true, true);
 		}
 	}
 	return false;
@@ -2023,7 +2023,7 @@ function CanChangeState(newMask)
 			checkYBottom = 0;
 		for(var i = 0; i < newBottom-curBottom; i++)
 		{
-			if((entity_place_collide(0,checkYBottom) || (onPlatform && place_meeting(position.X,position.Y+checkYBottom,global.colArr_Platform))) && !entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
+			if((entity_place_collide(0,checkYBottom) || (onPlatform && place_meeting(position.X,position.Y+checkYBottom,ColType_Platform))) && !entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
 			{
 				checkYBottom--;
 			}
@@ -2041,7 +2041,7 @@ function CanChangeState(newMask)
 		{
 			flag = true;
 		}
-		if(!entity_place_collide(0,checkYTop) && (!onPlatform || !place_meeting(position.X,position.Y+checkYTop,global.colArr_Platform)))
+		if(!entity_place_collide(0,checkYTop) && (!onPlatform || !place_meeting(position.X,position.Y+checkYTop,ColType_Platform)))
 		{
 			flag = true;
 		}
@@ -2079,7 +2079,7 @@ function ChangeState(newState,newStateFrame,newMask,isGrounded,stallCam = true)
 		{
 			if(newBottom-curBottom > 0)
 			{
-				if((entity_place_collide(0,checkYBottom) || (onPlatform && place_meeting(position.X,position.Y+checkYBottom,global.colArr_Platform))) && !entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
+				if((entity_place_collide(0,checkYBottom) || (onPlatform && place_meeting(position.X,position.Y+checkYBottom,ColType_Platform))) && !entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
 				{
 					checkYBottom--;
 				}

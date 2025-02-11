@@ -21,7 +21,7 @@ justFell = false;
 
 grounded = true;
 
-solids = array_concat(global.colArr_Solid,global.colArr_MovingSolid);
+solids = array_concat(ColType_Solid,ColType_MovingSolid);
 
 moveSnd = noone;
 sndStopped = false;

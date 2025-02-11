@@ -28,18 +28,18 @@ function scr_MainInitialize()
 	//instance_create_depth(0,0,-7,obj_MainMenu);
 	//room_goto(rm_Disclaimer);
 	
-	global.colArr_Player = [obj_Player];
-	global.colArr_Solid = [obj_Tile, obj_Gadora];
-	global.colArr_SolidSlope = [obj_Slope, obj_Slope_4th];
-	global.colArr_NPCSolid = [obj_NPCTile, obj_SaveStation];
-	global.colArr_NPCSolidSlope = [obj_NPCSlope, obj_NPCSlope_4th];
-	global.colArr_MovingSolid = [obj_MovingTile];
-	global.colArr_MovingSolidSlope = [obj_MovingSlope, obj_MovingSlope_4th];
-	global.colArr_Platform = [obj_Platform];
-	global.colArr_GrapplePoint = [obj_GrappleBlock, obj_GrappleBlockCracked, obj_PushBlock_Grapple, obj_PushBall_Grapple, obj_GrappleRipper];
-	global.colArr_Breakable = [obj_Breakable];
-	global.colArr_SpeedBlock = [obj_ShotBlock, obj_BombBlock, obj_SpeedBlock];
-	global.colArr_ScrewBlock = [obj_ShotBlock, obj_BombBlock, obj_ScrewBlock];
+	#macro ColType_Player [obj_Player]
+	#macro ColType_Solid [obj_Tile, obj_Gadora]
+	#macro ColType_SolidSlope [obj_Slope, obj_Slope_4th]
+	#macro ColType_NPCSolid [obj_NPCTile, obj_SaveStation]
+	#macro ColType_NPCSolidSlope [obj_NPCSlope, obj_NPCSlope_4th]
+	#macro ColType_MovingSolid [obj_MovingTile]
+	#macro ColType_MovingSolidSlope [obj_MovingSlope, obj_MovingSlope_4th]
+	#macro ColType_Platform [obj_Platform]
+	#macro ColType_GrapplePoint [obj_GrappleBlock, obj_GrappleBlockCracked, obj_PushBlock_Grapple, obj_PushBall_Grapple, obj_GrappleRipper]
+	#macro ColType_Breakable [obj_Breakable]
+	#macro ColType_SpeedBlock [obj_ShotBlock, obj_BombBlock, obj_SpeedBlock]
+	#macro ColType_ScrewBlock [obj_ShotBlock, obj_BombBlock, obj_ScrewBlock]
 	
 	chameleon_init();
 }

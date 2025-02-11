@@ -37,7 +37,7 @@ collision_rectangle_list(bbox_left-1,bbox_top-1,bbox_right+1,bbox_bottom+1,obj_E
 
 for(var i = 0; i < ds_list_size(entityList); i++)
 {
-	if(instance_exists(entityList[| i]) && array_contains_ext(entityList[| i].solids,global.colArr_MovingSolid))
+	if(instance_exists(entityList[| i]) && array_contains_ext(entityList[| i].solids,ColType_MovingSolid))
 	{
 		var entity = entityList[| i];
 		var tileCollide = true;

@@ -17,7 +17,7 @@ function GetPlayerPos()
 	var playerShootPosX = player.x+player.sprtOffsetX+player.shotOffsetX,
 		playerShootPosY = player.y+player.sprtOffsetY+player.shotOffsetY;
 	var _sdist = point_distance(player.x,player.y, playerShootPosX,playerShootPosY);
-	var pX = clamp(playerShootPosX - lengthdir_x(_sdist, shootDir), min(player.x,playerShootPosX), max(player.x,playerShootPosX)),
+	var pX = playerShootPosX - lengthdir_x(_sdist, shootDir),
 		pY = playerShootPosY - lengthdir_y(_sdist, shootDir);
 	
 	return new Vector2(pX, pY);

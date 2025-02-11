@@ -1,6 +1,6 @@
 /// @description 
 
-solids = array_concat(global.colArr_Solid,global.colArr_MovingSolid);
+solids = array_concat(ColType_Solid,ColType_MovingSolid);
 
 shutterID = 0;
 

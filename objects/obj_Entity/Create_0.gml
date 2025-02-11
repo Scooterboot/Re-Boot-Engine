@@ -80,7 +80,7 @@ colEdge = Edge.Bottom;
 
 grounded = false;
 
-solids = array_concat(global.colArr_Solid, global.colArr_MovingSolid);
+solids = array_concat(ColType_Solid, ColType_MovingSolid);
 
 function CanPlatformCollide()
 {
@@ -113,7 +113,7 @@ function entity_place_collide()
 		}
 	}
 	
-	if(place_meeting(xx+offsetX,yy+offsetY,global.colArr_Platform) && CanPlatformCollide())
+	if(place_meeting(xx+offsetX,yy+offsetY,ColType_Platform) && CanPlatformCollide())
 	{
 		if(entityPlatformCheck(offsetX,offsetY,xx,yy))
 		{
@@ -207,9 +207,9 @@ function entityPlatformCheck()
 		}
 	}
 	
-	if(place_meeting(xx+offsetX,yy+offsetY,global.colArr_Platform))
+	if(place_meeting(xx+offsetX,yy+offsetY,ColType_Platform))
 	{
-		var pl = instance_place_list(xx+offsetX,yy+offsetY,global.colArr_Platform,blockList,true);
+		var pl = instance_place_list(xx+offsetX,yy+offsetY,ColType_Platform,blockList,true);
 		for(var i = 0; i < pl; i++)
 		{
 			if(instance_exists(blockList[| i]))

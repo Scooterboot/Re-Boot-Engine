@@ -14,7 +14,7 @@ if(instance_exists(obj_Player))
 var checkX = x+lengthdir_x(16,image_angle)*image_xscale,
 	checkY = y+lengthdir_y(16,image_angle)*image_xscale;
 if (point_distance(x,y,player.x,player.y) <= 150 && 
-	!collision_line(checkX,checkY,player.x,player.y,global.colArr_Solid,true,true))
+	!collision_line(checkX,checkY,player.x,player.y,ColType_Solid,true,true))
 {
 	for(var i = 16; i < 150; i += 64)
 	{

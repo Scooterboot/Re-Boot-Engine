@@ -66,7 +66,7 @@ function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
 
 function CanDamageNPC(damage,npc)
 {
-	if(object_is_in_array(npc.object_index, global.colArr_GrapplePoint))
+	if(object_is_in_array(npc.object_index, ColType_GrapplePoint))
 	{
 		return false;
 	}

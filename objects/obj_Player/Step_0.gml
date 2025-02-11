@@ -1215,7 +1215,7 @@ if(xRayActive)
 	if(state == State.Jump || state == State.Somersault)
 	{
 		var detectRange = 8 + abs(prevVelX);
-		canWallJump = (move != 0 && (entity_place_collide(velX-detectRange*move,0) || place_meeting(position.X+velX-detectRange*move,position.Y,global.colArr_Platform)) && wjFrame <= 0 && coyoteJump <= 0);
+		canWallJump = (move != 0 && (entity_place_collide(velX-detectRange*move,0) || place_meeting(position.X+velX-detectRange*move,position.Y,ColType_Platform)) && wjFrame <= 0 && coyoteJump <= 0);
 	}
 	else
 	{
@@ -2424,11 +2424,11 @@ if(xRayActive)
 		jump = 0;
 	}
 	
-	var colL = instance_exists(collision_line(bb_left()+1,bb_top(),bb_left()+1,bb_bottom(),global.colArr_MovingSolid,true,true)),
-		colR = instance_exists(collision_line(bb_right()-1,bb_top(),bb_right()-1,bb_bottom(),global.colArr_MovingSolid,true,true)),
-		colT = instance_exists(collision_line(bb_left(),bb_top()+1,bb_right(),bb_top()+1,global.colArr_MovingSolid,true,true)),
-		colB = instance_exists(collision_line(bb_left(),bb_bottom()-1,bb_right(),bb_bottom()-1,global.colArr_MovingSolid,true,true));
-	if (place_meeting(position.X,position.Y,global.colArr_MovingSolid) && (state != State.Grip || !startClimb) && colL+colR+colT+colB >= 4)
+	var colL = instance_exists(collision_line(bb_left()+1,bb_top(),bb_left()+1,bb_bottom(),ColType_MovingSolid,true,true)),
+		colR = instance_exists(collision_line(bb_right()-1,bb_top(),bb_right()-1,bb_bottom(),ColType_MovingSolid,true,true)),
+		colT = instance_exists(collision_line(bb_left(),bb_top()+1,bb_right(),bb_top()+1,ColType_MovingSolid,true,true)),
+		colB = instance_exists(collision_line(bb_left(),bb_bottom()-1,bb_right(),bb_bottom()-1,ColType_MovingSolid,true,true));
+	if (place_meeting(position.X,position.Y,ColType_MovingSolid) && (state != State.Grip || !startClimb) && colL+colR+colT+colB >= 4)
 	{
 		passthru = min(passthru+1,passthruMax);
 	}
@@ -2439,11 +2439,11 @@ if(xRayActive)
 	passthroughMovingSolids = (passthru >= passthruMax);
 	if(passthroughMovingSolids)
 	{
-		solids = global.colArr_Solid;
+		solids = ColType_Solid;
 	}
 	else
 	{
-		solids = array_concat(global.colArr_Solid, global.colArr_MovingSolid);
+		solids = array_concat(ColType_Solid, ColType_MovingSolid);
 	}
 	
 #endregion
@@ -3253,7 +3253,7 @@ if(xRayActive)
 		}
 		
 		var colFlag = false;
-		var sColNum = collision_point_list(x+6*dir,y-18, array_concat(global.colArr_SolidSlope,global.colArr_MovingSolidSlope), true,true,blockList,true);
+		var sColNum = collision_point_list(x+6*dir,y-18, array_concat(ColType_SolidSlope,ColType_MovingSolidSlope), true,true,blockList,true);
 		for(var i = 0; i < sColNum; i++)
 		{
 			if(instance_exists(blockList[| i]))
@@ -3268,7 +3268,7 @@ if(xRayActive)
 		}
 		ds_list_clear(blockList);
 		
-		if((!entity_place_collide(2*dir,0) && !entity_place_collide(2*dir,4) && !entity_place_collide(0,2)) || (entity_position_collide(6*dir,-19) && !startClimb) || (colFlag && !startClimb) || (cDown && cJump && rJump) || (place_meeting(x,y,global.colArr_MovingSolid) && !startClimb))
+		if((!entity_place_collide(2*dir,0) && !entity_place_collide(2*dir,4) && !entity_place_collide(0,2)) || (entity_position_collide(6*dir,-19) && !startClimb) || (colFlag && !startClimb) || (cDown && cJump && rJump) || (place_meeting(x,y,ColType_MovingSolid) && !startClimb))
 		{
 			breakGrip = true;
 		}
@@ -3380,7 +3380,7 @@ if(xRayActive)
 					shineDir = 180;
 				}
 			}
-			if((entity_place_collide(0,4) || (onPlatform && place_meeting(x,y+4,global.colArr_Platform))) && (!entity_place_collide(0,-1) || entity_place_collide(0,0)))
+			if((entity_place_collide(0,4) || (onPlatform && place_meeting(x,y+4,ColType_Platform))) && (!entity_place_collide(0,-1) || entity_place_collide(0,0)))
 			{
 				position.Y -= 1;
 				y = scr_round(position.Y);
