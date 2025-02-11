@@ -27,24 +27,9 @@
     "path":"texturegroups/Default",
   },
   "tileAnimationFrames":[
-    {"$GMTileAnimation":"","%Name":"animation_1","frames":[
-        63,
-        64,
-        65,
-        64,
-      ],"name":"animation_1","resourceType":"GMTileAnimation","resourceVersion":"2.0",},
-    {"$GMTileAnimation":"","%Name":"animation_2","frames":[
-        66,
-        68,
-        70,
-        68,
-      ],"name":"animation_2","resourceType":"GMTileAnimation","resourceVersion":"2.0",},
-    {"$GMTileAnimation":"","%Name":"animation_3","frames":[
-        67,
-        69,
-        71,
-        69,
-      ],"name":"animation_3","resourceType":"GMTileAnimation","resourceVersion":"2.0",},
+    {"$GMTileAnimation":"","%Name":"animation_1","frames":[63,64,65,64,],"name":"animation_1","resourceType":"GMTileAnimation","resourceVersion":"2.0",},
+    {"$GMTileAnimation":"","%Name":"animation_2","frames":[66,68,70,68,],"name":"animation_2","resourceType":"GMTileAnimation","resourceVersion":"2.0",},
+    {"$GMTileAnimation":"","%Name":"animation_3","frames":[67,69,71,69,],"name":"animation_3","resourceType":"GMTileAnimation","resourceVersion":"2.0",},
   ],
   "tileAnimationSpeed":15.0,
   "tileHeight":16,

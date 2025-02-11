@@ -11,3 +11,6 @@ if(tile_exists(tile_layer_find(tileLayer1,x,y)) || tile_exists(tile_layer_find(t
 {
     visible = false;
 }*/
+
+event_perform_object(obj_Breakable,ev_create,0);
+extSprt = sprt_GrappleBlockExt;

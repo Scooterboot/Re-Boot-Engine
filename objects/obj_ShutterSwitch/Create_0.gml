@@ -1,6 +1,5 @@
 /// @description 
 event_inherited();
-lhc_activate();
 
 shutterID = 0;
 

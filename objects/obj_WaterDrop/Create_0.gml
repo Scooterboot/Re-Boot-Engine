@@ -17,6 +17,4 @@ image_yscale = image_xscale;
 image_index = irandom(image_number);
 image_speed = 0;
 
-lhc_activate();
-solids[0] = "ISolid";
-solids[1] = "IMovingSolid";
+solids = array_concat(global.colArr_Solid,global.colArr_MovingSolid);

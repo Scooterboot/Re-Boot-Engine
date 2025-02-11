@@ -15,17 +15,19 @@ if(drawAfterImage && !global.gamePaused)
 	var aftImg = new AfterImage(id,afterImgAlphaMult,afterImageNum);
 	ds_list_add(afterImageList, aftImg);
 }
+for(var i = ds_list_size(afterImageList)-1; i >= 0; i--)
+{
+	if(afterImageList[| i]._delete)
+	{
+		ds_list_delete(afterImageList,i);
+	}
+}
 for(var i = 0; i < ds_list_size(afterImageList); i++)
 {
 	var aftImg = afterImageList[| i];
 	aftImg.Update();
 		
-	if(aftImg._delete)
-	{
-		ds_list_delete(afterImageList,i);
-		delete aftImg;
-	}
-	else
+	if(!aftImg._delete)
 	{
 		aftImg.Draw();
 	}

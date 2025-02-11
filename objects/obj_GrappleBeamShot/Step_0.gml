@@ -13,11 +13,17 @@ if(!instance_exists(player))
 	exit;
 }
 
+var angDif = angle_difference(player.shootDir,shootDir);
+if(angDif != 0)
+{
+	shootDir += min(abs(angDif), 10) * sign(angDif);
+}
+
 var distMax = player.grappleMaxDist;
 grapSpeedMax = lerp(28,8, grappleDist/distMax);
 
-grapSignX = lengthdir_x(1,player.shootDir);
-grapSignY = lengthdir_y(1,player.shootDir);
+grapSignX = lengthdir_x(1,shootDir);
+grapSignY = lengthdir_y(1,shootDir);
 
 if(grappleState != GrappleState.None)
 {
@@ -120,8 +126,8 @@ else
 		if(impacted == 1)
 		{
 			grappleDist = max(grappleDist - grapSpeedMax, 0);
-			x = player.shootPosX+lengthdir_x(grappleDist,player.shootDir);
-		    y = player.shootPosY+lengthdir_y(grappleDist,player.shootDir);
+			x = player.shootPosX+lengthdir_x(grappleDist,shootDir);
+		    y = player.shootPosY+lengthdir_y(grappleDist,shootDir);
 			if(grappleDist <= 0)
 			{
 				impacted = 2;
@@ -133,17 +139,17 @@ else
 			while(grapSpeed > 0 && !entity_collision_line(xprevious-grapSignX,yprevious-grapSignY,x+grapSignX,y+grapSignY))
 		    {
 		        grappleDist += 1;
-				x = player.shootPosX+lengthdir_x(grappleDist,player.shootDir);
-				y = player.shootPosY+lengthdir_y(grappleDist,player.shootDir);
+				x = player.shootPosX+lengthdir_x(grappleDist,shootDir);
+				y = player.shootPosY+lengthdir_y(grappleDist,shootDir);
 		        grapSpeed -= 1;
 		    }
 			
 			var impactFlag = false;
 			
-			var num = collision_line_list(xprevious-grapSignX,yprevious-grapSignY,x+grapSignX,y+grapSignY,all,true,true,gp_list,true);
+			var num = collision_line_list(xprevious-grapSignX,yprevious-grapSignY,x+grapSignX,y+grapSignY,solids,true,true,gp_list,true);
 			for(var i = 0; i < num; i++)
 			{
-				if(instance_exists(gp_list[| i]) && asset_has_any_tag(gp_list[| i].object_index,solids,asset_object))
+				if(instance_exists(gp_list[| i]))
 				{
 					impactFlag = true;
 					
@@ -154,7 +160,7 @@ else
 						impactFlag = col.grappleCollision;
 					}
 					
-					if(asset_has_any_tag(col.object_index,"IGrapplePoint",asset_object))
+					if(object_is_in_array(col.object_index, global.colArr_GrapplePoint))
 					{
 						gPoint = col;
 						impactFlag = false;
@@ -180,14 +186,14 @@ else
 		{
 			if(!instance_exists(gPoint))
 			{
-				var ang = player.shootDir;
+				var ang = shootDir;
 				var xx = player.shootPosX+lengthdir_x(i,ang),
 					yy = player.shootPosY+lengthdir_y(i,ang);
-				var gp = collision_rectangle_list(xx-4,yy-4,xx+4,yy+4,all,true,true,gp_list,true);
+				var gp = collision_rectangle_list(xx-4,yy-4,xx+4,yy+4,global.colArr_GrapplePoint,true,true,gp_list,true);
 				for(var j = 0; j < gp; j++)
 				{
 					var point = gp_list[| j];
-					if(instance_exists(point) && asset_has_any_tag(point.object_index, "IGrapplePoint", asset_object))
+					if(instance_exists(point))
 					{
 						gPoint = point;
 						x = xx;
@@ -236,8 +242,8 @@ if(damage > 0)
 	
 	for(var j = 0; j < grappleDist; j += 8)
 	{
-		var xw = x-lengthdir_x(j,player.shootDir),
-			yw = y-lengthdir_y(j,player.shootDir);
+		var xw = x-lengthdir_x(j,shootDir),
+			yw = y-lengthdir_y(j,shootDir);
 		scr_DamageNPC(xw,yw,damage,damageType,damageSubType,0,-1,10);
 	}
 }

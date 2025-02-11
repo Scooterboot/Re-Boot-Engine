@@ -69,27 +69,31 @@ function ScrollY()
 	return ((cScrollDown && rScrollDown) - (cScrollUp && rScrollUp));
 }
 
-function UIBlend() { gpu_set_blendmode_ext_sepalpha(bm_src_alpha,bm_inv_src_alpha,bm_src_alpha,bm_one); }
+//function ui_blendmode() { gpu_set_blendmode_ext_sepalpha(bm_src_alpha,bm_inv_src_alpha,bm_src_alpha,bm_one); }
+//function ui_blendmode() { gpu_set_blendmode_ext_sepalpha(bm_src_alpha,bm_inv_src_alpha,bm_one,bm_one); }
+//function ui_blendmode() { gpu_set_blendmode(bm_normal); }
 
 selectedPanel = noone;
 panelList = ds_list_create();
 
 function CreatePanel(_x, _y, _width, _height, _scrollWidth = -1, _scrollHeight = -1, _scrollX = 0, _scrollY = 0)
 {
-	var pnl = instance_create_depth(_x, _y, depth, obj_UI_Panel);
+	var pnl = instance_create_depth(scr_floor(_x), scr_floor(_y), depth, obj_UI_Panel);
 	
-	pnl.width = _width;
-	pnl.height = _height;
+	var _w = scr_ceil(_width), _h = scr_ceil(_height),
+		_w2 = scr_ceil(_scrollWidth), _h2 = scr_ceil(_scrollHeight);
+	pnl.width = _w;
+	pnl.height = _h;
 	
-	pnl.scrollWidth = _width;
-	pnl.scrollHeight = _height;
-	if(_scrollWidth > _width)
+	pnl.scrollWidth = _w;
+	pnl.scrollHeight = _h;
+	if(_w2 > _w)
 	{
-		pnl.scrollWidth = _scrollWidth;
+		pnl.scrollWidth = _w2;
 	}
-	if(_scrollHeight > _height)
+	if(_h2 > _h)
 	{
-		pnl.scrollHeight = _scrollHeight;
+		pnl.scrollHeight = _h2;
 	}
 	
 	pnl.scrollPosX = _scrollX;
@@ -126,7 +130,7 @@ function UpdateUI()
 function DrawUI()
 {
 	surface_set_target(obj_Display.surfUI);
-	UIBlend();
+	ui_blendmode();
 	
 	var pNum = ds_list_size(panelList);
 	if(pNum > 0)

@@ -21,9 +21,7 @@ justFell = false;
 
 grounded = true;
 
-solids[0] = "ISolid";
-solids[1] = "IMovingSolid";
-//solids[2] = "IPlayer";
+solids = array_concat(global.colArr_Solid,global.colArr_MovingSolid);
 
 moveSnd = noone;
 sndStopped = false;

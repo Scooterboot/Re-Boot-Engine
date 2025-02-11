@@ -164,6 +164,7 @@ if(aiStyle == 1 || aiStyle == 2)
 		{
 			i *= -1;
 		}
+		//i *= 1 + scr_floor(waveStyle/3);
 	}
 	delay = max(delay - 1, 0);
 	if(delay <= 0)

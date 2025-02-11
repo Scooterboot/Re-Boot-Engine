@@ -1,7 +1,5 @@
 /// @description 
 
-lhc_inherit_interface("IMovingSolid");
-
 isSolid = true;
 
 canGrip = true;
@@ -69,7 +67,7 @@ function UpdatePosition(_x,_y, avoidClipping = false)
 	
 	for(var i = 0; i < ds_list_size(entityList); i++)
 	{
-		if(instance_exists(entityList[| i]) && array_contains(entityList[| i].solids,"IMovingSolid") && entityList[| i] != ignoredEntity)
+		if(instance_exists(entityList[| i]) && array_contains_ext(entityList[| i].solids, global.colArr_MovingSolid) && entityList[| i] != ignoredEntity)
 		{
 			var entity = entityList[| i];
 			var tileCollide = true;

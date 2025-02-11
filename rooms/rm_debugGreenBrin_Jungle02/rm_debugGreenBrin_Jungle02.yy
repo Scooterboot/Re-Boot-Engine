@@ -30,7 +30,7 @@
     {"name":"inst_3ACA545B","path":"rooms/rm_debugGreenBrin_Jungle02/rm_debugGreenBrin_Jungle02.yy",},
     {"name":"inst_2D360678","path":"rooms/rm_debugGreenBrin_Jungle02/rm_debugGreenBrin_Jungle02.yy",},
     {"name":"inst_3849DD78","path":"rooms/rm_debugGreenBrin_Jungle02/rm_debugGreenBrin_Jungle02.yy",},
-    {"name":"inst_3E127E2D","path":"rooms/rm_debugGreenBrin_Jungle02/rm_debugGreenBrin_Jungle02.yy",},
+    {"name":"inst_73D312FB","path":"rooms/rm_debugGreenBrin_Jungle02/rm_debugGreenBrin_Jungle02.yy",},
   ],
   "isDnd":false,
   "layers":[
@@ -94,7 +94,7 @@
         {"$GMRTileLayer":"","%Name":"Tiles_fg3","depth":1400,"effectEnabled":true,"effectType":null,"gridX":16,"gridY":16,"hierarchyFrozen":false,"inheritLayerDepth":true,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"name":"Tiles_fg3","properties":[],"resourceType":"GMRTileLayer","resourceVersion":"2.0","tiles":{"SerialiseHeight":0,"SerialiseWidth":0,"TileSerialiseData":[],},"tilesetId":null,"userdefinedDepth":false,"visible":true,"x":0,"y":0,},
       ],"name":"Tiles_fg0","properties":[],"resourceType":"GMRTileLayer","resourceVersion":"2.0","tiles":{"SerialiseHeight":16,"SerialiseWidth":32,"TileCompressedData":[-512,0,],"TileDataFormat":1,},"tilesetId":{"name":"ts_Tech","path":"tilesets/ts_Tech/ts_Tech.yy",},"userdefinedDepth":false,"visible":true,"x":0,"y":0,},
     {"$GMRInstanceLayer":"","%Name":"Doors","depth":1500,"effectEnabled":true,"effectType":null,"gridX":8,"gridY":8,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":true,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
-        {"$GMRInstance":"v1","%Name":"inst_3E127E2D","colour":4294967295,"frozen":false,"hasCreationCode":true,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_3E127E2D","objectId":{"name":"obj_DoorHatch_Power","path":"objects/obj_DoorHatch_Power/obj_DoorHatch_Power.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":-90.0,"scaleX":1.0,"scaleY":1.0,"x":384.0,"y":16.0,},
+        {"$GMRInstance":"v1","%Name":"inst_73D312FB","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_73D312FB","objectId":{"name":"obj_DoorHatch","path":"objects/obj_DoorHatch/obj_DoorHatch.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":270.0,"scaleX":1.0,"scaleY":1.0,"x":384.0,"y":16.0,},
       ],"layers":[],"name":"Doors","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
     {"$GMRInstanceLayer":"","%Name":"Liquids","depth":1600,"effectEnabled":true,"effectType":null,"gridX":8,"gridY":8,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":true,"inheritSubLayers":true,"inheritVisibility":true,"instances":[],"layers":[],"name":"Liquids","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
     {"$GMRInstanceLayer":"","%Name":"WorldObjects","depth":1700,"effectEnabled":true,"effectType":null,"gridX":8,"gridY":8,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":true,"inheritSubLayers":true,"inheritVisibility":true,"instances":[

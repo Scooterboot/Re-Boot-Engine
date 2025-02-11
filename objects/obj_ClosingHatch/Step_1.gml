@@ -1,6 +1,6 @@
 /// @description Close Logic
 var player = noone;
-for(var i = 0; i < (room_width+room_height)/2; i+= 32)
+for(var i = 0; i < (room_width+room_height)/2; i+= 16)
 {
 	var _checkX = x - lengthdir_x(i,image_angle)*sign(image_xscale),
 		_checkY = y - lengthdir_y(i,image_angle)*sign(image_xscale);

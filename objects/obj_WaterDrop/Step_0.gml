@@ -51,7 +51,7 @@ if(instance_exists(liquid) && !kill)
 	instance_destroy();
 }
 
-if(lhc_place_meeting(x,y,solids))
+if(place_meeting(x,y,solids))
 {
 	instance_destroy();
 }

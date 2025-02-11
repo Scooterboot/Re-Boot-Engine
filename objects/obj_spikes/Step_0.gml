@@ -1,5 +1,5 @@
 /// @description 
-event_inherited();
+event_perform_object(obj_Breakable,ev_step,0);
 
 //var player = instance_place(x,y,obj_Player);
 var player = noone;//collision_rectangle(bbox_left-1,bbox_top-1,bbox_right+1,bbox_bottom+1,obj_Player,false,true);

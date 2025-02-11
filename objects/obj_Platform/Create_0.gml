@@ -1,6 +1,5 @@
 /// @description 
 
-lhc_inherit_interface("IPlatform");
 xRayHide = false;
 
 isSolid = true;

@@ -40,6 +40,9 @@
     "name":"sprt_DoorHatch",
     "path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",
   },
-  "spriteMaskId":null,
+  "spriteMaskId":{
+    "name":"mask_DoorHatch",
+    "path":"sprites/mask_DoorHatch/mask_DoorHatch.yy",
+  },
   "visible":true,
 }

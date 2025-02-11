@@ -48,10 +48,10 @@ function GetPlayer()
 		var colFlag = false;
 		
 		var center = _player.Center();
-		var num = collision_line_list(center.X,center.Y,x+losCheckOffsetX,y+losCheckOffsetY,all,true,true,blockList,true);
+		var num = collision_line_list(center.X,center.Y,x+losCheckOffsetX,y+losCheckOffsetY,_player.solids,true,true,blockList,true);
 		for(var i = 0; i < num; i++)
 		{
-			if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,_player.solids,asset_object))
+			if(instance_exists(blockList[| i]))
 			{
 				colFlag = true;
 				break;

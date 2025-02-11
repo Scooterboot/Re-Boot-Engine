@@ -5,10 +5,7 @@
   "macroPageTiles":{
     "SerialiseHeight":14,
     "SerialiseWidth":11,
-    "TileCompressedData":[
-      -154,
-      0,
-    ],
+    "TileCompressedData":[-154,0,],
     "TileDataFormat":1,
   },
   "name":"ts_Crateria",

@@ -36,6 +36,9 @@
     "name":"sprt_DoorHatch_Missile",
     "path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",
   },
-  "spriteMaskId":null,
+  "spriteMaskId":{
+    "name":"mask_DoorHatch",
+    "path":"sprites/mask_DoorHatch/mask_DoorHatch.yy",
+  },
   "visible":true,
 }

@@ -14,7 +14,7 @@ if(image_alpha <= 0)
 	instance_destroy();
 }
 
-if(lhc_place_meeting(x,y,solids))
+if(place_meeting(x,y,solids))
 {
 	instance_destroy();
 }

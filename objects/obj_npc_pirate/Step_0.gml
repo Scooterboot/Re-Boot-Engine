@@ -11,7 +11,7 @@ if(state != PirateState.Turn)
 {
     var xplus = 0;
     var num = 10;
-    while(!lhc_collision_rectangle(max(bb_left()+xplus,bb_left()),bb_top(),min(bb_right()+xplus,bb_right()),bb_bottom()-16,solids,false,true) && num > 0)
+    while(!collision_rectangle(max(bb_left()+xplus,bb_left()),bb_top(),min(bb_right()+xplus,bb_right()),bb_bottom()-16,solids,false,true) && num > 0)
     {
         xplus += 16*dir;
         num--;

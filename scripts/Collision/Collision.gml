@@ -1,4 +1,16 @@
 
+function object_is_in_array(_obj, _arr)
+{
+	for(var i = 0; i < array_length(_arr); i++)
+	{
+		if(_obj == _arr[i] || object_is_ancestor(_obj,_arr[i]))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 function lines_intersect(x1,y1,x2,y2,x3,y3,x4,y4,segment)
 {
 	//  Returns a vector multiplier (t) for an intersection on the

@@ -31,8 +31,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"mask_ClosingHatch",
-    "path":"sprites/mask_ClosingHatch/mask_ClosingHatch.yy",
+    "name":"mask_DoorHatch",
+    "path":"sprites/mask_DoorHatch/mask_DoorHatch.yy",
   },
   "spriteMaskId":null,
   "visible":false,

@@ -28,29 +28,18 @@ function scr_MainInitialize()
 	//instance_create_depth(0,0,-7,obj_MainMenu);
 	//room_goto(rm_Disclaimer);
 	
-	lhc_init();
-
-	lhc_create_interface("IPlayer");
-	lhc_create_interface("ISolid");
-	lhc_create_interface("INPCSolid");
-	lhc_create_interface("IMovingSolid");
-	lhc_create_interface("ISlope");
-	lhc_create_interface("IPlatform");
-	lhc_create_interface("IGrapplePoint");
-	lhc_create_interface("IBreakable");
-	lhc_create_interface("ISpeedBlock");
-	lhc_create_interface("IScrewBlock");
-
-	lhc_assign_interface("IPlayer", obj_Player);
-	lhc_assign_interface("ISolid", obj_Tile, obj_Gadora);
-	lhc_assign_interface("INPCSolid", obj_NPCTile, obj_SaveStation);
-	lhc_assign_interface("IMovingSolid", obj_MovingTile);
-	lhc_assign_interface("ISlope", obj_Slope, obj_Slope_4th, obj_NPCSlope, obj_NPCSlope_4th, obj_MovingSlope, obj_MovingSlope_4th);
-	lhc_assign_interface("IPlatform", obj_Platform);
-	lhc_assign_interface("IGrapplePoint", obj_GrappleBlock, obj_GrappleBlockCracked, obj_PushBlock_Grapple, obj_PushBall_Grapple, obj_GrappleRipper);
-	lhc_assign_interface("IBreakable", obj_Breakable);
-	lhc_assign_interface("ISpeedBlock", obj_ShotBlock, obj_BombBlock, obj_SpeedBlock);
-	lhc_assign_interface("IScrewBlock", obj_ShotBlock, obj_BombBlock, obj_ScrewBlock);
+	global.colArr_Player = [obj_Player];
+	global.colArr_Solid = [obj_Tile, obj_Gadora];
+	global.colArr_SolidSlope = [obj_Slope, obj_Slope_4th];
+	global.colArr_NPCSolid = [obj_NPCTile, obj_SaveStation];
+	global.colArr_NPCSolidSlope = [obj_NPCSlope, obj_NPCSlope_4th];
+	global.colArr_MovingSolid = [obj_MovingTile];
+	global.colArr_MovingSolidSlope = [obj_MovingSlope, obj_MovingSlope_4th];
+	global.colArr_Platform = [obj_Platform];
+	global.colArr_GrapplePoint = [obj_GrappleBlock, obj_GrappleBlockCracked, obj_PushBlock_Grapple, obj_PushBall_Grapple, obj_GrappleRipper];
+	global.colArr_Breakable = [obj_Breakable];
+	global.colArr_SpeedBlock = [obj_ShotBlock, obj_BombBlock, obj_SpeedBlock];
+	global.colArr_ScrewBlock = [obj_ShotBlock, obj_BombBlock, obj_ScrewBlock];
 	
 	chameleon_init();
 }

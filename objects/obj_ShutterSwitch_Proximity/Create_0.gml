@@ -1,6 +1,5 @@
 /// @description 
 event_inherited();
-lhc_activate();
 
 sizeX = 120;
 sizeY = 120;
@@ -49,10 +48,10 @@ function GetPlayer()
 		var colFlag = false;
 		
 		var center = player.Center();
-		var num = collision_line_list(center.X,center.Y,x,y,all,true,true,blockList,true);
+		var num = collision_line_list(center.X,center.Y,x,y,player.solids,true,true,blockList,true);
 		for(var i = 0; i < num; i++)
 		{
-			if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,player.solids,asset_object))
+			if(instance_exists(blockList[| i]))
 			{
 				var block = blockList[| i];
 				var gflag = false;

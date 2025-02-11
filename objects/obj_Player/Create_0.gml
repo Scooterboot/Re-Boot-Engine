@@ -65,6 +65,10 @@ shineSparkRedirect = false;
 // To still use Chain Spark, press in the direction of the wall you're sliding on to initiate
 diagSparkSlideOnWalls = true;
 
+// Allow downward diagonal sparks to transfer to speed boost upon hitting flat ground
+// Disabled by default because it is overpowered (requires Chain Spark)
+diagDownSparkTransferBoost = false;
+
 // Re-charge a new shine spark during chain spark wall jumping
 // Press toward wall and down
 chainSparkReCharge = false;
@@ -371,6 +375,8 @@ grapWJCounter = 0;
 grapWallBounceCounter = 0;
 prevGrapVelocity = 0;
 
+grapReticle = noone;
+
 cFlashStartCounter = 0;
 cFlashStartMove = 0;
 cFlashDuration = 0;
@@ -406,7 +412,7 @@ enum MaxSpeed
 // Out of water (or in water with grav suit)
 maxSpeed[0,0] = 2.75;	// Running
 maxSpeed[1,0] = 4.75;	// Sprinting (no speed boost)
-maxSpeed[2,0] = 9.75;	// Speed Boosting
+maxSpeed[2,0] = 10.0;	// Speed Boosting	- (SM: 9.75)
 maxSpeed[3,0] = 1.25;	// Jump
 maxSpeed[4,0] = 1.875;	// Somersault	 - (SM: 1.375)
 maxSpeed[5,0] = 3.25;	// Morph Ball
@@ -1197,7 +1203,7 @@ function entity_collision(listNum)
 	{
 		for(var i = 0; i < listNum; i++)
 		{
-			if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object))
+			if(instance_exists(blockList[| i]))
 			{
 				var block = blockList[| i];
 				var isSolid = true;
@@ -1209,8 +1215,8 @@ function entity_collision(listNum)
 						isSolid = false;
 					}
 				}
-				var sp = (asset_has_any_tag(block.object_index, "ISpeedBlock", asset_object) && isSpeedBoosting && shineStart <= 0 && shineLauncherStart <= 0),
-					sc = (asset_has_any_tag(block.object_index, "IScrewBlock", asset_object) && isScrewAttacking);
+				var sp = (object_is_in_array(block.object_index, global.colArr_SpeedBlock) && isSpeedBoosting && shineStart <= 0 && shineLauncherStart <= 0),
+					sc = (object_is_in_array(block.object_index, global.colArr_ScrewBlock) && isScrewAttacking);
 				if(isSolid && !sp && !sc)
 				{
 					ds_list_clear(blockList);
@@ -1386,11 +1392,11 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		var bbottom = bb_bottom(),
 			bright = bb_right(),
 			bleft = bb_left();
-		if(fVelX > 0 && !entity_collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1) && !lhc_collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1,"IPlatform",true,true))
+		if(fVelX > 0 && !entity_collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1) && !collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1,global.colArr_Platform,true,true))
 		{
 			flag = true;
 		}
-		if(fVelX < 0 && !entity_collision_line(bleft+fVX+fVelX,y+yShift,bleft+fVX+fVelX,bbottom+yShift+1) && !lhc_collision_line(bleft+fVX+fVelX,y+yShift,bleft+fVX+fVelX,bbottom+yShift+1,"IPlatform",true,true))
+		if(fVelX < 0 && !entity_collision_line(bleft+fVX+fVelX,y+yShift,bleft+fVX+fVelX,bbottom+yShift+1) && !collision_line(bleft+fVX+fVelX,y+yShift,bleft+fVX+fVelX,bbottom+yShift+1,global.colArr_Platform,true,true))
 		{
 			flag = true;
 		}
@@ -1439,7 +1445,7 @@ function OnYCollision(fVY)
 {
 	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0)
 	{
-		if(abs(GetSparkDir()) <= 90 && !SparkDir_VertDown() && !entity_place_collide(3*sign(velX),0))
+		if(abs(GetSparkDir()) <= 90 && !SparkDir_VertDown() && !entity_place_collide(3*sign(velX),0) && (diagDownSparkTransferBoost || (!entity_place_collide(3*sign(velX),1) && entity_place_collide(1*sign(velX),2))))
 		{
 			shineEnd = 0;
 			shineDir = 0;
@@ -1933,11 +1939,11 @@ function MoveStick_CheckPGrip(_dir, movingTile)
 				cX -= climbX[floor(i)] * _dir;
 				cY += climbY[floor(i)];
 			}
-			return lhc_collision_line(lcheck+cX, y-17+cY, rcheck+cX, y-17+cY, "IMovingSolid", true, true);
+			return collision_line(lcheck+cX, y-17+cY, rcheck+cX, y-17+cY, global.colArr_MovingSolid, true, true);
 		}
 		else
 		{
-			return lhc_collision_line(lcheck, y-17, rcheck, y-17, "IMovingSolid", true, true);
+			return collision_line(lcheck, y-17, rcheck, y-17, global.colArr_MovingSolid, true, true);
 		}
 	}
 	return false;
@@ -2017,7 +2023,7 @@ function CanChangeState(newMask)
 			checkYBottom = 0;
 		for(var i = 0; i < newBottom-curBottom; i++)
 		{
-			if((entity_place_collide(0,checkYBottom) || (onPlatform && lhc_place_meeting(position.X,position.Y+checkYBottom,"IPlatform"))) && !entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
+			if((entity_place_collide(0,checkYBottom) || (onPlatform && place_meeting(position.X,position.Y+checkYBottom,global.colArr_Platform))) && !entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
 			{
 				checkYBottom--;
 			}
@@ -2035,7 +2041,7 @@ function CanChangeState(newMask)
 		{
 			flag = true;
 		}
-		if(!entity_place_collide(0,checkYTop) && (!onPlatform || !lhc_place_meeting(position.X,position.Y+checkYTop,"IPlatform")))
+		if(!entity_place_collide(0,checkYTop) && (!onPlatform || !place_meeting(position.X,position.Y+checkYTop,global.colArr_Platform)))
 		{
 			flag = true;
 		}
@@ -2073,7 +2079,7 @@ function ChangeState(newState,newStateFrame,newMask,isGrounded,stallCam = true)
 		{
 			if(newBottom-curBottom > 0)
 			{
-				if((entity_place_collide(0,checkYBottom) || (onPlatform && lhc_place_meeting(position.X,position.Y+checkYBottom,"IPlatform"))) && !entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
+				if((entity_place_collide(0,checkYBottom) || (onPlatform && place_meeting(position.X,position.Y+checkYBottom,global.colArr_Platform))) && !entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
 				{
 					checkYBottom--;
 				}
@@ -2188,6 +2194,18 @@ function PlayerGrounded(ydiff = 1)
 	if(entity_place_collide(0,ydiff) && (!entity_place_collide(0,0) || colB))
 	{
 		bottomCollision = true;
+	}
+	
+	if(bottomCollision)
+	{
+		if(entity_place_collide(1,-1) && !entity_place_collide(-1,2))
+		{
+			downSlopeFlag = true;
+		}
+		if(entity_place_collide(-1,-1) && !entity_place_collide(1,2))
+		{
+			downSlopeFlag = true;
+		}
 	}
 	
 	if(velY >= 0 && velY <= fGrav && jump <= 0)

@@ -12,6 +12,18 @@ var beamNum = (hasBeam[Beam.Ice]+hasBeam[Beam.Wave]+hasBeam[Beam.Spazer]+hasBeam
 
 if(!global.roomTrans && !obj_PauseMenu.pause)
 {
+	if(item[Item.Grapple] && itemSelected == 1 && itemHighlighted[1] == 3)
+	{
+		if(!instance_exists(grapReticle))
+		{
+			grapReticle = instance_create_depth(x,y,-4,obj_GrappleTargetAssist);
+		}
+	}
+	else if(instance_exists(grapReticle))
+	{
+		instance_destroy(grapReticle);
+	}
+	
 	if(global.HUD == 0)
 	{
 		itemHighlighted[0] = 0;

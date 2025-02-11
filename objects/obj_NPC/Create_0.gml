@@ -376,9 +376,7 @@ function _NPCDropItem(_x,_y)
 	return noone;
 }
 
-solids[0] = "ISolid";
-solids[1] = "IMovingSolid";
-solids[2] = "INPCSolid";
+solids = array_concat(global.colArr_Solid,global.colArr_MovingSolid,global.colArr_NPCSolid);
 
 function OnXCollision(fVX)
 {

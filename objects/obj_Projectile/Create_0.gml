@@ -188,14 +188,14 @@ function entity_place_collide()
 		}
 	}
 	
-	return entity_collision(instance_place_list(xx+offsetX,yy+offsetY,all,blockList,true));
+	return entity_collision(instance_place_list(xx+offsetX,yy+offsetY,solids,blockList,true));
 }
 
 function entity_collision(listNum)
 {
 	for(var i = 0; i < listNum; i++)
 	{
-		if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object))
+		if(instance_exists(blockList[| i]))
 		{
 			var block = blockList[| i];
 			var isSolid = true;

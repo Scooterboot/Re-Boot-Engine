@@ -25,9 +25,9 @@ buttonList = ds_list_create();
 
 function CreateButton(_x, _y, _width, _height, _text = "")
 {
-	var btn = instance_create_depth(_x, _y, depth, obj_UI_Button);
-	btn.width = _width;
-	btn.height = _height;
+	var btn = instance_create_depth(scr_floor(_x), scr_floor(_y), depth, obj_UI_Button);
+	btn.width = scr_ceil(_width);
+	btn.height = scr_ceil(_height);
 	btn.text = _text;
 	btn.panel = id;
 	btn.creator = creator;
@@ -70,7 +70,7 @@ function UpdatePanel()
 		var _btn = buttonList[| i];
 		if(instance_exists(_btn))
 		{
-			if(selectedButton == noone)
+			if(!instance_exists(selectedButton))
 			{
 				selectedButton = _btn;
 			}
@@ -109,4 +109,11 @@ function UpdatePanel()
 }
 
 panelSurf = noone;
-function DrawPanel(_x, _y) {}
+function DrawPanel(_x, _y)
+{
+	for(var i = 0; i < ds_list_size(buttonList); i++)
+	{
+		var btn = buttonList[| i];
+		btn.DrawButton(btn.GetX(),btn.GetY());
+	}
+}

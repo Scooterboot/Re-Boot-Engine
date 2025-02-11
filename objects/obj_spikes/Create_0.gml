@@ -1,5 +1,6 @@
 /// @description Initialize
-event_inherited();
+event_perform_object(obj_Breakable,ev_create,0);
+
 snd = noone;
 respawnTime = 0;
 asset_remove_tags(object_get_name(object_index),"ISolid",asset_object);

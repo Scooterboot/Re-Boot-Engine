@@ -50,8 +50,12 @@ function bb_bottom()
 }
 #endregion
 
-function Center()
+function Center(useRealXY = false)
 {
+	if(useRealXY)
+	{
+		return new Vector2(bb_left(x) + (bb_right(x)-bb_left(x))/2, bb_top(y) + (bb_bottom(y)-bb_top(y))/2);
+	}
 	return new Vector2(bb_left() + (bb_right()-bb_left())/2, bb_top() + (bb_bottom()-bb_top())/2);
 }
 
@@ -76,10 +80,8 @@ colEdge = Edge.Bottom;
 
 grounded = false;
 
-lhc_activate();
+solids = array_concat(global.colArr_Solid, global.colArr_MovingSolid);
 
-solids[0] = "ISolid";
-solids[1] = "IMovingSolid";
 function CanPlatformCollide()
 {
 	return false;
@@ -111,7 +113,7 @@ function entity_place_collide()
 		}
 	}
 	
-	if(lhc_place_meeting(xx+offsetX,yy+offsetY,"IPlatform") && CanPlatformCollide())
+	if(place_meeting(xx+offsetX,yy+offsetY,global.colArr_Platform) && CanPlatformCollide())
 	{
 		if(entityPlatformCheck(offsetX,offsetY,xx,yy))
 		{
@@ -119,7 +121,7 @@ function entity_place_collide()
 		}
 	}
 	
-	return entity_collision(instance_place_list(xx+offsetX,yy+offsetY,all,blockList,true));
+	return entity_collision(instance_place_list(xx+offsetX,yy+offsetY,solids,blockList,true));
 }
 
 function entity_position_collide()
@@ -143,16 +145,16 @@ function entity_position_collide()
 		}
 	}
 	
-	return entity_collision(instance_position_list(xx+offsetX,yy+offsetY,all,blockList,true));
+	return entity_collision(instance_position_list(xx+offsetX,yy+offsetY,solids,blockList,true));
 }
 
 function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
 {
-	return entity_collision(collision_line_list(x1,y1,x2,y2,all,prec,notme,blockList,true));
+	return entity_collision(collision_line_list(x1,y1,x2,y2,solids,prec,notme,blockList,true));
 }
 function entity_collision_rectangle(x1,y1,x2,y2, prec = true, notme = true)
 {
-	return entity_collision(collision_rectangle_list(x1,y1,x2,y2,all,prec,notme,blockList,true));
+	return entity_collision(collision_rectangle_list(x1,y1,x2,y2,solids,prec,notme,blockList,true));
 }
 
 function entity_collision(listNum)
@@ -161,7 +163,7 @@ function entity_collision(listNum)
 	{
 		for(var i = 0; i < listNum; i++)
 		{
-			if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object))
+			if(instance_exists(blockList[| i]))
 			{
 				var block = blockList[| i];
 				var isSolid = true;
@@ -205,12 +207,12 @@ function entityPlatformCheck()
 		}
 	}
 	
-	if(lhc_place_meeting(xx+offsetX,yy+offsetY,"IPlatform"))
+	if(place_meeting(xx+offsetX,yy+offsetY,global.colArr_Platform))
 	{
-		var pl = instance_place_list(xx+offsetX,yy+offsetY,all,blockList,true);
+		var pl = instance_place_list(xx+offsetX,yy+offsetY,global.colArr_Platform,blockList,true);
 		for(var i = 0; i < pl; i++)
 		{
-			if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,"IPlatform",asset_object))
+			if(instance_exists(blockList[| i]))
 			{
 				var platform = blockList[| i];
 				if(platform.isSolid && place_meeting(xx+offsetX,yy+offsetY,platform) && !place_meeting(xx,yy,platform) && bb_bottom(yy) < platform.bbox_top)
@@ -1891,7 +1893,7 @@ function ToggleSwitch(_x,_y,_objIndex)
 						center = Center();
 					with(sSwitch)
 					{
-						if(lhc_collision_line(center.X,center.Y,x,y,entity.solids,true,true))
+						if(collision_line(center.X,center.Y,x,y,entity.solids,true,true))
 						{
 							flag = false;
 						}
@@ -2053,6 +2055,237 @@ function EntityLiquid_Large(_velX, _velY)
 	}
 	
 	stepSplash = max(stepSplash-1,0);
+}
+
+#endregion
+
+
+// WIP
+npcList = ds_list_create();
+#region DamageNPC
+
+function DamageNPC(_colNum, _dmg, _dmgType, _dmgSubType, _freezeType, _freezeMax, _deathType, _invFrames)
+{
+	///@description scr_DamageNPC
+	///@param collision_list_num
+	///@param damage
+	///@param damageType
+	///@param damageSubType
+	///@param freezeType
+	///@param freezeMax
+	///@param deathType
+	///@param npcInvFrames
+	
+	if(_colNum > 0)
+	{
+		var isProjectile = object_is_ancestor(object_index,obj_Projectile);
+		
+		for(var i = 0; i < _colNum; i++)
+		{
+			var npc = npcList[| i];
+			if(!instance_exists(npc) || npc.dead || npc.immune)
+			{
+				continue;
+			}
+			if(npc.friendly && isProjectile && !hostile)
+			{
+				continue;
+			}
+			
+			var dmgMult = 0;
+			var arrLength = 5;
+			if(_dmgType == DmgType.Explosive)
+			{
+				arrLength = 4;
+			}
+			for(var d = 1; d <= arrLength; d++)
+			{
+				if(_dmgSubType[d])
+				{
+					dmgMult = max(dmgMult, npc.dmgMult[_dmgType][d]);
+				}
+			}
+			dmgMult *= npc.dmgMult[_dmgType][0];
+			if(_dmgType == DmgType.Explosive && _dmgSubType[5])
+			{
+				dmgMult *= npc.dmgMult[_dmgType][5];
+			}
+			
+			_dmg *= dmgMult;
+			
+			_dmg = npc.ModifyDamageTaken(_dmg,id,isProjectile);
+			if(isProjectile)
+			{
+				_dmg = ModifyDamageNPC(_dmg,npc);
+			}
+			
+			if(isProjectile && !CanDamageNPC(_dmg,npc))
+			{
+				continue;
+			}
+			
+			var partSys = obj_Particles.partSystemA,
+				partEmit = obj_Particles.partEmitA,
+				partX1 = posX+(bbox_left-x)+4,
+				partX2 = posX+(bbox_right-x)-4,
+				partY1 = posY+(bbox_top-y)+4,
+				partY2 = posY+(bbox_bottom-y)-4;
+			if(isProjectile)
+			{
+				part_emitter_region(partSys,partEmit,partX1,partX2,partY1,partY2,ps_shape_ellipse,ps_distr_linear);
+			}
+			
+			if(_dmg > 0)
+			{
+				if(!isProjectile || (npcInvFrames[i] <= 0))// && impacted <= 0))
+				{
+					var lifeEnd = 0;
+					if(!npc.freezeImmune && ((freezeType == 1 && npc.life <= (_dmg*2)) || freezeType == 2))
+					{
+						if(npc.frozen <= 0)
+						{
+							lifeEnd = 1;
+							audio_stop_sound(snd_FreezeNPC);
+							audio_play_sound(snd_FreezeNPC,0,false);
+						}
+						npc.frozen = freezeMax;
+						if(isProjectile)
+						{
+							part_emitter_burst(partSys,partEmit,obj_Particles.partFreeze,21*(1+isCharge));
+							
+							if(freezeKill)
+							{
+								lifeEnd = 0;
+							}
+						}
+					}
+					if(npc.frozenInvFrames <= 0)
+					{
+						if(!npc.freezeImmune && freezeType > 0 && npc.life <= (_dmg*2))
+						{
+							npc.frozenInvFrames = _invFrames;
+						}
+						
+						npc.StrikeNPC(_dmg, dmgType, dmgSubType, lifeEnd, deathType);
+						
+						npc.OnDamageTaken(_dmg,id,isProjectile);
+						if(isProjectile)
+						{
+							OnDamageNPC(_dmg,npc);
+						}
+					}
+					if(isProjectile && particleType != -1)
+					{
+						part_emitter_burst(partSys,partEmit,obj_Particles.bTrails[particleType],7*(1+isCharge));
+					}
+				}
+				if(isProjectile && particleType != -1 && multiHit)
+				{
+					part_emitter_burst(partSys,partEmit,obj_Particles.bTrails[particleType],(1+isCharge));
+				}
+			}
+			else if(isProjectile)
+			{
+				if(freezeType > 0 && !npc.freezeImmune)
+				{
+					if(npc.frozen <= 0)
+					{
+						audio_stop_sound(snd_FreezeNPC);
+						audio_play_sound(snd_FreezeNPC,0,false);
+					}
+					npc.frozen = freezeMax;
+                        
+					part_emitter_burst(partSys,partEmit,obj_Particles.partFreeze,21*(1+isCharge));
+				}
+				else if(dmgType != DmgType.Explosive || !dmgSubType[5])
+				{
+					if(npc.dmgAbsorb)
+					{
+						if(impacted <= 0)
+						{
+							npc.OnDamageAbsorbed(_damage,id,isProjectile);
+							
+							audio_stop_sound(snd_ProjAbsorbed);
+							audio_play_sound(snd_ProjAbsorbed,0,false);
+							
+							part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.partAbsorb,1);
+							
+							if(!multiHit)
+							{
+								//instance_destroy();
+								impacted = max(impacted,1);
+							}
+						}
+					}
+					else if(!reflected || multiHit)
+					{
+						reflected = true;
+						
+						audio_stop_sound(snd_Reflect);
+						audio_play_sound(snd_Reflect,0,false);
+						
+						part_emitter_burst(partSys,partEmit,obj_Particles.partDeflect,42);
+					}
+				}
+				
+				if(particleType != -1)
+				{
+					var partAmt = 7*(1+isCharge);
+					if(multiHit)
+					{
+						partAmt = (1+isCharge);
+					}
+					part_emitter_burst(partSys,partEmit,obj_Particles.bTrails[particleType],partAmt);
+				}
+			}
+			
+			if(isProjectile && (_dmg > 0 || !npc.dmgAbsorb))
+			{
+				if(_dmg > 0 && npcInvFrames[i] <= 0)
+				{
+					npcInvFrames[i] = _invFrames;
+					
+					for(var j = 0; j < instance_number(obj_NPC); j++)
+					{
+						var rlnpc = instance_find(obj_NPC,j);
+						if(!instance_exists(rlnpc) || rlnpc.dead || rlnpc.immune)
+						{
+							continue;
+						}
+						
+						if(rlnpc.realLife == npc)
+						{
+							npcInvFrames[j] = _invFrames;
+						}
+						else if(instance_exists(npc.realLife) && rlnpc == npc.realLife)
+						{
+							npcInvFrames[j] = _invFrames;
+							break;
+						}
+					}
+				}
+				
+				if(!multiHit)
+				{
+					//instance_destroy();
+					impacted = max(impacted,1);
+					//damage = 0;
+					//break;
+				}
+			}
+			else if(object_index == obj_Player)
+			{
+				if(isChargeSomersaulting && !isSpeedBoosting && !isScrewAttacking && dmgType == 1 && _dmg > 0)
+				{
+					statCharge = 0;
+					if(!npc.dead)
+					{
+						audio_play_sound(snd_InstaKillNPC_Failed,0,false);
+					}
+				}
+			}
+		}
+	}
 }
 
 #endregion

@@ -485,6 +485,12 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 		ChangeState(State.Morph,State.Morph,mask_Player_Morph,grounded);
 		morphFrame = 8;
 	}
+	
+	dir2 = dir;
+	if(stateFrame == State.Grip)
+	{
+		dir2 = -dir;
+	}
 
 #region Aim Control
 	prAngle = ((cAngleUp && rAngleUp) || (cAngleDown && rAngleDown));
@@ -681,6 +687,46 @@ if(xRayActive)
 {
 	exit;
 }
+
+#region Shoot direction
+	if(aimAngle == 0)
+	{
+		shootDir = 0;
+		if(dir2 == -1)
+		{
+			shootDir = 180;
+		}
+	}
+	else if(aimAngle == 1)
+	{
+		shootDir = 45;
+		if(dir2 == -1)
+		{
+			shootDir = 135;
+		}
+	}
+	else if(aimAngle == -1)
+	{
+		shootDir = 315;
+		if(dir2 == -1)
+		{
+			shootDir = 225;
+		}
+	}
+	else if(aimAngle == 2)
+	{
+		shootDir = 90;
+	}
+	else if(aimAngle == -2)
+	{
+		shootDir = 270;
+	}
+	
+	if(instance_exists(grapReticle) && is_struct(grapReticle.targetPoint))
+	{
+		shootDir = grapReticle.adjustedShootDir;
+	}
+#endregion
 
 #region Horizontal Movement
 
@@ -1169,7 +1215,7 @@ if(xRayActive)
 	if(state == State.Jump || state == State.Somersault)
 	{
 		var detectRange = 8 + abs(prevVelX);
-		canWallJump = (move != 0 && (entity_place_collide(velX-detectRange*move,0) || lhc_place_meeting(position.X+velX-detectRange*move,position.Y,"IPlatform")) && wjFrame <= 0 && coyoteJump <= 0);
+		canWallJump = (move != 0 && (entity_place_collide(velX-detectRange*move,0) || place_meeting(position.X+velX-detectRange*move,position.Y,global.colArr_Platform)) && wjFrame <= 0 && coyoteJump <= 0);
 	}
 	else
 	{
@@ -1943,11 +1989,11 @@ if(xRayActive)
 			}
 			
 			var canGrip = true;
-			var num = instance_place_list(x+move2,y,all,blockList,true);
-				num += collision_line_list(lcheck,y-17,rcheck,y-17,all,true,true,blockList,true);
+			var num = instance_place_list(x+move2,y,solids,blockList,true);
+				num += collision_line_list(lcheck,y-17,rcheck,y-17,solids,true,true,blockList,true);
 			for(var i = 0; i < num; i++)
 			{
-				if (instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object))
+				if (instance_exists(blockList[| i]))
 				{
 					var block = blockList[| i];
 					if (block.object_index == obj_Tile || object_is_ancestor(block.object_index,obj_Tile) ||
@@ -2378,11 +2424,11 @@ if(xRayActive)
 		jump = 0;
 	}
 	
-	var colL = lhc_collision_line(bb_left()+1,bb_top(),bb_left()+1,bb_bottom(),"IMovingSolid",true,true),
-		colR = lhc_collision_line(bb_right()-1,bb_top(),bb_right()-1,bb_bottom(),"IMovingSolid",true,true),
-		colT = lhc_collision_line(bb_left(),bb_top()+1,bb_right(),bb_top()+1,"IMovingSolid",true,true),
-		colB = lhc_collision_line(bb_left(),bb_bottom()-1,bb_right(),bb_bottom()-1,"IMovingSolid",true,true);
-	if (lhc_place_meeting(position.X,position.Y,"IMovingSolid") && (state != State.Grip || !startClimb) && colL+colR+colT+colB >= 4)
+	var colL = instance_exists(collision_line(bb_left()+1,bb_top(),bb_left()+1,bb_bottom(),global.colArr_MovingSolid,true,true)),
+		colR = instance_exists(collision_line(bb_right()-1,bb_top(),bb_right()-1,bb_bottom(),global.colArr_MovingSolid,true,true)),
+		colT = instance_exists(collision_line(bb_left(),bb_top()+1,bb_right(),bb_top()+1,global.colArr_MovingSolid,true,true)),
+		colB = instance_exists(collision_line(bb_left(),bb_bottom()-1,bb_right(),bb_bottom()-1,global.colArr_MovingSolid,true,true));
+	if (place_meeting(position.X,position.Y,global.colArr_MovingSolid) && (state != State.Grip || !startClimb) && colL+colR+colT+colB >= 4)
 	{
 		passthru = min(passthru+1,passthruMax);
 	}
@@ -2393,13 +2439,11 @@ if(xRayActive)
 	passthroughMovingSolids = (passthru >= passthruMax);
 	if(passthroughMovingSolids)
 	{
-		array_resize(solids,1);
-		solids[0] = "ISolid";
+		solids = global.colArr_Solid;
 	}
 	else
 	{
-		solids[0] = "ISolid";
-		solids[1] = "IMovingSolid";
+		solids = array_concat(global.colArr_Solid, global.colArr_MovingSolid);
 	}
 	
 #endregion
@@ -3209,10 +3253,10 @@ if(xRayActive)
 		}
 		
 		var colFlag = false;
-		var sColNum = collision_point_list(x+6*dir,y-18,obj_Slope,true,true,blockList,true);
+		var sColNum = collision_point_list(x+6*dir,y-18, array_concat(global.colArr_SolidSlope,global.colArr_MovingSolidSlope), true,true,blockList,true);
 		for(var i = 0; i < sColNum; i++)
 		{
-			if(instance_exists(blockList[| i]) && asset_has_any_tag(blockList[| i].object_index,solids,asset_object) && asset_has_any_tag(blockList[| i].object_index,"ISlope",asset_object))
+			if(instance_exists(blockList[| i]))
 			{
 				colFlag = true;
 				var sCol = blockList[| i];
@@ -3224,7 +3268,7 @@ if(xRayActive)
 		}
 		ds_list_clear(blockList);
 		
-		if((!entity_place_collide(2*dir,0) && !entity_place_collide(2*dir,4) && !entity_place_collide(0,2)) || (entity_position_collide(6*dir,-19) && !startClimb) || (colFlag && !startClimb) || (cDown && cJump && rJump) || (lhc_place_meeting(x,y,"IMovingSolid") && !startClimb))
+		if((!entity_place_collide(2*dir,0) && !entity_place_collide(2*dir,4) && !entity_place_collide(0,2)) || (entity_position_collide(6*dir,-19) && !startClimb) || (colFlag && !startClimb) || (cDown && cJump && rJump) || (place_meeting(x,y,global.colArr_MovingSolid) && !startClimb))
 		{
 			breakGrip = true;
 		}
@@ -3336,7 +3380,7 @@ if(xRayActive)
 					shineDir = 180;
 				}
 			}
-			if((entity_place_collide(0,4) || (onPlatform && lhc_place_meeting(x,y+4,"IPlatform"))) && (!entity_place_collide(0,-1) || entity_place_collide(0,0)))
+			if((entity_place_collide(0,4) || (onPlatform && place_meeting(x,y+4,global.colArr_Platform))) && (!entity_place_collide(0,-1) || entity_place_collide(0,0)))
 			{
 				position.Y -= 1;
 				y = scr_round(position.Y);
@@ -3945,6 +3989,13 @@ if(xRayActive)
 			velY = 0;
 			hurtTime = max(hurtTime - 1, 0);
 		}
+		
+		if(!speedBoost)
+		{
+			speedCounter = 0;
+			speedBuffer = 0;
+			speedBufferCounter = 0;
+		}
 	}
 	else
 	{
@@ -4292,6 +4343,155 @@ if(xRayActive)
 		cFlashPalNum = 1;
 		
 		cBubbleScale = max(cBubbleScale-0.075,0);
+	}
+#endregion
+
+#region Set Shoot Pos
+	shotOffsetX = 0;
+	shotOffsetY = 0;
+	
+	if(stateFrame == State.Stand || stateFrame == State.Crouch)
+	{
+		switch aimAngle
+		{
+			case 2:
+			{
+				shotOffsetX = 2*dir2;
+				shotOffsetY = -28;
+				break;
+			}
+			case 1:
+			{
+				shotOffsetX = 21*dir2;
+				shotOffsetY = -(21 + (dir == -1));
+				break;
+			}
+			case -1:
+			{
+				shotOffsetX = 20*dir2;
+				shotOffsetY = 10;
+				break;
+			}
+			case -2:
+			{
+				shotOffsetX = (8+(dir == -1))*dir2;
+				shotOffsetY = 19;
+				break;
+			}
+			default:
+			{
+				shotOffsetX = 15*dir2;
+				shotOffsetY = 1;
+				break;
+			}
+		}
+	}
+	if(stateFrame == State.Walk || stateFrame == State.Moon || stateFrame == State.Run || stateFrame == State.Brake || stateFrame == State.Jump || stateFrame == State.Somersault ||
+	stateFrame == State.Spark || stateFrame == State.Hurt || stateFrame == State.DmgBoost)
+	{
+		switch aimAngle
+		{
+			case 2:
+			{
+				shotOffsetX = 2*dir2;
+				shotOffsetY = -28;
+				break;
+			}
+			case 1:
+			{
+				shotOffsetX = 17*dir2;
+				shotOffsetY = -20;
+				if(stateFrame == State.Run)
+				{
+					shotOffsetX = 19*dir2;
+					shotOffsetY = -21;
+				}
+				break;
+			}
+			case -1:
+			{
+				shotOffsetX = 18*dir2;
+				shotOffsetY = 8;
+				break;
+			}
+			case -2:
+			{
+				shotOffsetX = (7+(dir == -1))*dir2;
+				shotOffsetY = 19;
+				break;
+			}
+			default:
+			{
+				shotOffsetX = 15*dir2;
+				shotOffsetY = 1;
+				if(stateFrame == State.Walk || stateFrame == State.Run)
+				{
+					shotOffsetX = (21+(stateFrame == State.Run))*dir2;
+					shotOffsetY = -2;
+				}
+				break;
+			}
+		}
+	}
+	if(stateFrame == State.Grip)
+	{
+		switch aimAngle
+		{
+			case 2:
+			{
+				shotOffsetX = 13*dir2;
+				shotOffsetY = -31;
+				if(dir == -1)
+				{
+					shotOffsetX = 12*dir2;
+				}
+				break;
+			}
+			case 1:
+			{
+				shotOffsetX = 28*dir2;
+				shotOffsetY = -22;
+				if(dir == -1)
+				{
+					shotOffsetX = 27*dir2;
+					shotOffsetY = -22;
+				}
+				break;
+			}
+			case -1:
+			{
+				shotOffsetX = 27*dir2;
+				shotOffsetY = 9;
+				if(dir == -1)
+				{
+					shotOffsetX = 25*dir2;
+					shotOffsetY = 10;
+				}
+				break;
+			}
+			case -2:
+			{
+				shotOffsetX = 11*dir2;
+				shotOffsetY = 17;
+				if(dir == -1)
+				{
+					shotOffsetX = 10*dir2;
+					shotOffsetY = 18;
+				}
+				break;
+			}
+			default:
+			{
+				shotOffsetX = 30*dir2;
+				shotOffsetY = -6;
+				if(dir == -1)
+				{
+					shotOffsetX = 32*dir2;
+					shotOffsetY = -8;
+				}
+				break;
+			}
+		}
 	}
 #endregion
 

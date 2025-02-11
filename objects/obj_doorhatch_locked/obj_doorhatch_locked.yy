@@ -37,6 +37,9 @@
     "name":"sprt_DoorHatch_Locked",
     "path":"sprites/sprt_DoorHatch_Locked/sprt_DoorHatch_Locked.yy",
   },
-  "spriteMaskId":null,
+  "spriteMaskId":{
+    "name":"mask_DoorHatch",
+    "path":"sprites/mask_DoorHatch/mask_DoorHatch.yy",
+  },
   "visible":true,
 }

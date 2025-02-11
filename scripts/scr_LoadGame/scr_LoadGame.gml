@@ -28,8 +28,6 @@ function scr_LoadGame()
 		
 			with(instance_create_layer(_map[? "x"],_map[? "y"],"Player",obj_Player))
 			{
-				lhc_activate();
-			
 				energyMax = _map[? "energyMax"];
 				energy = _map[? "energy"];
 				missileMax = _map[? "missileMax"];
@@ -139,10 +137,7 @@ function scr_LoadGame()
 		room_goto(rm_debugRedBrin_Start);
 		var sx = 80,
 			sy = 694;
-		with(instance_create_layer(sx,sy,"Player",obj_Player))
-		{
-			lhc_activate();
-		}
+		instance_create_layer(sx,sy,"Player",obj_Player);
 		instance_create_layer(sx-(global.resWidth/2),sy-(global.resHeight/2),"Camera",obj_Camera);
 		
 		for(var i = 0; i < array_length(global.mapArea); i++)

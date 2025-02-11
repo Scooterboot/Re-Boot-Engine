@@ -127,7 +127,8 @@ function xray_redraw_alpha()
 	}
 	with (obj_DoorHatch)
 	{
-		draw_sprite_ext(sprite_index,5,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
+		//draw_sprite_ext(sprite_index,4,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
+		draw_sprite_ext(mask_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
 	}
 	with (obj_Door)
 	{
@@ -207,7 +208,8 @@ function xray_redraw_outline()
 	}
 	with (obj_DoorHatch)
 	{
-		draw_sprite_ext(sprite_index,5,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
+		//draw_sprite_ext(sprite_index,5,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
+		draw_sprite_ext(mask_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
 		
 		var door = instance_place(x-lengthdir_x(image_xscale*2,image_angle),y-lengthdir_y(image_xscale*2,image_angle),obj_Door);
 		if(instance_exists(door))

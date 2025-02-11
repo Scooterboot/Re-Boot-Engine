@@ -6,3 +6,4 @@ timeLeft = 300;
 respawnTime = 20;
 
 respawnSprt = sprt_GrappleBlockBreak;
+extSprt = sprt_GrappleBlockCrackedExt;

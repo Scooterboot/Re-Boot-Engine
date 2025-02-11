@@ -66,13 +66,6 @@ function ChangeDir(newDir)
 	}
 }
 
-/*
-array_resize(solids,2);
-solids[0] = "ISolid";
-solids[1] = "INPCSolid";
-passthroughMovingSolids = true;
-*/
-
 function OnXCollision(fVX)
 {
 	ChangeDir(-sign(fVX));

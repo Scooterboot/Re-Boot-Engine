@@ -36,6 +36,9 @@
     "name":"sprt_DoorHatch_Super",
     "path":"sprites/sprt_DoorHatch_Super/sprt_DoorHatch_Super.yy",
   },
-  "spriteMaskId":null,
+  "spriteMaskId":{
+    "name":"mask_DoorHatch",
+    "path":"sprites/mask_DoorHatch/mask_DoorHatch.yy",
+  },
   "visible":true,
 }

@@ -14,8 +14,7 @@ if(state == 0) // idle
 	        var ydif = obj_Player.y-bb_top();
 	        if(obj_Player.bb_right() > bb_left()-((ydif/2)+1) && obj_Player.bb_left() < bb_right()+((ydif/2)+1))
 	        {
-				var tileCheck = lhc_collision_line(x,y,obj_Player.x,obj_Player.y,"ISolid",true,true);
-				if(!tileCheck)
+				if(!collision_line(x,y,obj_Player.x,obj_Player.y,solids,true,true))
 				{
 					state = 1;
 				}
