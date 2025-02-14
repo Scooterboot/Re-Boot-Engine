@@ -1,7 +1,8 @@
 /// @description Initialize
 event_inherited();
 
-doorOpenType = 1;
+doorOpenType[DoorOpenType.Missile] = true;
+blockBreakType[BlockBreakType.Missile] = true;
 
 damageSubType[1] = true;
 
@@ -14,7 +15,7 @@ particleDelay = 1;
 
 function TileInteract(_x,_y)
 {
-	//BreakBlock(_x,_y,blockDestroyType);
+	//BreakBlock(_x,_y,blockBreakType);
 	//OpenDoor(_x,_y,doorOpenType);
 	//ShutterSwitch(_x,_y,doorOpenType);
 }

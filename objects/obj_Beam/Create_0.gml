@@ -42,6 +42,13 @@ damageSubType[3] = isWave;
 damageSubType[4] = isSpazer;
 damageSubType[5] = isPlasma;
 
+blockBreakType[BlockBreakType.Shot] = true;
+doorOpenType[DoorOpenType.Beam] = true;
+doorOpenType[DoorOpenType.Ice] = isIce;
+doorOpenType[DoorOpenType.Wave] = isWave;
+doorOpenType[DoorOpenType.Spazer] = isSpazer;
+doorOpenType[DoorOpenType.Plasma] = isPlasma;
+
 if(isIce)
 {
     freezeType = 1 + isCharge;
@@ -98,7 +105,7 @@ if(isWave)
 		wavesPerSecond = 2.75;
 	}
 	tileCollide = false;
-	switchCollide = false;
+	switchLOSCheck = false;
 }
 else if(isSpazer)
 {

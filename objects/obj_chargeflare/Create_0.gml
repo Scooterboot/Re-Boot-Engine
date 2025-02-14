@@ -16,7 +16,7 @@ multiHit = true;
 tileCollide = false;
 function TileInteract(_x,_y)
 {
-	BreakBlock(_x,_y,blockDestroyType);
+	BreakBlock(_x,_y,blockBreakType);
 	OpenDoor(_x,_y,doorOpenType);
 	//ShutterSwitch(_x,_y,doorOpenType);
 }

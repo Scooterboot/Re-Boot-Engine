@@ -19,39 +19,7 @@ if(instance_exists(player.grapple) && player.grapple.grappleState != GrappleStat
 	exit;
 }
 
-
-if(player.aimAngle == 0)
-{
-	shootDir = 0;
-	if(player.dir2 == -1)
-	{
-		shootDir = 180;
-	}
-}
-else if(player.aimAngle == 1)
-{
-	shootDir = 45;
-	if(player.dir2 == -1)
-	{
-		shootDir = 135;
-	}
-}
-else if(player.aimAngle == -1)
-{
-	shootDir = 315;
-	if(player.dir2 == -1)
-	{
-		shootDir = 225;
-	}
-}
-else if(player.aimAngle == 2)
-{
-	shootDir = 90;
-}
-else if(player.aimAngle == -2)
-{
-	shootDir = 270;
-}
+shootDir = player.GetShootDirection(player.aimAngle, player.dir2);
 
 var pos = GetPlayerPos();
 var pX = pos.X, pY = pos.Y;
@@ -71,9 +39,7 @@ if(num > 0)
 				{
 					for(var yy = 0; yy < gpObj.image_yscale; yy++)
 					{
-						var _gpX = gpObj.x+8 + 16*xx,
-							_gpY = gpObj.y+8 + 16*yy;
-						AddPointToList(_gpX, _gpY);
+						AddPointToList(gpObj.x+8 + 16*xx, gpObj.y+8 + 16*yy);
 					}
 				}
 			}
@@ -150,6 +116,10 @@ else
 
 if(is_struct(targetPoint))
 {
-	var targetDir = point_direction(player.x,player.y, targetPoint.x,targetPoint.y);
-	adjustedShootDir = targetDir;// - player.shootDir;
+	var targetDir = point_direction(player.shootPosX,player.shootPosY, targetPoint.x,targetPoint.y);
+	adjustedShootDir = targetDir - shootDir;
+}
+else
+{
+	adjustedShootDir = 0;
 }

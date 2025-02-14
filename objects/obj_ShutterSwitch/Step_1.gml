@@ -15,3 +15,8 @@ if(!init)
 	
 	init = true;
 }
+
+if(toggled && !place_meeting(x,y,obj_Projectile))
+{
+	toggled = false;
+}

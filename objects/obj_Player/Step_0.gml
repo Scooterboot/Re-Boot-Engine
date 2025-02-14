@@ -689,42 +689,11 @@ if(xRayActive)
 }
 
 #region Shoot direction
-	if(aimAngle == 0)
-	{
-		shootDir = 0;
-		if(dir2 == -1)
-		{
-			shootDir = 180;
-		}
-	}
-	else if(aimAngle == 1)
-	{
-		shootDir = 45;
-		if(dir2 == -1)
-		{
-			shootDir = 135;
-		}
-	}
-	else if(aimAngle == -1)
-	{
-		shootDir = 315;
-		if(dir2 == -1)
-		{
-			shootDir = 225;
-		}
-	}
-	else if(aimAngle == 2)
-	{
-		shootDir = 90;
-	}
-	else if(aimAngle == -2)
-	{
-		shootDir = 270;
-	}
+	shootDir = GetShootDirection(aimAngle,dir2);
 	
-	if(instance_exists(grapReticle) && is_struct(grapReticle.targetPoint))
+	if(instance_exists(grapReticle) && grapReticle.adjustedShootDir != 0)
 	{
-		shootDir = grapReticle.adjustedShootDir;
+		shootDir += grapReticle.adjustedShootDir;
 	}
 #endregion
 

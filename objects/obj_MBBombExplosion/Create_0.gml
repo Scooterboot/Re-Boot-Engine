@@ -1,8 +1,9 @@
 /// @description Initialize
 event_inherited();
 
-blockDestroyType = 1;
-doorOpenType = 5;
+doorOpenType[DoorOpenType.Bomb] = true;
+blockBreakType[BlockBreakType.Bomb] = true;
+blockBreakType[BlockBreakType.Chain] = true;
 
 multiHit = true;
 

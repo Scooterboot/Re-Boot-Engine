@@ -1737,56 +1737,72 @@ function Collision_MovingSolid(vX, vY)
 }
 #endregion
 
+enum BlockBreakType
+{
+	Shot,
+	Missile,
+	SMissile,
+	Bomb,
+	Chain,
+	PBomb,
+	Speed,
+	Screw,
+	
+	_Length
+}
+blockBreakType = array_create(BlockBreakType._Length, false);
 #region BreakBlock
 function BreakBlock(xx,yy,type)
 {
-	if(place_meeting(xx,yy,obj_Breakable) && type > -1)
+	if(place_meeting(xx,yy,obj_Breakable) && array_length(type) >= BlockBreakType._Length)
 	{
-		DestroyObject(xx,yy,obj_ShotBlock);
-	
-		/*if(place_meeting(xx,yy,obj_BombBlock) && type == 0 && object_is_ancestor(object_index,obj_Projectile) && object_index.isBeam)
+		var bArr = [],
+			i = 0;
+		if(type[BlockBreakType.Shot])
 		{
-		    var b = instance_place(xx,yy,obj_BombBlock);
-		    if(!b.visible)
-		    {
-		        b.revealTile = true;
-		    }
-		}*/
-	
-		if(type == 1 || type >= 4)
-		{
-		    DestroyObject(xx,yy,obj_BombBlock);
-
-		    if(type == 1 || type == 7)
-		    {
-		        DestroyObject(xx,yy,obj_ChainBlock);
-		    }
+			bArr[i] = obj_ShotBlock;
+			i++;
 		}
-
-		if(type == 2 || type == 3 || type == 7)
+		
+		if(type[BlockBreakType.Missile])
 		{
-		    DestroyObject(xx,yy,obj_MissileBlock);
+			bArr[i] = obj_MissileBlock;
+			i++;
 		}
-
-		if(type == 3 || type == 7)
+		if(type[BlockBreakType.SMissile])
 		{
-		    DestroyObject(xx,yy,obj_SuperMissileBlock);
+			bArr[i] = obj_SuperMissileBlock;
+			i++;
 		}
-
-		if(type == 4 || type == 7)
+		
+		if(type[BlockBreakType.Bomb])
 		{
-		    DestroyObject(xx,yy,obj_PowerBombBlock);
+			bArr[i] = obj_BombBlock;
+			i++;
 		}
-
-		if(type == 5 || type == 7)
+		if(type[BlockBreakType.Chain])
 		{
-		    DestroyObject(xx,yy,obj_SpeedBlock);
+			bArr[i] = obj_ChainBlock;
+			i++;
 		}
-
-		if(type == 6 || type == 7)
+		if(type[BlockBreakType.PBomb])
 		{
-		    DestroyObject(xx,yy,obj_ScrewBlock);
+			bArr[i] = obj_PowerBombBlock;
+			i++;
 		}
+		
+		if(type[BlockBreakType.Speed])
+		{
+			bArr[i] = obj_SpeedBlock;
+			i++;
+		}
+		if(type[BlockBreakType.Screw])
+		{
+			bArr[i] = obj_ScrewBlock;
+			//i++;
+		}
+		
+		DestroyObject(xx,yy,bArr);
 	}
 }
 breakList = ds_list_create();
@@ -1797,39 +1813,68 @@ function DestroyObject(xx,yy,objIndex)
 	{
 		for(var i = 0; i < _num; i++)
 		{
-			instance_destroy(breakList[| i]);
+			if(instance_exists(breakList[| i]))
+			{
+				instance_destroy(breakList[| i]);
+			}
 		}
 	}
 	ds_list_clear(breakList);
 }
 #endregion
+
+enum DoorOpenType
+{
+	Beam,
+	Charge,
+	Ice,
+	Wave,
+	Spazer,
+	Plasma,
+	Missile,
+	SMissile,
+	Bomb,
+	PBomb,
+	
+	_Length
+}
+doorOpenType = array_create(DoorOpenType._Length, false);
 #region OpenDoor
 function OpenDoor(_x,_y,_type)
 {
-	if(place_meeting(_x,_y,obj_DoorHatch) && _type > -1)
+	if(place_meeting(_x,_y,obj_DoorHatch) && array_length(_type) >= DoorOpenType._Length)
 	{
-		DamageDoor(_x,_y,obj_DoorHatch,1);
-		DamageDoor(_x,_y,obj_DoorHatch_Locked,1);
+		var dArr = [],
+			i = 0,
+			dmg = 1;
 		
-		if(_type == 1 || _type == 2 || _type == 4)
+		if(_type[DoorOpenType.Beam])
 		{
-			if(_type == 2 || _type == 4)
-			{
-				DamageDoor(_x,_y,obj_DoorHatch_Missile,5);
-			}
-			else
-			{
-				DamageDoor(_x,_y,obj_DoorHatch_Missile,1);
-			}
+			dArr[i] = obj_DoorHatch_Blue;
+			i++;
+			dArr[i] = obj_DoorHatch_Locked;
+			i++;
 		}
-		if(_type == 2 || _type == 4)
+		
+		if(_type[DoorOpenType.Missile])
 		{
-			DamageDoor(_x,_y,obj_DoorHatch_Super,1);
+			dArr[i] = obj_DoorHatch_Missile;
+			i++;
 		}
-		if(_type == 3 || _type == 4)
+		if(_type[DoorOpenType.SMissile])
 		{
-			DamageDoor(_x,_y,obj_DoorHatch_Power,1);
+			dArr[i] = obj_DoorHatch_Super;
+			i++;
+			dmg = 5;
 		}
+		
+		if(_type[DoorOpenType.PBomb])
+		{
+			dArr[i] = obj_DoorHatch_Power;
+			//i++;
+		}
+		
+		DamageDoor(_x,_y,dArr,dmg);
 	}
 }
 doorList = ds_list_create();
@@ -1840,7 +1885,7 @@ function DamageDoor(_x,_y,_objIndex,_dmg)
 	{
 		for(var i = 0; i < _num; i++)
 		{
-			if(instance_exists(doorList[| i]) && doorList[| i].object_index == _objIndex && doorList[| i].unlocked)
+			if(instance_exists(doorList[| i]) && doorList[| i].unlocked)
 			{
 				doorList[| i].DamageHatch(_dmg);
 			}
@@ -1850,29 +1895,43 @@ function DamageDoor(_x,_y,_objIndex,_dmg)
 }
 #endregion
 #region ShutterSwitch
-switchCollide = true;
+switchLOSCheck = true; // toggle whether to do a Line of Sight check for switch activation
 function ShutterSwitch(_x,_y,_type)
 {
-	if(place_meeting(_x,_y,obj_ShutterSwitch) && _type > -1)
+	if(place_meeting(_x,_y,obj_ShutterSwitch) && array_length(_type) >= DoorOpenType._Length)
 	{
-		ToggleSwitch(_x,_y,obj_ShutterSwitch);
+		var dArr = [],
+			i = 0;
 		
-		if(_type == 1 || _type == 2 || _type == 4)
+		if(_type[DoorOpenType.Beam])
 		{
-			ToggleSwitch(_x,_y,obj_ShutterSwitch_Missile);
+			dArr[i] = obj_ShutterSwitch_Blue;
+			i++;
 		}
-		if(_type == 2 || _type == 4)
+		
+		if(_type[DoorOpenType.Missile])
 		{
-			ToggleSwitch(_x,_y,obj_ShutterSwitch_Super);
+			dArr[i] = obj_ShutterSwitch_Missile;
+			i++;
 		}
-		if(_type == 3 || _type == 4)
+		if(_type[DoorOpenType.SMissile])
 		{
-			ToggleSwitch(_x,_y,obj_ShutterSwitch_Power);
+			dArr[i] = obj_ShutterSwitch_Super;
+			i++;
 		}
-		if(_type == 5 || _type == 4)
+		
+		if(_type[DoorOpenType.Bomb])
 		{
-			ToggleSwitch(_x,_y,obj_ShutterSwitch_Bomb);
+			dArr[i] = obj_ShutterSwitch_Bomb;
+			i++;
 		}
+		if(_type[DoorOpenType.PBomb])
+		{
+			dArr[i] = obj_ShutterSwitch_Power;
+			//i++;
+		}
+		
+		ToggleSwitch(_x,_y,dArr);
 	}
 }
 switchList = ds_list_create();
@@ -1883,11 +1942,11 @@ function ToggleSwitch(_x,_y,_objIndex)
 	{
 		for(var i = 0; i < _num; i++)
 		{
-			if(instance_exists(switchList[| i]) && switchList[| i].object_index == _objIndex)
+			if(instance_exists(switchList[| i]))
 			{
 				var sSwitch = switchList[| i];
 				var flag = true;
-				if(switchCollide)
+				if(switchLOSCheck)
 				{
 					var entity = id,
 						center = Center();

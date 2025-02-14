@@ -11,8 +11,8 @@ damageSubType[3] = false;
 damageSubType[4] = true;
 damageSubType[5] = false;
 
-blockDestroyType = 7;
-doorOpenType = 4;
+array_fill(blockBreakType, true);
+array_fill(doorOpenType, true);
 
 particleType = -1;
 

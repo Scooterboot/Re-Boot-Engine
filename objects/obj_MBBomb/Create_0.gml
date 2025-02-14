@@ -20,7 +20,9 @@ damageSubType[3] = true;
 exploProj = obj_MBBombExplosion;
 exploDmgMult = 1;
 
-doorOpenType = 5;
+doorOpenType[DoorOpenType.Bomb] = true;
+blockBreakType[BlockBreakType.Bomb] = true;
+blockBreakType[BlockBreakType.Chain] = true;
 
 function OnXCollision(fVX)
 {
@@ -70,3 +72,5 @@ function OnBottomCollision(fVY)
 		}
 	}
 }
+
+function TileInteract(_x,_y) {}

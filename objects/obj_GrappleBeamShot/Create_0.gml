@@ -42,21 +42,24 @@ gp_list = ds_list_create();
 function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
 {
 	var num = collision_line_list(x1,y1,x2,y2,solids,prec,notme,gp_list,true);
-	for(var i = 0; i < num; i++)
+	if(num > 0)
 	{
-		if(instance_exists(gp_list[| i]))
+		for(var i = 0; i < num; i++)
 		{
-			var col = gp_list[| i];
+			if(instance_exists(gp_list[| i]))
+			{
+				var col = gp_list[| i];
 			
-			var flag = true;
-			if(col.object_index == obj_MovingTile || object_is_ancestor(col.object_index,obj_MovingTile))
-			{
-				flag = col.grappleCollision;
-			}
-			if(flag)
-			{
-				ds_list_clear(gp_list);
-				return true;
+				var flag = true;
+				if(col.object_index == obj_MovingTile || object_is_ancestor(col.object_index,obj_MovingTile))
+				{
+					flag = col.grappleCollision;
+				}
+				if(flag)
+				{
+					ds_list_clear(gp_list);
+					return true;
+				}
 			}
 		}
 	}

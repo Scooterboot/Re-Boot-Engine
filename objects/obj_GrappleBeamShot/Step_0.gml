@@ -16,7 +16,7 @@ if(!instance_exists(player))
 var angDif = angle_difference(player.shootDir,shootDir);
 if(angDif != 0)
 {
-	shootDir += min(abs(angDif), 10) * sign(angDif);
+	shootDir += min(abs(angDif), 15) * sign(angDif);
 }
 
 var distMax = player.grappleMaxDist;
@@ -189,16 +189,32 @@ else
 				var ang = shootDir;
 				var xx = player.shootPosX+lengthdir_x(i,ang),
 					yy = player.shootPosY+lengthdir_y(i,ang);
-				var gp = collision_rectangle_list(xx-4,yy-4,xx+4,yy+4,ColType_GrapplePoint,true,true,gp_list,true);
-				for(var j = 0; j < gp; j++)
+				var xoff = lengthdir_x(4,ang), yoff = lengthdir_y(4,ang);
+				var gp = 0;
+				if(global.grappleAimAssist) // if targeting reticle is enabled, use more precise grapple point detection
 				{
-					var point = gp_list[| j];
-					if(instance_exists(point))
+					gp = collision_line_list(xx,yy,xx-xoff,yy-yoff,ColType_GrapplePoint,true,true,gp_list,true);
+				}
+				else // otherwise, use a generous hitbox as an alternative to aim assist
+				{
+					var x1 = min(xx, xx-4*sign(xoff)),
+						y1 = min(yy, yy-4*sign(yoff)),
+						x2 = max(xx, xx-4*sign(xoff)),
+						y2 = max(yy, yy-4*sign(yoff));
+					gp = collision_rectangle_list(x1,y1,x2,y2,ColType_GrapplePoint,true,true,gp_list,true);
+				}
+				if(gp > 0)
+				{
+					for(var j = 0; j < gp; j++)
 					{
-						gPoint = point;
-						x = xx;
-						y = yy;
-						break;
+						var point = gp_list[| j];
+						if(instance_exists(point))
+						{
+							gPoint = point;
+							x = xx;
+							y = yy;
+							break;
+						}
 					}
 				}
 				ds_list_clear(gp_list);
@@ -222,8 +238,8 @@ else
 			{
 				if(object_is_ancestor(grapBlock.object_index,obj_Tile))
 				{
-					grapBlockPosX = scr_floor(clamp(x,grapBlock.bbox_left,grapBlock.bbox_right-1)/16)*16 + 8;
-					grapBlockPosY = scr_floor(clamp(y,grapBlock.bbox_top,grapBlock.bbox_bottom-1)/16)*16 + 8;
+					grapBlockPosX = scr_floor(clamp(x+grapSignX*4,grapBlock.bbox_left,grapBlock.bbox_right-1)/16)*16 + 8;
+					grapBlockPosY = scr_floor(clamp(y+grapSignY*4,grapBlock.bbox_top,grapBlock.bbox_bottom-1)/16)*16 + 8;
 				}
 		        grappleState = GrappleState.Swing;
 			}

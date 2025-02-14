@@ -360,7 +360,7 @@ grapple = noone;
 grappleActive = false;
 grappleDist = 0;
 grappleOldDist = 0;
-grappleMaxDist = 160;//143;
+grappleMaxDist = 200;//160;//143;
 
 grapAngle = 0;
 grapDisVel = 0;
@@ -1566,11 +1566,19 @@ function DestroyBlock(bx,by)
 {
 	if(isSpeedBoosting)
 	{
-		BreakBlock(bx,by,5);
+		var _type = array_create(BlockBreakType._Length,false);
+		_type[BlockBreakType.Shot] = true;
+		_type[BlockBreakType.Bomb] = true;
+		_type[BlockBreakType.Speed] = true;
+		BreakBlock(bx,by,_type);
 	}
 	if(isScrewAttacking)
 	{
-		BreakBlock(bx,by,6);
+		var _type = array_create(BlockBreakType._Length,false);
+		_type[BlockBreakType.Shot] = true;
+		_type[BlockBreakType.Bomb] = true;
+		_type[BlockBreakType.Screw] = true;
+		BreakBlock(bx,by,_type);
 	}
 }
 
@@ -2121,6 +2129,54 @@ function ChangeState(newState,newStateFrame,newMask,isGrounded,stallCam = true)
 }
 #endregion
 
+#region GetShootDirection
+function GetShootDirection(_aimAngle, _dir)
+{
+	var _shootDir;
+	switch(_aimAngle)
+	{
+		case -2:
+		{
+			_shootDir = 270;
+			break;
+		}
+		case -1:
+		{
+			_shootDir = 315;
+			if(_dir == -1)
+			{
+				_shootDir = 225;
+			}
+			break;
+		}
+		case 1:
+		{
+			_shootDir = 45;
+			if(_dir == -1)
+			{
+				_shootDir = 135;
+			}
+			break;
+		}
+		case 2:
+		{
+			_shootDir = 90;
+			break;
+		}
+		
+		default:
+		{
+			_shootDir = 0;
+			if(_dir == -1)
+			{
+				_shootDir = 180;
+			}
+			break;
+		}
+	}
+	return _shootDir;
+}
+#endregion
 #region Shoot
 function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWave = false, WaveStyleOffset = 0)
 {

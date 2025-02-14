@@ -61,13 +61,13 @@ timeLeft = 300;
 isCharge = false;
 
 damage = 0;
-damageType = 0;
-damageSubType[0] = true;
-damageSubType[1] = false;
-damageSubType[2] = false;
-damageSubType[3] = false;
-damageSubType[4] = false;
-damageSubType[5] = false;
+damageType = DmgType.Beam;
+damageSubType[0] = true; // all
+damageSubType[1] = false; // power beam (Beam/Charge) | missile (Explosive) | grapple beam (Misc)
+damageSubType[2] = false; // ice beam (Beam/Charge) | super missile (Explosive) | speed boost/shine spark (Misc)
+damageSubType[3] = false; // wave beam (Beam/Charge) | bomb (Explosive) | screw attack (Misc)
+damageSubType[4] = false; // spazer (Beam/Charge) | power bomb (Explosive) | hyper beam (Misc)
+damageSubType[5] = false; // plasma beam (Beam/Charge) | splash damage (Explosive) | boost ball (Misc)
 
 freezeType = 0;
 freezeKill = false;
@@ -140,10 +140,6 @@ enum ProjType
 }
 type = ProjType.Beam;
 
-
-blockDestroyType = 0;
-doorOpenType = 0;
-
 projLength = 0;
 rotFrame = 0;
 
@@ -193,34 +189,37 @@ function entity_place_collide()
 
 function entity_collision(listNum)
 {
-	for(var i = 0; i < listNum; i++)
+	if(listNum > 0)
 	{
-		if(instance_exists(blockList[| i]))
+		for(var i = 0; i < listNum; i++)
 		{
-			var block = blockList[| i];
-			var isSolid = true;
-			if(type != ProjType.Bomb && doorOpenType >= 0 && tileCollide)
+			if(instance_exists(blockList[| i]))
 			{
-				if(block.object_index == obj_DoorHatch || object_is_ancestor(block.object_index,obj_DoorHatch))
+				var block = blockList[| i];
+				var isSolid = true;
+				if(tileCollide && type != ProjType.Bomb && array_contains(doorOpenType, true))
 				{
-					if((!block.unlocked ||
-					(doorOpenType <= -1 && block.object_index == obj_DoorHatch) ||
-					(doorOpenType != 1 && doorOpenType != 2 && block.object_index == obj_DoorHatch_Missile) ||
-					(doorOpenType != 2 && block.object_index == obj_DoorHatch_Super) ||
-					(doorOpenType != 3 && block.object_index == obj_DoorHatch_Power)) && doorOpenType != 4)
+					if(object_is_ancestor(block.object_index,obj_DoorHatch))
+					{
+						if(!block.unlocked ||
+						(!doorOpenType[DoorOpenType.Beam] && block.object_index == obj_DoorHatch_Blue) ||
+						(!doorOpenType[DoorOpenType.Missile] && block.object_index == obj_DoorHatch_Missile) ||
+						(!doorOpenType[DoorOpenType.SMissile] && block.object_index == obj_DoorHatch_Super) ||
+						(!doorOpenType[DoorOpenType.PBomb] && block.object_index == obj_DoorHatch_Power))
+						{
+							isSolid = false;
+						}
+					}
+					if(instance_exists(lastReflec) && block == lastReflec)
 					{
 						isSolid = false;
 					}
 				}
-				if(instance_exists(lastReflec) && block == lastReflec)
+				if(isSolid)
 				{
-					isSolid = false;
+					ds_list_clear(blockList);
+					return true;
 				}
-			}
-			if(isSolid)
-			{
-				ds_list_clear(blockList);
-				return true;
 			}
 		}
 	}
@@ -256,7 +255,7 @@ function OnImpact(posX,posY,waveImpact = false)
 
 function TileInteract(_x,_y)
 {
-	BreakBlock(_x,_y,blockDestroyType);
+	BreakBlock(_x,_y,blockBreakType);
 	OpenDoor(_x,_y,doorOpenType);
 	ShutterSwitch(_x,_y,doorOpenType);
 }

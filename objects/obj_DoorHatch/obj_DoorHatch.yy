@@ -36,13 +36,7 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
-  "spriteId":{
-    "name":"sprt_DoorHatch",
-    "path":"sprites/sprt_DoorHatch/sprt_DoorHatch.yy",
-  },
-  "spriteMaskId":{
-    "name":"mask_DoorHatch",
-    "path":"sprites/mask_DoorHatch/mask_DoorHatch.yy",
-  },
-  "visible":true,
+  "spriteId":null,
+  "spriteMaskId":null,
+  "visible":false,
 }

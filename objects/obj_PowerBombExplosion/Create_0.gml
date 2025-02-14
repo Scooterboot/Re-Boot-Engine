@@ -10,12 +10,15 @@ pAlpha = 1;
 alpha2 = 1;
 image_alpha = pAlpha*alpha2;
 
-blockDestroyType = 4;
-doorOpenType = 3;
+doorOpenType[DoorOpenType.Bomb] = true;
+doorOpenType[DoorOpenType.PBomb] = true;
+blockBreakType[BlockBreakType.Bomb] = true;
+blockBreakType[BlockBreakType.PBomb] = true;
+blockBreakType[BlockBreakType.Chain] = true;
 
 multiHit = true;
 
-//switchCollide = false;
+//switchLOSCheck = false;
 
 type = ProjType.Bomb;
 

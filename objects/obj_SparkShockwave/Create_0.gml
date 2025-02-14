@@ -22,5 +22,5 @@ particleType = -1;
 
 rotFrame = 4;
 
-doorOpenType = -1;
-blockDestroyType = -1;
+array_fill(doorOpenType,false);
+array_fill(blockBreakType,false);

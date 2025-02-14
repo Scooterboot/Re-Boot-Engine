@@ -30,7 +30,7 @@ if(flag)
 	mapIconIndex = 0;
 	mapIcon[1] = mapIconIndex;
 	
-	htc = instance_create_layer(x,y,layer,obj_DoorHatch);
+	htc = instance_create_layer(x,y,layer,obj_DoorHatch_Blue);
 	htc.image_index = image_index;
 	htc.direction = direction;
 	htc.image_angle = image_angle;

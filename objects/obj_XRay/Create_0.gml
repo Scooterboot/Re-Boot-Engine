@@ -114,7 +114,7 @@ function xray_redraw_alpha()
 	
 	with (obj_Tile)
 	{
-		if (!object_is_ancestor(object_index,obj_DoorHatch) && object_index != obj_DoorHatch && 
+		if (!object_is_ancestor(object_index,obj_DoorHatch) && 
 			!object_is_ancestor(object_index,obj_InteractStation) &&
 			(!object_is_ancestor(object_index,obj_Breakable) || object_index == obj_NPCBreakable))
 		{
@@ -180,7 +180,7 @@ function xray_redraw_outline()
 
 	with (obj_Tile)
 	{
-		if (!object_is_ancestor(object_index,obj_DoorHatch) && object_index != obj_DoorHatch && 
+		if (!object_is_ancestor(object_index,obj_DoorHatch) && 
 			!object_is_ancestor(object_index,obj_InteractStation) &&
 			(!object_is_ancestor(object_index,obj_Breakable) || object_index == obj_NPCBreakable) &&
 			object_index != obj_Elevator)

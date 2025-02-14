@@ -35,36 +35,39 @@ if(aiStyle == 1)
 }
 
 var reflec = noone;
-collision_line_list(_x,_y,_x+fVelX,_y+fVelY,obj_Reflec,true,true,reflecList,true);
-if(tileCollide && doorOpenType >= 0)
+var rnum = collision_line_list(_x,_y,_x+fVelX,_y+fVelY,obj_Reflec,true,true,reflecList,true);
+if(tileCollide && array_contains(doorOpenType, true))
 {
-	collision_line_list(x,y,x+fVelX,y+fVelY,obj_DoorHatch,true,true,reflecList,true);
+	rnum += collision_line_list(x,y,x+fVelX,y+fVelY,obj_DoorHatch,true,true,reflecList,true);
 }
-for(var i = 0; i < ds_list_size(reflecList); i++)
+if(rnum > 0)
 {
-	var _ref = reflecList[| i];
-	if(instance_exists(_ref))
+	for(var i = 0; i < rnum; i++)
 	{
-		if(_ref.object_index == obj_Reflec)
+		var _ref = reflecList[| i];
+		if(instance_exists(_ref))
 		{
-			var p1 = _ref.GetPoint1(),
-				p2 = _ref.GetPoint2();
-			if(lines_intersect(p1.X,p1.Y,p2.X,p2.Y,_x,_y,_x+fVelX,_y+fVelY,true) > 0 && lastReflec != _ref)
+			if(_ref.object_index == obj_Reflec)
 			{
-				reflec = _ref;
-				break;
+				var p1 = _ref.GetPoint1(),
+					p2 = _ref.GetPoint2();
+				if(lines_intersect(p1.X,p1.Y,p2.X,p2.Y,_x,_y,_x+fVelX,_y+fVelY,true) > 0 && lastReflec != _ref)
+				{
+					reflec = _ref;
+					break;
+				}
 			}
-		}
-		else if(_ref.object_index == obj_DoorHatch || object_is_ancestor(_ref.object_index,obj_DoorHatch))
-		{
-			if((!_ref.unlocked ||
-			(doorOpenType <= -1 && _ref.object_index == obj_DoorHatch) ||
-			(doorOpenType != 1 && doorOpenType != 2 && _ref.object_index == obj_DoorHatch_Missile) ||
-			(doorOpenType != 2 && _ref.object_index == obj_DoorHatch_Super) ||
-			(doorOpenType != 3 && _ref.object_index == obj_DoorHatch_Power)) && doorOpenType != 4)
+			else if(object_is_ancestor(_ref.object_index,obj_DoorHatch))
 			{
-				reflec = _ref;
-				break;
+				if(!_ref.unlocked ||
+				(!doorOpenType[DoorOpenType.Beam] && _ref.object_index == obj_DoorHatch_Blue) ||
+				(!doorOpenType[DoorOpenType.Missile] && _ref.object_index == obj_DoorHatch_Missile) ||
+				(!doorOpenType[DoorOpenType.SMissile] && _ref.object_index == obj_DoorHatch_Super) ||
+				(!doorOpenType[DoorOpenType.PBomb] && _ref.object_index == obj_DoorHatch_Power))
+				{
+					reflec = _ref;
+					break;
+				}
 			}
 		}
 	}
@@ -92,7 +95,7 @@ if(instance_exists(reflec) && lastReflec != reflec)
 			_c++;
 		}
 	}
-	else if(reflec.object_index == obj_DoorHatch || object_is_ancestor(reflec.object_index,obj_DoorHatch))
+	else if(object_is_ancestor(reflec.object_index,obj_DoorHatch))
 	{
 		_ang = ReflectAngle(_ang, reflec.image_angle+(180 * (reflec.image_xscale < 0)));
 		

@@ -14,6 +14,7 @@ gates = array_create(0);
 
 lastProj = noone;
 
+toggled = false;
 function Toggle()
 {
 	for(var i = 0; i < array_length(gates); i++)
@@ -24,8 +25,12 @@ function Toggle()
 		}
 	}
 	
-	for(var i = 0; i < array_length(gates); i++)
+	if(!toggled)
 	{
-		gates[i].Toggle(gates[i].stuck);
+		for(var i = 0; i < array_length(gates); i++)
+		{
+			gates[i].Toggle(gates[i].stuck);
+		}
+		toggled = true;
 	}
 }

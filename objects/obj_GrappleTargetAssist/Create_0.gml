@@ -1,9 +1,10 @@
 /// @description 
 
-assistRadius = 22.5;
+assistRadius = 30;//22.5;
 
 grapObj_list = ds_list_create();
 grapPoint_list = ds_list_create();
+block_list = ds_list_create();
 
 function GrapPoint(_x, _y) constructor
 {
@@ -32,8 +33,32 @@ function AddPointToList(_x, _y)
 	if (point_distance(player.x,player.y, _x,_y) <= player.grappleMaxDist && 
 		abs(angle_difference(point_direction(pX,pY, _x,_y), shootDir)) <= assistRadius)
 	{
-		var gp = new GrapPoint(_x, _y);
-		ds_list_add(grapPoint_list,gp);
+		var colFound = false;
+		var num = collision_line_list(player.shootPosX,player.shootPosY, _x,_y, array_concat(ColType_Solid,ColType_MovingSolid), true,true,block_list,true);
+		num += collision_line_list(player.x,player.y, player.shootPosX,player.shootPosY, array_concat(ColType_Solid,ColType_MovingSolid), true,true,block_list,true);
+		if(num > 0)
+		{
+			for(var i = 0; i < num; i++)
+			{
+				if(instance_exists(block_list[| i]) && !object_is_in_array(block_list[| i].object_index, ColType_GrapplePoint))
+				{
+					colFound = true;
+					var col = block_list[| i];
+					if(col.object_index == obj_MovingTile || object_is_ancestor(col.object_index,obj_MovingTile))
+					{
+						colFound = col.grappleCollision;
+					}
+					break;
+				}
+			}
+		}
+		ds_list_clear(block_list);
+		
+		if(!colFound)
+		{
+			var gp = new GrapPoint(_x, _y);
+			ds_list_add(grapPoint_list,gp);
+		}
 	}
 }
 
@@ -42,5 +67,4 @@ adjustedShootDir = 0;
 targetPoint = noone;
 
 frame = 0;
-frameCounter = 0;
-frameSeq = [0,1,2,3,2,1];
+frameNum = 1;

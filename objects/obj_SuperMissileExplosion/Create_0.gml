@@ -1,11 +1,12 @@
 event_inherited();
 
-blockDestroyType = 3;
-doorOpenType = 2;
+doorOpenType[DoorOpenType.Missile] = true;
+doorOpenType[DoorOpenType.SMissile] = true;
+blockBreakType[BlockBreakType.Missile] = true;
+blockBreakType[BlockBreakType.SMissile] = true;
 
 multiHit = true;
 
-damageSubType[1] = true;
 damageSubType[2] = true;
 damageSubType[5] = true;
 
