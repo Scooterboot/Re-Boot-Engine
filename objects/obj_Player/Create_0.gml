@@ -361,6 +361,7 @@ grappleActive = false;
 grappleDist = 0;
 grappleOldDist = 0;
 grappleMaxDist = 200;//160;//143;
+grappleMinDist = 31;
 
 grapAngle = 0;
 grapDisVel = 0;
@@ -643,27 +644,28 @@ brakeFrame = 0;
 
 enum Frame
 {
-	Idle = 0,
-	Run = 1,
-	Morph = 2,
-	Ball = 3,
-	JAim = 4,
-	Jump = 5,
-	Somersault = 6,
-	Walk = 7,
-	Moon = 8,
-	SparkV = 9,
-	SparkH = 10,
-	SparkStart = 11,
-	GrappleLeg = 12,
-	Dodge = 13,
-	GrappleBody = 14,
-	CFlash = 15,
-	Push = 16
+	Idle,
+	Run,
+	Morph,
+	JAim,
+	Jump,
+	Somersault,
+	Walk,
+	Moon,
+	SparkV,
+	SparkH,
+	SparkStart,
+	GrappleLeg,
+	Dodge,
+	GrappleBody,
+	CFlash,
+	Push,
+	
+	_Length
 };
 
-frame[16] = 0;
-frameCounter[16] = 0;
+frame = array_create(Frame._Length, 0);
+frameCounter = array_create(Frame._Length, 0);
 
 idleNum = array(32,8,8,8,16,6,6,6);
 idleSequence = array(0,1,2,3,4,3,2,1);
@@ -681,11 +683,9 @@ crouchFrame = 0;
 
 morphFrame = 0;
 unmorphing = false;
-morphAlpha = 0;
-ballFrame = 0;
+morphYOffset = [5,3,2,1,0];
 morphNum = 0;
-ballAnimDir = dir;
-morphYOff = 0;
+groundedMorph = false;
 
 aimFrame = 0;
 
@@ -708,7 +708,6 @@ crouchSequence = array(0,1,1,2,3,3);
 
 landFinal = 0;
 crouchFinal = 0;
-morphFinal = 0;
 
 crouchYOffset = array(0,3,7,10);
 
@@ -926,10 +925,13 @@ powerBombStat = powerBombMax;
 enum Suit
 {
 	Varia,
-	Gravity
+	Gravity,
+	
+	_Length
 };
 // 2 Suits
-suit = array_create(2);
+suit = array_create(Suit._Length);
+hasSuit = array_create(Suit._Length);
 
 enum Boots
 {
@@ -937,10 +939,13 @@ enum Boots
 	SpaceJump,
 	Dodge,
 	SpeedBoost,
-	ChainSpark
+	ChainSpark,
+	
+	_Length
 };
 // 5 Boots
-boots = array_create(5);
+boots = array_create(Boots._Length);
+hasBoots = array_create(Boots._Length);
 
 enum Misc
 {
@@ -950,10 +955,13 @@ enum Misc
 	Spring,
 	Boost,
 	Spider,
-	ScrewAttack
+	ScrewAttack,
+	
+	_Length
 };
 // 7 Misc
-misc = array_create(7);
+misc = array_create(Misc._Length);
+hasMisc = array_create(Misc._Length);
 
 enum Beam
 {
@@ -961,10 +969,13 @@ enum Beam
 	Ice,
 	Wave,
 	Spazer,
-	Plasma
+	Plasma,
+	
+	_Length
 };
 // 5 Beams
-beam = array_create(5);
+beam = array_create(Beam._Length);
+hasBeam = array_create(Beam._Length);
 
 enum Item
 {
@@ -972,16 +983,13 @@ enum Item
 	SMissile,
 	PBomb,
 	Grapple,
-	XRay
+	XRay,
+	
+	_Length
 };
 // 5 Items
-item = array_create(5);
-
-hasSuit = array_create(array_length(suit));
-hasMisc = array_create(array_length(misc));
-hasBoots = array_create(array_length(boots));
-hasBeam = array_create(array_length(beam));
-hasItem = array_create(array_length(item));
+item = array_create(Item._Length);
+hasItem = array_create(Item._Length);
 
 //starting items
 /*misc[Misc.PowerGrip] = true;
@@ -3801,56 +3809,21 @@ function UpdatePlayerSurface(_palSurface)
 		
 		chameleon_set_surface(_palSurface);
 		
-		if(stateFrame != State.Morph || morphFrame > 0 || morphAlpha < 1)
+		var torso = torsoR;
+		if(fDir == -1)
 		{
-			var torso = torsoR;
-			if(fDir == -1)
-			{
-				torso = torsoL;
-			}
-		
-			if(legs != -1)
-			{
-				draw_sprite_ext(legs,legFrame,scr_round(surfW/2),scr_round(surfH/2),fDir,1,0,c_white,1);
-			}
-			draw_sprite_ext(torso,bodyFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),fDir,1,0,c_white,1);
+			torso = torsoL;
 		}
-		if(stateFrame == State.Morph)
+		
+		if(legs != -1)
 		{
-			/*if(!global.gamePaused)
-			{
-				if(unmorphing)
-				{
-					morphAlpha = max(morphAlpha - 0.175/(1+liquidMovement), 0);
-				}
-				else if(morphFrame < 6)
-				{
-					morphAlpha = min(morphAlpha + 0.075/(1+liquidMovement), 1);
-				}
-			}*/
-			if(morphFrame < 4)
-			{
-				if(unmorphing)
-				{
-					morphAlpha = 0;
-				}
-				else
-				{
-					morphAlpha = 1;
-				}
-			}
-			var ballSprtIndex = sprt_Player_MorphBall;
-			//if(misc[Misc.Spring])
-			if(misc[Misc.Spider])
-			{
-				ballSprtIndex = sprt_Player_SpringBall;
-			}
-			draw_sprite_ext(ballSprtIndex,ballFrame,scr_round(surfW/2),scr_round(surfH/2),1,1,0,c_white,morphAlpha);
-			//if(misc[Misc.Spring])
-			if(misc[Misc.Spider])
-			{
-				draw_sprite_ext(sprt_Player_SpringBall_Shine,0,scr_round(surfW/2),scr_round(surfH/2),1,1,0,c_white,morphAlpha);
-			}
+			draw_sprite_ext(legs,legFrame,scr_round(surfW/2),scr_round(surfH/2),fDir,1,0,c_white,1);
+		}
+		draw_sprite_ext(torso,bodyFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),fDir,1,0,c_white,1);
+		
+		if(misc[Misc.Spider] && stateFrame == State.Morph && morphFrame == 0 && !unmorphing)
+		{
+			draw_sprite_ext(sprt_Player_MorphBallAlt_Shine,0,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),1,1,0,c_white,1);
 		}
 	
 		if(itemSelected == 1 && (itemHighlighted[1] == 0 || itemHighlighted[1] == 1 || itemHighlighted[1] == 3))
@@ -3999,7 +3972,6 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		}
 	}
 
-	//if(misc[Misc.Spring] && stateFrame == State.Morph)
 	if(misc[Misc.Spider] && stateFrame == State.Morph)
 	{
 		var glowSpeed = 0.25;
@@ -4038,7 +4010,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		}
 		
 		chameleon_set(palSet,ballGlowIndex,spiderPal,spiderPalDiff,20);
-		draw_sprite_ext(sprt_Player_SpringBall_Glow,ballFrame,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,rot,c_white,morphAlpha*alph);
+		draw_sprite_ext(sprt_Player_MorphBallAlt_Glow,bodyFrame,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,rot,c_white,alph);
 		shader_reset();
 	}
 	else

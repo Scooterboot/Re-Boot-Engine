@@ -235,6 +235,19 @@ function xray_redraw_outline()
 	{
 		draw_sprite_ext(mask_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
 	}
+	
+	// draw black at room edges to fix tiny visual bug
+	draw_set_alpha(1);
+	draw_set_color(c_black);
+	
+	var _l = -camx,
+		_r = room_width-camx,
+		_t = -camy,
+		_b = room_height-camy;
+	
+	draw_rectangle(_l, _t, _r-1, _b-1, true);
+	
+	draw_set_color(c_white);
 
 	surface_reset_target();
 }

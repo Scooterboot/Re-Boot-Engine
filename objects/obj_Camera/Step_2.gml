@@ -18,10 +18,10 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 	
 	var pX = player.x,
 		pY = player.y;
-	if(player.stateFrame == State.Morph)
-	{
-		pY = player.y+8;
-	}
+	//if(player.stateFrame == State.Morph)
+	//{
+	//	pY = player.y+8;
+	//}
 	
 	var num = 1 + scr_floor(abs(pX-playerX) / 7);
 	if(playerX < pX)

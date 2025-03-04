@@ -2,9 +2,9 @@
   "$GMSprite":"",
   "%Name":"sprt_Map_DebugMaridia",
   "bboxMode":0,
-  "bbox_bottom":98,
+  "bbox_bottom":138,
   "bbox_left":21,
-  "bbox_right":118,
+  "bbox_right":208,
   "bbox_top":20,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,15 +12,15 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"0d1b970a-0332-4fd5-9299-bb86f128840e","name":"0d1b970a-0332-4fd5-9299-bb86f128840e","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"64403fb1-ee38-427d-a3f5-b6e37bdc437e","name":"64403fb1-ee38-427d-a3f5-b6e37bdc437e","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"","%Name":"35370767-5a4b-475f-89fc-b0179cf348cf","name":"35370767-5a4b-475f-89fc-b0179cf348cf","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"","%Name":"9cf33a9e-9bed-4240-8074-177c8e77cb3c","name":"9cf33a9e-9bed-4240-8074-177c8e77cb3c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
-  "height":120,
+  "height":160,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"4b84c4c7-9de3-4462-9145-d5280cb2651d","blendMode":0,"displayName":"default","isLocked":false,"name":"4b84c4c7-9de3-4462-9145-d5280cb2651d","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"6e00cd99-2e94-481b-bd33-cebbee8e0c5e","blendMode":0,"displayName":"default","isLocked":false,"name":"6e00cd99-2e94-481b-bd33-cebbee8e0c5e","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"sprt_Map_DebugMaridia",
   "nineSlice":null,
@@ -70,11 +70,11 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"0d1b970a-0332-4fd5-9299-bb86f128840e","path":"sprites/sprt_Map_DebugMaridia/sprt_Map_DebugMaridia.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"8a7ab107-0b2f-4f1b-a920-ffd1b07904a7","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"35370767-5a4b-475f-89fc-b0179cf348cf","path":"sprites/sprt_Map_DebugMaridia/sprt_Map_DebugMaridia.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"9e1c95bf-26d8-4027-9390-1246eb393ab3","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"64403fb1-ee38-427d-a3f5-b6e37bdc437e","path":"sprites/sprt_Map_DebugMaridia/sprt_Map_DebugMaridia.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"9f5493cc-585d-4f3d-968c-cb17c7b2f1a3","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"9cf33a9e-9bed-4240-8074-177c8e77cb3c","path":"sprites/sprt_Map_DebugMaridia/sprt_Map_DebugMaridia.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"5f2eb654-0398-45af-b355-fdc80dfaf043","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -90,5 +90,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":140,
+  "width":230,
 }

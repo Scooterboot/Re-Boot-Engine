@@ -24,12 +24,14 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			canXRay = false;
 		}
 	}
-	else if(grounded)
+	else if(grounded) // feels kinda jank ngl. but it does work. i just don't like it.
 	{
 		var block_bl = instance_position(bb_left(),bb_bottom()+1,obj_Tile),
-			block_br = instance_position(bb_right(),bb_bottom()+1,obj_Tile);
-		if ((!instance_exists(block_bl) || (instance_exists(block_bl) && block_bl.object_index == obj_CrumbleBlock)) && 
-			(!instance_exists(block_br) || (instance_exists(block_br) && block_br.object_index == obj_CrumbleBlock)))
+			block_br = instance_position(bb_right(),bb_bottom()+1,obj_Tile),
+			platform = collision_line(bb_left(),bb_bottom()+1,bb_right(),bb_bottom()+1,obj_Platform,true,true);
+		if ((!instance_exists(block_bl) xor (instance_exists(block_bl) && block_bl.object_index == obj_CrumbleBlock)) && 
+			(!instance_exists(block_br) xor (instance_exists(block_br) && block_br.object_index == obj_CrumbleBlock)) && 
+			!instance_exists(platform))
 		{
 			canXRay = false;
 		}
@@ -1090,19 +1092,9 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			#region Morph
 			case State.Morph:
 			{
-				aimFrame = 0;
-				ArmPos(0,0);
-				torsoR = sprt_Player_MorphFade;
-				
-				ballAnimDir = dir;
-				if(sign(velX) != 0)
-				{
-					ballAnimDir = sign(velX);
-				}
-				
 				for(var i = 0; i < array_length(frame); i++)
 				{
-					if(i != Frame.Morph && i != Frame.Ball)
+					if(i != Frame.Morph)
 					{
 						frame[i] = 0;
 						frameCounter[i] = 0;
@@ -1110,12 +1102,14 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				}
 				frame[Frame.JAim] = 6 * (velY <= 0);
 				
-				var xNum = point_distance(x,y,x+velX,y+velY);
-				if(liquidMovement)
-				{
-					xNum *= 0.75;
-				}
+				aimFrame = 0;
+				ArmPos(0,0);
 				
+				var ballAnimDir = dir;
+				if(sign(velX) != 0)
+				{
+					ballAnimDir = sign(velX);
+				}
 				if(spiderBall && spiderEdge != Edge.None)
 				{
 					if(sign(spiderSpeed) != 0)
@@ -1124,10 +1118,13 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					}
 				}
 				
-				if(xNum < 1 && xNum > 0)
+				var xNum = point_distance(x,y,x+velX,y+velY);
+				if(liquidMovement)
 				{
-					xNum = 1;
+					xNum *= 0.75;
 				}
+				xNum = xNum > 0 ? max(xNum,1) : 0;
+				
 				if(global.roomTrans)
 				{
 					morphNum = 1.5;
@@ -1140,53 +1137,43 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				{
 					morphNum = xNum;
 				}
-				frameCounter[Frame.Ball] += morphNum;
-				if(frameCounter[Frame.Ball] > 2)
-				{
-					frame[Frame.Ball] = scr_wrap(frame[Frame.Ball]+max(morphNum/3,1)*ballAnimDir, 0, 24);
-					frameCounter[Frame.Ball] = 0;
-				}
 				
-				ballFrame = frame[Frame.Ball];
+				frame[Frame.Morph] = scr_wrap(frame[Frame.Morph] + morphNum/3*ballAnimDir, 0, 24);
 				
+				var yOffFrame = 4;
 				if(unmorphing && scr_round(morphFrame) <= 5)
 				{
-					torsoR = sprt_Player_MorphOut;
-					morphFinal = scr_round(morphFrame)-1;
-					bodyFrame = morphFinal;
+					torsoR = sprt_Player_Morph;
+					bodyFrame = scr_round(morphFrame)-1;
+					yOffFrame = bodyFrame;
 				}
 				else if(scr_round(morphFrame) >= 4 && !unmorphing)
 				{
-					torsoR = sprt_Player_MorphOut;
-					morphFinal = 8-scr_round(morphFrame);
-					bodyFrame = morphFinal;
-					frame[Frame.Morph] = 0;
+					torsoR = sprt_Player_Morph;
+					bodyFrame = 8-scr_round(morphFrame);
+					yOffFrame = bodyFrame;
 				}
 				else
 				{
-					if(unmorphing)
+					fDir = 1;
+					torsoR = sprt_Player_MorphBall;
+					if(misc[Misc.Spider])
 					{
-						frame[Frame.Morph] = 0;
+						torsoR = sprt_Player_MorphBallAlt;
 					}
-					else
-					{
-						frame[Frame.Morph] += 1/(1+liquidMovement);
-						if(frame[Frame.Morph] > 22)
-						{
-							frame[Frame.Morph] = 0;
-						}
-					}
-					bodyFrame = scr_round(frame[Frame.Morph]);
+					bodyFrame = frame[Frame.Morph];
 				}
 				torsoL = torsoR;
 				
-				var yOff = 0;
-				if(unmorphing)
+				if(groundedMorph)
 				{
-					yOff = morphYOff * (morphFrame/8);
+					sprtOffsetY = -morphYOffset[yOffFrame];
+					if(unmorphing)
+					{
+						sprtOffsetY += 8;
+					}
 				}
 				
-				sprtOffsetY = 8+yOff;
 				break;
 			}
 			#endregion
@@ -2175,9 +2162,9 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				
 				if(frame[Frame.CFlash] < 5)
 				{
-					torsoR = sprt_Player_MorphOut;
+					torsoR = sprt_Player_Morph;
 					bodyFrame = 4-frame[Frame.CFlash];
-					sprtOffsetY = 8;
+					sprtOffsetY = 8-morphYOffset[bodyFrame];
 					
 					frame[Frame.CFlash]++;
 				}
@@ -2685,9 +2672,30 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				}
 				else if(bombDelayTime <= 0 && canShoot && rShoot)
 				{
+					var bombposx = x,
+						bombposy = y+3,
+						instaBomb = cDown;
+					if(spiderBall)
+					{
+						bombposx = x + lengthdir_x(-2,spiderJumpDir);
+						bombposy = y+1 + lengthdir_y(-2,spiderJumpDir);
+						if(spiderEdge == Edge.Top)
+						{
+							instaBomb = cUp;
+						}
+						if(spiderEdge == Edge.Left)
+						{
+							instaBomb = cLeft;
+						}
+						if(spiderEdge == Edge.Right)
+						{
+							instaBomb = cRight;
+						}
+					}
+					
 					if(itemSelected == 1 && (itemHighlighted[1] == 2 || global.HUD > 0) && powerBombStat > 0 && item[Item.PBomb])
 					{
-						var pBomb = instance_create_layer(x,y+11,"Projectiles_fg",obj_PowerBomb);
+						var pBomb = instance_create_layer(bombposx,bombposy,"Projectiles_fg",obj_PowerBomb);
 						pBomb.damage = 40;
 						bombDelayTime = 30;
 						powerBombStat--;
@@ -2696,27 +2704,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					}
 					else if(misc[Misc.Bomb] && (instance_number(obj_MBBomb) < 3 || cDown))
 					{
-						var bombposx = x,
-							bombposy = y+11,
-							instaBomb = cDown;
-						if(spiderBall)
-						{
-							bombposx = x + lengthdir_x(-2,spiderJumpDir);
-							bombposy = y+9 + lengthdir_y(-2,spiderJumpDir);
-							if(spiderEdge == Edge.Top)
-							{
-								instaBomb = cUp;
-							}
-							if(spiderEdge == Edge.Left)
-							{
-								instaBomb = cLeft;
-							}
-							if(spiderEdge == Edge.Right)
-							{
-								instaBomb = cRight;
-							}
-						}
-					
 						if(instaBomb)
 						{
 							var explo = instance_create_layer(bombposx,bombposy,"Projectiles_fg",obj_MBBombExplosion);
@@ -2873,6 +2860,14 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		
 				if(bombCharge >= bChMax || (!cShoot && bombCharge > 0))
 				{
+					var bombposx = x,
+						bombposy = y+3;
+					if(spiderBall)
+					{
+						bombposx = x + lengthdir_x(-2,spiderJumpDir);
+						bombposy = y+1 + lengthdir_y(-2,spiderJumpDir);
+					}
+					
 					if(!grounded && cDown)
 					{
 						var bombDir = array(0,90,210,330),
@@ -2880,7 +2875,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 							bombSpd = 2+((4/bChMax)*bombCharge);
 						for(var i = 0; i < 4; i++)
 						{
-							var bomb = instance_create_layer(x,y+11,"Projectiles_fg",obj_MBBomb);
+							var bomb = instance_create_layer(bombposx,bombposy,"Projectiles_fg",obj_MBBomb);
 							bomb.damage = 15;
 							bomb.spreadType = 2;
 							if(i > 0)
@@ -2927,7 +2922,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 								spreadType = 1;
 								bombTime = 55 + 20*i;
 							}
-							var bomb = instance_create_layer(x,y+11,"Projectiles_fg",obj_MBBomb);
+							var bomb = instance_create_layer(bombposx,bombposy,"Projectiles_fg",obj_MBBomb);
 							bomb.damage = 15;
 							bomb.velX = lengthdir_x(bombSpeed,bDir);
 							bomb.velY = lengthdir_y(bombSpeed,bDir);

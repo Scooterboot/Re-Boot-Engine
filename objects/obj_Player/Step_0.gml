@@ -483,6 +483,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 			}
 		}
 		ChangeState(State.Morph,State.Morph,mask_Player_Morph,grounded);
+		groundedMorph = grounded;
 		morphFrame = 8;
 	}
 	
@@ -512,6 +513,7 @@ if(!global.gamePaused || (xRayActive && !global.roomTrans && !obj_PauseMenu.paus
 				{
 					audio_play_sound(snd_Morph,0,false);
 					ChangeState(State.Morph,State.Morph,mask_Player_Morph,false);
+					groundedMorph = false;
 					morphFrame = 8;
 				}
 				
@@ -2111,7 +2113,30 @@ if(xRayActive)
 						rcheck = x+4;
 					}
 					
-					if(!entity_collision_rectangle(lcheck,yHeight-15,rcheck,yHeight-2))
+					var canGrip = true;
+					var num = collision_rectangle_list(lcheck,bbottom+qcHeight,rcheck,bbottom+qcHeight+3,solids,true,true,blockList,true);
+					if(num > 0)
+					{
+						for(var j = 0; j < num; j++)
+						{
+							if (instance_exists(blockList[| j]))
+							{
+								var block = blockList[| j];
+								if (block.object_index == obj_Tile || object_is_ancestor(block.object_index,obj_Tile) ||
+									block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
+								{
+									canGrip = block.canGrip;
+								}
+								if(canGrip)
+								{
+									break;
+								}
+							}
+						}
+					}
+					ds_list_clear(blockList);
+					
+					if(canGrip && !entity_collision_rectangle(lcheck,yHeight-15,rcheck,yHeight-2))
 					{
 						if(!entity_collision_rectangle(lcheck,yHeight-31,rcheck,yHeight-2))
 						{
@@ -2661,6 +2686,7 @@ if(xRayActive)
 		{
 			audio_play_sound(snd_Morph,0,false);
 			ChangeState(State.Morph,State.Morph,mask_Player_Morph,true);
+			groundedMorph = true;
 			morphFrame = 8;
 		}
 		else if(!grounded && CanChangeState(mask_Player_Jump))
@@ -2733,15 +2759,12 @@ if(xRayActive)
 			if(grounded)
 			{
 				ChangeState(state,stateFrame,mask_Player_Crouch,false);
+				groundedMorph = true;
 			}
 			else
 			{
 				ChangeState(state,stateFrame,mask_Player_Somersault,false);
-			}
-			
-			if(morphFrame == 8)
-			{
-				morphYOff = oldY-y;
+				groundedMorph = false;
 			}
 			
 			aimUpDelay = 10;
@@ -3121,13 +3144,10 @@ if(xRayActive)
 					mask_index = mask_Player_Crouch;
 					if(climbIndex >= 3 && climbTarget == 1)
 					{
-						mask_index = mask_Player_Morph;
+						audio_play_sound(snd_Morph,0,false);
+						ChangeState(state,State.Morph,mask_Player_Morph,true);
 						morphFrame = 8;
-						if(stateFrame != State.Morph)
-						{
-							audio_play_sound(snd_Morph,0,false);
-						}
-						stateFrame = State.Morph;
+						groundedMorph = true;
 					}
 					else if(climbIndex > 17)
 					{
@@ -3146,6 +3166,7 @@ if(xRayActive)
 				else if(climbIndex > 11 && !entity_place_collide(0,0))
 				{
 					ChangeState(State.Morph,State.Morph,mask_Player_Morph,true);
+					groundedMorph = true;
 				}
 			}
 		}
@@ -3850,21 +3871,22 @@ if(xRayActive)
 				var dist = point_distance(position.X,position.Y,grapple.x,grapple.y);
 				var reel = 0;
 			
-				var up = (cUp), down = (cDown && grappleDist < grappleMaxDist);
+				var up = (cUp && grappleDist > grappleMinDist),
+					down = (cDown && grappleDist < grappleMaxDist);
 				if(global.grappleStyle == 1 && move != 0)
 				{
 					up = false;
 					down = false;
 				}
 				var reelSpeed = 6 / (1+liquidMovement);
-				if(dist < 31)
+				if(dist < grappleMinDist)
 				{
-					reel = min(reelSpeed,31-dist);
+					reel = min(reelSpeed,grappleMinDist-dist);
 					grappleDist = min(dist,grappleMaxDist);
 				}
 				if(up)
 				{
-					reel = max(-reelSpeed,scr_round(31-dist));
+					reel = max(-reelSpeed,scr_round(grappleMinDist-dist));
 					grappleDist = min(dist,grappleMaxDist);
 				}
 				if(down)

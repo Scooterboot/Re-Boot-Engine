@@ -11,7 +11,7 @@ ini_open("settings.ini");
 	global.spiderBallStyle = ini_read_real("Controls", "spiderball control", 0);
 	global.dodgeStyle = ini_read_real("Controls", "dodge control", 0);
 	
-	global.grappleAimAssist = true;
+	global.grappleAimAssist = ini_read_real("Controls", "grapple aim assist", true);
 ini_close();
 
 // --- Keyboard ---
