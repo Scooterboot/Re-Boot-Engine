@@ -299,9 +299,10 @@
               291,1,273,-41,0,-2,273,-20,291,2,183,184,
             ],"TileDataFormat":1,},"tilesetId":{"name":"ts_Tech","path":"tilesets/ts_Tech/ts_Tech.yy",},"userdefinedDepth":false,"visible":true,"x":0,"y":0,},
         {"$GMRTileLayer":"","%Name":"Tiles_fg2","depth":1300,"effectEnabled":true,"effectType":null,"gridX":16,"gridY":16,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"name":"Tiles_fg2","properties":[],"resourceType":"GMRTileLayer","resourceVersion":"2.0","tiles":{"SerialiseHeight":64,"SerialiseWidth":96,"TileCompressedData":[
-              -3066,0,4,1879048213,1879048232,1342177320,1342177301,-92,0,4,1879048212,1879048231,1342177319,1342177300,
-              -92,0,4,1879048211,1879048230,1342177318,1342177299,-674,0,2,268435476,268435475,-94,0,2,268435495,268435494,
-              -94,0,2,805306407,805306406,-94,0,2,805306388,805306387,-1918,0,
+              -1187,0,3,16,0,16,-20,0,3,16,0,16,-1853,0,4,1879048213,1879048232,1342177320,1342177301,-92,0,4,1879048212,
+              1879048231,1342177319,1342177300,-92,0,4,1879048211,1879048230,1342177318,1342177299,-674,0,2,268435476,
+              268435475,-94,0,2,268435495,268435494,-94,0,2,805306407,805306406,-94,0,2,805306388,805306387,-1918,
+              0,
             ],"TileDataFormat":1,},"tilesetId":{"name":"ts_CRE","path":"tilesets/ts_CRE/ts_CRE.yy",},"userdefinedDepth":false,"visible":true,"x":0,"y":0,},
         {"$GMRTileLayer":"","%Name":"Tiles_fg3","depth":1400,"effectEnabled":true,"effectType":null,"gridX":16,"gridY":16,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"name":"Tiles_fg3","properties":[],"resourceType":"GMRTileLayer","resourceVersion":"2.0","tiles":{"SerialiseHeight":64,"SerialiseWidth":96,"TileCompressedData":[-4410,0,-4,536870979,-92,0,-4,536870963,-1634,0,],"TileDataFormat":1,},"tilesetId":{"name":"ts_Chrome","path":"tilesets/ts_Chrome/ts_Chrome.yy",},"userdefinedDepth":false,"visible":true,"x":0,"y":0,},
       ],"name":"Tiles_fg0","properties":[],"resourceType":"GMRTileLayer","resourceVersion":"2.0","tiles":{"SerialiseHeight":64,"SerialiseWidth":96,"TileCompressedData":[

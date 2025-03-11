@@ -8,21 +8,22 @@ if(global.gamePaused)
 var player = instance_place(x,y,obj_Player);
 if(state == 0)
 {
-	frameCounter++;
-	if(frameCounter > 12 || frame > 2)
+	if(frameFinal > 2)
 	{
-		if(frame <= 0)
-		{
-			frameNum = 1;
-		}
-		if(frame >= 2)
-		{
-			frameNum = -1;
-		}
-		frame = clamp(frame+frameNum,0,2);
-		frameCounter = 0;
+		frameFinal--;
+		frame = 2;
 	}
-	lFrame = frame;
+	else
+	{
+		frameCounter++;
+		if(frameCounter > 12)
+		{
+			frame = scr_wrap(frame+1,0,4);
+			frameCounter = 0;
+		}
+		frameFinal = frameSeq[frame];
+	}
+	lFrameFinal = frameFinal;
 	
 	if(instance_exists(player) && player.state == State.Morph && player.grounded && player.velY >= 0 && !player.spiderBall)
 	{
@@ -38,38 +39,20 @@ if(state == 0)
 			
 			audio_play_sound(snd_MorphLauncher,0,false);
 			state = 1;
+			stateCounter = player.shineLauncherStart;
 			
-			frame = 0;
 			frameCounter = 0;
-			lFrame = 2;
-			lFrameCounter = 0;
 		}
 	}
 }
 
 if(state == 1)
 {
-	if(frame <= 0)
-	{
-		frameNum = 1;
-	}
-	if(frame >= 4)
-	{
-		frameNum = -1;
-	}
-	frame = clamp(frame+frameNum,0,4);
+	frame = scr_wrap(frame+1,0,8);
+	frameFinal = frameSeq2[frame];
+	lFrameFinal = lFrameSeq[frame];
 	
-	if(lFrame <= 2)
-	{
-		lFrameNum = 1;
-	}
-	if(lFrame >= 6)
-	{
-		lFrameNum = -1;
-	}
-	lFrame = clamp(lFrame+lFrameNum,2,6);
-	
-	if(instance_exists(player) && player.shineLauncherStart > 0)
+	if(instance_exists(player) && player.state == State.BallSpark && player.shineLauncherStart > 0)
 	{
 		var xx = x,
 			yy = y+1;
@@ -103,13 +86,16 @@ if(state == 1)
 			}
 		}
 	}
+	
+	if(stateCounter > 0)
+	{
+		stateCounter--;
+	}
 	else
 	{
 		state = 0;
 		
 		frame = 0;
 		frameCounter = 0;
-		lFrame = 0;
-		lFrameCounter = 0;
 	}
 }

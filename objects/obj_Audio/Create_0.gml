@@ -110,8 +110,7 @@ global.music_CrateriaActive = new LoopedSong(mus_CrateriaActive, 0.495, 208.025)
 global.music_CrateriaMain = new LoopedSong(mus_CrateriaMain, 28.602, 238.914);
 global.music_BrinstarGreen = new LoopedSong(mus_BrinstarGreen, 64.806, 166.750);
 global.music_BrinstarRed = new LoopedSong(mus_BrinstarRed, 106.264, 218.838);
-//global.music_UpperNorfair = new LoopedSong(mus_UpperNorfair, 49.169, 107.423);
-global.music_UpperNorfair = new LoopedSong(mus_UpperNorfair, 22.855, 101.109);
+global.music_UpperNorfair = new LoopedSong(mus_UpperNorfair, 49.169, 107.423);
 global.music_LowerNorfair = new LoopedSong(mus_LowerNorfair, 130.679, 269.051);
 global.music_WreckedShip = new LoopedSong(mus_WreckedShip, 2.100, 269.217);
 global.music_WreckedShip_Active = new LoopedSong(mus_WreckedShip_Active, 3.563, 270.975);
@@ -119,6 +118,9 @@ global.music_UpperMaridia = new LoopedSong(mus_UpperMaridia, 5.802, 119.178);
 global.music_LowerMaridia = new LoopedSong(mus_LowerMaridia, 37.870, 115.695);
 global.music_TourianGateway = new LoopedSong(mus_TourianGateway, 0.041, 88.986);
 global.music_Tourian = new LoopedSong(mus_Tourian, 0.041, 221.223);
+
+global.music_NESNorfair = new LoopedSong(mus_NESNorfair, 22.855, 101.109);
+global.music_KraidsLair = new LoopedSong(mus_KraidsLair, 23.790, 233.082);
 
 global.music_BossTension = new LoopedSong(mus_BossTension, 0.027, 62.945);
 global.music_BossAwakening = new LoopedSong(mus_BossAwakening, 31.557, 63.015);

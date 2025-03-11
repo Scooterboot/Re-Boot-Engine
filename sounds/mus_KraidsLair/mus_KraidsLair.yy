@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"mus_KraidsLair",
+  "audioGroupId":{
+    "name":"audio_music",
+    "path":"audiogroups/audio_music",
+  },
+  "bitDepth":1,
+  "bitRate":192,
+  "compression":1,
+  "conversionMode":0,
+  "duration":242.5829,
+  "name":"mus_KraidsLair",
+  "parent":{
+    "name":"Custom",
+    "path":"folders/Sounds/Music/Areas/Custom.yy",
+  },
+  "preload":true,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"mus_KraidsLair.wav",
+  "type":1,
+  "volume":1.0,
+}

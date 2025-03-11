@@ -2710,7 +2710,7 @@ if(xRayActive)
 		
 		if(grounded && !prevGrounded)
 		{
-			if(morphFrame <= 0 && shineRampFix <= 0 && !slopeGrounded)
+			if(morphFrame <= 0 && !shineRampFix && !slopeGrounded)
 			{
 				if(!spiderBall)
 				{
@@ -2859,7 +2859,7 @@ if(xRayActive)
 		{
 			if(spiderEdge != Edge.None && prevSpiderEdge == Edge.None && grounded && !prevGrounded)
 			{
-				if(morphFrame <= 0 && shineRampFix <= 0)
+				if(morphFrame <= 0 && !shineRampFix)
 				{
 					audio_play_sound(snd_SpiderStick,0,false);
 					
@@ -3317,7 +3317,7 @@ if(xRayActive)
 		gunReady = false;
 		ledgeFall = true;
 		ledgeFall2 = true;
-		shineRampFix = 4;
+		shineRampFix = true;
 		shineFXCounter = min(shineFXCounter + 0.05, 1);
 		
 		var aUp = false,
@@ -3699,7 +3699,7 @@ if(xRayActive)
 		{
 			shineFXCounter = max(shineFXCounter - 0.075, 0);
 		}
-		shineRampFix = max(shineRampFix - 1, 0);
+		shineRampFix = false;
 		shineRestart = false;
 		
 		shineSparkSpeed = shineSparkStartSpeed;

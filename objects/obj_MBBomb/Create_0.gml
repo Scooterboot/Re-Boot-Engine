@@ -24,6 +24,8 @@ doorOpenType[DoorOpenType.Bomb] = true;
 blockBreakType[BlockBreakType.Bomb] = true;
 blockBreakType[BlockBreakType.Chain] = true;
 
+dmgScale = 0;
+
 function OnXCollision(fVX)
 {
 	if(spreadType < 2)

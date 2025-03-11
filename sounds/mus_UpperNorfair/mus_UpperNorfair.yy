@@ -9,7 +9,7 @@
   "bitRate":192,
   "compression":1,
   "conversionMode":0,
-  "duration":109.608,
+  "duration":141.01479,
   "name":"mus_UpperNorfair",
   "parent":{
     "name":"Areas",
@@ -19,7 +19,7 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"mus_UpperNorfair.mp3",
+  "soundFile":"mus_UpperNorfair.wav",
   "type":1,
   "volume":1.0,
 }

@@ -1,0 +1,1 @@
+canGrip = false;

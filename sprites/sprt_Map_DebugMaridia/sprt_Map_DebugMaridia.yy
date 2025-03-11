@@ -27,7 +27,7 @@
   "origin":0,
   "parent":{
     "name":"Map",
-    "path":"folders/Sprites/UI/Map.yy",
+    "path":"folders/Sprites/Map.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

@@ -5,6 +5,16 @@ if(global.gamePaused)
 	exit;
 }
 
+bombTimer--;
+if(bombTimer >= 20)
+{
+	image_speed = 0.25;
+}
+else
+{
+	image_speed = 0.5;
+}
+
 if(spreadType != -1)
 {
 	if(spreadType == 0)
@@ -40,18 +50,26 @@ if(spreadType != -1)
 	
 	Collision_Normal(velX,velY,false);
 }
-
-scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,4);
-
-bombTimer--;
-if(bombTimer >= 20)
-{
-	image_speed = 0.25;
-}
 else
 {
-	image_speed = 0.5;
+	if(bombTimer <= 40 && dmgScale == 0)
+	{
+		damage *= 3;
+		dmgScale = 1;
+	}
+	if(bombTimer <= 20 && dmgScale == 1)
+	{
+		damage *= 2.5;
+		dmgScale = 2;
+	}
+	if(bombTimer <= 1 && dmgScale == 2)
+	{
+		damage /= 0.75;
+		dmgScale = 3;
+	}
 }
+
+scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,4);
 
 if(bombTimer <= 0 || impacted > 0)
 {

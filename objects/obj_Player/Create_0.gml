@@ -181,7 +181,7 @@ shineSparkStartSpeed = 10;
 shineSparkSpeed = shineSparkStartSpeed;
 shineSparkSpeedMax = 15;//13;
 shineFXCounter = 0;
-shineRampFix = 0;
+shineRampFix = false;
 
 shineDownRot = 0;
 shineRestart = false;
@@ -306,9 +306,6 @@ liquidLevel = 0;
 
 statCharge = 0;
 maxCharge = 60;
-
-bombCharge = 0;
-bombChargeMax = 30;
 
 shootDir = 0;
 shootSpeed = 10;//8;
@@ -1509,7 +1506,7 @@ function OnYCollision(fVY)
 	}
 	
 	// Ball Bounce
-	if(canMorphBounce && !justBounced && bFlag && velY > (2.5 + fGrav) && state == State.Morph && morphFrame <= 0 && shineRampFix <= 0)
+	if(canMorphBounce && !justBounced && bFlag && velY > (2.5 + fGrav) && state == State.Morph && morphFrame <= 0 && !shineRampFix)
 	{
 		//audio_stop_sound(snd_Land);
 		//audio_play_sound(snd_Land,0,false);
@@ -3494,7 +3491,7 @@ function PaletteSurface()
 		}
 		#endregion
 		#region -- Screw Attack --
-		if(isScrewAttacking && frame[6] >= 1 && spaceJump <= 6 && wjFrame <= 0)
+		if(isScrewAttacking && frame[Frame.Somersault] >= 1 && spaceJump <= 6 && wjFrame <= 0)
 		{
 			screwPal = clamp(screwPal + 0.25*screwPalNum, 0, 1);
 			if(screwPal >= 1)

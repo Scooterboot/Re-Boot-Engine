@@ -2462,8 +2462,14 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			}
 			mbTrailPosX[mbTrailLength-1] = position.X + sprtOffsetX;
 			mbTrailPosY[mbTrailLength-1] = position.Y + sprtOffsetY;
-			var trailDir = point_direction(position.X,position.Y,oldPosition.X,oldPosition.Y);
-			if(point_distance(position.X,position.Y,oldPosition.X,oldPosition.Y) > 0)
+			
+			var posX = mbTrailPosX[mbTrailLength-1],
+				posY = mbTrailPosY[mbTrailLength-1];
+			var oldPosX = mbTrailPosX[mbTrailLength-2],
+				oldPosY = mbTrailPosY[mbTrailLength-2];
+			var trailDir = point_direction(posX,posY,oldPosX,oldPosY);
+			
+			if(point_distance(posX,posY,oldPosX,oldPosY) > 0)
 			{
 				mbTrailDir[mbTrailLength-1] = trailDir;
 			}
@@ -2538,6 +2544,11 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			sound = snd_PlasmaBeam_ChargeShot;
 			autoFire = 2;
 		}
+		
+		var bombDmg = 5, // Scales to 2.5x -> 7.5x -> 10x as the bomb's timer tics down. Logic stored in obj_Bomb.
+			instaBombDmg = 5, // Damage of bombs if you hold down to insta explode them. Very spammable.
+			chargeBombDmg = 30, // Bomb spread damage.
+			pBombDmg = 40; // Power bomb explosions deal damage per frame (well, not really, because enemies have i-frames).
 		
 		if(!xRayActive)
 		{
@@ -2670,66 +2681,86 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						}
 					}
 				}
-				else if(bombDelayTime <= 0 && canShoot && rShoot)
+				else if(canShoot)//if(bombDelayTime <= 0 && canShoot && rShoot)
 				{
-					var bombposx = x,
-						bombposy = y+3,
-						instaBomb = cDown;
-					if(spiderBall)
+					if(bombDelayTime <= 0)
 					{
-						bombposx = x + lengthdir_x(-2,spiderJumpDir);
-						bombposy = y+1 + lengthdir_y(-2,spiderJumpDir);
-						if(spiderEdge == Edge.Top)
+						if(rShoot || enqueShot)
 						{
-							instaBomb = cUp;
+							var bombPosX = x,
+								bombPosY = y+3,
+								instaBomb = cDown;
+							if(spiderBall)
+							{
+								bombPosX = x + lengthdir_x(-2,spiderJumpDir);
+								bombPosY = y+1 + lengthdir_y(-2,spiderJumpDir);
+								if(spiderEdge == Edge.Top)
+								{
+									instaBomb = cUp;
+								}
+								if(spiderEdge == Edge.Left)
+								{
+									instaBomb = cLeft;
+								}
+								if(spiderEdge == Edge.Right)
+								{
+									instaBomb = cRight;
+								}
+							}
+							
+							if(itemSelected == 1 && (itemHighlighted[1] == 2 || global.HUD > 0) && powerBombStat > 0 && item[Item.PBomb])
+							{
+								var pBomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_PowerBomb);
+								pBomb.damage = pBombDmg;
+								bombDelayTime = 30;
+								powerBombStat--;
+								cFlashStartCounter++;
+								//audio_play_sound(snd_PowerBombSet,0,false);
+							}
+							else if(misc[Misc.Bomb] && (instance_number(obj_MBBomb) < 3 || cDown))
+							{
+								if(instaBomb)
+								{
+									var explo = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBombExplosion);
+									explo.damage = instaBombDmg;
+									explo.MovePushBlock();
+									scr_PlayExplodeSnd(0,false);
+								}
+								else
+								{
+									var mbBomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBomb);
+									mbBomb.damage = bombDmg;
+									//audio_play_sound(snd_BombSet,0,false);
+								}
+								bombDelayTime = 8;
+							}
 						}
-						if(spiderEdge == Edge.Left)
-						{
-							instaBomb = cLeft;
-						}
-						if(spiderEdge == Edge.Right)
-						{
-							instaBomb = cRight;
-						}
+						enqueShot = false;
 					}
-					
-					if(itemSelected == 1 && (itemHighlighted[1] == 2 || global.HUD > 0) && powerBombStat > 0 && item[Item.PBomb])
+					else if(rShoot && bombDelayTime < 4)
 					{
-						var pBomb = instance_create_layer(bombposx,bombposy,"Projectiles_fg",obj_PowerBomb);
-						pBomb.damage = 40;
-						bombDelayTime = 30;
-						powerBombStat--;
-						cFlashStartCounter++;
-						//audio_play_sound(snd_PowerBombSet,0,false);
-					}
-					else if(misc[Misc.Bomb] && (instance_number(obj_MBBomb) < 3 || cDown))
-					{
-						if(instaBomb)
-						{
-							var explo = instance_create_layer(bombposx,bombposy,"Projectiles_fg",obj_MBBombExplosion);
-							explo.damage = 50;
-							explo.MovePushBlock();
-							scr_PlayExplodeSnd(0,false);
-						}
-						else
-						{
-							var mbBomb = instance_create_layer(bombposx,bombposy,"Projectiles_fg",obj_MBBomb);
-							mbBomb.damage = 50;
-							//audio_play_sound(snd_BombSet,0,false);
-						}
-						bombDelayTime = 8;
+						enqueShot = true;
 					}
 				}
-		
-				if(beam[Beam.Charge] && !unchargeable && !enqueShot && !isPushing && 
-				((state != State.Morph && stateFrame != State.Morph) || (statCharge >= 10 && (itemSelected == 0 || (global.HUD <= 0 && itemHighlighted[1] == 4)) && misc[Misc.Bomb])))
+				else
+				{
+					enqueShot = false;
+				}
+				
+				var cflag = (state != State.Morph && state != State.BallSpark);
+				if((state == State.Morph || state == State.BallSpark) && statCharge > 0)
+				{
+					cflag = true;
+				}
+				
+				if(beam[Beam.Charge] && !unchargeable && !enqueShot && !isPushing && cflag)
 				{
 					var chargeRate = 1;
 					if(state == State.DmgBoost && dBoostFrame < 19)
 					{
 						chargeRate *= 3;
 					}
-					statCharge = min(statCharge + chargeRate, maxCharge);
+					statCharge = min(statCharge + chargeRate, maxCharge * 2);
 					if(statCharge >= 10)
 					{
 						if(!chargeSoundPlayed)
@@ -2755,18 +2786,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						audio_stop_sound(snd_Charge);
 						audio_stop_sound(snd_Charge_Loop);
 						chargeSoundPlayed = false;
-					}
-					if(state == State.Morph)
-					{
-						if(bombCharge < statCharge)
-						{
-							bombCharge = statCharge;
-						}
-						bombCharge = min(bombCharge+1,bombChargeMax+maxCharge);
-					}
-					else
-					{
-						bombCharge = 0;
 					}
 				}
 				else
@@ -2802,147 +2821,150 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					chargeSoundPlayed = false;
 				}
 		
-				if(canShoot && dir != 0 && !xRayActive)
+				if(canShoot && beam[Beam.Charge] && !unchargeable && dir != 0 && !xRayActive)
 				{
 					if(state != State.Morph && stateFrame != State.Morph)
 					{
-						if(beam[Beam.Charge] && !unchargeable)
+						if(statCharge >= maxCharge)
 						{
-							if(statCharge >= maxCharge)
+							var flareDir = shootDir;
+							if(dir2 == -1)
 							{
-								var flareDir = shootDir;
-								if(dir2 == -1)
-								{
-									flareDir = angle_difference(shootDir,180);
-								}
-								var flare = instance_create_layer(shootPosX+lengthdir_x(5,shootDir),shootPosY+lengthdir_y(5,shootDir),layer_get_id("Projectiles_fg"),obj_ChargeFlare);
-								flare.damage = (beamDmg*chargeMult);
-								flare.sprite_index = beamFlare;
-								flare.damageSubType[2] = (beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1));
-								flare.damageSubType[3] = (beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2));
-								flare.damageSubType[4] = (beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3));
-								flare.damageSubType[5] = (beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4));
-								flare.direction = flareDir;
-								flare.image_angle = flareDir;
-								flare.image_xscale = dir2;
-								flare.creator = id;
-								if(beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1))
-								{
-									flare.freezeType = 2;
-									flare.freezeKill = true;
-								}
-							
-								damage = (beamDmg*chargeMult) / beamChargeAmt;
-								Shoot(beamCharge,damage,sSpeed,beamChargeDelay,beamChargeAmt,beamChargeSound,beamIsWave,beamWaveStyleOffset);
-							
-								chargeReleaseFlash = 4;
-								recoil = true;
+								flareDir = angle_difference(shootDir,180);
 							}
-							else if(statCharge >= 20)
+							var flare = instance_create_layer(shootPosX+lengthdir_x(5,shootDir),shootPosY+lengthdir_y(5,shootDir),layer_get_id("Projectiles_fg"),obj_ChargeFlare);
+							flare.damage = (beamDmg*chargeMult);
+							flare.sprite_index = beamFlare;
+							flare.damageSubType[2] = (beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1));
+							flare.damageSubType[3] = (beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2));
+							flare.damageSubType[4] = (beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3));
+							flare.damageSubType[5] = (beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4));
+							flare.direction = flareDir;
+							flare.image_angle = flareDir;
+							flare.image_xscale = dir2;
+							flare.creator = id;
+							if(beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1))
 							{
-								Shoot(shotIndex,damage,sSpeed,delay,amount,sound,beamIsWave,beamWaveStyleOffset);
-								recoil = true;
+								flare.freezeType = 2;
+								flare.freezeKill = true;
+							}
+							
+							damage = (beamDmg*chargeMult) / beamChargeAmt;
+							Shoot(beamCharge,damage,sSpeed,beamChargeDelay,beamChargeAmt,beamChargeSound,beamIsWave,beamWaveStyleOffset);
+							
+							chargeReleaseFlash = 4;
+							recoil = true;
+						}
+						else if(statCharge >= 20)
+						{
+							Shoot(shotIndex,damage,sSpeed,delay,amount,sound,beamIsWave,beamWaveStyleOffset);
+							recoil = true;
+						}
+					}
+					else if(misc[Misc.Bomb] && (itemSelected == 0 || (itemHighlighted[1] != 2 && global.HUD == 0) || powerBombStat <= 0 || !item[Item.PBomb]))
+					{
+						var bombPosX = x,
+							bombPosY = y+3;
+						if(spiderBall)
+						{
+							bombPosX = x + lengthdir_x(-2,spiderJumpDir);
+							bombPosY = y+1 + lengthdir_y(-2,spiderJumpDir);
+						}
+						
+						if(statCharge >= 20)
+						{
+							var bChargeScale = min(statCharge / (maxCharge*1.5), 1);
+							
+							if(!grounded && (!spiderBall || spiderEdge == Edge.None) && cDown)
+							{
+								var bombDir = [0,90,210,330],
+									bombTime = [0,30,30,30],
+									bombSpd = 2 + 4*bChargeScale;
+								for(var i = 0; i < 4; i++)
+								{
+									var bomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBomb);
+									bomb.damage = chargeBombDmg * bChargeScale;
+									bomb.spreadType = 2;
+									if(i > 0)
+									{
+										bomb.spreadSpeed = bombSpd;
+									}
+									bomb.spreadDir = bombDir[i];
+									bomb.spreadFrict = 0.5;
+									bomb.bombTimer = bombTime[i];
+								}
+								bombDelayTime = 60;
+								audio_play_sound(snd_BombSet,0,false);
+							}
+							else if(spiderBall && spiderEdge != Edge.None)
+							{
+								var bombDir = [0, 45, 90, 135, 180],
+									bombTime = [30, 30, 30, 30, 30];
+									bombSpd = 2 + 4*bChargeScale;
+								for(var i = 0; i < 5; i++)
+								{
+									bombDir[i] += spiderJumpDir-90;
+									
+									var bomb = instance_create_layer(x,y,"Projectiles_fg",obj_MBBomb);
+									bomb.damage = chargeBombDmg * bChargeScale;
+									bomb.spreadType = 2;
+									bomb.spreadSpeed = bombSpd;
+									bomb.spreadDir = bombDir[i];
+									bomb.spreadFrict = 0.5;
+									bomb.bombTimer = bombTime[i];
+								}
+								bombDelayTime = 60;
+								audio_play_sound(snd_BombSet,0,false);
+							}
+							else
+							{
+								var bombDirection = [60, 120, 75, 105, 90],
+									bombDirectionR = [45, 56.25, 67.5, 78.75, 90],
+									bombDirectionL = [135, 123.75, 112.5, 101.25, 90],
+									bombSpeed = 6*bChargeScale,
+									spreadFrict = 2,
+									spreadType = 0;
+								
+								for(var i = 0; i < 5; i++)
+								{
+									var bombTime = 100 - 5*i;
+									var bDir = bombDirection[i];
+									if(move2 != 0)
+									{
+										if(move2 == 1)
+										{
+											bDir = bombDirectionR[i];
+										}
+										else
+										{
+											bDir = bombDirectionL[i];
+										}
+									}
+									else if(cDown)
+									{
+										bDir = 90;
+										bombSpeed = 3 + 4*bChargeScale;
+										spreadFrict = 2 / max(3*i,1);
+										spreadType = 1;
+										bombTime = 55 + 20*i;
+									}
+									
+									var bomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBomb);
+									bomb.damage = chargeBombDmg * bChargeScale;
+									bomb.velX = lengthdir_x(bombSpeed,bDir);
+									bomb.velY = lengthdir_y(bombSpeed,bDir);
+									bomb.spreadType = spreadType;
+									bomb.spreadFrict = spreadFrict;
+									bomb.bombTimer = bombTime;
+								}
+								bombDelayTime = 120 + (30*spreadType);
+								audio_play_sound(snd_BombSet,0,false);
 							}
 						}
 					}
-					statCharge = 0;
 				}
-				if(state == State.Spark || state == State.BallSpark || dir == 0)
-				{
-					statCharge = 0;
-				}
+				statCharge = 0;
 				enqueShot = false;
-			}
-	
-			if(canShoot && state == State.Morph && stateFrame == State.Morph)
-			{
-				var bChMax = bombChargeMax+maxCharge;
-		
-				if(bombCharge >= bChMax || (!cShoot && bombCharge > 0))
-				{
-					var bombposx = x,
-						bombposy = y+3;
-					if(spiderBall)
-					{
-						bombposx = x + lengthdir_x(-2,spiderJumpDir);
-						bombposy = y+1 + lengthdir_y(-2,spiderJumpDir);
-					}
-					
-					if(!grounded && cDown)
-					{
-						var bombDir = array(0,90,210,330),
-							bombTime = array(0,30,30,30),
-							bombSpd = 2+((4/bChMax)*bombCharge);
-						for(var i = 0; i < 4; i++)
-						{
-							var bomb = instance_create_layer(bombposx,bombposy,"Projectiles_fg",obj_MBBomb);
-							bomb.damage = 15;
-							bomb.spreadType = 2;
-							if(i > 0)
-							{
-								bomb.spreadSpeed = bombSpd;
-							}
-							bomb.spreadDir = bombDir[i];
-							bomb.spreadFrict = 0.5;
-							bomb.bombTimer = bombTime[i];
-						}
-						bombDelayTime = 60;
-						audio_play_sound(snd_BombSet,0,false);
-					}
-					else
-					{
-						//var bombDirection = array(45, 135, 67.5, 112.5, 90),
-						var bombDirection = array(60, 120, 75, 105, 90),
-							bombDirectionR = array(45, 56.25, 67.5, 78.75, 90),
-							bombDirectionL = array(135, 123.75, 112.5, 101.25, 90),
-							bombSpeed = ((6/bChMax)*bombCharge),
-							spreadFrict = 2,
-							spreadType = 0;
-						for(var i = 0; i < 5; i++)
-						{
-							//var bombTime = 60 + 10*i;
-							var bombTime = 100 - 5*i;
-							var bDir = bombDirection[i];
-							if(move2 != 0)
-							{
-								if(move2 == 1)
-								{
-									bDir = bombDirectionR[i];
-								}
-								else
-								{
-									bDir = bombDirectionL[i];
-								}
-							}
-							else if(cDown)
-							{
-								bDir = 90;
-								bombSpeed = 3+((4/bChMax)*bombCharge);
-								spreadFrict = 2 / max(3*i,1);
-								spreadType = 1;
-								bombTime = 55 + 20*i;
-							}
-							var bomb = instance_create_layer(bombposx,bombposy,"Projectiles_fg",obj_MBBomb);
-							bomb.damage = 15;
-							bomb.velX = lengthdir_x(bombSpeed,bDir);
-							bomb.velY = lengthdir_y(bombSpeed,bDir);
-							bomb.spreadType = spreadType;
-							bomb.spreadFrict = spreadFrict;
-							bomb.bombTimer = bombTime;
-						}
-						bombDelayTime = 120 + (30*spreadType);
-						audio_play_sound(snd_BombSet,0,false);
-					}
-					bombCharge = 0;
-					statCharge = 0;
-					audio_stop_sound(snd_Charge);
-					audio_stop_sound(snd_Charge_Loop);
-					chargeSoundPlayed = false;
-				}
-			}
-			else
-			{
-				bombCharge = 0;
 			}
 			#endregion
 	
