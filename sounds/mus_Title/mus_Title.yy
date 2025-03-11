@@ -9,7 +9,7 @@
   "bitRate":192,
   "compression":1,
   "conversionMode":0,
-  "duration":102.03429,
+  "duration":102.005264,
   "name":"mus_Title",
   "parent":{
     "name":"Music",
@@ -19,7 +19,7 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"mus_Title.mp3",
+  "soundFile":"mus_Title.ogg",
   "type":1,
   "volume":1.0,
 }

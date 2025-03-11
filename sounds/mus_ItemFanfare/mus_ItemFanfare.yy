@@ -9,7 +9,7 @@
   "bitRate":192,
   "compression":0,
   "conversionMode":0,
-  "duration":5.694694,
+  "duration":5.648231,
   "name":"mus_ItemFanfare",
   "parent":{
     "name":"Misc",
@@ -19,7 +19,7 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"mus_ItemFanfare.mp3",
+  "soundFile":"mus_ItemFanfare.ogg",
   "type":1,
   "volume":1.0,
 }

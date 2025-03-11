@@ -19,7 +19,7 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"mus_WreckedShip.wav",
+  "soundFile":"mus_WreckedShip.ogg",
   "type":1,
   "volume":1.0,
 }

@@ -9,7 +9,7 @@
   "bitRate":192,
   "compression":1,
   "conversionMode":0,
-  "duration":34.31333,
+  "duration":34.29147,
   "name":"mus_AmbientSilence",
   "parent":{
     "name":"Misc",
@@ -19,7 +19,7 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"mus_AmbientSilence.mp3",
+  "soundFile":"mus_AmbientSilence.ogg",
   "type":1,
   "volume":1.0,
 }

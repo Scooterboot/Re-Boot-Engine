@@ -19,7 +19,7 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"mus_LowerMaridia.wav",
+  "soundFile":"mus_LowerMaridia.ogg",
   "type":1,
   "volume":1.0,
 }

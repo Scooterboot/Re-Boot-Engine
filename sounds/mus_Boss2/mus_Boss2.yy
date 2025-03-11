@@ -9,7 +9,7 @@
   "bitRate":192,
   "compression":1,
   "conversionMode":0,
-  "duration":65.0449,
+  "duration":65.01588,
   "name":"mus_Boss2",
   "parent":{
     "name":"Boss",
@@ -19,7 +19,7 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"mus_Boss2.mp3",
+  "soundFile":"mus_Boss2.ogg",
   "type":1,
   "volume":1.0,
 }

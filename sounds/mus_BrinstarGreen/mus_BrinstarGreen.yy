@@ -9,7 +9,7 @@
   "bitRate":192,
   "compression":1,
   "conversionMode":0,
-  "duration":222.04082,
+  "duration":222.00598,
   "name":"mus_BrinstarGreen",
   "parent":{
     "name":"Areas",
@@ -19,7 +19,7 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"mus_BrinstarGreen.mp3",
+  "soundFile":"mus_BrinstarGreen.ogg",
   "type":1,
   "volume":1.0,
 }

@@ -19,7 +19,7 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"amb_Rain.wav",
+  "soundFile":"amb_Rain.ogg",
   "type":1,
   "volume":1.0,
 }

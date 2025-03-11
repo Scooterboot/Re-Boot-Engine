@@ -9,7 +9,7 @@
   "bitRate":192,
   "compression":1,
   "conversionMode":0,
-  "duration":54.047348,
+  "duration":54.009617,
   "name":"mus_ItemRoom",
   "parent":{
     "name":"Misc",
@@ -19,7 +19,7 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"mus_ItemRoom.mp3",
+  "soundFile":"mus_ItemRoom.ogg",
   "type":1,
   "volume":1.0,
 }

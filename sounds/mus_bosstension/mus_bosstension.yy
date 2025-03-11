@@ -9,7 +9,7 @@
   "bitRate":192,
   "compression":1,
   "conversionMode":0,
-  "duration":73.03837,
+  "duration":73.00354,
   "name":"mus_BossTension",
   "parent":{
     "name":"Boss",
@@ -19,7 +19,7 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"mus_bosstension.mp3",
+  "soundFile":"mus_BossTension.ogg",
   "type":1,
   "volume":1.0,
 }
