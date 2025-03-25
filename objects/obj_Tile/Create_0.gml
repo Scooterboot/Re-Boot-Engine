@@ -1,3 +1,4 @@
-/// @description Interface inheritence
+/// @description 
 
 canGrip = true;
+canWallJump = true;

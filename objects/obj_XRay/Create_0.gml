@@ -222,14 +222,11 @@ function xray_redraw_outline()
 	}
 	with(obj_Breakable)
 	{
-		if(object_index != obj_Spikes)
-		{
-			draw_sprite_ext(sprt_Tile,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
-		}
-		else
-		{
-			draw_sprite_ext(sprt_Spikes,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_red,1);
-		}
+		draw_sprite_ext(sprt_Tile,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
+	}
+	with(obj_Spikes)
+	{
+		draw_sprite_ext(sprt_Spikes,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_red,1);
 	}
 	with(obj_InteractStation)
 	{

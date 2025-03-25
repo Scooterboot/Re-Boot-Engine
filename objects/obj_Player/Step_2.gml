@@ -26,8 +26,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	}
 	else if(grounded) // feels kinda jank ngl. but it does work. i just don't like it.
 	{
-		var block_bl = instance_position(bb_left(),bb_bottom()+1,obj_Tile),
-			block_br = instance_position(bb_right(),bb_bottom()+1,obj_Tile),
+		var block_bl = instance_position(bb_left(),bb_bottom()+1,solids),
+			block_br = instance_position(bb_right(),bb_bottom()+1,solids),
 			platform = collision_line(bb_left(),bb_bottom()+1,bb_right(),bb_bottom()+1,obj_Platform,true,true);
 		if ((!instance_exists(block_bl) xor (instance_exists(block_bl) && block_bl.object_index == obj_CrumbleBlock)) && 
 			(!instance_exists(block_br) xor (instance_exists(block_br) && block_br.object_index == obj_CrumbleBlock)) && 

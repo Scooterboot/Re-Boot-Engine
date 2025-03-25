@@ -1,1 +1,2 @@
 canGrip = false;
+canWallJump = false;

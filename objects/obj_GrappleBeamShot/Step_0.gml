@@ -57,10 +57,9 @@ if(grappleState != GrappleState.None)
 	                player.dir *= -1;
 	                player.dirFrame = 4*dir;
 	            }
-	            player.grappleDist = point_distance(player.x, player.y, x, y);
-	            player.grapAngle = point_direction(player.x, player.y, x, y) - 90;
-	            player.state = State.Grapple;
-	            player.stateFrame = State.Grapple;
+	            player.grappleDist = point_distance(player.position.X, player.position.Y, x, y);
+	            player.grapAngle = point_direction(player.position.X, player.position.Y, x, y) - 90;
+				player.ChangeState(State.Grapple,State.Grapple,mask_Player_Somersault,false,true);
 	        }
 			if(grapBlock.object_index == obj_GrappleBlockCracked)
 	        {

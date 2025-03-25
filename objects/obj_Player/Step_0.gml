@@ -1186,7 +1186,35 @@ if(xRayActive)
 	if(state == State.Jump || state == State.Somersault)
 	{
 		var detectRange = 8 + abs(prevVelX);
-		canWallJump = (move != 0 && (entity_place_collide(velX-detectRange*move,0) || place_meeting(position.X+velX-detectRange*move,position.Y,ColType_Platform)) && wjFrame <= 0 && coyoteJump <= 0);
+		//canWallJump = (move != 0 && (entity_place_collide(velX-detectRange*move,0) || place_meeting(position.X+velX-detectRange*move,position.Y,ColType_Platform)) && wjFrame <= 0 && coyoteJump <= 0);
+		canWallJump = false;
+		if(move != 0 && wjFrame <= 0 && coyoteJump <= 0)
+		{
+			var _solids = array_concat(solids,ColType_Platform);
+			var num = instance_place_list(position.X+velX-detectRange*move,position.Y,_solids,blockList,true);
+			if(num > 0)
+			{
+				for(var i = 0; i < num; i++)
+				{
+					if(instance_exists(blockList[| i]) && isValidSolid(blockList[| i]))
+					{
+						var block = blockList[| i];
+						var isSolid = true;
+						if (block.object_index == obj_Tile || object_is_ancestor(block.object_index,obj_Tile) ||
+							block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
+						{
+							isSolid = block.canWallJump;
+						}
+						if(isSolid)
+						{
+							canWallJump = true;
+							break;
+						}
+					}
+				}
+				ds_list_clear(blockList);
+			}
+		}
 	}
 	else
 	{
@@ -1206,7 +1234,8 @@ if(xRayActive)
 	fJumpHeight = jumpHeight[boots[Boots.HiJump],liquidState];
 	
 	var isJumping = (cJump && dir != 0 && /*climbIndex <= 0 &&*/ state != State.Spark && state != State.BallSpark && 
-	state != State.Hurt && (!spiderBall || !sparkCancelSpiderJumpTweak) && !xRayActive && (state != State.Grapple || grapWJCounter > 0));
+	state != State.Hurt && (!spiderBall || !sparkCancelSpiderJumpTweak) && !xRayActive && (state != State.Grapple || grapWJCounter > 0)) && 
+	(state != State.Morph || (!entity_place_collide(0,1) && !entity_place_collide(0,-1)) || (!entity_place_collide(0,1) ^^ !entity_place_collide(0,-1)) || entity_place_collide(0,0));
 	if(isJumping)
 	{
 		if(velY > 0 && !grounded)
@@ -1782,19 +1811,19 @@ if(xRayActive)
 		    }
 		    if(spiderMove == 0)
 		    {
-				if(entity_place_collide(0,1) && moveX != 0)
+				if(entity_place_collide(0,1) && spiderEdge != Edge.Top && moveX != 0)
 		        {
 		            spiderMove = moveX;
 		        }
-				if(entity_place_collide(0,-1) && moveX != 0)
+				if(entity_place_collide(0,-1) && spiderEdge != Edge.Bottom && moveX != 0)
 		        {
 		            spiderMove = -moveX;
 		        }
-				if(entity_place_collide(-1,0) && moveY != 0)
+				if(entity_place_collide(-1,0) && spiderEdge != Edge.Right && moveY != 0)
 		        {
 		            spiderMove = moveY;
 		        }
-				if(entity_place_collide(1,0) && moveY != 0)
+				if(entity_place_collide(1,0) && spiderEdge != Edge.Left && moveY != 0)
 		        {
 		            spiderMove = -moveY;
 		        }
@@ -3379,6 +3408,7 @@ if(xRayActive)
 			velY = 0;
 			shineCharge = 0;
 			shineSparkSpeed = shineSparkStartSpeed;
+			shineReflecCounter = 0;
 			
 			if((cSprint || (cJump && !rSparkJump)) && (move2 != 0 || cUp || cDown || aUp || aDown))
 			{
@@ -3402,6 +3432,7 @@ if(xRayActive)
 			velY = 0;
 			shineCharge = 0;
 			shineSparkSpeed = shineSparkStartSpeed;
+			shineReflecCounter = 0;
 			
 			if(shineLauncherStart == 1)
 			{
@@ -3418,6 +3449,7 @@ if(xRayActive)
 			velX = 0;
 			velY = 0;
 			shineSparkSpeed = shineSparkStartSpeed;
+			shineReflecCounter = 0;
 			if(shineRestart && boots[Boots.ChainSpark])
 			{
 				if(dir == sign(shineDir))
@@ -3575,75 +3607,82 @@ if(xRayActive)
 			velX = lengthdir_x(shineSparkSpeed,shineDir-90+shineDirDiff);
 			velY = lengthdir_y(shineSparkSpeed,shineDir-90+shineDirDiff);
 			
-			var reflec = noone;
-			/*for(var k = 0; k < ceil(shineSparkSpeed); k++)
+			if(shineReflecCounter < shineSparkReflecMax || shineSparkReflecMax < 0)
 			{
-				var vX = sign(velX)*k, vY = sign(velY)*k;
-				instance_place_list(x+vX,y+vY,obj_Reflec,reflecList,true);
-			}*/
-			collision_rectangle_list(bb_left()+min(velX,0),bb_top()+min(velY,0),bb_right()+max(velX,0),bb_bottom()+max(velY,0),obj_Reflec,true,true,reflecList,true);
-			for(var i = 0; i < ds_list_size(reflecList); i++)
-			{
-				var _ref = reflecList[| i];
-				if(instance_exists(_ref))
+				var reflec = noone;
+				/*for(var k = 0; k < ceil(shineSparkSpeed); k++)
 				{
-					var p1 = _ref.GetPoint1(),
-						p2 = _ref.GetPoint2();
-					for(var k = 0; k < ceil(shineSparkSpeed); k++)
+					var vX = sign(velX)*k, vY = sign(velY)*k;
+					instance_place_list(x+vX,y+vY,obj_Reflec,reflecList,true);
+				}*/
+				collision_rectangle_list(bb_left()+min(velX,0),bb_top()+min(velY,0),bb_right()+max(velX,0),bb_bottom()+max(velY,0),obj_Reflec,true,true,reflecList,true);
+				for(var i = 0; i < ds_list_size(reflecList); i++)
+				{
+					var _ref = reflecList[| i];
+					if(instance_exists(_ref))
 					{
-						var vX = sign(velX)*k, vY = sign(velY)*k;
-						if(lastReflec != _ref && rectangle_intersect_line(bb_left()+vX,bb_top()+vY,bb_right()+vX,bb_bottom()+vY, p1.X,p1.Y,p2.X,p2.Y))
+						var p1 = _ref.GetPoint1(),
+							p2 = _ref.GetPoint2();
+						for(var k = 0; k < ceil(shineSparkSpeed); k++)
 						{
-							reflec = _ref;
-							break;
+							var vX = sign(velX)*k, vY = sign(velY)*k;
+							if(lastReflec != _ref && rectangle_intersect_line(bb_left()+vX,bb_top()+vY,bb_right()+vX,bb_bottom()+vY, p1.X,p1.Y,p2.X,p2.Y))
+							{
+								reflec = _ref;
+								break;
+							}
 						}
 					}
+					if(instance_exists(reflec))
+					{
+						break;
+					}
 				}
-				if(instance_exists(reflec))
-				{
-					break;
-				}
-			}
-			ds_list_clear(reflecList);
+				ds_list_clear(reflecList);
 			
-			if(instance_exists(reflec) && lastReflec != reflec)
-			{
-				shineDir = ReflectAngle(shineDir-90, reflec.image_angle+90)+90;
-				shineDir = scr_wrap(shineDir,-180,180);
-				
-				var p1 = reflec.GetPoint1(),
-					p2 = reflec.GetPoint2();
-				var vX = 0,
-					vY = 0,
-					_c = 0,
-					_spd = ceil(shineSparkSpeed);
-				while(!rectangle_intersect_line(bb_left()+vX,bb_top()+vY,bb_right()+vX,bb_bottom()+vY, p1.X,p1.Y,p2.X,p2.Y) && _c < _spd)
+				if(instance_exists(reflec) && lastReflec != reflec)
 				{
-					vX += sign(velX) * min(1,abs(velX)-abs(vX));
-					vY += sign(velY) * min(1,abs(velY)-abs(vY));
-					_c++;
+					shineDir = ReflectAngle(shineDir-90, reflec.image_angle+90)+90;
+					shineDir = scr_wrap(shineDir,-180,180);
+					if(shineSparkReflecMax > 0)
+					{
+						shineReflecCounter++;
+					}
+				
+					var p1 = reflec.GetPoint1(),
+						p2 = reflec.GetPoint2();
+					var vX = 0,
+						vY = 0,
+						_c = 0,
+						_spd = ceil(shineSparkSpeed);
+					while(!rectangle_intersect_line(bb_left()+vX,bb_top()+vY,bb_right()+vX,bb_bottom()+vY, p1.X,p1.Y,p2.X,p2.Y) && _c < _spd)
+					{
+						vX += sign(velX) * min(1,abs(velX)-abs(vX));
+						vY += sign(velY) * min(1,abs(velY)-abs(vY));
+						_c++;
+					}
+				
+					velX = lengthdir_x(shineSparkSpeed,shineDir-90);
+					velY = lengthdir_y(shineSparkSpeed,shineDir-90);
+				
+					while(_c < _spd)
+					{
+						vX += sign(velX) * min(1,abs(velX)-abs(vX));
+						vY += sign(velY) * min(1,abs(velY)-abs(vY));
+						_c++;
+					}
+				
+					velX = vX;
+					velY = vY;
+				
+					lastReflec = reflec;
 				}
-				
-				velX = lengthdir_x(shineSparkSpeed,shineDir-90);
-				velY = lengthdir_y(shineSparkSpeed,shineDir-90);
-				
-				while(_c < _spd)
+				else if(instance_exists(lastReflec))
 				{
-					vX += sign(velX) * min(1,abs(velX)-abs(vX));
-					vY += sign(velY) * min(1,abs(velY)-abs(vY));
-					_c++;
-				}
-				
-				velX = vX;
-				velY = vY;
-				
-				lastReflec = reflec;
-			}
-			else if(instance_exists(lastReflec))
-			{
-				if(!place_meeting(x,y,lastReflec))
-				{
-					lastReflec = noone;
+					if(!place_meeting(x,y,lastReflec))
+					{
+						lastReflec = noone;
+					}
 				}
 			}
         
@@ -3716,11 +3755,12 @@ if(xRayActive)
 	if(state == State.Grapple)
 	{
 		stateFrame = State.Grapple;
-		mask_index = mask_Player_Crouch;
+		mask_index = mask_Player_Somersault; //mask_Player_Crouch;
 		if(!grappleActive)
 		{
-			stateFrame = State.Somersault;
-			state = State.Somersault;
+			//stateFrame = State.Somersault;
+			//state = State.Somersault;
+			ChangeState(State.Somersault,State.Somersault,mask_Player_Somersault,false);
 			var signx = (move2 != 0) ? move2 : sign(x - xprevious);
 			if(signx != 0)
 			{
@@ -3739,7 +3779,7 @@ if(xRayActive)
 		}
 		else
 		{
-			if(grappleVelX == 0 && abs(x - grapple.x) > 11 && abs(x - grapple.x) < 25 && ((entity_place_collide(10,0) && x < grapple.x) || (entity_place_collide(-10,0) && x > grapple.x)) && (grapAngle <= 45 || grapAngle >= 315) && grappleDist <= 33)
+			if(/*grappleVelX == 0 &&*/ abs(x - grapple.x) > 11 && abs(x - grapple.x) < 25 && ((entity_place_collide(10,0) && x < grapple.x) || (entity_place_collide(-10,0) && x > grapple.x)) && (grapAngle <= 45 || grapAngle >= 315) && grappleDist <= grappleMinDist+2)
 			{
 			    if(sign(x-grapple.x) != 0)
 			    {
@@ -3879,25 +3919,26 @@ if(xRayActive)
 					down = false;
 				}
 				var reelSpeed = 6 / (1+liquidMovement);
-				if(dist < grappleMinDist)
-				{
-					reel = min(reelSpeed,grappleMinDist-dist);
-					grappleDist = min(dist,grappleMaxDist);
-				}
 				if(up)
 				{
-					reel = max(-reelSpeed,scr_round(grappleMinDist-dist));
+					reel = max(-reelSpeed, grappleMinDist-dist);
 					grappleDist = min(dist,grappleMaxDist);
 				}
 				if(down)
 				{
-					reel = min(reelSpeed,grappleMaxDist-dist);
+					reel = min(reelSpeed, grappleMaxDist-dist);
 					grappleDist = min(dist,grappleMaxDist);
 				}
+				
 				if(grappleDist > grappleMaxDist)
 				{
-					reel = max(-reelSpeed/2,scr_round(grappleMaxDist-dist)-1);
+					reel = max(-reelSpeed/2, grappleMaxDist-dist-1);
 					grappleDist = dist;
+				}
+				if(grappleDist < grappleMinDist)
+				{
+					reel = min(reelSpeed/2, grappleMinDist-dist);
+					grappleDist = min(dist,grappleMaxDist);
 				}
 	
 				var vX = position.X - grapple.x,

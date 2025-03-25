@@ -53,6 +53,11 @@ speedBoostWallJump = true;
 // Cancel Shine Spark mid-flight by pressing jump
 shineSparkCancel = false;//true;
 
+// Maximum number of times Shine Spark can be redirected on Reflec panels, after which it just ignores them (counter resets on restarting a Shine Spark or Chain Sparking).
+// Useful for preventing being infinitely stuck Shine Sparking when shineSparkCancel is set to false.
+// Set to -1 to disable;
+shineSparkReflecMax = 30; // Default: 30
+
 // Low-level Shine Spark flight control / Shine Spark steering
 //press directions or angle buttons to slightly change flight direction
 shineSparkFlightAdjust = false;
@@ -208,6 +213,8 @@ function SparkDir_DiagUp() { return abs(GetSparkDir()) >= 112.5 && abs(GetSparkD
 function SparkDir_Hori() { return abs(GetSparkDir()) > 67.5 && abs(GetSparkDir()) < 112.5; }
 function SparkDir_DiagDown() { return abs(GetSparkDir()) >= 22.5 && abs(GetSparkDir()) <= 67.5; }
 function SparkDir_VertDown() { return abs(GetSparkDir()) < 22.5; }
+
+shineReflecCounter = 0;
 
 
 spiderBall = false;
@@ -1208,30 +1215,34 @@ function entity_collision(listNum)
 	{
 		for(var i = 0; i < listNum; i++)
 		{
-			if(instance_exists(blockList[| i]))
+			if(instance_exists(blockList[| i]) && isValidSolid(blockList[| i]))
 			{
-				var block = blockList[| i];
-				var isSolid = true;
-				if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
-				{
-					isSolid = block.isSolid;
-					if(block.ignoredEntity == id)
-					{
-						isSolid = false;
-					}
-				}
-				var sp = (object_is_in_array(block.object_index, ColType_SpeedBlock) && isSpeedBoosting && shineStart <= 0 && shineLauncherStart <= 0),
-					sc = (object_is_in_array(block.object_index, ColType_ScrewBlock) && isScrewAttacking);
-				if(isSolid && !sp && !sc)
-				{
-					ds_list_clear(blockList);
-					return true;
-				}
+				ds_list_clear(blockList);
+				return true;
 			}
 		}
 		ds_list_clear(blockList);
 	}
 	return false;
+}
+function isValidSolid(block)
+{
+	var isSolid = true;
+	if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
+	{
+		isSolid = block.isSolid;
+		if(block.ignoredEntity == id)
+		{
+			isSolid = false;
+		}
+	}
+	var sp = (object_is_in_array(block.object_index, ColType_SpeedBlock) && isSpeedBoosting && shineStart <= 0 && shineLauncherStart <= 0),
+		sc = (object_is_in_array(block.object_index, ColType_ScrewBlock) && isScrewAttacking);
+	if(sp || sc)
+	{
+		isSolid = false;
+	}
+	return isSolid;
 }
 
 function ModifyFinalVelX(fVX)
