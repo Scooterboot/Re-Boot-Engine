@@ -34,19 +34,19 @@ moveCounterY = 0;
 moveCounterMax = 30;
 function MoveSelectX()
 {
-	if(moveCounterX >= moveCounterMax)
+	if(creator.moveCounterX >= creator.moveCounterMax)
 	{
-		return cRight - cLeft;
+		return creator.cRight - creator.cLeft;
 	}
-	return (cRight && rRight) - (cLeft && rLeft);
+	return (creator.cRight && creator.rRight) - (creator.cLeft && creator.rLeft);
 }
 function MoveSelectY()
 {
-	if(moveCounterY >= moveCounterMax)
+	if(creator.moveCounterY >= creator.moveCounterMax)
 	{
-		return cDown - cUp;
+		return creator.cDown - creator.cUp;
 	}
-	return (cDown && rDown) - (cUp && rUp);
+	return (creator.cDown && creator.rDown) - (creator.cUp && creator.rUp);
 }
 
 selectedFile = -1;
@@ -494,7 +494,7 @@ function CreateConfirmDeletePanel()
 #region DrawGenericButton
 function DrawGenericButton(_x, _y)
 {
-	with(other)
+	//with(other)
 	{
 		var col = c_black,
 			alph = 0.5;
@@ -523,7 +523,7 @@ function DrawGenericButton(_x, _y)
 #region DrawMainMenuButton
 function DrawMainMenuButton(_x, _y)
 {
-	with(other)
+	//with(other)
 	{
 		var col = c_black,
 			alph = 0.5,
@@ -586,7 +586,7 @@ fileIconFrameCounter = 0;
 
 function DrawSaveFileButton(_x, _y)
 {
-	with(other)
+	//with(other)
 	{
 		/*
 		var col = c_black,
@@ -729,7 +729,7 @@ function DrawSaveFileButton(_x, _y)
 #region DrawConfirmPanel
 function DrawConfirmPanel(_x, _y)
 {
-	with(other)
+	//with(other)
 	{
 		alpha = min(alpha+0.15,1);
 		

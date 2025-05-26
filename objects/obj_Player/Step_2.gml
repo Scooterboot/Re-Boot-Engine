@@ -908,13 +908,12 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					frameCounter[i] = 0;
 				}
 				frame[Frame.JAim] = 6;
-				aimFrame = 0;
+				//aimFrame = 0;
 				walkToStandFrame = 0;
 				runToStandFrame[0] = 0;
 				runToStandFrame[1] = 0;
+				transFrame = 2;
 				
-				torsoR = sprt_Player_BrakeRight;
-				torsoL = sprt_Player_BrakeLeft;
 				if(move != 0 && move != dir)
 				{
 					brakeFrame = max(brakeFrame - 2, 0);
@@ -931,54 +930,39 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					part_particles_create(obj_Particles.partSystemB,x-(8+random(4))*dir,bb_bottom()+random(4),obj_Particles.bDust[1],1);
 				}
 				bodyFrame = clamp(5 - ceil(brakeFrame/2), 0, 4);
-				switch bodyFrame
+				legFrame = bodyFrame;
+				
+				drawMissileArm = true;
+				if(aimFrame > 0 && aimFrame < 3)
 				{
-					case 4:
-					{
-						ArmPos(11,-5);
-						if(dir == -1)
-						{
-							ArmPos(-9,-4);
-						}
-						break;
-					}
-					case 3:
-					{
-						ArmPos(4,-7);
-						if(dir == -1)
-						{
-							ArmPos(-1,-6);
-						}
-						break;
-					}
-					case 2:
-					{
-						ArmPos(0,-8);
-						if(dir == -1)
-						{
-							ArmPos(1,-7);
-						}
-						break;
-					}
-					case 1:
-					{
-						ArmPos(-2,-8);
-						if(dir == -1)
-						{
-							ArmPos(4,-6);
-						}
-						break;
-					}
-					default:
-					{
-						ArmPos(-3,-8);
-						if(dir == -1)
-						{
-							ArmPos(5,-6);
-						}
-						break;
-					}
+					torsoR = sprt_Player_BrakeAimUpRight;
+					torsoL = sprt_Player_BrakeAimUpLeft;
 				}
+				else if(aimFrame < 0 && aimFrame > -3)
+				{
+					torsoR = sprt_Player_BrakeAimDownRight;
+					torsoL = sprt_Player_BrakeAimDownLeft;
+				}
+				else if(aimFrame >= 3)
+				{
+					torsoR = sprt_Player_BrakeAimUpVRight;
+					torsoL = sprt_Player_BrakeAimUpVLeft;
+				}
+				else if(shootFrame)
+				{
+					torsoR = sprt_Player_BrakeAimRight;
+					torsoL = sprt_Player_BrakeAimLeft;
+				}
+				else
+				{
+					torsoR = sprt_Player_BrakeRight;
+					torsoL = sprt_Player_BrakeLeft;
+					drawMissileArm = false;
+				}
+				legs = sprt_Player_BrakeLeg;
+				
+				SetArmPosBrake();
+				
 				if(brakeFrame <= 0)
 				{
 					brake = false;
@@ -1141,13 +1125,13 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				frame[Frame.Morph] = scr_wrap(frame[Frame.Morph] + morphNum/3*ballAnimDir, 0, 24);
 				
 				var yOffFrame = 4;
-				if(unmorphing && scr_round(morphFrame) <= 5)
+				if(unmorphing > 0 && scr_round(morphFrame) <= 5)
 				{
 					torsoR = sprt_Player_Morph;
 					bodyFrame = scr_round(morphFrame)-1;
 					yOffFrame = bodyFrame;
 				}
-				else if(scr_round(morphFrame) >= 4 && !unmorphing)
+				else if(scr_round(morphFrame) >= 4 && unmorphing == 0)
 				{
 					torsoR = sprt_Player_Morph;
 					bodyFrame = 8-scr_round(morphFrame);
@@ -1168,7 +1152,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				if(groundedMorph)
 				{
 					sprtOffsetY = -morphYOffset[yOffFrame];
-					if(unmorphing)
+					if(unmorphing > 0)
 					{
 						sprtOffsetY += 8;
 					}
@@ -2292,7 +2276,13 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		spaceJump = max(spaceJump - 1, 0);
 		morphFrame = max(morphFrame - animSpeed, 0);
 		
-		if(stateFrame == State.Stand)
+		if(stateFrame == State.Brake)
+		{
+			runToStandFrame[0] = 0;
+			runToStandFrame[1] = 0;
+			walkToStandFrame = 0;
+		}
+		else if(stateFrame == State.Stand)
 		{
 			runToStandFrame[0] = max(runToStandFrame[0] - animSpeed, 0);
 			runToStandFrame[1] = max(runToStandFrame[1] - animSpeed, 0);
@@ -2494,7 +2484,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	{
 		var noBeamsActive = (beam[Beam.Ice]+beam[Beam.Wave]+beam[Beam.Spazer]+beam[Beam.Plasma] <= 0);
 		
-		var canShoot = (!startClimb && !brake && !moonFallState && !isPushing && state != State.Somersault && state != State.Spark && state != State.BallSpark && 
+		var canShoot = (!startClimb /*&& !brake*/ && !moonFallState && !isPushing && state != State.Somersault && state != State.Spark && state != State.BallSpark && 
 						state != State.Hurt && (stateFrame != State.DmgBoost || dBoostFrame >= 19) && state != State.Dodge && state != State.Death);
 		
 		if(!canShoot)
@@ -3091,13 +3081,16 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		
 			#endregion
 	
-			if(aimAngle != 0 || velX == 0 || !grounded || abs(dirFrame) < 4 || state == State.Morph)
+			if(aimAngle != 0 || (velX == 0 && stateFrame != State.Brake) || !grounded || abs(dirFrame) < 4 || state == State.Morph)
 			{
 				justShot = 0;
 			}
+			if(stateFrame != State.Brake)
+			{
+				justShot = max(justShot - 1, 0);
+			}
+			
 			shotDelayTime = max(shotDelayTime - 1, 0);
-			justShot = max(justShot - 1, 0);
-	
 			if(!instance_exists(obj_PowerBomb) && !instance_exists(obj_PowerBombExplosion))
 			{
 				bombDelayTime = max(bombDelayTime - 1, 0);

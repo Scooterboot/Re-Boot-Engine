@@ -906,7 +906,7 @@ if(xRayActive)
 		}
 		else if(!moveflag)
 		{
-			if((aimAngle > -2 || !cJump) && 
+			if((aimAngle > -2 /*|| !cJump*/) && 
 			(state != State.Morph || (state == State.Morph && abs(velX) <= maxSpeed[MaxSpeed.MorphBall,liquidState]) || grounded) && morphFrame <= 0)
 			{
 				if(velX > 0)
@@ -1025,6 +1025,7 @@ if(xRayActive)
 		if(sign(velX) != dir && sign(prevVelX) != dir)
 		{
 			stopBoosting = true;
+			speedCounter = 0;
 		}
 		if(move != dir && (speedCounter > 0 || !grounded) && morphFrame <= 0 && (aimAngle > -2 || !cJump))
 		{
@@ -1269,7 +1270,7 @@ if(xRayActive)
 				rSparkJump = true;
 			}
 			else if((rJump || (state == State.Morph && !spiderBall && rMorphJump) || bufferJump > 0) && quickClimbTarget <= 0 && //climbIndex <= 0 && 
-			(state != State.Morph || (state == State.Morph && ((misc[Misc.Spring] && morphFrame <= 0) || ((unmorphing || morphSpinJump) && CanChangeState(mask_Player_Somersault))))) && state != State.DmgBoost)
+			(state != State.Morph || (state == State.Morph && ((misc[Misc.Spring] && morphFrame <= 0) || ((unmorphing > 0 || morphSpinJump) && CanChangeState(mask_Player_Somersault))))) && state != State.DmgBoost)
 			{
 				if((grounded && !moonFallState) || coyoteJump > 0 || canWallJump || (state == State.Grip && canGripJump) || 
 				(boots[Boots.SpaceJump] && velY >= sjThresh && state == State.Somersault && !liquidMovement && rJump))
@@ -1669,7 +1670,7 @@ if(xRayActive)
 #endregion
 
 #region Boost Ball Movement
-	if((state == State.Morph || state == State.BallSpark || state == State.Grip || state == State.Hurt) && stateFrame == State.Morph && misc[Misc.Boost] && !unmorphing)
+	if((state == State.Morph || state == State.BallSpark || state == State.Grip || state == State.Hurt) && stateFrame == State.Morph && misc[Misc.Boost] && unmorphing == 0)
 	{
 		if(cSprint)
 		{
@@ -2756,12 +2757,12 @@ if(xRayActive)
 			}
 		}
 		
-		if(((cUp && rUp) || (cJump && rJump && (!misc[Misc.Spring] || morphSpinJump)) || (cMorph && rMorph)) && !unmorphing && morphFrame <= 0 && !spiderBall)
+		if(((cUp && rUp) || (cJump && rJump && (!misc[Misc.Spring] || morphSpinJump)) || (cMorph && rMorph)) && unmorphing == 0 && morphFrame <= 0 && !spiderBall)
 		{
 			if(CanChangeState(mask_Player_Crouch))
 			{
 				audio_play_sound(snd_Morph,0,false);
-				unmorphing = true;
+				unmorphing = 1;
 				morphFrame = 8;
 				aimUpDelay = 10;
 				
@@ -2771,6 +2772,7 @@ if(xRayActive)
 					velY = min(velY, 0);
 					speedCounter = 0;
 					speedBoost = false;
+					unmorphing = 2;
 				}
 			}
 			else
@@ -2782,7 +2784,7 @@ if(xRayActive)
 				}
 			}
 		}
-		if(unmorphing)
+		if(unmorphing > 0)
 		{
 			var oldY = y;
 			if(grounded)
@@ -2799,7 +2801,7 @@ if(xRayActive)
 			aimUpDelay = 10;
 			if(morphFrame <= 0)
 			{
-				if(morphSpinJump || (!grounded && move2 != 0))
+				if(morphSpinJump || (!grounded && unmorphing == 1))
 				{
 					ChangeState(State.Somersault,State.Somersault,mask_Player_Somersault,false);
 					frame[Frame.Somersault] = 2;
@@ -2809,7 +2811,7 @@ if(xRayActive)
 				{
 					ChangeState(State.Crouch,State.Crouch,mask_Player_Crouch,true);
 					crouchFrame = 0;
-					if(velX != 0)
+					if(velX != 0 && grounded)
 					{
 						uncrouch = 7;
 						if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
@@ -2847,12 +2849,12 @@ if(xRayActive)
 	{
 		if(state != State.Hurt)
 		{
-			unmorphing = false;
+			unmorphing = 0;
 		}
 		cFlashStartCounter = 0;
 	}
 	
-	if((state == State.Morph || state == State.BallSpark) && misc[Misc.Spider] && !unmorphing)
+	if((state == State.Morph || state == State.BallSpark) && misc[Misc.Spider] && unmorphing == 0)
 	{
 		if(global.spiderBallStyle == 0)
 		{
@@ -2925,7 +2927,12 @@ if(xRayActive)
 		
 		if(aimAngle == -2 || aimFrame <= -3)
 		{
-			ChangeState(state,stateFrame,mask_Player_Somersault,false);
+			downGrabDelay = 2;
+		}
+		if(downGrabDelay > 0)
+		{
+			ChangeState(state,stateFrame,mask_Player_AimDown,false);
+			downGrabDelay--;
 		}
 		else if(CanChangeState(mask_Player_Jump))
 		{
@@ -2945,11 +2952,11 @@ if(xRayActive)
 				audio_play_sound(snd_Land,0,false);
 			}
 			
-			if(mask_index == mask_Player_Somersault)
+			if(mask_index == mask_Player_AimDown)
 			{
 				if(!CanChangeState(mask_Player_Stand))
 				{
-					ChangeState(State.Crouch,State.Crouch,mask_Player_Somersault,true);
+					ChangeState(State.Crouch,State.Crouch,mask_Player_AimDown,true);
 					crouchFrame = 0;
 				}
 				else
@@ -3987,13 +3994,13 @@ if(xRayActive)
 #region Hurt
 	if(state == State.Hurt)
 	{
-		if(stateFrame != State.Morph || (unmorphing && morphFrame <= 0))
+		if(stateFrame != State.Morph || (unmorphing > 0 && morphFrame <= 0))
 		{
 			stateFrame = State.Hurt;
 		}
 		if(hurtTime <= 0)
 		{
-			if(lastState == State.Grip || lastState == State.Spark || (lastState == State.Morph && unmorphing))
+			if(lastState == State.Grip || lastState == State.Spark || (lastState == State.Morph && unmorphing > 0))
 			{
 				state = State.Jump;
 			}
@@ -4418,7 +4425,7 @@ if(xRayActive)
 			}
 		}
 	}
-	if(stateFrame == State.Walk || stateFrame == State.Moon || stateFrame == State.Run || stateFrame == State.Brake || stateFrame == State.Jump || stateFrame == State.Somersault ||
+	if(stateFrame == State.Walk || stateFrame == State.Moon || stateFrame == State.Run || stateFrame == State.Jump || stateFrame == State.Somersault ||
 	stateFrame == State.Spark || stateFrame == State.Hurt || stateFrame == State.DmgBoost)
 	{
 		switch aimAngle
@@ -4464,6 +4471,41 @@ if(xRayActive)
 				break;
 			}
 		}
+	}
+	if(stateFrame == State.Brake)
+	{
+		var _armPosR = [[-3,-8], [-2,-8], [0,-8], [4,-7], [11,-5]],
+			_armPosL = [[5,-6], [4,-6], [1,-7], [-1,-6], [-9,-4]];
+		
+		if(aimFrame > 0 && aimFrame < 3)
+		{
+			_armPosR = [[5,-16], [6,-16], [7,-17], [13,-18], [14,-19]];
+			_armPosL = [[-12,-16], [-13,-16], [-14,-17], [-16,-19], [-17,-20]];
+		}
+		else if(aimFrame < 0 && aimFrame > -3)
+		{
+			_armPosR = [[1,12], [2,12], [3,11], [10,10], [12,9]];
+			_armPosL = [[-11,11], [-12,11], [-13,10], [-14,9], [-16,8]];
+		}
+		else if(aimFrame >= 3)
+		{
+			_armPosR = [[-6,-25], [-5,-25], [-4,-26], [0,-27], [1,-28]];
+			_armPosL = [[0,-25], [-1,-25], [-2,-26], [-2,-27], [-4,-28]];
+		}
+		else if(shootFrame)
+		{
+			_armPosR = [[4,2], [5,2], [7,2], [9,1], [12,1]];
+			_armPosL = [[-14,2], [-15,2], [-16,2], [-16,1], [-17,1]];
+		}
+		
+		var _bFrame = clamp(5 - ceil(brakeFrame/2), 0, 4);
+		var armPos = _armPosR[_bFrame];
+		if(dir == -1)
+		{
+			armPos = _armPosL[_bFrame];
+		}
+		shotOffsetX = armPos[0];
+		shotOffsetY = armPos[1];
 	}
 	if(stateFrame == State.Grip)
 	{

@@ -14,5 +14,5 @@ if(outsideCam <= 1 && exploProj != noone)
     explo.damage = damage * exploDmgMult;
 	explo.npcInvFrames = npcInvFrames;
 	
-	MovePushBlock();
+	self.MovePushBlock();
 }

@@ -7,7 +7,7 @@ if(global.gamePaused)
 }
 
 var player = instance_place(x,y-2,obj_Player);
-if(instance_exists(player) && player.fVelY >= 0 && !player.spiderBall)
+if(instance_exists(player) && player.fVelY >= 0 )//&& !player.spiderBall)
 {
 	crumble = true;
 	if(abs(player.velX) > player.maxSpeed[MaxSpeed.MorphBall,player.liquidState])

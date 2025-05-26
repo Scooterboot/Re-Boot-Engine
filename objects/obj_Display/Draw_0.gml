@@ -42,7 +42,7 @@ if (camX+camW > room_width || camY+camH > room_height)
 
 #region Debug
 
-if(keyboard_check_pressed(vk_divide))
+if(keyboard_check_pressed(vk_divide) || keyboard_check_pressed(vk_f1) || keyboard_check_pressed(192))
 {
 	//debug = !debug;
 	debug = scr_wrap(debug+1,0,3);

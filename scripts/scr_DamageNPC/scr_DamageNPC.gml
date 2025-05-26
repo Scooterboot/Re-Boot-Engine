@@ -61,22 +61,22 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 		dmg = npc.ModifyDamageTaken(dmg,id,isProjectile);
 		if(isProjectile)
 		{
-			dmg = ModifyDamageNPC(dmg,npc);
+			dmg = self.ModifyDamageNPC(dmg,npc);
 		}
 		
-		if(isProjectile && !CanDamageNPC(dmg,npc))
+		if(isProjectile && !self.CanDamageNPC(dmg,npc))
 		{
 			continue;
 		}
 		
 		var partSys = obj_Particles.partSystemA,
-			partEmit = obj_Particles.partEmitA,
-			partX1 = posX+(bbox_left-x)+4,
-			partX2 = posX+(bbox_right-x)-4,
-			partY1 = posY+(bbox_top-y)+4,
-			partY2 = posY+(bbox_bottom-y)-4;
+			partEmit = obj_Particles.partEmitA;
 		if(isProjectile)
 		{
+			var partX1 = self.bb_left(posX)+4,
+				partX2 = self.bb_right(posX)-4,
+				partY1 = self.bb_top(posY)+4,
+				partY2 = self.bb_bottom(posY)-4;
 			part_emitter_region(partSys,partEmit,partX1,partX2,partY1,partY2,ps_shape_ellipse,ps_distr_linear);
 		}
                 
@@ -117,7 +117,7 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 					npc.OnDamageTaken(dmg,id,isProjectile);
 					if(isProjectile)
 					{
-						OnDamageNPC(dmg,npc);
+						self.OnDamageNPC(dmg,npc);
 					}
 	            }
 	            if(isProjectile && particleType != -1)

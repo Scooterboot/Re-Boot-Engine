@@ -235,9 +235,9 @@ if(tileCollide && impacted == 0)
 	var _signX = lengthdir_x(1,_dir),
 		_signY = lengthdir_y(1,_dir);
 	
-	if(entity_position_collide(fVelX,fVelY,x,y) || entity_collision_line(x-_tailX,y-_tailY,x+fVelX,y+fVelY,true,true))
+	if(self.entity_position_collide(fVelX,fVelY,x,y) || self.entity_collision_line(x-_tailX,y-_tailY,x+fVelX,y+fVelY,true,true))
 	{
-		while(!entity_position_collide(_signX,_signY,x,y) && !entity_collision_line(x-_tailX,y-_tailY,x+_signX,y+_signY,true,true) && velocity >= 0)
+		while(!self.entity_position_collide(_signX,_signY,x,y) && !self.entity_collision_line(x-_tailX,y-_tailY,x+_signX,y+_signY,true,true) && velocity >= 0)
 		{
 			x += _signX;
 			y += _signY;
@@ -266,16 +266,16 @@ var deathType = npcDeathType,
 
 if(impacted > 0)
 {
-	TileInteract(x+fVelX,y+fVelY);
-	TileInteract(x,y);
-	TileInteract(x-fVelX,y-fVelY);
+	self.TileInteract(x+fVelX,y+fVelY);
+	self.TileInteract(x,y);
+	self.TileInteract(x-fVelX,y-fVelY);
 }
 else
 {
-	TileInteract(x-fVelX,y-fVelY);
+	self.TileInteract(x-fVelX,y-fVelY);
 	if(!tileCollide)
 	{
-		TileInteract(x,y);
+		self.TileInteract(x,y);
 	}
 }
 
@@ -290,16 +290,16 @@ if(projLength > 0)
 			yw = y-lengthdir_y(j,direction);
 		if(impacted > 0)
 		{
-			TileInteract(xw+fVelX,yw+fVelY);
-			TileInteract(xw,yw);
-			TileInteract(xw-fVelX,yw-fVelY);
+			self.TileInteract(xw+fVelX,yw+fVelY);
+			self.TileInteract(xw,yw);
+			self.TileInteract(xw-fVelX,yw-fVelY);
 		}
 		else
 		{
-			TileInteract(xw-fVelX,yw-fVelY);
+			self.TileInteract(xw-fVelX,yw-fVelY);
 			if(!tileCollide)
 			{
-				TileInteract(xw,yw);
+				self.TileInteract(xw,yw);
 			}
 		}
 			
@@ -375,7 +375,7 @@ for(var i = 0; i < array_length(npcInvFrames); i++)
 
 if(impacted == 1)
 {
-	OnImpact(x,y);
+	self.OnImpact(x,y);
 }
 
 if(impacted > 0)

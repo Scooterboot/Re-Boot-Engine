@@ -184,7 +184,7 @@ function entity_place_collide()
 		}
 	}
 	
-	return entity_collision(instance_place_list(xx+offsetX,yy+offsetY,solids,blockList,true));
+	return self.entity_collision(instance_place_list(xx+offsetX,yy+offsetY,solids,blockList,true));
 }
 
 function entity_collision(listNum)
@@ -255,7 +255,7 @@ function OnImpact(posX,posY,waveImpact = false)
 
 function TileInteract(_x,_y)
 {
-	BreakBlock(_x,_y,blockBreakType);
-	OpenDoor(_x,_y,doorOpenType);
-	ShutterSwitch(_x,_y,doorOpenType);
+	self.BreakBlock(_x,_y,blockBreakType);
+	self.OpenDoor(_x,_y,doorOpenType);
+	self.ShutterSwitch(_x,_y,doorOpenType);
 }

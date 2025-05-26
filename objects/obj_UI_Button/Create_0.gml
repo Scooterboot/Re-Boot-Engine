@@ -22,8 +22,8 @@ function GetY() { return panel.y + (y + panel.scrollPosY) * panel.scaleY; }
 
 function GetMouse()
 {
-	var _x = GetX(),
-		_y = GetY();
+	var _x = self.GetX(),
+		_y = self.GetY();
 	var mouse = panel.GetMouse();
 	var flag = false;
 	if(mask_index != -1)
@@ -53,10 +53,10 @@ function OnSelect()
 
 function WhileSelected()
 {
-	var mouse = GetMouse();
+	var mouse = self.GetMouse();
 	if((creator.cSelect && creator.rSelect) || (instance_exists(mouse) && creator.cClickL && creator.rClickL))
 	{
-		OnClick();
+		self.OnClick();
 	}
 }
 
@@ -95,22 +95,22 @@ function UpdateButton()
 		exit;
 	}
 	
-	var mouse = GetMouse();
+	var mouse = self.GetMouse();
 	
 	if(creator.selectedPanel == panel)
 	{
 		if(panel.selectedButton == id)
 		{
-			WhileSelected();
+			self.WhileSelected();
 			
 			if(instance_exists(panel))
 			{
 				var moveX = panel.MoveSelectX(),
 					moveY = panel.MoveSelectY();
-				ChangeSelection(button_left, (moveX < 0));
-				ChangeSelection(button_right, (moveX > 0));
-				ChangeSelection(button_up, (moveY < 0));
-				ChangeSelection(button_down, (moveY > 0));
+				self.ChangeSelection(button_left, (moveX < 0));
+				self.ChangeSelection(button_right, (moveX > 0));
+				self.ChangeSelection(button_up, (moveY < 0));
+				self.ChangeSelection(button_down, (moveY > 0));
 			}
 		}
 		else
@@ -118,7 +118,7 @@ function UpdateButton()
 			if(instance_exists(mouse) && (mouse.velX != 0 || mouse.velY != 0))
 			{
 				panel.selectedButton = id;
-				OnSelect();
+				self.OnSelect();
 				justSelected = true;
 			}
 		}

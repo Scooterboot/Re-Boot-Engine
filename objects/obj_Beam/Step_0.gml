@@ -6,7 +6,7 @@ if(isWave)
 	layer = layer_get_id("Projectiles_fg");
 }
 
-EntityLiquid(!isWave,x-xprevious,y-yprevious,true,true,false);
+self.EntityLiquid(!isWave,x-xprevious,y-yprevious,true,true,false);
 
 var pNum = 7,
 	pType = -1;
@@ -61,8 +61,8 @@ if(!global.gamePaused)
 				}
 				else
 				{
-					var x1 = bb_left()+2, x2 = bb_right()-2,
-						y1 = bb_top()+2, y2 = bb_bottom()-2;
+					var x1 = self.bb_left()+2, x2 = self.bb_right()-2,
+						y1 = self.bb_top()+2, y2 = self.bb_bottom()-2;
 				
 					part_emitter_region(partSys,partEmit,x1,x2,y1,y2,ps_shape_ellipse,ps_distr_linear);
 					part_emitter_burst(partSys, partEmit, pType, pNum / max(num,1));
@@ -95,8 +95,8 @@ if(!global.gamePaused)
 	}
 	else if(liquid)
 	{
-		var x1 = bb_left()+2, x2 = bb_right()-2,
-			y1 = bb_top()+2, y2 = bb_bottom()-2;
+		var x1 = self.bb_left()+2, x2 = self.bb_right()-2,
+			y1 = self.bb_top()+2, y2 = self.bb_bottom()-2;
 		var bub = liquid.CreateBubble(random_range(x1,x2),random_range(y1,y2),0,0);
 		if(!isPlasma && !isCharge)
 		{

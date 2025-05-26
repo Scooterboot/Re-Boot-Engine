@@ -148,6 +148,8 @@ aimUpDelay = 0;
 extAimAngle = 0;
 extAimPreAngle = 0;
 
+downGrabDelay = 0;
+
 move = 0;
 move2 = 0;
 pMove = 0;
@@ -686,7 +688,7 @@ wjGripAnim = false;
 crouchFrame = 0;
 
 morphFrame = 0;
-unmorphing = false;
+unmorphing = 0;
 morphYOffset = [5,3,2,1,0];
 morphNum = 0;
 groundedMorph = false;
@@ -2898,6 +2900,41 @@ function SetArmPosStand()
 	}
 }
 #endregion
+#region SetArmPosBrake
+function SetArmPosBrake()
+{
+	var _armPosR = [[-3,-8], [-2,-8], [0,-8], [4,-7], [11,-5]],
+		_armPosL = [[5,-6], [4,-6], [1,-7], [-1,-6], [-9,-4]];
+	
+	if(aimFrame > 0 && aimFrame < 3)
+	{
+		_armPosR = [[5,-16], [6,-16], [7,-17], [13,-18], [14,-19]];
+		_armPosL = [[-12,-16], [-13,-16], [-14,-17], [-16,-19], [-17,-20]];
+	}
+	else if(aimFrame < 0 && aimFrame > -3)
+	{
+		_armPosR = [[1,12], [2,12], [3,11], [10,10], [12,9]];
+		_armPosL = [[-11,11], [-12,11], [-13,10], [-14,9], [-16,8]];
+	}
+	else if(aimFrame >= 3)
+	{
+		_armPosR = [[-6,-25], [-5,-25], [-4,-26], [0,-27], [1,-28]];
+		_armPosL = [[0,-25], [-1,-25], [-2,-26], [-2,-27], [-4,-28]];
+	}
+	else if(shootFrame)
+	{
+		_armPosR = [[4,2], [5,2], [7,2], [9,1], [12,1]];
+		_armPosL = [[-14,2], [-15,2], [-16,2], [-16,1], [-17,1]];
+	}
+	
+	var armPos = _armPosR[bodyFrame];
+	if(dir == -1)
+	{
+		armPos = _armPosL[bodyFrame];
+	}
+	ArmPos(armPos[0], armPos[1]);
+}
+#endregion
 #region SetArmPosJump
 function SetArmPosJump()
 {
@@ -3829,7 +3866,7 @@ function UpdatePlayerSurface(_palSurface)
 		}
 		draw_sprite_ext(torso,bodyFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),fDir,1,0,c_white,1);
 		
-		if(misc[Misc.Spider] && stateFrame == State.Morph && morphFrame == 0 && !unmorphing)
+		if(misc[Misc.Spider] && stateFrame == State.Morph && morphFrame == 0 && unmorphing == 0)
 		{
 			draw_sprite_ext(sprt_Player_MorphBallAlt_Shine,0,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),1,1,0,c_white,1);
 		}

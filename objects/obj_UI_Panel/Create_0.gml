@@ -89,18 +89,18 @@ function UpdatePanel()
 	{
 		if(scrollWidth > width)
 		{
-			var moveX = ScrollX();
+			var moveX = self.ScrollX();
 			scrollPosX = clamp(scrollPosX + scrollStepX*moveX, 0, max(scrollWidth-width, 0));
 		}
 		if(scrollHeight > height)
 		{
-			var moveY = ScrollY();
+			var moveY = self.ScrollY();
 			scrollPosY = clamp(scrollPosY + scrollStepY*moveY, 0, max(scrollHeight-height, 0));
 		}
 	}
 	/*else
 	{
-		var mouse = GetMouse();
+		var mouse = self.GetMouse();
 		if(instance_exists(mouse) && (mouse.velX != 0 || mouse.velY != 0))
 		{
 			creator.selectedPanel = id;

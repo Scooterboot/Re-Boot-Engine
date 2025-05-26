@@ -11,7 +11,7 @@ cStart = obj_Control.start;
 
 if(room == rm_GameOver)
 {
-	camera_set_view_pos(view_camera[0],room_width/2-global.resWidth/2,0);
+	camera_set_view_pos(view_camera[0], room_width/2 - global.resWidth/2, room_height/2 - global.resHeight/2);
 	
 	if(optionSelected == -1)
 	{
