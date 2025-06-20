@@ -1289,10 +1289,6 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 						fVX = 0;
 						maxSpeedX = 0;
 					}
-					else
-					{
-						maxSpeedY = 0;
-					}
 				}
 			}
 			#endregion
@@ -1530,10 +1526,6 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 						
 						fVY = 0;
 						maxSpeedY = 0;
-					}
-					else
-					{
-						maxSpeedX = 0;
 					}
 				}
 			}

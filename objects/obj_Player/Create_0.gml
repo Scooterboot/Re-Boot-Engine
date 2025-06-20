@@ -228,7 +228,9 @@ spiderJump = false;
 spiderJumpDir = 0;
 spiderJump_SpeedAddX = 0;
 spiderJump_SpeedAddY = 0;
+spiderGrappleUnstuck = 0;
 spiderGrappleSpeedKeep = false;
+spiderCornerFix = false;
 
 spiderGlowAlpha = 0;
 spiderGlowNum = 1;
@@ -1308,7 +1310,7 @@ function ModifyFinalVelY(fVY)
 
 function ModifySlopeXSteepness_Up()
 {
-	if(SpiderActive())
+	if(spiderBall && (spiderEdge != Edge.None || Crawler_CanStickRight() || Crawler_CanStickLeft()))
 	{
 		return 2;
 	}
@@ -1320,7 +1322,7 @@ function ModifySlopeXSteepness_Up()
 }
 function ModifySlopeXSteepness_Down()
 {
-	if(SpiderActive())
+	if(spiderBall && (spiderEdge != Edge.None || Crawler_CanStickRight() || Crawler_CanStickLeft()))
 	{
 		return 3;
 	}
@@ -1328,7 +1330,7 @@ function ModifySlopeXSteepness_Down()
 }
 function ModifySlopeYSteepness_Up()
 {
-	if(SpiderActive())
+	if(spiderBall && (spiderEdge != Edge.None || Crawler_CanStickBottom() || Crawler_CanStickTop()))
 	{
 		return 2;
 	}
@@ -1340,7 +1342,7 @@ function ModifySlopeYSteepness_Up()
 }
 function ModifySlopeYSteepness_Down()
 {
-	if(SpiderActive())
+	if(spiderBall && (spiderEdge != Edge.None || Crawler_CanStickBottom() || Crawler_CanStickTop()))
 	{
 		return 3;
 	}
@@ -1659,6 +1661,14 @@ function DestroyBlock(bx,by)
 
 function Crawler_ModifyFinalVelX(fVX)
 {
+	if(spiderCornerFix)
+	{
+		spiderCornerFix = false;
+		if(colEdge == Edge.None)
+		{
+			return 0;
+		}
+	}
 	if(colEdge != Edge.None)
 	{
 		return fVX;
@@ -1671,7 +1681,15 @@ function Crawler_ModifyFinalVelY(fVY)
 	{
 		justFell = false;
 	}
-	return fVY;
+	if(spiderCornerFix)
+	{
+		spiderCornerFix = false;
+		if(colEdge == Edge.None)
+		{
+			return 0;
+		}
+	}
+	return ModifyFinalVelY(fVY);
 }
 
 /*function Crawler_SlopeCheck(slope)
@@ -1813,7 +1831,9 @@ function Crawler_CanStickOuter(fVX, fVY, edge)
 		else if(colEdge != Edge.None && !entity_place_collide(0,ydir, checkPos.X,checkPos.Y))
 		{
 			velY = 0;
+			fVelY = 0;
 			position.X = checkPos.X;
+			spiderCornerFix = true;
 		}
 	}
 	if((edge == Edge.Top || edge == Edge.Bottom) && fVY != 0 && xdir != 0)
@@ -1847,7 +1867,9 @@ function Crawler_CanStickOuter(fVX, fVY, edge)
 		else if(colEdge != Edge.None && !entity_place_collide(xdir,0, checkPos.X,checkPos.Y))
 		{
 			velX = 0;
+			fVelX = 0;
 			position.Y = checkPos.Y;
+			spiderCornerFix = true;
 		}
 	}
 	return false;
@@ -2000,7 +2022,6 @@ function Crawler_CanMoveUpSlope_Bottom()
 		{
 			return true;
 		}
-		return false;
 	}
 	return CanMoveUpSlope_Bottom();
 }
@@ -2040,7 +2061,10 @@ function Crawler_CanMoveDownSlope_Bottom()
 {
 	if(Crawler_CanStickBottom())
 	{
-		return (colEdge == Edge.Bottom || colEdge == Edge.None);
+		if(colEdge == Edge.Bottom)
+		{
+			return true;
+		}
 	}
 	return CanMoveDownSlope_Bottom();
 }
@@ -2060,7 +2084,6 @@ function Crawler_CanMoveUpSlope_Top()
 		{
 			return true;
 		}
-		return false;
 	}
 	return CanMoveUpSlope_Top();
 }
@@ -2100,7 +2123,10 @@ function Crawler_CanMoveDownSlope_Top()
 {
 	if(Crawler_CanStickTop())
 	{
-		return (colEdge == Edge.Top);
+		if(colEdge == Edge.Top)
+		{
+			return true;
+		}
 	}
 	return CanMoveDownSlope_Top();
 }
@@ -2190,11 +2216,10 @@ function Crawler_CanMoveUpSlope_Right()
 				return true;
 			}
 		}
-		else if(colEdge == Edge.Right)// || colEdge == Edge.None)
+		else if(colEdge == Edge.Right || colEdge == Edge.None)
 		{
 			return true;
 		}
-		return false;
 	}
 	return CanMoveUpSlope_Right();
 }
@@ -2234,7 +2259,10 @@ function Crawler_CanMoveDownSlope_Right()
 {
 	if(Crawler_CanStickRight())
 	{
-		return (colEdge == Edge.Right);
+		if(colEdge == Edge.Right)
+		{
+			return true;
+		}
 	}
 	return CanMoveDownSlope_Right();
 }
@@ -2250,11 +2278,10 @@ function Crawler_CanMoveUpSlope_Left()
 				return true;
 			}
 		}
-		else if(colEdge == Edge.Left)// || colEdge == Edge.None)
+		else if(colEdge == Edge.Left || colEdge == Edge.None)
 		{
 			return true;
 		}
-		return false;
 	}
 	return CanMoveUpSlope_Left();
 }
@@ -2294,7 +2321,10 @@ function Crawler_CanMoveDownSlope_Left()
 {
 	if(Crawler_CanStickLeft())
 	{
-		return (colEdge == Edge.Left);
+		if(colEdge == Edge.Left)
+		{
+			return true;
+		}
 	}
 	return CanMoveDownSlope_Left();
 }
@@ -2720,7 +2750,7 @@ function SpiderEnable(flag)
 				dir *= -1;
 				dirFrame = 4*dir;
 			}
-			spiderEdge = Edge.None;
+			//spiderEdge = Edge.None;
 		}
 	}
 }
@@ -2729,7 +2759,7 @@ function SpiderEnable(flag)
 function SpiderActive()
 {
 	/// @description SpiderActive
-	/// @param edge=Edge.None
+	/// @param edge!=Edge.None
 	if(argument_count > 0)
 	{
 		return (spiderBall && spiderEdge == argument[0]);

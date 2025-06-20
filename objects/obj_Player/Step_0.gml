@@ -1837,14 +1837,23 @@ if(instance_exists(XRay))
 			reel = -reelSpeed;
 			grappleDist = min(dist,grappleMaxDist);
 			
+			velX = (velX > 0) ? max(velX-fFrict,0) : min(velX+fFrict,0);
+			velY = (velY > 0) ? max(velY-fFrict,0) : min(velY+fFrict,0);
+			
 			canMorphBounce = false;
 			
 			if((misc[Misc.MagBall] || misc[Misc.Spider]) && unmorphing == 0)
 			{
 				spiderGrappleSpeedKeep = true;
 			}
-			velX = 0;
-			velY = 0;
+			if(abs(fVelX) <= 1 && abs(fVelY) <= 1)
+			{
+				spiderGrappleUnstuck++;
+			}
+			else
+			{
+				spiderGrappleUnstuck = max(spiderGrappleUnstuck-1,0);
+			}
 		}
 		
 		var vX = position.X - grapple.x,
@@ -1866,7 +1875,7 @@ if(instance_exists(XRay))
 		
 		if(state == State.Morph)
 		{
-			if(grappleDist <= 20 || spiderEdge != Edge.None || !cShoot)
+			if(grappleDist <= 20 || spiderEdge != Edge.None || !cShoot || spiderGrappleUnstuck > 10)
 			{
 				instance_destroy(grapple);
 				if(spiderEdge != Edge.None)
@@ -1907,6 +1916,7 @@ if(instance_exists(XRay))
 		grappleVelX = 0;
 		grappleVelY = 0;
 		grapDisVel = 0;
+		spiderGrappleUnstuck = 0;
 	}
 
 #endregion
@@ -2211,6 +2221,57 @@ if(instance_exists(XRay))
 	}
 	else
 	{
+		if(spiderEdge != Edge.None && spiderSpeed != 0)
+		{
+			velY = 0;
+			if(PlayerGrounded() || PlayerOnPlatform())
+			{
+				velX = spiderSpeed*sign(lengthdir_x(1, GetEdgeAngle(spiderEdge)));
+				if(PlayerGrounded())
+				{
+					grounded = true;
+				}
+				if(PlayerOnPlatform())
+				{
+					onPlatform = true;
+				}
+				prevGrounded = grounded;
+				colEdge = Edge.Bottom;
+			}
+			else
+			{
+				switch(spiderEdge)
+				{
+					case Edge.Bottom:
+					{
+						velX = spiderSpeed;
+						velY = lengthdir_y(spiderSpeed, GetEdgeAngle(Edge.Bottom));
+						break;
+					}
+					case Edge.Top:
+					{
+						velX = -spiderSpeed;
+						velY = lengthdir_y(spiderSpeed, GetEdgeAngle(Edge.Top));
+						break;
+					}
+					case Edge.Right:
+					{
+						velX = lengthdir_x(spiderSpeed, GetEdgeAngle(Edge.Right));
+						velY = -spiderSpeed;
+						break;
+					}
+					case Edge.Left:
+					{
+						velX = lengthdir_x(spiderSpeed, GetEdgeAngle(Edge.Left));
+						velY = spiderSpeed;
+						break;
+					}
+				}
+			}
+		}
+		spiderEdge = Edge.None;
+		spiderMove = 0;
+		spiderSpeed = 0;
 		spiderJumpDir = 90;
 		spiderJump_SpeedAddX = 0;
 		spiderJump_SpeedAddY = 0;
@@ -2608,7 +2669,7 @@ if(instance_exists(XRay))
 	}
 	
 	fell = false;
-	var shouldForceDown = (state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Dodge && jump <= 0 && bombJump <= 0);
+	var shouldForceDown = (state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Dodge && jump <= 0 && bombJump <= 0 && !SpiderActive());
 	if((PlayerGrounded() || PlayerOnPlatform()) && fVelY >= 0)
 	{
 		justFell = shouldForceDown;
@@ -3132,14 +3193,7 @@ if(instance_exists(XRay))
 			}
 		}*/
 
-		if(!spiderBall)
-		{
-			spiderEdge = Edge.None;
-			spiderMove = 0;
-			spiderSpeed = 0;
-			audio_stop_sound(snd_SpiderLoop);
-		}
-		else if(state == State.Morph)
+		if(spiderBall && state == State.Morph)
 		{
 			if(spiderEdge != Edge.None && prevSpiderEdge == Edge.None )//&& grounded && !prevGrounded)
 			{
@@ -3200,13 +3254,14 @@ if(instance_exists(XRay))
 				audio_stop_sound(snd_SpiderLoop);
 			}
 		}
+		else
+		{
+			audio_stop_sound(snd_SpiderLoop);
+		}
 	}
 	else
 	{
 		SpiderEnable(false);
-		spiderEdge = Edge.None;
-		spiderMove = 0;
-		spiderSpeed = 0;
 		audio_stop_sound(snd_SpiderLoop);
 		
 		spiderGrappleSpeedKeep = false;
