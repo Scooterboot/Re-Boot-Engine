@@ -25,7 +25,7 @@ if(state == 0)
 	}
 	lFrameFinal = frameFinal;
 	
-	if(instance_exists(player) && player.state == State.Morph && player.grounded && player.velY >= 0 && !player.spiderBall)
+	if(instance_exists(player) && player.state == State.Morph && player.grounded && player.velY >= 0 && !player.SpiderActive())
 	{
 		if(place_meeting(x,y,obj_MBBombExplosion))
 		{

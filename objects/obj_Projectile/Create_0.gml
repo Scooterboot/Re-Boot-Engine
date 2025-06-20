@@ -163,28 +163,9 @@ function OnDamageNPC(damage,npc) {}
 #endregion
 
 #region Base Collision
-function entity_place_collide()
+function CanPlatformCollide()
 {
-	/// @description entity_place_collide
-	/// @param offsetX
-	/// @param offsetY
-	/// @param baseX=x
-	/// @param baseY=y
-	
-	var offsetX = argument[0],
-		offsetY = argument[1],
-		xx = position.X,
-		yy = position.Y;
-	if(argument_count > 2)
-	{
-		xx = argument[2];
-		if(argument_count > 3)
-		{
-			yy = argument[3];
-		}
-	}
-	
-	return self.entity_collision(instance_place_list(xx+offsetX,yy+offsetY,solids,blockList,true));
+	return false;
 }
 
 function entity_collision(listNum)

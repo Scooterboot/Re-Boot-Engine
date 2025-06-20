@@ -3,7 +3,7 @@
   "%Name":"fnt_GUI_Small2",
   "AntiAlias":0,
   "applyKerning":0,
-  "ascender":0,
+  "ascender":6,
   "ascenderOffset":0,
   "bold":false,
   "canGenerateBitmap":true,
@@ -107,7 +107,7 @@
     "124":{"character":124,"h":9,"offset":0,"shift":2,"w":1,"x":28,"y":13,},
     "125":{"character":125,"h":9,"offset":0,"shift":4,"w":3,"x":23,"y":13,},
     "126":{"character":126,"h":9,"offset":0,"shift":6,"w":5,"x":44,"y":46,},
-    "9647":{"character":9647,"h":9,"offset":1,"shift":3,"w":1,"x":51,"y":46,},
+    "9647":{"character":9647,"h":9,"offset":0,"shift":3,"w":2,"x":51,"y":46,},
   },
   "hinting":0,
   "includeTTF":true,
@@ -115,7 +115,7 @@
   "italic":false,
   "kerningPairs":[],
   "last":0,
-  "lineHeight":0,
+  "lineHeight":9,
   "maintainGms1Font":false,
   "name":"fnt_GUI_Small2",
   "parent":{
@@ -134,10 +134,7 @@
   "sdfSpread":8,
   "size":4.0,
   "styleName":"Regular",
-  "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
-  },
+  "textureGroupId":null,
   "TTFName":"${project_dir}\\fonts\\fnt_GUI_Small2\\fnt_GUI_Small2.png",
   "usesSDF":false,
 }

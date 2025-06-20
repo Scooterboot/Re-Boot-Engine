@@ -12,7 +12,7 @@ var beamNum = (hasBeam[Beam.Ice]+hasBeam[Beam.Wave]+hasBeam[Beam.Spazer]+hasBeam
 
 if(!global.roomTrans && !obj_PauseMenu.pause)
 {
-	if(global.grappleAimAssist && item[Item.Grapple] && itemSelected == 1 && itemHighlighted[1] == 3)
+	if(global.grappleAimAssist && state != State.Morph && item[Item.Grapple] && hudSlot == 1 && hudSlotItem[1] == 3)
 	{
 		if(!instance_exists(grapReticle))
 		{
@@ -26,7 +26,7 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 	
 	if(global.HUD == 0)
 	{
-		itemHighlighted[0] = 0;
+		hudSlotItem[0] = 0;
 		moveHPrev = 1;
 		pauseSelect = false;
 		
@@ -37,54 +37,54 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 		{
 			if(cHSelect && rHSelect)
 			{
-				if(itemSelected == 0)
+				if(hudSlot == 0)
 				{
-					itemSelected = 1;
+					hudSlot = 1;
 				}
 				else
 				{
-					itemHighlighted[1]++;
+					hudSlotItem[1]++;
 				}
 				
 				var numH = 5;
-				while(!itemAmmo[scr_wrap(itemHighlighted[1], 0, 5)] && numH > 0)
+				while(!itemAmmo[scr_wrap(hudSlotItem[1], 0, 5)] && numH > 0)
 				{
-					itemHighlighted[1]++;
+					hudSlotItem[1]++;
 				}
 				
-				if(itemHighlighted[1] > 4)
+				if(hudSlotItem[1] > 4)
 				{
-					itemSelected = 0;
-					itemHighlighted[1] = 0;
+					hudSlot = 0;
+					hudSlotItem[1] = 0;
 				}
 				
 				audio_play_sound(snd_MenuTick,0,false);
 			}
-			else if(itemSelected == 1)
+			else if(hudSlot == 1)
 			{
-				if(!itemAmmo[scr_wrap(itemHighlighted[1], 0, 5)])
+				if(!itemAmmo[scr_wrap(hudSlotItem[1], 0, 5)])
 				{
-					if(itemHighlighted[1] == Item.Missile && itemAmmo[Item.SMissile])
+					if(hudSlotItem[1] == Item.Missile && itemAmmo[Item.SMissile])
 					{
-						itemHighlighted[1] = Item.SMissile;
+						hudSlotItem[1] = Item.SMissile;
 					}
-					else if(itemHighlighted[1] == Item.SMissile && itemAmmo[Item.Missile])
+					else if(hudSlotItem[1] == Item.SMissile && itemAmmo[Item.Missile])
 					{
-						itemHighlighted[1] = Item.Missile;
+						hudSlotItem[1] = Item.Missile;
 					}
 					else
 					{
-						itemSelected = 0;
-						itemHighlighted[1] = 0;
+						hudSlot = 0;
+						hudSlotItem[1] = 0;
 					}
 					audio_play_sound(snd_MenuTick,0,false);
 				}
 			}
 			
-			if(itemSelected == 1 && ((cHCancel && rHCancel) || itemHighlighted[1] > 4))
+			if(hudSlot == 1 && ((cHCancel && rHCancel) || hudSlotItem[1] > 4))
 			{
-				itemSelected = 0;
-				itemHighlighted[1] = 0;
+				hudSlot = 0;
+				hudSlotItem[1] = 0;
 				if(cHCancel)
 				{
 					audio_play_sound(snd_MenuTick,0,false);
@@ -93,29 +93,29 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 		}
 		else
 		{
-			itemSelected = 0;
-			itemHighlighted[1] = 0;
+			hudSlot = 0;
+			hudSlotItem[1] = 0;
 		}
 		
-		if(itemSelected == 0)
+		if(hudSlot == 0)
 		{
-			itemHighlighted[1] = 0;
+			hudSlotItem[1] = 0;
 		}
 	}
 	else if(global.HUD == 1)
 	{
-		itemHighlighted[0] = 0;
+		hudSlotItem[0] = 0;
 		if(cHCancel && itemNum > 0)
 		{
 			if(cHCancel && rHCancel)
 			{
 				audio_play_sound(snd_MenuTick,0,false);
 			}
-			itemSelected = 1;
+			hudSlot = 1;
 		}
 		else
 		{
-			itemSelected = 0;
+			hudSlot = 0;
 		}
 		
 		if(itemNum > 1)
@@ -133,7 +133,7 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 					moveHPrev = moveH;
 					audio_play_sound(snd_MenuTick,0,false);
 				}
-				itemHighlighted[1] += moveH;
+				hudSlotItem[1] += moveH;
 			}
 			else
 			{
@@ -154,7 +154,7 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 	{
 		if(cHCancel && rHCancel && itemNum > 0)
 		{
-			itemSelected = scr_wrap(itemSelected + 1, 0, 2);
+			hudSlot = scr_wrap(hudSlot + 1, 0, 2);
 			audio_play_sound(snd_MenuTick,0,false);
 		}
 		if(cHSelect)
@@ -162,10 +162,10 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 			global.gamePaused = true;
 			/*if(((cHUp && rHUp) || (cHDown && rHDown)) && itemNum > 0)
 			{
-				itemSelected = scr_wrap(itemSelected + 1, 0, 1);
+				hudSlot = scr_wrap(hudSlot + 1, 0, 1);
 				audio_play_sound(snd_MenuTick,0,false);
 			}*/
-			if((itemSelected == 0 && beamNum > 0) || (itemSelected == 1 && itemNum > 1))
+			if((hudSlot == 0 && beamNum > 0) || (hudSlot == 1 && itemNum > 1))
 			{
 				moveH = (cHRight && rHRight) - (cHLeft && rHLeft);
 				if(moveH != 0)
@@ -175,14 +175,14 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 					moveHPrev = moveH;
 					audio_play_sound(snd_MenuTick,0,false);
 				}
-				itemHighlighted[itemSelected] += moveH;
+				hudSlotItem[hudSlot] += moveH;
 			}
-			var itemHighlighted2 = scr_wrap(itemHighlighted[0], 1, 5);
-			if(itemSelected == 0 && itemHighlighted[0] != 0)
+			var hudSlotItem2 = scr_wrap(hudSlotItem[0], 1, 5);
+			if(hudSlot == 0 && hudSlotItem[0] != 0)
 			{
-				if(cHToggle && rHToggle && hasBeam[itemHighlighted2])
+				if(cHToggle && rHToggle && hasBeam[hudSlotItem2])
 				{
-					beam[itemHighlighted2] = !beam[itemHighlighted2];
+					beam[hudSlotItem2] = !beam[hudSlotItem2];
 					audio_play_sound(snd_MenuShwsh,0,false);
 				}
 			}
@@ -196,24 +196,24 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 }
 
 var numH = 5;
-while(!hasBeam[scr_wrap(itemHighlighted[0], 1, 5)] && itemHighlighted[0] != 0 && numH > 0)
+while(!hasBeam[scr_wrap(hudSlotItem[0], 1, 5)] && hudSlotItem[0] != 0 && numH > 0)
 {
-	itemHighlighted[0] += moveHPrev;
+	hudSlotItem[0] += moveHPrev;
 	hudBOffsetX += 28*moveHPrev;
 	hudIOffsetX += 28*moveHPrev;
 	numH--;
 }
 numH = 5;
-while(!item[scr_wrap(itemHighlighted[1], 0, 5)] && numH > 0)
+while(!item[scr_wrap(hudSlotItem[1], 0, 5)] && numH > 0)
 {
-	itemHighlighted[1] += moveHPrev;
+	hudSlotItem[1] += moveHPrev;
 	hudBOffsetX += 28*moveHPrev;
 	hudIOffsetX += 28*moveHPrev;
 	numH--;
 }
-for(var i = 0; i < array_length(itemHighlighted); i++)
+for(var i = 0; i < array_length(hudSlotItem); i++)
 {
-	itemHighlighted[i] = scr_wrap(itemHighlighted[i], 0, 5);
+	hudSlotItem[i] = scr_wrap(hudSlotItem[i], 0, 5);
 }
 
 rHSelect = !cHSelect;
@@ -223,3 +223,5 @@ rHLeft = !cHLeft;
 rHUp = !cHUp;
 rHDown = !cHDown;
 rHToggle = !cHToggle;
+
+oldPosition.Equals(position);

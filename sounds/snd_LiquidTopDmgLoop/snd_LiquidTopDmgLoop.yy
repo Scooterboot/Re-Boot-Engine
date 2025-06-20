@@ -9,7 +9,7 @@
   "bitRate":128,
   "compression":0,
   "conversionMode":0,
-  "duration":0.335646,
+  "duration":0.33564627,
   "name":"snd_LiquidTopDmgLoop",
   "parent":{
     "name":"Player",

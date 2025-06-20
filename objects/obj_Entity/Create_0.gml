@@ -73,8 +73,8 @@ enum Edge
 	None,
 	Bottom,
 	Top,
-	Left,
-	Right
+	Right,
+	Left
 };
 colEdge = Edge.Bottom;
 
@@ -97,23 +97,15 @@ function entity_place_collide()
 	/// @description entity_place_collide
 	/// @param offsetX
 	/// @param offsetY
-	/// @param baseX=x
-	/// @param baseY=y
+	/// @param baseX=position.X
+	/// @param baseY=position.Y
 	
 	var offsetX = argument[0],
 		offsetY = argument[1],
-		xx = position.X,
-		yy = position.Y;
-	if(argument_count > 2)
-	{
-		xx = argument[2];
-		if(argument_count > 3)
-		{
-			yy = argument[3];
-		}
-	}
+		xx = argument_count > 2 ? argument[2] : position.X,
+		yy = argument_count > 3 ? argument[3] : position.Y;
 	
-	if(place_meeting(xx+offsetX,yy+offsetY,ColType_Platform) && self.CanPlatformCollide())
+	if(self.CanPlatformCollide() && place_meeting(xx+offsetX,yy+offsetY,ColType_Platform))
 	{
 		if(self.entityPlatformCheck(offsetX,offsetY,xx,yy))
 		{
@@ -129,21 +121,13 @@ function entity_position_collide()
 	/// @description entity_position_collide
 	/// @param offsetX
 	/// @param offsetY
-	/// @param baseX=x
-	/// @param baseY=y
+	/// @param baseX=position.X
+	/// @param baseY=position.Y
 	
 	var offsetX = argument[0],
 		offsetY = argument[1],
-		xx = position.X,
-		yy = position.Y;
-	if(argument_count > 2)
-	{
-		xx = argument[2];
-		if(argument_count > 3)
-		{
-			yy = argument[3];
-		}
-	}
+		xx = argument_count > 2 ? argument[2] : position.X,
+		yy = argument_count > 3 ? argument[3] : position.Y;
 	
 	return self.entity_collision(instance_position_list(xx+offsetX,yy+offsetY,solids,blockList,true));
 }
@@ -192,20 +176,13 @@ function entityPlatformCheck()
 	/// @description entityPlatformCheck
 	/// @param offsetX
 	/// @param offsetY
-	/// @param baseX=x
-	/// @param baseY=y
+	/// @param baseX=position.X
+	/// @param baseY=position.Y
+	
 	var offsetX = argument[0],
 		offsetY = argument[1],
-		xx = position.X,//scr_round(position.X),
-		yy = position.Y;//scr_round(position.Y);
-	if(argument_count > 2)
-	{
-		xx = argument[2];
-		if(argument_count > 3)
-		{
-			yy = argument[3];
-		}
-	}
+		xx = argument_count > 2 ? argument[2] : position.X,
+		yy = argument_count > 3 ? argument[3] : position.Y;
 	
 	if(place_meeting(xx+offsetX,yy+offsetY,ColType_Platform))
 	{
@@ -609,17 +586,24 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 				{
 					if(fVX > 0)
 					{
-						self.OnRightCollision(fVX);
 						position.X = scr_floor(position.X);
 					}
 					if(fVX < 0)
 					{
-						self.OnLeftCollision(fVX);
 						position.X = scr_ceil(position.X);
 					}
 					if(!self.entity_place_collide(sign(fVX),0))
 					{
 						position.X += sign(fVX);
+					}
+					
+					if(fVX > 0)
+					{
+						self.OnRightCollision(fVX);
+					}
+					if(fVX < 0)
+					{
+						self.OnLeftCollision(fVX);
 					}
 					self.OnXCollision(fVX);
 					fVX = 0;
@@ -746,17 +730,24 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 				{
 					if(fVY > 0)
 					{
-						self.OnBottomCollision(fVY);
 						position.Y = scr_floor(position.Y);
 					}
 					if(fVY < 0)
 					{
-						self.OnTopCollision(fVY);
 						position.Y = scr_ceil(position.Y);
 					}
 					if(!self.entity_place_collide(0,sign(fVY)))
 					{
 						position.Y += sign(fVY);
+					}
+					
+					if(fVY > 0)
+					{
+						self.OnBottomCollision(fVY);
+					}
+					if(fVY < 0)
+					{
+						self.OnTopCollision(fVY);
 					}
 					self.OnYCollision(fVY);
 					fVY = 0;
@@ -866,6 +857,17 @@ function Crawler_ModifyFinalVelY(fVY) { return fVY; }
 {
 	return colEdge != Edge.None;
 }*/
+
+function Crawler_CanStickRight() { return true; }
+function Crawler_CanStickLeft() { return true; }
+function Crawler_CanStickOuterRight() { return true; }
+function Crawler_CanStickOuterLeft() { return true; }
+
+function Crawler_CanStickBottom() { return true; }
+function Crawler_CanStickTop() { return true; }
+function Crawler_CanStickOuterBottom() { return true; }
+function Crawler_CanStickOuterTop() { return true; }
+
 
 // called on horizontal collision
 function Crawler_OnRightCollision(fVX) {} // -->|
@@ -986,34 +988,67 @@ function Crawler_CanMoveDownSlope_Left()
 #region Collision_Crawler
 function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 {
-	if(slopeSpeedAdjust && colEdge != Edge.None)
+	if(slopeSpeedAdjust)
 	{
-		var sAngle = 0;
-		switch(colEdge)
+		if(colEdge != Edge.None)
 		{
-			case Edge.Bottom:
+			var sAngle = 0;
+			switch(colEdge)
 			{
-				sAngle = self.GetEdgeAngle(colEdge);
-				break;
+				case Edge.Bottom:
+				{
+					sAngle = self.GetEdgeAngle(colEdge);
+					break;
+				}
+				case Edge.Right:
+				{
+					sAngle = angle_difference(self.GetEdgeAngle(colEdge),90);
+					break;
+				}
+				case Edge.Top:
+				{
+					sAngle = angle_difference(self.GetEdgeAngle(colEdge),180);
+					break;
+				}
+				case Edge.Left:
+				{
+					sAngle = angle_difference(self.GetEdgeAngle(colEdge),270);
+					break;
+				}
 			}
-			case Edge.Right:
-			{
-				sAngle = angle_difference(self.GetEdgeAngle(colEdge),90);
-				break;
-			}
-			case Edge.Top:
-			{
-				sAngle = angle_difference(self.GetEdgeAngle(colEdge),180);
-				break;
-			}
-			case Edge.Left:
-			{
-				sAngle = angle_difference(self.GetEdgeAngle(colEdge),270);
-				break;
-			}
+			vX = lengthdir_x(vX,sAngle);
+			vY = lengthdir_x(vY,sAngle);
 		}
-		vX = lengthdir_x(vX,sAngle);
-		vY = lengthdir_x(vY,sAngle);
+		else
+		{
+			var sAngle = 0;
+			if(self.entity_place_collide(0,2) ^^ self.entity_place_collide(0,-2))
+			{
+				if(self.entity_place_collide(0,2))
+				{
+					sAngle = self.GetEdgeAngle(Edge.Bottom);
+				}
+				if(self.entity_place_collide(0,-2))
+				{
+					sAngle = angle_difference(self.GetEdgeAngle(Edge.Top),180);
+				}
+			}
+			vX = lengthdir_x(vX,sAngle);
+		
+			sAngle = 0;
+			if(self.entity_place_collide(2,0) ^^ self.entity_place_collide(-2,0))
+			{
+				if(self.entity_place_collide(2,0))
+				{
+					sAngle = angle_difference(self.GetEdgeAngle(Edge.Right),90);
+				}
+				if(self.entity_place_collide(-2,0))
+				{
+					sAngle = angle_difference(self.GetEdgeAngle(Edge.Left),270);
+				}
+			}
+			vY = lengthdir_x(vY,sAngle);
+		}
 	}
 	
 	vX += shiftX;
@@ -1043,7 +1078,11 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 				var moveUpSlope_Bottom = (!self.entity_place_collide(xnum,-steepness) && self.entity_place_collide(0,steepness) && self.Crawler_CanMoveUpSlope_Bottom());
 				var moveUpSlope_Top = (!self.entity_place_collide(xnum,steepness) && self.entity_place_collide(0,-steepness) && self.Crawler_CanMoveUpSlope_Top());
 				var horizontalEdge = (colEdge == Edge.Bottom || colEdge == Edge.Top);
-				var ydir = -1;
+				var ydir = 0;
+				if(colEdge == Edge.Bottom)
+				{
+					ydir = -1;
+				}
 				if(colEdge == Edge.Top)
 				{
 					ydir = 1;
@@ -1069,8 +1108,20 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 				{
 					if(fVX > 0)
 					{
-						self.Crawler_OnRightCollision(fVX);
-						if(horizontalEdge || colEdge == Edge.None)
+						position.X = scr_floor(position.X);
+					}
+					if(fVX < 0)
+					{
+						position.X = scr_ceil(position.X);
+					}
+					if(!self.entity_place_collide(sign(fVX),0))
+					{
+						position.X += sign(fVX);
+					}
+					
+					if(fVX > 0)
+					{
+						if(self.Crawler_CanStickRight() && (horizontalEdge || colEdge == Edge.None))
 						{
 							if(horizontalEdge)
 							{
@@ -1079,12 +1130,15 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 							}
 							colEdge = Edge.Right;
 						}
-						position.X = scr_floor(position.X);
+						else if(!self.Crawler_CanStickRight() && colEdge = Edge.Right)
+						{
+							colEdge = Edge.None;
+						}
+						self.Crawler_OnRightCollision(fVX);
 					}
 					if(fVX < 0)
 					{
-						self.Crawler_OnLeftCollision(fVX);
-						if(horizontalEdge || colEdge == Edge.None)
+						if(self.Crawler_CanStickLeft() && (horizontalEdge || colEdge == Edge.None))
 						{
 							if(horizontalEdge)
 							{
@@ -1093,13 +1147,14 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 							}
 							colEdge = Edge.Left;
 						}
-						position.X = scr_ceil(position.X);
-					}
-					if(!self.entity_place_collide(sign(fVX),0))
-					{
-						position.X += sign(fVX);
+						else if(!self.Crawler_CanStickLeft() && colEdge == Edge.Left)
+						{
+							colEdge = Edge.None;
+						}
+						self.Crawler_OnLeftCollision(fVX);
 					}
 					self.Crawler_OnXCollision(fVX);
+					
 					fVX = 0;
 					maxSpeedX = 0;
 				}
@@ -1125,7 +1180,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 					}
 				}
 			}
-			else if(!self.entity_place_collide(0,0) && (colEdge == Edge.Bottom || colEdge == Edge.Top))
+			else if(!self.entity_place_collide(0,0) && colEdge != Edge.Right && colEdge != Edge.Left)
 			{
 				var steepness = self.ModifySlopeXSteepness_Down();
 				var xnum = 2*sign(fVX);
@@ -1136,8 +1191,12 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 				var moveDownSlope_Bottom = (self.entity_place_collide(0,1) && self.entity_place_collide(xnum,steepness) && self.Crawler_CanMoveDownSlope_Bottom());
 				var moveDownSlope_Top = (self.entity_place_collide(0,-1) && self.entity_place_collide(xnum,-steepness) && self.Crawler_CanMoveDownSlope_Top());
 			
-				var ydir = 1;
-				if(colEdge == Edge.Top)
+				var ydir = 0;
+				if(colEdge == Edge.Bottom || (colEdge == Edge.None && self.entity_place_collide(0,1)))
+				{
+					ydir = 1;
+				}
+				if(colEdge == Edge.Top || (colEdge == Edge.None && self.entity_place_collide(0,-1)))
 				{
 					ydir = -1;
 				}
@@ -1183,33 +1242,57 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 						}
 					}
 				}
-				else if(!self.entity_place_collide(sign(fVX),ydir))
+				else if(ydir != 0 && !self.entity_place_collide(sign(fVX),ydir))
 				{
-					if(fVX > 0)
+					var _checkFlag = false;
+					if(self.Crawler_CanStickOuterLeft())
 					{
-						position.X = scr_ceil(position.X);
-						colEdge = Edge.Left;
+						if(fVX > 0)
+						{
+							colEdge = Edge.Left;
+							position.X = scr_ceil(position.X);
+							_checkFlag = true;
+						}
 					}
-					if(fVX < 0)
+					else if(fVX > 0)
 					{
-						position.X = scr_floor(position.X);
-						colEdge = Edge.Right;
+						colEdge = Edge.None;
 					}
-					if(self.entity_place_collide(0,ydir))
+					if(self.Crawler_CanStickOuterRight())
 					{
-						position.X += sign(fVX);
+						if(fVX < 0)
+						{
+							colEdge = Edge.Right;
+							position.X = scr_floor(position.X);
+							_checkFlag = true;
+						}
 					}
-					if(!self.entity_place_collide(0,ydir))
+					else if(fVX < 0)
 					{
-						position.Y += ydir;
+						colEdge = Edge.None;
 					}
-				
-					vY = abs(vX)*ydir;
-					maxSpeedY = maxSpeedX;
-				
-					vX *= -1;
-					fVX = 0;
-					maxSpeedX = 0;
+					
+					if(_checkFlag)
+					{
+						if(self.entity_place_collide(0,ydir))
+						{
+							position.X += sign(fVX);
+						}
+						if(!self.entity_place_collide(0,ydir))
+						{
+							position.Y += ydir;
+						}
+						vY = abs(vX)*ydir;
+						maxSpeedY = maxSpeedX;
+						vX *= -1;
+						
+						fVX = 0;
+						maxSpeedX = 0;
+					}
+					else
+					{
+						maxSpeedY = 0;
+					}
 				}
 			}
 			#endregion
@@ -1238,7 +1321,11 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 				var moveUpSlope_Right = (!self.entity_place_collide(-steepness,ynum) && self.entity_place_collide(steepness,0) && self.Crawler_CanMoveUpSlope_Right());
 				var moveUpSlope_Left = (!self.entity_place_collide(steepness,ynum) && self.entity_place_collide(-steepness,0) && self.Crawler_CanMoveUpSlope_Left());
 				var verticalEdge = (colEdge == Edge.Left || colEdge == Edge.Right);
-				var xdir = -1;
+				var xdir = 0;
+				if(colEdge == Edge.Right)
+				{
+					xdir = -1;
+				}
 				if(colEdge == Edge.Left)
 				{
 					xdir = 1;
@@ -1264,8 +1351,20 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 				{
 					if(fVY > 0)
 					{
-						self.Crawler_OnBottomCollision(fVY);
-						if(verticalEdge || colEdge == Edge.None)
+						position.Y = scr_floor(position.Y);
+					}
+					if(fVY < 0)
+					{
+						position.Y = scr_ceil(position.Y);
+					}
+					if(!self.entity_place_collide(0,sign(fVY)))
+					{
+						position.Y += sign(fVY);
+					}
+					
+					if(fVY > 0)
+					{
+						if(self.Crawler_CanStickBottom() && (verticalEdge || colEdge == Edge.None))
 						{
 							if(verticalEdge)
 							{
@@ -1274,12 +1373,15 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 							}
 							colEdge = Edge.Bottom;
 						}
-						position.Y = scr_floor(position.Y);
+						else if(!self.Crawler_CanStickBottom() && colEdge == Edge.Bottom)
+						{
+							colEdge = Edge.None;
+						}
+						self.Crawler_OnBottomCollision(fVY);
 					}
 					if(fVY < 0)
 					{
-						self.Crawler_OnTopCollision(fVY);
-						if(verticalEdge || colEdge == Edge.None)
+						if(self.Crawler_CanStickTop() && (verticalEdge || colEdge == Edge.None))
 						{
 							if(verticalEdge)
 							{
@@ -1288,11 +1390,11 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 							}
 							colEdge = Edge.Top;
 						}
-						position.Y = scr_ceil(position.Y);
-					}
-					if(!self.entity_place_collide(0,sign(fVY)))
-					{
-						position.Y += sign(fVY);
+						else if(!self.Crawler_CanStickTop() && colEdge == Edge.Top)
+						{
+							colEdge = Edge.None;
+						}
+						self.Crawler_OnTopCollision(fVY);
 					}
 					self.Crawler_OnYCollision(fVY);
 					fVY = 0;
@@ -1320,7 +1422,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 					}
 				}
 			}
-			else if(!self.entity_place_collide(0,0) && (colEdge == Edge.Left || colEdge == Edge.Right))
+			else if(!self.entity_place_collide(0,0) && colEdge != Edge.Bottom && colEdge != Edge.Top)
 			{
 				var steepness = self.ModifySlopeYSteepness_Down();
 				var ynum = 2*sign(fVY);
@@ -1331,8 +1433,12 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 				var moveDownSlope_Right = (self.entity_place_collide(1,0) && self.entity_place_collide(steepness,ynum) && self.Crawler_CanMoveDownSlope_Right());
 				var moveDownSlope_Left = (self.entity_place_collide(-1,0) && self.entity_place_collide(-steepness,ynum) && self.Crawler_CanMoveDownSlope_Left());
 			
-				var xdir = 1;
-				if(colEdge == Edge.Left)
+				var xdir = 0;
+				if(colEdge == Edge.Right || (colEdge == Edge.None && self.entity_place_collide(1,0)))
+				{
+					xdir = 1;
+				}
+				if(colEdge == Edge.Left || (colEdge == Edge.None && self.entity_place_collide(-1,0)))
 				{
 					xdir = -1;
 				}
@@ -1378,33 +1484,57 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 						}
 					}
 				}
-				else if(!self.entity_place_collide(xdir,sign(fVY)))
+				else if(xdir != 0 && !self.entity_place_collide(xdir,sign(fVY)))
 				{
-					if(fVY > 0)
+					var _checkFlag = false;
+					if(self.Crawler_CanStickOuterTop())
 					{
-						position.Y = scr_ceil(position.Y);
-						colEdge = Edge.Top;
+						if(fVY > 0)
+						{
+							colEdge = Edge.Top;
+							position.Y = scr_ceil(position.Y);
+							_checkFlag = true;
+						}
 					}
-					if(fVY < 0)
+					else if(fVY >= 0)
 					{
-						position.Y = scr_floor(position.Y);
-						colEdge = Edge.Bottom;
+						colEdge = Edge.None;
 					}
-					if(self.entity_place_collide(xdir,0))
+					if(self.Crawler_CanStickOuterBottom())
 					{
-						position.Y += sign(fVY);
+						if(fVY < 0)
+						{
+							colEdge = Edge.Bottom;
+							position.Y = scr_floor(position.Y);
+							_checkFlag = true;
+						}
 					}
-					if(!self.entity_place_collide(xdir,0))
+					else if(fVY <= 0)
 					{
-						position.X += xdir;
+						colEdge = Edge.None;
 					}
-				
-					vX = abs(vY)*xdir;
-					maxSpeedX = maxSpeedY;
-				
-					vY *= -1;
-					fVY = 0;
-					maxSpeedY = 0;
+					
+					if(_checkFlag && colEdge != Edge.None)
+					{
+						if(self.entity_place_collide(xdir,0))
+						{
+							position.Y += sign(fVY);
+						}
+						if(!self.entity_place_collide(xdir,0))
+						{
+							position.X += xdir;
+						}
+						vX = abs(vY)*xdir;
+						maxSpeedX = maxSpeedY;
+						vY *= -1;
+						
+						fVY = 0;
+						maxSpeedY = 0;
+					}
+					else
+					{
+						maxSpeedX = 0;
+					}
 				}
 			}
 		
@@ -1501,17 +1631,24 @@ function Collision_MovingSolid(vX, vY)
 			{
 				if(fVX > 0)
 				{
-					self.MovingSolid_OnRightCollision(fVX);
 					position.X = scr_floor(position.X);
 				}
 				if(fVX < 0)
 				{
-					self.MovingSolid_OnLeftCollision(fVX);
 					position.X = scr_ceil(position.X);
 				}
 				if(!self.entity_place_collide(sign(fVX),0))
 				{
 					position.X += sign(fVX);
+				}
+				
+				if(fVX > 0)
+				{
+					self.MovingSolid_OnRightCollision(fVX);
+				}
+				if(fVX < 0)
+				{
+					self.MovingSolid_OnLeftCollision(fVX);
 				}
 				self.MovingSolid_OnXCollision(fVX);
 				fVX = 0;
@@ -1637,17 +1774,24 @@ function Collision_MovingSolid(vX, vY)
 			{
 				if(fVY > 0)
 				{
-					self.MovingSolid_OnBottomCollision(fVY);
 					position.Y = scr_floor(position.Y);
 				}
 				if(fVY < 0)
 				{
-					self.MovingSolid_OnTopCollision(fVY);
 					position.Y = scr_ceil(position.Y);
 				}
 				if(!self.entity_place_collide(0,sign(fVY)))
 				{
 					position.Y += sign(fVY);
+				}
+				
+				if(fVY > 0)
+				{
+					self.MovingSolid_OnBottomCollision(fVY);
+				}
+				if(fVY < 0)
+				{
+					self.MovingSolid_OnTopCollision(fVY);
 				}
 				self.MovingSolid_OnYCollision(fVY);
 				fVY = 0;
@@ -1745,6 +1889,7 @@ enum BlockBreakType
 	Bomb,
 	Chain,
 	PBomb,
+	BoostBall,
 	Speed,
 	Screw,
 	
@@ -1791,6 +1936,11 @@ function BreakBlock(xx,yy,type)
 			i++;
 		}
 		
+		if(type[BlockBreakType.BoostBall])
+		{
+			bArr[i] = obj_BoostBallBlock;
+			i++;
+		}
 		if(type[BlockBreakType.Speed])
 		{
 			bArr[i] = obj_SpeedBlock;
@@ -2334,13 +2484,9 @@ function DamageNPC(_colNum, _dmg, _dmgType, _dmgSubType, _freezeType, _freezeMax
 			}
 			else if(object_index == obj_Player)
 			{
-				if(isChargeSomersaulting && !isSpeedBoosting && !isScrewAttacking && dmgType == 1 && _dmg > 0)
+				if(IsChargeSomersaulting() && !IsSpeedBoosting() && !IsScrewAttacking() && dmgType == 1 && _dmg > 0)
 				{
 					statCharge = 0;
-					if(!npc.dead)
-					{
-						audio_play_sound(snd_InstaKillNPC_Failed,0,false);
-					}
 				}
 			}
 		}

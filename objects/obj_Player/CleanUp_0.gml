@@ -15,6 +15,10 @@ if(surface_exists(palSurface))
 {
     surface_free(palSurface);
 }
+if(surface_exists(ballGlowSurf))
+{
+    surface_free(ballGlowSurf);
+}
 if(surface_exists(cFlashPalSurf))
 {
     surface_free(cFlashPalSurf);
@@ -23,6 +27,8 @@ if(surface_exists(cFlashPalSurf))
 array_fill(mbTrailPosX, noone);
 array_fill(mbTrailPosY, noone);
 array_fill(mbTrailDir, noone);
+array_fill(mbTrailCol1, mbTrailColor_Start);
+array_fill(mbTrailCol2, mbTrailColor_End);
 
 if(surface_exists(mbTrailSurface))
 {

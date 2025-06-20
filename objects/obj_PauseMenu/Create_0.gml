@@ -131,6 +131,7 @@ miscName = array(
 "M.B. BOMB",
 "SPRING BALL",
 "BOOST BALL",
+"MAGNI BALL",
 "SPIDER BALL",
 "SCREW ATTACK");
 bootsName = array(

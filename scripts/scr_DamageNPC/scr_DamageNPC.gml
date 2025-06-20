@@ -226,13 +226,9 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 	    }
 	    else if(object_index == obj_Player)
 	    {
-	        if(isChargeSomersaulting && !isSpeedBoosting && !isScrewAttacking && dmgType == 1 && dmg > 0)
+	        if(IsChargeSomersaulting() && !IsSpeedBoosting() && !IsScrewAttacking() && dmgType == 1 && dmg > 0)
 	        {
 	            statCharge = 0;
-				if(!npc.dead)
-				{
-					audio_play_sound(snd_InstaKillNPC_Failed,0,false);
-				}
 	        }
 	    }
 	}

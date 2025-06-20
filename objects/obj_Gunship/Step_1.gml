@@ -27,7 +27,7 @@ var xx = x,
 
 var player = instance_place(x,y,obj_Player);
 if (instance_exists(player) && player.state == State.Elevator &&
-	abs(player.x - x) <= 10 && !player.grappleActive && !player.isPushing)
+	abs(player.x - x) <= 10 && !instance_exists(player.grapple) && !player.isPushing)
 {
 	if(state == ShipState.SaveDescend)
 	{

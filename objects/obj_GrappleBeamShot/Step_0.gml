@@ -29,6 +29,7 @@ if(grappleState != GrappleState.None)
 {
     if(instance_exists(grapBlock))
     {
+		grappled = true;
         if(grapBlockPosX > -1)
 		{
 			x = grapBlockPosX;
@@ -50,7 +51,7 @@ if(grappleState != GrappleState.None)
         drawGrapEffect = true;
 		if(grappleState == GrappleState.Swing)
 		{
-	        if(player.state != State.Grapple)
+	        if(!stateChanged && player.state != State.Grapple)
 	        {
 	            if(player.stateFrame == State.Grip)
 	            {
@@ -60,6 +61,7 @@ if(grappleState != GrappleState.None)
 	            player.grappleDist = point_distance(player.position.X, player.position.Y, x, y);
 	            player.grapAngle = point_direction(player.position.X, player.position.Y, x, y) - 90;
 				player.ChangeState(State.Grapple,State.Grapple,mask_Player_Somersault,false,true);
+				stateChanged = true;
 	        }
 			if(grapBlock.object_index == obj_GrappleBlockCracked)
 	        {
@@ -75,17 +77,18 @@ if(grappleState != GrappleState.None)
 					instance_destroy();
 					exit;
 				}
-				else
+				else if(!stateChanged)
 				{
 					if(player.stateFrame == State.Grip)
 		            {
 		                player.dir *= -1;
 		                player.dirFrame = 4*dir;
 		            }
-		            player.grappleDist = point_distance(player.x, player.y, x, y);
-		            player.grapAngle = point_direction(player.x, player.y, x, y) - 90;
-		            player.state = State.Grapple;
-		            player.stateFrame = State.Grapple;
+		            player.grappleDist = point_distance(player.position.X, player.position.Y, x, y);
+		            player.grapAngle = point_direction(player.position.X, player.position.Y, x, y) - 90;
+		            player.ChangeState(State.Grapple,State.Grapple,mask_Player_Somersault,false,true);
+					grappleState = GrappleState.Swing;
+					stateChanged = true;
 				}
 			}
 			else if(player.grappleDist <= 0)

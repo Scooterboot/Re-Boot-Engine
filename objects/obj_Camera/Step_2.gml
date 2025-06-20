@@ -137,13 +137,13 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 		}
 	}
 	
-	if(player.state == State.Grapple || player.state == State.Elevator || (player.state == State.Morph && player.spiderBall && player.spiderEdge != Edge.None))
+	if(player.state == State.Grapple || player.state == State.Elevator || (player.state == State.Morph && player.SpiderActive()))
 	{
 		xDir = 0;
 		yDir = 0;
 		targetX = playerX;
 		targetY = playerY;
-		if(player.state == State.Morph && player.spiderBall && player.spiderEdge != Edge.None)
+		if(player.state == State.Morph && player.SpiderActive())
 		{
 			camLimSpd = 0.5;
 		}

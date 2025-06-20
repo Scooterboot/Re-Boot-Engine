@@ -1,0 +1,2 @@
+up = false;
+left = false;

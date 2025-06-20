@@ -9,7 +9,7 @@
   "bitRate":128,
   "compression":0,
   "conversionMode":0,
-  "duration":0.300249,
+  "duration":0.30024943,
   "name":"snd_HealthDrainLoop",
   "parent":{
     "name":"Player",

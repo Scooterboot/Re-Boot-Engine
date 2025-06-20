@@ -80,7 +80,7 @@ if(bombTimer <= 0 || impacted > 0)
 		var flag = false;
 		with(player)
 		{
-			if(place_meeting(x,y,obj_MorphLauncher) && state == State.Morph && grounded && velY >= 0 && !spiderBall)
+			if(place_meeting(x,y,obj_MorphLauncher) && state == State.Morph && grounded && velY >= 0 && !SpiderActive())
 			{
 				flag = true;
 			}

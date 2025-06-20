@@ -21,7 +21,7 @@ if(revealTile)
 {
     if(!visible)
     {
-        RevealTile();
+        self.RevealTile();
         visible = true;
     }
     //revealTile = false;

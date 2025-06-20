@@ -1,12 +1,10 @@
 /// @description Update Anims, Shoot, & Environmental Dmg
 
-var xRayActive = instance_exists(XRay);
-
 Set_Beams();
 
 var sndFlag = false;
 
-if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTrans && stateFrame != State.Grapple)) && !obj_PauseMenu.pause && !pauseSelect))
+if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (global.roomTrans && stateFrame != State.Grapple)) && !obj_PauseMenu.pause && !pauseSelect))
 {
 	#region X-Ray
 	var canXRay = true;
@@ -37,7 +35,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 		}
 	}
 	
-	if(canXRay && (cSprint || global.HUD == 1) && itemSelected == 1 && itemHighlighted[1] == 4 && dir != 0 && fVelX == 0 && fVelY == 0 && (move2 == 0 || instance_exists(XRay)) && 
+	if(canXRay && (cSprint || global.HUD == 1) && hudSlot == 1 && hudSlotItem[1] == 4 && dir != 0 && fVelX == 0 && fVelY == 0 && (move2 == 0 || instance_exists(XRay)) && 
 		(((state == State.Stand || state == State.Crouch) && grounded) || state == State.Grip))
     {
 		stateFrame = state;
@@ -119,13 +117,13 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
     }
 	#endregion
 
-	var unchargeable = ((itemSelected == 1 && (itemHighlighted[1] == 0 || itemHighlighted[1] == 1 || itemHighlighted[1] == 3)) || xRayActive || hyperBeam);
+	var unchargeable = ((hudSlot == 1 && (hudSlotItem[1] == 0 || hudSlotItem[1] == 1 || hudSlotItem[1] == 3)) || instance_exists(XRay) || hyperBeam);
 	
 	#region Update Anims
 	
 	drawMissileArm = false;
-	shootFrame = (gunReady || justShot > 0 || instance_exists(grapple) || (cShoot && (rShoot || (beam[Beam.Charge] && !unchargeable)) && (itemSelected == 1 ||
-				((itemHighlighted[1] != 0 || missileStat > 0) && (itemHighlighted[1] != 1 || superMissileStat > 0)))));
+	shootFrame = (gunReady || justShot > 0 || instance_exists(grapple) || (cShoot && (rShoot || (beam[Beam.Charge] && !unchargeable)) && (hudSlot == 1 ||
+				((hudSlotItem[1] != 0 || missileStat > 0) && (hudSlotItem[1] != 1 || superMissileStat > 0)))));
 	sprtOffsetX = 0;
 	sprtOffsetY = 0;
 	torsoR = sprt_Player_StandCenter;
@@ -140,8 +138,8 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	gripOverlay = -1;
 	gripOverlayFrame = 0;
 	
-	//rotation = 0;
-	if(rotation != 0 && rotReAlignStep > 0)
+	rotation = 0;
+	/*if(rotation != 0 && rotReAlignStep > 0)
 	{
 		if(stateFrame == State.Somersault)
 		{
@@ -163,7 +161,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	else if(rotation != 0)
 	{
 		rotation = 0;
-	}
+	}*/
 	
 	var liquidMovement = (liquidState > 0);
 	
@@ -175,7 +173,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	}
 	
 	var aimFrameTarget = aimAngle*2;
-	if(xRayActive)
+	if(instance_exists(XRay))
 	{
 		aimFrameTarget = 0;
 	}
@@ -639,8 +637,10 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				
 				torsoR = sprt_Player_BrakeRight;
 				torsoL = sprt_Player_BrakeLeft;
+				legs = sprt_Player_BrakeLeg;
 				
 				bodyFrame = 4 - floor(frame[Frame.Moon]);
+				legFrame = bodyFrame;
 				switch bodyFrame
 				{
 					case 4:
@@ -914,6 +914,55 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				runToStandFrame[1] = 0;
 				transFrame = 2;
 				
+				bodyFrame = clamp(5 - ceil(brakeFrame/2), 0, 4);
+				legFrame = bodyFrame;
+				
+				torsoR = sprt_Player_BrakeRight;
+				torsoL = sprt_Player_BrakeLeft;
+				legs = sprt_Player_BrakeLeg;
+				var _armPosR = [[-3,-8], [-2,-8], [0,-8], [4,-7], [11,-5]],
+					_armPosL = [[5,-6], [4,-6], [1,-7], [-1,-6], [-9,-4]];
+				
+				drawMissileArm = true;
+				if(aimFrame > 0 && aimFrame < 3)
+				{
+					torsoR = sprt_Player_BrakeAimUpRight;
+					torsoL = sprt_Player_BrakeAimUpLeft;
+					_armPosR = [[5,-16], [6,-16], [7,-17], [13,-18], [14,-19]];
+					_armPosL = [[-12,-16], [-13,-16], [-14,-17], [-16,-19], [-17,-20]];
+				}
+				else if(aimFrame < 0 && aimFrame > -3)
+				{
+					torsoR = sprt_Player_BrakeAimDownRight;
+					torsoL = sprt_Player_BrakeAimDownLeft;
+					_armPosR = [[1,12], [2,12], [3,11], [10,10], [12,9]];
+					_armPosL = [[-11,11], [-12,11], [-13,10], [-14,9], [-16,8]];
+				}
+				else if(aimFrame >= 3)
+				{
+					torsoR = sprt_Player_BrakeAimUpVRight;
+					torsoL = sprt_Player_BrakeAimUpVLeft;
+					_armPosR = [[-6,-25], [-5,-25], [-4,-26], [0,-27], [1,-28]];
+					_armPosL = [[0,-25], [-1,-25], [-2,-26], [-2,-27], [-4,-28]];
+				}
+				else if(shootFrame)
+				{
+					torsoR = sprt_Player_BrakeAimRight;
+					torsoL = sprt_Player_BrakeAimLeft;
+					_armPosR = [[4,2], [5,2], [7,2], [9,1], [12,1]];
+					_armPosL = [[-14,2], [-15,2], [-16,2], [-16,1], [-17,1]];
+				}
+				else
+				{
+					drawMissileArm = false;
+				}
+				var armPos = _armPosR[bodyFrame];
+				if(dir == -1)
+				{
+					armPos = _armPosL[bodyFrame];
+				}
+				ArmPos(armPos[0], armPos[1]);
+				
 				if(move != 0 && move != dir)
 				{
 					brakeFrame = max(brakeFrame - 2, 0);
@@ -929,40 +978,6 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				{
 					part_particles_create(obj_Particles.partSystemB,x-(8+random(4))*dir,bb_bottom()+random(4),obj_Particles.bDust[1],1);
 				}
-				bodyFrame = clamp(5 - ceil(brakeFrame/2), 0, 4);
-				legFrame = bodyFrame;
-				
-				drawMissileArm = true;
-				if(aimFrame > 0 && aimFrame < 3)
-				{
-					torsoR = sprt_Player_BrakeAimUpRight;
-					torsoL = sprt_Player_BrakeAimUpLeft;
-				}
-				else if(aimFrame < 0 && aimFrame > -3)
-				{
-					torsoR = sprt_Player_BrakeAimDownRight;
-					torsoL = sprt_Player_BrakeAimDownLeft;
-				}
-				else if(aimFrame >= 3)
-				{
-					torsoR = sprt_Player_BrakeAimUpVRight;
-					torsoL = sprt_Player_BrakeAimUpVLeft;
-				}
-				else if(shootFrame)
-				{
-					torsoR = sprt_Player_BrakeAimRight;
-					torsoL = sprt_Player_BrakeAimLeft;
-				}
-				else
-				{
-					torsoR = sprt_Player_BrakeRight;
-					torsoL = sprt_Player_BrakeLeft;
-					drawMissileArm = false;
-				}
-				legs = sprt_Player_BrakeLeg;
-				
-				SetArmPosBrake();
-				
 				if(brakeFrame <= 0)
 				{
 					brake = false;
@@ -1094,7 +1109,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				{
 					ballAnimDir = sign(velX);
 				}
-				if(spiderBall && spiderEdge != Edge.None)
+				if(SpiderActive())
 				{
 					if(sign(spiderSpeed) != 0)
 					{
@@ -1141,7 +1156,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				{
 					fDir = 1;
 					torsoR = sprt_Player_MorphBall;
-					if(misc[Misc.Spider])
+					if((misc[Misc.MagBall] || misc[Misc.Spider]))
 					{
 						torsoR = sprt_Player_MorphBallAlt;
 					}
@@ -1503,7 +1518,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						gripOverlayFrame = gripFrame;
 					}
 					
-					if(xRayActive && (gripFrame <= 0 || gripFrame >= 3))
+					if(instance_exists(XRay) && (gripFrame <= 0 || gripFrame >= 3))
 					{
 						torsoR = sprt_Player_GripXRayRight;
 						torsoL = sprt_Player_GripXRayLeft;
@@ -1734,6 +1749,14 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 	                    frameCounter[i] = 0;
 	                }
 	            }
+				var _gAngle = scr_wrap(-grapAngle*dir,0,360);
+				var _somerFrame = _gAngle / (360 / 16);
+				if(boots[Boots.SpaceJump] && !liquidMovement)
+				{
+					_somerFrame = _gAngle / (360 / 8);
+				}
+				frame[Frame.Somersault] = 2 + _somerFrame;
+				
 	            if(grapWJCounter > 0)
 	            {
 	                torsoR = sprt_Player_GrappleWJRight;
@@ -2413,14 +2436,17 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			mbTrailColor_End = c_green;
 			if(spiderBall)
 			{
-				mbTrailColor_Start = merge_color(c_lime,c_yellow,0.6);
-				mbTrailColor_End = c_green;
+				if(misc[Misc.Spider])
+				{
+					mbTrailColor_Start = merge_color(c_lime,c_yellow,0.6);
+					mbTrailColor_End = c_green;
+				}
+				else
+				{
+					mbTrailColor_Start = c_aqua;
+					mbTrailColor_End = c_teal;
+				}
 			}
-			/*else if(suit[Suit.Gravity])
-			{
-				mbTrailColor_Start = c_aqua;
-				mbTrailColor_End = c_teal;
-			}*/
 			
 			if(speedFXCounter > 0)
 			{
@@ -2449,9 +2475,13 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				mbTrailPosX[i] = mbTrailPosX[i+1];
 				mbTrailPosY[i] = mbTrailPosY[i+1];
 				mbTrailDir[i] = mbTrailDir[i+1];
+				mbTrailCol1[i] = mbTrailCol1[i+1];
+				mbTrailCol2[i] = mbTrailCol2[i+1];
 			}
 			mbTrailPosX[mbTrailLength-1] = position.X + sprtOffsetX;
 			mbTrailPosY[mbTrailLength-1] = position.Y + sprtOffsetY;
+			mbTrailCol1[mbTrailLength-1] = mbTrailColor_Start;
+			mbTrailCol2[mbTrailLength-1] = mbTrailColor_End;
 			
 			var posX = mbTrailPosX[mbTrailLength-1],
 				posY = mbTrailPosY[mbTrailLength-1];
@@ -2502,9 +2532,9 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			amount = beamAmt,
 			sound = beamSound,
 			autoFire = 1;
-		if(itemSelected == 1 && itemHighlighted[1] <= 1)
+		if(hudSlot == 1 && hudSlotItem[1] <= 1)
 		{
-			if(itemHighlighted[1] == 0 && missileStat > 0 && item[Item.Missile])
+			if(hudSlotItem[1] == 0 && missileStat > 0 && item[Item.Missile])
 			{
 				shotIndex = obj_MissileShot;
 				damage = 100;
@@ -2514,7 +2544,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 				sound = snd_Missile_Shot;
 				autoFire = 0;
 			}
-			if(itemHighlighted[1] == 1 && superMissileStat > 0 && item[Item.SMissile])
+			if(hudSlotItem[1] == 1 && superMissileStat > 0 && item[Item.SMissile])
 			{
 				shotIndex = obj_SuperMissileShot;
 				damage = 300;
@@ -2540,15 +2570,15 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			chargeBombDmg = 30, // Bomb spread damage.
 			pBombDmg = 40; // Power bomb explosions deal damage per frame (well, not really, because enemies have i-frames).
 		
-		if(!xRayActive)
+		if(!instance_exists(XRay))
 		{
 			// ----- Shoot -----
 			#region Shoot
-			if((cShoot || enqueShot || (state == State.Grapple && grapWJCounter > 0)) && dir != 0 && !xRayActive && state != State.Death)
+			if((cShoot || enqueShot) && dir != 0 && state != State.Death)
 			{
 				if(state != State.Morph && stateFrame != State.Morph)
 				{
-					if(itemSelected == 1 && itemHighlighted[1] == 3 && item[Item.Grapple] && canShoot)
+					if(hudSlot == 1 && hudSlotItem[1] == 3 && item[Item.Grapple] && canShoot)
 					{
 						delay = 14;
 					
@@ -2597,7 +2627,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						instance_destroy(grapple);
 						grappleDist = 0;
 					
-						if(canShoot && (itemSelected == 0 || ((itemHighlighted[1] != 0 || missileStat > 0) && (itemHighlighted[1] != 1 || superMissileStat > 0))))
+						if(canShoot && (hudSlot == 0 || ((hudSlotItem[1] != 0 || missileStat > 0) && (hudSlotItem[1] != 1 || superMissileStat > 0))))
 						{
 							if(autoFire > 0)
 							{
@@ -2609,13 +2639,13 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 							{
 								if(rShoot || enqueShot || (!beam[Beam.Charge] && autoFire > 0) || autoFire == 2)
 								{
-									if(itemSelected == 1 && itemHighlighted[1] <= 1)
+									if(hudSlot == 1 && hudSlotItem[1] <= 1)
 									{
-										if(itemHighlighted[1] == 0 && missileStat > 0 && item[Item.Missile])
+										if(hudSlotItem[1] == 0 && missileStat > 0 && item[Item.Missile])
 										{
 											missileStat--;
 										}
-										if(itemHighlighted[1] == 1 && superMissileStat > 0 && item[Item.SMissile])
+										if(hudSlotItem[1] == 1 && superMissileStat > 0 && item[Item.SMissile])
 										{
 											superMissileStat--;
 										}
@@ -2680,7 +2710,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 							var bombPosX = x,
 								bombPosY = y+3,
 								instaBomb = cDown;
-							if(spiderBall)
+							if(SpiderActive())
 							{
 								bombPosX = x + lengthdir_x(-2,spiderJumpDir);
 								bombPosY = y+1 + lengthdir_y(-2,spiderJumpDir);
@@ -2698,7 +2728,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 								}
 							}
 							
-							if(itemSelected == 1 && (itemHighlighted[1] == 2 || global.HUD > 0) && powerBombStat > 0 && item[Item.PBomb])
+							if(hudSlot == 1 && (hudSlotItem[1] == 2 || global.HUD > 0) && powerBombStat > 0 && item[Item.PBomb])
 							{
 								var pBomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_PowerBomb);
 								pBomb.damage = pBombDmg;
@@ -2790,18 +2820,17 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			{
 				if(instance_exists(grapple))
 				{
-					if(grapple.grappleState != GrappleState.None)
+					if((state != State.Grapple || grapWJCounter <= 0))// && state != State.Morph)
 					{
-						instance_destroy(grapple);
+						if(grapple.grappleState != GrappleState.None)
+						{
+							instance_destroy(grapple);
+						}
+						else
+						{
+							grapple.impacted = max(grapple.impacted,1);
+						}
 					}
-					else
-					{
-						grapple.impacted = max(grapple.impacted,1);
-					}
-				}
-				else
-				{
-					grappleDist = 0;
 				}
 		
 				if(statCharge <= 0)
@@ -2811,7 +2840,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 					chargeSoundPlayed = false;
 				}
 		
-				if(canShoot && beam[Beam.Charge] && !unchargeable && dir != 0 && !xRayActive)
+				if(canShoot && beam[Beam.Charge] && !unchargeable && dir != 0)
 				{
 					if(state != State.Morph && stateFrame != State.Morph)
 					{
@@ -2825,15 +2854,15 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 							var flare = instance_create_layer(shootPosX+lengthdir_x(5,shootDir),shootPosY+lengthdir_y(5,shootDir),layer_get_id("Projectiles_fg"),obj_ChargeFlare);
 							flare.damage = (beamDmg*chargeMult);
 							flare.sprite_index = beamFlare;
-							flare.damageSubType[2] = (beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1));
-							flare.damageSubType[3] = (beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2));
-							flare.damageSubType[4] = (beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3));
-							flare.damageSubType[5] = (beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4));
+							flare.damageSubType[2] = (beam[Beam.Ice] || (noBeamsActive && hudSlotItem[0] == 1));
+							flare.damageSubType[3] = (beam[Beam.Wave] || (noBeamsActive && hudSlotItem[0] == 2));
+							flare.damageSubType[4] = (beam[Beam.Spazer] || (noBeamsActive && hudSlotItem[0] == 3));
+							flare.damageSubType[5] = (beam[Beam.Plasma] || (noBeamsActive && hudSlotItem[0] == 4));
 							flare.direction = flareDir;
 							flare.image_angle = flareDir;
 							flare.image_xscale = dir2;
 							flare.creator = id;
-							if(beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1))
+							if(beam[Beam.Ice] || (noBeamsActive && hudSlotItem[0] == 1))
 							{
 								flare.freezeType = 2;
 								flare.freezeKill = true;
@@ -2851,11 +2880,11 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 							recoil = true;
 						}
 					}
-					else if(misc[Misc.Bomb] && (itemSelected == 0 || (itemHighlighted[1] != 2 && global.HUD == 0) || powerBombStat <= 0 || !item[Item.PBomb]))
+					else if(misc[Misc.Bomb] && (hudSlot == 0 || (hudSlotItem[1] != 2 && global.HUD == 0) || powerBombStat <= 0 || !item[Item.PBomb]))
 					{
 						var bombPosX = x,
 							bombPosY = y+3;
-						if(spiderBall)
+						if(SpiderActive())
 						{
 							bombPosX = x + lengthdir_x(-2,spiderJumpDir);
 							bombPosY = y+1 + lengthdir_y(-2,spiderJumpDir);
@@ -2865,7 +2894,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 						{
 							var bChargeScale = min(statCharge / (maxCharge*1.5), 1);
 							
-							if(!grounded && (!spiderBall || spiderEdge == Edge.None) && cDown)
+							if(!grounded && !SpiderActive() && cDown)
 							{
 								var bombDir = [0,90,210,330],
 									bombTime = [0,30,30,30],
@@ -2886,7 +2915,7 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 								bombDelayTime = 60;
 								audio_play_sound(snd_BombSet,0,false);
 							}
-							else if(spiderBall && spiderEdge != Edge.None)
+							else if(SpiderActive())
 							{
 								var bombDir = [0, 45, 90, 135, 180],
 									bombTime = [30, 30, 30, 30, 30];
@@ -2958,31 +2987,31 @@ if(!global.gamePaused || (((xRayActive && !global.roomTrans) || (global.roomTran
 			}
 			#endregion
 	
-			if(isSpeedBoosting || isScrewAttacking)
+			if(IsSpeedBoosting() || IsScrewAttacking())
 			{
 				var dmgST;
 				dmgST[0] = true;
 				dmgST[1] = false;
-				dmgST[2] = isSpeedBoosting;
-				dmgST[3] = isScrewAttacking;
+				dmgST[2] = IsSpeedBoosting();
+				dmgST[3] = IsScrewAttacking();
 				dmgST[4] = false;
 				dmgST[5] = false;
 			    scr_DamageNPC(x,y,2000,DmgType.Misc,dmgST,0,3,0);
 			}
-			else if(isChargeSomersaulting)
+			else if(IsChargeSomersaulting())
 			{
 			    var psDmg = beamDmg*chargeMult * 2;
-			    /*if(beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3))
+			    /*if(beam[Beam.Spazer] || (noBeamsActive && hudSlotItem[0] == 3))
 			    {
 			        psDmg *= 2;
 			    }*/
 				var dmgST;
 				dmgST[0] = true;
 				dmgST[1] = true;
-				dmgST[2] = (beam[Beam.Ice] || (noBeamsActive && itemHighlighted[0] == 1));
-				dmgST[3] = (beam[Beam.Wave] || (noBeamsActive && itemHighlighted[0] == 2));
-				dmgST[4] = (beam[Beam.Spazer] || (noBeamsActive && itemHighlighted[0] == 3));
-				dmgST[5] = (beam[Beam.Plasma] || (noBeamsActive && itemHighlighted[0] == 4));
+				dmgST[2] = (beam[Beam.Ice] || (noBeamsActive && hudSlotItem[0] == 1));
+				dmgST[3] = (beam[Beam.Wave] || (noBeamsActive && hudSlotItem[0] == 2));
+				dmgST[4] = (beam[Beam.Spazer] || (noBeamsActive && hudSlotItem[0] == 3));
+				dmgST[5] = (beam[Beam.Plasma] || (noBeamsActive && hudSlotItem[0] == 4));
 			    scr_DamageNPC(x,y,psDmg,DmgType.Charge,dmgST,0,3,0);
 			}
 			if(boostBallDmgCounter > 0)

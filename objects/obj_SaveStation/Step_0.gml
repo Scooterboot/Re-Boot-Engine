@@ -10,7 +10,7 @@ var bbottom = bbox_bottom-1;
 var player = instance_place(x,y,obj_Player);
 if (instance_exists(player) && (player.state == State.Stand || player.state == State.Elevator) &&
 	abs(player.x - x) < 12 && player.bb_bottom() < bbottom+1 && player.bb_bottom() > bbottom-1 && 
-	player.grounded && !player.grappleActive && !player.isPushing)
+	player.grounded && !instance_exists(player.grapple) && !player.isPushing)
 {
 	if(saveCooldown <= 0)
 	{

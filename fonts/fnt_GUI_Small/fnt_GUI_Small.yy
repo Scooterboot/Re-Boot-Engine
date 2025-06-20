@@ -3,7 +3,7 @@
   "%Name":"fnt_GUI_Small",
   "AntiAlias":0,
   "applyKerning":0,
-  "ascender":0,
+  "ascender":7,
   "ascenderOffset":1,
   "bold":false,
   "canGenerateBitmap":true,
@@ -209,7 +209,7 @@
   "italic":false,
   "kerningPairs":[],
   "last":0,
-  "lineHeight":0,
+  "lineHeight":9,
   "maintainGms1Font":false,
   "name":"fnt_GUI_Small",
   "parent":{
@@ -227,10 +227,7 @@
   "sdfSpread":8,
   "size":6.0,
   "styleName":"Regular",
-  "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
-  },
+  "textureGroupId":null,
   "TTFName":"${project_dir}\\fonts\\GUIFontSmall\\GUIFontSmall.png",
   "usesSDF":false,
 }

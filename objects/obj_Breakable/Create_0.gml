@@ -54,11 +54,11 @@ function RevealTile()
 
 extSprt = noone;
 
-function DrawBreakable(_x,_y,_index)
+function DrawBreakable(_x,_y,_index, _extIndex = 0)
 {
 	if(extSprt != noone && _index > 0)
 	{
-		draw_sprite_ext(extSprt,0,_x,_y,image_xscale/2,image_yscale/2,image_angle,c_white,1);
+		draw_sprite_ext(extSprt,_extIndex,_x,_y,image_xscale/2,image_yscale/2,image_angle,c_white,1);
 	}
 	else
 	{

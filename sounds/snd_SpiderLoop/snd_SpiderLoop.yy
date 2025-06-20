@@ -9,7 +9,7 @@
   "bitRate":128,
   "compression":0,
   "conversionMode":0,
-  "duration":2.83771,
+  "duration":2.8377097,
   "name":"snd_SpiderLoop",
   "parent":{
     "name":"Morph",
@@ -19,7 +19,7 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"snd_SpiderLoop",
+  "soundFile":"snd_SpiderLoop.wav",
   "type":1,
   "volume":1.0,
 }

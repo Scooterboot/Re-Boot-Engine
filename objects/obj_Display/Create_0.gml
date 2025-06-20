@@ -95,11 +95,11 @@ stateText[18] = "Dodge";
 stateText[19] = "CrystalFlash";
 stateText[20] = "Push";
 
-edgeText[0] = "None";
-edgeText[1] = "Bottom";
-edgeText[2] = "Top";
-edgeText[3] = "Left";
-edgeText[4] = "Right";
+edgeText[Edge.None] = "None";
+edgeText[Edge.Bottom] = "Bottom";
+edgeText[Edge.Top] = "Top";
+edgeText[Edge.Right] = "Right";
+edgeText[Edge.Left] = "Left";
 
 zoomTempFlag = false;
 fastforwardtoggle = false;

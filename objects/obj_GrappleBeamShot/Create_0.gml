@@ -7,7 +7,7 @@ particleType = 1;
 
 shootDir = 0;
 grappleDist = 0;
-//grappled = false;
+grappled = false;
 //grappled2 = false;
 
 enum GrappleState
@@ -17,6 +17,7 @@ enum GrappleState
 	PushBlock
 }
 grappleState = GrappleState.None;
+stateChanged = false;
 
 grapBlock = noone;
 grapBlockPosX = -1;//0;

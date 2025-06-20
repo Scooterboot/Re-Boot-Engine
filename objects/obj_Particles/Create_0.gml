@@ -120,7 +120,7 @@ part_type_color2(bTrails[0],c_yellow,c_red);
 part_type_direction(bTrails[0],0,360,0,0);
 part_type_life(bTrails[0],8,25);
 //part_type_life(bTrails[0],8,16);
-part_type_sprite(bTrails[0],sprt_ParticlePixel,0,0,0);
+part_type_sprite(bTrails[0],sprt_ParticlePixel2,0,0,0);
 part_type_speed(bTrails[0],0.2,0.4,0,0);
 
 bTrails[1] = part_type_create();
@@ -130,7 +130,7 @@ part_type_color3(bTrails[1],c_white,c_aqua,c_blue);
 part_type_direction(bTrails[1],0,360,0,0);
 part_type_life(bTrails[1],50/4,100/4);
 //part_type_life(bTrails[1],12,16);
-part_type_sprite(bTrails[1],sprt_ParticlePixel,0,0,0);
+part_type_sprite(bTrails[1],sprt_ParticlePixel2,0,0,0);
 part_type_speed(bTrails[1],.2,.6,0,0);
 //part_type_gravity(bTrails[1],.051,270);
 part_type_gravity(bTrails[1],.1,270);
@@ -142,7 +142,7 @@ part_type_color2(bTrails[2],c_purple,c_fuchsia);
 part_type_direction(bTrails[2],0,360,0,0);
 part_type_life(bTrails[2],8,25);
 //part_type_life(bTrails[2],8,16);
-part_type_sprite(bTrails[2],sprt_ParticlePixel,0,0,0);
+part_type_sprite(bTrails[2],sprt_ParticlePixel2,0,0,0);
 part_type_speed(bTrails[2],0.2,0.4,0,0);
 
 bTrails[3] = part_type_create();
@@ -152,7 +152,7 @@ part_type_color2(bTrails[3],c_yellow,c_red);
 part_type_direction(bTrails[3],0,360,0,0);
 part_type_life(bTrails[3],8,25);
 //part_type_life(bTrails[3],8,16);
-part_type_sprite(bTrails[3],sprt_ParticlePixel,0,0,0);
+part_type_sprite(bTrails[3],sprt_ParticlePixel2,0,0,0);
 part_type_speed(bTrails[3],0.2,0.4,0,0);
 
 bTrails[4] = part_type_create();
@@ -162,7 +162,7 @@ part_type_color3(bTrails[4],c_white,c_lime,c_green);
 part_type_direction(bTrails[4],0,360,0,0);
 part_type_life(bTrails[4],8,25);
 //part_type_life(bTrails[4],8,16);
-part_type_sprite(bTrails[4],sprt_ParticlePixel,0,0,0);
+part_type_sprite(bTrails[4],sprt_ParticlePixel2,0,0,0);
 part_type_speed(bTrails[4],0.2,0.4,0,0);
 
 bTrails[5] = part_type_create();
@@ -248,7 +248,7 @@ for(var i = 0; i < 10; i++)
 	part_type_color2(bTrails[j],c1,c2);
 	part_type_direction(bTrails[j],0,360,0,0);
 	part_type_life(bTrails[j],8,25);
-	part_type_sprite(bTrails[j],sprt_ParticlePixel,0,0,0);
+	part_type_sprite(bTrails[j],sprt_ParticlePixel2,0,0,0);
 	part_type_speed(bTrails[j],0.2,0.4,0,0);
 }
 #endregion
@@ -309,7 +309,7 @@ part_type_blend(partFreeze,1);
 part_type_color3(partFreeze,c_white,c_aqua,c_blue);
 part_type_direction(partFreeze,0,360,0,0);
 part_type_life(partFreeze,8,10);
-part_type_sprite(partFreeze,sprt_ParticlePixel,0,0,0);
+part_type_sprite(partFreeze,sprt_ParticlePixel2,0,0,0);
 part_type_speed(partFreeze,.7,1,-.015,0);
 part_type_gravity(partFreeze,.07,270);
 
@@ -330,9 +330,27 @@ part_type_blend(gTrail,1);
 part_type_color3(gTrail,c_white,c_aqua,c_blue);
 part_type_direction(gTrail,0,360,0,0);
 part_type_life(gTrail,12,25);
-part_type_sprite(gTrail,sprt_ParticlePixel,0,0,0);
+part_type_sprite(gTrail,sprt_ParticlePixel2,0,0,0);
 part_type_speed(gTrail,0.2,0.4,0,0);
 
+//Spider Ball
+sbTrail = part_type_create();
+part_type_alpha3(sbTrail,1,.7,0);
+part_type_blend(sbTrail,1);
+part_type_color2(sbTrail,c_aqua,c_blue);
+part_type_direction(sbTrail,0,360,0,0);
+part_type_life(sbTrail,12,25);
+part_type_sprite(sbTrail,sprt_ParticlePixel2,0,0,0);
+part_type_speed(sbTrail,0.2,0.4,0,0);
+
+sbTrail2 = part_type_create();
+part_type_alpha3(sbTrail2,1,.7,0);
+part_type_blend(sbTrail2,1);
+part_type_color2(sbTrail2,c_lime,c_green);
+part_type_direction(sbTrail2,0,360,0,0);
+part_type_life(sbTrail2,12,25);
+part_type_sprite(sbTrail2,sprt_ParticlePixel2,0,0,0);
+part_type_speed(sbTrail2,0.2,0.4,0,0);
 
 
 //Enemy death explosions

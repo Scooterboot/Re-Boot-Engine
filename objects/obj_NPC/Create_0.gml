@@ -177,6 +177,11 @@ function StrikeNPC(damage, dmgType, dmgSubType, lifeEnd = 0, dethType = -1)
 		    }
 		    realLife.dead = true;
 		}
+		else if(dethType == 3)
+		{
+			audio_stop_sound(snd_InstaKillNPC_Failed);
+			audio_play_sound(snd_InstaKillNPC_Failed,0,false);
+		}
 		dead = realLife.dead;
 	}
 	else
@@ -190,6 +195,11 @@ function StrikeNPC(damage, dmgType, dmgSubType, lifeEnd = 0, dethType = -1)
 		        deathType = dethType;
 		    }
 		    dead = true;
+		}
+		else if(dethType == 3)
+		{
+			audio_stop_sound(snd_InstaKillNPC_Failed);
+			audio_play_sound(snd_InstaKillNPC_Failed,0,false);
 		}
 	}
 	

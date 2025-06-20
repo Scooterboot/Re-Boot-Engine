@@ -76,6 +76,7 @@ if(debug == 1)
         draw_text(xx+marginX,yy+marginY*17,"spiderSpeed: "+string(spiderSpeed));
 		
 		draw_text(xx+marginX,yy+marginY*19,"speedBoostWJCounter: "+string(speedBoostWJCounter));
+		draw_text(xx+marginX,yy+marginY*20,"grapAngle: "+string(grapAngle));
 		
 		/*for(var i = 0; i < ds_list_size(global.openHatchList); i++)
 		{

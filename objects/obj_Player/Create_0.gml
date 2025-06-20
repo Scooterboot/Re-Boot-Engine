@@ -228,9 +228,13 @@ spiderJump = false;
 spiderJumpDir = 0;
 spiderJump_SpeedAddX = 0;
 spiderJump_SpeedAddY = 0;
+spiderGrappleSpeedKeep = false;
 
 spiderGlowAlpha = 0;
 spiderGlowNum = 1;
+spiderPartCounter = 0;
+spiderPartMax = 3;
+spiderGlowIndex = 0;
 
 sparkCancelSpiderJumpTweak = false;
 
@@ -242,10 +246,6 @@ boostBallFX = 0;
 boostBallFXFlash = false;
 boostBallSnd = noone;
 
-
-isChargeSomersaulting = false;
-isSpeedBoosting = false;
-isScrewAttacking = false;
 
 stepSndPlayedAt = 0;
 
@@ -363,7 +363,6 @@ XRay = noone;
 constantDamageDelay = 0;
 
 grapple = noone;
-grappleActive = false;
 grappleDist = 0;
 grappleOldDist = 0;
 grappleMaxDist = 200;//160;//143;
@@ -731,7 +730,6 @@ climbFrame = 0;
 
 grapFrame = 3;
 grapWallBounceFrame = 0;
-grapMoveAnim = 0;
 
 grapPartFrame = 0;
 grapPartCounter = 0;
@@ -960,12 +958,13 @@ enum Misc
 	Bomb,
 	Spring,
 	Boost,
+	MagBall,
 	Spider,
 	ScrewAttack,
 	
 	_Length
 };
-// 7 Misc
+// 8 Misc
 misc = array_create(Misc._Length);
 hasMisc = array_create(Misc._Length);
 
@@ -1079,8 +1078,8 @@ rHToggle = !cHToggle;
 moveH = 0;
 moveHPrev = 1;
 
-itemSelected = 0;
-itemHighlighted[1] = 0;
+hudSlot = 0;
+hudSlotItem = [0,0];
 
 pauseSelect = false;
 
@@ -1122,6 +1121,8 @@ mbTrailLength = 18;
 mbTrailPosX = array_create(mbTrailLength, noone);
 mbTrailPosY = array_create(mbTrailLength, noone);
 mbTrailDir = array_create(mbTrailLength, noone);
+mbTrailCol1 = array_create(mbTrailLength, mbTrailColor_Start);
+mbTrailCol2 = array_create(mbTrailLength, mbTrailColor_End);
 
 mbTrailNum = 0;
 mbTrailNumRate = 1;
@@ -1203,6 +1204,50 @@ function AfterImage(_player, _alpha, _num) constructor
 	}
 }
 #endregion
+#region SparkDistort
+function SparkDistort(_alphaMult = 1)
+{
+	var _left = x-40, _top = y-40,
+		_right = x+40, _bottom = y+40;
+	if(state == State.BallSpark)
+	{
+		_left = x-24; _top = y-24;
+		_right = x+24; _bottom = y+24;
+	}
+	var dist = instance_create_depth(0,0,layer_get_depth(layer_get_id("Projectiles_fg"))-1,obj_Distort);
+	dist.left = _left;
+	dist.top = _top;
+	dist.right = _right;
+	dist.bottom = _bottom;
+	dist.alpha = 0.5;
+	dist.alphaNum = 1;
+	dist.alphaRate = 0.5;
+	dist.alphaRateMultDecr = 0.2;
+	dist.spread = 0.5;
+	dist.width = 0.5;
+	dist.colorMult = 0.5;
+	dist.alphaMult = _alphaMult;
+}
+#endregion
+
+#region IsChargeSomersaulting
+function IsChargeSomersaulting()
+{
+	return (statCharge >= maxCharge && (state == State.Somersault || state == State.Dodge || (state == State.DmgBoost && dBoostFrame < 18)));
+}
+#endregion
+#region IsSpeedBoosting
+function IsSpeedBoosting()
+{
+	return (speedBoost || state == State.Spark || state == State.BallSpark);
+}
+#endregion
+#region IsScrewAttacking
+function IsScrewAttacking()
+{
+	return (misc[Misc.ScrewAttack] && liquidState <= 0 && state == State.Somersault && stateFrame == State.Somersault);
+}
+#endregion
 
 #region Collision (Normal)
 
@@ -1238,9 +1283,10 @@ function isValidSolid(block)
 			isSolid = false;
 		}
 	}
-	var sp = (object_is_in_array(block.object_index, ColType_SpeedBlock) && isSpeedBoosting && shineStart <= 0 && shineLauncherStart <= 0),
-		sc = (object_is_in_array(block.object_index, ColType_ScrewBlock) && isScrewAttacking);
-	if(sp || sc)
+	var bb = (object_is_in_array(block.object_index, ColType_BoostBallBlock) && boostBallDmgCounter > 0),
+		sp = (object_is_in_array(block.object_index, ColType_SpeedBlock) && IsSpeedBoosting() && shineStart <= 0 && shineLauncherStart <= 0),
+		sc = (object_is_in_array(block.object_index, ColType_ScrewBlock) && IsScrewAttacking());
+	if(bb || sp || sc)
 	{
 		isSolid = false;
 	}
@@ -1262,7 +1308,7 @@ function ModifyFinalVelY(fVY)
 
 function ModifySlopeXSteepness_Up()
 {
-	if(spiderBall)
+	if(SpiderActive())
 	{
 		return 2;
 	}
@@ -1274,7 +1320,7 @@ function ModifySlopeXSteepness_Up()
 }
 function ModifySlopeXSteepness_Down()
 {
-	if(spiderBall)
+	if(SpiderActive())
 	{
 		return 3;
 	}
@@ -1282,7 +1328,7 @@ function ModifySlopeXSteepness_Down()
 }
 function ModifySlopeYSteepness_Up()
 {
-	if(spiderBall)
+	if(SpiderActive())
 	{
 		return 2;
 	}
@@ -1294,7 +1340,7 @@ function ModifySlopeYSteepness_Up()
 }
 function ModifySlopeYSteepness_Down()
 {
-	if(spiderBall)
+	if(SpiderActive())
 	{
 		return 3;
 	}
@@ -1582,15 +1628,23 @@ function CanMoveUpSlope_LeftRight(dir)
 
 function DestroyBlock(bx,by)
 {
-	if(isSpeedBoosting)
+	if(boostBallDmgCounter > 0)
+	{
+		var _type = array_create(BlockBreakType._Length,false);
+		_type[BlockBreakType.Shot] = true;
+		_type[BlockBreakType.BoostBall] = true;
+		BreakBlock(bx,by,_type);
+	}
+	if(IsSpeedBoosting())
 	{
 		var _type = array_create(BlockBreakType._Length,false);
 		_type[BlockBreakType.Shot] = true;
 		_type[BlockBreakType.Bomb] = true;
+		_type[BlockBreakType.BoostBall] = true;
 		_type[BlockBreakType.Speed] = true;
 		BreakBlock(bx,by,_type);
 	}
-	if(isScrewAttacking)
+	if(IsScrewAttacking())
 	{
 		var _type = array_create(BlockBreakType._Length,false);
 		_type[BlockBreakType.Shot] = true;
@@ -1603,10 +1657,20 @@ function DestroyBlock(bx,by)
 #endregion
 #region Collision (SpiderBall/Crawler)
 
-function Crawler_ModifyFinalVelX(fVX) { return fVX; }
+function Crawler_ModifyFinalVelX(fVX)
+{
+	if(colEdge != Edge.None)
+	{
+		return fVX;
+	}
+	return ModifyFinalVelX(fVX);
+}
 function Crawler_ModifyFinalVelY(fVY)
 {
-	justFell = false;
+	if(colEdge != Edge.None)
+	{
+		justFell = false;
+	}
 	return fVY;
 }
 
@@ -1615,183 +1679,338 @@ function Crawler_ModifyFinalVelY(fVY)
 	return colEdge != Edge.None;
 }*/
 
+function Crawler_CanStickTo()
+{
+	/// @description Crawler_CanStickTo
+	/// @param offsetX
+	/// @param offsetY
+	/// @param edgeCheck
+	/// @param baseX=position.X
+	/// @param baseY=position.Y
+	
+	var offsetX = argument[0],
+		offsetY = argument[1],
+		edgeCheck = argument[2],
+		xx = argument_count > 3 ? argument[3] : position.X,
+		yy = argument_count > 4 ? argument[4] : position.Y;
+	
+	var listNum = instance_place_list(xx+offsetX,yy+offsetY,ColType_MagnetTrack,blockList,true);
+	if(listNum > 0)
+	{
+		for(var i = 0; i < listNum; i++)
+		{
+			if(instance_exists(blockList[| i]))
+			{
+				var block = blockList[| i];
+				if ((edgeCheck == Edge.Bottom && block.up) ||
+					(edgeCheck == Edge.Top && block.down) ||
+					(edgeCheck == Edge.Right && block.left) ||
+					(edgeCheck == Edge.Left && block.right))
+				{
+					ds_list_clear(blockList);
+					return true;
+				}
+			}
+		}
+		ds_list_clear(blockList);
+	}
+	return false;
+}
+
+function Crawler_CanStickRight()
+{
+	if(state == State.Grip)
+	{
+		return true;
+	}
+	if(misc[Misc.Spider])
+	{
+		return true;
+	}
+	return Crawler_CanStickTo(1,0, Edge.Right);
+}
+function Crawler_CanStickLeft()
+{
+	if(state == State.Grip)
+	{
+		return true;
+	}
+	if(misc[Misc.Spider])
+	{
+		return true;
+	}
+	return Crawler_CanStickTo(-1,0, Edge.Left);
+}
+function Crawler_CanStickBottom()
+{
+	if(misc[Misc.Spider])
+	{
+		return true;
+	}
+	return Crawler_CanStickTo(0,1, Edge.Bottom);
+}
+function Crawler_CanStickTop()
+{
+	if(misc[Misc.Spider])
+	{
+		return true;
+	}
+	return Crawler_CanStickTo(0,-1, Edge.Top);
+}
+
+function Crawler_CanStickOuter(fVX, fVY, edge)
+{
+	var xdir = 0;
+	if(colEdge == Edge.Right || (colEdge == Edge.None && entity_place_collide(1,0) && jump <= 0))
+	{
+		xdir = 1;
+	}
+	if(colEdge == Edge.Left || (colEdge == Edge.None && entity_place_collide(-1,0) && jump <= 0))
+	{
+		xdir = -1;
+	}
+	
+	var ydir = 0;
+	if(colEdge == Edge.Bottom || (colEdge == Edge.None && entity_place_collide(0,1) && jump <= 0))
+	{
+		ydir = 1;
+	}
+	if(colEdge == Edge.Top || (colEdge == Edge.None && entity_place_collide(0,-1) && jump <= 0))
+	{
+		ydir = -1;
+	}
+	
+	var checkPos = new Vector2(position.X,position.Y);
+	if((edge == Edge.Left || edge == Edge.Right) && fVX != 0 && ydir != 0)
+	{
+		if(fVX > 0)
+		{
+			checkPos.X = scr_ceil(position.X);
+		}
+		if(fVX < 0)
+		{
+			checkPos.X = scr_floor(position.X);
+		}
+		if(entity_place_collide(0,ydir, checkPos.X,checkPos.Y))
+		{
+			checkPos.X += sign(fVX);
+		}
+		if(!entity_place_collide(0,ydir, checkPos.X,checkPos.Y))
+		{
+			checkPos.Y += ydir;
+		}
+		
+		if(Crawler_CanStickTo(-sign(fVX), 0, edge, checkPos.X,checkPos.Y))
+		{
+			if(spiderEdge == Edge.None)
+			{
+				spiderSpeed = velX*ydir;
+				spiderMove = sign(spiderSpeed);
+			}
+			spiderEdge = edge;
+			return true;
+		}
+		else if(colEdge != Edge.None && !entity_place_collide(0,ydir, checkPos.X,checkPos.Y))
+		{
+			velY = 0;
+			position.X = checkPos.X;
+		}
+	}
+	if((edge == Edge.Top || edge == Edge.Bottom) && fVY != 0 && xdir != 0)
+	{
+		if(fVY > 0)
+		{
+			checkPos.Y = scr_ceil(position.Y);
+		}
+		if(fVY < 0)
+		{
+			checkPos.Y = scr_floor(position.Y);
+		}
+		if(entity_place_collide(xdir,0, checkPos.X,checkPos.Y))
+		{
+			checkPos.Y += sign(fVY);
+		}
+		if(!entity_place_collide(xdir,0, checkPos.X,checkPos.Y))
+		{
+			checkPos.X += xdir;
+		}
+		if(Crawler_CanStickTo(0, -sign(fVY), edge, checkPos.X,checkPos.Y))
+		{
+			if(spiderEdge == Edge.None)
+			{
+				spiderSpeed = -velY*xdir;
+				spiderMove = sign(spiderSpeed);
+			}
+			spiderEdge = edge;
+			return true;
+		}
+		else if(colEdge != Edge.None && !entity_place_collide(xdir,0, checkPos.X,checkPos.Y))
+		{
+			velX = 0;
+			position.Y = checkPos.Y;
+		}
+	}
+	return false;
+}
+function Crawler_CanStickOuterLeft()
+{
+	if(state != State.BallSpark)
+	{
+		if(misc[Misc.Spider])
+		{
+			return (spiderEdge != Edge.None);
+		}
+		return Crawler_CanStickOuter(1, 0, Edge.Left);
+	}
+	return false;
+}
+function Crawler_CanStickOuterRight()
+{
+	if(state != State.BallSpark)
+	{
+		if(misc[Misc.Spider])
+		{
+			return (spiderEdge != Edge.None);
+		}
+		return Crawler_CanStickOuter(-1, 0, Edge.Right);
+	}
+	return false;
+}
+function Crawler_CanStickOuterTop()
+{
+	if(state != State.BallSpark)
+	{
+		if(misc[Misc.Spider])
+		{
+			return (spiderEdge != Edge.None);
+		}
+		return Crawler_CanStickOuter(0, 1, Edge.Top);
+	}
+	return false;
+}
+function Crawler_CanStickOuterBottom()
+{
+	if(state == State.Grip)
+	{
+		return true;
+	}
+	if(state != State.BallSpark)
+	{
+		if(misc[Misc.Spider])
+		{
+			return (spiderEdge != Edge.None);
+		}
+		return Crawler_CanStickOuter(0, -1, Edge.Bottom);
+	}
+	return false;
+}
+
 function Crawler_OnRightCollision(fVX)
 {
-	if(spiderEdge == Edge.Bottom || spiderEdge == Edge.Top || spiderEdge == Edge.None)
+	if(colEdge != Edge.None)
 	{
-		if(spiderEdge == Edge.None)
+		if(spiderEdge == Edge.Bottom || spiderEdge == Edge.Top || spiderEdge == Edge.None)
 		{
-			spiderSpeed = -velY;
-			spiderMove = sign(spiderSpeed);
+			if(spiderEdge == Edge.None)
+			{
+				spiderSpeed = -velY;
+				spiderMove = sign(spiderSpeed);
+			}
+			spiderEdge = Edge.Right;
 		}
-		spiderEdge = Edge.Right;
+	}
+	else
+	{
+		OnRightCollision(fVX);
 	}
 }
 function Crawler_OnLeftCollision(fVX)
 {
-	if(spiderEdge == Edge.Bottom || spiderEdge == Edge.Top || spiderEdge == Edge.None)
+	if(colEdge != Edge.None)
 	{
-		if(spiderEdge == Edge.None)
+		if(spiderEdge == Edge.Bottom || spiderEdge == Edge.Top || spiderEdge == Edge.None)
 		{
-			spiderSpeed = velY;
-			spiderMove = sign(spiderSpeed);
+			if(spiderEdge == Edge.None)
+			{
+				spiderSpeed = velY;
+				spiderMove = sign(spiderSpeed);
+			}
+			spiderEdge = Edge.Left;
 		}
-		spiderEdge = Edge.Left;
+	}
+	else
+	{
+		OnLeftCollision(fVX);
 	}
 }
 function Crawler_OnXCollision(fVX)
 {
-	if(state == State.BallSpark && shineStart <= 0 && shineLauncherStart <= 0)
+	if(colEdge != Edge.None)
 	{
-		if(!SparkDir_Hori() && !entity_place_collide(0,2*sign(velY)) && shineEnd <= 0)
+		if(state == State.BallSpark && shineStart <= 0 && shineLauncherStart <= 0)
 		{
-			shineDir = 0;
-			state = State.Morph;
-			speedFXCounter = 1;
-			speedCounter = speedCounterMax;
-			speedBoost = true;
-			speedCatchCounter = 6;
-			audio_stop_sound(snd_ShineSpark);
-		}
-		else
-		{
-			if(boots[Boots.ChainSpark])
+			if(!SparkDir_Hori() && !entity_place_collide(0,2*sign(velY)) && shineEnd <= 0)
 			{
-				shineRestart = true;
-				audio_stop_sound(snd_ShineSpark_Charge);
-				audio_play_sound(snd_ShineSpark_Charge,0,false);
+				shineDir = 0;
+				state = State.Morph;
+				speedFXCounter = 1;
+				speedCounter = speedCounterMax;
+				speedBoost = true;
+				speedCatchCounter = 6;
+				audio_stop_sound(snd_ShineSpark);
 			}
-			else if(shineEnd <= 0)
+			else
 			{
-				audio_play_sound(snd_Hurt,0,false);
+				if(boots[Boots.ChainSpark])
+				{
+					shineRestart = true;
+					audio_stop_sound(snd_ShineSpark_Charge);
+					audio_play_sound(snd_ShineSpark_Charge,0,false);
+				}
+				else if(shineEnd <= 0)
+				{
+					audio_play_sound(snd_Hurt,0,false);
+				}
+				shineEnd = shineEndMax;
 			}
-			shineEnd = shineEndMax;
 		}
+		velX = 0;
+		fVelX = 0;
+		move = 0;
+		bombJumpX = 0;
 	}
-	velX = 0;
-	fVelX = 0;
-	move = 0;
-	bombJumpX = 0;
+	else
+	{
+		OnXCollision(fVX);
+	}
 }
 
 function Crawler_CanMoveUpSlope_Bottom()
 {
-	if(state == State.BallSpark)
+	if(Crawler_CanStickBottom())
 	{
-		if(shineStart <= 0 && shineLauncherStart <= 0 && abs(GetSparkDir()) >= 90)
+		if(state == State.BallSpark)
+		{
+			if(shineStart <= 0 && shineLauncherStart <= 0 && abs(GetSparkDir()) >= 90)
+			{
+				return true;
+			}
+		}
+		else if(colEdge == Edge.Bottom || colEdge == Edge.None)
 		{
 			return true;
 		}
+		return false;
 	}
-	else if(colEdge == Edge.Bottom || colEdge == Edge.None)
-	{
-		return true;
-	}
-	return false;
+	return CanMoveUpSlope_Bottom();
 }
 function Crawler_OnSlopeXCollision_Bottom(fVX, yShift)
 {
-	if(state == State.BallSpark)
+	if(Crawler_CanStickBottom())
 	{
-		shineEnd = 0;
-		shineDir = 0;
-		state = State.Morph;
-		speedFXCounter = 1;
-		speedCounter = speedCounterMax;
-		speedBoost = true;
-		speedCatchCounter = 6;
-		audio_stop_sound(snd_ShineSpark);
-	}
-	if(spiderEdge == Edge.None)
-	{
-		spiderSpeed = velX;
-		spiderMove = sign(spiderSpeed);
-		spiderEdge = Edge.Bottom;
-	}
-	if(colEdge == Edge.None)
-	{
-		colEdge = Edge.Bottom;
-	}
-}
-function Crawler_CanMoveDownSlope_Bottom()
-{
-	return (colEdge == Edge.Bottom);
-}
-
-function Crawler_CanMoveUpSlope_Top()
-{
-	if(state == State.BallSpark)
-	{
-		if(shineStart <= 0 && shineLauncherStart <= 0 && abs(GetSparkDir()) <= 90)
+		if(state == State.BallSpark)
 		{
-			return true;
-		}
-	}
-	else if(colEdge == Edge.Top || colEdge == Edge.None)
-	{
-		return true;
-	}
-	return false;
-}
-function Crawler_OnSlopeXCollision_Top(fVX, yShift)
-{
-	if(state == State.BallSpark)
-	{
-		shineEnd = 0;
-		shineDir = 0;
-		state = State.Morph;
-		speedFXCounter = 1;
-		speedCounter = speedCounterMax;
-		speedBoost = true;
-		speedCatchCounter = 6;
-		audio_stop_sound(snd_ShineSpark);
-	}
-	if(spiderEdge == Edge.None)
-	{
-		spiderSpeed = -velX;
-		spiderMove = sign(spiderSpeed);
-		spiderEdge = Edge.Top;
-	}
-	if(colEdge == Edge.None)
-	{
-		colEdge = Edge.Top;
-	}
-}
-function Crawler_CanMoveDownSlope_Top()
-{
-	return (colEdge == Edge.Top);
-}
-
-function Crawler_OnBottomCollision(fVY)
-{
-	if(spiderEdge == Edge.Left || spiderEdge == Edge.Right || spiderEdge == Edge.None)
-	{
-		if(spiderEdge == Edge.None)
-		{
-			spiderSpeed = velX;
-			spiderMove = sign(spiderSpeed);
-		}
-		spiderEdge = Edge.Bottom;
-	}
-}
-function Crawler_OnTopCollision(fVY)
-{
-	if(spiderEdge == Edge.Left || spiderEdge == Edge.Right || spiderEdge == Edge.None)
-	{
-		if(spiderEdge == Edge.None)
-		{
-			spiderSpeed = -velX;
-			spiderMove = sign(spiderSpeed);
-		}
-		spiderEdge = Edge.Top;
-	}
-}
-function Crawler_OnYCollision(fVY)
-{
-	if(state == State.BallSpark && shineStart <= 0 && shineLauncherStart <= 0)
-	{
-		if(!SparkDir_VertUp() && !SparkDir_VertDown() && !entity_place_collide(2*sign(velX),0) && shineEnd <= 0)
-		{
+			shineEnd = 0;
 			shineDir = 0;
 			state = State.Morph;
 			speedFXCounter = 1;
@@ -1800,106 +2019,284 @@ function Crawler_OnYCollision(fVY)
 			speedCatchCounter = 6;
 			audio_stop_sound(snd_ShineSpark);
 		}
-		else
+		
+		if(spiderEdge == Edge.None)
 		{
-			if(shineEnd <= 0)
-			{
-				audio_play_sound(snd_Hurt,0,false);
-			}
-			shineEnd = shineEndMax;
+			spiderSpeed = velX;
+			spiderMove = sign(spiderSpeed);
+			spiderEdge = Edge.Bottom;
+		}
+		if(colEdge == Edge.None)
+		{
+			colEdge = Edge.Bottom;
 		}
 	}
-	
-	velY = 0;
-	fVelY = 0;
+	else
+	{
+		OnSlopeXCollision_Bottom(fVX, yShift);
+	}
+}
+function Crawler_CanMoveDownSlope_Bottom()
+{
+	if(Crawler_CanStickBottom())
+	{
+		return (colEdge == Edge.Bottom || colEdge == Edge.None);
+	}
+	return CanMoveDownSlope_Bottom();
+}
+
+function Crawler_CanMoveUpSlope_Top()
+{
+	if(Crawler_CanStickTop())
+	{
+		if(state == State.BallSpark)
+		{
+			if(shineStart <= 0 && shineLauncherStart <= 0 && abs(GetSparkDir()) <= 90)
+			{
+				return true;
+			}
+		}
+		else if(colEdge == Edge.Top || colEdge == Edge.None)
+		{
+			return true;
+		}
+		return false;
+	}
+	return CanMoveUpSlope_Top();
+}
+function Crawler_OnSlopeXCollision_Top(fVX, yShift)
+{
+	if(Crawler_CanStickTop())
+	{
+		if(state == State.BallSpark)
+		{
+			shineEnd = 0;
+			shineDir = 0;
+			state = State.Morph;
+			speedFXCounter = 1;
+			speedCounter = speedCounterMax;
+			speedBoost = true;
+			speedCatchCounter = 6;
+			audio_stop_sound(snd_ShineSpark);
+		}
+		
+		if(spiderEdge == Edge.None)
+		{
+			spiderSpeed = -velX;
+			spiderMove = sign(spiderSpeed);
+			spiderEdge = Edge.Top;
+		}
+		if(colEdge == Edge.None)
+		{
+			colEdge = Edge.Top;
+		}
+	}
+	else
+	{
+		OnSlopeXCollision_Top(fVX, yShift);
+	}
+}
+function Crawler_CanMoveDownSlope_Top()
+{
+	if(Crawler_CanStickTop())
+	{
+		return (colEdge == Edge.Top);
+	}
+	return CanMoveDownSlope_Top();
+}
+
+
+function Crawler_OnBottomCollision(fVY)
+{
+	if(colEdge != Edge.None)
+	{
+		if(spiderEdge == Edge.Left || spiderEdge == Edge.Right || spiderEdge == Edge.None)
+		{
+			if(spiderEdge == Edge.None)
+			{
+				spiderSpeed = velX;
+				spiderMove = sign(spiderSpeed);
+			}
+			spiderEdge = Edge.Bottom;
+		}
+	}
+	else
+	{
+		OnBottomCollision(fVY);
+	}
+}
+function Crawler_OnTopCollision(fVY)
+{
+	if(colEdge != Edge.None)
+	{
+		if(spiderEdge == Edge.Left || spiderEdge == Edge.Right || spiderEdge == Edge.None)
+		{
+			if(spiderEdge == Edge.None)
+			{
+				spiderSpeed = -velX;
+				spiderMove = sign(spiderSpeed);
+			}
+			spiderEdge = Edge.Top;
+		}
+	}
+	else
+	{
+		OnTopCollision(fVY);
+	}
+}
+function Crawler_OnYCollision(fVY)
+{
+	if(colEdge != Edge.None)
+	{
+		if(state == State.BallSpark && shineStart <= 0 && shineLauncherStart <= 0)
+		{
+			if(!SparkDir_VertUp() && !SparkDir_VertDown() && !entity_place_collide(2*sign(velX),0) && shineEnd <= 0)
+			{
+				shineDir = 0;
+				state = State.Morph;
+				speedFXCounter = 1;
+				speedCounter = speedCounterMax;
+				speedBoost = true;
+				speedCatchCounter = 6;
+				audio_stop_sound(snd_ShineSpark);
+			}
+			else
+			{
+				if(shineEnd <= 0)
+				{
+					audio_play_sound(snd_Hurt,0,false);
+				}
+				shineEnd = shineEndMax;
+			}
+		}
+		
+		velY = 0;
+		fVelY = 0;
+	}
+	else
+	{
+		OnYCollision(fVY);
+	}
 }
 
 function Crawler_CanMoveUpSlope_Right()
 {
-	if(state == State.BallSpark)
+	if(Crawler_CanStickRight())
 	{
-		if(shineStart <= 0 && shineLauncherStart <= 0 && (GetSparkDir() <= 0 || abs(GetSparkDir()) == 180))
+		if(state == State.BallSpark)
+		{
+			if(shineStart <= 0 && shineLauncherStart <= 0 && (GetSparkDir() <= 0 || abs(GetSparkDir()) == 180))
+			{
+				return true;
+			}
+		}
+		else if(colEdge == Edge.Right)// || colEdge == Edge.None)
 		{
 			return true;
 		}
+		return false;
 	}
-	else if(colEdge == Edge.Right)// || colEdge == Edge.None)
-	{
-		return true;
-	}
-	return false;
+	return CanMoveUpSlope_Right();
 }
 function Crawler_OnSlopeYCollision_Right(fVY, xShift)
 {
-	if(state == State.BallSpark)
+	if(Crawler_CanStickRight())
 	{
-		shineEnd = 0;
-		shineDir = 0;
-		state = State.Morph;
-		speedFXCounter = 1;
-		speedCounter = speedCounterMax;
-		speedBoost = true;
-		speedCatchCounter = 6;
-		audio_stop_sound(snd_ShineSpark);
+		if(state == State.BallSpark)
+		{
+			shineEnd = 0;
+			shineDir = 0;
+			state = State.Morph;
+			speedFXCounter = 1;
+			speedCounter = speedCounterMax;
+			speedBoost = true;
+			speedCatchCounter = 6;
+			audio_stop_sound(snd_ShineSpark);
+		}
+		
+		if(spiderEdge == Edge.None)
+		{
+			spiderSpeed = -velY;
+			spiderMove = sign(spiderSpeed);
+			spiderEdge = Edge.Right;
+		}
+		if(colEdge == Edge.None)
+		{
+			colEdge = Edge.Right;
+		}
 	}
-	if(spiderEdge == Edge.None)
+	else
 	{
-		spiderSpeed = -velY;
-		spiderMove = sign(spiderSpeed);
-		spiderEdge = Edge.Right;
-	}
-	if(colEdge == Edge.None)
-	{
-		colEdge = Edge.Right;
+		OnSlopeYCollision_Right();
 	}
 }
 function Crawler_CanMoveDownSlope_Right()
 {
-	return (colEdge == Edge.Right);
+	if(Crawler_CanStickRight())
+	{
+		return (colEdge == Edge.Right);
+	}
+	return CanMoveDownSlope_Right();
 }
 
 function Crawler_CanMoveUpSlope_Left()
 {
-	if(state == State.BallSpark)
+	if(Crawler_CanStickLeft())
 	{
-		if(shineStart <= 0 && shineLauncherStart <= 0 && (GetSparkDir() >= 0 || abs(GetSparkDir()) == 180))
+		if(state == State.BallSpark)
+		{
+			if(shineStart <= 0 && shineLauncherStart <= 0 && (GetSparkDir() >= 0 || abs(GetSparkDir()) == 180))
+			{
+				return true;
+			}
+		}
+		else if(colEdge == Edge.Left)// || colEdge == Edge.None)
 		{
 			return true;
 		}
+		return false;
 	}
-	else if(colEdge == Edge.Left)// || colEdge == Edge.None)
-	{
-		return true;
-	}
-	return false;
+	return CanMoveUpSlope_Left();
 }
 function Crawler_OnSlopeYCollision_Left(fVY, xShift)
 {
-	if(state == State.BallSpark)
+	if(Crawler_CanStickLeft())
 	{
-		shineEnd = 0;
-		shineDir = 0;
-		state = State.Morph;
-		speedFXCounter = 1;
-		speedCounter = speedCounterMax;
-		speedBoost = true;
-		speedCatchCounter = 6;
-		audio_stop_sound(snd_ShineSpark);
+		if(state == State.BallSpark)
+		{
+			shineEnd = 0;
+			shineDir = 0;
+			state = State.Morph;
+			speedFXCounter = 1;
+			speedCounter = speedCounterMax;
+			speedBoost = true;
+			speedCatchCounter = 6;
+			audio_stop_sound(snd_ShineSpark);
+		}
+		
+		if(spiderEdge == Edge.None)
+		{
+			spiderSpeed = velY;
+			spiderMove = sign(spiderSpeed);
+			spiderEdge = Edge.Left;
+		}
+		if(colEdge == Edge.None)
+		{
+			colEdge = Edge.Left;
+		}
 	}
-	if(spiderEdge == Edge.None)
+	else
 	{
-		spiderSpeed = velY;
-		spiderMove = sign(spiderSpeed);
-		spiderEdge = Edge.Left;
-	}
-	if(colEdge == Edge.None)
-	{
-		colEdge = Edge.Left;
+		OnSlopeYCollision_Left(fVY, xShift);
 	}
 }
 function Crawler_CanMoveDownSlope_Left()
 {
-	return (colEdge == Edge.Left);
+	if(Crawler_CanStickLeft())
+	{
+		return (colEdge == Edge.Left);
+	}
+	return CanMoveDownSlope_Left();
 }
 
 /*function Crawler_DestroyBlock(bx,by)
@@ -1915,35 +2312,35 @@ passthruMax = 2;
 
 function MoveStickBottom_X(movingTile)
 {
-	return (colEdge == Edge.Bottom || spiderBall);
+	return (colEdge == Edge.Bottom || colEdge == Edge.None || (spiderBall && Crawler_CanStickBottom()));
 }
 function MoveStickBottom_Y(movingTile)
 {
-	return (colEdge == Edge.Bottom || spiderBall);
+	return (colEdge == Edge.Bottom || colEdge == Edge.None || (spiderBall && Crawler_CanStickBottom()));
 }
 function MoveStickTop_X(movingTile)
 {
-	return (colEdge == Edge.Top || spiderBall);
+	return (colEdge == Edge.Top || (spiderBall && Crawler_CanStickTop()));
 }
 function MoveStickTop_Y(movingTile)
 {
-	return (colEdge == Edge.Top || spiderBall);
+	return (colEdge == Edge.Top || (spiderBall && Crawler_CanStickTop()));
 }
 function MoveStickRight_X(movingTile)
 {
-	return (colEdge == Edge.Right || spiderBall || MoveStick_CheckPGrip(1, movingTile) || (isPushing && dir == 1));
+	return (colEdge == Edge.Right || (spiderBall && Crawler_CanStickRight()) || MoveStick_CheckPGrip(1, movingTile) || (isPushing && dir == 1));
 }
 function MoveStickRight_Y(movingTile)
 {
-	return (colEdge == Edge.Right || spiderBall || MoveStick_CheckPGrip(1, movingTile));
+	return (colEdge == Edge.Right || (spiderBall && Crawler_CanStickRight()) || MoveStick_CheckPGrip(1, movingTile));
 }
 function MoveStickLeft_X(movingTile)
 {
-	return (colEdge == Edge.Left || spiderBall || MoveStick_CheckPGrip(-1, movingTile) || (isPushing && dir == -1));
+	return (colEdge == Edge.Left || (spiderBall && Crawler_CanStickLeft()) || MoveStick_CheckPGrip(-1, movingTile) || (isPushing && dir == -1));
 }
 function MoveStickLeft_Y(movingTile)
 {
-	return (colEdge == Edge.Left || spiderBall || MoveStick_CheckPGrip(-1, movingTile));
+	return (colEdge == Edge.Left || (spiderBall && Crawler_CanStickLeft()) || MoveStick_CheckPGrip(-1, movingTile));
 }
 
 function MoveStick_CheckPGrip(_dir, movingTile)
@@ -1977,7 +2374,7 @@ function MoveStick_CheckPGrip(_dir, movingTile)
 
 function MovingSolid_OnRightCollision(fVX)
 {
-	if(spiderBall )//&& (spiderEdge == Edge.Bottom || spiderEdge == Edge.Top || spiderEdge == Edge.None))
+	if(spiderBall && Crawler_CanStickRight())//&& (spiderEdge == Edge.Bottom || spiderEdge == Edge.Top || spiderEdge == Edge.None))
 	{
 		if(spiderEdge == Edge.None)
 		{
@@ -1989,7 +2386,7 @@ function MovingSolid_OnRightCollision(fVX)
 }
 function MovingSolid_OnLeftCollision(fVX)
 {
-	if(spiderBall )//&& (spiderEdge == Edge.Bottom || spiderEdge == Edge.Top || spiderEdge == Edge.None))
+	if(spiderBall && Crawler_CanStickLeft())//&& (spiderEdge == Edge.Bottom || spiderEdge == Edge.Top || spiderEdge == Edge.None))
 	{
 		if(spiderEdge == Edge.None)
 		{
@@ -2003,7 +2400,7 @@ function MovingSolid_OnXCollision(fVX) {}
 
 function MovingSolid_OnBottomCollision(fVY)
 {
-	if(spiderBall )//&& (spiderEdge == Edge.Left || spiderEdge == Edge.Right || spiderEdge == Edge.None))
+	if(spiderBall && Crawler_CanStickBottom())//&& (spiderEdge == Edge.Left || spiderEdge == Edge.Right || spiderEdge == Edge.None))
 	{
 		if(spiderEdge == Edge.None)
 		{
@@ -2015,7 +2412,7 @@ function MovingSolid_OnBottomCollision(fVY)
 }
 function MovingSolid_OnTopCollision(fVY)
 {
-	if(spiderBall )//&& (spiderEdge == Edge.Left || spiderEdge == Edge.Right || spiderEdge == Edge.None))
+	if(spiderBall && Crawler_CanStickTop())//&& (spiderEdge == Edge.Left || spiderEdge == Edge.Right || spiderEdge == Edge.None))
 	{
 		if(spiderEdge == Edge.None)
 		{
@@ -2257,7 +2654,7 @@ function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWav
 #region PlayerGrounded
 function PlayerGrounded(ydiff = 1)
 {
-	if(spiderBall && spiderEdge != Edge.None && jump <= 0)
+	if(SpiderActive() && jump <= 0)
 	{
 		return true;
 	}
@@ -2302,14 +2699,14 @@ function SpiderEnable(flag)
 	if(spiderBall != flag)
 	{
 		spiderBall = flag;
-		audio_play_sound(snd_SpiderStart,0,false);
+		//audio_play_sound(snd_SpiderStart,0,false);
 		if(flag)
 		{
-			if(!audio_is_playing(snd_SpiderLoop))
+			/*if(!audio_is_playing(snd_SpiderLoop))
 			{
 				audio_play_sound(snd_SpiderLoop,0,true);
-			}
-			if(grounded)
+			}*/
+			if(grounded && Crawler_CanStickBottom())
 			{
 				spiderEdge = Edge.Bottom;
 				spiderSpeed = velX;
@@ -2331,11 +2728,20 @@ function SpiderEnable(flag)
 #region SpiderActive
 function SpiderActive()
 {
+	/// @description SpiderActive
+	/// @param edge=Edge.None
 	if(argument_count > 0)
 	{
 		return (spiderBall && spiderEdge == argument[0]);
 	}
 	return (spiderBall && spiderEdge != Edge.None);
+}
+#endregion
+
+#region GrappleActive
+function GrappleActive()
+{
+	return (instance_exists(grapple) && grapple.grappled && grapple.grappleState == GrappleState.Swing);
 }
 #endregion
 
@@ -2525,7 +2931,7 @@ function Set_Beams()
 	var beamSelected = array_create(5);
 	for(var i = 1; i < 5; i++)
 	{
-		beamSelected[i] = (beam[i] || (noBeamsActive && itemHighlighted[0] == i));
+		beamSelected[i] = (beam[i] || (noBeamsActive && hudSlotItem[0] == i));
 	}
 	
 	if(beamSelected[Beam.Wave])
@@ -2898,41 +3304,6 @@ function SetArmPosStand()
 			break;
 		}
 	}
-}
-#endregion
-#region SetArmPosBrake
-function SetArmPosBrake()
-{
-	var _armPosR = [[-3,-8], [-2,-8], [0,-8], [4,-7], [11,-5]],
-		_armPosL = [[5,-6], [4,-6], [1,-7], [-1,-6], [-9,-4]];
-	
-	if(aimFrame > 0 && aimFrame < 3)
-	{
-		_armPosR = [[5,-16], [6,-16], [7,-17], [13,-18], [14,-19]];
-		_armPosL = [[-12,-16], [-13,-16], [-14,-17], [-16,-19], [-17,-20]];
-	}
-	else if(aimFrame < 0 && aimFrame > -3)
-	{
-		_armPosR = [[1,12], [2,12], [3,11], [10,10], [12,9]];
-		_armPosL = [[-11,11], [-12,11], [-13,10], [-14,9], [-16,8]];
-	}
-	else if(aimFrame >= 3)
-	{
-		_armPosR = [[-6,-25], [-5,-25], [-4,-26], [0,-27], [1,-28]];
-		_armPosL = [[0,-25], [-1,-25], [-2,-26], [-2,-27], [-4,-28]];
-	}
-	else if(shootFrame)
-	{
-		_armPosR = [[4,2], [5,2], [7,2], [9,1], [12,1]];
-		_armPosL = [[-14,2], [-15,2], [-16,2], [-16,1], [-17,1]];
-	}
-	
-	var armPos = _armPosR[bodyFrame];
-	if(dir == -1)
-	{
-		armPos = _armPosL[bodyFrame];
-	}
-	ArmPos(armPos[0], armPos[1]);
 }
 #endregion
 #region SetArmPosJump
@@ -3391,6 +3762,9 @@ xRayVisorNum = 1;
 
 morphPal = 0;
 ballGlowIndex = 0;
+ballGlowSpiderAlph = 0;
+ballGlowSpiderIndex = 0;
+ballGlowSurf = surface_create(sprite_get_width(pal_Player_BallGlow),sprite_get_height(pal_Player_BallGlow));
 
 heatPal = 0;
 heatPalNum = 1;
@@ -3539,7 +3913,7 @@ function PaletteSurface()
 		}
 		#endregion
 		#region -- Screw Attack --
-		if(isScrewAttacking && frame[Frame.Somersault] >= 1 && spaceJump <= 6 && wjFrame <= 0)
+		if(IsScrewAttacking() && frame[Frame.Somersault] >= 1 && spaceJump <= 6 && wjFrame <= 0)
 		{
 			screwPal = clamp(screwPal + 0.25*screwPalNum, 0, 1);
 			if(screwPal >= 1)
@@ -3584,7 +3958,7 @@ function PaletteSurface()
 				if(statCharge >= maxCharge)
 				{
 					//if(state == State.Somersault || state == State.Dodge)
-					if(isChargeSomersaulting)
+					if(IsChargeSomersaulting())
 					{
 						DrawPalSprite(palSprite2,beamPalInd,1);
 					}
@@ -3603,7 +3977,7 @@ function PaletteSurface()
 				}
 			}
 			//else if((state == State.Somersault || state == State.Dodge) && statCharge >= maxCharge)
-			else if(isChargeSomersaulting)
+			else if(IsChargeSomersaulting())
 			{
 				DrawPalSprite(palSprite2,beamPalInd,0.375);
 			}
@@ -3699,6 +4073,81 @@ function PaletteSurface()
 		palSurface = surface_create(sprite_get_width(pal_Player_PowerSuit),sprite_get_height(pal_Player_PowerSuit));
 	}
 	
+	if(surface_exists(ballGlowSurf))
+	{
+		if((misc[Misc.MagBall] || misc[Misc.Spider]) && stateFrame == State.Morph)
+		{
+			var glowSpeed = 0.25;
+			if(state == State.BallSpark || speedBoost)
+			{
+				glowSpeed = 0.375;
+			}
+			if(global.roomTrans)
+			{
+				glowSpeed *= 0.5;
+			}
+			else if(global.gamePaused)
+			{
+				glowSpeed = 0;
+			}
+			ballGlowIndex = scr_wrap(ballGlowIndex + glowSpeed, 0, 10);
+			ballGlowSpiderIndex = scr_wrap(ballGlowSpiderIndex + glowSpeed, 0, 6);
+		}
+		else
+		{
+			ballGlowIndex = 0;
+			ballGlowSpiderIndex = 0;
+		}
+		
+		surface_set_target(ballGlowSurf);
+		draw_clear_alpha(c_black,1);
+		gpu_set_colorwriteenable(1,1,1,0);
+		
+		var palSet = pal_Player_BallGlow;
+		if(suit[0])
+		{
+			palSet = pal_Player_BallGlow_Varia;
+		}
+		if(suit[1])
+		{
+			palSet = pal_Player_BallGlow_Gravity;
+		}
+		
+		DrawPalSprite(palSet, scr_wrap(scr_floor(ballGlowIndex)-1, 0, 10), 1-frac(ballGlowIndex));
+		DrawPalSprite(palSet, scr_floor(ballGlowIndex), 1);
+		DrawPalSprite(palSet, scr_ceil(ballGlowIndex), frac(ballGlowIndex));
+		
+		if(spiderBall)
+		{
+			if(!global.gamePaused)
+			{
+				ballGlowSpiderAlph = min(ballGlowSpiderAlph + 0.1, 1);
+			}
+			draw_clear_alpha(c_black,ballGlowSpiderAlph);
+			
+			palSet = pal_Player_MagBallGlow;
+			if(misc[Misc.Spider])
+			{
+				palSet = pal_Player_SpiderBallGlow;
+			}
+			
+			DrawPalSprite(palSet, scr_wrap(scr_floor(ballGlowSpiderIndex)-1, 0, 6), 1-frac(ballGlowSpiderIndex));
+			DrawPalSprite(palSet, scr_floor(ballGlowSpiderIndex), ballGlowSpiderAlph);
+			DrawPalSprite(palSet, scr_ceil(ballGlowSpiderIndex), ballGlowSpiderAlph * frac(ballGlowSpiderIndex));
+		}
+		else if(!global.gamePaused)
+		{
+			ballGlowSpiderAlph = max(ballGlowSpiderAlph - 0.1, 0);
+		}
+		
+		gpu_set_colorwriteenable(1,1,1,1);
+		surface_reset_target();
+	}
+	else
+	{
+		ballGlowSurf = surface_create(sprite_get_width(pal_Player_BallGlow),sprite_get_height(pal_Player_BallGlow));
+	}
+	
 	if(surface_exists(cFlashPalSurf))
 	{
 		surface_set_target(cFlashPalSurf);
@@ -3757,15 +4206,18 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 				{
 					var tRatio = i/mbTrailLength;
 					var tAlpha = tRatio,
-						tColor = mbTrailColor_Start;
+						//tColor = mbTrailColor_Start;
+						tColor = mbTrailCol1[i];
     
 					if(tRatio < 0.5)
 					{
-						tColor = merge_colour(c_black,mbTrailColor_End,tRatio*2);
+						//tColor = merge_colour(c_black,mbTrailColor_End,tRatio*2);
+						tColor = merge_colour(c_black,mbTrailCol2[i],tRatio*2);
 					}
 					else
 					{
-						tColor = merge_colour(mbTrailColor_End,mbTrailColor_Start,tRatio*2-1);
+						//tColor = merge_colour(mbTrailColor_End,mbTrailColor_Start,tRatio*2-1);
+						tColor = merge_colour(mbTrailCol2[i],mbTrailCol1[i],tRatio*2-1);
 					}
 
 					var dist = min(i+2,8);
@@ -3866,12 +4318,12 @@ function UpdatePlayerSurface(_palSurface)
 		}
 		draw_sprite_ext(torso,bodyFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),fDir,1,0,c_white,1);
 		
-		if(misc[Misc.Spider] && stateFrame == State.Morph && morphFrame == 0 && unmorphing == 0)
+		if((misc[Misc.MagBall] || misc[Misc.Spider]) && stateFrame == State.Morph && morphFrame == 0 && unmorphing == 0)
 		{
 			draw_sprite_ext(sprt_Player_MorphBallAlt_Shine,0,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),1,1,0,c_white,1);
 		}
 	
-		if(itemSelected == 1 && (itemHighlighted[1] == 0 || itemHighlighted[1] == 1 || itemHighlighted[1] == 3))
+		if(hudSlot == 1 && (hudSlotItem[1] == 0 || hudSlotItem[1] == 1 || hudSlotItem[1] == 3))
 		{
 			missileArmFrame = min(missileArmFrame + 1, 4);
 		}
@@ -4017,50 +4469,13 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		}
 	}
 
-	if(misc[Misc.Spider] && stateFrame == State.Morph)
+	if((misc[Misc.MagBall] || misc[Misc.Spider]) && stateFrame == State.Morph)
 	{
-		var glowSpeed = 0.25;
-		if(state == State.BallSpark || speedBoost)
-		{
-			glowSpeed = 0.375;
-		}
-		//else if(shineCharge > 0)
-		//{
-		//	glowSpeed = -0.45;
-		//}
-		var palSet = pal_Player_BallGlow;
-		if(suit[0])
-		{
-			palSet = pal_Player_BallGlow_Varia;
-		}
-		if(suit[1])
-		{
-			palSet = pal_Player_BallGlow_Gravity;
-		}
-		if(global.roomTrans)
-		{
-			glowSpeed *= 0.5;
-		}
-		else if(global.gamePaused)
-		{
-			glowSpeed = 0;
-		}
-		ballGlowIndex = scr_wrap(ballGlowIndex + glowSpeed, 0, 9);
-		
-		var spiderPal = 9+ballGlowIndex;
-		var spiderPalDiff = 0;
-		if(spiderBall)
-		{
-			spiderPalDiff = 1;//1-clamp(spiderGlowAlpha,0,1);
-		}
-		
-		chameleon_set(palSet,ballGlowIndex,spiderPal,spiderPalDiff,20);
+		gpu_set_blendmode(bm_add);
+		chameleon_set_surface(ballGlowSurf);
 		draw_sprite_ext(sprt_Player_MorphBallAlt_Glow,bodyFrame,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,rot,c_white,alph);
 		shader_reset();
-	}
-	else
-	{
-		ballGlowIndex = 0;
+		gpu_set_blendmode(bm_normal);
 	}
 	
 	if(stateFrame == State.Morph)
@@ -4069,12 +4484,17 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		{
 			var minGlow = 0.1,
 				maxGlow = 0.75;
+			if(spiderEdge == Edge.None)
+			{
+				minGlow = 0.25;
+				maxGlow = 0.5;
+			}
 			if(speedBoost)
 			{
 				minGlow = 0.35;
 				maxGlow = 1;
 			}
-			spiderGlowAlpha += 0.02 * spiderGlowNum * (!global.gamePaused);
+			spiderGlowAlpha = clamp(spiderGlowAlpha + 0.02 * spiderGlowNum * (!global.gamePaused), 0, maxGlow);
 			if(spiderGlowAlpha <= minGlow)
 			{
 				spiderGlowNum = max(spiderGlowNum,1);
@@ -4082,6 +4502,15 @@ function PostDrawPlayer(posX, posY, rot, alph)
 			if(spiderGlowAlpha >= maxGlow)
 			{
 				spiderGlowNum = -1;
+			}
+			
+			if(spiderEdge != Edge.None)
+			{
+				spiderGlowIndex = 1;
+			}
+			else
+			{
+				spiderGlowIndex = 0;
 			}
 		}
 		else
@@ -4096,8 +4525,13 @@ function PostDrawPlayer(posX, posY, rot, alph)
 			{
 				maxGlow2 = 0.75;
 			}
+			var _sprt = sprt_Player_MagnetBallFX;
+			if(misc[Misc.Spider])
+			{
+				_sprt = sprt_Player_SpiderBallFX;
+			}
 			gpu_set_blendmode(bm_add);
-			draw_sprite_ext(sprt_Player_SpiderBallFX,0,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,rot,c_white,min(spiderGlowAlpha,maxGlow2)*alph);
+			draw_sprite_ext(_sprt,spiderGlowIndex,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,rot,c_white,min(spiderGlowAlpha,maxGlow2)*alph);
 			gpu_set_blendmode(bm_normal);
 		}
 	}
@@ -4105,6 +4539,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 	{
 		spiderGlowAlpha = 0;
 		spiderGlowNum = 2;
+		spiderGlowIndex = 0;
 	}
 	
 	if(cBubbleScale > 0)
@@ -4208,7 +4643,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		shineFrameCounter = 0;
 	}
 
-	if(isScrewAttacking && frame[Frame.Somersault] >= 2 && !canWallJump && wjFrame <= 0)
+	if(IsScrewAttacking() && frame[Frame.Somersault] >= 2 && !canWallJump && wjFrame <= 0)
 	{
 		screwFrameCounter += 1*(!global.gamePaused);
 		if(screwFrameCounter >= 2)
@@ -4231,7 +4666,8 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		screwFrameCounter = 0;
 	}
 	
-	if(itemSelected == 1 && itemHighlighted[1] == 3 && item[Item.Grapple] && state != State.Morph && morphFrame <= 0 && instance_exists(grapple) && state != State.Somersault)
+	//if(hudSlot == 1 && hudSlotItem[1] == 3 && item[Item.Grapple] && state != State.Morph && morphFrame <= 0 && instance_exists(grapple) && state != State.Somersault)
+	if(instance_exists(grapple))
 	{
 	    var sPosX = xx+sprtOffsetX+armOffsetX,
 	        sPosY = yy+sprtOffsetY+runYOffset+armOffsetY;

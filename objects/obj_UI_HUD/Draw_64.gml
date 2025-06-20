@@ -261,39 +261,57 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				
 				if(stateFrame == State.Morph && misc[Misc.Boost] && boostBallCharge > 0)
 				{
+					width = sprite_get_width(sprt_UI_SpeedMeter);
+					if(SpiderActive())
+					{
+						width *= power((abs(spiderSpeed) / minBoostSpeed),2);
+					}
+					else
+					{
+						width *= power((abs(velX) / minBoostSpeed),2);
+					}
+						
+					for(var j = 0; j < height; j++)
+					{
+						var rw = min(width-j+1,width);
+						if(rw > 0)
+						{
+							draw_sprite_part_ext(sprt_UI_SpeedMeter,2,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
+						}
+					}
+				
 					width = sprite_get_width(sprt_UI_SpeedMeter) * (boostBallCharge / boostBallChargeMax);
 					for(var j = 0; j < height; j++)
 					{
 						var rw = min(width-j+1,width);
 						if(rw > 0)
 						{
-							draw_sprite_part_ext(sprt_UI_SpeedMeter,2,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
+							draw_sprite_part_ext(sprt_UI_SpeedMeter,3,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
 						}
 					}
 				}
-				
-				var _widths = [12,15,19,23];
-				var _prevWidth = 0;
-				for(var i = 0; i < speedCounter; i++)
+				else
 				{
-					_prevWidth += _widths[i];
-				}
-				
-				if(speedCounter < 4 && (state == State.Stand || speedKeep == 1 || (speedKeep == 2 && liquidState <= 0)))
-				{
-					width = _prevWidth + _widths[speedCounter] * ((speedBuffer+1) / speedBufferMax);
-					for(var j = 0; j < height; j++)
+					var _widths = [12,15,19,23];
+					var _prevWidth = 0;
+					for(var i = 0; i < speedCounter; i++)
 					{
-						var rw = min(width-j+1,width);
-						if(rw > 0)
+						_prevWidth += _widths[i];
+					}
+				
+					if(speedCounter < 4 && (state == State.Stand || speedKeep == 1 || (speedKeep == 2 && liquidState <= 0)))
+					{
+						width = _prevWidth + _widths[speedCounter] * ((speedBuffer+1) / speedBufferMax);
+						for(var j = 0; j < height; j++)
 						{
-							draw_sprite_part_ext(sprt_UI_SpeedMeter,2,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
+							var rw = min(width-j+1,width);
+							if(rw > 0)
+							{
+								draw_sprite_part_ext(sprt_UI_SpeedMeter,2,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
+							}
 						}
 					}
-				}
-				
-				//if(!walkState && (state == State.Stand || !restrictSBToRun))
-				//{
+					
 					width = sprite_get_width(sprt_UI_SpeedMeter);
 					if(SpiderActive())
 					{
@@ -311,11 +329,29 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 							draw_sprite_part_ext(sprt_UI_SpeedMeter,3,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
 						}
 					}
-				//}
+				}
 				
 				if(speedCounter >= 4 || state == State.Spark || state == State.BallSpark)
 				{
-					draw_sprite_ext(sprt_UI_SpeedMeter,4,xx,_meterY,1,1,0,c_white,1);
+					draw_sprite_ext(sprt_UI_SpeedMeter,3,xx,_meterY,1,1,0,c_white,1);
+					
+					width = sprite_get_width(sprt_UI_SpeedMeter);
+					if(SpiderActive())
+					{
+						width *= power((abs(spiderSpeed) / minBoostSpeed),2);
+					}
+					else
+					{
+						width *= power((abs(velX) / minBoostSpeed),2);
+					}
+					for(var j = 0; j < height; j++)
+					{
+						var rw = min(width-j+1,width);
+						if(rw > 0)
+						{
+							draw_sprite_part_ext(sprt_UI_SpeedMeter,4,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
+						}
+					}
 				}
 			}
 			
@@ -399,13 +435,13 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				    draw_set_color(c_white);
 				    draw_set_alpha(1);
     
-				    draw_sprite_ext(sprt_UI_HWepSlot,(itemSelected == 0),floor(vX2+66),floor(vY+10),1,1,0,c_white,1);
+				    draw_sprite_ext(sprt_UI_HWepSlot,(hudSlot == 0),floor(vX2+66),floor(vY+10),1,1,0,c_white,1);
 				    draw_sprite_ext(sprt_UI_HBeamIcon,beamIconIndex,floor(vX2+66),floor(vY+10),1,1,0,c_white,1);
     
 				    if(itemNum > 0)
 				    {
-				        draw_sprite_ext(sprt_UI_HWepSlot,(itemSelected == 1),floor(vX2+94),floor(vY+10),1,1,0,c_white,1);
-				        var iconIndex = itemHighlighted[1];
+				        draw_sprite_ext(sprt_UI_HWepSlot,(hudSlot == 1),floor(vX2+94),floor(vY+10),1,1,0,c_white,1);
+				        var iconIndex = hudSlotItem[1];
 				        if(stateFrame == State.Morph && item[2])
 				        {
 				            iconIndex = 2;
@@ -421,11 +457,11 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 						draw_set_valign(fa_top);
 				        var tX = 0,
 				            tY = 21;
-				        if(itemSelected == 0)
+				        if(hudSlot == 0)
 				        {
-				            var strg = beamName[itemHighlighted[0]];
+				            var strg = beamName[hudSlotItem[0]];
 				            tX = scr_round(95 - (string_width(strg) / 2));
-				            draw_text_transformed(vX+tX,vY+tY,beamName[itemHighlighted[0]],1,1,0);
+				            draw_text_transformed(vX+tX,vY+tY,beamName[hudSlotItem[0]],1,1,0);
             
 				            var xBPos = 94 + hudBOffsetX,
 				                xBOffset = 28,
@@ -436,15 +472,15 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				                if(hasBeam[j] || i == 0)
 				                {
 				                    comboNum = 10*(beam[j] && i != 0);
-				                    if(i == itemHighlighted[0])
+				                    if(i == hudSlotItem[0])
 				                    {
 				                        draw_sprite_ext(sprt_UI_HItemBeam,i+5+(5*(beam[j] && i != 0)),vX+xBPos,vY+yBPos,1,1,0,c_white,1);
 				                    }
-				                    if(i == scr_wrap(itemHighlighted[0]-1, 0, 5))
+				                    if(i == scr_wrap(hudSlotItem[0]-1, 0, 5))
 				                    {
 				                        draw_sprite_ext(sprt_UI_HItemBeam,i+comboNum,vX+(xBPos-xBOffset),vY+yBPos,1,1,0,c_white,1);
 				                    }
-				                    if(i == scr_wrap(itemHighlighted[0]-2, 0, 5))
+				                    if(i == scr_wrap(hudSlotItem[0]-2, 0, 5))
 				                    {
 				                        var a = 1;
 				                        if(hudBOffsetX < 0)
@@ -453,16 +489,16 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				                        }
 				                        draw_sprite_ext(sprt_UI_HItemBeam,i+comboNum,vX+(xBPos-xBOffset*2),vY+yBPos,1,1,0,c_white,a);
 				                    }
-				                    if(i == scr_wrap(itemHighlighted[0]-3, 0, 5) && hudBOffsetX > 0)
+				                    if(i == scr_wrap(hudSlotItem[0]-3, 0, 5) && hudBOffsetX > 0)
 				                    {
 				                        var a = clamp(abs(hudBOffsetX)/xBOffset,0,1);
 				                        draw_sprite_ext(sprt_UI_HItemBeam,i+comboNum,vX+(xBPos-xBOffset*3),vY+yBPos,1,1,0,c_white,a);
 				                    }
-				                    if(i == scr_wrap(itemHighlighted[0]+1, 0, 5))
+				                    if(i == scr_wrap(hudSlotItem[0]+1, 0, 5))
 				                    {
 				                        draw_sprite_ext(sprt_UI_HItemBeam,i+comboNum,vX+(xBPos+xBOffset),vY+yBPos,1,1,0,c_white,1);
 				                    }
-				                    if(i == scr_wrap(itemHighlighted[0]+2, 0, 5))
+				                    if(i == scr_wrap(hudSlotItem[0]+2, 0, 5))
 				                    {
 				                        var a = 1;
 				                        if(hudBOffsetX > 0)
@@ -471,7 +507,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				                        }
 				                        draw_sprite_ext(sprt_UI_HItemBeam,i+comboNum,vX+(xBPos+xBOffset*2),vY+yBPos,1,1,0,c_white,a);
 				                    }
-				                    if(i == scr_wrap(itemHighlighted[0]+3, 0, 5) && hudBOffsetX < 0)
+				                    if(i == scr_wrap(hudSlotItem[0]+3, 0, 5) && hudBOffsetX < 0)
 				                    {
 				                        var a = clamp(abs(hudBOffsetX)/xBOffset,0,1);
 				                        draw_sprite_ext(sprt_UI_HItemBeam,i+comboNum,vX+(xBPos+xBOffset*3),vY+yBPos,1,1,0,c_white,a);
@@ -488,11 +524,11 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				            }
 				            hudIOffsetX = 0;
 				        }
-				        if(itemSelected == 1)
+				        if(hudSlot == 1)
 				        {
-				            var strg = itemName[itemHighlighted[1]];
+				            var strg = itemName[hudSlotItem[1]];
 				            tX = scr_round(95 - (string_width(strg) / 2));
-				            draw_text_transformed(vX+tX,vY+tY,itemName[itemHighlighted[1]],1,1,0);
+				            draw_text_transformed(vX+tX,vY+tY,itemName[hudSlotItem[1]],1,1,0);
             
 				            var xIPos = 94 + hudIOffsetX,
 				                xIOffset = 28,
@@ -501,15 +537,15 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				            {
 				                if(item[i])
 				                {
-				                    if(i == itemHighlighted[1])
+				                    if(i == hudSlotItem[1])
 				                    {
 				                        draw_sprite_ext(sprt_UI_HItemMisc,i+5,vX+xIPos,vY+yIPos,1,1,0,c_white,1);
 				                    }
-				                    if(i == scr_wrap(itemHighlighted[1]-1, 0, 5))
+				                    if(i == scr_wrap(hudSlotItem[1]-1, 0, 5))
 				                    {
 				                        draw_sprite_ext(sprt_UI_HItemMisc,i,vX+(xIPos-xIOffset),vY+yIPos,1,1,0,c_white,1);
 				                    }
-				                    if(i == scr_wrap(itemHighlighted[1]-2, 0, 5))
+				                    if(i == scr_wrap(hudSlotItem[1]-2, 0, 5))
 				                    {
 				                        var a = 1;
 				                        if(hudIOffsetX < 0)
@@ -518,16 +554,16 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				                        }
 				                        draw_sprite_ext(sprt_UI_HItemMisc,i,vX+(xIPos-xIOffset*2),vY+yIPos,1,1,0,c_white,a);
 				                    }
-				                    if(i == scr_wrap(itemHighlighted[1]-3, 0, 5) && hudIOffsetX > 0)
+				                    if(i == scr_wrap(hudSlotItem[1]-3, 0, 5) && hudIOffsetX > 0)
 				                    {
 				                        var a = clamp(abs(hudIOffsetX)/xIOffset,0,1);
 				                        draw_sprite_ext(sprt_UI_HItemMisc,i,vX+(xIPos-xIOffset*3),vY+yIPos,1,1,0,c_white,a);
 				                    }
-				                    if(i == scr_wrap(itemHighlighted[1]+1, 0, 5))
+				                    if(i == scr_wrap(hudSlotItem[1]+1, 0, 5))
 				                    {
 				                        draw_sprite_ext(sprt_UI_HItemMisc,i,vX+(xIPos+xIOffset),vY+yIPos,1,1,0,c_white,1);
 				                    }
-				                    if(i == scr_wrap(itemHighlighted[1]+2, 0, 5))
+				                    if(i == scr_wrap(hudSlotItem[1]+2, 0, 5))
 				                    {
 				                        var a = 1;
 				                        if(hudIOffsetX > 0)
@@ -536,7 +572,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				                        }
 				                        draw_sprite_ext(sprt_UI_HItemMisc,i,vX+(xIPos+xIOffset*2),vY+yIPos,1,1,0,c_white,a);
 				                    }
-				                    if(i == scr_wrap(itemHighlighted[1]+3, 0, 5) && hudIOffsetX < 0)
+				                    if(i == scr_wrap(hudSlotItem[1]+3, 0, 5) && hudIOffsetX < 0)
 				                    {
 				                        var a = clamp(abs(hudIOffsetX)/xIOffset,0,1);
 				                        draw_sprite_ext(sprt_UI_HItemMisc,i,vX+(xIPos+xIOffset*3),vY+yIPos,1,1,0,c_white,a);
@@ -562,7 +598,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
     
 				    if(item[0])
 				    {
-				        draw_sprite_ext(sprt_UI_HAmmoIcon,(itemSelected == 1 && itemHighlighted[1] == 0 && stateFrame != State.Morph),floor(vX2+110),floor(vY+4),1,1,0,c_white,1);
+				        draw_sprite_ext(sprt_UI_HAmmoIcon,(hudSlot == 1 && hudSlotItem[1] == 0 && stateFrame != State.Morph),floor(vX2+110),floor(vY+4),1,1,0,c_white,1);
 			
 						var col2 = c_white;
 						if(missileStat >= missileMax)
@@ -578,7 +614,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				    }
 				    if(item[1])
 				    {
-				        draw_sprite_ext(sprt_UI_HAmmoIcon,2+(itemSelected == 1 && itemHighlighted[1] == 1 && stateFrame != State.Morph),floor(vX2+150),floor(vY+4),1,1,0,c_white,1);
+				        draw_sprite_ext(sprt_UI_HAmmoIcon,2+(hudSlot == 1 && hudSlotItem[1] == 1 && stateFrame != State.Morph),floor(vX2+150),floor(vY+4),1,1,0,c_white,1);
     
 				        var col2 = c_white;
 						if(superMissileStat >= superMissileMax)
@@ -592,7 +628,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				    }
 				    if(item[2])
 				    {
-				        draw_sprite_ext(sprt_UI_HAmmoIcon,4+(itemSelected == 1 && (itemHighlighted[1] == 2 || stateFrame == State.Morph)),floor(vX2+184),floor(vY+4),1,1,0,c_white,1);
+				        draw_sprite_ext(sprt_UI_HAmmoIcon,4+(hudSlot == 1 && (hudSlotItem[1] == 2 || stateFrame == State.Morph)),floor(vX2+184),floor(vY+4),1,1,0,c_white,1);
     
 						var col2 = c_white;
 						if(powerBombStat >= powerBombMax)
@@ -672,13 +708,13 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 								}
 							}
 							var index = 0;
-							if((itemHighlighted[1] == i && (global.HUD == 0 || stateFrame != State.Morph)) || (global.HUD == 1 && stateFrame == State.Morph && i == 2))
+							if((hudSlotItem[1] == i && (global.HUD == 0 || stateFrame != State.Morph)) || (global.HUD == 1 && stateFrame == State.Morph && i == 2))
 							{
 								if(global.HUD == 1)
 								{
 									index = 2;
 								}
-								if(itemSelected == 1)
+								if(hudSlot == 1)
 								{
 									index = 1;
 								}
@@ -739,9 +775,9 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 						draw_set_font(fnt_Menu2);
 						draw_set_halign(fa_left);
 						draw_set_valign(fa_top);
-						var strg = itemName[itemHighlighted[1]],
+						var strg = itemName[hudSlotItem[1]],
 				        tX = 123 - scr_round(string_width(strg) / 2);
-				        draw_text_transformed(vX+tX,vY+21,itemName[itemHighlighted[1]],1,1,0);
+				        draw_text_transformed(vX+tX,vY+21,itemName[hudSlotItem[1]],1,1,0);
 						var xx = 69,
 							yy = 38;
 						for(var i = 0; i < array_length(item); i++)
@@ -749,7 +785,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 							xx = 50 + 36*i;
 							if(item[i])
 							{
-								draw_sprite_ext(sprt_UI_HItemMisc,i+5*(itemHighlighted[1] == i),vX+xx,vY+yy,1,1,0,c_white,1);
+								draw_sprite_ext(sprt_UI_HItemMisc,i+5*(hudSlotItem[1] == i),vX+xx,vY+yy,1,1,0,c_white,1);
 							}
 						}
 					}
