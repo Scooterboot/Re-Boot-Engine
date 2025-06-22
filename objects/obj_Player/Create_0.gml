@@ -377,6 +377,12 @@ grapBoost = false;
 
 grappleVelX = 0;
 grappleVelY = 0;
+grappleReelVel = 0;
+grappleReelSpd = 0.75;
+grappleReelFrict = 1;
+grappleReelMax = 6;
+spiderGrappleReelSpd = 0.625;
+spiderGrappleReelMax = 8;
 
 grapWJCounter = 0;
 
@@ -1741,11 +1747,11 @@ function Crawler_CanStickRight()
 	{
 		return true;
 	}
-	if(misc[Misc.Spider])
+	if((Crawler_CanStickTo(1,0, Edge.Right) || misc[Misc.Spider]) && !GrappleActive())
 	{
 		return true;
 	}
-	return Crawler_CanStickTo(1,0, Edge.Right);
+	return false;
 }
 function Crawler_CanStickLeft()
 {
@@ -1753,27 +1759,27 @@ function Crawler_CanStickLeft()
 	{
 		return true;
 	}
-	if(misc[Misc.Spider])
+	if((Crawler_CanStickTo(-1,0, Edge.Left) || misc[Misc.Spider]) && !GrappleActive())
 	{
 		return true;
 	}
-	return Crawler_CanStickTo(-1,0, Edge.Left);
+	return false;
 }
 function Crawler_CanStickBottom()
 {
-	if(misc[Misc.Spider])
+	if((Crawler_CanStickTo(0,1, Edge.Bottom) || misc[Misc.Spider]) && !GrappleActive())
 	{
 		return true;
 	}
-	return Crawler_CanStickTo(0,1, Edge.Bottom);
+	return false;
 }
 function Crawler_CanStickTop()
 {
-	if(misc[Misc.Spider])
+	if((Crawler_CanStickTo(0,-1, Edge.Top) || misc[Misc.Spider]) && !GrappleActive())
 	{
 		return true;
 	}
-	return Crawler_CanStickTo(0,-1, Edge.Top);
+	return false;
 }
 
 function Crawler_CanStickOuter(fVX, fVY, edge)
@@ -1876,37 +1882,25 @@ function Crawler_CanStickOuter(fVX, fVY, edge)
 }
 function Crawler_CanStickOuterLeft()
 {
-	if(state != State.BallSpark)
+	if((Crawler_CanStickOuter(1, 0, Edge.Left) || misc[Misc.Spider]) && !GrappleActive() && state != State.BallSpark)
 	{
-		if(misc[Misc.Spider])
-		{
-			return (spiderEdge != Edge.None);
-		}
-		return Crawler_CanStickOuter(1, 0, Edge.Left);
+		return true;
 	}
 	return false;
 }
 function Crawler_CanStickOuterRight()
 {
-	if(state != State.BallSpark)
+	if((Crawler_CanStickOuter(-1, 0, Edge.Right) || misc[Misc.Spider]) && !GrappleActive() && state != State.BallSpark)
 	{
-		if(misc[Misc.Spider])
-		{
-			return (spiderEdge != Edge.None);
-		}
-		return Crawler_CanStickOuter(-1, 0, Edge.Right);
+		return true;
 	}
 	return false;
 }
 function Crawler_CanStickOuterTop()
 {
-	if(state != State.BallSpark)
+	if((Crawler_CanStickOuter(0, 1, Edge.Top) || misc[Misc.Spider]) && !GrappleActive() && state != State.BallSpark)
 	{
-		if(misc[Misc.Spider])
-		{
-			return (spiderEdge != Edge.None);
-		}
-		return Crawler_CanStickOuter(0, 1, Edge.Top);
+		return true;
 	}
 	return false;
 }
@@ -1916,13 +1910,9 @@ function Crawler_CanStickOuterBottom()
 	{
 		return true;
 	}
-	if(state != State.BallSpark)
+	if((Crawler_CanStickOuter(0, -1, Edge.Bottom) || misc[Misc.Spider]) && !GrappleActive() && state != State.BallSpark)
 	{
-		if(misc[Misc.Spider])
-		{
-			return (spiderEdge != Edge.None);
-		}
-		return Crawler_CanStickOuter(0, -1, Edge.Bottom);
+		return true;
 	}
 	return false;
 }
@@ -4236,18 +4226,20 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 				{
 					var tRatio = i/mbTrailLength;
 					var tAlpha = tRatio,
-						//tColor = mbTrailColor_Start;
 						tColor = mbTrailCol1[i];
     
 					if(tRatio < 0.5)
 					{
-						//tColor = merge_colour(c_black,mbTrailColor_End,tRatio*2);
 						tColor = merge_colour(c_black,mbTrailCol2[i],tRatio*2);
 					}
 					else
 					{
-						//tColor = merge_colour(mbTrailColor_End,mbTrailColor_Start,tRatio*2-1);
 						tColor = merge_colour(mbTrailCol2[i],mbTrailCol1[i],tRatio*2-1);
+					}
+					
+					if(invFrames > 0 && (invFrames&1) && !global.roomTrans)
+					{
+						tColor = c_black;
 					}
 
 					var dist = min(i+2,8);

@@ -2463,12 +2463,6 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 				mbTrailColor_Start = merge_color(mbTrailColor_Start, c_yellow, boostBallFX);
 				mbTrailColor_End = merge_color(mbTrailColor_End, c_olive, boostBallFX);
 			}
-		
-			if(invFrames > 0 && !(invFrames&1) && !global.roomTrans)
-			{
-				mbTrailColor_Start = c_black;
-				mbTrailColor_End = c_black;
-			}
 			
 			for(var i = 0; i < mbTrailLength-1; i++)
 			{

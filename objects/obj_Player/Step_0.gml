@@ -1684,6 +1684,7 @@ if(instance_exists(XRay))
 		var ndist = point_distance(position.X+velX,position.Y+velY,grapple.x,grapple.y);
 		
 		var reel = 0;
+		var _lmult = 1 / (1+liquidMovement);
 		
 		if(state == State.Grapple)
 		{
@@ -1802,9 +1803,11 @@ if(instance_exists(XRay))
 				}
 			}
 			
-			var reelSpeed = 6 / (1+liquidMovement);
-			var up = (cUp && grappleDist > grappleMinDist),
-				down = (cDown && grappleDist < grappleMaxDist);
+			var _rlSpd = grappleReelSpd*_lmult,
+				_rlMax = grappleReelMax*_lmult,
+				_rlFrict = grappleReelFrict*_lmult;
+			var up = (cUp && dist >= grappleMinDist),
+				down = (cDown && dist <= grappleMaxDist);
 			if(global.grappleStyle == 1 && move != 0)
 			{
 				up = false;
@@ -1812,33 +1815,64 @@ if(instance_exists(XRay))
 			}
 			if(up)
 			{
-				reel = max(-reelSpeed, grappleMinDist-dist);
+				if(grappleReelVel > 0)
+				{
+					_rlSpd += _rlFrict;
+				}
+				grappleReelVel = max(grappleReelVel - _rlSpd, -_rlMax, grappleMinDist-dist);
 				grappleDist = min(dist,grappleMaxDist);
 			}
-			if(down)
+			else if(down)
 			{
-				reel = min(reelSpeed, grappleMaxDist-dist);
+				if(grappleReelVel < 0)
+				{
+					_rlSpd += _rlFrict;
+				}
+				grappleReelVel = min(grappleReelVel + _rlSpd, _rlMax, grappleMaxDist-dist);
 				grappleDist = min(dist,grappleMaxDist);
 			}
-			if(grappleDist > grappleMaxDist)
+			else
 			{
-				reel = max(-reelSpeed/2, grappleMaxDist-dist-1);
+				if(grappleReelVel > 0)
+				{
+					grappleReelVel = max(grappleReelVel-_rlFrict, 0);
+				}
+				if(grappleReelVel < 0)
+				{
+					grappleReelVel = min(grappleReelVel+_rlFrict, 0);
+				}
+			}
+			
+			reel = grappleReelVel;
+			if(dist >= grappleMaxDist+1)
+			{
+				var reelSpd = max(-3*_lmult, grappleMaxDist-dist);
+				if(reelSpd < 0)
+				{
+					reel = reelSpd;
+				}
 				grappleDist = dist;
+				grappleReelVel = min(grappleReelVel,0);
 			}
-			if(grappleDist < grappleMinDist)
+			if(dist <= grappleMinDist-1)
 			{
-				reel = min(reelSpeed/2, grappleMinDist-dist);
+				var reelSpd = min(3*_lmult, grappleMinDist-dist);
+				if(reelSpd > 0)
+				{
+					reel = reelSpd;
+				}
 				grappleDist = min(dist,grappleMaxDist);
+				grappleReelVel = max(grappleReelVel,0);
 			}
 		}
 		if(state == State.Morph)
 		{
-			var reelSpeed = 8 / (1+liquidMovement);
-			reel = -reelSpeed;
+			grappleReelVel = max(grappleReelVel - spiderGrappleReelSpd*_lmult, -spiderGrappleReelMax*_lmult);
+			reel = grappleReelVel;
 			grappleDist = min(dist,grappleMaxDist);
 			
-			velX = (velX > 0) ? max(velX-fFrict,0) : min(velX+fFrict,0);
-			velY = (velY > 0) ? max(velY-fFrict,0) : min(velY+fFrict,0);
+			velX = (velX > 0) ? max(velX-fFrict/2,0) : min(velX+fFrict/2,0);
+			velY = (velY > 0) ? max(velY-fFrict/2,0) : min(velY+fFrict/2,0);
 			
 			canMorphBounce = false;
 			
@@ -1859,13 +1893,15 @@ if(instance_exists(XRay))
 		var vX = position.X - grapple.x,
 			vY = position.Y - grapple.y;
 		
+		grappleDist += reel;
+		
 		var ddist = ndist - dist;
 		vX /= dist;
 		vY /= dist;
 		velX -= vX * ddist;
 		velY -= vY * ddist;
-		vX *= (grappleDist + reel);
-		vY *= (grappleDist + reel);
+		vX *= grappleDist;
+		vY *= grappleDist;
 		grappleVelX = (grapple.x + vX) - position.X;
 		grappleVelY = (grapple.y + vY) - position.Y;
 		
@@ -1875,34 +1911,13 @@ if(instance_exists(XRay))
 		
 		if(state == State.Morph)
 		{
-			if(grappleDist <= 20 || spiderEdge != Edge.None || !cShoot || spiderGrappleUnstuck > 10)
+			if(point_distance(position.X+velX+grappleVelX,position.Y+velY+grappleVelY,grapple.x,grapple.y) <= 24 || !cShoot || spiderGrappleUnstuck > 10)
 			{
 				instance_destroy(grapple);
-				if(spiderEdge != Edge.None)
-				{
-					if(spiderEdge == Edge.Bottom)
-					{
-						spiderSpeed += grappleVelX;
-					}
-					if(spiderEdge == Edge.Top)
-					{
-						spiderSpeed -= grappleVelX;
-					}
-					if(spiderEdge == Edge.Right)
-					{
-						spiderSpeed -= grappleVelY;
-					}
-					if(spiderEdge == Edge.Left)
-					{
-						spiderSpeed += grappleVelY;
-					}
-					spiderMove = sign(spiderSpeed);
-				}
-				else
-				{
-					velX += grappleVelX;
-					velY += grappleVelY;
-				}
+				velX += grappleVelX;
+				velY += grappleVelY;
+				grappleVelX = 0;
+				grappleVelY = 0;
 			}
 		}
 	}
@@ -1916,6 +1931,7 @@ if(instance_exists(XRay))
 		grappleVelX = 0;
 		grappleVelY = 0;
 		grapDisVel = 0;
+		grappleReelVel = 0;
 		spiderGrappleUnstuck = 0;
 	}
 
@@ -3071,7 +3087,7 @@ if(instance_exists(XRay))
 			}
 		}
 		
-		if(!GrappleActive() && ((cUp && rUp) || (cJump && rJump && (!misc[Misc.Spring] || morphSpinJump)) || (cMorph && rMorph)) && unmorphing == 0 && morphFrame <= 0 && !spiderBall)
+		if(!GrappleActive() && ((cUp && rUp) || (cJump && rJump && (!misc[Misc.Spring] || morphSpinJump)) || (cMorph && rMorph)) && unmorphing == 0 && morphFrame <= 0 && !SpiderActive()) //!spiderBall)
 		{
 			if(CanChangeState(mask_Player_Crouch))
 			{
