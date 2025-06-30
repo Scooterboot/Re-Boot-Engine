@@ -27,33 +27,33 @@ copyFile = -1;
 fileIconFrame = 0;
 fileIconFrameCounter = 0;
 
-option = array(
+option = [
 "FILE A",
 "FILE B",
 "FILE C",
 "DISPLAY OPTIONS",
 "AUDIO OPTIONS",
 "CONTROL OPTIONS",
-"QUIT TO DESKTOP");
+"QUIT TO DESKTOP"];
 
-copyOption = array(
+copyOption = [
 "FILE A",
 "FILE B",
 "FILE C",
-"CANCEL");
+"CANCEL"];
 
 confirmPos = 0;
-confirmText = array("ARE YOU SURE?", "NO", "YES");
+confirmText = ["ARE YOU SURE?", "NO", "YES"];
 confirmQuitDT = false;
 confirmCopy = false;
-confirmCopyText = array("COPY","TO");
+confirmCopyText = ["COPY","TO"];
 confirmDelete = false;
 confirmDeleteText = "DELETE";
 
-subOption = array(
+subOption = [
 "START GAME",
 "COPY FILE",
-"DELETE FILE");
+"DELETE FILE"];
 
 noDataText = "NO DATA";
 energyText = "ENERGY";
@@ -82,11 +82,11 @@ cursorFrameCounter = 0;
 
 moveCounter = 0;
 
-buttonTip = array(
+buttonTip = [
 "Move",
 "Select",
 "Back",
-"Cancel");
+"Cancel"];
 
 buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1]+"   ${menuCancelButton} - "+buttonTip[2];
 buttonTipScrib = scribble(buttonTipString);

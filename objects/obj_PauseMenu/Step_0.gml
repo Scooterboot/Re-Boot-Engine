@@ -9,7 +9,7 @@ cSelect = obj_Control.mSelect;
 cCancel = obj_Control.mCancel;
 cStart = obj_Control.start;
 
-var canPause = (room != rm_MainMenu && instance_exists(obj_Player) && obj_Player.state != State.Elevator && obj_Player.introAnimState == -1 && !instance_exists(obj_Transition));// && 
+var canPause = (room != rm_MainMenu && instance_exists(obj_Player) && obj_Player.state != State.Elevator && obj_Player.state != State.Death && obj_Player.introAnimState == -1 && !instance_exists(obj_Transition) && !instance_exists(obj_DeathAnim));// && 
 //(!instance_exists(obj_MessageBox) || obj_MessageBox.messageType == Message.Expansion || obj_MessageBox.messageType == Message.Simple || obj_MessageBox.kill));
 if(instance_exists(obj_MessageBox))
 {

@@ -5,8 +5,9 @@ itemName = "chainSpark";
 itemID = 0;
 
 itemHeader = "CHAIN SPARK";
-itemDesc = "Allows Wall Jumping during Shine Spark.\n" +
-"Allows downward Shine Sparking.";
+//itemDesc = "Allows Wall Jumping during Shine Spark.\n" +
+//"Allows downward Shine Sparking.";
+itemDesc = "Allows Wall Jumping during Shine Spark."
 
 isMajorItem = true;
 

@@ -11,6 +11,6 @@ damageInvFrames = 60;
 
 frame = 0;
 frameCounter = 0;
-frameSeq = array(2,3,4,3);
+frameSeq = [2,3,4,3];
 
 image_speed = 0;

@@ -17,7 +17,7 @@ fVelX = 0;
 splash = false;
 watery = true;
 
-waterSplashMoveX = array(3,3,3,4,4,3,3,3,3,1,1,0,0);
+waterSplashMoveX = [3,3,3,4,4,3,3,3,3,1,1,0,0];
 ogScaleX = image_xscale;
 
 mask_index = sprite_index;

@@ -127,7 +127,7 @@ blinkCounterMax = 180;
 headFrame = 2;
 headFrameCounter = 0;
 headFrameNum = 0;
-headBoxRotSeq = array(45, 45, 45, 32.5, 20, 7.5, -5, -17.5, -30, -30, -17.5, -5, 7.5, 20, 32.5);
+headBoxRotSeq = [45, 45, 45, 32.5, 20, 7.5, -5, -17.5, -30, -30, -17.5, -5, 7.5, 20, 32.5];
 
 rHandFrame = 0;
 lHandFrame = 0;
@@ -285,8 +285,8 @@ LArm_Idle =
 	[-20,-19,-17,-14.5, -7,  0.5,   8,  14,    15,  14,   8,  0.5, -7,-14.5, -17, -19],
 	[ 45, 42, 40,   35, 30,   25,  20,  16,    15,  16,  20,   25, 30,   35,  40,  42]
 ];
-RHandAnimSeq_Idle = array(0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0);
-LHandAnimSeq_Idle = array(8,7,6,5,4,3,2,1,0,1,2,3,4,5,6,7,8);
+RHandAnimSeq_Idle = [0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0];
+LHandAnimSeq_Idle = [8,7,6,5,4,3,2,1,0,1,2,3,4,5,6,7,8];
 
 ArmIdleFrame = 0;
 ArmIdleTransition = 1;
@@ -343,7 +343,7 @@ Arm_Fling =
 	[ 15,  25, 40, 45, 43,  25,  10,   0,  7.5]
 ];
 Arm_Fling_Offhand = [-15,0,15];
-HandAnimSeq_Fling = array(0,3,6,8,8,7,6,5,3,0);
+HandAnimSeq_Fling = [0,3,6,8,8,7,6,5,3,0];
 
 ArmFlingFrame = 0;
 ArmFlingTransition = 0;

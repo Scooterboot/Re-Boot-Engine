@@ -76,25 +76,25 @@ moveCounter = 0;
 
 optionPos = 0;
 
-option = array(
+option = [
 "DISPLAY OPTIONS",
 "AUDIO OPTIONS",
 "CONTROL OPTIONS",
 "RESTART FROM LAST SAVE",
 "QUIT TO MAIN MENU",
-"QUIT TO DESKTOP");
+"QUIT TO DESKTOP"];
 
 confirmPos = 0;
-confirmText = array("ARE YOU SURE?", "NO", "YES");
+confirmText = ["ARE YOU SURE?", "NO", "YES"];
 confirmRestart = false;//-1;
 confirmQuitMM = false;//-1;
 confirmQuitDT = false;//-1;
 
-headerText = array(
+headerText = [
 "ZEBES",
 "SAMUS",
 "OPTIONS",
-"LOG BOOK");
+"LOG BOOK"];
 mapAreaText[MapArea.Crateria] = "CRATERIA";
 mapAreaText[MapArea.WreckedShip] = "WRECKED SHIP";
 mapAreaText[MapArea.Brinstar] = "BRINSTAR";
@@ -102,30 +102,30 @@ mapAreaText[MapArea.Norfair] = "NORFAIR";
 mapAreaText[MapArea.Maridia] = "MARIDIA";
 mapAreaText[MapArea.Tourian] = "TOURIAN";
 
-itemHeaderText = array(
+itemHeaderText = [
 "SUIT",
 "BEAM",
 "EQUIP",
 "GEAR",
-"BOOTS");
+"BOOTS"];
 
-suitName = array(
+suitName = [
 "VARIA SUIT",
-"GRAVITY SUIT");
-beamName = array(
+"GRAVITY SUIT"];
+beamName = [
 "CHARGE BEAM",
 "ICE BEAM",
 "WAVE BEAM",
 "SPAZER",
-"PLASMA BEAM");
-itemName = array(
+"PLASMA BEAM"];
+itemName = [
 "MISSILE",
 "SUPER MISSILE",
 "POWER BOMB",
 "GRAPPLE BEAM",
-"X-RAY VISOR");
+"X-RAY VISOR"];
 
-miscName = array(
+miscName = [
 "POWER GRIP",
 "MORPH BALL",
 "M.B. BOMB",
@@ -133,13 +133,13 @@ miscName = array(
 "BOOST BALL",
 "MAGNI BALL",
 "SPIDER BALL",
-"SCREW ATTACK");
-bootsName = array(
+"SCREW ATTACK"];
+bootsName = [
 "HI-JUMP",
 "SPACE JUMP",
 "ACCEL DASH",
 "SPEED BOOSTER",
-"CHAIN SPARK");
+"CHAIN SPARK"];
 
 pauseSurf = surface_create(global.resWidth,global.resHeight);
 

@@ -16,7 +16,7 @@ header[3] = "CONTROLLER BINDINGS";
 gpFound = "CONTROLLER BINDINGS";
 gpNotFound = "NO CONTROLLER DETECTED";
 
-option = array(
+option = [
 "WEAPON HUD",
 "AIM CONTROL",
 "AUTO-RUN",
@@ -24,13 +24,13 @@ option = array(
 "MORE OPTIONS",
 "KEYBOARD BINDINGS",
 "CONTROLLER BINDINGS",
-"BACK");
+"BACK"];
 
-currentOption = array(
+currentOption = [
 global.HUD,
 global.aimStyle,
 global.autoSprint,
-global.quickClimb);
+global.quickClimb];
 
 currentOptionName[0,0] = "DEFAULT";
 currentOptionName[0,1] = "SELECT & ARM";
@@ -67,18 +67,18 @@ optionTip[6,0] = "Configure Controller Bindings";
 optionTip[7,0] = "Exit Control Options Menu";
 
 
-advOption = array(
+advOption = [
 "GRIP CLIMB CONTROL",
 "GRAPPLE CONTROL",
 "SPIDER BALL CONTROL",
 "ACCEL DASH CONTROL",
-"BACK");
+"BACK"];
 
-advCurrentOption = array(
+advCurrentOption = [
 global.gripStyle,
 global.grappleStyle,
 global.spiderBallStyle,
-global.dodgeStyle);
+global.dodgeStyle];
 
 advCurrentOptionName[0,0] = "DEFAULT";
 advCurrentOptionName[0,1] = "ADVANCED";
@@ -118,14 +118,14 @@ cNameHUD[0] = "WEAPON CANCEL";
 cNameHUD[1] = "ARM WEAPON";
 cNameHUD[2] = "WEAPON SLOT SWITCH";
 
-controlKey = array(
+controlKey = [
 "UP","DOWN","LEFT","RIGHT",
 "JUMP","SHOOT","RUN","AIM UP","AIM DOWN",
 "AIM LOCK","QUICK MORPH",
 "WEAPON SELECT","WEAPON CANCEL",
 "MENU - START","MENU - SELECT","MENU - CANCEL",
 "RESET TO DEFAULTS",
-"BACK");
+"BACK"];
 
 for(var i = 0; i < array_length(global.key); i++)
 {
@@ -136,16 +136,16 @@ for(var i = 0; i < array_length(global.key_m); i++)
 	currentControlKey[i+array_length(global.key)] = global.key_m[i];
 }
 
-controlButton = array(
+controlButton = [
 "D-PAD","LEFT STICK","DEAD ZONE",
 "JUMP","SHOOT","RUN","AIM UP","AIM DOWN",
 "AIM LOCK","QUICK MORPH",
 "WEAPON SELECT","WEAPON CANCEL",
 "MENU - START","MENU - SELECT","MENU - CANCEL",
 "RESET TO DEFAULTS",
-"BACK");
+"BACK"];
 
-currentControlButton = array(global.gp_usePad,global.gp_useStick,global.gp_deadZone);
+currentControlButton = [global.gp_usePad,global.gp_useStick,global.gp_deadZone];
 for(var i = 0; i < array_length(global.gp); i++)
 {
 	currentControlButton[i+3] = global.gp[i];

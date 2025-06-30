@@ -126,10 +126,10 @@ if(screenFade >= 1 && !menuClosing)
 			}
 		}
 		
-		currentOption = array(
+		currentOption = [
 		global.musicVolume,
 		global.soundVolume,
-		global.ambianceVolume);
+		global.ambianceVolume];
 		ini_open("settings.ini");
 		ini_write_real("Audio", "music", global.musicVolume);
 		ini_write_real("Audio", "sound", global.soundVolume);

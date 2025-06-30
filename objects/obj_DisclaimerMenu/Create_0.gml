@@ -31,10 +31,10 @@ revealText = array_create(6,0);
 revealCounter = 0;
 
 
-buttonTip = array(
+buttonTip = [
 "Move",
 "Select",
-"Cancel");
+"Cancel"];
 
 buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1];//+"   ${menuCancelButton} - "+buttonTip[2];
 buttonTipScrib = scribble(buttonTipString);

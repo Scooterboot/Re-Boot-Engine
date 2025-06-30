@@ -28,7 +28,7 @@ image_index = 0;
 
 frame = 0;
 frameCounter = 0;
-frameSeq = array(0,0,1,1,2,3,4);
+frameSeq = [0,0,1,1,2,3,4];
 
 function OnDamageNPC(damage,npc)
 {

@@ -487,7 +487,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			}
 			var str = InsertIconsIntoString(fText),
 				strX = scr_round(ww/2),
-				strY = scr_round(hh-23);//scr_round(global.resHeight-36+sprite_get_height(sprt_Sub_Footer)/2);
+				strY = scr_round(hh-32);//scr_round(global.resHeight-36+sprite_get_height(sprt_Sub_Footer)/2);
 			if(footerScrib.get_text() != str)
 			{
 				footerScrib.overwrite(str);
@@ -502,7 +502,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				roundMarginY = footerH/2;
 				
 			var footerScaleX = max(scr_round(roundMarginX*(footerW+strW-2)/footerW)/roundMarginX,4),
-				footerScaleY = max(scr_round(roundMarginY*(footerH+strH-16)/footerH)/roundMarginY,1.2);
+				footerScaleY = max(scr_round(roundMarginY*(footerH+strH)/footerH)/roundMarginY,1.2);
 			draw_sprite_ext(sprt_Sub_Footer,1,strX,strY,footerScaleX,footerScaleY,0,c_white,0.5);
 			draw_sprite_ext(sprt_Sub_Footer,0,strX,strY,footerScaleX,footerScaleY,0,c_white,1);
 			

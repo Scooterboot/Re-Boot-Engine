@@ -45,7 +45,7 @@ spikePosY[2] = 24;
 spitCounter = 0;
 spitFired = false;
 
-moveYOffset = array(0,0,1,2,2,2,1,0,0,0,1,2,2,2,1,0);
+moveYOffset = [0,0,1,2,2,2,1,0,0,0,1,2,2,2,1,0];
 walkFrame = 0;
 walkFrameCounter = 0;
 mouthFrame = 0;
@@ -56,7 +56,7 @@ handFrameCounter = 0;
 
 tailFrame = 0;
 tailFrameCounter = 0;
-tailFrameSequence = array(1,2,3,2);
+tailFrameSequence = [1,2,3,2];
 tailFrame2 = 0;
 
 

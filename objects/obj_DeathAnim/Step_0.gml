@@ -59,6 +59,7 @@ if(screenFade[1] >= 1.05 && frame >= array_length(animSequence)-1)
     screenFade[2] = min(screenFade[2] + 0.025, 1.05);
 }
 
+global.gamePaused = true;
 if(screenFade[2] >= 1.05 && !audio_is_playing(snd_Death))
 {
 	instance_destroy(obj_Player);

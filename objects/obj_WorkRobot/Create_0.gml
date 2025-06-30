@@ -30,7 +30,7 @@ frameCounter = 0;
 eyePalIndex = 0;
 eyePalNum = 0;
 
-moveXSeq = array(1,1,1,0,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1);
+moveXSeq = [1,1,1,0,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1];
 movedAtFrame = -1;
 
 dir = image_xscale;
@@ -74,13 +74,13 @@ function OnXCollision(fVX)
 }
 
 
-topOffsetX = array(
+topOffsetX = [
  0,-1,-2,-4,
 -7,-2, 0, 2,
  7, 4, 2, 1,
  0,-1,-2,-4,
 -7,-2, 0, 2,
- 7, 4, 2, 1);
+ 7, 4, 2, 1];
 
 for(var i = 0; i < 9; i++)
 {

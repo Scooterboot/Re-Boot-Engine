@@ -30,7 +30,7 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 		moveHPrev = 1;
 		pauseSelect = false;
 		
-		var itemAmmo = array((item[Item.Missile] && missileStat > 0),(item[Item.SMissile] && superMissileStat > 0),(item[Item.PBomb] && powerBombStat > 0),item[Item.Grapple],item[Item.XRay]);
+		var itemAmmo = [ (item[Item.Missile] && missileStat > 0), (item[Item.SMissile] && superMissileStat > 0), (item[Item.PBomb] && powerBombStat > 0), item[Item.Grapple], item[Item.XRay] ];
 		var itemNum2 = (itemAmmo[Item.Missile]+itemAmmo[Item.SMissile]+itemAmmo[Item.PBomb]+itemAmmo[Item.Grapple]+itemAmmo[Item.XRay]);
 		
 		if(itemNum2 > 0)

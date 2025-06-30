@@ -126,7 +126,7 @@ function UpdateUI()
 function DrawUI()
 {
 	surface_set_target(obj_Display.surfUI);
-	ui_blendmode();
+	bm_set_one();
 	
 	var pNum = ds_list_size(panelList);
 	if(pNum > 0)

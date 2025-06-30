@@ -4,9 +4,9 @@ var imgAng = scr_wrap(image_angle,0,360);
 var angleNum = scr_round(imgAng/45);
 var angle = imgAng - 45*angleNum;
 
-var imgNum = array(0,1,2,1,0,1,2,1),
-	imgXScale = array(1,1,1,1,1,-1,-1,-1),
-	imgYScale = array(1,1,1,-1,-1,-1,1,1),
+var imgNum = [0,1,2,1,0,1,2,1],
+	imgXScale = [1,1,1,1,1,-1,-1,-1],
+	imgYScale = [1,1,1,-1,-1,-1,1,1],
 	index = scr_wrap(angleNum,0,8),
 	xoff = lengthdir_x(7,imgAng+90),
 	yoff = lengthdir_y(7,imgAng+90);

@@ -715,7 +715,7 @@ if(instance_exists(XRay))
 	{
 		if(grounded)
 		{
-			if(abs(velX) > maxSpeed[MaxSpeed.MorphBall,liquidState] && liquidState <= 0)
+			if(abs(velX) > lerp(maxSpeed[MaxSpeed.MorphBall,liquidState],maxSpeed[MaxSpeed.MockBall,liquidState],0.5) && liquidState <= 0)
 			{
 				moveState = MaxSpeed.MockBall;
 				//if(speedBoost && sprint)
@@ -1729,9 +1729,9 @@ if(instance_exists(XRay))
 				}
 				else
 				{
-					if(point_distance(position.X,position.Y,position.X+velX,position.Y+velY) >= minBoostSpeed*0.75)
+					if(point_distance(0,0,velX,velY) >= minBoostSpeed*0.75)
 					{
-						if(point_distance(position.X,position.Y,position.X+velX,position.Y+velY) < maxSpeed[MaxSpeed.SpeedBoost,liquidState]*1.25)
+						if(point_distance(0,0,velX,velY) < maxSpeed[MaxSpeed.SpeedBoost,liquidState]*1.25)
 						{
 							velX += lengthdir_x(moveSpeed[0,liquidState]*sign(grapAngVel),grapAngle);
 							velY += lengthdir_y(moveSpeed[0,liquidState]*sign(grapAngVel),grapAngle);
@@ -3729,10 +3729,11 @@ if(instance_exists(XRay))
 			aUp = (aimAngle == 1);
 			aDown = (aimAngle == -1);
 		}
+		var allowDown = true; //boots[Boots.ChainSpark];
 		
 		if(shineStart > 0)
 		{
-			if(move2 != 0 || aUp || (aDown && boots[Boots.ChainSpark]))
+			if(move2 != 0 || aUp || (aDown && allowDown))
 			{
 				if(aUp || cUp)
 				{
@@ -3745,7 +3746,7 @@ if(instance_exists(XRay))
 						shineDir = 135*dir;
 					}
 				}
-				else if((aDown || cDown) && boots[Boots.ChainSpark])
+				else if((aDown || cDown) && allowDown)
 				{
 					if(move2 != 0)
 					{
@@ -3763,7 +3764,7 @@ if(instance_exists(XRay))
 			}
 			else
 			{
-				if(cDown && boots[Boots.ChainSpark])
+				if(cDown && allowDown)
 				{
 					shineDir = 0;
 				}
@@ -3899,7 +3900,7 @@ if(instance_exists(XRay))
 				(global.dodgeStyle == 0 && cAimLock && rAimLock) || 
 				(global.dodgeStyle == 1 && cSprint && rSprint)))
 			{
-				if(move2 != 0 || aUp || (aDown && boots[Boots.ChainSpark]))
+				if(move2 != 0 || aUp || (aDown && allowDown))
 				{
 					if(aUp || cUp)
 					{
@@ -3912,7 +3913,7 @@ if(instance_exists(XRay))
 							shineDir = 135*dir;
 						}
 					}
-					else if((aDown || cDown) && boots[Boots.ChainSpark])
+					else if((aDown || cDown) && allowDown)
 					{
 						if(move2 != 0)
 						{
@@ -3928,7 +3929,7 @@ if(instance_exists(XRay))
 						shineDir = 90*move2;
 					}
 				}
-				else if(cDown && boots[Boots.ChainSpark])
+				else if(cDown && allowDown)
 				{
 					shineDir = 0;
 				}
@@ -3980,8 +3981,28 @@ if(instance_exists(XRay))
 				}
 			}
 			
+			if(shineDiagSpeedFlag)
+			{
+				shineDirDiff = 0;
+				if(SparkDir_DiagUp())
+				{
+					shineDiagAngleTweak = min(shineDiagAngleTweak+1, 45);
+				}
+				if(SparkDir_DiagDown())
+				{
+					shineDiagAngleTweak = max(shineDiagAngleTweak-1, -45);
+				}
+			}
+			else
+			{
+				shineDiagAngleTweak = 0;
+			}
+			shineDiagSpeedFlag = false;
+			
+			var shineDirDiff2 = shineDirDiff + shineDiagAngleTweak*dir;
+			
 			velX = lengthdir_x(shineSparkSpeed,shineDir-90+shineDirDiff);
-			velY = lengthdir_y(shineSparkSpeed,shineDir-90+shineDirDiff);
+			velY = lengthdir_y(shineSparkSpeed,shineDir-90+shineDirDiff2);
 			
 			if(shineReflecCounter < shineSparkReflecMax || shineSparkReflecMax < 0)
 			{
@@ -4116,8 +4137,10 @@ if(instance_exists(XRay))
 		}
 		shineRampFix = false;
 		shineRestart = false;
-		
 		shineSparkSpeed = shineSparkStartSpeed;
+		
+		shineDiagSpeedFlag = false;
+		shineDiagAngleTweak = 0;
 		
 		if(!cJump)
 		{
@@ -4294,11 +4317,14 @@ if(instance_exists(XRay))
 #region Death
 	if(state == State.Death)
 	{
-		var d = instance_create_depth(x,y,-1,obj_DeathAnim);
-		d.posX = x-camera_get_view_x(view_camera[0]);
-		d.posY = y-camera_get_view_y(view_camera[0]);
-		d.dir = dir;
-		global.gamePaused = true;
+		if(!instance_exists(obj_DeathAnim))
+		{
+			var d = instance_create_depth(x,y,-1,obj_DeathAnim);
+			d.posX = x-camera_get_view_x(view_camera[0]);
+			d.posY = y-camera_get_view_y(view_camera[0]);
+			d.dir = dir;
+			global.gamePaused = true;
+		}
 	}
 #endregion
 #region Dodge

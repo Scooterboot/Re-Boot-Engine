@@ -13,7 +13,7 @@ option[1] = "QUIT TO MAIN MENU";
 option[2] = "QUIT TO DESKTOP";
 
 confirmPos = 0;
-confirmText = array("ARE YOU SURE?", "NO", "YES");
+confirmText = ["ARE YOU SURE?", "NO", "YES"];
 confirmQuitMM = -1;
 confirmQuitDT = -1;
 
@@ -21,10 +21,10 @@ cursorFrame = 0;
 cursorFrameCounter = 0;
 
 
-buttonTip = array(
+buttonTip = [
 "Move",
 "Select",
-"Cancel");
+"Cancel"];
 
 buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1];//+"   ${menuCancelButton} - "+buttonTip[2];
 buttonTipScrib = scribble(buttonTipString);

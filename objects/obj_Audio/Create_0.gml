@@ -138,7 +138,7 @@ global.prevShotSndIndex = noone;
 global.prevExplodeSnd = noone;
 global.breakSndCounter = 0;
 
-sndPauseArray = array(
+sndPauseArray = [
 snd_Somersault,
 snd_Somersault_Loop,
 snd_Somersault_SJ,
@@ -162,7 +162,7 @@ snd_LavaDamageLoop,
 snd_LiquidTopDmgLoop,
 snd_LowHealthAlarm,
 snd_PushBlock_Move,
-snd_Kraid_DyingRoar);
+snd_Kraid_DyingRoar];
 
 global.SilenceAudio = function()
 {

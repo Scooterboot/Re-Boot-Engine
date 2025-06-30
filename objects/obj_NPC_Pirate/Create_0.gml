@@ -29,9 +29,9 @@ currentFrame = 0;
 frame[3] = 0;
 frameCounter[3] = 0;
 
-standFrameSequence = array(2,1,0,1,2,3,4,3,2);
-//shootFrameSequence = array(0,1,2,3,4,3,2,1,0);
-shootFrameSequence = array(0,1,2,3,4,5,4,3,2,1,0);
+standFrameSequence = [2,1,0,1,2,3,4,3,2];
+//shootFrameSequence = [0,1,2,3,4,3,2,1,0];
+shootFrameSequence = [0,1,2,3,4,5,4,3,2,1,0];
 
 shotsFired = false;
 

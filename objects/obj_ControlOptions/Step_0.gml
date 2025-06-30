@@ -140,11 +140,11 @@ if(screenFade >= 1 && !menuClosing)
 				}
 			}
 			
-			currentOption = array(
+			currentOption = [
 			global.HUD,
 			global.aimStyle,
 			global.autoSprint,
-			global.quickClimb);
+			global.quickClimb];
 			
 			ini_open("settings.ini");
 			ini_write_real("Controls", "hud style", global.HUD);
@@ -216,11 +216,11 @@ if(screenFade >= 1 && !menuClosing)
 				}
 			}
 			
-			advCurrentOption = array(
+			advCurrentOption = [
 			global.gripStyle,
 			global.grappleStyle,
 			global.spiderBallStyle,
-			global.dodgeStyle);
+			global.dodgeStyle];
 			
 			ini_open("settings.ini");
 			ini_write_real("Controls", "grip control", global.gripStyle);

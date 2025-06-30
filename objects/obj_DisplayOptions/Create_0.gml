@@ -10,7 +10,7 @@ header[0] = "SCREEN OPTIONS";
 header[1] = "HUD OPTIONS";
 header[2] = "ENVIRONMENT OPTIONS";
 
-option = array(
+option = [
 "WINDOW MODE",
 "DISPLAY SCALE",
 "WIDESCREEN",
@@ -19,9 +19,9 @@ option = array(
 "HUD DISPLAY",
 "HUD MINIMAP",
 "WATER DISTORTION",
-"BACK");
+"BACK"];
 
-currentOption = array(
+currentOption = [
 global.fullScreen,
 global.screenScale,
 global.widescreenEnabled,
@@ -29,7 +29,7 @@ global.vsync,
 global.upscale,
 global.hudDisplay,
 global.hudMap,
-global.waterDistortion);
+global.waterDistortion];
 
 currentOptionName[0,0] = "WINDOWED";
 currentOptionName[0,1] = "FULLSCREEN";

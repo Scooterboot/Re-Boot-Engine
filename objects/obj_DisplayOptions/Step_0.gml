@@ -156,7 +156,7 @@ if(screenFade >= 1 && !menuClosing)
 		}
 		window_set_size(global.resWidth*global.screenScale,global.resHeight*global.screenScale);
 		
-		currentOption = array(
+		currentOption = [
 		global.fullScreen,
 		global.screenScale,
 		global.widescreenEnabled,
@@ -164,7 +164,7 @@ if(screenFade >= 1 && !menuClosing)
 		global.upscale,
 		global.hudDisplay,
 		global.hudMap,
-		global.waterDistortion);
+		global.waterDistortion];
 		ini_open("settings.ini");
 		ini_write_real("Display", "fullscreen", global.fullScreen);
 		ini_write_real("Display", "scale", global.screenScale);

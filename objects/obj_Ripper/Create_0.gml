@@ -26,4 +26,4 @@ mSpeed = mSpeed2;
 dirFrame = 5*dir;
 frame = 0;
 frameCounter = 0;
-frameSeq = array(0,1,2,1);
+frameSeq = [0,1,2,1];

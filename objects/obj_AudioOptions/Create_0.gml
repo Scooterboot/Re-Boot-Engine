@@ -7,16 +7,16 @@ surf = surface_create(global.resWidth,global.resHeight);
 
 header = "AUDIO OPTIONS";
 
-option = array(
+option = [
 "MUSIC VOLUME",
 "SOUND VOLUME",
 "AMBIANCE VOLUME",
-"BACK");
+"BACK"];
 
-currentOption = array(
+currentOption = [
 global.musicVolume,
 global.soundVolume,
-global.ambianceVolume);
+global.ambianceVolume];
 
 optionTip[0] = "Music Volume";
 optionTip[1] = "Sound Effects Volume" + "\n" + "Jumping, shooting, etc.";

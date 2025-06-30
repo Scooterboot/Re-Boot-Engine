@@ -9,7 +9,7 @@ function scr_GetLayersFromString()
 		//_list = ds_list_create();
 		num = 0;
 	
-	var result = array(0);
+	var result = [];
 	
 	for(var i = 0; i < array_length(_lay); i++)
 	{

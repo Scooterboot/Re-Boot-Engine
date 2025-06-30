@@ -782,11 +782,11 @@ function DrawConfirmPanel(_x, _y)
 #endregion
 
 buttonTipY = 0;
-buttonTip = array(
+buttonTip = [
 "Move",
 "Select",
 "Back",
-"Cancel");
+"Cancel"];
 
 buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1]+"   ${menuCancelButton} - "+buttonTip[2];
 buttonTipScrib = scribble(buttonTipString);

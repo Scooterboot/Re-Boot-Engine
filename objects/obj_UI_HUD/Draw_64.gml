@@ -23,7 +23,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				mapDifY = msSizeH;
 			
 			//gpu_set_blendmode_ext_sepalpha(bm_src_alpha,bm_inv_src_alpha,bm_src_alpha,bm_one);
-			ui_blendmode();
+			bm_set_one();
 			
 			surface_set_target(obj_Display.surfUI);
 			draw_set_color(c_black);
@@ -108,7 +108,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		{
 			surface_set_target(obj_Display.surfUI);
 			//gpu_set_blendmode_ext_sepalpha(bm_src_alpha,bm_inv_src_alpha,bm_src_alpha,bm_one);
-			ui_blendmode();
+			bm_set_one();
 			
 			#region HUD Energy
 			

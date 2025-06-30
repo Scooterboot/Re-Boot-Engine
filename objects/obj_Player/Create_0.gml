@@ -190,6 +190,9 @@ shineSparkSpeedMax = 15;//13;
 shineFXCounter = 0;
 shineRampFix = false;
 
+shineDiagSpeedFlag = false;
+shineDiagAngleTweak = 0;
+
 shineDownRot = 0;
 shineRestart = false;
 
@@ -305,7 +308,7 @@ isPushing = false;
 pushBlock = noone;
 //pushMove = array(0,0,1,1,1,0,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,1,1,0,1,0,0,0,0,1,0,1,0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1,0,1,0,0,0,0,0,0,0,0,0);
 //pushMove = array(2, 2, 3, 4, 2, 1, 0, 3, 4, 1, 1, 3, 4, 3, 4, 3, 2, 0);
-pushMove = array(2, 2, 3, 4, 2, 1, 0, 0, 1, 1, 3, 4, 3, 4, 3, 2);
+pushMove = [2, 2, 3, 4, 2, 1, 0, 0, 1, 1, 3, 4, 3, 4, 3, 2];
 
 activeStation = noone;
 
@@ -426,7 +429,7 @@ enum MaxSpeed
 // Out of water (or in water with grav suit)
 maxSpeed[0,0] = 2.75;	// Running
 maxSpeed[1,0] = 4.75;	// Sprinting (no speed boost)
-maxSpeed[2,0] = 10.0;	// Speed Boosting	- (SM: 9.75)
+maxSpeed[2,0] = 9.75;	// Speed Boosting
 maxSpeed[3,0] = 1.25;	// Jump
 maxSpeed[4,0] = 1.875;	// Somersault	 - (SM: 1.375)
 maxSpeed[5,0] = 3.25;	// Morph Ball
@@ -641,14 +644,14 @@ lastStateFrame = prevStateFrame;
 dirFrame = 0;
 
 //Run Torso Y Offset
-rOffset =  array(1,0,0,1,2,2,3,2,1,1,0,0,0,1,2,2,3,2,1,1,0,0);
-rOffset2 = array(0,0,0,0,1,1,2,2,1,1,0,0,0,0,1,1,2,2,1,1,0,0);
+rOffset =  [1,0,0,1,2,2,3,2,1,1,0,0,0,1,2,2,3,2,1,1,0,0];
+rOffset2 = [0,0,0,0,1,1,2,2,1,1,0,0,0,0,1,1,2,2,1,1,0,0];
 
 //Moon Walk Torso Y Offset
-mOffset = array(0,0,0,0,1,1,1,0,0,0,1,1,1);
+mOffset = [0,0,0,0,1,1,1,0,0,0,1,1,1];
 
 runYOffset = 0;
-runAimSequence = array(0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,1,1);
+runAimSequence = [0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,1,1];
 
 runAnimCounterMax = [3, 2.5, 2, 1.5, 1];
 
@@ -680,15 +683,15 @@ enum Frame
 frame = array_create(Frame._Length, 0);
 frameCounter = array_create(Frame._Length, 0);
 
-idleNum = array(32,8,8,8,16,6,6,6);
-idleSequence = array(0,1,2,3,4,3,2,1);
+idleNum = [32,8,8,8,16,6,6,6];
+idleSequence = [0,1,2,3,4,3,2,1];
 
-idleNum_Low = array(12,4,4,4,10,4,4,4);
-idleSequence_Low = array(0,2,4,4,5,3,3,1);
+idleNum_Low = [12,4,4,4,10,4,4,4];
+idleSequence_Low = [0,2,4,4,5,3,3,1];
 
 wjFrame = 0;
 //wjSequence = array(3,3,3,2,2,1,1,1,0);
-wjSequence = array(3,3,3,2,2,1,1,0,0);
+wjSequence = [3,3,3,2,2,1,1,0,0];
 wjAnimDelay = 0;
 wjGripAnim = false;
 
@@ -714,17 +717,17 @@ walkToStandFrame = 0;
 landFrame = 0;
 smallLand = false;
 
-landSequence = array(0,4,4,4,3,3,2,2,1,0);
-smallLandSequence = array(0,4,4,4,1,1,0);
+landSequence = [0,4,4,4,3,3,2,2,1,0];
+smallLandSequence = [0,4,4,4,1,1,0];
 
-crouchSequence = array(0,1,1,2,3,3);
+crouchSequence = [0,1,1,2,3,3];
 
 landFinal = 0;
 crouchFinal = 0;
 
-crouchYOffset = array(0,3,7,10);
+crouchYOffset = [0,3,7,10];
 
-landYOffset = array(2,5,8,4,1);
+landYOffset = [2,5,8,4,1];
 
 gripFrame = 0;
 gripGunReady = false;
@@ -733,7 +736,7 @@ gripGunCounter = 0;
 
 //gripAimTarget = array(4,6,2,8,0);
 
-climbSequence = array(0,0,1,2,3,4,5,6,7,8,9,9,9,9,10,10,11,11,11);
+climbSequence = [0,0,1,2,3,4,5,6,7,8,9,9,9,9,10,10,11,11,11];
 climbFrame = 0;
 
 grapFrame = 3;
@@ -744,7 +747,7 @@ grapPartCounter = 0;
 
 hurtFrame = 0;
 
-pushFrameSequence = array(0,1,2,3,4,5,5,6,7,8,9,9,10,11,12,13,14,15);
+pushFrameSequence = [0,1,2,3,4,5,5,6,7,8,9,9,10,11,12,13,14,15];
 
 torsoR = sprt_Player_StandCenter;
 torsoL = torsoR;
@@ -881,7 +884,7 @@ saveAnimFrame = 0;
 saveAnimFrameCounter = 0;
 
 cBubbleScale = 0;
-cFlashFrameSequence = array(0,1,2,1);
+cFlashFrameSequence = [0,1,2,1];
 
 //
 memeDance = false;
@@ -1402,19 +1405,26 @@ function OnXCollision(fVX)
 	bombJumpX = 0;
 	
 	var diagSparkSlide = (diagSparkSlideOnWalls && (SparkDir_DiagUp() || SparkDir_DiagDown()) && (cRight - cLeft) != dir);
-	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0 && !diagSparkSlide)
+	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0)
 	{
-		if(boots[Boots.ChainSpark] && !instance_exists(pBlock) && (abs(GetSparkDir()) == 90 || (!entity_place_collide(0,3) && abs(GetSparkDir()) < 90) || (!entity_place_collide(0,-3) && abs(GetSparkDir()) > 90)))
+		if(!diagSparkSlide)
 		{
-			shineRestart = true;
-			audio_stop_sound(snd_ShineSpark_Charge);
-			audio_play_sound(snd_ShineSpark_Charge,0,false);
+			if(boots[Boots.ChainSpark] && !instance_exists(pBlock) && (abs(GetSparkDir()) == 90 || (!entity_place_collide(0,3) && abs(GetSparkDir()) < 90) || (!entity_place_collide(0,-3) && abs(GetSparkDir()) > 90)))
+			{
+				shineRestart = true;
+				audio_stop_sound(snd_ShineSpark_Charge);
+				audio_play_sound(snd_ShineSpark_Charge,0,false);
+			}
+			else if(shineEnd <= 0)
+			{
+				audio_play_sound(snd_Hurt,0,false);
+			}
+			shineEnd = shineEndMax;
 		}
-		else if(shineEnd <= 0)
+		else
 		{
-			audio_play_sound(snd_Hurt,0,false);
+			shineDiagSpeedFlag = true;
 		}
-		shineEnd = shineEndMax;
 	}
 }
 
@@ -1882,7 +1892,7 @@ function Crawler_CanStickOuter(fVX, fVY, edge)
 }
 function Crawler_CanStickOuterLeft()
 {
-	if((Crawler_CanStickOuter(1, 0, Edge.Left) || misc[Misc.Spider]) && !GrappleActive() && state != State.BallSpark)
+	if((Crawler_CanStickOuter(1, 0, Edge.Left) || (misc[Misc.Spider] && jump <= 0)) && !GrappleActive() && state != State.BallSpark)
 	{
 		return true;
 	}
@@ -1890,7 +1900,7 @@ function Crawler_CanStickOuterLeft()
 }
 function Crawler_CanStickOuterRight()
 {
-	if((Crawler_CanStickOuter(-1, 0, Edge.Right) || misc[Misc.Spider]) && !GrappleActive() && state != State.BallSpark)
+	if((Crawler_CanStickOuter(-1, 0, Edge.Right) || (misc[Misc.Spider] && jump <= 0)) && !GrappleActive() && state != State.BallSpark)
 	{
 		return true;
 	}
@@ -1898,7 +1908,7 @@ function Crawler_CanStickOuterRight()
 }
 function Crawler_CanStickOuterTop()
 {
-	if((Crawler_CanStickOuter(0, 1, Edge.Top) || misc[Misc.Spider]) && !GrappleActive() && state != State.BallSpark)
+	if((Crawler_CanStickOuter(0, 1, Edge.Top) || (misc[Misc.Spider] && jump <= 0)) && !GrappleActive() && state != State.BallSpark)
 	{
 		return true;
 	}
@@ -1910,7 +1920,7 @@ function Crawler_CanStickOuterBottom()
 	{
 		return true;
 	}
-	if((Crawler_CanStickOuter(0, -1, Edge.Bottom) || misc[Misc.Spider]) && !GrappleActive() && state != State.BallSpark)
+	if((Crawler_CanStickOuter(0, -1, Edge.Bottom) || (misc[Misc.Spider] && jump <= 0)) && !GrappleActive() && state != State.BallSpark)
 	{
 		return true;
 	}
@@ -4118,10 +4128,23 @@ function PaletteSurface()
 			ballGlowIndex = 0;
 			ballGlowSpiderIndex = 0;
 		}
+		if(!global.gamePaused)
+		{
+			if(spiderBall)
+			{
+				ballGlowSpiderAlph = min(ballGlowSpiderAlph + 0.1, 1);
+			}
+			else
+			{
+				ballGlowSpiderAlph = max(ballGlowSpiderAlph - 0.1, 0);
+			}
+		}
+		var _alph1 = 1-ballGlowSpiderAlph,
+			_alph2 = ballGlowSpiderAlph;
 		
 		surface_set_target(ballGlowSurf);
-		draw_clear_alpha(c_black,1);
-		gpu_set_colorwriteenable(1,1,1,0);
+		draw_clear_alpha(c_black,0);
+		bm_set_one();
 		
 		var palSet = pal_Player_BallGlow;
 		if(suit[0])
@@ -4133,34 +4156,24 @@ function PaletteSurface()
 			palSet = pal_Player_BallGlow_Gravity;
 		}
 		
-		DrawPalSprite(palSet, scr_wrap(scr_floor(ballGlowIndex)-1, 0, 10), 1-frac(ballGlowIndex));
-		DrawPalSprite(palSet, scr_floor(ballGlowIndex), 1);
-		DrawPalSprite(palSet, scr_ceil(ballGlowIndex), frac(ballGlowIndex));
+		DrawPalSprite(palSet, scr_wrap(scr_floor(ballGlowIndex)-1, 0, 10), _alph1 * (1-frac(ballGlowIndex)));
+		DrawPalSprite(palSet, scr_floor(ballGlowIndex), _alph1);
+		DrawPalSprite(palSet, scr_ceil(ballGlowIndex), _alph1 * frac(ballGlowIndex));
 		
 		if(spiderBall)
 		{
-			if(!global.gamePaused)
-			{
-				ballGlowSpiderAlph = min(ballGlowSpiderAlph + 0.1, 1);
-			}
-			draw_clear_alpha(c_black,ballGlowSpiderAlph);
-			
 			palSet = pal_Player_MagBallGlow;
 			if(misc[Misc.Spider])
 			{
 				palSet = pal_Player_SpiderBallGlow;
 			}
 			
-			DrawPalSprite(palSet, scr_wrap(scr_floor(ballGlowSpiderIndex)-1, 0, 6), 1-frac(ballGlowSpiderIndex));
-			DrawPalSprite(palSet, scr_floor(ballGlowSpiderIndex), ballGlowSpiderAlph);
-			DrawPalSprite(palSet, scr_ceil(ballGlowSpiderIndex), ballGlowSpiderAlph * frac(ballGlowSpiderIndex));
-		}
-		else if(!global.gamePaused)
-		{
-			ballGlowSpiderAlph = max(ballGlowSpiderAlph - 0.1, 0);
+			DrawPalSprite(palSet, scr_wrap(scr_floor(ballGlowSpiderIndex)-1, 0, 6), _alph2 * (1-frac(ballGlowSpiderIndex)));
+			DrawPalSprite(palSet, scr_floor(ballGlowSpiderIndex), _alph2);
+			DrawPalSprite(palSet, scr_ceil(ballGlowSpiderIndex), _alph2 * frac(ballGlowSpiderIndex));
 		}
 		
-		gpu_set_colorwriteenable(1,1,1,1);
+		bm_reset();
 		surface_reset_target();
 	}
 	else
@@ -4370,6 +4383,13 @@ function UpdatePlayerSurface(_palSurface)
 		}
 		
 		shader_reset();
+		
+		if((misc[Misc.MagBall] || misc[Misc.Spider]) && stateFrame == State.Morph)
+		{
+			chameleon_set_surface(ballGlowSurf);
+			draw_sprite_ext(sprt_Player_MorphBallAlt_Glow,bodyFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),1,1,0,c_white,1);
+			shader_reset();
+		}
 	
 		surface_reset_target();
 	}
@@ -4489,15 +4509,6 @@ function PostDrawPlayer(posX, posY, rot, alph)
 			draw_sprite_ext(sprt_Player_IntroFX,saveAnimFrame,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,0,make_color_rgb(0,255,114),alph);
 			gpu_set_blendmode(bm_normal);
 		}
-	}
-
-	if((misc[Misc.MagBall] || misc[Misc.Spider]) && stateFrame == State.Morph)
-	{
-		gpu_set_blendmode(bm_add);
-		chameleon_set_surface(ballGlowSurf);
-		draw_sprite_ext(sprt_Player_MorphBallAlt_Glow,bodyFrame,scr_round(xx+sprtOffsetX),scr_round(yy+sprtOffsetY),1,1,rot,c_white,alph);
-		shader_reset();
-		gpu_set_blendmode(bm_normal);
 	}
 	
 	if(stateFrame == State.Morph)

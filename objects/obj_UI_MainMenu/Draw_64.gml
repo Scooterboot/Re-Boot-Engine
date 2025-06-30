@@ -4,7 +4,7 @@ var ww = global.resWidth,
 	hh = global.resHeight;
 
 surface_set_target(obj_Display.surfUI);
-ui_blendmode();
+bm_set_one();
 
 if(room == rm_MainMenu)
 {
@@ -138,7 +138,7 @@ if(room == rm_MainMenu)
 		gpu_set_blendmode(bm_add);
 		draw_rectangle_color(-32, hh-_height + _yoff, (ww/2)-1, hh + _yoff, c_black,col2,col2,c_black, false);
 		draw_rectangle_color((ww/2), hh-_height + _yoff, ww+31, hh + _yoff, col2,c_black,c_black,col2, false);
-		ui_blendmode();
+		bm_set_one();
 	
 		var tipx = ww/2,
 			tipy = hh-4;
