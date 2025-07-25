@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"LuiDropDown",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"LuiDropDown",
+  "parent":{
+    "name":"Components",
+    "path":"folders/Scripts/UI/Limekys/LimeUI/Components.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

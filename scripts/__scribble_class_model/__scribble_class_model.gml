@@ -1,14 +1,13 @@
+// Feather disable all
+// Feather ignore all
 /// @param element
 /// @param modelCacheName
 
-// feather disable all
-// feather ignore all
-
 function __scribble_class_model(_element, _model_cache_name) constructor
 {
-    static __scribble_state    = __scribble_get_state();
-    static __mcache_dict       = __scribble_get_cache_state().__mcache_dict;
-    static __mcache_name_array = __scribble_get_cache_state().__mcache_name_array;
+    static __scribble_state    = __scribble_initialize().__state;
+    static __mcache_dict       = __scribble_initialize().__cache_state.__mcache_dict;
+    static __mcache_name_array = __scribble_initialize().__cache_state.__mcache_name_array;
     
     //Record the start time so we can get a duration later
     if (SCRIBBLE_VERBOSE) var _timer_total = get_timer();
@@ -34,9 +33,6 @@ function __scribble_class_model(_element, _model_cache_name) constructor
     __last_drawn = __scribble_state.__frames;
     __frozen     = undefined;
     __flushed    = false;
-    
-    __uses_standard_font = false;
-    __uses_msdf_font     = false;
     
     __pages      = 0;
     __width      = 0;
@@ -65,13 +61,13 @@ function __scribble_class_model(_element, _model_cache_name) constructor
     
     
     
-    static __submit = function(_page, _msdf_feather_thickness, _double_draw)
+    static __submit = function(_page, _double_draw)
     {
         if (__flushed) return undefined;
         
         __last_drawn = __scribble_state.__frames;
         
-        __pages_array[_page].__submit(_msdf_feather_thickness, (__has_arabic || __has_thai || SCRIBBLE_ALWAYS_DOUBLE_DRAW) && _double_draw);
+        __pages_array[_page].__submit((SCRIBBLE_ALWAYS_DOUBLE_DRAW || __has_arabic || __has_thai) && _double_draw);
     }
     
     static __freeze = function()
@@ -91,6 +87,8 @@ function __scribble_class_model(_element, _model_cache_name) constructor
     
     static __flush = function()
     {
+        //Don't forget to update scribble_flush_everything() if you change anything here!
+        
         if (__flushed) return undefined;
         if (__SCRIBBLE_DEBUG) __scribble_trace("Flushing model \"" + string(__cache_name) + "\"");
         
@@ -301,7 +299,7 @@ function __scribble_class_model(_element, _model_cache_name) constructor
         }
     }
     
-    static _generator_state = __scribble_get_generator_state();
+    static _generator_state = __scribble_initialize().__generator_state;
     with(_generator_state)
     {
         __Reset();
@@ -318,8 +316,9 @@ function __scribble_class_model(_element, _model_cache_name) constructor
     __scribble_gen_6_build_lines();
     __scribble_gen_7_build_pages();
     __scribble_gen_8_position_glyphs();
-    __scribble_gen_9_write_vbuffs();
-    __scribble_gen_10_set_padding_flags();
+    __scribble_gen_9_build_vbuff_grids();
+    __scribble_gen_10_write_vbuffs();
+    __scribble_gen_11_set_padding_flags();
     
     if (SCRIBBLE_VERBOSE)
     {

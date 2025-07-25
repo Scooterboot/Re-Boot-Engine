@@ -1,9 +1,8 @@
-// feather disable all
-// feather ignore all
-
+// Feather disable all
+// Feather ignore all
 function __scribble_gen_1_model_limits_and_bezier_curves()
 {
-    static _generator_state = __scribble_get_generator_state();
+    static _generator_state = __scribble_initialize().__generator_state;
     
     var _element = _generator_state.__element;
     

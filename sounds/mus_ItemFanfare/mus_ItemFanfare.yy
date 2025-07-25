@@ -9,7 +9,7 @@
   "bitRate":192,
   "compression":0,
   "conversionMode":0,
-  "duration":5.648231,
+  "duration":5.6482315,
   "name":"mus_ItemFanfare",
   "parent":{
     "name":"Misc",

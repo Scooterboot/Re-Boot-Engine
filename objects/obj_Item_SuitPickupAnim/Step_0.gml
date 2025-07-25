@@ -28,8 +28,8 @@ if(instance_exists(player))
 	player.y = scr_round(player.position.Y);
 	if(animCounter == animCounterMax)
 	{
-		player.hasSuit[animType] = true;
-		player.suit[animType] = true;
+		player.hasItem[animType] = true;
+		player.item[animType] = true;
 	}
 }
 if(animCounter == 1)

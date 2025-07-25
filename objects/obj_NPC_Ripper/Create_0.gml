@@ -4,7 +4,7 @@ event_inherited();
 dir = sign(image_xscale);
 mSpeed = 1;
 
-function OnXCollision(fVX)
+function OnXCollision(fVX, isOOB = false)
 {
 	dir = -sign(fVX);
 	velX = 0;

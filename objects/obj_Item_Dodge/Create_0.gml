@@ -11,6 +11,6 @@ isMajorItem = true;
 
 function CollectItem(player)
 {
-	player.hasBoots[Boots.Dodge] = true;
-	player.boots[Boots.Dodge] = true;
+	player.hasItem[Item.AccelDash] = true;
+	player.item[Item.AccelDash] = true;
 }

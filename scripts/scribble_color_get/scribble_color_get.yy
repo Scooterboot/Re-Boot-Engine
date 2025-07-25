@@ -6,7 +6,7 @@
   "name":"scribble_color_get",
   "parent":{
     "name":"Colours",
-    "path":"folders/Extensions/Scribble/Colours.yy",
+    "path":"folders/Scripts/UI/Scribble/Colours.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

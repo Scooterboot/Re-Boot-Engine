@@ -71,7 +71,10 @@ function UpdateSurface()
 		draw_vertex_color((_width/2),(_height/2),make_color_rgb(127,127,255),1);
 		for(var i = 0; i <= 360; i += 5)
 		{
-			var col = make_color_rgb(127+lengthdir_x(127,i)*colorMult,127-lengthdir_y(127,i)*colorMult,127);
+			var col = make_color_rgb(
+					scr_round(127+lengthdir_x(127,i)*colorMult), 
+					scr_round(127-lengthdir_y(127,i)*colorMult), 
+					255);
 				
 			var x1 = (_width/2)+lengthdir_x((_width/2),i),
 				y1 = (_height/2)+lengthdir_y((_height/2),i);

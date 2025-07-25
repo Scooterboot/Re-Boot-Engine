@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"LuiSprite",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"LuiSprite",
+  "parent":{
+    "name":"Components",
+    "path":"folders/Scripts/UI/Limekys/LimeUI/Components.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

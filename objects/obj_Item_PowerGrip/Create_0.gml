@@ -11,6 +11,6 @@ isMajorItem = true;
 
 function CollectItem(player)
 {
-	player.hasMisc[Misc.PowerGrip] = true;
-	player.misc[Misc.PowerGrip] = true;
+	player.hasItem[Item.PowerGrip] = true;
+	player.item[Item.PowerGrip] = true;
 }

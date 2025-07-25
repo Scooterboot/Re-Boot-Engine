@@ -123,7 +123,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				
 				var suitMax = 0,
 					beamMax = 0,
-					itemMax = 0;
+					equipMax = 0;
 				for(var i = 0; i < ds_list_size(invListL); i++)
 				{
 					if(string_pos("Suit",ds_list_find_value(invListL,i)) != 0)
@@ -134,14 +134,14 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					{
 						beamMax++;
 					}
-					if(string_pos("Item",ds_list_find_value(invListL,i)) != 0)
+					if(string_pos("Equip",ds_list_find_value(invListL,i)) != 0)
 					{
-						itemMax++;
+						equipMax++;
 					}
 				}
 				DrawItemHeader(ww/2 - 152,46,itemHeaderText[0],suitMax,1);
 				DrawItemHeader(ww/2 - 152,84,itemHeaderText[1],beamMax,1);
-				DrawItemHeader(ww/2 - 152,152,itemHeaderText[2],itemMax,1);
+				DrawItemHeader(ww/2 - 152,152,itemHeaderText[2],equipMax,1);
 				
 				for(var i = 0; i < ds_list_size(invListL); i++)
 				{
@@ -152,40 +152,40 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 						iBoxY = 54+10*i;
 					var text = "";
 					var enabled = false;
-					var isItem = false;
+					var isEquip = false;
 					if(i < suitMax)
 					{
 						text = suitName[index];
-						enabled = P.suit[index];
+						enabled = P.item[suitIndex[index]];
 					}
 					else if(i-suitMax < beamMax)
 					{
 						iBoxY = 92+10*(i-suitMax);
 						text = beamName[index];
-						enabled = P.beam[index];
+						enabled = P.item[beamIndex[index]];
 					}
-					else if(i-suitMax-beamMax < itemMax)
+					else if(i-suitMax-beamMax < equipMax)
 					{
 						iBoxY = 160+10*(i-suitMax-beamMax);
-						text = itemName[index];
-						enabled = P.item[index];
-						isItem = true;
-						if(text == itemName[0])
+						text = equipName[index];
+						enabled = P.item[equipIndex[index]];
+						isEquip = true;
+						if(text == equipName[0])
 						{
 							text = string(P.missileStat)+"/"+string(P.missileMax);
 						}
-						if(text == itemName[1])
+						if(text == equipName[1])
 						{
 							text = string(P.superMissileStat)+"/"+string(P.superMissileMax);
 						}
-						if(text == itemName[2])
+						if(text == equipName[2])
 						{
 							text = string(P.powerBombStat)+"/"+string(P.powerBombMax);
 						}
 					}
 					
 					draw_sprite_ext(sprt_Sub_ItemBox,!enabled,iBoxX,iBoxY,1,1,0,c_white,1);
-					if(isItem)
+					if(isEquip)
 					{
 						draw_sprite_ext(sprt_Sub_ItemIcons,index,iBoxX+2,iBoxY+1,1,1,0,c_white,1);
 					}
@@ -198,7 +198,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 						gpu_set_blendmode(bm_add);
 						draw_sprite_ext(sprt_Sub_ItemNav_Box,!enabled,iBoxX,iBoxY,1,1,0,c_white,selectorAlpha*1.25);
 						gpu_set_blendmode(bm_normal);
-						if(!isItem)
+						if(!isEquip)
 						{
 							draw_sprite_ext(sprt_Sub_ItemNav_Dot,0,iBoxX+2,iBoxY+2,1,1,0,c_white,1);
 							draw_sprite_ext(sprt_Sub_ItemNav_Dot,1,iBoxX+2,iBoxY+2,1,1,0,c_white,(1-selectorAlpha)*1.25);
@@ -210,14 +210,15 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					draw_set_font(fnt_GUI_Small2);
 					var subTxt = string_copy(text,1,scr_floor(textAnim));
 					var xoffset = 8;
-					if(isItem)
+					if(isEquip)
 					{
 						xoffset = 15;
-						if(index == Item.PBomb)
+						if(index == array_find_index_by_value(equipIndex,Item.PowerBomb))
 						{
 							xoffset = 11;
 						}
-						if(index == Item.Grapple || index == Item.XRay)
+						if(index == array_find_index_by_value(equipIndex,Item.GrappleBeam) || 
+							index == array_find_index_by_value(equipIndex,Item.XRayVisor))
 						{
 							xoffset = 12;
 						}
@@ -262,13 +263,13 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					if(i < miscMax)
 					{
 						text = miscName[index];
-						enabled = P.misc[index];
+						enabled = P.item[miscIndex[index]];
 					}
 					else if(i-miscMax < bootsMax)
 					{
 						iBoxY = 160+10*(i-miscMax);
 						text = bootsName[index];
-						enabled = P.boots[index];
+						enabled = P.item[bootsIndex[index]];
 					}
 					
 					draw_sprite_ext(sprt_Sub_ItemBox,!enabled,iBoxX,iBoxY,-1,1,0,c_white,1);

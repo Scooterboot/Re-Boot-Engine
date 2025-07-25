@@ -2,48 +2,32 @@
 event_inherited();
 
 #region BBox vars
-function bb_left()
+function bb_left(xx = undefined)
 {
 	/// @description bb_left
 	/// @param baseX=x
-	var xx = x;
-	if(argument_count > 0)
-	{
-		xx = argument[0];
-	}
+	xx = is_undefined(xx) ? x : xx;
 	return bbox_left-x + xx;
 }
-function bb_right()
+function bb_right(xx = undefined)
 {
 	/// @description bb_right
 	/// @param baseX=x
-	var xx = x;
-	if(argument_count > 0)
-	{
-		xx = argument[0];
-	}
+	xx = is_undefined(xx) ? x : xx;
 	return bbox_right-x + xx - 1;
 }
-function bb_top()
+function bb_top(yy = undefined)
 {
 	/// @description bb_top
 	/// @param baseY=y
-	var yy = y;
-	if(argument_count > 0)
-	{
-		yy = argument[0];
-	}
+	yy = is_undefined(yy) ? y : yy;
 	return bbox_top-y + yy;
 }
-function bb_bottom()
+function bb_bottom(yy = undefined)
 {
 	/// @description bb_bottom
 	/// @param baseY=y
-	var yy = y;
-	if(argument_count > 0)
-	{
-		yy = argument[0];
-	}
+	yy = is_undefined(yy) ? y : yy;
 	return bbox_bottom-y + yy - 1;
 }
 #endregion

@@ -60,12 +60,11 @@ function explodePush(_proj,_velX)
 	}
 }
 
-mBlockOffsetX = -16;
-mBlockOffsetY = -16;
-mBlock = instance_create_layer(x+mBlockOffsetX,y+mBlockOffsetX,"Collision",obj_MovingTile);
-mBlock.image_xscale = 2;
-mBlock.image_yscale = 2;
-mBlock.ignoredEntity = id;
+mBlockOffset[0] = new Vector2(-16,-16);
+mBlocks[0] = instance_create_layer(x+mBlockOffset[0].X,y+mBlockOffset[0].Y,"Collision",obj_MovingTile);
+mBlocks[0].image_xscale = 2;
+mBlocks[0].image_yscale = 2;
+mBlocks[0].ignoredEntity = id;
 
 
 function ModifyFinalVelY(fVY)
@@ -103,7 +102,7 @@ function ModifySlopeYSteepness_Down()
 	return 2;
 }
 
-function OnXCollision(fVX)
+function OnXCollision(fVX, isOOB = false)
 {
 	velX = 0;
 	fVelX = 0;
@@ -136,7 +135,7 @@ function OnBottomCollision(fVY)
 	}
 }
 
-function OnYCollision(fVY)
+function OnYCollision(fVY, isOOB = false)
 {
 	velY = 0;
 	fVelY = 0;

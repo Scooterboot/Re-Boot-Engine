@@ -13,6 +13,6 @@ isMajorItem = true;
 
 function CollectItem(player)
 {
-	player.hasBoots[Boots.ChainSpark] = true;
-	player.boots[Boots.ChainSpark] = true;
+	player.hasItem[Item.ChainSpark] = true;
+	player.item[Item.ChainSpark] = true;
 }

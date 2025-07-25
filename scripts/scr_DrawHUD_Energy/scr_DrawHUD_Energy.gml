@@ -101,10 +101,10 @@ function scr_DrawHUD_Energy() {
 	{
 		yDiff = max(yDiff,7);
 	}
-	if(boots[Boots.Dodge])
+	if(item[Item.AccelDash])
 	{
 		var _meterY = yy+yDiff+8;
-		if(boots[Boots.SpeedBoost] || (stateFrame == State.Morph && misc[Misc.Boost]))
+		if(item[Item.SpeedBooster] || (stateFrame == State.Morph && item[Item.BoostBall]))
 		{
 			_meterY += 5;
 		}
@@ -127,7 +127,7 @@ function scr_DrawHUD_Energy() {
 		}
 	}
 	
-	if(boots[Boots.SpeedBoost] || (stateFrame == State.Morph && misc[Misc.Boost]))
+	if(item[Item.SpeedBooster] || (stateFrame == State.Morph && item[Item.BoostBall]))
 	{
 		var _meterY = yy+yDiff+8;
 		var width = sprite_get_width(sprt_UI_SpeedMeter);
@@ -148,7 +148,7 @@ function scr_DrawHUD_Energy() {
 			}
 		}
 		
-		if(stateFrame == State.Morph && misc[Misc.Boost] && boostBallCharge > 0)
+		if(stateFrame == State.Morph && item[Item.BoostBall] && boostBallCharge > 0)
 		{
 			width = sprite_get_width(sprt_UI_SpeedMeter) * (boostBallCharge / boostBallChargeMax);
 			for(var j = 0; j < height; j++)
@@ -168,7 +168,7 @@ function scr_DrawHUD_Energy() {
 			_prevWidth += _widths[i];
 		}
 		
-		if(speedCounter < 4 && (state == State.Stand || speedKeep == 1 || (speedKeep == 2 && liquidState <= 0)))
+		if(speedCounter < 4 && (state == State.Stand || _SPEED_KEEP == 1 || (_SPEED_KEEP == 2 && liquidState <= 0)))
 		{
 			width = _prevWidth + _widths[speedCounter] * ((speedBuffer+1) / speedBufferMax);
 			for(var j = 0; j < height; j++)
@@ -181,7 +181,7 @@ function scr_DrawHUD_Energy() {
 			}
 		}
 		
-		if(!walkState && (state == State.Stand || !restrictSBToRun))
+		if(!walkState && (state == State.Stand || !_RUN_RESTRICT_SB))
 		{
 			width = sprite_get_width(sprt_UI_SpeedMeter);
 			if(SpiderActive())

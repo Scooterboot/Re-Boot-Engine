@@ -54,7 +54,7 @@ else
 	}
 	
 	var col = c_orange;
-	if(animType == Suit.Gravity)
+	if(animType == Item.GravitySuit)
 	{
 		col = c_fuchsia;
 	}

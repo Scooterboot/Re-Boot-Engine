@@ -1,23 +1,17 @@
 
 function scr_round(val)
 {
-	//return (val + (abs(frac(val)) >= 0.5)*sign(val) - frac(val));
-	var val2 = floor(abs(val)+0.5);
-	return val2 * sign(val);
+	return sign(val) * floor(abs(val)+0.5);
 }
 
 function scr_ceil(val)
 {
-	//return (val + (abs(frac(val)) > 0)*sign(val) - frac(val));
-	var val2 = ceil(abs(val));
-	return val2 * sign(val);
+	return sign(val) * ceil(abs(val));
 }
 
 function scr_floor(val)
 {
-	//return (val - frac(val));
-	var val2 = floor(abs(val));
-	return val2 * sign(val);
+	return sign(val) * floor(abs(val));
 }
 
 function scr_wrap(val,vmin,vmax)

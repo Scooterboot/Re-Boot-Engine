@@ -107,8 +107,6 @@ if(grappleState != GrappleState.None)
             audio_play_sound(snd_GrappleBeam_Loop,0,true);
         }
         
-        //part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.PartBeam[3],1);
-        //part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.PartBeam[2],1);
         part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.gTrail,1);
 		
 		layer = layer_get_id("Projectiles_fg");
@@ -246,22 +244,21 @@ else
 		        grappleState = GrappleState.Swing;
 			}
 	    }
+		
+		if(damage > 0)
+		{
+			for(var j = 0; j < point_distance(player.position.X,player.position.Y, x,y); j += 8)
+			{
+				var _dir = point_direction(player.position.X,player.position.Y, x,y),
+					xw = x-lengthdir_x(j,_dir),
+					yw = y-lengthdir_y(j,_dir);
+				scr_DamageNPC(xw,yw,damage,damageType,damageSubType,0,-1,10);
+			}
+		}
 	}
 	else
 	{
 		instance_destroy();
 		exit;
-	}
-}
-
-if(damage > 0)
-{
-	//scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,4);
-	
-	for(var j = 0; j < grappleDist; j += 8)
-	{
-		var xw = x-lengthdir_x(j,shootDir),
-			yw = y-lengthdir_y(j,shootDir);
-		scr_DamageNPC(xw,yw,damage,damageType,damageSubType,0,-1,10);
 	}
 }

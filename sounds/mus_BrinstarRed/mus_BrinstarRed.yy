@@ -9,7 +9,7 @@
   "bitRate":192,
   "compression":1,
   "conversionMode":0,
-  "duration":247.01389,
+  "duration":247.01387,
   "name":"mus_BrinstarRed",
   "parent":{
     "name":"Areas",

@@ -1,4 +1,4 @@
-/// @description 
+/// @description TODO: Rewrite
 
 if(room != rm_MainMenu && instance_exists(obj_Player))
 {
@@ -212,33 +212,41 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			{
 				yDiff = max(yDiff,7);
 			}
-			if(boots[Boots.Dodge])
+			if(item[Item.AccelDash])
 			{
 				var _meterY = yy+yDiff+8;
-				if(boots[Boots.SpeedBoost] || (stateFrame == State.Morph && misc[Misc.Boost]))
+				if(item[Item.SpeedBooster] || (stateFrame == State.Morph && item[Item.BoostBall]))
 				{
 					_meterY += 5;
 				}
-				for(var i = 0; i < 2; i += 1)
+				for(var i = 0; i < dodgeChargeCells; i += 1)
 				{
-					draw_sprite_ext(sprt_UI_DodgeMeter,0,xx+14*i,_meterY,1,1,0,c_white,1);
-		
-					var recharge = clamp((dodgeRecharge / (dodgeRechargeMax/2)) - i,0,1);
-					var width = sprite_get_width(sprt_UI_DodgeMeter)*recharge;
-					var height = sprite_get_height(sprt_UI_DodgeMeter);
-					var imgInd = 1 + (canDodge && recharge >= 1);
+					var _meterX = xx+14*i;
+					var sprInd = sprt_UI_DodgeMeter;
+					draw_sprite_ext(sprInd,0,_meterX,_meterY,1,1,0,c_white,1);
+					
+					var height = sprite_get_height(sprInd);
+					var recharge = clamp((dodgeRecharge / dodgeChargeCellSize) - i,0,1);
+					var width = sprite_get_width(sprInd)*recharge;
+					var charge = clamp((dodgeCharge / dodgeChargeCellSize) - i,0,1);
+					var width2 = sprite_get_width(sprInd)*charge;
 					for(var j = 0; j < height; j++)
 					{
 						var rw = min(width-j+1,width);
 						if(rw > 0)
 						{
-							draw_sprite_part_ext(sprt_UI_DodgeMeter,imgInd,0,j,rw,1,xx+14*i,_meterY+j,1,1,c_white,1);
+							draw_sprite_part_ext(sprInd,1,0,j,rw,1,_meterX,_meterY+j,1,1,c_white,1);
+						}
+						rw = min(width2-j+1,width2);
+						if(rw > 0)
+						{
+							draw_sprite_part_ext(sprInd,2,0,j,rw,1,_meterX,_meterY+j,1,1,c_white,1);
 						}
 					}
 				}
 			}
 			
-			if(boots[Boots.SpeedBoost] || (stateFrame == State.Morph && misc[Misc.Boost]))
+			if(item[Item.SpeedBooster] || (stateFrame == State.Morph && item[Item.BoostBall]))
 			{
 				var _meterY = yy+yDiff+8;
 				var width = sprite_get_width(sprt_UI_SpeedMeter);
@@ -259,7 +267,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					}
 				}
 				
-				if(stateFrame == State.Morph && misc[Misc.Boost] && boostBallCharge > 0)
+				if(stateFrame == State.Morph && item[Item.BoostBall] && boostBallCharge > 0)
 				{
 					width = sprite_get_width(sprt_UI_SpeedMeter);
 					if(SpiderActive())
@@ -299,7 +307,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 						_prevWidth += _widths[i];
 					}
 				
-					if(speedCounter < 4 && (state == State.Stand || speedKeep == 1 || (speedKeep == 2 && liquidState <= 0)))
+					if(speedCounter < 4 && (state == State.Stand || _SPEED_KEEP == 1 || (_SPEED_KEEP == 2 && liquidState <= 0)))
 					{
 						width = _prevWidth + _widths[speedCounter] * ((speedBuffer+1) / speedBufferMax);
 						for(var j = 0; j < height; j++)
@@ -357,6 +365,19 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			
 			#endregion
 			
+			var beam = [],
+				hasBeam = [],
+				equip = [];
+			for(var i = 0; i < array_length(beamIndex); i++)
+			{
+				beam[i] = item[beamIndex[i]];
+				hasBeam[i] = hasItem[beamIndex[i]];
+			}
+			for(var i = 0; i < array_length(equipIndex); i++)
+			{
+				equip[i] = item[equipIndex[i]];
+			}
+			
 			if(global.HUD == 2)
 			{
 				#region HUD Alt
@@ -378,7 +399,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					}
 					var vX2 = vX+eOffX;
 
-				    var itemNum = (item[Item.Missile]+item[Item.SMissile]+item[Item.PBomb]+item[Item.Grapple]+item[Item.XRay]);
+				    var itemNum = (item[Item.Missile]+item[Item.SuperMissile]+item[Item.PowerBomb]+item[Item.GrappleBeam]+item[Item.XRayVisor]);
     
 				    if(selecting)
 				    {
@@ -393,10 +414,14 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				    draw_set_color(col);
 				    draw_set_alpha(alpha);
     
-				    var xx = 52,
-				        yy = 0,
-				        ww = 26,
-				        hh = 18;
+					//var xx = 52,
+					//	yy = 0,
+					//	ww = 26,
+					//	hh = 18;
+					xx = 52;
+					yy = 0;
+					ww = 26;
+					hh = 18;
 				    draw_roundrect_ext(vX2+xx,vY+yy,vX2+ww+xx,vY+hh+yy,8,8,false);
     
 				    if(itemNum > 0)
@@ -408,7 +433,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				        draw_roundrect_ext(vX2+xx,vY+yy,vX2+ww+xx,vY+hh+yy,8,8,false);
 				    }
     
-				    if(item[0])
+				    if(item[Item.Missile])
 				    {
 				        xx = 108;
 				        yy = 2;
@@ -416,7 +441,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				        hh = 10;
 				        draw_roundrect_ext(vX2+xx,vY+yy,vX2+ww+xx,vY+hh+yy,4,4,false);
 				    }
-				    if(item[1])
+				    if(item[Item.SuperMissile])
 				    {
 				        xx = 148;
 				        yy = 2;
@@ -424,7 +449,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				        hh = 10;
 				        draw_roundrect_ext(vX2+xx,vY+yy,vX2+ww+xx,vY+hh+yy,4,4,false);
 				    }
-				    if(item[2])
+				    if(item[Item.PowerBomb])
 				    {
 				        xx = 182;
 				        yy = 2;
@@ -442,14 +467,14 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				    {
 				        draw_sprite_ext(sprt_UI_HWepSlot,(hudSlot == 1),floor(vX2+94),floor(vY+10),1,1,0,c_white,1);
 				        var iconIndex = hudSlotItem[1];
-				        if(stateFrame == State.Morph && item[2])
+				        if(stateFrame == State.Morph && item[Item.PowerBomb])
 				        {
 				            iconIndex = 2;
 				        }
 				        draw_sprite_ext(sprt_UI_HItemIcon,iconIndex,floor(vX2+94),floor(vY+10),1,1,0,c_white,1);
 				    }
-    
-				    if(selecting)
+					
+					if(selecting)
 				    {
 				        draw_set_color(c_white);
 				        draw_set_font(fnt_Menu2);
@@ -535,7 +560,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				                yIPos = 38;
 				            for(var i = 0; i < 5; i += 1)
 				            {
-				                if(item[i])
+				                if(equip[i])
 				                {
 				                    if(i == hudSlotItem[1])
 				                    {
@@ -596,7 +621,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				        hudIOffsetX = 0;
 				    }
     
-				    if(item[0])
+				    if(item[Item.Missile])
 				    {
 				        draw_sprite_ext(sprt_UI_HAmmoIcon,(hudSlot == 1 && hudSlotItem[1] == 0 && stateFrame != State.Morph),floor(vX2+110),floor(vY+4),1,1,0,c_white,1);
 			
@@ -612,7 +637,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				        var missileNum2 = floor(missileStat/100);
 				        draw_sprite_ext(sprt_UI_HNumFont2,missileNum2,floor(vX2+125),floor(vY+5),1,1,0,col2,1);
 				    }
-				    if(item[1])
+				    if(item[Item.SuperMissile])
 				    {
 				        draw_sprite_ext(sprt_UI_HAmmoIcon,2+(hudSlot == 1 && hudSlotItem[1] == 1 && stateFrame != State.Morph),floor(vX2+150),floor(vY+4),1,1,0,c_white,1);
     
@@ -626,7 +651,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				        var superMissileNum = floor(superMissileStat/10);
 				        draw_sprite_ext(sprt_UI_HNumFont2,superMissileNum,floor(vX2+165),floor(vY+5),1,1,0,col2,1);
 				    }
-				    if(item[2])
+				    if(item[Item.PowerBomb])
 				    {
 				        draw_sprite_ext(sprt_UI_HAmmoIcon,4+(hudSlot == 1 && (hudSlotItem[1] == 2 || stateFrame == State.Morph)),floor(vX2+184),floor(vY+4),1,1,0,c_white,1);
     
@@ -653,7 +678,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 
 				//var col = c_black, alpha = 0.4;
 
-				var itemNum = (item[Item.Missile]+item[Item.SMissile]+item[Item.PBomb]+item[Item.Grapple]+item[Item.XRay]);
+				var itemNum = (item[Item.Missile]+item[Item.SuperMissile]+item[Item.PowerBomb]+item[Item.GrappleBeam]+item[Item.XRayVisor]);
 
 				var selecting = (pauseSelect && !global.roomTrans && !obj_PauseMenu.pause);
     
@@ -669,9 +694,9 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				        draw_set_alpha(1);
 				    }
 
-				    for(var i = 0; i < array_length(item); i++)
+				    for(var i = 0; i < array_length(equip); i++)
 				    {
-				        if(item[i])
+				        if(equip[i])
 				        {
 				            draw_set_color(col);
 				            draw_set_alpha(alpha);
@@ -684,10 +709,14 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 							}
 							var vX2 = vX+eOffX;
 				
-							var xx = 57,
-								yy = 4,
-								ww = 39,
-								hh = 14;
+							//var xx = 57,
+							//	yy = 4,
+							//	ww = 39,
+							//	hh = 14;
+							xx = 57;
+							yy = 4;
+							ww = 39;
+							hh = 14;
 							if(i == 1)
 							{
 								xx = 101;
@@ -719,7 +748,9 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 									index = 1;
 								}
 							}
-							var x2 = xx-2, y2 = yy-2;
+							//var x2 = xx-2, y2 = yy-2;
+							x2 = xx-2;
+							y2 = yy-2;
 							draw_roundrect_ext(vX2+x2,vY+y2,vX2+x2+ww,vY+y2+hh,8,8,false);
 				
 							draw_set_alpha(1);
@@ -778,12 +809,14 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 						var strg = itemName[hudSlotItem[1]],
 				        tX = 123 - scr_round(string_width(strg) / 2);
 				        draw_text_transformed(vX+tX,vY+21,itemName[hudSlotItem[1]],1,1,0);
-						var xx = 69,
-							yy = 38;
-						for(var i = 0; i < array_length(item); i++)
+						//var xx = 69,
+						//	yy = 38;
+						xx = 69;
+						yy = 38;
+						for(var i = 0; i < array_length(equip); i++)
 						{
 							xx = 50 + 36*i;
-							if(item[i])
+							if(equip[i])
 							{
 								draw_sprite_ext(sprt_UI_HItemMisc,i+5*(hudSlotItem[1] == i),vX+xx,vY+yy,1,1,0,c_white,1);
 							}

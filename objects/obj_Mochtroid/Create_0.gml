@@ -61,11 +61,11 @@ function DamagePlayer()
 	}
 }
 
-function OnXCollision(fVX)
+function OnXCollision(fVX, isOOB = false)
 {
 	velX = 0;
 }
-function OnYCollision(fVY)
+function OnYCollision(fVY, isOOB = false)
 {
 	velY = 0;
 }

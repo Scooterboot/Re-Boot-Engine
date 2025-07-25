@@ -11,6 +11,6 @@ isMajorItem = true;
 
 function CollectItem(player)
 {
-	player.hasMisc[Misc.ScrewAttack] = true;
-	player.misc[Misc.ScrewAttack] = true;
+	player.hasItem[Item.ScrewAttack] = true;
+	player.item[Item.ScrewAttack] = true;
 }

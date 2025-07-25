@@ -1,4 +1,4 @@
 /// @description 
 event_inherited();
 
-mBlock.grappleCollision = false;
+mBlocks[0].grappleCollision = false;

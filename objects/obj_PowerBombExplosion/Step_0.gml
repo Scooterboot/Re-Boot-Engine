@@ -12,7 +12,7 @@ if(scaleTimer >= 60)
 	pAlpha = (75 - scaleTimer)/15;
 }
 
-TileInteract(x,y);
+self.TileInteract(x,y);
 
 scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,8);
 

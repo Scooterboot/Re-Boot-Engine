@@ -9,7 +9,7 @@
   "bitRate":192,
   "compression":1,
   "conversionMode":0,
-  "duration":54.009617,
+  "duration":54.009613,
   "name":"mus_ItemRoom",
   "parent":{
     "name":"Misc",

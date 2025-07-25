@@ -22,7 +22,7 @@ if(image_angle == 180)
 }
 jumpXDir = 1;
 
-function OnXCollision(fVX)
+function OnXCollision(fVX, isOOB = false)
 {
 	velX *= -1;
 }
@@ -44,7 +44,7 @@ function OnSlopeXCollision_Top(fVX)
 		grounded = true;
 	}
 }*/
-function OnYCollision(fVY)
+function OnYCollision(fVY, isOOB = false)
 {
 	if(gravDir == 1 && velY >= 0)
 	{

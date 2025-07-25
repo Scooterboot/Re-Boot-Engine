@@ -1,9 +1,13 @@
+// Feather disable all
 /// @param name
 /// @param function
 
 function scribble_add_macro(_name, _function)
 {
-    __scribble_initialize();
+    static _system                = __scribble_initialize();
+    static _effects_map           = _system.__effects_map;
+    static _macros_map            = _system.__macros_map;
+    static _typewriter_events_map = _system.__typewriter_events_map;
     
     if (!is_string(_name))
     {
@@ -11,53 +15,34 @@ function scribble_add_macro(_name, _function)
         exit;
     }
     
-    if (!is_method(_function))
+    if (is_undefined(_function) || (!is_method(_function) && !script_exists(_function)))
     {
-        if (is_real(_function))
-        {
-            if (!script_exists(_function))
-            {
-                __scribble_error("Script with asset index ", _function, " doesn't exist\n ", false);
-                exit;
-            }
-        }
-        else
-        {
-            __scribble_error("Invalid function provided\n(Input datatype was \"", typeof(_function), "\")");
-            exit;
-        }
+        __scribble_error("Invalid function provided\n(Input datatype was \"", typeof(_function), "\")");
+        exit;
     }
     
-    if (ds_map_exists(__scribble_config_colours(), _name))
+    if (variable_struct_exists(__scribble_config_colours(), _name))
     {
         __scribble_trace("Warning! Macro name \"" + _name + "\" has already been defined as a colour");
         exit;
     }
     
-    if (ds_map_exists(__scribble_get_effects_map(), _name))
+    if (ds_map_exists(_effects_map, _name))
     {
         __scribble_trace("Warning! Macro name \"" + _name + "\" has already been defined as an effect");
         exit;
     }
     
-    if (ds_map_exists(__scribble_get_typewriter_events_map(), _name))
+    if (ds_map_exists(_typewriter_events_map, _name))
     {
         __scribble_trace("Warning! Macro name \"" + _name + "\" has already been defined as a typist event");
         exit;
     }
     
-    var _macros_map = __scribble_get_macros_map();
     var _old_function = _macros_map[? _name];
     if (!is_undefined(_old_function))
     {
-        if (is_numeric(_old_function) and (_old_function < 0))
-        {
-            __scribble_trace("Warning! Overwriting event [" + _name + "] tied to <invalid script>");
-        }
-        else
-        {
-            __scribble_trace("Warning! Overwriting event [" + _name + "] tied to \"" + (is_method(_old_function)? string(_old_function) : script_get_name(_old_function)) + "\"");
-        }
+        __scribble_trace("Warning! Overwriting event [" + _name + "] tied to \"" + (is_method(_old_function)? string(_old_function) : script_get_name(_old_function)) + "\"");
     }
     
     _macros_map[? _name] = _function;

@@ -6,7 +6,7 @@
   "name":"__scribble_config_defaults",
   "parent":{
     "name":"Configuration - Please edit these!",
-    "path":"folders/Extensions/Scribble/Configuration - Please edit these!.yy",
+    "path":"folders/Scripts/UI/Scribble/Configuration - Please edit these!.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

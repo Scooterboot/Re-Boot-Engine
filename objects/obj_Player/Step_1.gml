@@ -7,12 +7,12 @@ cHUp = obj_Control.up;
 cHDown = obj_Control.down;
 cHToggle = obj_Control.mSelect;
 
-var beamNum = (hasBeam[Beam.Ice]+hasBeam[Beam.Wave]+hasBeam[Beam.Spazer]+hasBeam[Beam.Plasma]),
-	itemNum = (item[Item.Missile]+item[Item.SMissile]+item[Item.PBomb]+item[Item.Grapple]+item[Item.XRay]);
+var beamNum = (hasItem[Item.IceBeam]+hasItem[Item.WaveBeam]+hasItem[Item.Spazer]+hasItem[Item.PlasmaBeam]),
+	itemNum = (item[Item.Missile]+item[Item.SuperMissile]+item[Item.PowerBomb]+item[Item.GrappleBeam]+item[Item.XRayVisor]);
 
 if(!global.roomTrans && !obj_PauseMenu.pause)
 {
-	if(global.grappleAimAssist && state != State.Morph && item[Item.Grapple] && hudSlot == 1 && hudSlotItem[1] == 3)
+	if(global.grappleAimAssist && state != State.Morph && item[Item.GrappleBeam] && hudSlot == 1 && hudSlotItem[1] == 3)
 	{
 		if(!instance_exists(grapReticle))
 		{
@@ -30,8 +30,8 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 		moveHPrev = 1;
 		pauseSelect = false;
 		
-		var itemAmmo = [ (item[Item.Missile] && missileStat > 0), (item[Item.SMissile] && superMissileStat > 0), (item[Item.PBomb] && powerBombStat > 0), item[Item.Grapple], item[Item.XRay] ];
-		var itemNum2 = (itemAmmo[Item.Missile]+itemAmmo[Item.SMissile]+itemAmmo[Item.PBomb]+itemAmmo[Item.Grapple]+itemAmmo[Item.XRay]);
+		var itemAmmo = [ (item[Item.Missile] && missileStat > 0), (item[Item.SuperMissile] && superMissileStat > 0), (item[Item.PowerBomb] && powerBombStat > 0), item[Item.GrappleBeam], item[Item.XRayVisor] ];
+		var itemNum2 = (itemAmmo[0] + itemAmmo[1] + itemAmmo[2] + itemAmmo[3] + itemAmmo[4]);
 		
 		if(itemNum2 > 0)
 		{
@@ -64,11 +64,11 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 			{
 				if(!itemAmmo[scr_wrap(hudSlotItem[1], 0, 5)])
 				{
-					if(hudSlotItem[1] == Item.Missile && itemAmmo[Item.SMissile])
+					if(hudSlotItem[1] == Item.Missile && itemAmmo[Item.SuperMissile])
 					{
-						hudSlotItem[1] = Item.SMissile;
+						hudSlotItem[1] = Item.SuperMissile;
 					}
-					else if(hudSlotItem[1] == Item.SMissile && itemAmmo[Item.Missile])
+					else if(hudSlotItem[1] == Item.SuperMissile && itemAmmo[Item.Missile])
 					{
 						hudSlotItem[1] = Item.Missile;
 					}
@@ -180,9 +180,9 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 			var hudSlotItem2 = scr_wrap(hudSlotItem[0], 1, 5);
 			if(hudSlot == 0 && hudSlotItem[0] != 0)
 			{
-				if(cHToggle && rHToggle && hasBeam[hudSlotItem2])
+				if(cHToggle && rHToggle && hasItem[beamIndex[hudSlotItem2]])
 				{
-					beam[hudSlotItem2] = !beam[hudSlotItem2];
+					item[beamIndex[hudSlotItem2]] = !item[beamIndex[hudSlotItem2]];
 					audio_play_sound(snd_MenuShwsh,0,false);
 				}
 			}
@@ -196,7 +196,7 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 }
 
 var numH = 5;
-while(!hasBeam[scr_wrap(hudSlotItem[0], 1, 5)] && hudSlotItem[0] != 0 && numH > 0)
+while(!hasItem[beamIndex[scr_wrap(hudSlotItem[0], 1, 5)]] && hudSlotItem[0] != 0 && numH > 0)
 {
 	hudSlotItem[0] += moveHPrev;
 	hudBOffsetX += 28*moveHPrev;
@@ -204,7 +204,7 @@ while(!hasBeam[scr_wrap(hudSlotItem[0], 1, 5)] && hudSlotItem[0] != 0 && numH > 
 	numH--;
 }
 numH = 5;
-while(!item[scr_wrap(hudSlotItem[1], 0, 5)] && numH > 0)
+while(!item[equipIndex[scr_wrap(hudSlotItem[1], 0, 5)]] && numH > 0)
 {
 	hudSlotItem[1] += moveHPrev;
 	hudBOffsetX += 28*moveHPrev;
@@ -223,5 +223,3 @@ rHLeft = !cHLeft;
 rHUp = !cHUp;
 rHDown = !cHDown;
 rHToggle = !cHToggle;
-
-oldPosition.Equals(position);

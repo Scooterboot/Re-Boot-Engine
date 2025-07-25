@@ -33,12 +33,12 @@ function BounceLimit()
 		_kill = true;
 	}
 }
-function OnXCollision(fVX)
+function OnXCollision(fVX, isOOB = false)
 {
 	velX *= -1;
 	BounceLimit();
 }
-function OnYCollision(fVY)
+function OnYCollision(fVY, isOOB = false)
 {
 	velY *= -1;
 	BounceLimit();

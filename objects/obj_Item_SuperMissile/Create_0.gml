@@ -14,9 +14,9 @@ expanDesc = "+"+string(sMissileAmount)+" Super Missile Capacity";
 
 function CollectItem(player)
 {
-	isExpansion = (player.hasItem[Item.SMissile]);
-	player.hasItem[Item.SMissile] = true;
-	player.item[Item.SMissile] = true;
+	isExpansion = (player.hasItem[Item.SuperMissile]);
+	player.hasItem[Item.SuperMissile] = true;
+	player.item[Item.SuperMissile] = true;
 	player.superMissileMax += sMissileAmount;
 	player.superMissileStat += sMissileAmount;
 }

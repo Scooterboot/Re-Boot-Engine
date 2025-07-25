@@ -12,6 +12,6 @@ isMajorItem = true;
 
 function CollectItem(player)
 {
-	player.hasBoots[Boots.SpeedBoost] = true;
-	player.boots[Boots.SpeedBoost] = true;
+	player.hasItem[Item.SpeedBooster] = true;
+	player.item[Item.SpeedBooster] = true;
 }

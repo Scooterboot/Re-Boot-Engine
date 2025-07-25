@@ -27,11 +27,11 @@ global.zoomResWidth = global.resWidth*global.zoomScale;
 global.zoomResHeight = global.resHeight*global.zoomScale;
 
 application_surface_draw_enable(false); //disable default application surface drawing
-
-debug = 0;
-
+display_set_gui_maximize(1, 1, 0, 0);
 gpu_set_zwriteenable(false);
 surface_depth_disable(true);
+
+debug = 0;
 
 screenScale = 1;
 if(global.screenScale > 0)

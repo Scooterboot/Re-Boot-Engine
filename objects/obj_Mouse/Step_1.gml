@@ -1,14 +1,10 @@
 /// @description Set position
 
-var xx = camera_get_view_x(view_camera[0]),
-	yy = camera_get_view_y(view_camera[0]),
-	screenScale = obj_Display.screenScale;
+x = MousePos().X;
+y = MousePos().Y;
 
-x = (window_mouse_get_x()/screenScale) - (global.screenX/screenScale);
-y = (window_mouse_get_y()/screenScale) - (global.screenY/screenScale);
-
-posX = mouse_x - (global.screenX/screenScale);
-posY = mouse_y - (global.screenY/screenScale);
+posX = MousePos_Room().X;
+posY = MousePos_Room().Y;
 
 velX = x - xprevious;
 velY = y - yprevious;

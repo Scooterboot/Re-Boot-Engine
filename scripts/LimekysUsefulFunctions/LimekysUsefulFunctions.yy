@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"LimekysUsefulFunctions",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"LimekysUsefulFunctions",
+  "parent":{
+    "name":"UsefulTools",
+    "path":"folders/Scripts/UI/Limekys/UsefulTools.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -24,15 +24,15 @@ if(!collideAny)
 
 if(colEdge == Edge.None)
 {
-	if(abs(scr_wrap(rotation2,-180,180)) < 90)
+	/*if(abs(scr_wrap(rotation2,-180,180)) < 90)
 	{
 		rotation2 = scr_wrap(-90*moveDir,0,360);
-	}
+	}*/
 	
 	velX = 0;
 	velY += min(fGrav,max(fallSpeedMax-velY,0));
 	
-	if(collideAny)
+	/*if(collideAny)
 	{
 		if(entity_place_collide(0,ycheck))
 		{
@@ -50,7 +50,7 @@ if(colEdge == Edge.None)
 		{
 			colEdge = Edge.Left;
 		}
-	}
+	}*/
 }
 
 var colL = entity_collision_line(bb_left(),bb_top(),bb_left(),bb_bottom()),
@@ -126,7 +126,10 @@ else
 		}
 	}
 	
-	rotation2 = GetEdgeAngle(colEdge);
+	if(colEdge != Edge.None)
+	{
+		rotation2 = GetEdgeAngle(colEdge);
+	}
 	
 	fVelX = velX;
 	fVelY = velY;

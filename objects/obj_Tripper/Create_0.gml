@@ -42,7 +42,7 @@ frameSeq = [0,1,2,1];
 deathOffsetX = 0;
 deathOffsetY = 8;
 
-function OnXCollision(fVX)
+function OnXCollision(fVX, isOOB = false)
 {
 	dir = -sign(fVX);
 	velX = 0;

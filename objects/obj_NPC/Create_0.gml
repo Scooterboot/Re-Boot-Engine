@@ -97,8 +97,7 @@ frozen = 0;
 
 hurtSound = noone;
 
-freezePlatform = noone;
-
+createPlatformOnFrozen = true;
 
 setOldPoses = 0;
 for(var i = 0; i < 10; i++)
@@ -324,7 +323,7 @@ function _NPCDropItem(_x,_y)
 				dChNum += dropChance[3];
 				dChFlag[3] = true;
 			}
-			if(player.hasItem[Item.SMissile] && player.superMissileStat < player.superMissileMax)
+			if(player.hasItem[Item.SuperMissile] && player.superMissileStat < player.superMissileMax)
 			{
 				dChNum += dropChance[4];
 				dChFlag[4] = true;
@@ -337,7 +336,7 @@ function _NPCDropItem(_x,_y)
 					}
 				}
 			}
-			if(player.hasItem[Item.PBomb] && player.powerBombStat < player.powerBombMax)
+			if(player.hasItem[Item.PowerBomb] && player.powerBombStat < player.powerBombMax)
 			{
 				dChNum += dropChance[5];
 				dChFlag[5] = true;
@@ -388,7 +387,7 @@ function _NPCDropItem(_x,_y)
 
 solids = array_concat(ColType_Solid,ColType_MovingSolid,ColType_NPCSolid);
 
-function OnXCollision(fVX)
+function OnXCollision(fVX, isOOB = false)
 {
 	if(sign(velX) == sign(fVelX))
 	{
@@ -396,7 +395,7 @@ function OnXCollision(fVX)
 	}
 	fVelX = 0;
 }
-function OnYCollision(fVY)
+function OnYCollision(fVY, isOOB = false)
 {
 	if(sign(velY) == sign(fVelY))
 	{

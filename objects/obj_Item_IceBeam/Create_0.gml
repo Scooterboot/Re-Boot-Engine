@@ -11,6 +11,6 @@ isMajorItem = true;
 
 function CollectItem(player)
 {
-	player.hasBeam[Beam.Ice] = true;
-	player.beam[Beam.Ice] = true;
+	player.hasItem[Item.IceBeam] = true;
+	player.item[Item.IceBeam] = true;
 }

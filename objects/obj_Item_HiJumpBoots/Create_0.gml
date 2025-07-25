@@ -11,6 +11,6 @@ isMajorItem = true;
 
 function CollectItem(player)
 {
-	player.hasBoots[Boots.HiJump] = true;
-	player.boots[Boots.HiJump] = true;
+	player.hasItem[Item.HiJump] = true;
+	player.item[Item.HiJump] = true;
 }

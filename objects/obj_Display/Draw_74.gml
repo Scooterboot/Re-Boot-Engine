@@ -107,7 +107,7 @@ if(debug > 0)
 	
 	var spStr = "";
 	
-	if(instance_exists(obj_Player) && obj_Player.boots[Boots.SpeedBoost])
+	if(instance_exists(obj_Player) && obj_Player.item[Item.SpeedBooster])
 	{
 		with(obj_Player)
 		{

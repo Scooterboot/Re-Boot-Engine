@@ -6,10 +6,13 @@ function PauseAI()
 	return (global.gamePaused || /*!scr_WithinCamRange() ||*/ frozen > 0 || dmgFlash > 0);
 }
 
-platform = instance_create_layer(scr_round(bb_left()),scr_round(bb_top()),layer_get_id("Collision"),obj_Platform);
-platform.image_xscale = (bb_right()-bb_left()+1)/16;
-platform.image_yscale = (bb_bottom()-bb_top()+1)/16;
-platform.xRayHide = true;
+createPlatformOnFrozen = false;
+
+mBlockOffset[0] = new Vector2(bb_left(0), bb_top(0));
+mBlocks[0] = instance_create_layer(scr_round(bb_left()),scr_round(bb_top()),layer_get_id("Collision"),obj_Platform);
+mBlocks[0].image_xscale = (bb_right()-bb_left()+1)/16;
+mBlocks[0].image_yscale = (bb_bottom()-bb_top()+1)/16;
+mBlocks[0].xRayHide = true;
 
 function DmgColPlayer()
 {

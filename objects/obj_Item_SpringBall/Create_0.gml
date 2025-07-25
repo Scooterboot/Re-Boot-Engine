@@ -11,6 +11,6 @@ isMajorItem = true;
 
 function CollectItem(player)
 {
-	player.hasMisc[Misc.Spring] = true;
-	player.misc[Misc.Spring] = true;
+	player.hasItem[Item.SpringBall] = true;
+	player.item[Item.SpringBall] = true;
 }

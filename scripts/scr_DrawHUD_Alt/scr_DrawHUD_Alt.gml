@@ -18,7 +18,7 @@ function scr_DrawHUD_Alt() {
 		}
 		var vX2 = vX+eOffX;
 
-	    var itemNum = (item[Item.Missile]+item[Item.SMissile]+item[Item.PBomb]+item[Item.Grapple]+item[Item.XRay]);
+	    var itemNum = (item[Item.Missile]+item[Item.SuperMissile]+item[Item.PowerBomb]+item[Item.GrappleBeam]+item[Item.XRayVisor]);
     
 	    if(selecting)
 	    {
@@ -109,12 +109,12 @@ function scr_DrawHUD_Alt() {
 	            for(var i = 0; i < 5; i += 1)
 	            {
 	                var j = i;
-	                if(hasBeam[j] || i == 0)
+	                if(hasItem[j] || i == 0)
 	                {
-	                    comboNum = 10*(beam[j] && i != 0);
+	                    comboNum = 10*(item[j] && i != 0);
 	                    if(i == hudSlotItem[0])
 	                    {
-	                        draw_sprite_ext(sprt_UI_HItemBeam,i+5+(5*(beam[j] && i != 0)),vX+xBPos,vY+yBPos,1,1,0,c_white,1);
+	                        draw_sprite_ext(sprt_UI_HItemBeam,i+5+(5*(item[j] && i != 0)),vX+xBPos,vY+yBPos,1,1,0,c_white,1);
 	                    }
 	                    if(i == scr_wrap(hudSlotItem[0]-1, 0, 5))
 	                    {

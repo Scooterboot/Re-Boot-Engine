@@ -1,19 +1,14 @@
+// Feather disable all
 /// @param target
 /// @param source
 /// @param overwrite
 /// @param glyphs
 /// @param [glyphs]...
 
-// feather disable all
-// feather ignore all
-
 function scribble_super_glyph_copy(_target, _source, _overwrite)
 {
     var _target_font_data = __scribble_get_font_data(_target);
     var _source_font_data = __scribble_get_font_data(_source);
-    
-    //Verify that the two fonts can be used together
-    __scribble_super_glyph_copy_common(_target_font_data, _source_font_data);
     
     var _target_glyphs_map       = _target_font_data.__glyphs_map;
     var _target_glyph_data_grid  = _target_font_data.__glyph_data_grid;
@@ -50,43 +45,6 @@ function scribble_super_glyph_copy(_target, _source, _overwrite)
     
     ds_grid_set_region(_target_glyph_data_grid, 0, SCRIBBLE_GLYPH.FONT_HEIGHT, ds_grid_width(_target_glyph_data_grid), SCRIBBLE_GLYPH.FONT_HEIGHT,
                        max(_target_font_data.__height, _source_font_data.__height));
-}
-
-function __scribble_super_glyph_copy_common(_target_font_data, _source_font_data)
-{
-    if (_source_font_data.__msdf == undefined)
-    {
-        __scribble_error("Cannot determine if the source font is an MSDF font. Please add glyphs to it");
-    }
-    else if (_target_font_data.__msdf == undefined)
-    {
-        //Target font hasn't had anything added to it yet
-    }
-    else if (_target_font_data.__msdf || _source_font_data.__msdf)
-    {
-        if (_target_font_data.__msdf == false)
-        {
-            __scribble_error("Cannot mix standard/sprite fonts with MSDF fonts (target is not an MSDF font)");
-        }
-        
-        if (_source_font_data.__msdf == false)
-        {
-            __scribble_error("Cannot mix standard/sprite fonts with MSDF fonts (source is not an MSDF font)");
-        }
-        
-        if (_source_font_data.__msdf_pxrange == undefined)
-        {
-            __scribble_error("Source font's MSDF pxrange must be defined before copying glyphs");
-        }
-        
-        if ((_target_font_data.__msdf_pxrange != undefined) && (_target_font_data.__msdf_pxrange != _source_font_data.__msdf_pxrange))
-        {
-            __scribble_error("MSDF font pxrange must match (target = ", _target_font_data.__msdf_pxrange, " vs. source = ", _source_font_data.__msdf_pxrange, ")");
-        }
-    }
-    
-    _target_font_data.__msdf = _source_font_data.__msdf;
-    _target_font_data.__msdf_pxrange = _source_font_data.__msdf_pxrange;
 }
 
 function __scribble_prepare_super_work_array(_input_array)

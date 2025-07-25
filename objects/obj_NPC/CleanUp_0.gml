@@ -1,7 +1,10 @@
-/// @description Remove platform
+/// @description 
 event_inherited();
 
-if(instance_exists(freezePlatform))
+if(array_length(mBlocks) > 0)
 {
-    instance_destroy(freezePlatform);
+    for(var i = 0; i < array_length(mBlocks); i++)
+	{
+		instance_destroy(mBlocks[i]);
+	}
 }

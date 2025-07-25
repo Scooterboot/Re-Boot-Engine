@@ -4,48 +4,32 @@ position = new Vector2(x,y);
 oldPosition = new Vector2(position.X,position.Y);
 
 #region BBox vars
-function bb_left()
+function bb_left(xx = undefined)
 {
 	/// @description bb_left
 	/// @param baseX=position.X
-	var xx = position.X;
-	if(argument_count > 0)
-	{
-		xx = argument[0];
-	}
+	xx = is_undefined(xx) ? position.X : xx;
 	return bbox_left-x + xx;
 }
-function bb_right()
+function bb_right(xx = undefined)
 {
 	/// @description bb_right
 	/// @param baseX=position.X
-	var xx = position.X;
-	if(argument_count > 0)
-	{
-		xx = argument[0];
-	}
+	xx = is_undefined(xx) ? position.X : xx;
 	return bbox_right-x + xx - 1;
 }
-function bb_top()
+function bb_top(yy = undefined)
 {
 	/// @description bb_top
 	/// @param baseY=position.Y
-	var yy = position.Y;
-	if(argument_count > 0)
-	{
-		yy = argument[0];
-	}
+	yy = is_undefined(yy) ? position.Y : yy;
 	return bbox_top-y + yy;
 }
-function bb_bottom()
+function bb_bottom(yy = undefined)
 {
 	/// @description bb_bottom
 	/// @param baseY=position.Y
-	var yy = position.Y;
-	if(argument_count > 0)
-	{
-		yy = argument[0];
-	}
+	yy = is_undefined(yy) ? position.Y : yy;
 	return bbox_bottom-y + yy - 1;
 }
 #endregion
@@ -92,7 +76,7 @@ blockList = ds_list_create();
 
 #region Base Collision Checks
 
-function entity_place_collide()
+function entity_place_collide(offsetX, offsetY, xx = undefined, yy = undefined)
 {
 	/// @description entity_place_collide
 	/// @param offsetX
@@ -100,10 +84,8 @@ function entity_place_collide()
 	/// @param baseX=position.X
 	/// @param baseY=position.Y
 	
-	var offsetX = argument[0],
-		offsetY = argument[1],
-		xx = argument_count > 2 ? argument[2] : position.X,
-		yy = argument_count > 3 ? argument[3] : position.Y;
+	xx = is_undefined(xx) ? position.X : xx;
+	yy = is_undefined(yy) ? position.Y : yy;
 	
 	if(self.CanPlatformCollide() && place_meeting(xx+offsetX,yy+offsetY,ColType_Platform))
 	{
@@ -116,7 +98,7 @@ function entity_place_collide()
 	return self.entity_collision(instance_place_list(xx+offsetX,yy+offsetY,solids,blockList,true));
 }
 
-function entity_position_collide()
+function entity_position_collide(offsetX, offsetY, xx = undefined, yy = undefined)
 {
 	/// @description entity_position_collide
 	/// @param offsetX
@@ -124,10 +106,8 @@ function entity_position_collide()
 	/// @param baseX=position.X
 	/// @param baseY=position.Y
 	
-	var offsetX = argument[0],
-		offsetY = argument[1],
-		xx = argument_count > 2 ? argument[2] : position.X,
-		yy = argument_count > 3 ? argument[3] : position.Y;
+	xx = is_undefined(xx) ? position.X : xx;
+	yy = is_undefined(yy) ? position.Y : yy;
 	
 	return self.entity_collision(instance_position_list(xx+offsetX,yy+offsetY,solids,blockList,true));
 }
@@ -154,7 +134,7 @@ function entity_collision(listNum)
 				if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
 				{
 					isSolid = block.isSolid;
-					if(block.ignoredEntity == id)
+					if(block.ignoredEntity == id || block.tempIgnoredEnt == id)
 					{
 						isSolid = false;
 					}
@@ -171,7 +151,7 @@ function entity_collision(listNum)
 	return false;
 }
 
-function entityPlatformCheck()
+function entityPlatformCheck(offsetX, offsetY, xx = undefined, yy = undefined)
 {
 	/// @description entityPlatformCheck
 	/// @param offsetX
@@ -179,10 +159,8 @@ function entityPlatformCheck()
 	/// @param baseX=position.X
 	/// @param baseY=position.Y
 	
-	var offsetX = argument[0],
-		offsetY = argument[1],
-		xx = argument_count > 2 ? argument[2] : position.X,
-		yy = argument_count > 3 ? argument[3] : position.Y;
+	xx = is_undefined(xx) ? position.X : xx;
+	yy = is_undefined(yy) ? position.Y : yy;
 	
 	if(place_meeting(xx+offsetX,yy+offsetY,ColType_Platform))
 	{
@@ -440,7 +418,7 @@ function ModifySlopeYSteepness_Down() { return 4; }
 // called on horizontal collision
 function OnRightCollision(fVX) {} // -->|
 function OnLeftCollision(fVX) {} // |<--
-function OnXCollision(fVX) {} // same as both above
+function OnXCollision(fVX, isOOB = false) {} // same as both above
 
 // check if allowed to move "up" a slope while on the floor, like so:
 //	  ->/
@@ -472,7 +450,7 @@ function CanMoveDownSlope_Top() { return false; }
 // called on vertical collision
 function OnBottomCollision(fVY) {}
 function OnTopCollision(fVY) {}
-function OnYCollision(fVY) {} // same as both above
+function OnYCollision(fVY, isOOB = false) {} // same as both above
 
 // check if allowed to move "up" a slope on the right wall, like so:
 //	^ \
@@ -506,8 +484,10 @@ function DestroyBlock(bx,by) {}
 
 #endregion
 #region Collision_Normal
-function Collision_Normal(vX, vY, slopeSpeedAdjust)
+function Collision_Normal(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 {
+	oldPosition.Equals(position);
+	
 	if(slopeSpeedAdjust)
 	{
 		var sAngle = 0;
@@ -688,6 +668,19 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 			
 			position.X += fVX;
 		}
+		if(!ignoreOOB && (position.X > room_width || position.X < 0))
+		{
+			if(position.X > room_width)
+			{
+				self.OnRightCollision(fVX);
+			}
+			if(position.X < 0)
+			{
+				self.OnLeftCollision(fVX);
+			}
+			self.OnXCollision(fVX, true);
+			position.X = clamp(position.X,0,room_width);
+		}
 		x = scr_round(position.X);
 		
 		var fVY = self.ModifyFinalVelY(min(maxSpeedY,1)*sign(vY));
@@ -833,6 +826,19 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust)
 			
 			position.Y += fVY;
 		}
+		if(!ignoreOOB && (position.Y > room_height || position.Y < 0))
+		{
+			if(position.Y > room_height)
+			{
+				self.OnBottomCollision(fVX);
+			}
+			if(position.Y < 0)
+			{
+				self.OnTopCollision(fVX);
+			}
+			self.OnYCollision(fVX, true);
+			position.Y = clamp(position.Y,0,room_height);
+		}
 		y = scr_round(position.Y);
 		
 		maxSpeedX = max(maxSpeedX-1,0);
@@ -860,19 +866,19 @@ function Crawler_ModifyFinalVelY(fVY) { return fVY; }
 
 function Crawler_CanStickRight() { return true; }
 function Crawler_CanStickLeft() { return true; }
-function Crawler_CanStickOuterRight() { return true; }
-function Crawler_CanStickOuterLeft() { return true; }
+function Crawler_CanStickOuterRight() { return (colEdge != Edge.None); }
+function Crawler_CanStickOuterLeft() { return (colEdge != Edge.None); }
 
 function Crawler_CanStickBottom() { return true; }
 function Crawler_CanStickTop() { return true; }
-function Crawler_CanStickOuterBottom() { return true; }
-function Crawler_CanStickOuterTop() { return true; }
+function Crawler_CanStickOuterBottom() { return (colEdge != Edge.None); }
+function Crawler_CanStickOuterTop() { return (colEdge != Edge.None); }
 
 
 // called on horizontal collision
 function Crawler_OnRightCollision(fVX) {} // -->|
 function Crawler_OnLeftCollision(fVX) {} // |<--
-function Crawler_OnXCollision(fVX) {} // same as both above
+function Crawler_OnXCollision(fVX, isOOB = false) {} // same as both above
 
 // check if allowed to move "up" a slope while on the floor, like so:
 //	  ->/
@@ -928,7 +934,7 @@ function Crawler_CanMoveDownSlope_Top()
 // called on vertical collision
 function Crawler_OnBottomCollision(fVY) {}
 function Crawler_OnTopCollision(fVY) {}
-function Crawler_OnYCollision(fVY) {} // same as both above
+function Crawler_OnYCollision(fVY, isOOB = false) {} // same as both above
 
 // check if allowed to move "up" a slope on the right wall, like so:
 //	^ \
@@ -986,8 +992,10 @@ function Crawler_CanMoveDownSlope_Left()
 
 #endregion
 #region Collision_Crawler
-function Collision_Crawler(vX, vY, slopeSpeedAdjust)
+function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 {
+	oldPosition.Equals(position);
+	
 	if(slopeSpeedAdjust)
 	{
 		if(colEdge != Edge.None)
@@ -1295,6 +1303,19 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 			
 			position.X += fVX;
 		}
+		if(!ignoreOOB && (position.X > room_width || position.X < 0))
+		{
+			if(position.X > room_width)
+			{
+				self.Crawler_OnRightCollision(fVX);
+			}
+			if(position.X < 0)
+			{
+				self.Crawler_OnLeftCollision(fVX);
+			}
+			self.Crawler_OnXCollision(fVX, true);
+			position.X = clamp(position.X,0,room_width);
+		}
 		x = scr_round(position.X);
 		
 		var fVY = self.Crawler_ModifyFinalVelY(min(maxSpeedY,1)*sign(vY));
@@ -1534,6 +1555,19 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 			
 			position.Y += fVY;
 		}
+		if(!ignoreOOB && (position.Y > room_height || position.Y < 0))
+		{
+			if(position.Y > room_height)
+			{
+				self.Crawler_OnBottomCollision(fVX);
+			}
+			if(position.Y < 0)
+			{
+				self.Crawler_OnTopCollision(fVX);
+			}
+			self.Crawler_OnYCollision(fVX, true);
+			position.Y = clamp(position.Y,0,room_height);
+		}
 		y = scr_round(position.Y);
 		
 		maxSpeedX = max(maxSpeedX-1,0);
@@ -1549,6 +1583,49 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust)
 #endregion
 
 #region Moving Solid Hooks
+
+mBlocks = [];
+mBlockOffset = [];
+function UpdateMovingTiles(xx = undefined, yy = undefined, avoidClipping = false, _controlEntity = noone)
+{
+	/// @description UpdateMovingTiles
+	/// @param baseX=position.X
+	/// @param baseY=position.Y
+	/// @param avoidClipping=false
+	
+	xx = is_undefined(xx) ? position.X : xx;
+	yy = is_undefined(yy) ? position.Y : yy;
+	
+	if(array_length(mBlocks) > 0)
+	{
+		//for(var i = 0; i < array_length(mBlocks); i++)
+		//{
+		//	if(!instance_exists(mBlocks[i])) continue;
+		//	mBlocks[i].isSolid = false;
+		//}
+		for(var i = 0; i < array_length(mBlocks); i++)
+		{
+			if(!instance_exists(mBlocks[i])) continue;
+			
+			mBlocks[i].tempIgnoredEnt = _controlEntity;
+			var _posX = xx,
+				_posY = yy;
+			if(array_length(mBlockOffset) > i && is_struct(mBlockOffset[i]))
+			{
+				_posX += mBlockOffset[i].X;
+				_posY += mBlockOffset[i].Y;
+			}
+			mBlocks[i].isSolid = false;
+			mBlocks[i].UpdatePosition(_posX, _posY, avoidClipping, id);
+			mBlocks[i].isSolid = true;
+		}
+		//for(var i = 0; i < array_length(mBlocks); i++)
+		//{
+		//	if(!instance_exists(mBlocks[i])) continue;
+		//	mBlocks[i].isSolid = true;
+		//}
+	}
+}
 
 passthroughMovingSolids = false;
 
@@ -1573,7 +1650,7 @@ function MovingSolid_OnYCollision(fVY) {} // same as both above
 
 #endregion
 #region Collision_MovingSolid
-function Collision_MovingSolid(vX, vY)
+function Collision_MovingSolid(vX, vY, _controlEntity = noone)
 {
 	var upSlopeSteepness_X = 5,
 		downSlopeSteepness_X = 5,
@@ -1585,291 +1662,295 @@ function Collision_MovingSolid(vX, vY)
 	while(maxSpeedX > 0 || maxSpeedY > 0)
 	{
 		var fVX = min(maxSpeedX,1)*sign(vX);
-		
-		#region X Collision
-		
-		self.DestroyBlock(position.X+fVX,position.Y);
-		
-		var colR = self.entity_collision_line(self.bb_right()+fVX,self.bb_top(),self.bb_right()+fVX,self.bb_bottom()),
-			colL = self.entity_collision_line(self.bb_left()+fVX,self.bb_top(),self.bb_left()+fVX,self.bb_bottom());
-		if(self.entity_place_collide(sign(fVX),0) && (!self.entity_place_collide(0,0) || (fVX > 0 && colR) || (fVX < 0 && colL)))
+		if(fVX != 0)
 		{
-			var steepness = upSlopeSteepness_X;
-			var xnum = 2*sign(fVX);
-			
-			self.DestroyBlock(position.X+xnum,position.Y+steepness);
-			self.DestroyBlock(position.X+xnum,position.Y-steepness);
-			
-			var moveUpSlope_Bottom = (!self.entity_place_collide(xnum,-steepness) && self.entity_place_collide(0,steepness) && steepness > 0);
-			var moveUpSlope_Top = (!self.entity_place_collide(xnum,steepness) && self.entity_place_collide(0,-steepness) && steepness > 0);
-			
-			var yplus = 0;
-			if(moveUpSlope_Bottom)
+			#region X Collision
+		
+			self.DestroyBlock(position.X+fVX,position.Y);
+		
+			var colR = self.entity_collision_line(self.bb_right()+fVX,self.bb_top(),self.bb_right()+fVX,self.bb_bottom()),
+				colL = self.entity_collision_line(self.bb_left()+fVX,self.bb_top(),self.bb_left()+fVX,self.bb_bottom());
+			if(self.entity_place_collide(sign(fVX),0) && (!self.entity_place_collide(0,0) || (fVX > 0 && colR) || (fVX < 0 && colL)))
 			{
-				while(self.entity_place_collide(fVX,yplus) && yplus > -steepness)
-				{
-					yplus--;
-				}
-			}
-			if(moveUpSlope_Top)
-			{
-				while(self.entity_place_collide(fVX,yplus) && yplus < steepness)
-				{
-					yplus++;
-				}
-			}
+				var steepness = upSlopeSteepness_X;
+				var xnum = 2*sign(fVX);
 			
-			if(self.entity_place_collide(fVX,yplus) || (!moveUpSlope_Bottom && !moveUpSlope_Top))
-			{
-				if(fVX > 0)
+				self.DestroyBlock(position.X+xnum,position.Y+steepness);
+				self.DestroyBlock(position.X+xnum,position.Y-steepness);
+			
+				var moveUpSlope_Bottom = (!self.entity_place_collide(xnum,-steepness) && self.entity_place_collide(0,steepness) && steepness > 0);
+				var moveUpSlope_Top = (!self.entity_place_collide(xnum,steepness) && self.entity_place_collide(0,-steepness) && steepness > 0);
+			
+				var yplus = 0;
+				if(moveUpSlope_Bottom)
 				{
-					position.X = scr_floor(position.X);
-				}
-				if(fVX < 0)
-				{
-					position.X = scr_ceil(position.X);
-				}
-				if(!self.entity_place_collide(sign(fVX),0))
-				{
-					position.X += sign(fVX);
-				}
-				
-				if(fVX > 0)
-				{
-					self.MovingSolid_OnRightCollision(fVX);
-				}
-				if(fVX < 0)
-				{
-					self.MovingSolid_OnLeftCollision(fVX);
-				}
-				self.MovingSolid_OnXCollision(fVX);
-				fVX = 0;
-				maxSpeedX = 0;
-			}
-			else
-			{
-				if(yplus > 0)
-				{
-					position.Y = floor(position.Y + yplus);
-					if(self.entity_place_collide(fVX,0))
+					while(self.entity_place_collide(fVX,yplus) && yplus > -steepness)
 					{
-						position.Y += 1;
+						yplus--;
 					}
+				}
+				if(moveUpSlope_Top)
+				{
+					while(self.entity_place_collide(fVX,yplus) && yplus < steepness)
+					{
+						yplus++;
+					}
+				}
+			
+				if(self.entity_place_collide(fVX,yplus) || (!moveUpSlope_Bottom && !moveUpSlope_Top))
+				{
+					if(fVX > 0)
+					{
+						position.X = scr_floor(position.X);
+					}
+					if(fVX < 0)
+					{
+						position.X = scr_ceil(position.X);
+					}
+					if(!self.entity_place_collide(sign(fVX),0))
+					{
+						position.X += sign(fVX);
+					}
+				
+					if(fVX > 0)
+					{
+						self.MovingSolid_OnRightCollision(fVX);
+					}
+					if(fVX < 0)
+					{
+						self.MovingSolid_OnLeftCollision(fVX);
+					}
+					self.MovingSolid_OnXCollision(fVX);
+					fVX = 0;
+					maxSpeedX = 0;
 				}
 				else
 				{
-					position.Y = ceil(position.Y + yplus);
-					if(self.entity_place_collide(fVX,0))
+					if(yplus > 0)
 					{
-						position.Y -= 1;
+						position.Y = floor(position.Y + yplus);
+						if(self.entity_place_collide(fVX,0))
+						{
+							position.Y += 1;
+						}
+					}
+					else
+					{
+						position.Y = ceil(position.Y + yplus);
+						if(self.entity_place_collide(fVX,0))
+						{
+							position.Y -= 1;
+						}
 					}
 				}
 			}
-		}
-		else if(!self.entity_place_collide(0,0))
-		{
-			var steepness = downSlopeSteepness_X;
-			var xnum = 2*sign(fVX);
-			
-			self.DestroyBlock(position.X+xnum,position.Y+steepness);
-			self.DestroyBlock(position.X+xnum,position.Y-steepness);
-			
-			var moveDownSlope_Bottom = (self.entity_place_collide(0,1) && self.entity_place_collide(xnum,steepness));
-			var moveDownSlope_Top = (self.entity_place_collide(0,-1) && self.entity_place_collide(xnum,-steepness));
-			
-			if(moveDownSlope_Bottom || moveDownSlope_Top)
+			else if(!self.entity_place_collide(0,0))
 			{
-				var yplus2 = 0;
-				if(moveDownSlope_Bottom)
+				var steepness = downSlopeSteepness_X;
+				var xnum = 2*sign(fVX);
+			
+				self.DestroyBlock(position.X+xnum,position.Y+steepness);
+				self.DestroyBlock(position.X+xnum,position.Y-steepness);
+			
+				var moveDownSlope_Bottom = (self.entity_place_collide(0,1) && self.entity_place_collide(xnum,steepness));
+				var moveDownSlope_Top = (self.entity_place_collide(0,-1) && self.entity_place_collide(xnum,-steepness));
+			
+				if(moveDownSlope_Bottom || moveDownSlope_Top)
 				{
-					while(!self.entity_place_collide(fVX,yplus2+1) && yplus2 < steepness)
+					var yplus2 = 0;
+					if(moveDownSlope_Bottom)
 					{
-						yplus2++;
-					}
-				}
-				if(moveDownSlope_Top)
-				{
-					while(!self.entity_place_collide(fVX,yplus2-1) && yplus2 > -steepness)
-					{
-						yplus2--;
-					}
-				}
-				
-				if(!self.entity_place_collide(fVX,yplus2))
-				{
-					if(self.entity_place_collide(fVX,yplus2+sign(yplus2)))
-					{
-						if(yplus2 > 0)
+						while(!self.entity_place_collide(fVX,yplus2+1) && yplus2 < steepness)
 						{
-							position.Y = ceil(position.Y + yplus2);
-							if(self.entity_place_collide(fVX,0))
-							{
-								position.Y -= 1;
-							}
+							yplus2++;
 						}
-						else
+					}
+					if(moveDownSlope_Top)
+					{
+						while(!self.entity_place_collide(fVX,yplus2-1) && yplus2 > -steepness)
 						{
-							position.Y = floor(position.Y + yplus2);
-							if(self.entity_place_collide(fVX,0))
+							yplus2--;
+						}
+					}
+				
+					if(!self.entity_place_collide(fVX,yplus2))
+					{
+						if(self.entity_place_collide(fVX,yplus2+sign(yplus2)))
+						{
+							if(yplus2 > 0)
 							{
-								position.Y += 1;
+								position.Y = ceil(position.Y + yplus2);
+								if(self.entity_place_collide(fVX,0))
+								{
+									position.Y -= 1;
+								}
+							}
+							else
+							{
+								position.Y = floor(position.Y + yplus2);
+								if(self.entity_place_collide(fVX,0))
+								{
+									position.Y += 1;
+								}
 							}
 						}
 					}
 				}
 			}
+			#endregion
+			
+			position.X += fVX;
 		}
-		#endregion
-		
-		position.X += fVX;
 		x = scr_round(position.X);
 		
-		maxSpeedX = max(maxSpeedX-1,0);
-	
-	
 		var fVY = min(maxSpeedY,1)*sign(vY);
-		
-		#region Y Collision
-		
-		self.DestroyBlock(position.X,position.Y+fVY);
-		
-		var colB = self.entity_collision_line(self.bb_left(),self.bb_bottom()+fVY,self.bb_right(),self.bb_bottom()+fVY),
-			colT = self.entity_collision_line(self.bb_left(),self.bb_top()+fVY,self.bb_right(),self.bb_top()+fVY);
-		if(self.entity_place_collide(0,sign(fVY)) && (!self.entity_place_collide(0,0) || (fVY > 0 && colB) || (fVY < 0 && colT)))
+		if(fVY != 0)
 		{
-			var steepness = upSlopeSteepness_Y;
-			var ynum = 2*sign(fVY);
-			
-			self.DestroyBlock(position.X+steepness,position.Y+ynum);
-			self.DestroyBlock(position.X-steepness,position.Y+ynum);
-			
-			var moveUpSlope_Right = (!self.entity_place_collide(-steepness,ynum) && self.entity_place_collide(steepness,0) && steepness > 0);
-			var moveUpSlope_Left = (!self.entity_place_collide(steepness,ynum) && self.entity_place_collide(-steepness,0) && steepness > 0);
-			
-			var xplus = 0;
-			if(moveUpSlope_Right)
+			#region Y Collision
+		
+			self.DestroyBlock(position.X,position.Y+fVY);
+		
+			var colB = self.entity_collision_line(self.bb_left(),self.bb_bottom()+fVY,self.bb_right(),self.bb_bottom()+fVY),
+				colT = self.entity_collision_line(self.bb_left(),self.bb_top()+fVY,self.bb_right(),self.bb_top()+fVY);
+			if(self.entity_place_collide(0,sign(fVY)) && (!self.entity_place_collide(0,0) || (fVY > 0 && colB) || (fVY < 0 && colT)))
 			{
-				while(self.entity_place_collide(xplus,fVY) && xplus > -steepness)
-				{
-					xplus--;
-				}
-			}
-			if(moveUpSlope_Left)
-			{
-				while(self.entity_place_collide(xplus,fVY) && xplus < steepness)
-				{
-					xplus++;
-				}
-			}
+				var steepness = upSlopeSteepness_Y;
+				var ynum = 2*sign(fVY);
 			
-			if(self.entity_place_collide(xplus,fVY) || (!moveUpSlope_Right && !moveUpSlope_Left))
-			{
-				if(fVY > 0)
+				self.DestroyBlock(position.X+steepness,position.Y+ynum);
+				self.DestroyBlock(position.X-steepness,position.Y+ynum);
+			
+				var moveUpSlope_Right = (!self.entity_place_collide(-steepness,ynum) && self.entity_place_collide(steepness,0) && steepness > 0);
+				var moveUpSlope_Left = (!self.entity_place_collide(steepness,ynum) && self.entity_place_collide(-steepness,0) && steepness > 0);
+			
+				var xplus = 0;
+				if(moveUpSlope_Right)
 				{
-					position.Y = scr_floor(position.Y);
-				}
-				if(fVY < 0)
-				{
-					position.Y = scr_ceil(position.Y);
-				}
-				if(!self.entity_place_collide(0,sign(fVY)))
-				{
-					position.Y += sign(fVY);
-				}
-				
-				if(fVY > 0)
-				{
-					self.MovingSolid_OnBottomCollision(fVY);
-				}
-				if(fVY < 0)
-				{
-					self.MovingSolid_OnTopCollision(fVY);
-				}
-				self.MovingSolid_OnYCollision(fVY);
-				fVY = 0;
-				maxSpeedY = 0;
-			}
-			else
-			{
-				if(xplus > 0)
-				{
-					position.X = floor(position.X + xplus);
-					if(self.entity_place_collide(0,fVY))
+					while(self.entity_place_collide(xplus,fVY) && xplus > -steepness)
 					{
-						position.X += 1;
+						xplus--;
 					}
+				}
+				if(moveUpSlope_Left)
+				{
+					while(self.entity_place_collide(xplus,fVY) && xplus < steepness)
+					{
+						xplus++;
+					}
+				}
+			
+				if(self.entity_place_collide(xplus,fVY) || (!moveUpSlope_Right && !moveUpSlope_Left))
+				{
+					if(fVY > 0)
+					{
+						position.Y = scr_floor(position.Y);
+					}
+					if(fVY < 0)
+					{
+						position.Y = scr_ceil(position.Y);
+					}
+					if(!self.entity_place_collide(0,sign(fVY)))
+					{
+						position.Y += sign(fVY);
+					}
+				
+					if(fVY > 0)
+					{
+						self.MovingSolid_OnBottomCollision(fVY);
+					}
+					if(fVY < 0)
+					{
+						self.MovingSolid_OnTopCollision(fVY);
+					}
+					self.MovingSolid_OnYCollision(fVY);
+					fVY = 0;
+					maxSpeedY = 0;
 				}
 				else
 				{
-					position.X = ceil(position.X + xplus);
-					if(self.entity_place_collide(0,fVY))
+					if(xplus > 0)
 					{
-						position.X -= 1;
+						position.X = floor(position.X + xplus);
+						if(self.entity_place_collide(0,fVY))
+						{
+							position.X += 1;
+						}
+					}
+					else
+					{
+						position.X = ceil(position.X + xplus);
+						if(self.entity_place_collide(0,fVY))
+						{
+							position.X -= 1;
+						}
 					}
 				}
 			}
-		}
-		else if(!self.entity_place_collide(0,0))
-		{
-			var steepness = downSlopeSteepness_Y;
-			var ynum = 2*sign(fVY);
-			
-			self.DestroyBlock(position.X+steepness,position.Y+ynum);
-			self.DestroyBlock(position.X-steepness,position.Y+ynum);
-			
-			var moveDownSlope_Right = (self.entity_place_collide(1,0) && self.entity_place_collide(steepness,ynum));
-			var moveDownSlope_Left = (self.entity_place_collide(-1,0) && self.entity_place_collide(-steepness,ynum));
-			
-			if(moveDownSlope_Right || moveDownSlope_Left)
+			else if(!self.entity_place_collide(0,0))
 			{
-				var xplus2 = 0;
-				if(moveDownSlope_Right)
+				var steepness = downSlopeSteepness_Y;
+				var ynum = 2*sign(fVY);
+			
+				self.DestroyBlock(position.X+steepness,position.Y+ynum);
+				self.DestroyBlock(position.X-steepness,position.Y+ynum);
+			
+				var moveDownSlope_Right = (self.entity_place_collide(1,0) && self.entity_place_collide(steepness,ynum));
+				var moveDownSlope_Left = (self.entity_place_collide(-1,0) && self.entity_place_collide(-steepness,ynum));
+			
+				if(moveDownSlope_Right || moveDownSlope_Left)
 				{
-					while(!self.entity_place_collide(1+xplus2,fVY) && xplus2 < steepness)
+					var xplus2 = 0;
+					if(moveDownSlope_Right)
 					{
-						xplus2++;
-					}
-				}
-				if(moveDownSlope_Left)
-				{
-					while(!self.entity_place_collide(-1+xplus2,fVY) && xplus2 > -steepness)
-					{
-						xplus2--;
-					}
-				}
-				
-				if(!self.entity_place_collide(xplus2,fVY))
-				{
-					if(self.entity_place_collide(xplus2+sign(xplus2),fVY))
-					{
-						if(xplus2 > 0)
+						while(!self.entity_place_collide(1+xplus2,fVY) && xplus2 < steepness)
 						{
-							position.X = ceil(position.X + xplus2);
-							if(self.entity_place_collide(0,fVY))
-							{
-								position.X -= 1;
-							}
+							xplus2++;
 						}
-						else
+					}
+					if(moveDownSlope_Left)
+					{
+						while(!self.entity_place_collide(-1+xplus2,fVY) && xplus2 > -steepness)
 						{
-							position.X = floor(position.X + xplus2);
-							if(self.entity_place_collide(0,fVY))
+							xplus2--;
+						}
+					}
+				
+					if(!self.entity_place_collide(xplus2,fVY))
+					{
+						if(self.entity_place_collide(xplus2+sign(xplus2),fVY))
+						{
+							if(xplus2 > 0)
 							{
-								position.X += 1;
+								position.X = ceil(position.X + xplus2);
+								if(self.entity_place_collide(0,fVY))
+								{
+									position.X -= 1;
+								}
+							}
+							else
+							{
+								position.X = floor(position.X + xplus2);
+								if(self.entity_place_collide(0,fVY))
+								{
+									position.X += 1;
+								}
 							}
 						}
 					}
 				}
 			}
+		
+			#endregion
+			
+			position.Y += fVY;
 		}
-		
-		#endregion
-		
-		position.Y += fVY;
 		y = scr_round(position.Y);
 		
+		maxSpeedX = max(maxSpeedX-1,0);
 		maxSpeedY = max(maxSpeedY-1,0);
 	}
+	
+	self.UpdateMovingTiles(x,y,false, _controlEntity);
 }
 #endregion
 

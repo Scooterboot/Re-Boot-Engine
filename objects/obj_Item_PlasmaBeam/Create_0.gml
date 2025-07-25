@@ -11,6 +11,6 @@ isMajorItem = true;
 
 function CollectItem(player)
 {
-	player.hasBeam[Beam.Plasma] = true;
-	player.beam[Beam.Plasma] = true;
+	player.hasItem[Item.PlasmaBeam] = true;
+	player.item[Item.PlasmaBeam] = true;
 }

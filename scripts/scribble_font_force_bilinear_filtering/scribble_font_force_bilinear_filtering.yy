@@ -6,7 +6,7 @@
   "name":"scribble_font_force_bilinear_filtering",
   "parent":{
     "name":"Fonts",
-    "path":"folders/Extensions/Scribble/Fonts.yy",
+    "path":"folders/Scripts/UI/Scribble/Fonts.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

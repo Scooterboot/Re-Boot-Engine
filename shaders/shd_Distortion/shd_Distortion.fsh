@@ -19,7 +19,7 @@ void main()
 	if (distort_amount.x > 0.5) {distort_amount.x -= 1.0;}// wrap around
 	if (distort_amount.y > 0.5) {distort_amount.y -= 1.0;}// wrap around
 	//distort_amount /= 4.0;
-	distort_amount *= texelSize * 100.0;
+	distort_amount *= texelSize * 96.0;//100.0;
 
 	gl_FragColor = v_vColour * texture2D( gm_BaseTexture, v_vTexcoord+distort_amount);
 }

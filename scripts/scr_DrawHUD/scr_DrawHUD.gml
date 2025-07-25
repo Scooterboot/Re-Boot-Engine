@@ -6,7 +6,7 @@ function scr_DrawHUD() {
 
 	var col = c_black, alpha = 0.4;
 
-	var itemNum = (item[Item.Missile]+item[Item.SMissile]+item[Item.PBomb]+item[Item.Grapple]+item[Item.XRay]);
+	var itemNum = (item[Item.Missile]+item[Item.SuperMissile]+item[Item.PowerBomb]+item[Item.GrappleBeam]+item[Item.XRayVisor]);
 
 	var selecting = (pauseSelect && !global.roomTrans && !obj_PauseMenu.pause);
     

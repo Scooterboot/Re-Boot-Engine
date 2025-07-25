@@ -5,15 +5,15 @@ rot = 0;
 
 //posX = x;
 //posY = y;
-for(var i = 0; i < 11; i++)
+for(var i = 0; i < 12; i++)
 {
 	var type = obj_MovingTile;
 	var xscale = 1,
 		yscale = 1;
-	if(i >= 7)
+	if(i >= 8)
 	{
 		type = obj_MovingSlope;
-		if(i >= 9)
+		if(i >= 10)
 		{
 			xscale = -1;
 			yscale = -1;
@@ -32,64 +32,74 @@ for(var i = 0; i < 11; i++)
 		}
 		case 2:
 		{
-			offx = 16;
+			offx = 0;
 			offy = 16;
 			break;
 		}
 		case 3:
 		{
-			offx = 32;
+			offx = 16;
 			offy = 16;
+			xscale = 2;
+			yscale = 2;
 			break;
 		}
 		case 4:
 		{
 			offx = 32;
-			offy = 32;
+			offy = 48;
 			break;
 		}
 		case 5:
 		{
 			offx = 48;
 			offy = 32;
+			xscale = 2;
+			yscale = 2;
 			break;
 		}
 		case 6:
 		{
-			offx = 64;
+			offx = 80;
 			offy = 32;
 			break;
 		}
-		
 		case 7:
+		{
+			offx = 80;
+			offy = 48;
+			break;
+		}
+		
+		case 8:
 		{
 			offx = 32;
 			offy = 0;
 			break;
 		}
-		case 8:
+		case 9:
 		{
 			offx = 48;
 			offy = 16;
 			break;
 		}
-		case 9:
-		{
-			offx = 16;
-			offy = 32;
-			break;
-		}
 		case 10:
 		{
-			offx = 32;
+			offx = 16;
 			offy = 48;
+			break;
+		}
+		case 11:
+		{
+			offx = 32;
+			offy = 64;
 			break;
 		}
 	}
 	
-	mBlocks[i] = instance_create_layer(x+offx,y+offy,layer_get_id("Collision"),type);
-	mBlocks[i].image_xscale = xscale;
-	mBlocks[i].image_yscale = yscale;
-	mBlockOffX[i] = offx;
-	mBlockOffY[i] = offy;
+	blocks[i] = instance_create_layer(x+offx,y+offy,layer_get_id("Collision"),type);
+	blocks[i].image_xscale = xscale;
+	blocks[i].image_yscale = yscale;
+	blockOffX[i] = offx;
+	blockOffY[i] = offy;
 }

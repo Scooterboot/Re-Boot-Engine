@@ -11,6 +11,6 @@ isMajorItem = true;
 
 function CollectItem(player)
 {
-	player.hasItem[Item.Grapple] = true;
-	player.item[Item.Grapple] = true;
+	player.hasItem[Item.GrappleBeam] = true;
+	player.item[Item.GrappleBeam] = true;
 }

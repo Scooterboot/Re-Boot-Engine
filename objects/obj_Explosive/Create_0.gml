@@ -10,6 +10,8 @@ blockBreakType[BlockBreakType.Shot] = true;
 exploProj = noone;
 exploDmgMult = 0.5;
 exploSnd = -1;
+sourceVelX = 0;
+sourceVelY = 0;
 
 image_angle = 0;
 

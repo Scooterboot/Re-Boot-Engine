@@ -118,7 +118,7 @@ beamName = [
 "WAVE BEAM",
 "SPAZER",
 "PLASMA BEAM"];
-itemName = [
+equipName = [
 "MISSILE",
 "SUPER MISSILE",
 "POWER BOMB",
@@ -140,6 +140,41 @@ bootsName = [
 "ACCEL DASH",
 "SPEED BOOSTER",
 "CHAIN SPARK"];
+
+suitIndex = [
+Item.VariaSuit,
+Item.GravitySuit];
+
+beamIndex = [
+Item.ChargeBeam,
+Item.IceBeam,
+Item.WaveBeam,
+Item.Spazer,
+Item.PlasmaBeam];
+
+equipIndex = [
+Item.Missile,
+Item.SuperMissile,
+Item.PowerBomb,
+Item.GrappleBeam,
+Item.XRayVisor];
+
+miscIndex = [
+Item.PowerGrip,
+Item.MorphBall,
+Item.MBBomb,
+Item.SpringBall,
+Item.BoostBall,
+Item.MagniBall,
+Item.SpiderBall,
+Item.ScrewAttack];
+
+bootsIndex = [
+Item.HiJump,
+Item.SpaceJump,
+Item.AccelDash,
+Item.SpeedBooster,
+Item.ChainSpark];
 
 pauseSurf = surface_create(global.resWidth,global.resHeight);
 
@@ -283,38 +318,38 @@ function DrawInventoryPlayer()
 		surface_set_target(playerInvSurf);
 		draw_clear_alpha(c_black,0);
 		
-		var i = P.suit[Suit.Varia];
-		if(P.suit[Suit.Gravity])
+		var i = P.item[Item.VariaSuit];
+		if(P.item[Item.GravitySuit])
 		{
-			i = 2+P.suit[Suit.Varia];
+			i = 2+P.item[Item.VariaSuit];
 		}
 		draw_sprite(sprt_Sub_Samus,i,xx,yy);
-		if(P.misc[Misc.PowerGrip])
+		if(P.item[Item.PowerGrip])
 		{
 			draw_sprite(sprt_Sub_Samus_Grip,min(i,2),xx+30,yy+36);
 		}
-		if(P.boots[Boots.SpaceJump])
+		if(P.item[Item.SpaceJump])
 		{
 			draw_sprite(sprt_Sub_Samus_Boots1,min(i,2),xx,yy+96);
 		}
-		if(P.boots[Boots.HiJump])
+		if(P.item[Item.HiJump])
 		{
 			draw_sprite(sprt_Sub_Samus_Boots2,min(i,2),xx,yy+134);
 		}
 		
-		if(P.beam[Beam.Ice])
+		if(P.item[Item.IceBeam])
 		{
 			draw_sprite(sprt_Sub_Samus_GunLights,0,xx-32,yy+57);
 		}
-		if(P.beam[Beam.Wave])
+		if(P.item[Item.WaveBeam])
 		{
 			draw_sprite(sprt_Sub_Samus_GunLights,1,xx-32,yy+57);
 		}
-		if(P.beam[Beam.Spazer])
+		if(P.item[Item.Spazer])
 		{
 			draw_sprite(sprt_Sub_Samus_GunLights,2,xx-32,yy+57);
 		}
-		if(P.beam[Beam.Plasma])
+		if(P.item[Item.PlasmaBeam])
 		{
 			draw_sprite(sprt_Sub_Samus_GunLights,3,xx-32,yy+57);
 		}
@@ -349,14 +384,14 @@ function DrawInventoryPlayer()
 		{
 			playerGlowInd = 1;
 		}
-		else if(string_pos("Item",ability) != 0)
+		else if(string_pos("Equip",ability) != 0)
 		{
 			playerGlowInd = 1;
-			if(index == Item.PBomb)
+			if(index == array_find_index_by_value(equipIndex,Item.PowerBomb))
 			{
 				playerGlowInd = 3;
 			}
-			if(index = Item.XRay)
+			if(index = array_find_index_by_value(equipIndex,Item.XRayVisor))
 			{
 				playerGlowInd = 7;
 			}
@@ -364,11 +399,11 @@ function DrawInventoryPlayer()
 		else if(string_pos("Misc",ability) != 0)
 		{
 			playerGlowInd = 3;
-			if(index == Misc.PowerGrip)
+			if(index == array_find_index_by_value(miscIndex,Item.PowerGrip))
 			{
 				playerGlowInd = 2;
 			}
-			if(index == Misc.ScrewAttack)
+			if(index == array_find_index_by_value(miscIndex,Item.ScrewAttack))
 			{
 				playerGlowInd = 0;
 			}
@@ -377,15 +412,15 @@ function DrawInventoryPlayer()
 		{
 			yDest = -20;
 			playerGlowInd = 0;
-			if(index == Boots.HiJump)
+			if(index == array_find_index_by_value(bootsIndex,Item.HiJump))
 			{
 				playerGlowInd = 5;
 			}
-			if(index == Boots.SpaceJump)
+			if(index == array_find_index_by_value(bootsIndex,Item.SpaceJump))
 			{
 				playerGlowInd = 4;
 			}
-			if(index == Boots.Dodge)
+			if(index == array_find_index_by_value(bootsIndex,Item.AccelDash))
 			{
 				playerGlowInd = 6;
 			}
@@ -482,7 +517,7 @@ function DrawInventoryPlayer()
 			
 			if(highlight_Suit)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask,P.suit[Suit.Varia],xx,yy);
+				draw_sprite(sprt_Sub_Samus_GlowMask,P.item[Item.VariaSuit],xx,yy);
 			}
 			if(highlight_Beam)
 			{
@@ -490,7 +525,7 @@ function DrawInventoryPlayer()
 			}
 			if(highlight_Grip)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask,3+P.misc[Misc.PowerGrip],xx,yy);
+				draw_sprite(sprt_Sub_Samus_GlowMask,3+P.item[Item.PowerGrip],xx,yy);
 			}
 			if(highlight_Torso)
 			{
@@ -498,11 +533,11 @@ function DrawInventoryPlayer()
 			}
 			if(highlight_Boots1)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask,6+P.boots[Boots.SpaceJump],xx,yy);
+				draw_sprite(sprt_Sub_Samus_GlowMask,6+P.item[Item.SpaceJump],xx,yy);
 			}
 			if(highlight_Boots2)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask,8+P.boots[Boots.HiJump],xx,yy);
+				draw_sprite(sprt_Sub_Samus_GlowMask,8+P.item[Item.HiJump],xx,yy);
 			}
 			if(highlight_Visor)
 			{
@@ -618,10 +653,11 @@ function DrawInventoryPlayer_Retro()
 		{
 			l = 1;
 		}
-		else if(string_pos("Item",ability) != 0)
+		else if(string_pos("Equip",ability) != 0)
 		{
 			l = 2;
-			if(index = Item.PBomb || index = Item.XRay)
+			if(index = array_find_index_by_value(equipIndex,Item.PowerBomb) || 
+				index = array_find_index_by_value(equipIndex,Item.XRayVisor))
 			{
 				l = 3;
 			}
@@ -629,7 +665,7 @@ function DrawInventoryPlayer_Retro()
 		else if(string_pos("Misc",ability) != 0)
 		{
 			l = 4;
-			if(index == Misc.PowerGrip)
+			if(index == array_find_index_by_value(miscIndex,Item.PowerGrip))
 			{
 				l = 5;
 			}
@@ -637,7 +673,8 @@ function DrawInventoryPlayer_Retro()
 		else if(string_pos("Boots",ability) != 0)
 		{
 			l = 7;
-			if(index == Boots.HiJump || index == Boots.SpaceJump)
+			if(index == array_find_index_by_value(bootsIndex,Item.HiJump) || 
+				index == array_find_index_by_value(bootsIndex,Item.SpaceJump))
 			{
 				l = 6;
 			}
@@ -678,13 +715,13 @@ function DrawInventoryPlayer_Retro()
 			lineX2 = -27;
 			lineY2 = 2;
 		}
-		else if(string_pos("Item",ability) != 0)
+		else if(string_pos("Equip",ability) != 0)
 		{
 			lineX1 = -75;
 			lineY1 = 43 + 10*(invPos-7);
 			lineX2 = -27;
 			lineY2 = 2;
-			if(index == Item.XRay)
+			if(index == Item.XRayVisor)
 			{
 				lineX2 = -28;
 				lineY2 = -43;
@@ -696,7 +733,7 @@ function DrawInventoryPlayer_Retro()
 			lineY1 = -45 + 10*invPos;
 			lineX2 = 28;
 			lineY2 = -30;
-			if(index == Misc.PowerGrip)
+			if(index == Item.PowerGrip)
 			{
 				lineY2 = -4;
 			}
@@ -707,7 +744,7 @@ function DrawInventoryPlayer_Retro()
 			lineY1 = 44 + 10*(invPos-6);
 			lineX2 = 19;
 			lineY2 = 48;
-			if(index == Boots.SpeedBoost || index == Boots.ChainSpark || index == Boots.Dodge)
+			if(index == Item.SpeedBooster || index == Item.ChainSpark || index == Item.AccelDash)
 			{
 				lineX3 = 28;
 				lineY3 = -30;
@@ -753,29 +790,29 @@ function DrawInventoryPlayer_Retro()
 		surface_set_target(playerInvSurf);
 		draw_clear_alpha(c_black,0);
 		
-		var i = P.suit[Suit.Varia];
-		if(P.suit[Suit.Gravity])
+		var i = P.item[Item.VariaSuit];
+		if(P.item[Item.GravitySuit])
 		{
-			i = 2+P.suit[Suit.Varia];
+			i = 2+P.item[Item.VariaSuit];
 		}
 		
 		var b = 0;
-		if(P.beam[Beam.Charge])
+		if(P.item[Item.ChargeBeam])
 		{
 			b = 1;
-			if(P.beam[Beam.Spazer])
+			if(P.item[Item.Spazer])
 			{
 				b = 4;
 			}
-			if(P.beam[Beam.Wave])
+			if(P.item[Item.WaveBeam])
 			{
 				b = 3;
 			}
-			if(P.beam[Beam.Plasma])
+			if(P.item[Item.PlasmaBeam])
 			{
 				b = 5;
 			}
-			if(P.beam[Beam.Ice])
+			if(P.item[Item.IceBeam])
 			{
 				b = 2;
 			}
@@ -784,15 +821,15 @@ function DrawInventoryPlayer_Retro()
 		
 		draw_sprite(sprt_Sub_Samus_Retro,i,xx,yy);
 		
-		if(P.misc[Misc.PowerGrip])
+		if(P.item[Item.PowerGrip])
 		{
 			draw_sprite(sprt_Sub_Samus_Grip_Retro,min(i,2),xx+4,yy+41);
 		}
-		if(P.boots[Boots.SpaceJump])
+		if(P.item[Item.SpaceJump])
 		{
 			draw_sprite(sprt_Sub_Samus_Boots1_Retro,min(i,2),xx,yy+67);
 		}
-		if(P.boots[Boots.HiJump])
+		if(P.item[Item.HiJump])
 		{
 			draw_sprite(sprt_Sub_Samus_Boots2_Retro,min(i,2),xx,yy+96);
 		}
@@ -824,14 +861,14 @@ function DrawInventoryPlayer_Retro()
 		{
 			playerGlowInd = 1;
 		}
-		else if(string_pos("Item",ability) != 0)
+		else if(string_pos("Equip",ability) != 0)
 		{
 			playerGlowInd = 1;
-			if(index == Item.PBomb)
+			if(index == array_find_index_by_value(equipIndex,Item.PowerBomb))
 			{
 				playerGlowInd = 3;
 			}
-			if(index = Item.XRay)
+			if(index = array_find_index_by_value(equipIndex,Item.XRayVisor))
 			{
 				playerGlowInd = 7;
 			}
@@ -839,11 +876,11 @@ function DrawInventoryPlayer_Retro()
 		else if(string_pos("Misc",ability) != 0)
 		{
 			playerGlowInd = 3;
-			if(index == Misc.PowerGrip)
+			if(index == array_find_index_by_value(miscIndex,Item.PowerGrip))
 			{
 				playerGlowInd = 2;
 			}
-			if(index == Misc.ScrewAttack)
+			if(index == array_find_index_by_value(miscIndex,Item.ScrewAttack))
 			{
 				playerGlowInd = 0;
 			}
@@ -851,15 +888,15 @@ function DrawInventoryPlayer_Retro()
 		else if(string_pos("Boots",ability) != 0)
 		{
 			playerGlowInd = 0;
-			if(index == Boots.HiJump)
+			if(index == array_find_index_by_value(bootsIndex,Item.HiJump))
 			{
 				playerGlowInd = 5;
 			}
-			if(index == Boots.SpaceJump)
+			if(index == array_find_index_by_value(bootsIndex,Item.SpaceJump))
 			{
 				playerGlowInd = 4;
 			}
-			if(index == Boots.Dodge)
+			if(index == array_find_index_by_value(bootsIndex,Item.AccelDash))
 			{
 				playerGlowInd = 6;
 			}
@@ -948,31 +985,31 @@ function DrawInventoryPlayer_Retro()
 			
 			if(highlight_Beam)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,2+P.beam[Beam.Charge]+2*P.suit[Suit.Varia],xx,yy);
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,2+P.item[Item.ChargeBeam]+2*P.item[Item.VariaSuit],xx,yy);
 			}
 			if(highlight_Suit)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,P.suit[Suit.Varia],xx,yy);
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,P.item[Item.VariaSuit],xx,yy);
 			}
 			if(highlight_Grip)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,6+P.suit[Suit.Varia],xx,yy);
-				if(P.misc[Misc.PowerGrip])
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,6+P.item[Item.VariaSuit],xx,yy);
+				if(P.item[Item.PowerGrip])
 				{
 					draw_sprite(sprt_Sub_Samus_GlowMask_Retro,8,xx,yy);
 				}
 			}
 			if(highlight_Torso)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,9+P.suit[Suit.Varia],xx,yy);
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,9+P.item[Item.VariaSuit],xx,yy);
 			}
 			if(highlight_Boots1)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,11+P.boots[Boots.SpaceJump],xx,yy);
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,11+P.item[Item.SpaceJump],xx,yy);
 			}
 			if(highlight_Boots2)
 			{
-				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,13+P.boots[Boots.HiJump],xx,yy);
+				draw_sprite(sprt_Sub_Samus_GlowMask_Retro,13+P.item[Item.HiJump],xx,yy);
 			}
 			if(highlight_Visor)
 			{

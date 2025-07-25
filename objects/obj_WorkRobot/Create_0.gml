@@ -13,6 +13,7 @@ dmgMult[DmgType.Misc][3] = 0; // screw attack
 dmgMult[DmgType.Misc][5] = 0; // boost ball
 
 freezeImmune = true;
+createPlatformOnFrozen = false;
 
 dropChance[0] = 2; // nothing
 dropChance[1] = 32; // energy
@@ -66,7 +67,7 @@ function ChangeDir(newDir)
 	}
 }
 
-function OnXCollision(fVX)
+function OnXCollision(fVX, isOOB = false)
 {
 	ChangeDir(-sign(fVX));
 	velX = 0;
@@ -163,8 +164,6 @@ for(var i = 0; i < 9; i++)
 	mBlocks[i].image_xscale = xscale;
 	mBlocks[i].image_yscale = yscale;
 	mBlocks[i].canGrip = false;
-	mBlockOffX[i] = offx;
-	mBlockOffY[i] = offy;
-	
+	mBlockOffset[i] = new Vector2(offx,offy);
 	mBlockOffX_default[i] = offx;
 }

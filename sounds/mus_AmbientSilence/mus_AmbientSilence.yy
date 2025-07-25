@@ -9,7 +9,7 @@
   "bitRate":192,
   "compression":1,
   "conversionMode":0,
-  "duration":34.29147,
+  "duration":34.291473,
   "name":"mus_AmbientSilence",
   "parent":{
     "name":"Misc",

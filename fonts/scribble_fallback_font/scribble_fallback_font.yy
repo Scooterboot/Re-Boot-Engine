@@ -120,7 +120,7 @@
   "name":"scribble_fallback_font",
   "parent":{
     "name":"(System - don't call these functions)",
-    "path":"folders/Extensions/Scribble/(System - don't call these functions).yy",
+    "path":"folders/Scripts/UI/Scribble/(System - don't call these functions).yy",
   },
   "pointRounding":0,
   "ranges":[

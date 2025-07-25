@@ -1,7 +1,7 @@
 /// @description 
 //event_inherited();
 
-for(var i = 0; i < array_length(mBlocks); i++)
+for(var i = 0; i < array_length(blocks); i++)
 {
-	instance_destroy(mBlocks[i]);
+	instance_destroy(blocks[i]);
 }

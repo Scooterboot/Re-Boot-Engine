@@ -9,7 +9,7 @@
   "bitRate":192,
   "compression":1,
   "conversionMode":0,
-  "duration":109.57183,
+  "duration":109.57184,
   "name":"mus_NESNorfair",
   "parent":{
     "name":"Custom",

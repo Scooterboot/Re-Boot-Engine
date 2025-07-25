@@ -1,6 +1,6 @@
 /// @description Initialize
 
-animType = Suit.Varia;
+animType = Item.VariaSuit;
 
 animCounter = 0;
 animCounterMax = 90;

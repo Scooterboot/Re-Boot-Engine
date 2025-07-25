@@ -145,19 +145,19 @@ if(instance_exists(reflec) && lastReflec != reflec)
 #region AI Styles
 if(aiStyle == 0)
 {
-	if(x <= -abs(velX)*2 || x >= room_width+abs(velX)*2 || y <= -abs(velY)*2 || y >= room_height+abs(velY)*2)
+	/*if(x <= -abs(velX)*2 || x >= room_width+abs(velX)*2 || y <= -abs(velY)*2 || y >= room_height+abs(velY)*2)
 	{
 		instance_destroy();
 		exit;
-	}
+	}*/
 }
 if(aiStyle == 1 || aiStyle == 2)
 {
-	if(x <= -(amplitude*2) || x >= room_width+(amplitude*2) || y <= -(amplitude*2) || y >= room_height+(amplitude*2))
+	/*if(x <= -(amplitude*2) || x >= room_width+(amplitude*2) || y <= -(amplitude*2) || y >= room_height+(amplitude*2))
 	{
 		instance_destroy();
 		exit;
-	}
+	}*/
 	
 	var i = 0;
 	if(waveStyle > 0)
@@ -250,6 +250,13 @@ if(tileCollide && impacted == 0)
 	{
 		x += fVelX;
 		y += fVelY;
+	}
+	
+	if(x < 0 || x > room_width || y < 0 || y > room_height)
+	{
+		x = clamp(x,0,room_width);
+		y = clamp(y,0,room_height);
+		impacted = 1;
 	}
 }
 else if(impacted == 0)
@@ -399,7 +406,12 @@ if(timeLeft > -1)
 	}
 }
 
-if(!scr_WithinCamRange(-1,-1,extCamRange) && !ignoreCamera)
+var _camFlag = ignoreCamera;
+if(x < 0 || x > room_width || y < 0 || y > room_height)
+{
+	_camFlag = false;
+}
+if(!scr_WithinCamRange(-1,-1,extCamRange) && !_camFlag)
 {
 	outsideCam++;
 	if(outsideCam > 1)

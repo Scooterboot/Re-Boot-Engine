@@ -4,33 +4,32 @@ if(global.gamePaused)
 	exit;
 }
 
-#region Freeze timer & platform
-
-if(frozen > 0 && !dead)
+if(createPlatformOnFrozen && !freezeImmune)
 {
-	if(!instance_exists(freezePlatform))
+	if(frozen > 0 && !dead)
 	{
-	    freezePlatform = instance_create_layer(scr_round(bb_left()),scr_round(bb_top()),layer_get_id("Collision"),obj_Platform);
-	    freezePlatform.image_xscale = (bb_right()-bb_left()+1)/16;
-	    freezePlatform.image_yscale = (bb_bottom()-bb_top()+1)/16;
-		freezePlatform.xRayHide = true;
+		if(array_length(mBlocks) <= 0 || !instance_exists(mBlocks[0]))
+		{
+			mBlockOffset[0] = new Vector2(bb_left(0), bb_top(0));
+		    mBlocks[0] = instance_create_layer(x+mBlockOffset[0].X, y+mBlockOffset[0].Y, layer_get_id("Collision"), obj_Platform);
+		    mBlocks[0].image_xscale = (bb_right()-bb_left()+1)/16;
+		    mBlocks[0].image_yscale = (bb_bottom()-bb_top()+1)/16;
+			mBlocks[0].xRayHide = true;
+		}
+		else
+		{
+			self.UpdateMovingTiles();
+		}
 	}
-	else
+	else if(array_length(mBlocks) > 0 && instance_exists(mBlocks[0]))
 	{
-		freezePlatform.isSolid = false;
-		freezePlatform.UpdatePosition(scr_round(bb_left()),scr_round(bb_top()));
-		freezePlatform.isSolid = true;
+		instance_destroy(mBlocks[0]);
+		mBlocks = [];
 	}
-}
-else if(instance_exists(freezePlatform))
-{
-	instance_destroy(freezePlatform);
 }
 
 frozenInvFrames = max(frozenInvFrames-1,0);
 frozen = max(frozen - 1, 0);
-
-#endregion
 
 DamagePlayer();
 

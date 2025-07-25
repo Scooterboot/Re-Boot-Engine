@@ -37,49 +37,12 @@ function scr_LoadGame()
 				powerBombMax = _map[? "powerBombMax"];
 				powerBombStat = _map[? "powerBombStat"];
 
-				for(var i = 0; i < array_length(suit); i++)
-				{
-					suit[i] = _map[? "suit"+string(i)];
-				}
-				for(var i = 0; i < array_length(hasSuit); i++)
-				{
-					hasSuit[i] = _map[? "hasSuit"+string(i)];
-				}
-	
-				for(var i = 0; i < array_length(boots); i++)
-				{
-					boots[i] = _map[? "boots"+string(i)];
-				}
-				for(var i = 0; i < array_length(hasBoots); i++)
-				{
-					hasBoots[i] = _map[? "hasBoots"+string(i)];
-				}
-	
-				for(var i = 0; i < array_length(misc); i++)
-				{
-					misc[i] = _map[? "misc"+string(i)];
-				}
-				for(var i = 0; i < array_length(hasMisc); i++)
-				{
-					hasMisc[i] = _map[? "hasMisc"+string(i)];
-				}
-	
-				for(var i = 0; i < array_length(beam); i++)
-				{
-					beam[i] = _map[? "beam"+string(i)];
-				}
-				for(var i = 0; i < array_length(hasBeam); i++)
-				{
-					hasBeam[i] = _map[? "hasBeam"+string(i)];
-				}
-	
 				for(var i = 0; i < array_length(item); i++)
 				{
 					item[i] = _map[? "item"+string(i)];
 				}
 				for(var i = 0; i < array_length(hasItem); i++)
 				{
-					//ds_map_add(_map, "hasItem"+string(i), hasItem[i]);
 					hasItem[i] = _map[? "hasItem"+string(i)];
 				}
 			

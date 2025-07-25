@@ -7,7 +7,7 @@ state = 0;
 counter[0] = 0;
 counter[1] = 0;
 
-function OnYCollision(fVY)
+function OnYCollision(fVY, isOOB = false)
 {
 	if(fVY > 0 && state == 2)
 	{

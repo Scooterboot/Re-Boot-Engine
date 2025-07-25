@@ -11,6 +11,6 @@ isMajorItem = true;
 
 function CollectItem(player)
 {
-	player.hasMisc[Misc.Boost] = true;
-	player.misc[Misc.Boost] = true;
+	player.hasItem[Item.BoostBall] = true;
+	player.item[Item.BoostBall] = true;
 }

@@ -1,5 +1,5 @@
 /// @description 
 event_inherited();
 
-instance_destroy(mBlock);
+instance_destroy(mBlocks[0]);
 audio_stop_sound(moveSnd);

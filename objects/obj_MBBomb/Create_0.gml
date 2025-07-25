@@ -26,7 +26,7 @@ blockBreakType[BlockBreakType.Chain] = true;
 
 dmgScale = 0;
 
-function OnXCollision(fVX)
+function OnXCollision(fVX, isOOB = false)
 {
 	if(spreadType < 2)
 	{
@@ -38,7 +38,7 @@ function OnXCollision(fVX)
 	}
 	ImpactBreak();
 }
-function OnYCollision(fVY)
+function OnYCollision(fVY, isOOB = false)
 {
 	if(spreadType < 2)
 	{

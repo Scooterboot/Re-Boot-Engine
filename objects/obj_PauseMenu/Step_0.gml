@@ -118,25 +118,25 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 		}
 		else if(ds_list_empty(invListL))
 		{
-			for(var i = 0; i < array_length(P.hasSuit); i++)
+			for(var i = 0; i < array_length(suitIndex); i++)
 			{
-				if(P.hasSuit[i])
+				if(P.hasItem[suitIndex[i]])
 				{
 					ds_list_add(invListL,"Suit_"+string(i));
 				}
 			}
-			for(var i = 0; i < array_length(P.hasBeam); i++)
+			for(var i = 0; i < array_length(beamIndex); i++)
 			{
-				if(P.hasBeam[i])
+				if(P.hasItem[beamIndex[i]])
 				{
 					ds_list_add(invListL,"Beam_"+string(i));
 				}
 			}
-			for(var i = 0; i < array_length(P.hasItem); i++)
+			for(var i = 0; i < array_length(equipIndex); i++)
 			{
-				if(P.hasItem[i])
+				if(P.hasItem[equipIndex[i]])
 				{
-					ds_list_add(invListL,"Item_"+string(i));
+					ds_list_add(invListL,"Equip_"+string(i));
 				}
 			}
 		}
@@ -146,16 +146,16 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 		}
 		else if(ds_list_empty(invListR))
 		{
-			for(var i = 0; i < array_length(P.hasMisc); i++)
+			for(var i = 0; i < array_length(miscIndex); i++)
 			{
-				if(P.hasMisc[i])
+				if(P.hasItem[miscIndex[i]])
 				{
 					ds_list_add(invListR,"Misc_"+string(i));
 				}
 			}
-			for(var i = 0; i < array_length(P.hasBoots); i++)
+			for(var i = 0; i < array_length(bootsIndex); i++)
 			{
-				if(P.hasBoots[i])
+				if(P.hasItem[bootsIndex[i]])
 				{
 					ds_list_add(invListR,"Boots_"+string(i));
 				}
@@ -312,7 +312,7 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 					{
 						invPosX = 1;
 						invPos = 0;
-						if(string_pos("Item",ability) != 0)
+						if(string_pos("Equip",ability) != 0)
 						{
 							for(var i = 0; i < ds_list_size(invListR); i++)
 							{
@@ -329,21 +329,18 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 					{
 						if(string_pos("Suit",ability) != 0)
 						{
-							P.suit[index] = !P.suit[index];
+							P.item[suitIndex[index]] = !P.item[suitIndex[index]];
 						}
 						if(string_pos("Beam",ability) != 0)
 						{
-							P.beam[index] = !P.beam[index];
+							P.item[beamIndex[index]] = !P.item[beamIndex[index]];
 						}
-						if(string_pos("Item",ability) != 0)
+						if(string_pos("Equip",ability) != 0)
 						{
-							//toggleItem = false;
-							P.item[index] = !P.item[index];
+							P.item[equipIndex[index]] = !P.item[equipIndex[index]];
 						}
-						//else
-						//{
-							audio_play_sound(snd_MenuBoop,0,false);
-						//}
+						
+						audio_play_sound(snd_MenuBoop,0,false);
 					}
 				}
 				else if(invPosX == 1)
@@ -372,7 +369,7 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 							for(var i = 0; i < ds_list_size(invListL); i++)
 							{
 								var pos = ds_list_find_value(invListL,i);
-								if(string_pos("Item",pos) != 0)
+								if(string_pos("Equip",pos) != 0)
 								{
 									invPos = i;
 									break;
@@ -384,11 +381,11 @@ if(canPause && pause && pauseFade >= 1 && !loadGame && !gameEnd)
 					{
 						if(string_pos("Misc",ability) != 0)
 						{
-							P.misc[index] = !P.misc[index];
+							P.item[miscIndex[index]] = !P.item[miscIndex[index]];
 						}
 						if(string_pos("Boots",ability) != 0)
 						{
-							P.boots[index] = !P.boots[index];
+							P.item[bootsIndex[index]] = !P.item[bootsIndex[index]];
 						}
 						audio_play_sound(snd_MenuBoop,0,false);
 					}

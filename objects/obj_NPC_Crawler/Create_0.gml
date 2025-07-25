@@ -15,12 +15,12 @@ function MoveStickRight_Y(movingTile) { return true; }
 function MoveStickLeft_X(movingTile) { return true; }
 function MoveStickLeft_Y(movingTile) { return true; }
 
-function Crawler_OnXCollision(fVX)
+function Crawler_OnXCollision(fVX, isOOB = false)
 {
 	velX = 0;
 	fVelX = 0;
 }
-function Crawler_OnYCollision(fVY)
+function Crawler_OnYCollision(fVY, isOOB = false)
 {
 	velY = 0;
 	fVelY = 0;

@@ -9,7 +9,7 @@
   "bitRate":192,
   "compression":1,
   "conversionMode":0,
-  "duration":177.0057,
+  "duration":176.99556,
   "name":"mus_LowerMaridia",
   "parent":{
     "name":"Areas",

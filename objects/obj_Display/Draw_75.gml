@@ -4,7 +4,7 @@ var screenX = scr_round(global.screenX),
 	screenW = global.resWidth*screenScale,
 	screenH = global.resHeight*screenScale;
 
-display_set_gui_maximize(1, 1, 0, 0);
+//display_set_gui_maximize(1, 1, 0, 0);
 
 gpu_set_texfilter(false);
 draw_clear_alpha(c_black,0);

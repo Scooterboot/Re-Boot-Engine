@@ -47,42 +47,6 @@ function scr_SaveGame()
 		ds_map_add(_map, "powerBombMax", powerBombMax);
 		ds_map_add(_map, "powerBombStat", powerBombStat);
 
-		for(var i = 0; i < array_length(suit); i++)
-		{
-			ds_map_add(_map, "suit"+string(i), suit[i]);
-		}
-		for(var i = 0; i < array_length(hasSuit); i++)
-		{
-			ds_map_add(_map, "hasSuit"+string(i), hasSuit[i]);
-		}
-	
-		for(var i = 0; i < array_length(boots); i++)
-		{
-			ds_map_add(_map, "boots"+string(i), boots[i]);
-		}
-		for(var i = 0; i < array_length(hasBoots); i++)
-		{
-			ds_map_add(_map, "hasBoots"+string(i), hasBoots[i]);
-		}
-	
-		for(var i = 0; i < array_length(misc); i++)
-		{
-			ds_map_add(_map, "misc"+string(i), misc[i]);
-		}
-		for(var i = 0; i < array_length(hasMisc); i++)
-		{
-			ds_map_add(_map, "hasMisc"+string(i), hasMisc[i]);
-		}
-	
-		for(var i = 0; i < array_length(beam); i++)
-		{
-			ds_map_add(_map, "beam"+string(i), beam[i]);
-		}
-		for(var i = 0; i < array_length(hasBeam); i++)
-		{
-			ds_map_add(_map, "hasBeam"+string(i), hasBeam[i]);
-		}
-	
 		for(var i = 0; i < array_length(item); i++)
 		{
 			ds_map_add(_map, "item"+string(i), item[i]);

@@ -11,6 +11,6 @@ isMajorItem = true;
 
 function CollectItem(player)
 {
-	player.hasBeam[Beam.Spazer] = true;
-	player.beam[Beam.Spazer] = true;
+	player.hasItem[Item.Spazer] = true;
+	player.item[Item.Spazer] = true;
 }

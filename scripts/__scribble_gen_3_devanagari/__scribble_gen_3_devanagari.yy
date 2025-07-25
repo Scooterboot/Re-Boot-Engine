@@ -6,7 +6,7 @@
   "name":"__scribble_gen_3_devanagari",
   "parent":{
     "name":"Generator",
-    "path":"folders/Extensions/Scribble/(System - don't call these functions)/Generator.yy",
+    "path":"folders/Scripts/UI/Scribble/(System - don't call these functions)/Generator.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

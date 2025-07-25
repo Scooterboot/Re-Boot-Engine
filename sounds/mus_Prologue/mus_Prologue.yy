@@ -9,7 +9,7 @@
   "bitRate":192,
   "compression":1,
   "conversionMode":0,
-  "duration":205.00899,
+  "duration":205.00897,
   "name":"mus_Prologue",
   "parent":{
     "name":"Music",

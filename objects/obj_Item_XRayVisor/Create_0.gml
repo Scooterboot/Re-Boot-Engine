@@ -11,6 +11,6 @@ isMajorItem = true;
 
 function CollectItem(player)
 {
-	player.hasItem[Item.XRay] = true;
-	player.item[Item.XRay] = true;
+	player.hasItem[Item.XRayVisor] = true;
+	player.item[Item.XRayVisor] = true;
 }

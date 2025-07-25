@@ -11,6 +11,6 @@ isMajorItem = true;
 
 function CollectItem(player)
 {
-	player.hasBeam[Beam.Wave] = true;
-	player.beam[Beam.Wave] = true;
+	player.hasItem[Item.WaveBeam] = true;
+	player.item[Item.WaveBeam] = true;
 }

@@ -14,9 +14,9 @@ expanDesc = "+"+string(pBombAmount)+" Power Bomb Capacity";
 
 function CollectItem(player)
 {
-	isExpansion = (player.hasItem[Item.PBomb]);
-	player.hasItem[Item.PBomb] = true;
-	player.item[Item.PBomb] = true;
+	isExpansion = (player.hasItem[Item.PowerBomb]);
+	player.hasItem[Item.PowerBomb] = true;
+	player.item[Item.PowerBomb] = true;
 	player.powerBombMax += pBombAmount;
 	player.powerBombStat += pBombAmount;
 }

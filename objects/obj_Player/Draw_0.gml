@@ -35,7 +35,7 @@ for(var i = 0; i < ds_list_size(afterImageList); i++)
 
 PreDrawPlayer(x,y,0,1);
 
-if(liquid && !liquidMovement && suit[Suit.Gravity])
+if(liquid && !liquidMovement && item[Item.GravitySuit])
 {
 	gravGlowAlpha += 0.01*gravGlowNum*(!global.gamePaused);
 	if(gravGlowAlpha <= 0.75)

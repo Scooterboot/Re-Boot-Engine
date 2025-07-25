@@ -1,12 +1,9 @@
 /// @description 
+event_inherited();
 if(global.gamePaused)
 {
 	exit;
 }
-
-frozenInvFrames = max(frozenInvFrames-1,0);
-frozen = max(frozen - 1, 0);
-
 
 if(!PauseAI())
 {
@@ -24,8 +21,4 @@ if(!PauseAI())
 	}
 }
 
-platform.isSolid = false;
-platform.UpdatePosition(scr_round(bb_left()),scr_round(bb_top()));
-platform.isSolid = true;
-
-DamagePlayer();
+self.UpdateMovingTiles();

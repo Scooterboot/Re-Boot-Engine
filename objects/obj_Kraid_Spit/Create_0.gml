@@ -15,7 +15,7 @@ function PauseAI()
 
 grav = 0.125;
 
-function OnXCollision(fVX)
+function OnXCollision(fVX, isOOB = false)
 {
 	for(var i = 0; i < 3; i++)
 	{
@@ -29,7 +29,7 @@ function OnXCollision(fVX)
 	}
 	kill = true;
 }
-function OnYCollision(fVY)
+function OnYCollision(fVY, isOOB = false)
 {
 	OnXCollision(fVY);
 }

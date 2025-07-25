@@ -6,7 +6,7 @@
   "name":"lib_logger",
   "parent":{
     "name":"Libraries",
-    "path":"folders/Extensions/Libraries.yy",
+    "path":"folders/Scripts/Libraries.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

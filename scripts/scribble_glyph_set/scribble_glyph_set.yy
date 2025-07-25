@@ -6,7 +6,7 @@
   "name":"scribble_glyph_set",
   "parent":{
     "name":"Fonts",
-    "path":"folders/Extensions/Scribble/Fonts.yy",
+    "path":"folders/Scripts/UI/Scribble/Fonts.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

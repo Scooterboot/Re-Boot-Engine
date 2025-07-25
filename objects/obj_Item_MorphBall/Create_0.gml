@@ -11,6 +11,6 @@ isMajorItem = true;
 
 function CollectItem(player)
 {
-	player.hasMisc[Misc.Morph] = true;
-	player.misc[Misc.Morph] = true;
+	player.hasItem[Item.MorphBall] = true;
+	player.item[Item.MorphBall] = true;
 }

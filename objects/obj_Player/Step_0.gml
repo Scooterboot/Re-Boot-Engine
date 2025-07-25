@@ -87,188 +87,72 @@ if(!global.gamePaused || (instance_exists(XRay) && !global.roomTrans && !obj_Pau
 			powerBombMax = 50;//2 * powerBombTanks;
 			powerBombStat = powerBombMax;
 		
-			for(var i = 0; i < array_length(suit); i++)
-			{
-				suit[i] = true;
-				hasSuit[i] = suit[i];
-			}
-			for(var i = 0; i < array_length(misc); i++)
-			{
-				misc[i] = true;
-				hasMisc[i] = misc[i];
-			}
-			for(var i = 0; i < array_length(boots); i++)
-			{
-				boots[i] = true;
-				hasBoots[i] = boots[i];
-			}
-			for(var i = 0; i < array_length(beam); i++)
-			{
-				beam[i] = true;
-				hasBeam[i] = beam[i];
-			}
-			for(var i = 0; i < array_length(item); i++)
+			for(var i = 0; i < Item._Length; i++)
 			{
 				item[i] = true;
-				hasItem[i] = item[i];
+				hasItem[i] = true;
 			}
 		}
 		#endregion
 		#region 6
 		if(keyboard_check_pressed(ord("6")))
 		{
-			var rand = irandom(9);
-			if(rand == 0 && energyMax < 1499)
+			var ilen = Item._Length;
+			var rnum = irandom(ilen),
+				rnum2 = ilen;
+			while(rnum2 > 0)
 			{
-				energyMax += 100;
-				energy = energyMax;
-			}
-			else if(rand == 1 && missileMax < 250)
-			{
-				missileMax += 5;
-				missileStat = missileMax;
-				item[Item.Missile] = true;
-			}
-			else if(rand == 2 && superMissileMax < 50)
-			{
-				superMissileMax += 5;
-				superMissileStat = superMissileMax;
-				item[Item.SMissile] = true;
-			}
-			else if(rand == 3 && powerBombMax < 50)
-			{
-				powerBombMax += 5;
-				powerBombStat = powerBombMax;
-				item[Item.PBomb] = true;
-			}
-			else
-			{
-				if(rand == 4 || rand == 0)
+				if(rnum >= Item._Length)
 				{
-					var ilen = array_length(beam);
-					var rnum = irandom(ilen-1),
-						rnum2 = ilen;
-					while(rnum2 > 0)
+					if(energyMax < 1499)
 					{
-						if(!hasBeam[rnum])
-						{
-							beam[rnum] = true;
-							break;
-						}
-						else
-						{
-							rnum = scr_wrap(rnum+1,0,ilen);
-						}
-						rnum2--;
-					}
-				}
-				else if(rand == 5 || rand == 1)
-				{
-					if(!hasItem[Item.Grapple] && !hasItem[Item.XRay])
-					{
-						item[irandom_range(Item.Grapple,Item.XRay)] = true;
-					}
-					else if(!hasItem[Item.Grapple])
-					{
-						item[Item.Grapple] = true;
+						energyMax += 100;
+						energy = energyMax;
+						break;
 					}
 					else
 					{
-						item[Item.XRay] = true;
+						rnum = irandom(ilen-1);
 					}
 				}
-				else if(rand == 6 || rand == 2)
+				else if(rnum == Item.Missile && missileMax < 250)
 				{
-					var ilen = array_length(misc);
-					var rnum = irandom(ilen-1),
-						rnum2 = ilen;
-					while(rnum2 > 0)
-					{
-						if(!hasMisc[rnum])
-						{
-							misc[rnum] = true;
-							break;
-						}
-						else
-						{
-							rnum = scr_wrap(rnum+1,0,ilen);
-						}
-						rnum2--;
-					}
+					missileMax += 5;
+					missileStat = missileMax;
+					item[Item.Missile] = true;
+					break;
 				}
-				else if(rand == 7 || rand == 3)
+				else if(rnum == Item.SuperMissile && superMissileMax < 50)
 				{
-					var ilen = array_length(boots);
-					var rnum = irandom(ilen-1),
-						rnum2 = ilen;
-					while(rnum2 > 0)
-					{
-						if(!hasBoots[rnum])
-						{
-							boots[rnum] = true;
-							break;
-						}
-						else
-						{
-							rnum = scr_wrap(rnum+1,0,ilen);
-						}
-						rnum2--;
-					}
+					superMissileMax += 5;
+					superMissileStat = superMissileMax;
+					item[Item.SuperMissile] = true;
+					break;
 				}
-				else if(rand >= 8)
+				else if(rnum == Item.PowerBomb && powerBombMax < 50)
 				{
-					var ilen = array_length(suit);
-					var rnum = irandom(ilen-1),
-						rnum2 = ilen;
-					while(rnum2 > 0)
-					{
-						if(!hasSuit[rnum])
-						{
-							suit[rnum] = true;
-							break;
-						}
-						else
-						{
-							rnum = scr_wrap(rnum+1,0,ilen);
-						}
-						rnum2--;
-					}
+					powerBombMax += 5;
+					powerBombStat = powerBombMax;
+					item[Item.PowerBomb] = true;
+					break;
 				}
+				else if(!hasItem[rnum])
+				{
+					item[rnum] = true;
+					break;
+				}
+				else
+				{
+					rnum = scr_wrap(rnum+1,0,ilen+1);
+				}
+				rnum2--;
 			}
 		
-			for(var i = 0; i < array_length(suit); i++)
-			{
-				if(!hasSuit[i] && suit[i])
-				{
-					hasSuit[i] = true;
-				}
-			}
-			for(var i = 0; i < array_length(beam); i++)
-			{
-				if(!hasBeam[i] && beam[i])
-				{
-					hasBeam[i] = true;
-				}
-			}
-			for(var i = 0; i < array_length(item); i++)
+			for(var i = 0; i < Item._Length; i++)
 			{
 				if(!hasItem[i] && item[i])
 				{
 					hasItem[i] = true;
-				}
-			}
-			for(var i = 0; i < array_length(misc); i++)
-			{
-				if(!hasMisc[i] && misc[i])
-				{
-					hasMisc[i] = true;
-				}
-			}
-			for(var i = 0; i < array_length(boots); i++)
-			{
-				if(!hasBoots[i] && boots[i])
-				{
-					hasBoots[i] = true;
 				}
 			}
 		}
@@ -368,11 +252,11 @@ if(!global.gamePaused || (instance_exists(XRay) && !global.roomTrans && !obj_Pau
 	}
 	
 	damageReduct = 1;
-	if(suit[Suit.Varia])
+	if(item[Item.VariaSuit])
 	{
 		damageReduct *= 0.5;
 	}
-	if(suit[Suit.Gravity])
+	if(item[Item.GravitySuit])
 	{
 		damageReduct *= 0.5;
 	}
@@ -389,7 +273,7 @@ if(!global.gamePaused || (instance_exists(XRay) && !global.roomTrans && !obj_Pau
 	    {
 	        dph = 3;
 	    }
-	    liquidMovement = (liquidLevel > dph && !suit[Suit.Gravity]);
+	    liquidMovement = (liquidLevel > dph && !item[Item.GravitySuit]);
 		
 		if(liquidMovement)
 		{
@@ -466,12 +350,12 @@ if(!global.gamePaused || (instance_exists(XRay) && !global.roomTrans && !obj_Pau
 	
 	walkState = ((cAimLock || instance_exists(grapple)) && velX != 0 && sign(velX) != dir && state == State.Stand && !instance_exists(XRay));
 	
-	if(dir != 0 && cMorph && rMorph && morphFrame <= 0 && state != State.Crouch && state != State.Morph && stateFrame != State.Morph && misc[Misc.Morph] && state != State.Spark && state != State.BallSpark && state != State.Grip && !instance_exists(XRay))
+	if(dir != 0 && cMorph && rMorph && morphFrame <= 0 && state != State.Crouch && state != State.Morph && stateFrame != State.Morph && item[Item.MorphBall] && state != State.Spark && state != State.BallSpark && state != State.Grip && !instance_exists(XRay))
 	{
 		audio_play_sound(snd_Morph,0,false);
 		if(state == State.Stand)
 		{
-			if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
+			if(_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidMovement))
 			{
 				velX = min(abs(velX),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 				speedCounter = 0;
@@ -482,7 +366,7 @@ if(!global.gamePaused || (instance_exists(XRay) && !global.roomTrans && !obj_Pau
 		groundedMorph = grounded;
 		morphFrame = 8;
 		
-		if(GrappleActive() && (misc[Misc.MagBall] || misc[Misc.Spider]) && unmorphing == 0 && global.spiderBallStyle == 0)
+		if(GrappleActive() && (item[Item.MagniBall] || item[Item.SpiderBall]) && unmorphing == 0 && global.spiderBallStyle == 0)
 		{
 			SpiderEnable(true);
 		}
@@ -510,7 +394,7 @@ if(!global.gamePaused || (instance_exists(XRay) && !global.roomTrans && !obj_Pau
 		{
 			if(!grounded && cDown && !cUp && state != State.Morph)
 			{
-				if(aimAngle == -2 && move == 0 && rDown && morphFrame <= 0 && state != State.Morph && misc[Misc.Morph] && state != State.Somersault && state != State.Spark && state != State.BallSpark && state != State.Grip && !cAngleUp && !cAngleDown)
+				if(aimAngle == -2 && move == 0 && rDown && morphFrame <= 0 && state != State.Morph && item[Item.MorphBall] && state != State.Somersault && state != State.Spark && state != State.BallSpark && state != State.Grip && !cAngleUp && !cAngleDown)
 				{
 					audio_play_sound(snd_Morph,0,false);
 					ChangeState(State.Morph,State.Morph,mask_Player_Morph,false);
@@ -730,7 +614,7 @@ if(instance_exists(XRay))
 		}
 		else
 		{
-			if(misc[Misc.Spring])
+			if(item[Item.SpringBall])
 			{
 				moveState = MaxSpeed.AirSpring;
 			}
@@ -756,7 +640,7 @@ if(instance_exists(XRay))
 	{
 		if(sprint && !liquidMovement)
 		{
-			if(boots[Boots.SpeedBoost])
+			if(item[Item.SpeedBooster])
 			{
 				moveState = MaxSpeed.SpeedBoost;
 			}
@@ -937,7 +821,7 @@ if(instance_exists(XRay))
 				}
 			}
 		}
-		else if(state == State.Dodge && dodgeLength >= dodgeLengthMax-5 && !speedBoost)
+		else if(state == State.Dodge && dodgeLength >= dodgeLengthEnd && !speedBoost)
 		{
 			var flag = (!liquidMovement && (move != dir || dodgeDir == -dir));
 			if(velX > 0)
@@ -957,7 +841,7 @@ if(instance_exists(XRay))
 	
 	minBoostSpeed = maxSpeed[MaxSpeed.Sprint,liquidState] + ((maxSpeed[MaxSpeed.SpeedBoost,liquidState] - maxSpeed[MaxSpeed.Sprint,liquidState])*0.75);
 	
-	if(fastWallJump && speedBoostWallJump)
+	if(_FAST_WALLJUMP && _SPEEDBOOST_WALLJUMP)
 	{
 		var sBoostWJFlag = (speedBoost && state == State.Somersault && !grounded && sign(prevVelX) != dir && abs(prevVelX) >= maxSpeed[MaxSpeed.Sprint,liquidState]);
 		if(sBoostWJFlag)
@@ -1016,7 +900,7 @@ if(instance_exists(XRay))
 		{
 			speedBuffer = 0;
 			speedBufferCounter = 0;
-			//if(!speedBoost && (speedKeep == 0 || (speedKeep == 2 && liquidMovement)))
+			//if(!speedBoost && (_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidMovement)))
 			//{
 			//	speedCounter = 0;
 			//}
@@ -1046,13 +930,13 @@ if(instance_exists(XRay))
 		}
 	}
 	
-	if(boots[Boots.SpeedBoost])
+	if(item[Item.SpeedBooster])
 	{
 		if(speedCounter >= speedCounterMax)
 		{
 			speedBoost = true;
 		}
-		else if(!speedBoost && (abs(velX) >= minBoostSpeed || abs(spiderSpeed) >= minBoostSpeed) && (state == State.Stand || !restrictSBToRun) && state != State.Dodge && state != State.Grapple && !grapBoost && !spiderJump)
+		else if(!speedBoost && (abs(velX) >= minBoostSpeed || abs(spiderSpeed) >= minBoostSpeed) && (state == State.Stand || !_RUN_RESTRICT_SB) && state != State.Dodge && state != State.Grapple && !grapBoost && !spiderJumpBoost)
 		{
 			speedCounter = speedCounterMax;
 			speedBoost = true;
@@ -1188,15 +1072,27 @@ if(instance_exists(XRay))
 		}
 	}
 	
+	var detectWJ = false;
 	if(state == State.Jump || state == State.Somersault)
 	{
-		var detectRange = 8 + abs(prevVelX);
-		//canWallJump = (move != 0 && (entity_place_collide(velX-detectRange*move,0) || place_meeting(position.X+velX-detectRange*move,position.Y,ColType_Platform)) && wjFrame <= 0 && coyoteJump <= 0);
+		var detectRange = 8;
+		if(_FAST_WALLJUMP)
+		{
+			detectRange += abs(prevVelX);
+		}
 		canWallJump = false;
-		if(move != 0 && wjFrame <= 0 && coyoteJump <= 0)
+		if((move != 0 || (_FAST_WALLJUMP && sign(velX) != 0 && move != sign(velX))) && wjFrame <= 0 && coyoteJump <= 0)
 		{
 			var _solids = array_concat(solids,ColType_Platform);
-			var num = instance_place_list(position.X+velX-detectRange*move,position.Y,_solids,blockList,true);
+			var num = 0;
+			if(move != 0)
+			{
+				num = instance_place_list(position.X+velX - detectRange*move, position.Y, _solids, blockList, true);
+			}
+			if(_FAST_WALLJUMP && sign(velX) != 0 && move != sign(velX))
+			{
+				num = instance_place_list(position.X+velX + detectRange*sign(velX), position.Y, _solids, blockList, true);
+			}
 			if(num > 0)
 			{
 				for(var i = 0; i < num; i++)
@@ -1212,7 +1108,11 @@ if(instance_exists(XRay))
 						}
 						if(isSolid)
 						{
-							canWallJump = true;
+							if(move != 0 && place_meeting(position.X+velX - detectRange*move, position.Y, block))
+							{
+								canWallJump = true;
+							}
+							detectWJ = _FAST_WALLJUMP;
 							break;
 						}
 					}
@@ -1236,7 +1136,7 @@ if(instance_exists(XRay))
 	
 	#region Jump Logic
 	
-	fJumpHeight = jumpHeight[boots[Boots.HiJump],liquidState];
+	fJumpHeight = jumpHeight[item[Item.HiJump],liquidState];
 	
 	var isJumping = (cJump && dir != 0 && /*climbIndex <= 0 &&*/ state != State.Spark && state != State.BallSpark && 
 	state != State.Hurt && (!SpiderActive() || !sparkCancelSpiderJumpTweak) && (state != State.Grapple || grapWJCounter > 0)) && 
@@ -1257,8 +1157,8 @@ if(instance_exists(XRay))
 		if(jump <= 0)
 		{
 			if(shineCharge > 0 && rJump && (CanChangeState(mask_Player_Jump) || state == State.Morph) && !entity_place_collide(0,-1) && 
-			(move == 0 || velX == 0 || state == State.Jump) && state != State.Somersault && state != State.DmgBoost && ((!cAngleDown && !cDown) || boots[Boots.ChainSpark]) && 
-			(state != State.Morph || misc[Misc.Spring]) && morphFrame <= 0 && state != State.Grip)
+			(move == 0 || velX == 0 || state == State.Jump) && state != State.Somersault && state != State.DmgBoost && ((!cAngleDown && !cDown) || item[Item.ChainSpark]) && 
+			(state != State.Morph || item[Item.SpringBall]) && morphFrame <= 0 && state != State.Grip)
 			{
 				audio_stop_sound(snd_ShineSpark_Charge);
 				shineStart = 30;
@@ -1274,12 +1174,12 @@ if(instance_exists(XRay))
 				rSparkJump = true;
 			}
 			else if((rJump || (state == State.Morph && !SpiderActive() && rMorphJump) || bufferJump > 0) && quickClimbTarget <= 0 && //climbIndex <= 0 && 
-			(state != State.Morph || (state == State.Morph && ((misc[Misc.Spring] && morphFrame <= 0) || ((unmorphing > 0 || morphSpinJump) && CanChangeState(mask_Player_Somersault))))) && state != State.DmgBoost)
+			(state != State.Morph || (state == State.Morph && ((item[Item.SpringBall] && morphFrame <= 0) || ((unmorphing > 0 || morphSpinJump) && CanChangeState(mask_Player_Somersault))))) && state != State.DmgBoost)
 			{
 				if((grounded && !moonFallState) || coyoteJump > 0 || canWallJump || (state == State.Grip && canGripJump) || 
-				(boots[Boots.SpaceJump] && velY >= sjThresh && state == State.Somersault && !liquidMovement && rJump))
+				(item[Item.SpaceJump] && velY >= sjThresh && state == State.Somersault && !liquidMovement && ((!detectWJ && rRespinJump) || bufferJump <= 1)))
 				{
-					if(!grounded && !canWallJump && boots[Boots.SpaceJump] && velY >= sjThresh)
+					if(!grounded && !canWallJump && item[Item.SpaceJump] && velY >= sjThresh)
 					{
 						spaceJump = 8;
 					}
@@ -1325,7 +1225,7 @@ if(instance_exists(XRay))
 							m = dir;
 						}
 						
-						if(fastWallJump)
+						if(_FAST_WALLJUMP)
 						{
 							velX = max(baseVel,abs(prevVelX))*m;
 							
@@ -1356,10 +1256,11 @@ if(instance_exists(XRay))
 								dist.alpha = 0.5;
 								dist.alphaNum = 1;
 								dist.alphaRate = 0.5;
-								dist.alphaRateMultDecr = 0.2;
+								dist.alphaRateMultDecr = 0.3;//0.2;
 								dist.spread = 0.5;
 								dist.width = 0.5;
 								dist.colorMult = -fastWJFlash;
+								dist.alphaMult = 0.75;
 								
 								var num = ceil(24*spd);
 								for(var i = 0; i < ceil(18*spd); i++)
@@ -1381,9 +1282,10 @@ if(instance_exists(XRay))
 						wjFrame = 8;
 						wjAnimDelay = 10;
 						
-						if(dodgeRecharge >= dodgeRecharge-dodgeRechargeRate)
+						var dRechargeMax = dodgeChargeCellSize * dodgeChargeCells;
+						if(dodgeRecharge >= dRechargeMax-dodgeRechargeRate)
 						{
-							dodgeRecharge = min(dodgeRecharge+dodgeRechargeRate,dodgeRechargeMax);
+							dodgeRecharge = min(dodgeRecharge+dodgeRechargeRate, dRechargeMax);
 						}
 						
 						if(liquid && liquid.liquidType != LiquidType.Lava)
@@ -1447,7 +1349,7 @@ if(instance_exists(XRay))
 							ChangeState(State.Jump,State.Jump,mask_Player_Jump,false, false);
 						}
 					}
-					if((rJump || bufferJump > 0) && state == State.Morph && !misc[Misc.Spring])//(cSprint || !misc[Misc.Spring]) && boostBallCharge < boostBallChargeMin)
+					if((rJump || bufferJump > 0) && state == State.Morph && !item[Item.SpringBall])//(cSprint || !item[Item.SpringBall]) && boostBallCharge < boostBallChargeMin)
 					{
 						morphSpinJump = true;
 					}
@@ -1458,13 +1360,17 @@ if(instance_exists(XRay))
 				{
 					if(state != State.Morph && state != State.Grip && !instance_exists(grapple))
 					{
+						if(state == State.Jump)
+						{
+							rRespinJump = false;
+						}
 						ChangeState(State.Somersault,State.Somersault,mask_Player_Somersault,false);
 						if(moonFallState && !moonFall)
 						{
 							moonFall = true;
 						}
 					}
-					if(state == State.Morph && (cSprint || !misc[Misc.Spring]))
+					if(state == State.Morph && (cSprint || !item[Item.SpringBall]))
 					{
 						morphSpinJump = true;
 					}
@@ -1480,13 +1386,13 @@ if(instance_exists(XRay))
 			}
 		}
 		
-		fJumpSpeed = jumpSpeed[boots[Boots.HiJump],liquidState];
+		fJumpSpeed = jumpSpeed[item[Item.HiJump],liquidState];
 		if(wallJumped)
 		{
-			fJumpSpeed = jumpSpeed[2+boots[Boots.HiJump],liquidState];
+			fJumpSpeed = jumpSpeed[2+item[Item.HiJump],liquidState];
 		}
 	
-		if(boots[Boots.SpeedBoost] && abs(velX) > maxSpeed[MaxSpeed.Sprint,liquidState] && speedCounter > 0)
+		if(item[Item.SpeedBooster] && abs(velX) > maxSpeed[MaxSpeed.Sprint,liquidState] && speedCounter > 0)
 		{
 			fJumpSpeed += max((abs(velX) - maxSpeed[MaxSpeed.Sprint,liquidState]) / 2, 0);
 		}
@@ -1510,6 +1416,7 @@ if(instance_exists(XRay))
 				prevSpiderEdge = Edge.None;
 				
 				spiderJump = true;
+				spiderJumpBoost = true;
 			}
 			else
 			{
@@ -1541,6 +1448,7 @@ if(instance_exists(XRay))
 		
 		jump = 0;
 		wallJumped = false;
+		rRespinJump = true;
 	}
 	if(grounded)
 	{
@@ -1628,6 +1536,7 @@ if(instance_exists(XRay))
 			prevSpiderEdge = Edge.None;
 			
 			spiderJump = true;
+			spiderJumpBoost = true;
 		}
 		else
 		{
@@ -1665,7 +1574,7 @@ if(instance_exists(XRay))
 		velY += min(fGrav,max(fallspd-velY,0));
 	}
 	
-	if(state != State.Morph || !misc[Misc.Spring])
+	if(state != State.Morph || !item[Item.SpringBall])
 	{
 		rMorphJump = false;
 	}
@@ -1876,7 +1785,7 @@ if(instance_exists(XRay))
 			
 			canMorphBounce = false;
 			
-			if((misc[Misc.MagBall] || misc[Misc.Spider]) && unmorphing == 0)
+			if((item[Item.MagniBall] || item[Item.SpiderBall]) && unmorphing == 0)
 			{
 				spiderGrappleSpeedKeep = true;
 			}
@@ -1938,7 +1847,7 @@ if(instance_exists(XRay))
 #endregion
 
 #region Boost Ball Movement
-	if((state == State.Morph || state == State.BallSpark || state == State.Grip || state == State.Hurt) && stateFrame == State.Morph && misc[Misc.Boost] && unmorphing == 0)
+	if((state == State.Morph || state == State.BallSpark || state == State.Grip || state == State.Hurt) && stateFrame == State.Morph && item[Item.BoostBall] && unmorphing == 0)
 	{
 		if(cSprint)
 		{
@@ -2001,7 +1910,6 @@ if(instance_exists(XRay))
 				boostBallDmgCounter = bbMult;
 				boostBallFXFlash = true;
 				
-				spiderJump = false;
 				grapBoost = false;
 			}
 			
@@ -2022,53 +1930,12 @@ if(instance_exists(XRay))
 #region Spider Ball Movement
 	if(spiderBall)
 	{
-		switch(spiderEdge)
-		{
-			case Edge.Bottom:
-			{
-				if(!entity_place_collide(0,2) && !entity_place_collide(2,2) && !entity_place_collide(-2,2))
-				{
-					spiderEdge = Edge.None;
-				}
-				break;
-			}
-			case Edge.Left:
-			{
-				if(!entity_place_collide(-2,0) && !entity_place_collide(-2,2) && !entity_place_collide(-2,-2))
-				{
-					spiderEdge = Edge.None;
-				}
-				break;
-			}
-			case Edge.Top:
-			{
-				if(!entity_place_collide(0,-2) && !entity_place_collide(2,-2) && !entity_place_collide(-2,-2))
-				{
-					spiderEdge = Edge.None;
-				}
-				break;
-			}
-			case Edge.Right:
-			{
-				if(!entity_place_collide(2,0) && !entity_place_collide(2,2) && !entity_place_collide(2,-2))
-				{
-					spiderEdge = Edge.None;
-				}
-				break;
-			}
-		}
-		
-		if(state == State.BallSpark && (shineStart > 0 || shineLauncherStart > 0))
-		{
-			spiderEdge = Edge.None;
-		}
-		
 		if(spiderEdge == Edge.None)
 		{
 			spiderSpeed = 0;
-			if(state != State.BallSpark && !spiderJump)
+			if(state != State.BallSpark && !spiderJump && jump <= 0)
 			{
-				if((entity_place_collide(0,1) || grounded) && Crawler_CanStickBottom())
+				if(entity_place_collide(0,1) && Crawler_CanStickBottom())
 				{
 					spiderEdge = Edge.Bottom;
 					spiderSpeed = velX;
@@ -2093,20 +1960,24 @@ if(instance_exists(XRay))
 					spiderMove = sign(spiderSpeed);
 				}
 			}
-			
-			if(jump <= 0 && bombJump <= 0)
-			{
-				spiderJump = false;
-				spiderJumpDir = 90;
-				spiderJump_SpeedAddX = 0;
-				spiderJump_SpeedAddY = 0;
-			}
 		}
 		else
 		{
+			if ((spiderEdge == Edge.Bottom && !entity_place_collide(0,2) && !entity_place_collide(2,2) && !entity_place_collide(-2,2)) ||
+				(spiderEdge == Edge.Left && !entity_place_collide(-2,0) && !entity_place_collide(-2,2) && !entity_place_collide(-2,-2)) ||
+				(spiderEdge == Edge.Top && !entity_place_collide(0,-2) && !entity_place_collide(2,-2) && !entity_place_collide(-2,-2)) || 
+				(spiderEdge == Edge.Right && !entity_place_collide(2,0) && !entity_place_collide(2,2) && !entity_place_collide(2,-2)))
+			{
+				spiderEdge = Edge.None;
+			}
+			
+			if(state == State.BallSpark && (shineStart > 0 || shineLauncherStart > 0))
+			{
+				spiderEdge = Edge.None;
+			}
+			
 			canMorphBounce = false;
 			rMorphJump = false;
-			spiderJump = false;
 			
 			var moveX = (cRight-cLeft),
 		        moveY = (cDown-cUp);
@@ -2188,44 +2059,22 @@ if(instance_exists(XRay))
 			switch(spiderEdge)
 			{
 				case Edge.Bottom:
-				{
 					velX = spiderSpeed;
 					velY = 1;
-					
-					spiderJump_SpeedAddX = velX;
-					spiderJump_SpeedAddY = 0;
-					break;
-				}
+				break;
 				case Edge.Left:
-				{
 					velX = -1;
 					velY = spiderSpeed;
-					
-					spiderJump_SpeedAddX = 0;
-					spiderJump_SpeedAddY = velY;
-					break;
-				}
+				break;
 				case Edge.Top:
-				{
 					velX = -spiderSpeed;
 					velY = -1;
-					
-					spiderJump_SpeedAddX = velX;
-					spiderJump_SpeedAddY = 0;
-					break;
-				}
+				break;
 				case Edge.Right:
-				{
 					velX = 1;
 					velY = -spiderSpeed;
-					
-					spiderJump_SpeedAddX = 0;
-					spiderJump_SpeedAddY = velY;
-					break;
-				}
+				break;
 			}
-			
-			spiderJumpDir = scr_wrap(GetEdgeAngle(spiderEdge) + 90,0,360);
 			
 			if(shineEnd > 0)
 			{
@@ -2237,7 +2086,7 @@ if(instance_exists(XRay))
 	}
 	else
 	{
-		if(spiderEdge != Edge.None && spiderSpeed != 0)
+		if(spiderEdge != Edge.None && spiderSpeed != 0 && !spiderJump)
 		{
 			velY = 0;
 			if(PlayerGrounded() || PlayerOnPlatform())
@@ -2259,43 +2108,27 @@ if(instance_exists(XRay))
 				switch(spiderEdge)
 				{
 					case Edge.Bottom:
-					{
 						velX = spiderSpeed;
 						velY = lengthdir_y(spiderSpeed, GetEdgeAngle(Edge.Bottom));
-						break;
-					}
+					break;
 					case Edge.Top:
-					{
 						velX = -spiderSpeed;
 						velY = lengthdir_y(spiderSpeed, GetEdgeAngle(Edge.Top));
-						break;
-					}
+					break;
 					case Edge.Right:
-					{
 						velX = lengthdir_x(spiderSpeed, GetEdgeAngle(Edge.Right));
 						velY = -spiderSpeed;
-						break;
-					}
+					break;
 					case Edge.Left:
-					{
 						velX = lengthdir_x(spiderSpeed, GetEdgeAngle(Edge.Left));
 						velY = spiderSpeed;
-						break;
-					}
+					break;
 				}
 			}
 		}
 		spiderEdge = Edge.None;
 		spiderMove = 0;
 		spiderSpeed = 0;
-		spiderJumpDir = 90;
-		spiderJump_SpeedAddX = 0;
-		spiderJump_SpeedAddY = 0;
-		
-		if(grounded || abs(velX) < maxSpeed[MaxSpeed.MockBall,liquidState])
-		{
-			spiderJump = false;
-		}
 	}
 #endregion
 
@@ -2326,23 +2159,25 @@ if(instance_exists(XRay))
 
 #region Grip Collision
 
-	if(misc[Misc.PowerGrip] && (state == State.Jump || state == State.Somersault) && morphFrame <= 0 && !grounded && abs(dirFrame) >= 4 && velY >= 0 && move2 != 0)
+	if(item[Item.PowerGrip] && (state == State.Jump || state == State.Somersault) && morphFrame <= 0 && !grounded && abs(dirFrame) >= 4 && velY >= 0 && move2 != 0)
 	{
 		if(!entity_place_collide(0,-4) && ((state == State.Jump && !entity_place_collide(0,3)) || (state == State.Somersault && !entity_place_collide(0,13))))
 		{
-			var vcheck = x+6,// - 1,
-				rcheck = x+6,// - 1,
-				lcheck = x;// - 1;
+			var _px = position.X,
+				_py = position.Y;
+			var vcheck = _px+6,// - 1,
+				rcheck = _px+6,// - 1,
+				lcheck = _px;// - 1;
 			if(move2 == -1)
 			{
-				vcheck = x-6;
-				rcheck = x;
-				lcheck = x-6;
+				vcheck = _px-6;
+				rcheck = _px;
+				lcheck = _px-6;
 			}
 			
 			var canGrip = true;
-			var num = instance_place_list(x+move2,y,solids,blockList,true);
-				num += collision_line_list(lcheck,y-17,rcheck,y-17,solids,true,true,blockList,true);
+			var num = instance_place_list(_px+move2,_py,solids,blockList,true);
+				num += collision_line_list(lcheck,_py-17,rcheck,_py-17,solids,true,true,blockList,true);
 			for(var i = 0; i < num; i++)
 			{
 				if (instance_exists(blockList[| i]))
@@ -2361,18 +2196,18 @@ if(instance_exists(XRay))
 			}
 			ds_list_clear(blockList);
 			
-			if(entity_collision_line(lcheck,y-17,rcheck,y-17) && !entity_collision_line(lcheck,y-22,rcheck,y-26) && entity_place_collide(move2,0) && dir == move2)
+			if(entity_collision_line(lcheck,_py-17,rcheck,_py-17) && !entity_collision_line(lcheck,_py-22,rcheck,_py-26) && entity_place_collide(move2,0) && dir == move2)
 			{
-				var rslopeX = x+14,// - 1,
-					rslopeY = y-25,
-					lslopeX = x+6,// - 1,
-					lslopeY = y-17;
+				var rslopeX = _px+14,// - 1,
+					rslopeY = _py-25,
+					lslopeX = _px+6,// - 1,
+					lslopeY = _py-17;
 				if(move2 == -1)
 				{
-					rslopeX = x-6;
-					rslopeY = y-17;
-					lslopeX = x-14;
-					lslopeY = y-25;
+					rslopeX = _px-6;
+					rslopeY = _py-17;
+					lslopeX = _px-14;
+					lslopeY = _py-25;
 				}
 				var slopeOffset = 0;
 				while(slopeOffset >= -8 && entity_collision_line(lslopeX,lslopeY+slopeOffset,rslopeX,rslopeY+slopeOffset))
@@ -2424,16 +2259,19 @@ if(instance_exists(XRay))
 		}
 		if(state == State.Stand || (state == State.Crouch && crouchFrame <= 0))
 		{
+			var _px = position.X,
+				_py = position.Y;
+			
 			// using a for loop to cut down on duplicate code like this is probably pretty stupid.
 			// then again, 'if it looks stupid, but works, it isn't stupid.'
 			for(var i = 0; i < 2; i++)
 			{
-				var lcheck = x,// - 1,
-					rcheck = x+7;// - 1;
+				var lcheck = _px,// - 1,
+					rcheck = _px+7;// - 1;
 				if(dir == -1)
 				{
-					lcheck = x-7;
-					rcheck = x;
+					lcheck = _px-7;
+					rcheck = _px;
 				}
 				
 				if(i == 0 && entity_collision_rectangle(lcheck,bbottom-8,rcheck,bbottom-5))
@@ -2462,14 +2300,14 @@ if(instance_exists(XRay))
 				{
 					var yHeight = bbottom+qcHeight;
 					
-					lcheck = x+6;// - 1;
-					rcheck = x+14;// - 1;
+					lcheck = _px+6;// - 1;
+					rcheck = _px+14;// - 1;
 					var rcheckY = yHeight-9,
 						lcheckY = yHeight-1;
 					if(dir == -1)
 					{
-						lcheck = x-14;
-						rcheck = x-6;
+						lcheck = _px-14;
+						rcheck = _px-6;
 						
 						rcheckY = yHeight-1;
 						lcheckY = yHeight-9;
@@ -2486,12 +2324,12 @@ if(instance_exists(XRay))
 						yHeight += slopeOffset;
 					}
 					
-					lcheck = x-4;// - 1;
-					rcheck = x+14;// - 1;
+					lcheck = _px-4;// - 1;
+					rcheck = _px+14;// - 1;
 					if(dir == -1)
 					{
-						lcheck = x-14;
-						rcheck = x+4;
+						lcheck = _px-14;
+						rcheck = _px+4;
 					}
 					
 					var canGrip = true;
@@ -2523,7 +2361,7 @@ if(instance_exists(XRay))
 						{
 							quickClimbTarget = 2;
 						}
-						else if(misc[Misc.Morph])
+						else if(item[Item.MorphBall])
 						{
 							quickClimbTarget = 1;
 						}
@@ -2587,6 +2425,7 @@ if(instance_exists(XRay))
 	{
 		grounded = false;
 	}
+	pushBlock = noone;
 	
 	colEdge = Edge.Bottom;
 	if(spiderBall)
@@ -2609,7 +2448,7 @@ if(instance_exists(XRay))
 		fVelY += grappleVelY;
 		fVelX += grappleVelX;
 		
-		if(armPumping && prAngle && fVelX != 0 && move == dir && grounded && state == State.Stand)
+		if(_ARM_PUMP && prAngle && fVelX != 0 && move == dir && grounded && state == State.Stand)
 		{
 			fVelX += move;
 		}
@@ -2668,11 +2507,11 @@ if(instance_exists(XRay))
 	
 	if(spiderBall || (state == State.Grip && startClimb && climbIndex <= 6))
 	{
-		Collision_Crawler(fVelX,fVelY, (state != State.Grip));
+		Collision_Crawler(fVelX,fVelY, (state != State.Grip), (state == State.Elevator));
 	}
 	else
 	{
-		Collision_Normal(fVelX,fVelY, (state != State.Grip));
+		Collision_Normal(fVelX,fVelY, (state != State.Grip), (state == State.Elevator));
 	}
 	
 	if(!grounded && velY == 0 && PlayerGrounded())
@@ -2748,27 +2587,6 @@ if(instance_exists(XRay))
 	if(grounded)
 	{
 		moonFall = false;
-	}
-	
-	if(state != State.Elevator)
-	{
-		position.X = clamp(position.X,0,room_width);
-		position.Y = clamp(position.Y,0,room_height);
-	}
-	
-	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineEnd <= 0 && 
-	(x <= 0 || x >= room_width || y <= 0 || y >= room_height))
-	{
-		if((x <= 0 || x >= room_width) && boots[Boots.ChainSpark])
-		{
-			shineRestart = true;
-			audio_play_sound(snd_ShineSpark_Charge,0,false);
-		}
-		else if(shineEnd <= 0)
-		{
-			audio_play_sound(snd_Hurt,0,false);
-		}
-		shineEnd = shineEndMax;
 	}
 	
 	if(y+fVelY < 0)
@@ -2891,7 +2709,7 @@ if(instance_exists(XRay))
 		}
 		
 		isPushing = false;
-		pushBlock = instance_place(x+3*move2,y,obj_PushBlock);
+		//pushBlock = instance_place(x+3*move2,y,obj_PushBlock);
 		if(move2 == dir && grounded && !place_meeting(x,y+2,pushBlock))
 		{
 		    isPushing = (instance_exists(pushBlock) && pushBlock.grounded);
@@ -2908,7 +2726,7 @@ if(instance_exists(XRay))
             }
             else if(pushBlock.liquid)
             {
-                vX *= 0.9;
+                vX *= 0.875;
             }
             
 			var animRate = 0.275 / (1+liquidMovement);
@@ -3042,7 +2860,7 @@ if(instance_exists(XRay))
 			aimUpDelay = 6;//10;
 			ChangeState(State.Stand,State.Stand,mask_Player_Stand,true);
 		}
-		if(misc[Misc.Morph] && crouchFrame <= 0 && ((cDown && (rDown || !CanChangeState(mask_Player_Stand)) && move2 == 0) || (cMorph && rMorph)) && stateFrame != State.Morph && morphFrame <= 0)
+		if(item[Item.MorphBall] && crouchFrame <= 0 && ((cDown && (rDown || !CanChangeState(mask_Player_Stand)) && move2 == 0) || (cMorph && rMorph)) && stateFrame != State.Morph && morphFrame <= 0)
 		{
 			audio_play_sound(snd_Morph,0,false);
 			ChangeState(State.Morph,State.Morph,mask_Player_Morph,true);
@@ -3077,7 +2895,7 @@ if(instance_exists(XRay))
 					audio_stop_sound(snd_Land);
 					audio_play_sound(snd_Land,0,false);
 					
-					if((speedKeep == 0 || (speedKeep == 2 && liquidMovement)) && canMorphBounce && !justBounced)
+					if((_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidMovement)) && canMorphBounce && !justBounced)
 					{
 						velX = min(abs(velX),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 						speedCounter = 0;
@@ -3087,7 +2905,7 @@ if(instance_exists(XRay))
 			}
 		}
 		
-		if(!GrappleActive() && ((cUp && rUp) || (cJump && rJump && (!misc[Misc.Spring] || morphSpinJump)) || (cMorph && rMorph)) && unmorphing == 0 && morphFrame <= 0 && !SpiderActive()) //!spiderBall)
+		if(!GrappleActive() && ((cUp && rUp) || (cJump && rJump && (!item[Item.SpringBall] || morphSpinJump)) || (cMorph && rMorph)) && unmorphing == 0 && morphFrame <= 0 && !SpiderActive()) //!spiderBall)
 		{
 			if(CanChangeState(mask_Player_Crouch))
 			{
@@ -3144,7 +2962,7 @@ if(instance_exists(XRay))
 					if(velX != 0 && grounded)
 					{
 						uncrouch = 7;
-						if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
+						if(_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidMovement))
 						{
 							velX = min(abs(velX),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 							speedCounter = 0;
@@ -3160,8 +2978,9 @@ if(instance_exists(XRay))
 			morphSpinJump = false;
 		}
 		
+		// Crystal Flash activation
 		var ammo = missileStat+superMissileStat+powerBombStat;
-		if((CanChangeState(mask_Player_Crouch) || crystalClip) && energy < lowEnergyThresh && ammo > 0 && cFlashStartCounter > 0 && cShoot && cDown)
+		if((CanChangeState(mask_Player_Crouch) || _CRYSTAL_CLIP) && energy < lowEnergyThresh && ammo > 0 && cFlashStartCounter > 0 && cShoot && cDown)
 		{
 			cFlashStartCounter++;
 			
@@ -3182,9 +3001,10 @@ if(instance_exists(XRay))
 			unmorphing = 0;
 		}
 		cFlashStartCounter = 0;
+		audio_stop_sound(snd_SpiderLoop);
 	}
 	
-	if((state == State.Morph || state == State.BallSpark) && (misc[Misc.MagBall] || misc[Misc.Spider]) && unmorphing == 0)
+	if((state == State.Morph || state == State.BallSpark) && (item[Item.MagniBall] || item[Item.SpiderBall]) && unmorphing == 0)
 	{
 		if(global.spiderBallStyle == 0)
 		{
@@ -3208,10 +3028,50 @@ if(instance_exists(XRay))
 				SpiderEnable(false);
 			}
 		}*/
-
-		if(spiderBall && state == State.Morph)
+	}
+	else
+	{
+		SpiderEnable(false);
+		spiderGrappleSpeedKeep = false;
+	}
+	
+	if(spiderBall)
+	{
+		if(spiderEdge == Edge.None)
 		{
-			if(spiderEdge != Edge.None && prevSpiderEdge == Edge.None )//&& grounded && !prevGrounded)
+			if(jump <= 0 && bombJump <= 0)
+			{
+				spiderJumpDir = 90;
+				spiderJump_SpeedAddX = 0;
+				spiderJump_SpeedAddY = 0;
+			}
+			audio_stop_sound(snd_SpiderLoop);
+		}
+		else
+		{
+			spiderJump = false;
+			spiderJumpDir = scr_wrap(GetEdgeAngle(spiderEdge) + 90,0,360);
+			switch(spiderEdge)
+			{
+				case Edge.Bottom:
+					spiderJump_SpeedAddX = velX;
+					spiderJump_SpeedAddY = 0;
+				break;
+				case Edge.Left:
+					spiderJump_SpeedAddX = 0;
+					spiderJump_SpeedAddY = velY;
+				break;
+				case Edge.Top:
+					spiderJump_SpeedAddX = velX;
+					spiderJump_SpeedAddY = 0;
+				break;
+				case Edge.Right:
+					spiderJump_SpeedAddX = 0;
+					spiderJump_SpeedAddY = velY;
+				break;
+			}
+			
+			if(prevSpiderEdge == Edge.None)
 			{
 				if(morphFrame <= 0 && !shineRampFix)
 				{
@@ -3222,7 +3082,7 @@ if(instance_exists(XRay))
 						audio_stop_sound(snd_SpiderLand);
 						audio_play_sound(snd_SpiderLand,0,false);
 						
-						if(!spiderGrappleSpeedKeep && (speedKeep == 0 || (speedKeep == 2 && liquidMovement)))
+						if(!spiderGrappleSpeedKeep && (_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidMovement)))
 						{
 							spiderSpeed = min(abs(spiderSpeed),maxSpeed[MaxSpeed.Run,liquidState])*sign(spiderSpeed);
 							speedCounter = 0;
@@ -3232,56 +3092,51 @@ if(instance_exists(XRay))
 					}
 				}
 			}
+			spiderGrappleSpeedKeep = false;
 			
-			if(spiderGrappleSpeedKeep && spiderEdge != Edge.None)
+			if(!audio_is_playing(snd_SpiderLoop))
 			{
-				spiderGrappleSpeedKeep = false;
+				audio_play_sound(snd_SpiderLoop,0,true);
 			}
 			
-			if(spiderEdge != Edge.None)
+			spiderPartCounter += max(abs(spiderSpeed),1);
+			if(spiderPartCounter > spiderPartMax)
 			{
-				if(!audio_is_playing(snd_SpiderLoop))
+				var _partType = obj_Particles.sbTrail;
+				if(item[Item.SpiderBall])
 				{
-					audio_play_sound(snd_SpiderLoop,0,true);
+					_partType = obj_Particles.sbTrail2;
 				}
-				
-				spiderPartCounter += max(abs(spiderSpeed),1);
-				if(spiderPartCounter > spiderPartMax)
-				{
-					var _partType = obj_Particles.sbTrail;
-					if(misc[Misc.Spider])
-					{
-						_partType = obj_Particles.sbTrail2;
-					}
-					var _num = max(abs(spiderSpeed)/2,1);
-					var _partX = clamp(x+lengthdir_x(16,spiderJumpDir+180), bb_left(x), bb_right(x)),
-						_partY = clamp(y+lengthdir_y(16,spiderJumpDir+180), bb_top(y), bb_bottom(y));
-					var _partX1 = _partX + lengthdir_x(5,spiderJumpDir+90),
-						_partY1 = _partY + lengthdir_y(5,spiderJumpDir+90),
-						_partX2 = _partX + lengthdir_x(5,spiderJumpDir-90),
-						_partY2 = _partY + lengthdir_y(5,spiderJumpDir-90);
-					part_emitter_region(obj_Particles.partSystemA,obj_Particles.partEmitA, _partX1,_partX2, _partY1,_partY2, ps_shape_line, ps_distr_linear);
-					part_emitter_burst(obj_Particles.partSystemA,obj_Particles.partEmitA,_partType,_num);
-					spiderPartCounter = 0;
-				}
+				var _num = max(abs(spiderSpeed)/2,1);
+				var _partX = clamp(x+lengthdir_x(16,spiderJumpDir+180), bb_left(x), bb_right(x)),
+					_partY = clamp(y+lengthdir_y(16,spiderJumpDir+180), bb_top(y), bb_bottom(y));
+				var _partX1 = _partX + lengthdir_x(5,spiderJumpDir+90),
+					_partY1 = _partY + lengthdir_y(5,spiderJumpDir+90),
+					_partX2 = _partX + lengthdir_x(5,spiderJumpDir-90),
+					_partY2 = _partY + lengthdir_y(5,spiderJumpDir-90);
+				part_emitter_region(obj_Particles.partSystemA,obj_Particles.partEmitA, _partX1,_partX2, _partY1,_partY2, ps_shape_line, ps_distr_linear);
+				part_emitter_burst(obj_Particles.partSystemA,obj_Particles.partEmitA,_partType,_num);
+				spiderPartCounter = 0;
 			}
-			else
-			{
-				audio_stop_sound(snd_SpiderLoop);
-			}
-		}
-		else
-		{
-			audio_stop_sound(snd_SpiderLoop);
 		}
 	}
 	else
 	{
-		SpiderEnable(false);
 		audio_stop_sound(snd_SpiderLoop);
-		
+		if((jump <= 0 && bombJump <= 0) || grounded)
+		{
+			spiderJump = false;
+			spiderJumpDir = 90;
+			spiderJump_SpeedAddX = 0;
+			spiderJump_SpeedAddY = 0;
+		}
+		if(grounded || abs(velX) < maxSpeed[MaxSpeed.MockBall,liquidState])
+		{
+			spiderJumpBoost = false;
+		}
 		spiderGrappleSpeedKeep = false;
 	}
+	
 #endregion
 #region Jump
 	if(state == State.Jump)
@@ -3309,7 +3164,7 @@ if(instance_exists(XRay))
 		{
 			if(!slopeGrounded)
 			{
-				if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
+				if(_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidMovement))
 				{
 					velX = min(abs(velX) * (power(abs(velX),0.25) - 1),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 					speedCounter = 0;
@@ -3386,7 +3241,7 @@ if(instance_exists(XRay))
 			{
 				if(!somerSoundPlayed)
 				{
-					if(boots[Boots.SpaceJump])
+					if(item[Item.SpaceJump])
 					{
 						audio_play_sound(snd_Somersault_SJ,0,false);
 					}
@@ -3408,7 +3263,7 @@ if(instance_exists(XRay))
 				audio_stop_sound(snd_Somersault_Loop);
 				somerSoundPlayed = false;
 			}
-			if(misc[Misc.ScrewAttack])
+			if(item[Item.ScrewAttack])
 			{
 				if(!screwSoundPlayed)
 				{
@@ -3420,7 +3275,7 @@ if(instance_exists(XRay))
 					audio_play_sound(snd_ScrewAttack_Loop,0,true);
 				}
 			}
-			if(oldDir != dir && boots[Boots.SpaceJump] && !misc[Misc.ScrewAttack] && wjAnimDelay <= 0)
+			if(oldDir != dir && item[Item.SpaceJump] && !item[Item.ScrewAttack] && wjAnimDelay <= 0)
 			{
 				audio_stop_sound(snd_Somersault);
 				audio_stop_sound(snd_Somersault_SJ);
@@ -3453,7 +3308,7 @@ if(instance_exists(XRay))
 		{
 			if(!slopeGrounded)
 			{
-				if(speedKeep == 0 || (speedKeep == 2 && liquidMovement))
+				if(_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidMovement))
 				{
 					velX = min(abs(velX) * (power(abs(velX),0.25) - 1),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 					speedCounter = 0;
@@ -3529,6 +3384,9 @@ if(instance_exists(XRay))
 		ledgeFall = false;
 		ledgeFall2 = false;
 		
+		var _px = position.X,
+			_py = position.Y;
+		
 		var breakGrip = false;
 		if(startClimb)
 		{
@@ -3592,7 +3450,7 @@ if(instance_exists(XRay))
 			if(!entity_place_collide(0,-8))
 			{
 				var ctStart = 0;
-				while(ctStart >= -16 && entity_collision_line(x,bb_top()+ctStart,x+9*dir,bb_top()+ctStart))
+				while(ctStart >= -16 && entity_collision_line(_px,bb_top()+ctStart,_px+9*dir,bb_top()+ctStart))
 				{
 					ctStart--;
 				}
@@ -3602,7 +3460,7 @@ if(instance_exists(XRay))
 						crouchH = 29;
 				
 					var ctHeight = -(crouchH+1);
-					while(ctHeight <= -morphH && entity_collision_line(x,bb_top()+ctStart+ctHeight,x+9*dir,bb_top()+ctStart+ctHeight))
+					while(ctHeight <= -morphH && entity_collision_line(_px,bb_top()+ctStart+ctHeight,_px+9*dir,bb_top()+ctStart+ctHeight))
 					{
 						ctHeight++;
 					}
@@ -3610,7 +3468,7 @@ if(instance_exists(XRay))
 					{
 						climbTarget = 2;
 					}
-					else if(ctHeight <= -morphH && misc[Misc.Morph])
+					else if(ctHeight <= -morphH && item[Item.MorphBall])
 					{
 						climbTarget = 1;
 					}
@@ -3631,21 +3489,21 @@ if(instance_exists(XRay))
 				ChangeState(State.Jump,State.Jump,mask_Player_Jump,true);
 			}
 			
-			var rcheck = x+6,// - 1,
-				lcheck = x;// - 1;
+			var rcheck = _px+6,// - 1,
+				lcheck = _px;// - 1;
 			if(dir == -1)
 			{
-				rcheck = x;
-				lcheck = x-6;
+				rcheck = _px;
+				lcheck = _px-6;
 			}
-			if(!entity_collision_line(lcheck,y-17,rcheck,y-17))
+			if(!entity_collision_line(lcheck,_py-17,rcheck,_py-17))
 			{
 				breakGrip = true;
 			}
 		}
 		
 		var colFlag = false;
-		var sColNum = collision_point_list(x+6*dir,y-18, array_concat(ColType_SolidSlope,ColType_MovingSolidSlope), true,true,blockList,true);
+		var sColNum = collision_point_list(_px+6*dir,_py-18, array_concat(ColType_SolidSlope,ColType_MovingSolidSlope), true,true,blockList,true);
 		for(var i = 0; i < sColNum; i++)
 		{
 			if(instance_exists(blockList[| i]))
@@ -3660,7 +3518,7 @@ if(instance_exists(XRay))
 		}
 		ds_list_clear(blockList);
 		
-		if((!entity_place_collide(2*dir,0) && !entity_place_collide(2*dir,4) && !entity_place_collide(0,2)) || (entity_position_collide(6*dir,-19) && !startClimb) || (colFlag && !startClimb) || (cDown && cJump && rJump) || (place_meeting(x,y,ColType_MovingSolid) && !startClimb))
+		if((!entity_place_collide(2*dir,0) && !entity_place_collide(2*dir,4) && !entity_place_collide(0,2)) || (entity_position_collide(6*dir,-19) && !startClimb) || (colFlag && !startClimb) || (cDown && cJump && rJump) || (place_meeting(_px,_py,ColType_MovingSolid) && !startClimb))
 		{
 			breakGrip = true;
 		}
@@ -3729,7 +3587,7 @@ if(instance_exists(XRay))
 			aUp = (aimAngle == 1);
 			aDown = (aimAngle == -1);
 		}
-		var allowDown = true; //boots[Boots.ChainSpark];
+		var allowDown = true; //item[Item.ChainSpark];
 		
 		if(shineStart > 0)
 		{
@@ -3821,12 +3679,18 @@ if(instance_exists(XRay))
 			{
 				scr_PlayExplodeSnd(0,false);
 				audio_stop_sound(snd_ShineSpark);
+				
+				if(instance_exists(obj_ScreenShaker))
+				{
+					obj_ScreenShaker.Shake(12);
+				}
+				SparkDistort(1, 0.5);
 			}
 			velX = 0;
 			velY = 0;
 			shineSparkSpeed = shineSparkStartSpeed;
 			shineReflecCounter = 0;
-			if(shineRestart && boots[Boots.ChainSpark])
+			if(shineRestart && item[Item.ChainSpark])
 			{
 				if(dir == sign(shineDir))
 				{
@@ -3854,7 +3718,7 @@ if(instance_exists(XRay))
 					shineRestart = false;
 					shineEnd = 0;
 				}
-				else if(cDown && move2 == -dir && chainSparkReCharge)
+				else if(cDown && move2 == -dir && _SPARK_CHAIN_RECHARGE)
 				{
 					shineCharge = shineChargeMax;
 					shineEnd = 1;
@@ -3896,7 +3760,7 @@ if(instance_exists(XRay))
 		else
 		{
 			var oldSDir = shineDir;
-			if (canDodge && shineSparkRedirect && (
+			if (canDodge && _SPARK_CONTROL && (
 				(global.dodgeStyle == 0 && cAimLock && rAimLock) || 
 				(global.dodgeStyle == 1 && cSprint && rSprint)))
 			{
@@ -3939,14 +3803,8 @@ if(instance_exists(XRay))
 				}
 				if(shineDir != oldSDir)
 				{
-					if(dodgeRecharge >= dodgeRechargeMax)
-					{
-						dodgeRecharge = dodgeRechargeMax/2;
-					}
-					else
-					{
-						dodgeRecharge = 0;
-					}
+					dodgeCharge = max(dodgeCharge - dodgeChargeCellSize, 0);
+					dodgeRecharge = dodgeCharge;
 					audio_play_sound(snd_ShineSpark_Charge,0,false);
 				}
 			}
@@ -3959,7 +3817,7 @@ if(instance_exists(XRay))
 			shineSparkSpeed = min(shineSparkSpeed+moveSpeed[MoveSpeed.Spark,liquidState], shineSparkSpeedMax);
 			
 			shineDirDiff = 0;
-			if(shineSparkFlightAdjust)
+			if(_SPARK_STEERING)
 			{
 				var moveY = (cDown-cUp);
 				moveY = clamp(moveY+(aDown-aUp),-1,1);
@@ -4004,14 +3862,9 @@ if(instance_exists(XRay))
 			velX = lengthdir_x(shineSparkSpeed,shineDir-90+shineDirDiff);
 			velY = lengthdir_y(shineSparkSpeed,shineDir-90+shineDirDiff2);
 			
-			if(shineReflecCounter < shineSparkReflecMax || shineSparkReflecMax < 0)
+			if(shineReflecCounter < _SPARK_REFLEC_MAX || _SPARK_REFLEC_MAX < 0)
 			{
 				var reflec = noone;
-				/*for(var k = 0; k < ceil(shineSparkSpeed); k++)
-				{
-					var vX = sign(velX)*k, vY = sign(velY)*k;
-					instance_place_list(x+vX,y+vY,obj_Reflec,reflecList,true);
-				}*/
 				collision_rectangle_list(bb_left()+min(velX,0),bb_top()+min(velY,0),bb_right()+max(velX,0),bb_bottom()+max(velY,0),obj_Reflec,true,true,reflecList,true);
 				for(var i = 0; i < ds_list_size(reflecList); i++)
 				{
@@ -4041,7 +3894,7 @@ if(instance_exists(XRay))
 				{
 					shineDir = ReflectAngle(shineDir-90, reflec.image_angle+90)+90;
 					shineDir = scr_wrap(shineDir,-180,180);
-					if(shineSparkReflecMax > 0)
+					if(_SPARK_REFLEC_MAX > 0)
 					{
 						shineReflecCounter++;
 					}
@@ -4083,7 +3936,7 @@ if(instance_exists(XRay))
 				}
 			}
         
-			if(cJump && rJump && shineSparkCancel)
+			if(cJump && rJump && _SPARK_CANCEL)
 			{
 				if(state == State.BallSpark)
 				{
@@ -4095,9 +3948,9 @@ if(instance_exists(XRay))
 				}
 				if(SparkDir_Hori())
 				{
-					if(boots[Boots.SpaceJump] && state != State.Morph)
+					if(item[Item.SpaceJump] && state != State.Morph)
 					{
-						velY = -jumpSpeed[boots[Boots.HiJump],liquidState];
+						velY = -jumpSpeed[item[Item.HiJump],liquidState];
 						jumping = true;
 					}
 					else
@@ -4328,7 +4181,15 @@ if(instance_exists(XRay))
 	}
 #endregion
 #region Dodge
-	if(boots[Boots.Dodge] && dir != 0 && (state == State.Stand || state == State.Crouch || state == State.Jump || state == State.Somersault || (state == State.Grip && !startClimb)))
+	
+	var dRechargeMax = dodgeChargeCellSize * dodgeChargeCells;
+	if(dodgeRecharge >= dRechargeMax)
+	{
+		dodgeCharge = dRechargeMax
+	}
+	canDodge = (item[Item.AccelDash] && dodgeCharge >= dodgeChargeCellSize);
+	
+	if(item[Item.AccelDash] && dir != 0 && (state == State.Stand || state == State.Crouch || state == State.Jump || state == State.Somersault || (state == State.Grip && !startClimb) || state == State.Dodge))
 	{
 		if ((global.dodgeStyle == 0 && cAimLock) || 
 			(global.dodgeStyle == 1 && cSprint && !global.autoSprint))
@@ -4360,6 +4221,8 @@ if(instance_exists(XRay))
 					move2 = dir;
 				}
 				ChangeState(State.Dodge,State.Dodge,mask_Player_Crouch,(groundedDodge == 1));
+				dodgeLength = 0;
+				dodged = false;
 				velY = 0;
 				if(move2 == dir)
 				{
@@ -4382,7 +4245,7 @@ if(instance_exists(XRay))
 		ledgeFall2 = true;
 		
 		var unchargeable = ((hudSlot == 1 && (hudSlotItem[1] == 0 || hudSlotItem[1] == 1 || hudSlotItem[1] == 3)) || hyperBeam);
-		var shoot = cancelDashShoot && ((cShoot && rShoot) || (!cShoot && !rShoot && !unchargeable));
+		var shoot = _DASH_SHOOT_CANCEL && ((cShoot && rShoot) || (!cShoot && !rShoot && !unchargeable));
 		if(dodgeLength >= dodgeLengthMax || shoot)
 		{
 			if(grounded)
@@ -4412,27 +4275,45 @@ if(instance_exists(XRay))
 			}
 			else
 			{
-				state = State.Somersault;
+				ChangeState(State.Somersault,State.Somersault,mask_Player_Somersault,false);
 			}
 		}
 		else
 		{
-			if(dodgeLength < dodgeLengthMax-5)
+			if(dodgeLength < dodgeLengthEnd)
 			{
-				velX = max(moveSpeed[MoveSpeed.Dodge,liquidState],abs(velX))*dodgeDir;
+				var ms_spd = moveSpeed[MoveSpeed.Dodge,liquidState],
+					max_spd_d = maxSpeed[MaxSpeed.Dodge,liquidState],
+					max_spd_s = maxSpeed[MaxSpeed.SpeedBoost,liquidState];
+				if(abs(velX) < max_spd_d)
+				{
+					if(dodgeDir == 1)
+					{
+						velX = min(velX + ms_spd, max_spd_d);
+					}
+					if(dodgeDir == -1)
+					{
+						velX = max(velX - ms_spd, -max_spd_d);
+					}
+				}
+				else if(!liquidMovement && (dodgeLength <= 0 || abs(velX) > max_spd_d) && abs(velX) < max_spd_s)
+				{
+					if(dodgeDir == 1)
+					{
+						velX = min(velX + ms_spd, max_spd_s);
+					}
+					if(dodgeDir == -1)
+					{
+						velX = max(velX - ms_spd, -max_spd_s);
+					}
+				}
 			}
 			dodgeLength += (1 / (1+liquidMovement));
 			
 			if(!dodged)
 			{
-				if(dodgeRecharge >= dodgeRechargeMax)
-				{
-					dodgeRecharge = dodgeRechargeMax/2;
-				}
-				else
-				{
-					dodgeRecharge = 0;
-				}
+				dodgeCharge = max(dodgeCharge - dodgeChargeCellSize, 0);
+				dodgeRecharge = dodgeCharge;
 				audio_play_sound(snd_Dodge,0,false);
 				dodged = true;
 			}
@@ -4445,27 +4326,20 @@ if(instance_exists(XRay))
 		dodged = false;
 		dodgeLength = 0;
 		
-		if(dodgeRecharge < dodgeRechargeMax-dodgeRechargeRate)
+		if(dodgeRecharge < dRechargeMax-dodgeRechargeRate)
 		{
-			dodgeRecharge = min(dodgeRecharge+dodgeRechargeRate,dodgeRechargeMax-dodgeRechargeRate);
+			dodgeRecharge = min(dodgeRecharge+dodgeRechargeRate, dRechargeMax-dodgeRechargeRate);
 		}
 		else if(grounded || state == State.Grip || state == State.Grapple || ((state == State.Spark || state == State.BallSpark) && shineEnd > 0))
 		{
-			dodgeRecharge = min(dodgeRecharge+dodgeRechargeRate,dodgeRechargeMax);
+			dodgeRecharge = min(dodgeRecharge+dodgeRechargeRate, dRechargeMax);
 			if(shineEnd > 0)
 			{
-				dodgeRecharge = dodgeRechargeMax;
+				dodgeRecharge = dRechargeMax;
 			}
 		}
-		if(dodgeRecharge >= dodgeRechargeMax)
-		{
-			canDodge = boots[Boots.Dodge];
-		}
-		else if(dodgeRecharge < dodgeRechargeMax/2)
-		{
-			canDodge = false;
-		}
 	}
+	
 #endregion
 #region CrystalFlash
 	if(state == State.CrystalFlash)
@@ -4481,7 +4355,7 @@ if(instance_exists(XRay))
 		{
 			cFlashStartMove++;
 			
-			if(crystalClip)
+			if(_CRYSTAL_CLIP)
 			{
 				position.Y -= 2;
 				y = scr_round(position.Y);
@@ -4762,7 +4636,7 @@ if(instance_exists(XRay))
 	x = scr_round(position.X);
 	y = scr_round(position.Y);
 	
-	if(!misc[Misc.ScrewAttack] || state != State.Somersault || liquidMovement)
+	if(!item[Item.ScrewAttack] || state != State.Somersault || liquidMovement)
 	{
 		audio_stop_sound(snd_ScrewAttack);
 		audio_stop_sound(snd_ScrewAttack_Loop);
