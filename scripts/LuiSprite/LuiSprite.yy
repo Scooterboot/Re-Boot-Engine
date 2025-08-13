@@ -6,7 +6,7 @@
   "name":"LuiSprite",
   "parent":{
     "name":"Components",
-    "path":"folders/Scripts/UI/Limekys/LimeUI/Components.yy",
+    "path":"folders/Scripts/Limekys/LimeUI/Components.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

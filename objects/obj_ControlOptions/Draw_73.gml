@@ -191,7 +191,7 @@ if(surface_exists(surf))
 		}
 	}
 
-	if(screen == 2)
+	/*if(screen == 2)
 	{
 		var yOff = 0;
 		for(var i = 0; i < array_length(controlKey); i++)
@@ -250,7 +250,7 @@ if(surface_exists(surf))
 			
 				var oYY = oY+(i*space)+yOff;
 			
-				scr_DrawOptionText(oX+256/*192*/-string_width(cKeyString),oYY,cKeyString,c_white,alpha,string_width(cKeyString),bC,bA);
+				scr_DrawOptionText(oX+256/*192//-string_width(cKeyString),oYY,cKeyString,c_white,alpha,string_width(cKeyString),bC,bA);
 			}
 			else
 			{
@@ -362,7 +362,7 @@ if(surface_exists(surf))
 			
 					var oYY = oY+(i*space)+yOff;
 			
-					scr_DrawOptionText(oX+256/*192*/-string_width(cButtonString),oYY,cButtonString,c_white,alpha,string_width(cButtonString),bC,bA);
+					scr_DrawOptionText(oX+256/*192//-string_width(cButtonString),oYY,cButtonString,c_white,alpha,string_width(cButtonString),bC,bA);
 				}
 			}
 			else
@@ -370,7 +370,7 @@ if(surface_exists(surf))
 				yOff -= space;
 			}
 		}
-	}
+	}*/
 
 	if(tipStrg != "")
 	{

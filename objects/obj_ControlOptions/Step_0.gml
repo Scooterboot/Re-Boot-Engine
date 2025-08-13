@@ -1,11 +1,11 @@
 /// @description Menus
-cRight = obj_Control.mRight;
-cLeft = obj_Control.mLeft;
-cUp = obj_Control.mUp;
-cDown = obj_Control.mDown;
-cSelect = obj_Control.mSelect;
-cCancel = obj_Control.mCancel;
-cStart = obj_Control.start;
+SetControlVars(controlGroups);
+cRight = cMenuRight;
+cLeft = cMenuLeft;
+cUp = cMenuUp;
+cDown = cMenuDown;
+cSelect = cMenuAccept;
+cCancel = cMenuCancel;
 
 if(room != rm_MainMenu && (global.roomTrans || !global.gamePaused || !obj_PauseMenu.isPaused))
 {
@@ -118,18 +118,18 @@ if(screenFade >= 1 && !menuClosing)
 				{
 					//Keyboard bindings
 					select = false;
-					screen = 2;
-					prevOptionPos = optionPos;
-					optionPos = 0;
+					//screen = 2;
+					//prevOptionPos = optionPos;
+					//optionPos = 0;
 					break;
 				}
 				case 6:
 				{
 					//Controller bindings
 					select = false;
-					screen = 3;
-					prevOptionPos = optionPos;
-					optionPos = 0;
+					//screen = 3;
+					//prevOptionPos = optionPos;
+					//optionPos = 0;
 					break;
 				}
 				case 7:
@@ -230,7 +230,7 @@ if(screenFade >= 1 && !menuClosing)
 			ini_close();
 		}
 	}
-	if(screen == 2)
+	/*if(screen == 2)
 	{
 		if(global.aimStyle != 0 && optionPos == 8)
 		{
@@ -448,7 +448,7 @@ if(screenFade >= 1 && !menuClosing)
 				}
 			}
 		}
-	}
+	}*/
 }
 
 if(global.gpSlot != -1)
@@ -481,10 +481,10 @@ else
 
 keySelectDelay = max(keySelectDelay - 1, 0);
 
+SetReleaseVars(controlGroups);
 rRight = !cRight;
 rLeft = !cLeft;
 rUp = !cUp;
 rDown = !cDown;
 rSelect = !cSelect;
 rCancel = !cCancel;
-rStart = !cStart;

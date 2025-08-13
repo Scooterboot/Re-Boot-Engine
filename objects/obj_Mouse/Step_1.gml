@@ -23,10 +23,10 @@ if(velX != 0 || velY != 0 || mouse_check_button(mb_any) || mouse_wheel_up() || m
 	hide = false;
 	idleTime = 0;
 }
-if(keyboard_check(vk_anykey) || gamepad_button_check(global.gpSlot,gp_anybutton()) || gamepad_axis_value(global.gpSlot, gp_axislh) != 0 || gamepad_axis_value(global.gpSlot, gp_axislv) != 0)
+/*if(keyboard_check(vk_anykey) || gamepad_button_check(global.gpSlot,gp_anybutton()) || gamepad_axis_value(global.gpSlot, gp_axislh) != 0 || gamepad_axis_value(global.gpSlot, gp_axislv) != 0)
 {
 	hide = true;
-}
+}*/
 
 if(!hide)
 {

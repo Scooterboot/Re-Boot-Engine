@@ -1,13 +1,15 @@
 /// @description 
 
 #region Set Controls
-cRight = false;
+/*cRight = false;
 cLeft = false;
 cUp = false;
 cDown = false;
 cSelect = false;
 cCancel = false;
-cStart = false;
+cStart = false;*/
+controlGroups = "menu";
+InitControlVars(controlGroups)
 
 cClickL = false;
 cClickR = false;
@@ -16,13 +18,14 @@ cScrollDown = false;
 
 function SetControlVars_Press()
 {
-	cRight = obj_Control.mRight;
+	/*cRight = obj_Control.mRight;
 	cLeft = obj_Control.mLeft;
 	cUp = obj_Control.mUp;
 	cDown = obj_Control.mDown;
 	cSelect = obj_Control.mSelect;
 	cCancel = obj_Control.mCancel;
-	cStart = obj_Control.start;
+	cStart = obj_Control.start;*/
+	SetControlVars(controlGroups);
 	
 	cClickL = mouse_check_button(mb_left);
 	cClickR = mouse_check_button(mb_right);
@@ -30,13 +33,13 @@ function SetControlVars_Press()
 	cScrollDown = mouse_wheel_down();
 }
 
-rRight = true;
+/*rRight = true;
 rLeft = true;
 rUp = true;
 rDown = true;
 rSelect = true;
 rCancel = true;
-rStart = true;
+rStart = true;*/
 
 rClickL = true;
 rClickR = true;
@@ -45,13 +48,14 @@ rScrollDown = true;
 
 function SetControlVars_Release()
 {
-	rRight = !cRight;
+	/*rRight = !cRight;
 	rLeft = !cLeft;
 	rUp = !cUp;
 	rDown = !cDown;
 	rSelect = !cSelect;
 	rCancel = !cCancel;
-	rStart = !cStart;
+	rStart = !cStart;*/
+	SetReleaseVars(controlGroups);
 	
 	rClickL = !cClickL;
 	rClickR = !cClickR;

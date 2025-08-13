@@ -54,7 +54,7 @@ function OnSelect()
 function WhileSelected()
 {
 	var mouse = self.GetMouse();
-	if((creator.cSelect && creator.rSelect) || (instance_exists(mouse) && creator.cClickL && creator.rClickL))
+	if((creator.cMenuAccept && creator.rMenuAccept) || (instance_exists(mouse) && creator.cClickL && creator.rClickL))
 	{
 		self.OnClick();
 	}

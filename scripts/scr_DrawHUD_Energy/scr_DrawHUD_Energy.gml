@@ -1,5 +1,5 @@
 ///scr_DrawHUD_Energy
-function scr_DrawHUD_Energy() {
+/*function scr_DrawHUD_Energy() {
 
 	var vX = camera_get_view_x(view_camera[0]),
 		vY = camera_get_view_y(view_camera[0]);
@@ -79,7 +79,7 @@ function scr_DrawHUD_Energy() {
 				eY = yy;
 			}
 			draw_sprite_ext(sprt_HETank,(statEnergyTanks > i),floor(eX),floor(eY),1,1,0,c_white,1);
-		}*/
+		}//
 		for(var i = 0; i < energyTanks; i++)
 		{
 			var eX = xx + (7*i)/2,
@@ -208,3 +208,4 @@ function scr_DrawHUD_Energy() {
 		}
 	}
 }
+*/

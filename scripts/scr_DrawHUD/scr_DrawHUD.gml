@@ -1,5 +1,5 @@
 ///scr_DrawHUD
-function scr_DrawHUD() {
+/*function scr_DrawHUD() {
 
 	var vX = camera_get_view_x(view_camera[0]),
 		vY = camera_get_view_y(view_camera[0]);
@@ -146,3 +146,4 @@ function scr_DrawHUD() {
 
 
 }
+*/

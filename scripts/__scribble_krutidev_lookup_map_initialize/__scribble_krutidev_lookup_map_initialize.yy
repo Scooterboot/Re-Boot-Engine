@@ -6,7 +6,7 @@
   "name":"__scribble_krutidev_lookup_map_initialize",
   "parent":{
     "name":"Initialization",
-    "path":"folders/Scripts/UI/Scribble/(System - don't call these functions)/Initialization.yy",
+    "path":"folders/Scripts/Scribble/(System - don't call these functions)/Initialization.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

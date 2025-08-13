@@ -1,4 +1,4 @@
-function scr_DrawMiniMap()
+/*function scr_DrawMiniMap()
 {
 	// HUD Minimap
 	var vX = camera_get_view_x(view_camera[0]),
@@ -76,3 +76,4 @@ function scr_DrawMiniMap()
 	}
 	hudMapFlashAlpha = clamp(hudMapFlashAlpha + (0.1*hudMapFlashNum),0,1);
 }
+*/

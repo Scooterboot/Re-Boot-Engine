@@ -1,17 +1,17 @@
-function gp_anybutton(slotOverride = -1)
+/*
+function gp_anybutton(slotOverride = undefined)
 {
-	var slot = global.gpSlot;
-	if(slotOverride > -1)
+	var slot = slotOverride == undefined ? global.gamepadIndex : slotOverride;
+	if(array_length(global.gamepad) > 0)
 	{
-		slot = slotOverride;
-	}
-	var gp_index = 0;
-	for(gp_index = gp_face1; gp_index < gp_face1+global.gpButtonNum; gp_index++)
-	{
-		if(gamepad_button_check(slot, gp_index))
+		for(var gp_index = gp_face1; gp_index < gp_face1+global.gpButtonCount[slot]; gp_index++)
 		{
-			break;
+			if(gamepad_button_check(global.gamepad[slot], gp_index))
+			{
+				return gp_index;
+			}
 		}
 	}
-	return gp_index;
+	return -1;
 }
+*/

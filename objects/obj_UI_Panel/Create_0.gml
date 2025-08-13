@@ -47,11 +47,11 @@ function GetMouse()
 
 function MoveSelectX()
 {
-	return (creator.cRight && creator.rRight) - (creator.cLeft && creator.rLeft);
+	return (creator.cMenuRight && creator.rMenuRight) - (creator.cMenuLeft && creator.rMenuLeft);
 }
 function MoveSelectY()
 {
-	return (creator.cDown && creator.rDown) - (creator.cUp && creator.rUp);
+	return (creator.cMenuDown && creator.rMenuDown) - (creator.cMenuUp && creator.rMenuUp);
 }
 
 function ScrollX()

@@ -9,7 +9,7 @@
   "bitRate":128,
   "compression":0,
   "conversionMode":0,
-  "duration":0.537868,
+  "duration":0.5378685,
   "name":"snd_PerfectFastWJ",
   "parent":{
     "name":"Player",

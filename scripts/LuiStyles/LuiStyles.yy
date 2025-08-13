@@ -6,7 +6,7 @@
   "name":"LuiStyles",
   "parent":{
     "name":"LimeUI",
-    "path":"folders/Scripts/UI/Limekys/LimeUI.yy",
+    "path":"folders/Scripts/Limekys/LimeUI.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -108,3 +108,6 @@ rDown = !cDown;
 rSelect = !cSelect;
 rCancel = !cCancel;
 rStart = !cStart;
+
+controlGroups = "menu";
+InitControlVars(controlGroups);

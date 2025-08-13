@@ -1,12 +1,12 @@
 /// @description 
 
-if !(instance_exists(obj_XRay))
+if !(instance_exists(obj_XRayVisor))
 {
 	instance_destroy();
 }
 else
 {
-	with (obj_XRay)
+	with (obj_XRayVisor)
 	{
 		var camx = obj_Camera.playerXRayX - width/2, //camera_get_view_x(view_camera[0]),
 			camy = obj_Camera.playerXRayY - height/2; //camera_get_view_y(view_camera[0]);

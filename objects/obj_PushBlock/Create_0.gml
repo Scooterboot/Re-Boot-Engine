@@ -85,23 +85,6 @@ function ModifyFinalVelY(fVY)
 	return fVY;
 }
 
-function ModifySlopeXSteepness_Up()
-{
-	return 2;
-}
-function ModifySlopeXSteepness_Down()
-{
-	return 3;
-}
-function ModifySlopeYSteepness_Up()
-{
-	return 1;
-}
-function ModifySlopeYSteepness_Down()
-{
-	return 2;
-}
-
 function OnXCollision(fVX, isOOB = false)
 {
 	velX = 0;

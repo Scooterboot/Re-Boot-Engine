@@ -1,13 +1,13 @@
 /// @description Game Over Menu
 event_inherited();
 
-cRight = obj_Control.mRight;
-cLeft = obj_Control.mLeft;
-cUp = obj_Control.mUp;
-cDown = obj_Control.mDown;
-cSelect = obj_Control.mSelect;
-cCancel = obj_Control.mCancel;
-cStart = obj_Control.start;
+SetControlVars(controlGroups);
+cRight = cMenuRight;
+cLeft = cMenuLeft;
+cUp = cMenuUp;
+cDown = cMenuDown;
+cSelect = cMenuAccept;
+cCancel = cMenuCancel;
 
 if(room == rm_GameOver)
 {
@@ -144,10 +144,10 @@ else
 	screenFade = max(screenFade - 0.075,0);
 }
 
+SetReleaseVars(controlGroups);
 rRight = !cRight;
 rLeft = !cLeft;
 rUp = !cUp;
 rDown = !cDown;
 rSelect = !cSelect;
 rCancel = !cCancel;
-rStart = !cStart;

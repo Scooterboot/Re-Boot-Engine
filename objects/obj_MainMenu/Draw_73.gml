@@ -264,7 +264,7 @@ if(currentScreen == MainScreen.FileSelect || currentScreen == MainScreen.FileCop
 							eX = tx + (7*(j-1))/2;
 							eY = ty+7;
 						}
-						draw_sprite_ext(sprt_UI_HETank,(statEnergyTanks > j),floor(eX),floor(eY),1,1,0,c_white,1);
+						draw_sprite_ext(sprt_HUD_ETank,(statEnergyTanks > j),floor(eX),floor(eY),1,1,0,c_white,1);
 					}
 				}
 			}

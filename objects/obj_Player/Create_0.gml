@@ -28,7 +28,7 @@ godmode = false;
 #macro _ARM_PUMP true
 
 // Allows vertical aiming via [Aim Up]+[Aim Down] (L+R) while moving
-allowMovingVertAim = true;
+//allowMovingVertAim = true;
 
 // Continue speed boosting/keep momentum after landing (also applies to spider ball)
 // 0 = disabled
@@ -94,6 +94,8 @@ allowMovingVertAim = true;
 
 #endregion
 
+InitControlVars();
+
 #region Main
 
 enum State
@@ -145,7 +147,8 @@ justBounced = false;
 aimAngle = 0; //2 = verticle up, 1 = diagonal up, 0 = forward, -1 = diagonal down, -2 = vertical down
 prevAimAngle = aimAngle;
 lastAimAngle = prevAimAngle;
-aimUpDelay = 0;
+//aimUpDelay = 0;
+aimAnimDelay = 0;
 
 extAimAngle = 0;
 extAimPreAngle = 0;
@@ -273,8 +276,9 @@ fell = false;
 
 onPlatform = false;
 
-upClimbCounter = 0;
+grippedDir = 0;
 
+upClimbCounter = 0;
 startClimb = false;
 climbTarget = 0;
 climbIndex = 0;
@@ -296,7 +300,6 @@ dmgFlash = 0;
 dmgBoost = 0;
 dmgBoostJump = false;
 
-dodgePress = 0;
 groundedDodge = 0;
 dodgeDir = 0;
 dodged = false;
@@ -343,7 +346,7 @@ waveDir = 1;
 immune = false;
 
 
-cRight = false;
+/*cRight = false;
 cLeft = false;
 cUp = false;
 cDown = false;
@@ -365,12 +368,13 @@ rSprint = !cSprint;
 rAngleUp = !cAngleUp;
 rAngleDown = !cAngleDown;
 rAimLock = !cAimLock;
-rMorph = !cMorph;
+rMorph = !cMorph;*/
 
 rMorphJump = false;
 rSparkJump = false;
 rRespinJump = true;
 
+Scan = noone;
 XRay = noone;
 //XRayDying = 0;
 
@@ -600,6 +604,10 @@ grapGrav[2] = 0.0615;	// In lava/acid
 fallSpeedMax = 5; // Maximum fall speed - soft cap
 moonFallMax = 32;
 
+// Downward velocity threshold for Space Jump activation
+spaceJumpFallThresh[0] = 2; // In Air
+spaceJumpFallThresh[1] = 2; // Underwater (with Grav) - SM: 1
+
 bombJumpMax[0] = 13;	// air
 bombJumpMax[1] = 1;		// underwater
 bombJumpMax[2] = 1;//3;		// under lava/acid
@@ -743,9 +751,9 @@ crouchYOffset = [0,3,7,10];
 landYOffset = [2,5,8,4,1];
 
 gripFrame = 0;
-gripGunReady = false;
+//gripGunReady = false;
 gripAimFrame = 0;
-gripGunCounter = 0;
+//gripGunCounter = 0;
 
 //gripAimTarget = array(4,6,2,8,0);
 
@@ -868,9 +876,6 @@ turnArmPosY[4] = -29;
 
 rotation = 0;
 rotReAlignStep = 3;
-
-hudBOffsetX = 0;
-hudIOffsetX = 0;
 
 dBoostFrame = 0;
 dBoostFrameCounter = 0;
@@ -1016,10 +1021,129 @@ beamWaveStyleOffset = 1;
 
 beamFlare = sprt_PowerBeamChargeFlare;
 
-#endregion
-#region HUD
+function CanCharge()
+{
+	//return (item[Item.ChargeBeam] && !HUDWeaponSelected(HUDWeapon.Missile) && !HUDWeaponSelected(HUDWeapon.SuperMissile) && !HUDWeaponSelected(HUDWeapon.GrappleBeam) && !instance_exists(XRay) && !hyperBeam);
+	if(!item[Item.ChargeBeam]) { return false; }
+	if(hyperBeam) { return false; }
+	if(HUDWeaponSelected(HUDWeapon.Missile)) { return false; }
+	if(HUDWeaponSelected(HUDWeapon.SuperMissile)) { return false; }
+	if(HUDWeaponSelected(HUDWeapon.GrappleBeam)) { return false; }
+	if(HUDVisorSelected(HUDVisor.Scan)) { return false; }
+	if(HUDVisorSelected(HUDVisor.XRay)) { return false; }
+	
+	return true;
+}
 
-cHSelect = false;
+#endregion
+#region HUD UI
+
+enum PlayerUIState
+{
+	None,
+	WeapWheel,
+	VisorWheel
+}
+uiState = PlayerUIState.None;
+
+pauseSelect = false;
+hudSelectWheelSize = 48;
+hudSelectWheelMin = 32;
+hudPauseAnim = 0;
+hudSlotAnim = 0;
+hudCursorAnim = 0;
+
+function HUDItem(_itemIndex, _hudIconSprt, _selectIconSprt, _getAmmo = undefined, _getAmmoMax = undefined, _ammoIconSprt = undefined, _ammoDigits = undefined) constructor
+{
+	itemIndex = _itemIndex;
+	hudIconSprt = _hudIconSprt;
+	selectIconSprt = _selectIconSprt;
+	
+	GetAmmo = _getAmmo;
+	GetAmmoMax = _getAmmoMax;
+	ammoIconSprt = _ammoIconSprt;
+	ammoDigits = _ammoDigits;
+}
+
+enum HUDWeapon
+{
+	Missile,		// Top slot
+	//Slot2,			// Top-right slot
+	SuperMissile,	// Right slot
+	//Slot4,			// Bottom-right slot
+	PowerBomb,		// Bottom slot
+	//Slot6,			// Bottom-left slot
+	GrappleBeam,	// Left slot
+	//Slot8,			// Top-left slot
+	
+	_Length
+}
+hudWeapon = array_create(HUDWeapon._Length, 0);
+
+hudWeapon[HUDWeapon.Missile] = new HUDItem(Item.Missile, sprt_HUD_Icon_Missile, sprt_UI_ItemWheel_Icon_Missile,
+	function(){ return missileStat; }, function(){ return missileMax; }, sprt_HUD_AmmoIcon_Missile, 3);
+
+hudWeapon[HUDWeapon.SuperMissile] = new HUDItem(Item.SuperMissile, sprt_HUD_Icon_SuperMissile, sprt_UI_ItemWheel_Icon_SuperMissile,
+	function(){ return superMissileStat; }, function(){ return superMissileMax; }, sprt_HUD_AmmoIcon_SuperMissile, 2);
+
+hudWeapon[HUDWeapon.PowerBomb] = new HUDItem(Item.PowerBomb, sprt_HUD_Icon_PowerBomb, sprt_UI_ItemWheel_Icon_PowerBomb,
+	function(){ return powerBombStat; }, function(){ return powerBombMax; }, sprt_HUD_AmmoIcon_PowerBomb, 2);
+
+hudWeapon[HUDWeapon.GrappleBeam] = new HUDItem(Item.GrappleBeam, sprt_HUD_Icon_GrappleBeam, sprt_UI_ItemWheel_Icon_GrappleBeam);
+
+hudWeaponIndex = -1;
+hudAltWeaponIndex = -1;
+weapHUDOpen = false;
+
+function HasHUDWeapon(_hudIndex)
+{
+	return (_hudIndex >= 0 && _hudIndex < array_length(hudWeapon) && is_struct(hudWeapon[_hudIndex]) && (hudWeapon[_hudIndex].itemIndex == undefined || item[hudWeapon[_hudIndex].itemIndex]));
+}
+function HUDWeaponHasAmmo(_hudIndex)
+{
+	if(HasHUDWeapon(_hudIndex))
+	{
+		var hWep = hudWeapon[_hudIndex],
+			ammo = 1;
+		if(hWep.GetAmmo != undefined)
+		{
+			ammo = hWep.GetAmmo();
+		}
+		return (ammo > 0);
+	}
+	return false;
+}
+function HUDWeaponSelected(_hudIndex)
+{
+	return (HUDWeaponHasAmmo(_hudIndex) && hudWeaponIndex == _hudIndex);
+}
+
+enum HUDVisor
+{
+	Scan,
+	XRay,
+	
+	_Length
+}
+hudVisor = array_create(HUDVisor._Length, 0);
+
+hudVisor[HUDVisor.Scan] = new HUDItem(undefined, sprt_HUD_Icon_ScanVisor, sprt_UI_ItemWheel_Icon_ScanVisor);
+hudVisor[HUDVisor.XRay] = new HUDItem(Item.XRayVisor, sprt_HUD_Icon_XRayVisor, sprt_UI_ItemWheel_Icon_XRayVisor);
+
+hudVisorIndex = -1;
+hudAltVisorIndex = -1;
+visorHUDOpen = false;
+
+function HasHUDVisor(_hudIndex)
+{
+	return (_hudIndex >= 0 && _hudIndex < array_length(hudVisor) && is_struct(hudVisor[_hudIndex]) && (hudVisor[_hudIndex].itemIndex == undefined || item[hudVisor[_hudIndex].itemIndex]));
+}
+function HUDVisorSelected(_hudIndex)
+{
+	return (HasHUDVisor(_hudIndex) && hudVisorIndex == _hudIndex);
+}
+
+/*cHSelect = false;
 cHCancel = false;
 cHRight = false;
 cHLeft = false;
@@ -1033,31 +1157,15 @@ rHRight = !cHRight;
 rHLeft = !cHLeft;
 rHUp = !cHUp;
 rHDown = !cHDown;
-rHToggle = !cHToggle;
+rHToggle = !cHToggle;*/
 
-moveH = 0;
+/*moveH = 0;
 moveHPrev = 1;
 
 hudSlot = 0;
 hudSlotItem = [0,0];
 
 pauseSelect = false;
-
-currentMap = global.rmMapArea;
-playerMapX = -1;
-playerMapY = -1;
-if(instance_exists(obj_Map))
-{
-	playerMapX = obj_Map.GetMapPosX(x);
-	playerMapY = obj_Map.GetMapPosY(y);
-}
-prevPlayerMapX = playerMapX;
-prevPlayerMapY = playerMapY;
-pMapOffsetX = 0;
-pMapOffsetY = 0;
-
-hudMapFlashAlpha = 0;
-hudMapFlashNum = 1;
 
 beamIndex = [
 Item.ChargeBeam,
@@ -1086,6 +1194,9 @@ itemName = [
 "POWER BOMB",
 "GRAPPLE BEAM",
 "X-RAY VISOR"];
+
+hudBOffsetX = 0;
+hudIOffsetX = 0;*/
 
 #endregion
 #region MB Trail
@@ -1229,7 +1340,7 @@ function IsScrewAttacking()
 
 function CanPlatformCollide()
 {
-	return (grounded || !cDown) && (!spiderBall || spiderEdge == Edge.None || spiderEdge == Edge.Bottom) && !fell;
+	return (grounded || !cPlayerDown) && (!spiderBall || spiderEdge == Edge.None || spiderEdge == Edge.Bottom) && !fell;
 }
 
 function entity_collision(listNum)
@@ -1286,41 +1397,41 @@ function ModifySlopeXSteepness_Up()
 {
 	if(spiderBall && (spiderEdge != Edge.None || Crawler_CanStickRight() || Crawler_CanStickLeft()))
 	{
-		return 2;
+		return 1;
 	}
 	if((speedBoost && grounded) || state == State.Grapple || ((state == State.Spark || state == State.BallSpark) && !SparkDir_Hori()))
-	{
-		return 4;
-	}
-	return 2;
-}
-function ModifySlopeXSteepness_Down()
-{
-	if(spiderBall && (spiderEdge != Edge.None || Crawler_CanStickRight() || Crawler_CanStickLeft()))
-	{
-		return 3;
-	}
-	return 3;
-}
-function ModifySlopeYSteepness_Up()
-{
-	if(spiderBall && (spiderEdge != Edge.None || Crawler_CanStickBottom() || Crawler_CanStickTop()))
-	{
-		return 2;
-	}
-	if(fVelY < 0)
 	{
 		return 2;
 	}
 	return 1;
 }
+function ModifySlopeXSteepness_Down()
+{
+	if(spiderBall && (spiderEdge != Edge.None || Crawler_CanStickRight() || Crawler_CanStickLeft()))
+	{
+		return 1;
+	}
+	return 1;
+}
+function ModifySlopeYSteepness_Up()
+{
+	if(spiderBall && (spiderEdge != Edge.None || Crawler_CanStickBottom() || Crawler_CanStickTop()))
+	{
+		return 1;
+	}
+	if(fVelY < 0)
+	{
+		return 1;
+	}
+	return 0.5;
+}
 function ModifySlopeYSteepness_Down()
 {
 	if(spiderBall && (spiderEdge != Edge.None || Crawler_CanStickBottom() || Crawler_CanStickTop()))
 	{
-		return 3;
+		return 1;
 	}
-	return 2;
+	return 0.5;
 }
 
 function OnRightCollision(fVX)
@@ -1347,10 +1458,10 @@ function OnXCollision(fVX, isOOB = false)
 		}
 		pBlock.velX = vx;
 	}
-	if(state == State.Stand)
+	/*if(state == State.Stand)
 	{
 		pushBlock = instance_place(position.X+2*move2,position.Y,obj_PushBlock);
-	}
+	}*/
 	
 	fastWJGrace = (_FAST_WALLJUMP && state == State.Somersault && abs(velX) >= maxSpeed[MaxSpeed.Run,liquidState]);
 	var fwjGrace = (fastWJGrace && fastWJGraceCounter < fastWJGraceMax);
@@ -1373,7 +1484,7 @@ function OnXCollision(fVX, isOOB = false)
 	move = 0;
 	bombJumpX = 0;
 	
-	var diagSparkSlide = (_SPARK_DAIG_SLIDE && (SparkDir_DiagUp() || SparkDir_DiagDown()) && (cRight - cLeft) != dir);
+	var diagSparkSlide = (_SPARK_DAIG_SLIDE && (SparkDir_DiagUp() || SparkDir_DiagDown()) && (cPlayerRight - cPlayerLeft) != dir);
 	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0)
 	{
 		if(!diagSparkSlide)
@@ -1443,11 +1554,11 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		var bbottom = bb_bottom(),
 			bright = bb_right(),
 			bleft = bb_left();
-		if(fVelX > 0 && !entity_collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1) && !collision_line(bright+fVX+fVelX,y+yShift,bright+fVX+fVelX,bbottom+yShift+1,ColType_Platform,true,true))
+		if(fVelX > 0 && !entity_collision_line(bright+fVX+fVelX, position.Y+yShift, bright+fVX+fVelX, bbottom+yShift+1) && !collision_line(bright+fVX+fVelX, position.Y+yShift, bright+fVX+fVelX, bbottom+yShift+1, ColType_Platform, true, true))
 		{
 			flag = true;
 		}
-		if(fVelX < 0 && !entity_collision_line(bleft+fVX+fVelX,y+yShift,bleft+fVX+fVelX,bbottom+yShift+1) && !collision_line(bleft+fVX+fVelX,y+yShift,bleft+fVX+fVelX,bbottom+yShift+1,ColType_Platform,true,true))
+		if(fVelX < 0 && !entity_collision_line(bleft+fVX+fVelX, position.Y+yShift, bleft+fVX+fVelX, bbottom+yShift+1) && !collision_line(bleft+fVX+fVelX, position.Y+yShift, bleft+fVX+fVelX, bbottom+yShift+1, ColType_Platform, true, true))
 		{
 			flag = true;
 		}
@@ -2371,7 +2482,7 @@ function MoveStickLeft_Y(movingTile)
 
 function MoveStick_CheckPGrip(_dir, movingTile)
 {
-	if(state == State.Grip && dir == _dir)
+	if(state == State.Grip && grippedDir == _dir)
 	{
 		var _px = position.X,
 			_py = position.Y;
@@ -2951,7 +3062,8 @@ function EntityLiquid_Large(_velX, _velY)
 				bub.velX += _velX/2;
 				if (state == State.Grip)
 			    {
-			        bub.posX -= (dir * 6);
+			        //bub.posX -= (dir * 6);
+					bub.posX = x - 2 * grippedDir;
 			    }
 			}
 		}
@@ -3585,17 +3697,17 @@ function SetArmPosGrip()
 		{
 			case 0:
 			{
-				ArmPos(-1*dir,9);
+				ArmPos(-1*fDir,9);
 				break;
 			}
 			case 1:
 			{
-				ArmPos(-5*dir,12);
+				ArmPos(-5*fDir,12);
 				break;
 			}
 			case 2:
 			{
-				ArmPos(-6*dir,12);
+				ArmPos(-6*fDir,12);
 				break;
 			}
 		}
@@ -3607,7 +3719,7 @@ function SetArmPosGrip()
 		    default:
 		    {
 		        ArmPos(-11, 17);
-		        if(dir == -1)
+		        if(fDir == -1)
 		        {
 		            ArmPos(10, 18);
 		        }
@@ -3617,7 +3729,7 @@ function SetArmPosGrip()
 		    case 1:
 		    {
 		        ArmPos(-21, 14);
-		        if(dir == -1)
+		        if(fDir == -1)
 		        {
 		            ArmPos(18, 15);
 		        }
@@ -3626,18 +3738,18 @@ function SetArmPosGrip()
 		    case 2:
 		    {
 		        ArmPos(-27, 9);
-		        if(dir == -1)
+		        if(fDir == -1)
 		        {
 		            ArmPos(25,10);
 		        }
-		        armOffsetX += (recoilCounter > 0)*dir;
+		        armOffsetX += (recoilCounter > 0)*fDir;
 		        armOffsetY -= (recoilCounter > 0);
 		        break;
 		    }
 		    case 3:
 		    {
 		        ArmPos(-30, 1);
-		        if(dir == -1)
+		        if(fDir == -1)
 		        {
 		            ArmPos(29, 1);
 		        }
@@ -3646,17 +3758,17 @@ function SetArmPosGrip()
 		    case 4:
 		    {
 		        ArmPos(-30,-6);
-		        if(dir == -1)
+		        if(fDir == -1)
 		        {
 		            ArmPos(32,-8);
 		        }
-		        armOffsetX += (recoilCounter > 0)*dir;
+		        armOffsetX += (recoilCounter > 0)*fDir;
 		        break;
 		    }
 		    case 5:
 		    {
 		        ArmPos(-30, -16);
-		        if(dir == -1)
+		        if(fDir == -1)
 		        {
 		            ArmPos(30, -18);
 		        }
@@ -3665,18 +3777,18 @@ function SetArmPosGrip()
 		    case 6:
 		    {
 		        ArmPos(-27, -21);
-		        if(dir == -1)
+		        if(fDir == -1)
 		        {
 		            ArmPos(26, -21);
 		        }
-		        armOffsetX += (recoilCounter > 0)*dir;
+		        armOffsetX += (recoilCounter > 0)*fDir;
 		        armOffsetY += (recoilCounter > 0);
 		        break;
 		    }
 		    case 7:
 		    {
 		        ArmPos(-23,-28);
-		        if(dir == -1)
+		        if(fDir == -1)
 		        {
 		            ArmPos(23,-28);
 		        }
@@ -3685,7 +3797,7 @@ function SetArmPosGrip()
 		    case 8:
 		    {
 		        ArmPos(-12, -31);
-		        if(dir == -1)
+		        if(fDir == -1)
 		        {
 		            ArmPos(12, -31);
 		        }
@@ -3703,62 +3815,62 @@ function SetArmPosClimb()
 	{
 	    case 0:
 	    {
-	        ArmPos(5*dir,7);
+	        ArmPos(5*fDir,7);
 	        break;
 	    }
 	    case 1:
 	    {
-	        ArmPos(5*dir,10);
+	        ArmPos(5*fDir,10);
 	        break;
 	    }
 	    case 2:
 	    {
-	        ArmPos(7*dir,13);
+	        ArmPos(7*fDir,13);
 	        break;
 	    }
 	    case 3:
 	    {
-	        ArmPos(9*dir,16);
+	        ArmPos(9*fDir,16);
 	        break;
 	    }
 	    case 4:
 	    {
-	        ArmPos(9*dir,17);
+	        ArmPos(9*fDir,17);
 	        break;
 	    }
 	    case 5:
 	    {
-	        ArmPos(8*dir,17);
+	        ArmPos(8*fDir,17);
 	        break;
 	    }
 	    case 6:
 	    {
-	        ArmPos(7*dir,20);
+	        ArmPos(7*fDir,20);
 	        break;
 	    }
 	    case 7:
 	    {
-	        ArmPos(7*dir,20);
+	        ArmPos(7*fDir,20);
 	        break;
 	    }
 	    case 8:
 	    {
-	        ArmPos(8*dir,19);
+	        ArmPos(8*fDir,19);
 	        break;
 	    }
 	    case 9:
 	    {
-	        ArmPos(9*dir,16);
+	        ArmPos(9*fDir,16);
 	        break;
 	    }
 	    case 10:
 	    {
-	        ArmPos(9*dir,13);
+	        ArmPos(9*fDir,13);
 	        break;
 	    }
 	    case 11:
 	    {
-	        ArmPos(15*dir,5);
+	        ArmPos(15*fDir,5);
 	        break;
 	    }
 	}
@@ -4404,7 +4516,8 @@ function UpdatePlayerSurface(_palSurface)
 			draw_sprite_ext(sprt_Player_MorphBallAlt_Shine,0,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),1,1,0,c_white,1);
 		}
 	
-		if(hudSlot == 1 && (hudSlotItem[1] == 0 || hudSlotItem[1] == 1 || hudSlotItem[1] == 3))
+		//if(hudSlot == 1 && (hudSlotItem[1] == 0 || hudSlotItem[1] == 1 || hudSlotItem[1] == 3))
+		if(HUDWeaponSelected(HUDWeapon.Missile) || HUDWeaponSelected(HUDWeapon.SuperMissile) || HUDWeaponSelected(HUDWeapon.GrappleBeam))
 		{
 			missileArmFrame = min(missileArmFrame + 1, 4);
 		}

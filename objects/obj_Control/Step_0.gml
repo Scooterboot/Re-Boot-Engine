@@ -1,8 +1,41 @@
 /// @description Define & Set
 
 
+
+/*if(gamepad_is_supported() && array_length(global.gamepad) > 0)
+{
+	for (var i = 0; i < array_length(global.gamepad); i++)
+	{
+		if(gamepad_is_connected(global.gamepad[i]) && gamepad_button_check(global.gamepad[i], gp_anybutton(i)))
+		{
+			global.gamepadIndex = i;
+			global.gpSlot = global.gamepad[i];
+			break;
+		}
+	}
+}
+else
+{
+	global.gamepadIndex = 0;
+	global.gpSlot = -1;
+}
+
+if(keyboard_check(vk_anykey))
+{
+	usingGamePad = false;
+}
+if (global.gpSlot > -1 && gamepad_is_connected(global.gpSlot) && 
+	(gamepad_button_check(global.gpSlot,gp_anybutton()) || 
+	gamepad_axis_value(global.gpSlot, gp_axislh) != 0 || 
+	gamepad_axis_value(global.gpSlot, gp_axislv) != 0 || 
+	gamepad_axis_value(global.gpSlot, gp_axisrh) != 0 || 
+	gamepad_axis_value(global.gpSlot, gp_axisrv) != 0))
+{
+	usingGamePad = true;
+}
+
 // temp code
-if(gamepad_is_supported())
+/*if(gamepad_is_supported())
 {
 	for (var i = 0; i < gamepad_get_device_count(); i++)
 	{
@@ -13,10 +46,10 @@ if(gamepad_is_supported())
 	        break;
 	    }
 	}
-}
+}*/
 // temp code
 
-
+/*
 ///Define
 kUp = keyboard_check(global.key[0]);
 kDown = keyboard_check(global.key[1]);
@@ -146,3 +179,4 @@ cursorActiveTimer = max(cursorActiveTimer - 1, 0);
 
 mousePrevX = mouse_x;
 mousePrevY = mouse_y;
+*/

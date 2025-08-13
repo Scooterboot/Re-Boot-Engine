@@ -11,8 +11,11 @@ else
 
 var sprt = sprt_UI_MouseCursor;
 
+var xx = scr_round(x),
+	yy = scr_round(y);
+
 surface_set_target(obj_Display.surfUI);
-draw_sprite_ext(sprt,0,x,y,1,1,0,make_color_rgb(51,109,174),image_alpha);
+draw_sprite_ext(sprt,0,xx,yy,1,1,0,make_color_rgb(51,109,174),image_alpha);
 surface_reset_target();
 
 if(!surface_exists(mouseGlowSurf))
@@ -54,7 +57,7 @@ else
 	surface_set_target(obj_Display.surfUI);
 	gpu_set_blendmode(bm_add);
 	gpu_set_colorwriteenable(1,1,1,0);
-	draw_surface_ext(mouseGlowSurf,x,y,1,1,0,c_white,image_alpha);
+	draw_surface_ext(mouseGlowSurf,xx,yy,1,1,0,c_white,image_alpha);
 	gpu_set_colorwriteenable(1,1,1,1);
 	gpu_set_blendmode(bm_normal);
 	surface_reset_target();

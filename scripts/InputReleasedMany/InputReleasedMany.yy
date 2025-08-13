@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"InputReleasedMany",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"InputReleasedMany",
+  "parent":{
+    "name":"Many",
+    "path":"folders/Scripts/Input/Checkers/Many.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

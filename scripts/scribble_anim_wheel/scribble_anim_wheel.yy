@@ -6,7 +6,7 @@
   "name":"scribble_anim_wheel",
   "parent":{
     "name":"Animation",
-    "path":"folders/Scripts/UI/Scribble/Animation.yy",
+    "path":"folders/Scripts/Scribble/Animation.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

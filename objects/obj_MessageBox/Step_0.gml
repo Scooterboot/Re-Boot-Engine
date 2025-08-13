@@ -1,11 +1,9 @@
 /// @description Logic
 event_inherited();
 
-cSelect = obj_Control.mSelect;
-cCancel = obj_Control.mCancel;
-cStart = obj_Control.start;
-var prSelect = (cSelect && rSelect),
-	prCancel = (cCancel && rCancel),
+SetControlVars("menu");
+var prSelect = (cMenuAccept && rMenuAccept),
+	prCancel = (cMenuCancel && rMenuCancel),
 	prStart = (cStart && rStart);
 
 switch (messageType)
@@ -65,6 +63,4 @@ if(kill && messageAlpha <= 0)
 	instance_destroy();
 }
 
-rSelect = !cSelect;
-rCancel = !cCancel;
-rStart = !cStart;
+SetReleaseVars("menu");

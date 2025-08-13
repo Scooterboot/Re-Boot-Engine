@@ -36,17 +36,17 @@ function MoveSelectX()
 {
 	if(creator.moveCounterX >= creator.moveCounterMax)
 	{
-		return creator.cRight - creator.cLeft;
+		return creator.cMenuRight - creator.cMenuLeft;
 	}
-	return (creator.cRight && creator.rRight) - (creator.cLeft && creator.rLeft);
+	return (creator.cMenuRight && creator.rMenuRight) - (creator.cMenuLeft && creator.rMenuLeft);
 }
 function MoveSelectY()
 {
 	if(creator.moveCounterY >= creator.moveCounterMax)
 	{
-		return creator.cDown - creator.cUp;
+		return creator.cMenuDown - creator.cMenuUp;
 	}
-	return (creator.cDown && creator.rDown) - (creator.cUp && creator.rUp);
+	return (creator.cMenuDown && creator.rMenuDown) - (creator.cMenuUp && creator.rMenuUp);
 }
 
 selectedFile = -1;
@@ -718,7 +718,7 @@ function DrawSaveFileButton(_x, _y)
 							eX = tx + (7*(j-1))/2;
 							eY = ty+7;
 						}
-						draw_sprite_ext(sprt_UI_HETank,(statEnergyTanks > j),floor(eX),floor(eY),1,1,0,c_white,1);
+						draw_sprite_ext(sprt_HUD_ETank,(statEnergyTanks > j),floor(eX),floor(eY),1,1,0,c_white,1);
 					}
 				}
 			}

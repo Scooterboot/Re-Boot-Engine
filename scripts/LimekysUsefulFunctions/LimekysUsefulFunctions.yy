@@ -6,7 +6,7 @@
   "name":"LimekysUsefulFunctions",
   "parent":{
     "name":"UsefulTools",
-    "path":"folders/Scripts/UI/Limekys/UsefulTools.yy",
+    "path":"folders/Scripts/Limekys/UsefulTools.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

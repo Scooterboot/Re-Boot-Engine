@@ -127,14 +127,14 @@ controlKey = [
 "RESET TO DEFAULTS",
 "BACK"];
 
-for(var i = 0; i < array_length(global.key); i++)
+/*for(var i = 0; i < array_length(global.key); i++)
 {
 	currentControlKey[i] = global.key[i];
 }
 for(var i = 0; i < array_length(global.key_m); i++)
 {
 	currentControlKey[i+array_length(global.key)] = global.key_m[i];
-}
+}*/
 
 controlButton = [
 "D-PAD","LEFT STICK","DEAD ZONE",
@@ -145,7 +145,7 @@ controlButton = [
 "RESET TO DEFAULTS",
 "BACK"];
 
-currentControlButton = [global.gp_usePad,global.gp_useStick,global.gp_deadZone];
+/*currentControlButton = [global.gp_usePad,global.gp_useStick,global.gp_deadZone];
 for(var i = 0; i < array_length(global.gp); i++)
 {
 	currentControlButton[i+3] = global.gp[i];
@@ -153,7 +153,7 @@ for(var i = 0; i < array_length(global.gp); i++)
 for(var i = 0; i < array_length(global.gp_m); i++)
 {
 	currentControlButton[i+3+array_length(global.gp)] = global.gp_m[i];
-}
+}*/
 
 selectedKey = -1;
 keySelectDelay = 0;
@@ -191,3 +191,6 @@ rDown = !cDown;
 rSelect = !cSelect;
 rCancel = !cCancel;
 rStart = !cStart;
+
+controlGroups = "menu";
+InitControlVars(controlGroups);

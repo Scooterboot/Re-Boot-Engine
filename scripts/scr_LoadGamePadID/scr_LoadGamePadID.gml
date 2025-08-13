@@ -1,5 +1,5 @@
 /// @description scr_LoadGamePadID()
-function scr_LoadGamePadID()
+/*function scr_LoadGamePadID()
 {
 	global.gpSlot = -1;
 	global.gpButtonNum = -1;
@@ -17,3 +17,4 @@ function scr_LoadGamePadID()
 		}
 	}
 }
+*/

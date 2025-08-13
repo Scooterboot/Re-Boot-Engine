@@ -9,7 +9,7 @@
   "bitRate":128,
   "compression":0,
   "conversionMode":0,
-  "duration":0.538413,
+  "duration":0.5384127,
   "name":"snd_FastWallJump",
   "parent":{
     "name":"Player",

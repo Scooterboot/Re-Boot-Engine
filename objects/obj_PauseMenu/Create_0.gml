@@ -197,6 +197,9 @@ rSelect = !cSelect;
 rCancel = !cCancel;
 rStart = !cStart;
 
+controlGroups = "menu";
+InitControlVars(controlGroups);
+
 footerText[0] = "${itemSelectButton} - World Map\n"+
 				"${menuSelectButton} - Place Marker\n"+
 				"${menuCancelButton} - Menu Select";
@@ -387,11 +390,11 @@ function DrawInventoryPlayer()
 		else if(string_pos("Equip",ability) != 0)
 		{
 			playerGlowInd = 1;
-			if(index == array_find_index_by_value(equipIndex,Item.PowerBomb))
+			if(index == array_get_index(equipIndex,Item.PowerBomb))
 			{
 				playerGlowInd = 3;
 			}
-			if(index = array_find_index_by_value(equipIndex,Item.XRayVisor))
+			if(index = array_get_index(equipIndex,Item.XRayVisor))
 			{
 				playerGlowInd = 7;
 			}
@@ -399,11 +402,11 @@ function DrawInventoryPlayer()
 		else if(string_pos("Misc",ability) != 0)
 		{
 			playerGlowInd = 3;
-			if(index == array_find_index_by_value(miscIndex,Item.PowerGrip))
+			if(index == array_get_index(miscIndex,Item.PowerGrip))
 			{
 				playerGlowInd = 2;
 			}
-			if(index == array_find_index_by_value(miscIndex,Item.ScrewAttack))
+			if(index == array_get_index(miscIndex,Item.ScrewAttack))
 			{
 				playerGlowInd = 0;
 			}
@@ -412,15 +415,15 @@ function DrawInventoryPlayer()
 		{
 			yDest = -20;
 			playerGlowInd = 0;
-			if(index == array_find_index_by_value(bootsIndex,Item.HiJump))
+			if(index == array_get_index(bootsIndex,Item.HiJump))
 			{
 				playerGlowInd = 5;
 			}
-			if(index == array_find_index_by_value(bootsIndex,Item.SpaceJump))
+			if(index == array_get_index(bootsIndex,Item.SpaceJump))
 			{
 				playerGlowInd = 4;
 			}
-			if(index == array_find_index_by_value(bootsIndex,Item.AccelDash))
+			if(index == array_get_index(bootsIndex,Item.AccelDash))
 			{
 				playerGlowInd = 6;
 			}
@@ -656,8 +659,8 @@ function DrawInventoryPlayer_Retro()
 		else if(string_pos("Equip",ability) != 0)
 		{
 			l = 2;
-			if(index = array_find_index_by_value(equipIndex,Item.PowerBomb) || 
-				index = array_find_index_by_value(equipIndex,Item.XRayVisor))
+			if(index = array_get_index(equipIndex,Item.PowerBomb) || 
+				index = array_get_index(equipIndex,Item.XRayVisor))
 			{
 				l = 3;
 			}
@@ -665,7 +668,7 @@ function DrawInventoryPlayer_Retro()
 		else if(string_pos("Misc",ability) != 0)
 		{
 			l = 4;
-			if(index == array_find_index_by_value(miscIndex,Item.PowerGrip))
+			if(index == array_get_index(miscIndex,Item.PowerGrip))
 			{
 				l = 5;
 			}
@@ -673,8 +676,8 @@ function DrawInventoryPlayer_Retro()
 		else if(string_pos("Boots",ability) != 0)
 		{
 			l = 7;
-			if(index == array_find_index_by_value(bootsIndex,Item.HiJump) || 
-				index == array_find_index_by_value(bootsIndex,Item.SpaceJump))
+			if(index == array_get_index(bootsIndex,Item.HiJump) || 
+				index == array_get_index(bootsIndex,Item.SpaceJump))
 			{
 				l = 6;
 			}
@@ -864,11 +867,11 @@ function DrawInventoryPlayer_Retro()
 		else if(string_pos("Equip",ability) != 0)
 		{
 			playerGlowInd = 1;
-			if(index == array_find_index_by_value(equipIndex,Item.PowerBomb))
+			if(index == array_get_index(equipIndex,Item.PowerBomb))
 			{
 				playerGlowInd = 3;
 			}
-			if(index = array_find_index_by_value(equipIndex,Item.XRayVisor))
+			if(index = array_get_index(equipIndex,Item.XRayVisor))
 			{
 				playerGlowInd = 7;
 			}
@@ -876,11 +879,11 @@ function DrawInventoryPlayer_Retro()
 		else if(string_pos("Misc",ability) != 0)
 		{
 			playerGlowInd = 3;
-			if(index == array_find_index_by_value(miscIndex,Item.PowerGrip))
+			if(index == array_get_index(miscIndex,Item.PowerGrip))
 			{
 				playerGlowInd = 2;
 			}
-			if(index == array_find_index_by_value(miscIndex,Item.ScrewAttack))
+			if(index == array_get_index(miscIndex,Item.ScrewAttack))
 			{
 				playerGlowInd = 0;
 			}
@@ -888,15 +891,15 @@ function DrawInventoryPlayer_Retro()
 		else if(string_pos("Boots",ability) != 0)
 		{
 			playerGlowInd = 0;
-			if(index == array_find_index_by_value(bootsIndex,Item.HiJump))
+			if(index == array_get_index(bootsIndex,Item.HiJump))
 			{
 				playerGlowInd = 5;
 			}
-			if(index == array_find_index_by_value(bootsIndex,Item.SpaceJump))
+			if(index == array_get_index(bootsIndex,Item.SpaceJump))
 			{
 				playerGlowInd = 4;
 			}
-			if(index == array_find_index_by_value(bootsIndex,Item.AccelDash))
+			if(index == array_get_index(bootsIndex,Item.AccelDash))
 			{
 				playerGlowInd = 6;
 			}

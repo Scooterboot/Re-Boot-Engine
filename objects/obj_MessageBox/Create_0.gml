@@ -32,14 +32,7 @@ messageDurMax_Simple = 60;
 messageAlpha = 0;
 kill = false;
 
-cSelect = false;
-cCancel = false;
-cStart = false;
-
-rSelect = !cSelect;
-rCancel = !cCancel;
-rStart = !cStart;
-
+InitControlVars("menu");
 
 descScrib = scribble(description);
 descScrib.starting_format("fnt_GUI_Small2",c_white);

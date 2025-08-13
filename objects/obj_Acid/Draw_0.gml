@@ -53,9 +53,9 @@ if(surface_exists(finalSurface))
 		draw_primitive_end();
 	}
 	
-	if(instance_exists(obj_XRay))
+	if(instance_exists(obj_XRayVisor))
 	{
-		with(obj_XRay)
+		with(obj_XRayVisor)
 		{
 			gpu_set_blendmode_ext(bm_dest_alpha, bm_src_alpha);
 

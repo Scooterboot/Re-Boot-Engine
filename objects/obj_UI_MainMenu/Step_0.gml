@@ -1,14 +1,18 @@
 /// @description 
 SetControlVars_Press();
+var cUp = cMenuUp,
+	cDown = cMenuDown,
+	cLeft = cMenuLeft,
+	cRight = cMenuRight;
 
-var anyStartButton = ((cStart && rStart) || (cSelect && rSelect) || (cCancel && rCancel) || (cClickL && rClickL));
+var anyStartButton = ((cStart && rStart) || (cMenuAccept && rMenuAccept) || (cMenuCancel && rMenuCancel) || (cClickL && rClickL));
 
 if(room == rm_MainMenu)
 {
 	camera_set_view_pos(view_camera[0], room_width/2 - global.resWidth/2, room_height/2 - global.resHeight/2);
 	
-	var select = (cSelect && rSelect) || (cClickL && rClickL),
-		cancel = (cCancel && rCancel) || (cClickR && rClickR);
+	var select = (cMenuAccept && rMenuAccept) || (cClickL && rClickL),
+		cancel = (cMenuCancel && rMenuCancel) || (cClickR && rClickR);
 	if(state != MMState.TitleIntro && state != MMState.Title)
 	{
 		if((cLeft || cRight) && !select && !cancel)

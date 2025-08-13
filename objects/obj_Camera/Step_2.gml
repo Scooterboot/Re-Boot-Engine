@@ -1,6 +1,6 @@
 /// @description Camera movement
 //if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
-if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj_PauseMenu.pause)) && instance_exists(obj_Player))
+if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRayVisor) && !obj_PauseMenu.pause)) && instance_exists(obj_Player))
 {
 	var player = obj_Player;
 	var xx = x + (camWidth()/2),
@@ -58,7 +58,7 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 	targetY = playerY;
 	velX = 0;
 	velY = 0;
-	camKey = player.cAimLock;
+	camKey = player.cMoonwalk; // TODO: redo some logic involving this
 	
 	var angle = player.aimAngle,
 		speedX = player.fVelX,
@@ -96,10 +96,10 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRay) && !obj
 	{
 		yDir = sign(angle) * -1;
 	}
-	if(player.state == State.Grip && player.gripGunReady && player.move != xDir)
+	/*if(player.state == State.Grip && player.gripGunReady && player.move != xDir)
 	{
 		xDir *= -1;
-	}
+	}*/
 	
 	targetX = playerX + camLimit_Right;
 	if(xDir <= -1)

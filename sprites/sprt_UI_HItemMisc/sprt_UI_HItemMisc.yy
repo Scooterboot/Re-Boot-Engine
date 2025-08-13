@@ -34,8 +34,8 @@
   "nineSlice":null,
   "origin":4,
   "parent":{
-    "name":"Alt HUD",
-    "path":"folders/Sprites/UI/HUD/Alt HUD.yy",
+    "name":"Alt HUD old",
+    "path":"folders/Sprites/UI/HUD/Alt HUD old.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

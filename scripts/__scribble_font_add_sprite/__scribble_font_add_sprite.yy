@@ -6,7 +6,7 @@
   "name":"__scribble_font_add_sprite",
   "parent":{
     "name":"(System - don't call these functions)",
-    "path":"folders/Scripts/UI/Scribble/(System - don't call these functions).yy",
+    "path":"folders/Scripts/Scribble/(System - don't call these functions).yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

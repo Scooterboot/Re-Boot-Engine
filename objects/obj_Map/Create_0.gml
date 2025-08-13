@@ -17,8 +17,6 @@ mapSurf = surface_create(global.mapSquareSizeW,global.mapSquareSizeH);
 
 playerMapX = 0;
 playerMapY = 0;
-prevPlayerMapX = 0;
-prevPlayerMapY = 0;
 
 function GetMapPosX(_x)
 {
@@ -77,8 +75,6 @@ global.mapArea[MapArea.Norfair] = new AreaMap(sprt_Map_DebugNorfair, "Norfair");
 global.mapArea[MapArea.Maridia] = new AreaMap(sprt_Map_DebugMaridia, "Maridia");
 global.mapArea[MapArea.Tourian] = new AreaMap(sprt_Map_DebugTourian, "Tourian");
 
-prevArea = noone;
-
 #region DrawMap
 
 function PrepareMapSurf(mapArea,mapX,mapY,mapWidth,mapHeight,isMinimap = false,baseAlpha = 0)
@@ -119,7 +115,7 @@ function PrepareMapSurf(mapArea,mapX,mapY,mapWidth,mapHeight,isMinimap = false,b
 			
 			if(baseAlpha > 0)
 			{
-				draw_sprite_stretched_ext(sprt_UI_HMapBase,0,offX,offY,sprite_get_width(mapSprt),sprite_get_height(mapSprt),c_white,baseAlpha);
+				draw_sprite_stretched_ext(sprt_HUD_MapBase,0,offX,offY,sprite_get_width(mapSprt),sprite_get_height(mapSprt),c_white,baseAlpha);
 			}
 		
 			if(ds_exists(mapGrid,ds_type_grid))

@@ -6,7 +6,7 @@
   "name":"draw_text_scribble_ext",
   "parent":{
     "name":"Quick Functions",
-    "path":"folders/Scripts/UI/Scribble/Quick Functions.yy",
+    "path":"folders/Scripts/Scribble/Quick Functions.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

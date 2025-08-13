@@ -6,7 +6,7 @@
   "name":"scribble_font_duplicate",
   "parent":{
     "name":"Fonts",
-    "path":"folders/Scripts/UI/Scribble/Fonts.yy",
+    "path":"folders/Scripts/Scribble/Fonts.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

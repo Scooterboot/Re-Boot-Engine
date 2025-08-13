@@ -6,7 +6,7 @@
   "name":"scribble_kerning_pair_get",
   "parent":{
     "name":"Fonts",
-    "path":"folders/Scripts/UI/Scribble/Fonts.yy",
+    "path":"folders/Scripts/Scribble/Fonts.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

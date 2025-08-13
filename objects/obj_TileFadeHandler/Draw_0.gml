@@ -54,9 +54,9 @@ else
 	gpu_set_colorwriteenable(1,1,1,1);
 	gpu_set_blendmode(bm_normal);
 
-	if(instance_exists(obj_XRay))
+	if(instance_exists(obj_XRayVisor))
 	{
-		with(obj_XRay)
+		with(obj_XRayVisor)
 		{
 			gpu_set_blendmode_ext(bm_dest_alpha, bm_src_alpha);
 
@@ -75,9 +75,9 @@ else
 	draw_surface(fadeTileSurfaceTemp,camX,camY);
 }
 
-if(instance_exists(obj_XRay))
+if(instance_exists(obj_XRayVisor))
 {
-	with(obj_XRay)
+	with(obj_XRayVisor)
 	{
 		draw_primitive_begin(pr_trianglestrip);
 		for(var i = 0; i < 360-(coneSpread*2); i = min(i+45,360-(coneSpread*2)))

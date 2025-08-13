@@ -63,9 +63,9 @@ if(gravGlowAlpha > 0 && !hurtflag)
 	{
 		for(var j = 1; j < 3; j++)
 		{
-			var gx = x+scr_ceil(lengthdir_x(1,i)*j),
-			gy = y+scr_ceil(lengthdir_y(1,i)*j);
-			DrawPlayer(gx,gy,rotation,alp*(0.5*(1/6)));
+			var gx = x+scr_ceil(lengthdir_x(j,i)),
+				gy = y+scr_ceil(lengthdir_y(j,i));
+			DrawPlayer(gx, gy, rotation, alp * 0.08);
 		}
 	}
 	gpu_set_blendmode(bm_normal);

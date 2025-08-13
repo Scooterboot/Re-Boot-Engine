@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"snd_Scanning",
+  "audioGroupId":{
+    "name":"audio_sound",
+    "path":"audiogroups/audio_sound",
+  },
+  "bitDepth":1,
+  "bitRate":128,
+  "compression":0,
+  "conversionMode":0,
+  "duration":1.5126303,
+  "name":"snd_Scanning",
+  "parent":{
+    "name":"Visor",
+    "path":"folders/Sounds/Visor.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"snd_Scanning.wav",
+  "type":1,
+  "volume":1.0,
+}

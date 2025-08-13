@@ -78,7 +78,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					
 					var bgx = -msSizeW + scr_wrap(scr_round(mx),0,msSizeW),
 						bgy = -msSizeH + scr_wrap(scr_round(my),0,msSizeH);
-					draw_sprite_stretched_ext(sprt_UI_HMapBase,0,bgx,bgy,ww+(msSizeW*2),hh+(msSizeH*2),c_white,0.25);
+					draw_sprite_stretched_ext(sprt_HUD_MapBase,0,bgx,bgy,ww+(msSizeW*2),hh+(msSizeH*2),c_white,0.25);
 					
 					//obj_Map.DrawMap(global.rmMapArea,0,0,-scr_round(mx),-scr_round(my),global.resWidth,global.resHeight);
 					obj_Map.PrepareMapSurf(global.rmMapArea,-scr_round(mx),-scr_round(my),global.resWidth,global.resHeight);
@@ -213,12 +213,12 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					if(isEquip)
 					{
 						xoffset = 15;
-						if(index == array_find_index_by_value(equipIndex,Item.PowerBomb))
+						if(index == array_get_index(equipIndex,Item.PowerBomb))
 						{
 							xoffset = 11;
 						}
-						if(index == array_find_index_by_value(equipIndex,Item.GrappleBeam) || 
-							index == array_find_index_by_value(equipIndex,Item.XRayVisor))
+						if(index == array_get_index(equipIndex,Item.GrappleBeam) || 
+							index == array_get_index(equipIndex,Item.XRayVisor))
 						{
 							xoffset = 12;
 						}

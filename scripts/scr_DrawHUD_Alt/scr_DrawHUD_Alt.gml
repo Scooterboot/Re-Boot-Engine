@@ -1,5 +1,5 @@
 ///scr_DrawHUD_Alt
-function scr_DrawHUD_Alt() {
+/*function scr_DrawHUD_Alt() {
 
 	var vX = camera_get_view_x(view_camera[0]),
 		vY = camera_get_view_y(view_camera[0]);
@@ -284,3 +284,4 @@ function scr_DrawHUD_Alt() {
 
 
 }
+*/

@@ -9,7 +9,7 @@
   "bitRate":128,
   "compression":0,
   "conversionMode":0,
-  "duration":0.419819,
+  "duration":0.41981858,
   "name":"snd_Malfunc",
   "parent":{
     "name":"Player",
