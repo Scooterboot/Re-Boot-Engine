@@ -501,6 +501,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			}
 			
 			#endregion
+			#region Item Wheel
 			
 			if(hudPauseAnim > 0)
 			{
@@ -628,6 +629,8 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			{
 				hudCursorAnim = 0;
 			}
+			
+			#endregion
 		}
 		
 		gpu_set_blendmode(bm_normal);

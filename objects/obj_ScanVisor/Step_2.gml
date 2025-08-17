@@ -18,19 +18,16 @@ else
 
 if(!kill)
 {
-	scanSpread = min(scanSpread + 0.1, 1);
+	scanAlpha = min(scanAlpha + 0.1, 1);
 	
-	if(instance_exists(obj_Camera))
-	{
-		x += (obj_Camera.x - obj_Camera.xprevious);
-		y += (obj_Camera.y - obj_Camera.yprevious);
-	}
+	x = clamp(x, 0, global.resWidth);
+	y = clamp(y, 0, global.resHeight);
 }
 else
 {
-	scanSpread = max(scanSpread - 0.1, 0);
+	scanAlpha = max(scanAlpha - 0.1, 0);
 	
-	if(scanSpread <= 0)
+	if(scanAlpha <= 0)
 	{
 		instance_destroy();
 	}

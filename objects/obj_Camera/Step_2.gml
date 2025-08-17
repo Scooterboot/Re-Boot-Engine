@@ -153,7 +153,7 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRayVisor) &&
 		camLimitMax_Top = 0;
 		camLimitMax_Bottom = 0;
 	}
-	if(instance_exists(player.XRay))
+	if(player.HUDVisorSelected(HUDVisor.Scan) || player.HUDVisorSelected(HUDVisor.XRay))
 	{
 		camLimitMax_Left = -32;
 		camLimitMax_Right = 32;
@@ -166,12 +166,22 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRayVisor) &&
 	camLimit_Top = CamLimitIncr(camLimit_Top, camLimitMax_Top, camLimSpd, yy-prevPlayerY);
 	camLimit_Bottom = CamLimitIncr(camLimit_Bottom, camLimitMax_Bottom, camLimSpd, yy-prevPlayerY);
 	
-	if(instance_exists(player.XRay))
+	if(player.HUDVisorSelected(HUDVisor.Scan) || player.HUDVisorSelected(HUDVisor.XRay))
 	{
-		targetX = playerX + lengthdir_x(32,player.XRay.coneDir);
-		targetY = playerY + lengthdir_y(32,player.XRay.coneDir);
+		if(player.HUDVisorSelected(HUDVisor.Scan))
+		{
+			var xdif = scr_round((player.scanVisor.GetRoomX() - playerX)*0.5),
+				ydif = scr_round((player.scanVisor.GetRoomY() - playerY)*0.5);
+			targetX = playerX + min(abs(xdif), 32) * sign(xdif);
+			targetY = playerY + min(abs(ydif), 32) * sign(ydif);
+		}
+		if(player.HUDVisorSelected(HUDVisor.XRay))
+		{
+			targetX = playerX + scr_round(lengthdir_x(32,player.xrayVisor.coneDir));
+			targetY = playerY + scr_round(lengthdir_y(32,player.xrayVisor.coneDir));
+		}
 		
-		var num2 = 1 + scr_floor(abs(targetX-xx) / 7);
+		var num2 = 2 + scr_floor(abs(targetX-xx) / 7);
 		if(abs(targetX-xx) < 2)
 		{
 			num2 = 10;
@@ -184,8 +194,9 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRayVisor) &&
 		{
 			velX = max(-num2,targetX-xx);
 		}
+		velX += playerMoveX;
 		
-		num2 = 1 + scr_floor(abs(targetY-yy) / 7);
+		num2 = 2 + scr_floor(abs(targetY-yy) / 7);
 		if(abs(targetY-yy) < 2)
 		{
 			num2 = 10;
@@ -198,6 +209,7 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRayVisor) &&
 		{
 			velY = max(-num2,targetY-yy);
 		}
+		velY += playerMoveY;
 	}
 	else
 	{

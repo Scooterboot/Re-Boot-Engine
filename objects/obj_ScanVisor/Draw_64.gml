@@ -1,10 +1,8 @@
 
-alpha = scanSpread;
-
-visorX = scr_round(x) - camera_get_view_x(view_camera[0]);
-visorY = scr_round(y) - camera_get_view_y(view_camera[0]);
+var visorX = scr_round(x), visorY = scr_round(y);
 
 var _width = sprite_get_width(sprt_ScanReticle);
+var scanSpread = scanAnim * scanAlpha;
 var retScale1 = lerp(_width-2, _width+8, scanSpread) / _width,
 	retScale2 = lerp(_width, _width+14, scanSpread) / _width;
 
@@ -29,10 +27,10 @@ if(surface_exists(darkSurf))
 surface_set_target(obj_Display.surfUI);
 bm_set_one();
 
-draw_surface_ext(darkSurf, 0,0, 1,1, 0, c_white, 0.625*alpha);
+draw_surface_ext(darkSurf, 0,0, 1,1, 0, c_white, 0.625*scanAlpha);
 
-draw_sprite_ext(sprt_ScanReticle, 1, visorX, visorY, retScale1, retScale1, 0,c_white,alpha);
-draw_sprite_ext(sprt_ScanReticle, 0, visorX, visorY, retScale2, retScale2, 0,c_white,alpha);
+draw_sprite_ext(sprt_ScanReticle, 1, visorX, visorY, retScale1, retScale1, 0,c_white,scanAlpha);
+draw_sprite_ext(sprt_ScanReticle, 0, visorX, visorY, retScale2, retScale2, 0,c_white,scanAlpha);
 
 gpu_set_blendmode(bm_normal);
 surface_reset_target();

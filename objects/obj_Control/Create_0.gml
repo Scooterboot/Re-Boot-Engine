@@ -28,15 +28,14 @@ function ControlInput(_verbIndex, _defaultPressType = PressType.Press, _defaultC
 	
 	function GetInput()
 	{
-		/*var _forGamepad = InputPlayerUsingGamepad();
-		var _input = false;
-		if(comboType == ComboType.Or || is_undefined(InputBindingGet(_forGamepad, verbIndex, 1)))
+		//var _input = InputCheck(verbIndex);
+		var _input = InputCheck_Alt(verbIndex, 0);
+		if(!is_undefined(InputBindingGet(InputPlayerUsingGamepad(), verbIndex, 1)))
 		{
-			_input = InputCheck(verbIndex);
-		}
-		else
-		{
-			_input = InputCheck_Alt(verbIndex, 0);
+			if(comboType == ComboType.Or)
+			{
+				_input |= InputCheck_Alt(verbIndex, 1);
+			}
 			if(comboType == ComboType.And)
 			{
 				_input &= InputCheck_Alt(verbIndex, 1);
@@ -45,8 +44,7 @@ function ControlInput(_verbIndex, _defaultPressType = PressType.Press, _defaultC
 			{
 				_input &= !InputCheck_Alt(verbIndex, 1);
 			}
-		}*/
-		var _input = InputCheck(verbIndex);
+		}
 		
 		switch(pressType)
 		{

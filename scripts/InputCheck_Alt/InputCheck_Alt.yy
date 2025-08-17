@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"InputCheck_Alt",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"InputCheck_Alt",
+  "parent":{
+    "name":"Checkers",
+    "path":"folders/Scripts/Input/Checkers.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

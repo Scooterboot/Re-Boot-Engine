@@ -4,15 +4,11 @@ Set_Beams();
 
 var sndFlag = false;
 
-if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (global.roomTrans && stateFrame != State.Grapple)) && !obj_PauseMenu.pause && !pauseSelect))
+if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans) || (global.roomTrans && stateFrame != State.Grapple)) && !obj_PauseMenu.pause && !pauseSelect))
 {
-	//var unchargeable = ((hudSlot == 1 && (hudSlotItem[1] == 0 || hudSlotItem[1] == 1 || hudSlotItem[1] == 3)) || instance_exists(XRay) || hyperBeam);
-	
 	#region Update Anims
 	
 	drawMissileArm = false;
-	//shootFrame = (gunReady || justShot > 0 || instance_exists(grapple) || (cFire && (rFire || (item[Item.ChargeBeam] && !unchargeable)) && (hudSlot == 1 ||
-	//			((hudSlotItem[1] != 0 || missileStat > 0) && (hudSlotItem[1] != 1 || superMissileStat > 0)))));
 	shootFrame = (gunReady || justShot > 0 || instance_exists(grapple) || (cFire && (rFire || CanCharge())));
 	sprtOffsetX = 0;
 	sprtOffsetY = 0;
@@ -63,7 +59,7 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 	}
 	
 	var aimFrameTarget = aimAngle*2;
-	if(instance_exists(XRay))
+	if(HUDVisorSelected(HUDVisor.XRay))
 	{
 		aimFrameTarget = 0;
 	}
@@ -292,7 +288,7 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 					frame[Frame.Idle] = scr_wrap(frame[Frame.Idle] + 1,0,array_length(iNum));
 					frameCounter[Frame.Idle] = 0;
 				}
-				if(instance_exists(obj_XRayVisor) || aimFrame != 0 || landFrame > 0 || recoilCounter > 0 || runToStandFrame[0] > 0 || runToStandFrame[1] > 0 || walkToStandFrame > 0)
+				if(HUDVisorSelected(HUDVisor.Scan) || HUDVisorSelected(HUDVisor.XRay) || aimFrame != 0 || landFrame > 0 || recoilCounter > 0 || runToStandFrame[0] > 0 || runToStandFrame[1] > 0 || walkToStandFrame > 0)
 				{
 					frame[Frame.Idle] = 0;
 					frameCounter[Frame.Idle] = 0;
@@ -346,11 +342,19 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 							bodyFrame = scr_round(walkToStandFrame)-1;
 							ArmPos((18+(3*bodyFrame))*dir,-(1+bodyFrame));
 						}
-						else if(instance_exists(obj_XRayVisor))
+						else if(HUDVisorSelected(HUDVisor.Scan))
 						{
 							torsoR = sprt_Player_XRayRight;
 							torsoL = sprt_Player_XRayLeft;
-							var xcone = abs(scr_wrap(XRay.coneDir-90, -180, 180));
+							var sdir = point_direction(x,y, scanVisor.GetRoomX(),scanVisor.GetRoomY());
+							var xcone = abs(scr_wrap(sdir-90, -180, 180));
+							bodyFrame = 4-scr_round(xcone/45);
+						}
+						else if(HUDVisorSelected(HUDVisor.XRay))
+						{
+							torsoR = sprt_Player_XRayRight;
+							torsoL = sprt_Player_XRayLeft;
+							var xcone = abs(scr_wrap(xrayVisor.coneDir-90, -180, 180));
 							bodyFrame = 4-scr_round(xcone/45);
 						}
 					}
@@ -706,10 +710,8 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 					}
 				}
 				
-				var shootFrame2 = shootFrame;//(shootFrame || cMoonwalk);
-				
 				runYOffset = -rOffset[frame[Frame.Run]];
-				if(aimFrame != 0 || shootFrame2)
+				if(aimFrame != 0 || shootFrame)
 				{
 					runYOffset = -rOffset2[frame[Frame.Run]];
 				}
@@ -734,7 +736,7 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 				{
 					if(aimFrame == 0)
 					{
-						if(shootFrame2)
+						if(shootFrame)
 						{
 							torsoR = sprt_Player_RunAimRight;
 							torsoL = sprt_Player_RunAimLeft;
@@ -757,8 +759,8 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 						{
 							ArmPos(22*dir,-2);
 						}
-						runToStandFrame[shootFrame2] = 2;
-						runToStandFrame[!shootFrame2] = 0;
+						runToStandFrame[shootFrame] = 2;
+						runToStandFrame[!shootFrame] = 0;
 						bodyFrame = frame[Frame.Run];
 					}
 					else
@@ -797,7 +799,6 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 					frameCounter[i] = 0;
 				}
 				frame[Frame.JAim] = 6;
-				//aimFrame = 0;
 				walkToStandFrame = 0;
 				runToStandFrame[0] = 0;
 				runToStandFrame[1] = 0;
@@ -905,7 +906,7 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 					frame[Frame.Idle] = scr_wrap(frame[Frame.Idle] + 1,0,array_length(iNum));
 					frameCounter[Frame.Idle] = 0;
 				}
-				if(aimFrame != 0 || crouchFrame > 0 || recoilCounter > 0 || instance_exists(obj_XRayVisor))
+				if(aimFrame != 0 || crouchFrame > 0 || recoilCounter > 0 || HUDVisorSelected(HUDVisor.Scan) || HUDVisorSelected(HUDVisor.XRay))
 				{
 					frame[Frame.Idle] = 0;
 					frameCounter[Frame.Idle] = 0;
@@ -919,11 +920,19 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 					{
 						if(aimFrame == 0)
 						{
-							if(instance_exists(obj_XRayVisor))
+							if(HUDVisorSelected(HUDVisor.Scan))
 							{
 								torsoR = sprt_Player_XRayRight;
 								torsoL = sprt_Player_XRayLeft;
-								var xcone = abs(scr_wrap(XRay.coneDir-90, -180, 180));
+								var sdir = point_direction(x,y, scanVisor.GetRoomX(),scanVisor.GetRoomY());
+								var xcone = abs(scr_wrap(sdir-90, -180, 180));
+								bodyFrame = 4-scr_round(xcone/45);
+							}
+							else if(HUDVisorSelected(HUDVisor.XRay))
+							{
+								torsoR = sprt_Player_XRayRight;
+								torsoL = sprt_Player_XRayLeft;
+								var xcone = abs(scr_wrap(xrayVisor.coneDir-90, -180, 180));
 								bodyFrame = 4-scr_round(xcone/45);
 							}
 							else
@@ -1340,7 +1349,6 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 				frame[Frame.JAim] = 6;
 				var gripAimTarget = aimFrameTarget+4;
 				fDir = grippedDir;
-				//armDir = fDir;
 				if(climbIndex <= 0)
 				{
 					torsoR = sprt_Player_GripRight;
@@ -1349,11 +1357,8 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 					if(recoilCounter > 0)
 					{
 						gripAimFrame = clamp(gripAimFrame, gripAimTarget-3,gripAimTarget+3);
-						//gripGunReady = true;
-						//gripGunCounter = 30;
 						gSpeed *= 2;
 					}
-					//if(gripGunReady)
 					if(dir != grippedDir)
 					{
 						gripFrame = min(gripFrame + gSpeed, 3);
@@ -1401,18 +1406,17 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 						torsoL = sprt_Player_GripFireLeft;
 						bodyFrame = scr_round(gripAimFrame/2);
 					}
-					//if(dir == -1 && dirFrame == -4)
 					if(grippedDir == -1)
 					{
 						gripOverlay = sprt_Player_ArmGripOverlay;
 						gripOverlayFrame = gripFrame;
 					}
 					
-					if(instance_exists(XRay) && (gripFrame <= 0 || gripFrame >= 3))
+					if(HUDVisorSelected(HUDVisor.XRay) && (gripFrame <= 0 || gripFrame >= 3))
 					{
 						torsoR = sprt_Player_GripXRayRight;
 						torsoL = sprt_Player_GripXRayLeft;
-						var xcone = abs(scr_wrap(XRay.coneDir-90, -180, 180));
+						var xcone = abs(scr_wrap(xrayVisor.coneDir-90, -180, 180));
 						bodyFrame = 4-scr_round(xcone/45);
 						if(gripFrame > 0)
 						{
@@ -1420,7 +1424,6 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 							drawMissileArm = false; // temp
 						}
 						
-						//if(dir == -1 && dirFrame == -4)
 						if(grippedDir == -1)
 						{
 							gripOverlay = sprt_Player_ArmGripOverlay_XRay;
@@ -1496,7 +1499,6 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 				}
 				else
 				{
-					//if(shineDir == 0)
 					if(SparkDir_VertUp())
 					{
 						if(frame[Frame.SparkV] < 1)
@@ -1523,7 +1525,6 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 						
 						SetArmPosSpark(0);
 					}
-					//else if(shineDir == 4)
 					else if(SparkDir_VertDown())
 					{
 						if(abs(shineDownRot) < 180)
@@ -1633,7 +1634,13 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 	                    frameCounter[i] = 0;
 	                }
 	            }
-				var _gAngle = scr_wrap(-grapAngle*dir,0,360);
+				var _grapAngle = grapAngle;
+				if(instance_exists(grapple))
+				{
+					_grapAngle = point_direction(position.X, position.Y, grapple.x, grapple.y) - 90;
+				}
+				
+				var _gAngle = scr_wrap(-_grapAngle*dir,0,360);
 				var _somerFrame = _gAngle / (360 / 16);
 				if(item[Item.SpaceJump] && !liquidMovement)
 				{
@@ -1659,7 +1666,7 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 					legFrame = frame[Frame.JAim];
 					
 					var aimF = scr_round(aimFrame)-aimFrameTarget;
-					var gRot = grapAngle + abs(aimF)*22.5*fDir;
+					var gRot = _grapAngle + abs(aimF)*22.5*fDir;
 					rotation = scr_round(gRot/2.8125)*2.8125;
 					
 					SetArmPosJump();
@@ -1679,12 +1686,12 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 					}
 					else
 					{
-						frame[Frame.GrappleBody] = scr_wrap(10-scr_round(grapAngle/18)*dir,0,20);
+						frame[Frame.GrappleBody] = scr_wrap(10-scr_round(_grapAngle/18)*dir,0,20);
 					}
 					bodyFrame = frame[Frame.GrappleBody];
 					
 					legs = sprt_Player_GrappleLeg;
-	                rotation = scr_round(grapAngle/2.8125)*2.8125;
+	                rotation = scr_round(_grapAngle/2.8125)*2.8125;
 					rotReAlignStep = 4;
 
 	                ArmPos(lengthdir_x(31, rotation + 90),lengthdir_y(31, rotation + 90));
@@ -2238,7 +2245,6 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 		}
 	
 		recoilCounter = max(recoilCounter - 1, 0);
-		//gripGunCounter = max(gripGunCounter - 1, 0);
 	
 		if(climbIndexCounter > liquidMovement || climbIndex <= 1)
 		{
@@ -2394,7 +2400,7 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 	
 	if(!global.roomTrans)
 	{
-		var canShoot = (!startClimb /*&& !brake*/ && !moonFallState && !isPushing && state != State.Somersault && state != State.Spark && state != State.BallSpark && 
+		var canShoot = (!startClimb && !moonFallState && !isPushing && state != State.Somersault && state != State.Spark && state != State.BallSpark && 
 						state != State.Hurt && (stateFrame != State.DmgBoost || dBoostFrame >= 19) && state != State.Dodge && state != State.Death);
 		if(!canShoot)
 		{
@@ -2411,31 +2417,26 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 			amount = beamAmt,
 			sound = beamSound,
 			autoFire = 1;
-		//if(hudSlot == 1 && hudSlotItem[1] <= 1)
-		//{
-			//if(hudSlotItem[1] == 0 && missileStat > 0 && item[Item.Missile])
-			if(HUDWeaponSelected(HUDWeapon.Missile))
-			{
-				shotIndex = obj_MissileShot;
-				damage = 100;
-				sSpeed = shootSpeed/2;
-				delay = 9;
-				amount = 1;
-				sound = snd_Missile_Shot;
-				autoFire = 0;
-			}
-			//if(hudSlotItem[1] == 1 && superMissileStat > 0 && item[Item.SuperMissile])
-			else if(HUDWeaponSelected(HUDWeapon.SuperMissile))
-			{
-				shotIndex = obj_SuperMissileShot;
-				damage = 300;
-				sSpeed = shootSpeed/3;
-				delay = 19;
-				amount = 1;
-				sound = snd_SuperMissile_Shot;
-				autoFire = 0;
-			}
-		//}
+		if(HUDWeaponSelected(HUDWeapon.Missile))
+		{
+			shotIndex = obj_MissileShot;
+			damage = 100;
+			sSpeed = shootSpeed/2;
+			delay = 9;
+			amount = 1;
+			sound = snd_Missile_Shot;
+			autoFire = 0;
+		}
+		else if(HUDWeaponSelected(HUDWeapon.SuperMissile))
+		{
+			shotIndex = obj_SuperMissileShot;
+			damage = 300;
+			sSpeed = shootSpeed/3;
+			delay = 19;
+			amount = 1;
+			sound = snd_SuperMissile_Shot;
+			autoFire = 0;
+		}
 		else if(hyperBeam)
 		{
 			shotIndex = obj_HyperBeamShot;
@@ -2451,7 +2452,7 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 			chargeBombDmg = 30, // Bomb spread damage.
 			pBombDmg = 40; // Power bomb explosions deal damage per frame (well, not really, because enemies have i-frames).
 		
-		if(!instance_exists(XRay))
+		if(!HUDVisorSelected(HUDVisor.XRay))
 		{
 			// ----- Shoot -----
 			#region Shoot
@@ -2459,7 +2460,6 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 			{
 				if(state != State.Morph && stateFrame != State.Morph)
 				{
-					//if(hudSlot == 1 && hudSlotItem[1] == 3 && item[Item.GrappleBeam] && canShoot)
 					if(HUDWeaponSelected(HUDWeapon.GrappleBeam) && canShoot)
 					{
 						delay = 14;
@@ -2509,8 +2509,7 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 						instance_destroy(grapple);
 						grappleDist = 0;
 					
-						//if(canShoot && (hudSlot == 0 || ((hudSlotItem[1] != 0 || missileStat > 0) && (hudSlotItem[1] != 1 || superMissileStat > 0))))
-						if(canShoot)
+						if(canShoot && (hudWeaponIndex <= -1 || HUDWeaponHasAmmo(hudWeaponIndex)))
 						{
 							if(autoFire > 0)
 							{
@@ -2522,17 +2521,6 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 							{
 								if(rFire || enqueShot || (!item[Item.ChargeBeam] && autoFire > 0) || autoFire == 2)
 								{
-									/*if(hudSlot == 1 && hudSlotItem[1] <= 1)
-									{
-										if(hudSlotItem[1] == 0 && missileStat > 0 && item[Item.Missile])
-										{
-											missileStat--;
-										}
-										if(hudSlotItem[1] == 1 && superMissileStat > 0 && item[Item.SuperMissile])
-										{
-											superMissileStat--;
-										}
-									}*/
 									if(HUDWeaponSelected(HUDWeapon.Missile))
 									{
 										missileStat--;
@@ -2593,7 +2581,7 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 						}
 					}
 				}
-				else if(canShoot)//if(bombDelayTime <= 0 && canShoot && rFire)
+				else if(canShoot)
 				{
 					if(bombDelayTime <= 0)
 					{
@@ -2620,7 +2608,6 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 								}
 							}
 							
-							//if(hudSlot == 1 && (hudSlotItem[1] == 2 || global.HUD > 0) && powerBombStat > 0 && item[Item.PowerBomb])
 							if(HUDWeaponSelected(HUDWeapon.PowerBomb) || (item[Item.PowerBomb] && hudWeaponIndex >= 0 && powerBombStat > 0))
 							{
 								var pBomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_PowerBomb);
@@ -2666,7 +2653,6 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 					cflag = true;
 				}
 				
-				//if(item[Item.ChargeBeam] && !unchargeable && !enqueShot && !isPushing && cflag)
 				if(item[Item.ChargeBeam] && CanCharge() && !enqueShot && !isPushing && cflag)
 				{
 					var chargeRate = 1;
@@ -2714,7 +2700,7 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 			{
 				if(instance_exists(grapple))
 				{
-					if((state != State.Grapple || grapWJCounter <= 0))// && state != State.Morph)
+					if((state != State.Grapple || grapWJCounter <= 0))
 					{
 						if(grapple.grappleState != GrappleState.None)
 						{
@@ -2734,7 +2720,6 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 					chargeSoundPlayed = false;
 				}
 		
-				//f(canShoot && item[Item.ChargeBeam] && !unchargeable && dir != 0)
 				if(canShoot && CanCharge() && dir != 0)
 				{
 					if(state != State.Morph && stateFrame != State.Morph)
@@ -2775,8 +2760,7 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 							recoil = true;
 						}
 					}
-					//else if(item[Item.MBBomb] && (hudSlot == 0 || (hudSlotItem[1] != 2 && global.HUD == 0) || powerBombStat <= 0 || !item[Item.PowerBomb]))
-					else if(item[Item.MBBomb] && !HUDWeaponSelected(HUDWeapon.PowerBomb) && (!item[Item.PowerBomb] || hudWeaponIndex < 0 || powerBombStat <= 0))
+					else if(item[Item.MBBomb] && !HUDWeaponSelected(HUDWeapon.PowerBomb))
 					{
 						var bombPosX = x,
 							bombPosY = y+3;
@@ -3018,17 +3002,6 @@ if(!global.gamePaused || (((instance_exists(XRay) && !global.roomTrans) || (glob
 			}
 		}
 	
-		/*rRight = !cRight;
-		rLeft = !cLeft;
-		rUp = !cUp;
-		rDown = !cDown;
-		rJump = !cJump;
-		rShoot = !cShoot;
-		rSprint = !cSprint;
-		rAngleUp = !cAngleUp;
-		rAngleDown = !cAngleDown;
-		rAimLock = !cAimLock;
-		rMorph = !cMorph;*/
 		SetReleaseVars("player");
 	
 		oldDir = dir;

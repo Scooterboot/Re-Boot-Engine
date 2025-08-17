@@ -1,7 +1,6 @@
 /// @description Physics, States, etc.
 
-//if(!global.gamePaused || (instance_exists(XRay) && !global.roomTrans && !obj_PauseMenu.pause && !pauseSelect))
-if(instance_exists(XRay) && !global.roomTrans && !obj_PauseMenu.pause && !pauseSelect)
+if(HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans && !obj_PauseMenu.pause && !pauseSelect)
 {
 	aimAngle = 0;
 }
@@ -193,17 +192,11 @@ if(!global.gamePaused)
 	
 	#endregion
 	
+	SetControlVars("player");
 	if(state == State.Elevator || state == State.Recharge || state == State.CrystalFlash || introAnimState != -1)
 	{
-		InputVerbGroupSetActive(INPUT_VERB_GROUP.PlayerMovement,false);
-		InputVerbGroupSetActive(INPUT_VERB_GROUP.PlayerActions,false);
+		InitControlVars("player");
 	}
-	else if(!InputVerbGroupGetActive(INPUT_VERB_GROUP.PlayerMovement) || !InputVerbGroupGetActive(INPUT_VERB_GROUP.PlayerActions))
-	{
-		InputVerbGroupSetActive(INPUT_VERB_GROUP.PlayerMovement,true);
-		InputVerbGroupSetActive(INPUT_VERB_GROUP.PlayerActions,true);
-	}
-	SetControlVars("player");
 	
 	#region Appearance Fanfare Anim & Save Anim
 	if(introAnimState == 0)
@@ -330,7 +323,7 @@ if(!global.gamePaused)
 	pMove = ((cPlayerRight && rPlayerRight) - (cPlayerLeft && rPlayerLeft));
 	
 	if(move != 0 && !brake && morphFrame <= 0 && wjFrame <= 0 && (state != State.Grip || !startClimb) && 
-	(!cMoonwalk /*|| cSprint*/ || state == State.Somersault || state == State.Morph || instance_exists(XRay) || (global.aimStyle == 2 && cAimUp)) && 
+	(!cMoonwalk || state == State.Somersault || state == State.Morph || (global.aimStyle == 2 && cAimUp)) && 
 	!instance_exists(grapple) && state != State.Spark && state != State.BallSpark && state != State.Hurt && stateFrame != State.DmgBoost && dmgBoost <= 0 && state != State.Dodge)
 	{
 		dir = move;
@@ -344,10 +337,6 @@ if(!global.gamePaused)
 		if(spiderMove != 0)
 		{
 			dir = spiderMove;
-			/*if(spiderEdge == Edge.Top)
-			{
-				dir = -spiderMove;
-			}*/
 		}
 	}
 	
@@ -359,9 +348,9 @@ if(!global.gamePaused)
 		brakeFrame = 0;
 	}
 	
-	walkState = ((cMoonwalk || instance_exists(grapple)) && velX != 0 && sign(velX) != dir && state == State.Stand && !instance_exists(XRay));
+	walkState = ((cMoonwalk || instance_exists(grapple)) && velX != 0 && sign(velX) != dir && state == State.Stand);
 	
-	if(dir != 0 && cMorph && rMorph && morphFrame <= 0 && state != State.Crouch && state != State.Morph && stateFrame != State.Morph && item[Item.MorphBall] && state != State.Spark && state != State.BallSpark && state != State.Grip && !instance_exists(XRay))
+	if(dir != 0 && cMorph && rMorph && morphFrame <= 0 && state != State.Crouch && state != State.Morph && stateFrame != State.Morph && item[Item.MorphBall] && state != State.Spark && state != State.BallSpark && state != State.Grip)
 	{
 		audio_play_sound(snd_Morph,0,false);
 		if(state == State.Stand)
@@ -395,12 +384,12 @@ if(!global.gamePaused)
 	
 	if(!instance_exists(grapple))
 	{
-		if((aimAngle > -2 && (aimAngle < 2 || state != State.Grip || rlAngle)) || prAngle || grounded || move != 0 || instance_exists(XRay) || 
+		if((aimAngle > -2 && (aimAngle < 2 || state != State.Grip || rlAngle)) || prAngle || grounded || move != 0 || 
 			state == State.Morph || state == State.Somersault || state == State.Spark || state == State.BallSpark)
 		{
 			aimAngle = 0;
 		}
-		if(!instance_exists(XRay) && state != State.Morph)
+		if(state != State.Morph)
 		{
 			var _up = cPlayerUp,
 				_down = cPlayerDown,
@@ -654,11 +643,6 @@ if(!global.gamePaused)
 		lastAimAngle = prevAimAngle;
 	}
 #endregion
-
-if(instance_exists(XRay))
-{
-	exit;
-}
 
 #region Shoot direction
 	shootDir = GetShootDirection(aimAngle,dir2);
@@ -1152,8 +1136,6 @@ if(instance_exists(XRay))
 			if(climbUp && !startClimb)
 			{
 				audio_play_sound(snd_Climb,0,false);
-				//gripGunReady = false;
-				//gripGunCounter = 0;
 				startClimb = true;
 				climbIndexCounter += 2;
 			}
@@ -1215,7 +1197,6 @@ if(instance_exists(XRay))
 	{
 		if(state == State.Grip)
 		{
-			//canWallJump = ((gripGunReady && move2 != dir && !cPlayerDown) || (move2 != 0 && move2 != dir));
 			canWallJump = ((dir != grippedDir && move2 != grippedDir && !cPlayerDown) || (move2 != 0 && move2 != grippedDir));
 		}
 		else if(state != State.Grapple)
@@ -1229,7 +1210,7 @@ if(instance_exists(XRay))
 	
 	fJumpHeight = jumpHeight[item[Item.HiJump],liquidState];
 	
-	var isJumping = (cJump && dir != 0 && /*climbIndex <= 0 &&*/ state != State.Spark && state != State.BallSpark && 
+	var isJumping = (cJump && dir != 0 && state != State.Spark && state != State.BallSpark && 
 	state != State.Hurt && (!SpiderActive() || !sparkCancelSpiderJumpTweak) && (state != State.Grapple || grapWJCounter > 0)) && 
 	(state != State.Morph || (!entity_place_collide(0,1) && !entity_place_collide(0,-1)) || (!entity_place_collide(0,1) ^^ !entity_place_collide(0,-1)) || entity_place_collide(0,0));
 	if(isJumping)
@@ -1264,7 +1245,7 @@ if(instance_exists(XRay))
 				}
 				rSparkJump = true;
 			}
-			else if((rJump || (state == State.Morph && !SpiderActive() && rMorphJump) || bufferJump > 0) && quickClimbTarget <= 0 && //climbIndex <= 0 && 
+			else if((rJump || (state == State.Morph && !SpiderActive() && rMorphJump) || bufferJump > 0) && quickClimbTarget <= 0 && 
 			(state != State.Morph || (state == State.Morph && ((item[Item.SpringBall] && morphFrame <= 0) || ((unmorphing > 0 || morphSpinJump) && CanChangeState(mask_Player_Somersault))))) && state != State.DmgBoost)
 			{
 				if((grounded && !moonFallState) || coyoteJump > 0 || canWallJump || (state == State.Grip && canGripJump) || 
@@ -1293,12 +1274,9 @@ if(instance_exists(XRay))
 						audio_play_sound(snd_WallJump,0,false);
 						
 						var baseVel = moveSpeed[MoveSpeed.WallJump,liquidState];
-						//if(state == State.Grip && gripGunReady)
 						if(state == State.Grip && grippedDir != dir)
 						{
 							baseVel = moveSpeed[MoveSpeed.ClingWallJump,liquidState];
-							//dir *= -1;
-							//dirFrame = dir;
 							wjGripAnim = true;
 						}
 						if(state == State.Grapple)
@@ -1398,11 +1376,6 @@ if(instance_exists(XRay))
 							part_particles_create(obj_Particles.partSystemB,x-6*dir,y+10,obj_Particles.bDust[0],3);
 						}
 					}
-					/*else if(state == State.Grip && gripGunReady)
-					{
-						dir *= -1;
-						dirFrame = dir;
-					}*/
 					else if(state == State.Grip && dir != grippedDir)
 					{
 						dirFrame = dir;
@@ -2480,8 +2453,6 @@ if(instance_exists(XRay))
 			justFell = false;
 			
 			audio_play_sound(snd_Climb,0,false);
-			//gripGunReady = false;
-			//gripGunCounter = 0;
 			startClimb = true;
 			
 			var _h = 0;
@@ -2912,20 +2883,6 @@ if(instance_exists(XRay))
 		velY = 0;
 		aimAngle = 0;
 		
-		/*var flag = true;
-		if(instance_exists(obj_EnergyStation) && obj_EnergyStation.activeDir != 0)
-		{
-			flag = false;
-		}
-		if(instance_exists(obj_MissileStation) && obj_MissileStation.activeDir != 0)
-		{
-			flag = false;
-		}
-		
-		if(flag)
-		{
-			state = State.Stand;
-		}*/
 		if(!instance_exists(activeStation) || activeStation.activeDir == 0)
 		{
 			state = State.Stand;
@@ -3532,14 +3489,6 @@ if(instance_exists(XRay))
 			
 			stateFrame = State.Grip;
 			mask_index = mask_Player_Jump;
-			/*if(move2 != 0 && (!gripGunReady || gripGunCounter <= 0))
-			{
-				gripGunReady = (move2 != dir);
-			}
-			if(aimAngle != 0)
-			{
-				gripGunReady = true;
-			}*/
 			
 			climbTarget = 0;
 			if(!entity_place_collide(0,-8))
@@ -3626,11 +3575,6 @@ if(instance_exists(XRay))
 			else
 			{
 				ChangeState(State.Jump,State.Jump,mask_Player_Jump,true);
-				/*if((!cJump || cPlayerDown) && gripGunReady)
-				{
-					dir *= -1;
-					dirFrame = dir;
-				}*/
 				if((!cJump || cPlayerDown) && dir != grippedDir)
 				{
 					dirFrame = dir;
@@ -4302,11 +4246,6 @@ if(instance_exists(XRay))
 			{
 				groundedDodge = 2;
 			}
-			/*if(state == State.Grip && gripGunReady)
-			{
-				dir = -dir;
-				move2 = dir;
-			}*/
 			ChangeState(State.Dodge,State.Dodge,mask_Player_Crouch,(groundedDodge == 1));
 			dodgeLength = 0;
 			dodged = false;

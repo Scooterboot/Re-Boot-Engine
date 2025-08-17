@@ -94,7 +94,15 @@ godmode = false;
 
 #endregion
 
+#region Input
+
 InitControlVars();
+
+rMorphJump = false;
+rSparkJump = false;
+rRespinJump = true;
+
+#endregion
 
 #region Main
 
@@ -147,7 +155,6 @@ justBounced = false;
 aimAngle = 0; //2 = verticle up, 1 = diagonal up, 0 = forward, -1 = diagonal down, -2 = vertical down
 prevAimAngle = aimAngle;
 lastAimAngle = prevAimAngle;
-//aimUpDelay = 0;
 aimAnimDelay = 0;
 
 extAimAngle = 0;
@@ -166,7 +173,6 @@ oldDir = dir;
 lastDir = oldDir;
 
 speedCounter = 0;
-//speedCounterMax = 80;//120;
 speedCounterMax = 4;
 speedBuffer = 0;
 speedBufferMax = 10;
@@ -267,8 +273,6 @@ moonFallCounter = 0;
 moonFallCounterMax = 12;//30;
 moonFall = false;
 
-//uncrouching = false;
-
 ledgeFall = false;
 ledgeFall2 = false;
 justFell = false;
@@ -342,42 +346,7 @@ enqueShot = false;
 
 waveDir = 1;
 
-
 immune = false;
-
-
-/*cRight = false;
-cLeft = false;
-cUp = false;
-cDown = false;
-cJump = false;
-cShoot = false;
-cSprint = false;
-cAngleUp = false;
-cAngleDown = false;
-cAimLock = false;
-cMorph = false;
-
-rRight = !cRight;
-rLeft = !cLeft;
-rUp = !cUp;
-rDown = !cDown;
-rJump = !cJump;
-rShoot = !cShoot;
-rSprint = !cSprint;
-rAngleUp = !cAngleUp;
-rAngleDown = !cAngleDown;
-rAimLock = !cAimLock;
-rMorph = !cMorph;*/
-
-rMorphJump = false;
-rSparkJump = false;
-rRespinJump = true;
-
-Scan = noone;
-XRay = noone;
-//XRayDying = 0;
-
 constantDamageDelay = 0;
 
 grapple = noone;
@@ -751,11 +720,7 @@ crouchYOffset = [0,3,7,10];
 landYOffset = [2,5,8,4,1];
 
 gripFrame = 0;
-//gripGunReady = false;
 gripAimFrame = 0;
-//gripGunCounter = 0;
-
-//gripAimTarget = array(4,6,2,8,0);
 
 climbSequence = [0,0,1,2,3,4,5,6,7,8,9,9,9,9,10,10,11,11,11];
 climbFrame = 0;
@@ -1023,7 +988,6 @@ beamFlare = sprt_PowerBeamChargeFlare;
 
 function CanCharge()
 {
-	//return (item[Item.ChargeBeam] && !HUDWeaponSelected(HUDWeapon.Missile) && !HUDWeaponSelected(HUDWeapon.SuperMissile) && !HUDWeaponSelected(HUDWeapon.GrappleBeam) && !instance_exists(XRay) && !hyperBeam);
 	if(!item[Item.ChargeBeam]) { return false; }
 	if(hyperBeam) { return false; }
 	if(HUDWeaponSelected(HUDWeapon.Missile)) { return false; }
@@ -1118,6 +1082,9 @@ function HUDWeaponSelected(_hudIndex)
 	return (HUDWeaponHasAmmo(_hudIndex) && hudWeaponIndex == _hudIndex);
 }
 
+scanVisor = noone;
+xrayVisor = noone;
+
 enum HUDVisor
 {
 	Scan,
@@ -1140,63 +1107,21 @@ function HasHUDVisor(_hudIndex)
 }
 function HUDVisorSelected(_hudIndex)
 {
-	return (HasHUDVisor(_hudIndex) && hudVisorIndex == _hudIndex);
+	if(HasHUDVisor(_hudIndex))
+	{
+		var _flag = true;
+		if(_hudIndex == HUDVisor.Scan)
+		{
+			_flag = instance_exists(scanVisor);
+		}
+		if(_hudIndex == HUDVisor.XRay)
+		{
+			_flag = instance_exists(xrayVisor);
+		}
+		return (_flag && hudVisorIndex == _hudIndex);
+	}
+	return false;
 }
-
-/*cHSelect = false;
-cHCancel = false;
-cHRight = false;
-cHLeft = false;
-cHUp = false;
-cHDown = false;
-cHToggle = false;
-
-rHSelect = !cHSelect;
-rHCancel = !cHCancel;
-rHRight = !cHRight;
-rHLeft = !cHLeft;
-rHUp = !cHUp;
-rHDown = !cHDown;
-rHToggle = !cHToggle;*/
-
-/*moveH = 0;
-moveHPrev = 1;
-
-hudSlot = 0;
-hudSlotItem = [0,0];
-
-pauseSelect = false;
-
-beamIndex = [
-Item.ChargeBeam,
-Item.IceBeam,
-Item.WaveBeam,
-Item.Spazer,
-Item.PlasmaBeam];
-
-equipIndex = [
-Item.Missile,
-Item.SuperMissile,
-Item.PowerBomb,
-Item.GrappleBeam,
-Item.XRayVisor];
-
-beamName = [
-"POWER BEAM",
-"ICE BEAM",
-"WAVE BEAM",
-"SPAZER",
-"PLASMA BEAM"];
-
-itemName = [
-"MISSILE",
-"SUPER MISSILE",
-"POWER BOMB",
-"GRAPPLE BEAM",
-"X-RAY VISOR"];
-
-hudBOffsetX = 0;
-hudIOffsetX = 0;*/
 
 #endregion
 #region MB Trail
@@ -1787,11 +1712,6 @@ function Crawler_ModifyFinalVelY(fVY)
 	}
 	return ModifyFinalVelY(fVY);
 }
-
-/*function Crawler_SlopeCheck(slope)
-{
-	return colEdge != Edge.None;
-}*/
 
 function Crawler_CanStickTo(offsetX, offsetY, edgeCheck, xx = undefined, yy = undefined)
 {
@@ -2513,15 +2433,6 @@ function MoveStick_CheckPGrip(_dir, movingTile)
 
 function MovingSolid_OnRightCollision(fVX)
 {
-	/*if(spiderBall && Crawler_CanStickRight())//&& (spiderEdge == Edge.Bottom || spiderEdge == Edge.Top || spiderEdge == Edge.None))
-	{
-		if(spiderEdge == Edge.None)
-		{
-			spiderSpeed = -velY;
-			spiderMove = sign(spiderSpeed);
-		}
-		spiderEdge = Edge.Right;
-	}*/
 	if(spiderBall)
 	{
 		Crawler_OnRightCollision(fVX);
@@ -2533,15 +2444,6 @@ function MovingSolid_OnRightCollision(fVX)
 }
 function MovingSolid_OnLeftCollision(fVX)
 {
-	/*if(spiderBall && Crawler_CanStickLeft())//&& (spiderEdge == Edge.Bottom || spiderEdge == Edge.Top || spiderEdge == Edge.None))
-	{
-		if(spiderEdge == Edge.None)
-		{
-			spiderSpeed = velY;
-			spiderMove = sign(spiderSpeed);
-		}
-		spiderEdge = Edge.Left;
-	}*/
 	if(spiderBall)
 	{
 		Crawler_OnLeftCollision(fVX);
@@ -2565,15 +2467,6 @@ function MovingSolid_OnXCollision(fVX)
 
 function MovingSolid_OnBottomCollision(fVY)
 {
-	/*if(spiderBall && Crawler_CanStickBottom())//&& (spiderEdge == Edge.Left || spiderEdge == Edge.Right || spiderEdge == Edge.None))
-	{
-		if(spiderEdge == Edge.None)
-		{
-			spiderSpeed = velX;
-			spiderMove = sign(spiderSpeed);
-		}
-		spiderEdge = Edge.Bottom;
-	}*/
 	if(spiderBall)
 	{
 		Crawler_OnBottomCollision(fVY);
@@ -2585,15 +2478,6 @@ function MovingSolid_OnBottomCollision(fVY)
 }
 function MovingSolid_OnTopCollision(fVY)
 {
-	/*if(spiderBall && Crawler_CanStickTop())//&& (spiderEdge == Edge.Left || spiderEdge == Edge.Right || spiderEdge == Edge.None))
-	{
-		if(spiderEdge == Edge.None)
-		{
-			spiderSpeed = -velX;
-			spiderMove = sign(spiderSpeed);
-		}
-		spiderEdge = Edge.Top;
-	}*/
 	if(spiderBall)
 	{
 		Crawler_OnTopCollision(fVY);
@@ -3592,102 +3476,6 @@ function SetArmPosTrans()
 	}
 }
 #endregion
-#region SetArmPosGrip (old)
-/*function SetArmPosGrip()
-{
-	switch scr_round(gripAimFrame)
-	{
-	    case 1:
-	    {
-	        ArmPos(-(18 + 2*(gripFrame >= 2) + gripFrame)*dir, 13 + (gripFrame >= 3));
-	        if(dir == -1)
-	        {
-	            ArmPos(-(18 + clamp(gripFrame-1,0,1))*dir, 13 + clamp(gripFrame-1,0,2));
-	        }
-	        break;
-	    }
-	    case 2:
-	    {
-	        ArmPos(-(23 + (gripFrame >= 1) + gripFrame)*dir, 9);
-	        if(dir == -1)
-	        {
-	            ArmPos(-(23 + clamp(gripFrame-1,0,2))*dir,9 + (gripFrame >= 3));
-	        }
-	        armOffsetX += (recoilCounter > 0 && gripFrame >= 3)*dir;
-	        armOffsetY -= (recoilCounter > 0 && gripFrame >= 3);
-	        break;
-	    }
-	    case 3:
-	    {
-	        ArmPos(-(26 + (gripFrame >= 1) + 3*(gripFrame >= 2))*dir, 1);
-	        if(dir == -1)
-	        {
-	            ArmPos(-(27 + clamp(gripFrame-1,0,2))*dir, 1);
-	        }
-	        break;
-	    }
-	    case 4:
-	    {
-	        ArmPos(-(26 + gripFrame + (gripFrame >= 2))*dir,-(5 + (gripFrame >= 2)));
-	        if(dir == -1)
-	        {
-	            ArmPos(-(28 + 2*clamp(gripFrame-1,0,2))*dir,-(6 + 2*(gripFrame >= 2)));
-	        }
-	        armOffsetX += (recoilCounter > 0 && gripFrame >= 3)*dir;
-	        break;
-	    }
-	    case 5:
-	    {
-	        ArmPos(-(27+ gripFrame)*dir, -(16));
-	        if(dir == -1)
-	        {
-	            ArmPos(-(28 + clamp(gripFrame-1,0,2))*dir, -(17 + (gripFrame >= 3)));
-	        }
-	        break;
-	    }
-	    case 6:
-	    {
-	        ArmPos(-(24+gripFrame)*dir, -21);
-	        if(dir == -1)
-	        {
-	            ArmPos(-(24 + clamp(gripFrame-1,0,2))*dir, -21);
-	        }
-	        armOffsetX += (recoilCounter > 0 && gripFrame >= 3)*dir;
-	        armOffsetY += (recoilCounter > 0 && gripFrame >= 3);
-	        break;
-	    }
-	    case 7:
-	    {
-	        ArmPos(-(20 + gripFrame)*dir,-(27 + (gripFrame >= 3)));
-	        if(dir == -1)
-	        {
-	            ArmPos(-(21 + clamp(gripFrame-1,0,2))*dir,-(27 + (gripFrame >= 3)));
-	        }
-	        break;
-	    }
-	    case 8:
-	    {
-	        ArmPos(-(10 + (gripFrame >= 1) + (gripFrame >= 3))*dir, -(30 + (gripFrame >= 2)));
-	        if(dir == -1)
-	        {
-	            ArmPos(-(11 + (gripFrame >= 2))*dir, -(30 + (gripFrame >= 3)));
-	        }
-	        armOffsetY += (recoilCounter > 0 && gripFrame >= 3);
-	        break;
-	    }
-	    default:
-	    {
-	        ArmPos(-(8+gripFrame)*dir, 15+clamp(gripFrame-1,0,2));
-	        if(dir == -1)
-	        {
-	            ArmPos(-(9 + (gripFrame >= 2))*dir, 15 + gripFrame);
-	        }
-	        armOffsetY -= (recoilCounter > 0 && gripFrame >= 3);
-	        break;
-	    }
-	}
-}*/
-#endregion
 #region SetArmPosGrip
 function SetArmPosGrip()
 {
@@ -3942,11 +3730,8 @@ enum PlayerPal2
 	HyperEnd = 17
 }
 
-darkRoomVisorFlash = 0;
-darkRoomVisorNum = 1;
-
-xRayVisorFlash = 0;
-xRayVisorNum = 1;
+visorPalFlash = 0;
+visorPalNum = 1;
 
 morphPal = 0;
 ballGlowIndex = 0;
@@ -4026,35 +3811,28 @@ function PaletteSurface()
 		}
 		#endregion
 		#region -- Visor flashing --
-		/*if(false) // if(room is dark and activates visor flashing)
+		if(HUDVisorSelected(HUDVisor.Scan) || HUDVisorSelected(HUDVisor.XRay))
 		{
-			if(darkRoomVisorFlash >= 1)
+			if(visorPalFlash >= 1)
             {
-                darkRoomVisorNum = -1;
+                visorPalNum = -1;
             }
-            if(darkRoomVisorFlash <= 0)
+            if(visorPalFlash <= 0)
             {
-                darkRoomVisorNum = 1;
+                visorPalNum = 1;
             }
-            darkRoomVisorFlash = clamp(darkRoomVisorFlash + 0.125*darkRoomVisorNum,0,1);
+            visorPalFlash = clamp(visorPalFlash + 0.125*visorPalNum,0,1);
 			
-			DrawPalSprite(pal_Visor_Flash,0,1);
-			DrawPalSprite(pal_Visor_Flash,1,darkRoomVisorFlash);
-		}*/
-		if(instance_exists(XRay))
-		{
-			if(xRayVisorFlash >= 1)
-            {
-                xRayVisorNum = -1;
-            }
-            if(xRayVisorFlash <= 0)
-            {
-                xRayVisorNum = 1;
-            }
-            xRayVisorFlash = clamp(xRayVisorFlash + 0.125*xRayVisorNum,0,1);
-			
-			DrawPalSprite(pal_Player_Visor_XRay,0,XRay.alpha);
-			DrawPalSprite(pal_Player_Visor_XRay,1,XRay.alpha*xRayVisorFlash);
+			if(HUDVisorSelected(HUDVisor.Scan))
+			{
+				DrawPalSprite(pal_Player_Visor_Flash,0,1);
+				DrawPalSprite(pal_Player_Visor_Flash,1,visorPalFlash);
+			}
+			if(HUDVisorSelected(HUDVisor.XRay))
+			{
+				DrawPalSprite(pal_Player_Visor_XRay,0,1);
+				DrawPalSprite(pal_Player_Visor_XRay,1,visorPalFlash);
+			}
 		}
 		#endregion
 		#region -- Intro fanfare / saving --
@@ -4145,7 +3923,6 @@ function PaletteSurface()
 			{
 				if(statCharge >= maxCharge)
 				{
-					//if(state == State.Somersault || state == State.Dodge)
 					if(IsChargeSomersaulting())
 					{
 						DrawPalSprite(palSprite2,beamPalInd,1);
@@ -4164,7 +3941,6 @@ function PaletteSurface()
 					DrawPalSprite(palSprite,PlayerPal.Spark,0.35);
 				}
 			}
-			//else if((state == State.Somersault || state == State.Dodge) && statCharge >= maxCharge)
 			else if(IsChargeSomersaulting())
 			{
 				DrawPalSprite(palSprite2,beamPalInd,0.375);
@@ -4516,7 +4292,6 @@ function UpdatePlayerSurface(_palSurface)
 			draw_sprite_ext(sprt_Player_MorphBallAlt_Shine,0,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),1,1,0,c_white,1);
 		}
 	
-		//if(hudSlot == 1 && (hudSlotItem[1] == 0 || hudSlotItem[1] == 1 || hudSlotItem[1] == 3))
 		if(HUDWeaponSelected(HUDWeapon.Missile) || HUDWeaponSelected(HUDWeapon.SuperMissile) || HUDWeaponSelected(HUDWeapon.GrappleBeam))
 		{
 			missileArmFrame = min(missileArmFrame + 1, 4);
@@ -4535,7 +4310,6 @@ function UpdatePlayerSurface(_palSurface)
 			missileArmFrame = 0;
 		}
 	
-		//if(stateFrame == State.Grip && climbIndex <= 0 && gripAimFrame == 0 && dir == -1 && dirFrame == -4)
 		if(gripOverlay != -1)
 		{
 			draw_sprite_ext(gripOverlay,gripOverlayFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),fDir,1,0,c_white,1);
@@ -4780,7 +4554,6 @@ function PostDrawPlayer(posX, posY, rot, alph)
 				sFrame += 4;
 				shineRot -= 45*dir;
 			}
-			//if(dir == -1 && shineRot != 0)
 			if(dir == -1 && point_distance(oldPosition.X,oldPosition.Y,position.X,position.Y) != 0)
 			{
 				shineRot -= 180;
@@ -4810,12 +4583,10 @@ function PostDrawPlayer(posX, posY, rot, alph)
 			shineFrameCounter = 0;
 		}
 		var sFrame = shineFrame;
-		//var shineRot = 90 - 45*shineDir;
 		var shineRot = shineDir - 90;
 		var len = 6;
 		var shineX = scr_round(xx + lengthdir_x(len,shineRot)),
 			shineY = scr_round(yy + lengthdir_y(len,shineRot));
-		//if(abs(shineDir) == 1 || abs(shineDir) == 3)
 		if(SparkDir_DiagUp() || SparkDir_DiagDown())
 		{
 			sFrame += 4;
@@ -4858,7 +4629,6 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		screwFrameCounter = 0;
 	}
 	
-	//if(hudSlot == 1 && hudSlotItem[1] == 3 && item[Item.GrappleBeam] && state != State.Morph && morphFrame <= 0 && instance_exists(grapple) && state != State.Somersault)
 	if(instance_exists(grapple))
 	{
 	    var sPosX = xx+sprtOffsetX+armOffsetX,

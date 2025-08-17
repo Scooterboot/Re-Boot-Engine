@@ -127,7 +127,7 @@ function __InputConfigVerbs()
 	
 	InputDefineVerb(INPUT_VERB.AimUp,		"aim up",		ord("S"),				gp_shoulderrb);
 	InputDefineVerb(INPUT_VERB.AimDown,		"aim down",		ord("A"),				gp_shoulderlb);
-	InputDefineVerb(INPUT_VERB.AimLock,		"aim lock",		[[ord("S"), ord("A")]],	[[gp_shoulderrb, gp_shoulderlb]]);
+	InputDefineVerb(INPUT_VERB.AimLock,		"aim lock",		[ord("S"), ord("A")],	[gp_shoulderrb, gp_shoulderlb]);
 	InputDefineVerb(INPUT_VERB.ReverseAim,	"reverse aim",	ord("D"),				gp_shoulderl);
 	InputDefineVerb(INPUT_VERB.Moonwalk,	"moonwalk",		ord("F"),				gp_shoulderl);
 	
