@@ -675,6 +675,7 @@
     {"name":"InputDeviceStopAllRebinding","order":12,"path":"scripts/InputDeviceStopAllRebinding/InputDeviceStopAllRebinding.yy",},
     {"name":"InputDistance","order":1,"path":"scripts/InputDistance/InputDistance.yy",},
     {"name":"InputDuration","order":1,"path":"scripts/InputDuration/InputDuration.yy",},
+    {"name":"InputGetAltArray","order":1,"path":"scripts/InputGetAltArray/InputGetAltArray.yy",},
     {"name":"InputGetBindingName","order":1,"path":"scripts/InputGetBindingName/InputGetBindingName.yy",},
     {"name":"InputGetSteamInfo","order":2,"path":"scripts/InputGetSteamInfo/InputGetSteamInfo.yy",},
     {"name":"InputIconDefineEmpty","order":5,"path":"scripts/InputIconDefineEmpty/InputIconDefineEmpty.yy",},

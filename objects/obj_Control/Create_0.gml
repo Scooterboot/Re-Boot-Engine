@@ -2,6 +2,7 @@
 
 enum ComboType
 {
+	None,
 	Or,
 	And,
 	AndNot
@@ -29,20 +30,28 @@ function ControlInput(_verbIndex, _defaultPressType = PressType.Press, _defaultC
 	function GetInput()
 	{
 		//var _input = InputCheck(verbIndex);
-		var _input = InputCheck_Alt(verbIndex, 0);
-		if(!is_undefined(InputBindingGet(InputPlayerUsingGamepad(), verbIndex, 1)))
+		var _input = false;
+		if(comboType == ComboType.None)
 		{
-			if(comboType == ComboType.Or)
+			_input = InputCheck(verbIndex);
+		}
+		else
+		{
+			_input = InputCheck_Alt(verbIndex, 0);
+			if(!is_undefined(InputBindingGet(InputPlayerUsingGamepad(), verbIndex, 1)))
 			{
-				_input |= InputCheck_Alt(verbIndex, 1);
-			}
-			if(comboType == ComboType.And)
-			{
-				_input &= InputCheck_Alt(verbIndex, 1);
-			}
-			if(comboType == ComboType.AndNot)
-			{
-				_input &= !InputCheck_Alt(verbIndex, 1);
+				if(comboType == ComboType.Or)
+				{
+					_input |= InputCheck_Alt(verbIndex, 1);
+				}
+				if(comboType == ComboType.And)
+				{
+					_input &= InputCheck_Alt(verbIndex, 1);
+				}
+				if(comboType == ComboType.AndNot)
+				{
+					_input &= !InputCheck_Alt(verbIndex, 1);
+				}
 			}
 		}
 		
@@ -97,7 +106,7 @@ for(var i = 0; i < INPUT_VERB._Length; i++)
 	{
 		_pressType = PressType.Hold;
 	}
-	var _comboType = ComboType.Or;
+	var _comboType = ComboType.None;
 	if(i == INPUT_VERB.AimLock)
 	{
 		_comboType = ComboType.And;

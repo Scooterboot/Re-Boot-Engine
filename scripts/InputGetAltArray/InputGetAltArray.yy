@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"InputCheck_Alt",
+  "%Name":"InputGetAltArray",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"InputCheck_Alt",
+  "name":"InputGetAltArray",
   "parent":{
     "name":"_Custom",
     "path":"folders/Scripts/Input/_Custom.yy",
