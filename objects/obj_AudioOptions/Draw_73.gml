@@ -90,11 +90,11 @@ if(surface_exists(surf))
 			draw_set_alpha(1);
 			if(currentOption[i] > 0)
 			{
-				draw_rectangle(bX-1,oYY,bX+(bW2*currentOption[i])-2,oYY+sh-1,false);
+				draw_rectangle(bX-1,oYY,bX+(bW2*currentOption[i]/100)-2,oYY+sh-1,false);
 			}
 			draw_set_color(c_white);
 			draw_set_halign(fa_middle);
-			scr_DrawOptionText(bX+floor(bW2/2),oYY,string(floor(currentOption[i]*100))+"%",c_white,1,0,c_black,0);
+			scr_DrawOptionText(bX+floor(bW2/2),oYY,string(currentOption[i])+"%",c_white,1,0,c_black,0);
 			draw_set_halign(fa_left);
 		}
 		scr_DrawOptionText(oX+indent,oYY,option[i],c_white,1,bW,bC,bA);

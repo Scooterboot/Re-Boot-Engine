@@ -223,7 +223,7 @@ if(!global.gamePaused)
 			introAnimCounter++;
 		}
 		
-		if(cStart)
+		if(global.control[INPUT_VERB.Start])
 		{
 			introAnimState = -1;
 			introAnimCounter = 0;
@@ -1505,14 +1505,20 @@ if(!global.gamePaused)
 			velY = max(velY*2,-fJumpSpeed*0.9);
 		}
 		
-		bufferJump = max(bufferJump-1,0);
+		if(state != State.Grapple)
+		{
+			bufferJump = max(bufferJump-1,0);
+		}
 	}
 	else
 	{
-		bufferJump = bufferJumpMax;
-		if(SpiderActive() || state == State.Spark || state == State.BallSpark || state == State.Grip || state == State.Grapple)
+		if(state != State.Grapple)
 		{
-			bufferJump = 0;
+			bufferJump = bufferJumpMax;
+			if(SpiderActive() || state == State.Spark || state == State.BallSpark || state == State.Grip)
+			{
+				bufferJump = 0;
+			}
 		}
 		
 		jump = 0;
@@ -1681,6 +1687,7 @@ if(!global.gamePaused)
 			    {
 			        grapWJCounter = 60;
 			    }
+				bufferJump = 0;
 			}
 			else
 			{
@@ -1722,62 +1729,58 @@ if(!global.gamePaused)
 					}
 				}
 				
-				var kickDir = dir;
-				if(move2 != 0)
+				var kickDir = 0;
+				var grapVel = point_distance(0,0, velX,velY),
+					detectKick = 8 + grapVel;
+				var checkL = entity_place_collide(lengthdir_x(-detectKick, grapAngle), lengthdir_y(-detectKick, grapAngle)),
+					checkR = entity_place_collide(lengthdir_x(detectKick, grapAngle), lengthdir_y(detectKick, grapAngle));
+				if(checkL ^^ checkR)
 				{
-					kickDir = move2;
+					if(checkL) { kickDir = 1; }
+					if(checkR) { kickDir = -1; }
 				}
-				if(sign(grapAngVel) != 0)
+				if(kickDir == 0 && (checkL || checkR))
 				{
-					kickDir = sign(grapAngVel);
+					kickDir = move;
 				}
-				var grapVelocity = point_distance(x,y,xprevious,yprevious),
-				kickCheckX = lengthdir_x(kickDir*max(grapVelocity,2),grapAngle),
-				kickCheckY = lengthdir_y(kickDir*max(grapVelocity,2),grapAngle),
-				kickBaseX1 = x+lengthdir_x(-2,grapAngle-90),
-				kickBaseY1 = y+lengthdir_y(-2,grapAngle-90),
-				kickBaseX2 = x+lengthdir_x(2,grapAngle-90),
-				kickBaseY2 = y+lengthdir_y(2,grapAngle-90);
-				if(entity_place_collide(kickCheckX,kickCheckY,kickBaseX1,kickBaseY1) && entity_place_collide(kickCheckX,kickCheckY,kickBaseX2,kickBaseY2))
+				
+				if(cJump)
 				{
-					grapWallBounceCounter = -10*kickDir;
-					prevGrapVelocity = grapVelocity;
-				}
-				if(grapWallBounceCounter != 0)
-				{
-					if(cJump && rJump)
-			        {
-						var kickSpeed = moveSpeed[MoveSpeed.GrappleKick,liquidState];
-						kickSpeed = max(kickSpeed,prevGrapVelocity);
-			            velX = lengthdir_x(kickSpeed * sign(grapWallBounceCounter),grapAngle);
-						velY = lengthdir_y(kickSpeed * sign(grapWallBounceCounter),grapAngle);
+					if(kickDir != 0 && (rJump || bufferJump > 0))
+					{
+						var kickSpeed = max(moveSpeed[MoveSpeed.GrappleKick,liquidState], grapVel);
+			            velX = lengthdir_x(kickSpeed * kickDir,grapAngle);
+						velY = lengthdir_y(kickSpeed * kickDir,grapAngle);
 			            audio_play_sound(snd_WallJump,0,false);
 			            grapWallBounceFrame = 15;
 						
 						if(!liquid)
 						{
-							var partLen = 20;
-							if(sign(grapWallBounceCounter) == -dir)
+							var partLen = 25;
+							var gAngle = grapAngle-90;
+							for(var i = 0; i < 45; i++)
 							{
-								partLen = 25;
-							}
-							var gAngle = grapAngle-90,
-								gnum = 45;
-							while(gnum > 0 && entity_position_collide(lengthdir_x(partLen,gAngle)-velX,y+lengthdir_y(partLen,gAngle)-velY))
-							{
-								gAngle -= dir;
-								gnum--;
+								if(!entity_position_collide(lengthdir_x(partLen,gAngle), lengthdir_y(partLen,gAngle)))
+								{
+									gAngle -= kickDir;
+								}
+								else
+								{
+									gAngle += kickDir;
+								}
 							}
 							
-							var partX = x+lengthdir_x(partLen,gAngle)-velX,
-								partY = y+lengthdir_y(partLen,gAngle)-velY;
+							var partX = x+lengthdir_x(partLen,gAngle),
+								partY = y+lengthdir_y(partLen,gAngle);
 							part_particles_create(obj_Particles.partSystemB,partX,partY,obj_Particles.bDust[0],3);
 						}
-			        }
+						bufferJump = 0;
+					}
+					bufferJump = max(bufferJump-1,0);
 				}
 				else
 				{
-					prevGrapVelocity = 0;
+					bufferJump = bufferJumpMax;
 				}
 			}
 			
@@ -3591,10 +3594,9 @@ if(!global.gamePaused)
 	}
 	else
 	{
-		//gripGunReady = false;
-		gripFrame = 0;
-		gripAimFrame = 0;
-		//gripGunCounter = 0;
+		gripTurnFrame = 0;
+		gripAimAnim = 0;
+		
 		upClimbCounter = 0;
 		startClimb = false;
 		climbTarget = 0;
@@ -4598,62 +4600,21 @@ if(!global.gamePaused)
 	}
 	if(stateFrame == State.Grip)
 	{
-		switch aimAngle
+		var faceAway = (dir != grippedDir);
+		var _armPosR = [[-6,16], [10,8], [9,0], [10,-23], [-3,-29]],
+			_armPosL = [[-6,16], [10,8], [9,0], [10,-23], [-3,-29]];
+		if(faceAway)
 		{
-			case 2:
-			{
-				shotOffsetX = 13*dir2;
-				shotOffsetY = -31;
-				if(grippedDir == -1)
-				{
-					shotOffsetX = 12*dir2;
-				}
-				break;
-			}
-			case 1:
-			{
-				shotOffsetX = 28*dir2;
-				shotOffsetY = -22;
-				if(grippedDir == -1)
-				{
-					shotOffsetX = 27*dir2;
-					shotOffsetY = -22;
-				}
-				break;
-			}
-			case -1:
-			{
-				shotOffsetX = 27*dir2;
-				shotOffsetY = 9;
-				if(grippedDir == -1)
-				{
-					shotOffsetX = 25*dir2;
-					shotOffsetY = 10;
-				}
-				break;
-			}
-			case -2:
-			{
-				shotOffsetX = 11*dir2;
-				shotOffsetY = 17;
-				if(grippedDir == -1)
-				{
-					shotOffsetX = 10*dir2;
-					shotOffsetY = 18;
-				}
-				break;
-			}
-			default:
-			{
-				shotOffsetX = 30*dir2;
-				shotOffsetY = -6;
-				if(grippedDir == -1)
-				{
-					shotOffsetX = 32*dir2;
-					shotOffsetY = -8;
-				}
-				break;
-			}
+			_armPosR = [[-11,17], [-27, 9], [-30,-6], [-27,-21], [-12,-31]];
+			_armPosL = [[-10,18], [-25,10], [-32,-8], [-26,-21], [-12,-31]];
+		}
+		
+		shotOffsetX = _armPosR[aimAngle+2][0];
+		shotOffsetY = _armPosR[aimAngle+2][1];
+		if(grippedDir == -1)
+		{
+			shotOffsetX = -_armPosL[aimAngle+2][0];
+			shotOffsetY = _armPosL[aimAngle+2][1];
 		}
 	}
 #endregion

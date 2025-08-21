@@ -63,10 +63,10 @@ if(screenFade >= 1 && !menuClosing)
 	}
 	if(screen == 0)
 	{
-		if(global.gpSlot <= -1 && optionPos == 6)
+		/*if(global.gpSlot <= -1 && optionPos == 6)
 		{
 			optionPos += movePrev;
-		}
+		}*/
 		optionPos = scr_wrap(optionPos,0,array_length(option));
 		if(select || (moveX != 0 && optionPos < 4))
 		{
@@ -451,14 +451,14 @@ if(screenFade >= 1 && !menuClosing)
 	}*/
 }
 
-if(global.gpSlot != -1)
+/*if(global.gpSlot != -1)
 {
 	option[6] = gpFound;
 }
 else
 {
 	option[6] = gpNotFound;
-}
+}*/
 
 controlKey[12] = cNameHUD[global.HUD];
 controlButton[11] = controlKey[12];

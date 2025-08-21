@@ -1351,89 +1351,181 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 				fDir = grippedDir;
 				if(climbIndex <= 0)
 				{
-					torsoR = sprt_Player_GripRight;
-					torsoL = sprt_Player_GripLeft;
-					var gSpeed = 1/(1+liquidMovement);
-					if(recoilCounter > 0)
+					var usingVisor = (HUDVisorSelected(HUDVisor.Scan) || HUDVisorSelected(HUDVisor.XRay));
+					var visorFrame = 2;
+					if(HUDVisorSelected(HUDVisor.Scan))
 					{
-						gripAimFrame = clamp(gripAimFrame, gripAimTarget-3,gripAimTarget+3);
-						gSpeed *= 2;
+						var sdir = point_direction(x,y, scanVisor.GetRoomX(),scanVisor.GetRoomY());
+						var xcone = abs(scr_wrap(sdir-90, -180, 180));
+						visorFrame = 4-scr_round(xcone/45);
 					}
-					if(dir != grippedDir)
+					if(HUDVisorSelected(HUDVisor.XRay))
 					{
-						gripFrame = min(gripFrame + gSpeed, 3);
-						
-						if(gripFrame >= 3)
+						var xcone = abs(scr_wrap(xrayVisor.coneDir-90, -180, 180));
+						visorFrame = 4-scr_round(xcone/45);
+					}
+					
+					var faceAway = (dir != grippedDir);
+					if(faceAway)
+					{
+						gripTurnFrame = min(gripTurnFrame+1,3);
+					}
+					else
+					{
+						gripTurnFrame = max(gripTurnFrame-1,0);
+					}
+					
+					if(grippedDir == -1)
+					{
+						gripOverlay = sprt_Player_GripLeft_ArmOverlay;
+					}
+					
+					if(gripTurnFrame > 0 && gripTurnFrame < 3)
+					{
+						bodyFrame = gripTurnFrame-1;
+						gripOverlayFrame = gripTurnFrame+5;
+						torsoR = sprt_Player_GripTurnRight_Idle;
+						torsoL = sprt_Player_GripTurnLeft_Idle;
+						ArmPos(-4*fDir, 11);
+						if(bodyFrame > 0)
 						{
-							if(gripAimFrame > gripAimTarget)
+							ArmPos(-5*fDir, 11);
+						}
+						
+						if(!usingVisor)
+						{
+							if(aimFrame > 0 && aimFrame < 3)
 							{
-								gripAimFrame = max(gripAimFrame - aimSpeed, gripAimTarget);
+								torsoR = sprt_Player_GripTurnRight_AimUp;
+								torsoL = sprt_Player_GripTurnLeft_AimUp;
+								ArmPos(-4*fDir,-21);
+								if(bodyFrame > 0)
+								{
+									ArmPos(-19*fDir,-21);
+								}
+							}
+							else if(aimFrame < 0 && aimFrame > -3)
+							{
+								torsoR = sprt_Player_GripTurnRight_AimDown;
+								torsoL = sprt_Player_GripTurnLeft_AimDown;
+								ArmPos(-4*fDir,8);
+								if(bodyFrame > 0)
+								{
+									ArmPos(-15*fDir,9);
+								}
+							}
+							else if(aimFrame >= 3)
+							{
+								torsoR = sprt_Player_GripTurnRight_AimUpV;
+								torsoL = sprt_Player_GripTurnLeft_AimUpV;
+								ArmPos(-4*fDir,-30);
+								if(bodyFrame > 0)
+								{
+									ArmPos(-7*fDir,-30);
+								}
+							}
+							else if(aimFrame <= -3)
+							{
+								torsoR = sprt_Player_GripTurnRight_AimDownV;
+								torsoL = sprt_Player_GripTurnLeft_AimDownV;
+								ArmPos(-8*fDir,16);
+								if(bodyFrame > 0)
+								{
+									ArmPos(-10*fDir,17);
+								}
 							}
 							else
 							{
-								gripAimFrame = min(gripAimFrame + aimSpeed, gripAimTarget);
+								torsoR = sprt_Player_GripTurnRight;
+								torsoL = sprt_Player_GripTurnLeft;
+								ArmPos(0,-1);
+								if(bodyFrame > 0)
+								{
+									ArmPos(-24*fDir,-3);
+								}
 							}
 						}
-						else
-						{
-							gripAimFrame = clamp(gripAimFrame, gripAimTarget-3,gripAimTarget+3);
-						}
 					}
-					else
-					{
-						gripAimFrame = 0;
-						gripFrame = max(gripFrame - gSpeed, 0);
-					}
-					SetArmPosGrip();
-					if(gripFrame <= 2)
-					{
-						finalArmFrame = 2-(gripFrame > 0);
-					}
-					else
-					{
-						armDir = -fDir;
-						finalArmFrame = gripAimFrame;
-					}
-					drawMissileArm = true;
-					bodyFrame = scr_round(gripFrame);
-					if(gripFrame >= 3)
-					{
-						bodyFrame += scr_round(gripAimFrame);
-					}
-					if(recoilCounter > 0 && gripAimFrame == (scr_round(gripAimFrame/2)*2) && gripFrame >= 3)
-					{
-						torsoR = sprt_Player_GripFireRight;
-						torsoL = sprt_Player_GripFireLeft;
-						bodyFrame = scr_round(gripAimFrame/2);
-					}
-					if(grippedDir == -1)
-					{
-						gripOverlay = sprt_Player_ArmGripOverlay;
-						gripOverlayFrame = gripFrame;
-					}
-					
-					if(HUDVisorSelected(HUDVisor.XRay) && (gripFrame <= 0 || gripFrame >= 3))
+					else if(usingVisor)
 					{
 						torsoR = sprt_Player_GripXRayRight;
 						torsoL = sprt_Player_GripXRayLeft;
-						var xcone = abs(scr_wrap(xrayVisor.coneDir-90, -180, 180));
-						bodyFrame = 4-scr_round(xcone/45);
-						if(gripFrame > 0)
+						bodyFrame = visorFrame;
+						gripOverlayFrame = bodyFrame;
+						if(faceAway)
 						{
-							bodyFrame += 5;
-							drawMissileArm = false; // temp
+							torsoR = sprt_Player_GripXRayAwayRight;
+							torsoL = sprt_Player_GripXRayAwayLeft;
+							gripOverlayFrame = 7;
+						}
+					}
+					else
+					{
+						drawMissileArm = true;
+						
+						torsoR = sprt_Player_GripIdleRight;
+						torsoL = sprt_Player_GripIdleLeft;
+						bodyFrame = min(gripAimAnim,1);
+						gripOverlayFrame = 2;
+						ArmPos(-1*fDir, 9);
+						finalArmFrame = 2;
+						if(bodyFrame > 0)
+						{
+							ArmPos(2*fDir, 3);
+							finalArmFrame = 3;
 						}
 						
-						if(grippedDir == -1)
+						if(shootFrame || aimFrame != 0 || recoilCounter > 0 || faceAway)
 						{
-							gripOverlay = sprt_Player_ArmGripOverlay_XRay;
-							gripOverlayFrame = bodyFrame;
+							aimAnimTweak = 2;
+						}
+						if(aimAnimTweak > 0 && !faceAway)
+						{
+							gripAimAnim = min(gripAimAnim+1,2);
+						}
+						else
+						{
+							gripAimAnim = max(gripAimAnim-1,0);
+						}
+						
+						if(aimAnimTweak > 0 || gripAimAnim >= 2)
+						{
+							if(recoilCounter > 0 && aimFrame == (scr_round(aimFrame/2)*2) && transFrame >= 0)
+							{
+								torsoR = sprt_Player_GripAimRight_Recoil;
+								torsoL = sprt_Player_GripAimLeft_Recoil;
+								bodyFrame = 2 + scr_round(aimFrame/2);
+								gripOverlayFrame = bodyFrame;
+								if(faceAway)
+								{
+									torsoR = sprt_Player_GripAimAwayRight_Recoil;
+									torsoL = sprt_Player_GripAimAwayLeft_Recoil;
+									gripOverlayFrame = 7;
+								}
+							}
+							else
+							{
+								torsoR = sprt_Player_GripAimRight;
+								torsoL = sprt_Player_GripAimLeft;
+								bodyFrame = 4 + aimFrame;
+								gripOverlayFrame = 2 + scr_round(aimFrame/2);
+								if(faceAway)
+								{
+									torsoR = sprt_Player_GripAimAwayRight;
+									torsoL = sprt_Player_GripAimAwayLeft;
+									gripOverlayFrame = 7;
+								}
+							}
+							
+							SetArmPosGrip();
+							finalArmFrame = aimFrame + 4;
 						}
 					}
 				}
 				else
 				{
 					aimFrame = 0;
+					gripTurnFrame = 0;
 					torsoR = sprt_Player_ClimbRight;
 					torsoL = sprt_Player_ClimbLeft;
 					if(climbIndexCounter > liquidMovement)
@@ -2985,10 +3077,20 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 			}
 		
 			#endregion
-	
-			if(aimAngle != 0 || (velX == 0 && stateFrame != State.Brake) || !grounded || abs(dirFrame) < 4 || state == State.Morph)
+			
+			if(stateFrame == State.Grip)
 			{
-				justShot = 0;
+				if(aimAngle != 0 || dir != grippedDir)
+				{
+					justShot = 0;
+				}
+			}
+			else
+			{
+				if(aimAngle != 0 || (velX == 0 && stateFrame != State.Brake) || !grounded || abs(dirFrame) < 4 || state == State.Morph)
+				{
+					justShot = 0;
+				}
 			}
 			if(stateFrame != State.Brake)
 			{

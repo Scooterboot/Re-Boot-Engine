@@ -1,18 +1,18 @@
 /// @description Initialize
 
 ini_open("settings.ini");
-	global.musicVolume = ini_read_real("Audio", "music", 0.75);
-	global.soundVolume = ini_read_real("Audio", "sound", 0.75);
-	global.ambianceVolume = ini_read_real("Audio", "ambiance", 0.75);
+	global.musicVolume = ini_read_real("Audio", "music", 75);
+	global.soundVolume = ini_read_real("Audio", "sound", 75);
+	global.ambianceVolume = ini_read_real("Audio", "ambiance", 75);
 ini_close();
 
 audio_group_load(audio_music);
 audio_group_load(audio_sound);
 audio_group_load(audio_ambiance);
 
-audio_group_set_gain(audio_music,global.musicVolume,0);
-audio_group_set_gain(audio_sound,global.soundVolume,0);
-audio_group_set_gain(audio_ambiance,global.ambianceVolume,0);
+audio_group_set_gain(audio_music,global.musicVolume/100,0);
+audio_group_set_gain(audio_sound,global.soundVolume/100,0);
+audio_group_set_gain(audio_ambiance,global.ambianceVolume/100,0);
 
 skipTitleIntro = false;
 

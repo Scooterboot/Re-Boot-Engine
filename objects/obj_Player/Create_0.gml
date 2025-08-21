@@ -719,8 +719,8 @@ crouchYOffset = [0,3,7,10];
 
 landYOffset = [2,5,8,4,1];
 
-gripFrame = 0;
-gripAimFrame = 0;
+gripTurnFrame = 0;
+gripAimAnim = 0;
 
 climbSequence = [0,0,1,2,3,4,5,6,7,8,9,9,9,9,10,10,11,11,11];
 climbFrame = 0;
@@ -3479,119 +3479,54 @@ function SetArmPosTrans()
 #region SetArmPosGrip
 function SetArmPosGrip()
 {
-	if(gripFrame < 3)
+	var faceAway = (dir != grippedDir);
+	var _armPosR = [[-6,16], [2,11], [10,8], [11,3], [9,0], [12,-14], [10,-23], [5,-27], [-3,-29]],
+		_armPosL = [[-6,16], [2,11], [10,8], [11,3], [9,0], [12,-14], [10,-23], [5,-27], [-3,-29]];
+	if(faceAway)
 	{
-		switch scr_round(gripFrame)
+		_armPosR = [[-11,17], [-21,14], [-27, 9], [-30,1], [-30,-6], [-30,-16], [-27,-21], [-23,-28], [-12,-31]];
+		_armPosL = [[-10,18], [-18,15], [-25,10], [-29,1], [-32,-8], [-30,-18], [-26,-21], [-23,-28], [-12,-31]];
+	}
+	ArmPos(_armPosR[aimFrame+4][0], _armPosR[aimFrame+4][1]);
+	if(grippedDir == -1)
+	{
+		ArmPos(-_armPosL[aimFrame+4][0], _armPosL[aimFrame+4][1]);
+	}
+	
+	var _dir = grippedDir;
+	if(faceAway) { _dir *= -1; }
+	
+	if(recoilCounter > 0)
+	{
+		switch(aimFrame)
 		{
-			case 0:
+			case -4:
 			{
-				ArmPos(-1*fDir,9);
+				armOffsetY -= 1;
 				break;
 			}
-			case 1:
+			case -2:
 			{
-				ArmPos(-5*fDir,12);
+				armOffsetX -= 1*_dir;
+				armOffsetY -= 1;
+				break;
+			}
+			case 0:
+			{
+				armOffsetX -= 1*_dir;
 				break;
 			}
 			case 2:
 			{
-				ArmPos(-6*fDir,12);
+				armOffsetX -= 1*_dir;
+				armOffsetY += 1;
 				break;
 			}
-		}
-	}
-	else
-	{
-		switch scr_round(gripAimFrame)
-		{
-		    default:
-		    {
-		        ArmPos(-11, 17);
-		        if(fDir == -1)
-		        {
-		            ArmPos(10, 18);
-		        }
-		        armOffsetY -= (recoilCounter > 0);
-		        break;
-		    }
-		    case 1:
-		    {
-		        ArmPos(-21, 14);
-		        if(fDir == -1)
-		        {
-		            ArmPos(18, 15);
-		        }
-		        break;
-		    }
-		    case 2:
-		    {
-		        ArmPos(-27, 9);
-		        if(fDir == -1)
-		        {
-		            ArmPos(25,10);
-		        }
-		        armOffsetX += (recoilCounter > 0)*fDir;
-		        armOffsetY -= (recoilCounter > 0);
-		        break;
-		    }
-		    case 3:
-		    {
-		        ArmPos(-30, 1);
-		        if(fDir == -1)
-		        {
-		            ArmPos(29, 1);
-		        }
-		        break;
-		    }
-		    case 4:
-		    {
-		        ArmPos(-30,-6);
-		        if(fDir == -1)
-		        {
-		            ArmPos(32,-8);
-		        }
-		        armOffsetX += (recoilCounter > 0)*fDir;
-		        break;
-		    }
-		    case 5:
-		    {
-		        ArmPos(-30, -16);
-		        if(fDir == -1)
-		        {
-		            ArmPos(30, -18);
-		        }
-		        break;
-		    }
-		    case 6:
-		    {
-		        ArmPos(-27, -21);
-		        if(fDir == -1)
-		        {
-		            ArmPos(26, -21);
-		        }
-		        armOffsetX += (recoilCounter > 0)*fDir;
-		        armOffsetY += (recoilCounter > 0);
-		        break;
-		    }
-		    case 7:
-		    {
-		        ArmPos(-23,-28);
-		        if(fDir == -1)
-		        {
-		            ArmPos(23,-28);
-		        }
-		        break;
-		    }
-		    case 8:
-		    {
-		        ArmPos(-12, -31);
-		        if(fDir == -1)
-		        {
-		            ArmPos(12, -31);
-		        }
-		        armOffsetY += (recoilCounter > 0);
-		        break;
-		    }
+			case 4:
+			{
+				armOffsetY += 1;
+				break;
+			}
 		}
 	}
 }

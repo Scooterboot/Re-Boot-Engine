@@ -116,7 +116,8 @@ if(surface_exists(surf))
 				bW = 249 - string_width(currentOptionName[i,currentOption[i]]) - indent;
 			}
 			var col3 = c_white;
-			if(i == 6 && global.gpSlot <= -1)
+			//if(i == 6 && global.gpSlot <= -1)
+			if(i == 5 || i == 6)
 			{
 				col3 = c_gray;
 			}

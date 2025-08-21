@@ -235,6 +235,14 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 	#endregion
 	#region Toggle current visor
 	
+	var _tVisorOn = (cVisorToggleOn && rVisorToggleOn),
+		_tVisorOff = (cVisorToggleOff && rVisorToggleOff);
+	if(hudAltVisorIndex == HUDVisor.Scan)
+	{
+		_tVisorOn &= !cFire;
+		_tVisorOff |= cFire;
+	}
+	
 	if(HasHUDVisor(hudAltVisorIndex) && (hudVisorIndex == -1 || hudVisorIndex == hudAltVisorIndex))
 	{
 		var canUseVisor = true;
@@ -281,13 +289,13 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 		{
 			if(hudVisorIndex == -1)
 			{
-				if(cVisorToggleOn && rVisorToggleOn)
+				if(_tVisorOn)
 				{
 					hudVisorIndex = hudAltVisorIndex;
 					audio_play_sound(snd_MenuTick,0,false);
 				}
 			}
-			else if(cVisorToggleOff && rVisorToggleOff)
+			else if(_tVisorOff)
 			{
 				hudVisorIndex = -1;
 				audio_play_sound(snd_MenuTick,0,false);
