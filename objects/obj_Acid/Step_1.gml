@@ -1,6 +1,6 @@
 /// @description Acid Movement
 
-if(global.gamePaused)
+if(global.GamePaused())
 {
 	exit;
 }

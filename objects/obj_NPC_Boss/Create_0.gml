@@ -38,6 +38,9 @@ function AnimBone(_defaultX, _defaultY, _parentBone = pointer_null) constructor
 	
 	rotation = 0;
 	offsetRotation = 0;
+	steppedRotation = 0;
+	rotationStepCounter = 0;
+	rotationStepMax = 1;
 	
 	scale = new Vector2();
 	dir = 1;
@@ -112,12 +115,23 @@ function AnimBone(_defaultX, _defaultY, _parentBone = pointer_null) constructor
 		{
 			rotation += parent.rotation;
 		}
+		
+		rotationStepCounter++;
+		if(rotationStepCounter > rotationStepMax)
+		{
+			steppedRotation = rotation;
+			rotationStepCounter = 0;
+		}
 	}
 	
-	function AnimateRotation(rotArray, frame, transition, loop = false)
+	function AnimateRotation(rotArray, frame, transition, loop = false, rotClamp = 0)
 	{
 		//rotation = lerp(rotation, LerpArray(rotArray,frame,loop), transition);
 		offsetRotation = lerp(offsetRotation, LerpArray(rotArray,frame,loop), transition);
+		if(rotClamp > 0)
+		{
+			offsetRotation = scr_round(offsetRotation/rotClamp)*rotClamp;
+		}
 	}
 	function AnimatePosition(posArray, frame, transition, loop = false)
 	{
@@ -157,14 +171,18 @@ function DrawLimb(_name, _sprt, _bone, _bone2 = pointer_null) constructor
 	}
 	
 	function Shader() {}
-	function Draw(frame = 0, dir = 1)
+	function Draw(frame = 0, dir = 1, rot = undefined)
 	{
 		var b = bone;
 		if(dir == -1 && bone2 != pointer_null)
 		{
 			b = bone2;
 		}
-		var rot = scr_round(b.rotation) * dir;
+		var _rot = b.steppedRotation * dir;
+		if(!is_undefined(rot))
+		{
+			_rot = rot;
+		}
 		var scaleX = b.scale.X*dir,
 			scaleY = b.scale.Y;
 		var xOffset = sprite_get_xoffset(sprt),
@@ -188,37 +206,51 @@ function DrawLimb(_name, _sprt, _bone, _bone2 = pointer_null) constructor
 			draw_clear_alpha(c_black,0);
 			surface_reset_target();
 		}
-		if(surface_exists(limbSurf2))
+		
+		if(rotScale > 1)
 		{
-			surface_set_target(limbSurf2);
-			draw_clear_alpha(c_black,0);
+			if(surface_exists(limbSurf2))
+			{
+				surface_set_target(limbSurf2);
+				draw_clear_alpha(c_black,0);
 			
-			var shd = sh_better_scaling_5xbrc;
-			shader_set(shd);
-		    shader_set_uniform_f(shader_get_uniform(shd, "texel_size"), 1 / surface_get_width(limbSurf), 1 / surface_get_height(limbSurf));
-		    shader_set_uniform_f(shader_get_uniform(shd, "texture_size"), surface_get_width(limbSurf), surface_get_height(limbSurf));
-		    shader_set_uniform_f(shader_get_uniform(shd, "color"), 1, 1, 1, 1);
-		    shader_set_uniform_f(shader_get_uniform(shd, "color_to_make_transparent"), 0, 0, 0);
-			
-			draw_surface_ext(limbSurf,0,0,rotScale,rotScale,0,c_white,1);
-			shader_reset();
-			
-			surface_reset_target();
-			
-			var sc = dcos(rot),
-				ss = dsin(rot),
-				sx = xOffset * scaleX,
-				sy = yOffset * scaleY;
-			var sxx = scr_round(b.position.X)-sc*sx-ss*sy,
-				syy = scr_round(b.position.Y)-sc*sy+ss*sx;
-			draw_surface_ext(limbSurf2,sxx,syy,scaleX/rotScale,scaleY/rotScale,rot,b.color,b.alpha);
+				var shd = sh_better_scaling_5xbrc;
+				shader_set(shd);
+			    shader_set_uniform_f(shader_get_uniform(shd, "texel_size"), 1 / surface_get_width(limbSurf), 1 / surface_get_height(limbSurf));
+			    shader_set_uniform_f(shader_get_uniform(shd, "texture_size"), surface_get_width(limbSurf), surface_get_height(limbSurf));
+			    shader_set_uniform_f(shader_get_uniform(shd, "color"), 1, 1, 1, 1);
+			    shader_set_uniform_f(shader_get_uniform(shd, "color_to_make_transparent"), 0, 0, 0);
+				
+				draw_surface_ext(limbSurf,0,0,rotScale,rotScale,0,c_white,1);
+				shader_reset();
+				
+				surface_reset_target();
+				
+				var sc = dcos(_rot),
+					ss = dsin(_rot),
+					sx = xOffset * scaleX,
+					sy = yOffset * scaleY;
+				var sxx = scr_round(b.position.X-sc*sx-ss*sy),
+					syy = scr_round(b.position.Y-sc*sy+ss*sx);
+				draw_surface_ext(limbSurf2,sxx,syy,scaleX/rotScale,scaleY/rotScale,_rot,b.color,b.alpha);
+			}
+			else
+			{
+				limbSurf2 = surface_create(surfW*rotScale,surfH*rotScale);
+				surface_set_target(limbSurf2);
+				draw_clear_alpha(c_black,0);
+				surface_reset_target();
+			}
 		}
 		else
 		{
-			limbSurf2 = surface_create(surfW*rotScale,surfH*rotScale);
-			surface_set_target(limbSurf2);
-			draw_clear_alpha(c_black,0);
-			surface_reset_target();
+			var sc = dcos(_rot),
+				ss = dsin(_rot),
+				sx = xOffset * scaleX,
+				sy = yOffset * scaleY;
+			var sxx = scr_round(b.position.X-sc*sx-ss*sy),
+				syy = scr_round(b.position.Y-sc*sy+ss*sx);
+			draw_surface_ext(limbSurf,sxx,syy,scaleX,scaleY,_rot,b.color,b.alpha);
 		}
 	}
 }

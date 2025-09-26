@@ -1,7 +1,7 @@
 /// @description Trail
 event_inherited();
 
-if(!global.gamePaused)
+if(!global.GamePaused())
 {
 	velX = min(abs(velX) * 1.05, abs(lengthdir_x(10,direction)))*sign(velX);
 	velY = min(abs(velY) * 1.05, abs(lengthdir_y(10,direction)))*sign(velY);

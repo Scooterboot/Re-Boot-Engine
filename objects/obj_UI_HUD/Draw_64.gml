@@ -1,4 +1,4 @@
-/// @description TODO: Rewrite
+/// @description 
 
 if(room != rm_MainMenu && instance_exists(obj_Player))
 {
@@ -35,41 +35,42 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		draw_set_alpha(1);
 		surface_reset_target();
 		
-		if(global.rmMapArea != noone)
+		if(room != rm_MainMenu && global.rmMapArea != noone && (!instance_exists(obj_Transition) || obj_Transition.transitionComplete))
 		{
 			currentMap = global.rmMapArea;
-			if(!instance_exists(obj_Transition) || obj_Transition.transitionComplete || prevArea != global.rmMapArea)
+			
+			playerMapX = obj_Map.playerMapX * msSizeW;
+			playerMapY = obj_Map.playerMapY * msSizeH;
+			if(prevArea == noone)
 			{
-				playerMapX = obj_Map.playerMapX * msSizeW;
-				playerMapY = obj_Map.playerMapY * msSizeH;
-				if(prevArea == noone)
-				{
-					prevPlayerMapX = playerMapX;
-					prevPlayerMapY = playerMapY;
-				}
-				
-				if(prevArea == global.rmMapArea)
-				{
-					if(playerMapX != prevPlayerMapX)
-					{
-						pMapOffsetX = -msSizeW*sign(playerMapX-prevPlayerMapX);
-					}
-					if(playerMapY != prevPlayerMapY)
-					{
-						pMapOffsetY = -msSizeH*sign(playerMapY-prevPlayerMapY);
-					}
-				}
-				else
-				{
-					pMapOffsetX = 0;
-					pMapOffsetY = 0;
-				}
-				
 				prevPlayerMapX = playerMapX;
 				prevPlayerMapY = playerMapY;
-				prevArea = global.rmMapArea;
 			}
 			
+			if(prevArea == global.rmMapArea)
+			{
+				if(playerMapX != prevPlayerMapX)
+				{
+					pMapOffsetX = -msSizeW*sign(playerMapX-prevPlayerMapX);
+				}
+				if(playerMapY != prevPlayerMapY)
+				{
+					pMapOffsetY = -msSizeH*sign(playerMapY-prevPlayerMapY);
+				}
+			}
+			else
+			{
+				pMapOffsetX = 0;
+				pMapOffsetY = 0;
+			}
+			
+			prevPlayerMapX = playerMapX;
+			prevPlayerMapY = playerMapY;
+			prevArea = currentMap;
+		}
+		
+		if(currentMap != noone)
+		{
 			obj_Map.PrepareMapSurf(currentMap, playerMapX-mapDifX+pMapOffsetX,playerMapY-mapDifY+pMapOffsetY, mapWidth,mapHeight, true,0.75);
 			
 			surface_set_target(obj_Display.surfUI);
@@ -119,7 +120,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		{
 			hudMapFlashNum = 1;
 		}
-		if(hudMapFlashAlpha >= 1 || (global.gamePaused))
+		if(hudMapFlashAlpha >= 1 || (global.GamePaused()))
 		{
 			hudMapFlashNum = -1;
 		}

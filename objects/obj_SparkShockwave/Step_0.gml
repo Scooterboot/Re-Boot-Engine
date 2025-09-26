@@ -1,6 +1,6 @@
 /// @description 
 event_inherited();
-if(global.gamePaused)
+if(global.GamePaused())
 {
 	exit;
 }

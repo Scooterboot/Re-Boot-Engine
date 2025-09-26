@@ -1,6 +1,6 @@
 /// -- Collide Water --
 
-if(global.gamePaused)
+if(global.GamePaused())
 {
 	exit;
 }

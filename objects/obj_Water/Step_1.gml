@@ -1,6 +1,6 @@
 /// Water Movement
 
-if(global.gamePaused)
+if(global.GamePaused())
 {
 	exit;
 }

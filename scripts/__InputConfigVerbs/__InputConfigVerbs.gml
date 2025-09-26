@@ -12,7 +12,6 @@ function __InputConfigVerbs()
 		MenuScrollDown,
 		MenuScrollLeft,
 		MenuScrollRight,
-		MenuScrollHKey,
 	
 		Start,
 		MenuAccept,
@@ -94,12 +93,11 @@ function __InputConfigVerbs()
 	InputDefineVerb(INPUT_VERB.MenuRight,	"menu right",	vk_right,	[ gp_axislh, gp_padr]);
 	InputDefineCluster(INPUT_CLUSTER.MenuMove, INPUT_VERB.MenuUp, INPUT_VERB.MenuRight, INPUT_VERB.MenuDown, INPUT_VERB.MenuLeft);
 	
-	InputDefineVerb(INPUT_VERB.MenuScrollUp,	"menu scroll up",		undefined,	-gp_axisrv);
-	InputDefineVerb(INPUT_VERB.MenuScrollDown,	"menu scroll down",		undefined,	 gp_axisrv);
-	InputDefineVerb(INPUT_VERB.MenuScrollLeft,	"menu scroll left",		undefined,	-gp_axisrh);
-	InputDefineVerb(INPUT_VERB.MenuScrollRight,	"menu scroll right",	undefined,	 gp_axisrh);
+	InputDefineVerb(INPUT_VERB.MenuScrollUp,	"menu scroll up",		[mb_wheel_up, vk_shift],	-gp_axisrv);
+	InputDefineVerb(INPUT_VERB.MenuScrollDown,	"menu scroll down",		[mb_wheel_down, vk_shift],	 gp_axisrv);
+	InputDefineVerb(INPUT_VERB.MenuScrollLeft,	"menu scroll left",		[mb_wheel_up, vk_shift],	-gp_axisrh);
+	InputDefineVerb(INPUT_VERB.MenuScrollRight,	"menu scroll right",	[mb_wheel_down, vk_shift],	 gp_axisrh);
 	InputDefineCluster(INPUT_CLUSTER.MenuScroll, INPUT_VERB.MenuScrollUp, INPUT_VERB.MenuScrollRight, INPUT_VERB.MenuScrollDown, INPUT_VERB.MenuScrollLeft);
-	InputDefineVerb(INPUT_VERB.MenuScrollHKey, "menu scroll horizontal key", vk_shift, undefined);
 	
 	InputDefineVerb(INPUT_VERB.Start,			"start",			vk_enter,	gp_start);
 	InputDefineVerb(INPUT_VERB.MenuAccept,		"menu accept",		ord("Z"),	_gp_face1);

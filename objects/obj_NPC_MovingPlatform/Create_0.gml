@@ -3,7 +3,7 @@ event_inherited();
 
 function PauseAI()
 {
-	return (global.gamePaused || /*!scr_WithinCamRange() ||*/ frozen > 0 || dmgFlash > 0);
+	return (global.GamePaused() || /*!scr_WithinCamRange() ||*/ frozen > 0 || dmgFlash > 0);
 }
 
 createPlatformOnFrozen = false;

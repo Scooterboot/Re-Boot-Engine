@@ -35,7 +35,7 @@ if(instance_exists(player) && frame >= 4)
 
 if(frame > 0)
 {
-    if(frame == 4 && !audio_is_playing(snd_Door_Close) && !global.roomTrans)
+    if(frame == 4 && !audio_is_playing(snd_Door_Close) && global.pauseState != PauseState.RoomTrans)
     {
         audio_play_sound(snd_Door_Close,0,false);
     }
@@ -62,6 +62,7 @@ if(place_meeting(x,y,obj_Gadora))
 {
 	immune = true;
 }
+justHit = false;
 
 if(hitPoints <= 0)
 {

@@ -1,5 +1,5 @@
 /// @description Player pickup logic
-if(global.gamePaused)
+if(global.GamePaused())
 {
 	//image_speed = 0;
 	exit;
@@ -21,7 +21,7 @@ if(!collected)
 		{
 			obj_UI_Old.CreateMessageBox(itemHeader,itemDesc,Message.Item);
 			obj_Audio.playItemFanfare = true;
-			global.gamePaused = true;
+			global.pauseState = PauseState.MessageBox;
 		}
 		else
 		{

@@ -6,7 +6,7 @@ if(!audio_is_playing(snd_ScanVisor))
 }
 else
 {
-	if(global.roomTrans || obj_PauseMenu.pause || obj_Player.pauseSelect)
+	if(global.GamePaused())
 	{
 		audio_pause_sound(snd_ScanVisor);
 	}

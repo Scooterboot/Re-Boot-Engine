@@ -35,8 +35,7 @@ else
 {
     if(alpha <= 0)
     {
-        global.roomTrans = false;
-        global.gamePaused = false;
+        global.pauseState = PauseState.None;
         instance_destroy();
 		exit;
     }

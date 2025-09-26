@@ -1,6 +1,6 @@
 /// @description Draw
 
-if(!global.gamePaused)
+if(!global.GamePaused())
 {
 	xstart += speed_x;
 	ystart += speed_y;

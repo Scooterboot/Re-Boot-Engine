@@ -2,7 +2,7 @@
 
 //#region Projectile Behavior
 
-if(global.gamePaused)
+if(global.GamePaused())
 {
 	exit;
 }

@@ -18,20 +18,21 @@ hitPoints = 1;
 hitAnim = 0;
 
 immune = false;
+justHit = false;
 function DamageHatch(_dmg)
 {
-	if(!immune)
+	if(!immune && !justHit)
 	{
 		hitPoints -= _dmg;
 		if(hitPoints > 0)
 		{
 			hitAnim = 8;
 		}
+		justHit = true;
 	}
 }
 
 unlocked = true;
-unlockAnim = 0;
 function UnlockCondition()
 {
 	return true;

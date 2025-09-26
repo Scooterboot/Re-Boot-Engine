@@ -30,7 +30,7 @@ function __InputVerbGroupsConfig()
     //InputVerbGroupDefine(INPUT_VERB_GROUP.EXAMPLE_B, [INPUT_VERB.ACTION, INPUT_VERB.SPECIAL]);
 	InputVerbGroupDefine(INPUT_VERB_GROUP.Menu,
 	[INPUT_VERB.MenuUp, INPUT_VERB.MenuDown, INPUT_VERB.MenuLeft, INPUT_VERB.MenuRight,
-	INPUT_VERB.MenuScrollUp, INPUT_VERB.MenuScrollDown, INPUT_VERB.MenuScrollLeft, INPUT_VERB.MenuScrollRight, INPUT_VERB.MenuScrollHKey,
+	INPUT_VERB.MenuScrollUp, INPUT_VERB.MenuScrollDown, INPUT_VERB.MenuScrollLeft, INPUT_VERB.MenuScrollRight,
 	INPUT_VERB.Start, INPUT_VERB.MenuAccept, INPUT_VERB.MenuCancel, INPUT_VERB.MenuSecondary,
 	INPUT_VERB.MenuR1, INPUT_VERB.MenuR2, INPUT_VERB.MenuL1, INPUT_VERB.MenuL2]);
 	

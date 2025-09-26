@@ -12,7 +12,7 @@ if(activeDir != 0)
 	animSpeed = 3;
 }
 
-if(!global.gamePaused)
+if(!global.GamePaused())
 {
 	frameCounter++;
 	if(frameCounter > animSpeed)

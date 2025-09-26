@@ -1,5 +1,4 @@
 /// @description Sound
-global.gamePaused = true;
 
 if(!audio_is_playing(snd_XRay_Loop))
 {
@@ -14,18 +13,16 @@ if(!audio_is_playing(snd_XRay_Loop))
 		audio_sound_gain(xRaySound,0.375,2000);
     }
 }
+
+if(global.pauseState != PauseState.XRay)
+{
+	audio_pause_sound(snd_XRay);
+	audio_pause_sound(snd_XRay_Loop);
+}
 else
 {
-	if(global.roomTrans || obj_PauseMenu.pause || obj_Player.pauseSelect)
-	{
-		audio_pause_sound(snd_XRay);
-		audio_pause_sound(snd_XRay_Loop);
-	}
-	else
-	{
-		audio_resume_sound(snd_XRay);
-		audio_resume_sound(snd_XRay_Loop);
-	}
+	audio_resume_sound(snd_XRay);
+	audio_resume_sound(snd_XRay_Loop);
 }
 
 if(!kill)

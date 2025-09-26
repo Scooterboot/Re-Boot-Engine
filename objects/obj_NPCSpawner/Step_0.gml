@@ -1,5 +1,5 @@
 /// @description 
-if(global.gamePaused || !scr_WithinCamRange())
+if(global.GamePaused() || !scr_WithinCamRange())
 {
 	exit;
 }

@@ -1,6 +1,6 @@
 /// @description Behavior
 
-if(global.gamePaused)
+if(global.GamePaused())
 {
 	exit;
 }
@@ -20,7 +20,7 @@ if(bombTimer <= 0)
 	var player = collision_circle(x,y,(bb_right()-bb_left())/3,obj_Player,false,true);
 	if(instance_exists(player))
 	{
-		if(!player.cDown || forceJump)
+		if(!player.cPlayerDown || forceJump)
 		{
 			var num = player.x - x;
 			if(abs(num) > 1)

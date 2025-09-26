@@ -1,4 +1,4 @@
-if(!global.gamePaused)
+if(!global.GamePaused())
 {
 	part_system_update(partSystemA);
 	part_system_update(partSystemB);

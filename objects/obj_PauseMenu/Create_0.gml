@@ -10,6 +10,7 @@ gameLoaded = false;
 loadFade = 0;
 gameEnd = false;
 gameEnded = false;
+prevPauseState = PauseState.None;
 
 enum Screen
 {

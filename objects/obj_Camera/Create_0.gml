@@ -16,6 +16,9 @@ camLimit_Right = camLimitMax_Right;
 camLimit_Top = camLimitMax_Top;
 camLimit_Bottom = camLimitMax_Bottom;
 
+camLimit_ExtraX = 32;
+camLimit_ExtraY = 32;
+
 function CamLimitIncr(_limit, _max, _spd, _pos)
 {
 	if(_limit < _max)

@@ -33,7 +33,7 @@ function LoopedSong(_snd, _loopStart, _loopEnd) constructor
 	loopLength = loopEnd-loopStart;
 	
 	song = songID;
-	function Play(priority = 1, loops = true)
+	function PlaySong(priority = 1, loops = true)
 	{
 		song = audio_play_sound(songID,priority,loops);
 		audio_sound_gain(song,1,0);
@@ -45,9 +45,9 @@ function LoopedSong(_snd, _loopStart, _loopEnd) constructor
 		return song;
 	}
 	function IsPlaying() { return audio_is_playing(song); }
-	function Stop() { audio_stop_sound(song); }
-	function Pause() { audio_pause_sound(song); }
-	function Resume() { audio_resume_sound(song); }
+	function StopSong() { audio_stop_sound(song); }
+	function PauseSong() { audio_pause_sound(song); }
+	function ResumeSong() { audio_resume_sound(song); }
 	function GetTrackPos() { return audio_sound_get_track_position(song); }
 	function SetTrackPos(time) { audio_sound_set_track_position(song,time); }
 	/*function Loop()
@@ -76,7 +76,7 @@ function LoopedSong(_snd, _loopStart, _loopEnd) constructor
 			}
 			if(GetGain() <= 0)
 			{
-				Stop();
+				StopSong();
 				gainSet = false;
 			}
 		}

@@ -7,7 +7,7 @@ cDown = cMenuDown;
 cSelect = cMenuAccept;
 cCancel = cMenuCancel;
 
-if(room != rm_MainMenu && (global.roomTrans || !global.gamePaused || !obj_PauseMenu.isPaused))
+if(room != rm_MainMenu && global.pauseState != PauseState.PauseMenu)
 {
 	menuClosing = true;
 }

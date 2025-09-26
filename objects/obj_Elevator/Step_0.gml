@@ -1,5 +1,5 @@
 /// @description Logic
-if(global.gamePaused)
+if(global.GamePaused())
 {
     exit;
 }

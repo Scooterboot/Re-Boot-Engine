@@ -1,6 +1,6 @@
 /// @description Initialize
 
-global.gamePaused = true;
+global.pauseState = PauseState.XRay;
 
 var xbackdepth = layer_get_depth(layer_get_id("Tiles_bg0")) - 1;
 backDraw = instance_create_depth(x,y,xbackdepth,obj_XRayBack);

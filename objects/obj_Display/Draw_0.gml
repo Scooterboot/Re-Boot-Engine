@@ -42,7 +42,7 @@ if (camX+camW > room_width || camY+camH > room_height)
 
 #region Debug
 
-if(keyboard_check_pressed(vk_divide) || keyboard_check_pressed(vk_f1) || keyboard_check_pressed(192))
+if(keyboard_check_pressed(vk_divide) || keyboard_check_pressed(vk_f1) || keyboard_check_pressed(vk_backtick))
 {
 	//debug = !debug;
 	debug = scr_wrap(debug+1,0,3);
@@ -311,7 +311,7 @@ if(debug == 1)
 		draw_set_color(c_white);
         draw_set_alpha(0.5);
 		
-		draw_rectangle(xx-camLimit_Right,yy-camLimit_Bottom,xx-camLimit_Left-1,yy-camLimit_Top-1, true);
+		draw_rectangle(scr_round(xx-camLimit_Right),scr_round(yy-camLimit_Bottom),scr_round(xx-camLimit_Left)-1,scr_round(yy-camLimit_Top)-1, true);
 		draw_rectangle(scr_round(playerX),scr_round(playerY),scr_round(playerX)-1,scr_round(playerY)-1,true);
 		
 		draw_set_alpha(1);

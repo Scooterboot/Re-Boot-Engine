@@ -18,7 +18,7 @@ for(var i = 0; i < array_length(Limbs); i++)
 		frame = headFrame;
 	}
 	
-	Limbs[i].Draw(frame,dir);
+	Limbs[i].Draw(frame, dir);
 }
 
 dmgFlash = max(dmgFlash-1,0);

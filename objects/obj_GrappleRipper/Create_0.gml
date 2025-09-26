@@ -39,7 +39,7 @@ jetFrameSeq = [0,1,2,1];
 
 function PauseAI()
 {
-	return (global.gamePaused || /*!scr_WithinCamRange() ||*/ frozen > 0 || dmgFlash > 0);
+	return (global.GamePaused() || /*!scr_WithinCamRange() ||*/ frozen > 0 || dmgFlash > 0);
 }
 
 /*function ModifyDamageTaken(damage,object,isProjectile)

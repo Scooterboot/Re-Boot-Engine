@@ -1,6 +1,6 @@
 /// @description Delete Surfaces
 
-global.gamePaused = false;
+global.pauseState = PauseState.None;
 
 surface_free(surfaceFront);
 surface_free(surfaceBack);

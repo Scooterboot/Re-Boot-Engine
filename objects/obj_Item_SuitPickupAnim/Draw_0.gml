@@ -25,7 +25,7 @@ else
 	surface_reset_target();
 	
 	
-	if(!global.gamePaused)
+	if(!global.GamePaused())
 	{
 		if(animCounter < animCounterMax)
 		{

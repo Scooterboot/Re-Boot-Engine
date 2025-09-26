@@ -109,7 +109,7 @@ enum INPUT_PLUG_IN_CALLBACK
 #macro INPUT_ON_IOS      (os_type == os_ios || os_type == os_tvos)
 #macro INPUT_ON_ANDROID  (os_type == os_android)
 //#macro INPUT_ON_XBOX     ((os_type == os_xboxone) || (os_type == os_xboxseriesxs))
-#macro INPUT_ON_XBOX     ((os_type == os_gdk) || (os_type == os_xboxseriesxs))
+#macro INPUT_ON_XBOX     ((os_type == os_xboxone) || (os_type == os_gdk) || (os_type == os_xboxseriesxs))
 #macro INPUT_ON_PS4      (os_type == os_ps4)
 #macro INPUT_ON_PS5      (os_type == os_ps5)
 #macro INPUT_ON_SWITCH   (os_type == os_switch)

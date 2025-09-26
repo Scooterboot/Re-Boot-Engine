@@ -6,6 +6,36 @@ unlocked = UnlockCondition();
 if(unlocked)
 {
 	unlockAnim = scr_wrap(unlockAnim+1,0,6);
+	
+	if(lockFrame < 4)
+	{
+		lockFrameCounter++;
+		if(lockFrameCounter > 1)
+		{
+			lockFrame += 1;
+			lockFrameCounter = 0;
+		}
+	}
+}
+else if(lockFrame > 0 && frame <= 0)
+{
+	lockFrameCounter++;
+	if(lockFrameCounter > 1)
+	{
+		lockFrame -= 1;
+		lockFrameCounter = 0;
+	}
+}
+image_index = 4;
+
+if(frame > 0)
+{
+	playLockedSnd = !unlocked;
+}
+else if(playLockedSnd)
+{
+	audio_play_sound(snd_Door_Locked,0,false);
+	playLockedSnd = false;
 }
 
 if(unlocked && !prevUnlocked)

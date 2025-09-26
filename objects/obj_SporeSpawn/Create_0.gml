@@ -75,7 +75,7 @@ function ModifyDamageTaken(damage,object,isProjectile)
 
 function PauseAI()
 {
-	return (global.gamePaused || dmgFlash > 0);
+	return (global.GamePaused() || dmgFlash > 0);
 }
 
 mouthTop = instance_create_layer(x,y,layer,obj_SporeSpawn_Top);

@@ -2,7 +2,7 @@
 
 //global.currentItemPercent = (ds_list_size(global.collectedItemList) / global.totalItems) * 100;
 
-if(room != rm_MainMenu && !global.gamePaused)
+if(room != rm_MainMenu && !global.GamePaused())
 {
 	global.currentPlayTime += (1 / game_get_speed(gamespeed_fps)) * (oldDelta / delta_time);
 	

@@ -1,6 +1,6 @@
 /// @description Unpause
 event_inherited();
-if(global.gamePaused && !obj_PauseMenu.pause)
+if(global.pauseState == PauseState.MessageBox)
 {
-	global.gamePaused = false;
+	global.pauseState = PauseState.None;
 }

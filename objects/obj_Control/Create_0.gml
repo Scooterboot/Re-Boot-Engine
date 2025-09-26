@@ -18,17 +18,32 @@ enum PressType
 	Release
 }
 #region ControlInput struct
-function ControlInput(_verbIndex, _defaultPressType = PressType.Press, _defaultComboType = ComboType.Or) constructor
+function ControlInput(_verbIndex, _keyboardPressType, _keyboardComboType, _gamepadPressType, _gamepadComboType) constructor
 {
 	verbIndex = _verbIndex;
-	defaultPressType = _defaultPressType;
-	defaultComboType = _defaultComboType;
+	defaultPressType_KB = _keyboardPressType;
+	defaultComboType_KB = _keyboardComboType;
+	defaultPressType_GP = _gamepadPressType;
+	defaultComboType_GP = _gamepadComboType;
 	
-	pressType = defaultPressType;
-	comboType = defaultComboType;
+	pressType_KB = defaultPressType_KB;
+	comboType_KB = defaultComboType_KB;
+	pressType_GP = defaultPressType_GP;
+	comboType_GP = defaultComboType_GP;
+	
+	pressType = pressType_KB;
+	comboType = comboType_KB;
 	
 	function GetInput()
 	{
+		pressType = pressType_KB;
+		comboType = comboType_KB;
+		if(InputPlayerGetDevice() != INPUT_KBM)
+		{
+			pressType = pressType_GP;
+			comboType = comboType_GP;
+		}
+		
 		//var _input = InputCheck(verbIndex);
 		var _input = false;
 		if(comboType == ComboType.None)
@@ -101,17 +116,32 @@ function ControlInput(_verbIndex, _defaultPressType = PressType.Press, _defaultC
 
 for(var i = 0; i < INPUT_VERB._Length; i++)
 {
-	var _pressType = PressType.Press;
+	var _pressTypeKB = PressType.Press,
+		_comboTypeKB = ComboType.None,
+		_pressTypeGP = PressType.Press,
+		_comboTypeGP = ComboType.None;
+	
+	if(i == INPUT_VERB.MenuScrollUp || i == INPUT_VERB.MenuScrollDown)
+	{
+		_comboTypeKB = ComboType.AndNot;
+	}
+	if(i == INPUT_VERB.MenuScrollLeft || i == INPUT_VERB.MenuScrollRight)
+	{
+		_comboTypeKB = ComboType.And;
+	}
+	
 	if(i == INPUT_VERB.Sprint || INPUT_VERB.SpiderBall)
 	{
-		_pressType = PressType.Hold;
+		_pressTypeKB = PressType.Hold;
+		_pressTypeGP = PressType.Hold;
 	}
-	var _comboType = ComboType.None;
 	if(i == INPUT_VERB.AimLock)
 	{
-		_comboType = ComboType.And;
+		_comboTypeKB = ComboType.And;
+		_comboTypeGP = ComboType.And;
 	}
-	global.controlInput[i] = new ControlInput(i, _pressType, _comboType);
+	
+	global.controlInput[i] = new ControlInput(i, _pressTypeKB, _comboTypeKB, _pressTypeGP, _comboTypeGP);
 	global.control[i] = false;
 }
 

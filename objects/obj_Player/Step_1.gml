@@ -80,13 +80,16 @@ if(state == State.Elevator || state == State.Recharge || state == State.CrystalF
 	
 	hudPauseAnim = 0;
 	uiState = PlayerUIState.None;
-	pauseSelect = false;
+	if(global.pauseState == PauseState.ItemMenu)
+	{
+		global.pauseState = PauseState.None;
+	}
 	
 	SetReleaseVars("menu");
 	exit;
 }
 
-if(!global.roomTrans && !obj_PauseMenu.pause)
+if(global.pauseState == PauseState.None || global.pauseState == PauseState.ItemMenu || global.pauseState == PauseState.XRay)
 {
 	if(cWeapHUDOpen && hudVisorIndex != HUDVisor.Scan && hudVisorIndex != HUDVisor.XRay)
 	{
@@ -115,16 +118,18 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 	
 	if(hudPauseAnim > 0)
 	{
-		pauseSelect = true;
-		global.gamePaused = true;
+		global.pauseState = PauseState.ItemMenu;
 	}
 	else
 	{
-		if(pauseSelect)
+		if(global.pauseState == PauseState.ItemMenu)
 		{
-			global.gamePaused = false;
+			global.pauseState = PauseState.None;
+			if(instance_exists(xrayVisor))
+			{
+				global.pauseState = PauseState.XRay;
+			}
 		}
-		pauseSelect = false;
 	}
 	
 	#region Weapon Wheel
@@ -319,14 +324,22 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 	{
 		if(instance_exists(scanVisor))
 		{
-			var moveX = InputX(INPUT_CLUSTER.VisorMove),
-				moveY = InputY(INPUT_CLUSTER.VisorMove);
-			
-			if(!pauseSelect)
+			if(global.pauseState == PauseState.None)
 			{
-				var mspd = 5;
-				scanVisor.x += moveX*mspd;
-				scanVisor.y += moveY*mspd;
+				if(InputPlayerGetDevice() == INPUT_KBM) // && visor uses mouse for control == true
+				{
+					var _mp = MousePos();
+					scanVisor.x = _mp.X;
+					scanVisor.y = _mp.Y;
+				}
+				else
+				{
+					var moveX = InputX(INPUT_CLUSTER.VisorMove),
+						moveY = InputY(INPUT_CLUSTER.VisorMove);
+					var mspd = 5;
+					scanVisor.x += moveX*mspd;
+					scanVisor.y += moveY*mspd;
+				}
 			}
 		}
 		else
@@ -365,10 +378,16 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 			xrayVisor.x = xpos.X;
 			xrayVisor.y = xpos.Y;
 			
-			if(!pauseSelect)
+			if(global.pauseState == PauseState.XRay)
 			{
 				var moveDir = InputDirection(0,INPUT_CLUSTER.VisorMove),
 					moveDist = InputDistance(INPUT_CLUSTER.VisorMove);
+				if(InputPlayerGetDevice() == INPUT_KBM) // && visor uses mouse for control == true
+				{
+					var _mp = MousePos_Room();
+					moveDir = point_direction(x,y, _mp.X,_mp.Y);
+					moveDist = 1;
+				}
 				
 				if(moveDist > 0)
 				{
@@ -394,7 +413,7 @@ if(!global.roomTrans && !obj_PauseMenu.pause)
 			xrayVisor = instance_create_depth(xpos.X, xpos.Y, xrayDepth, obj_XRayVisor);
 			xrayVisor.kill = 0;
 			xrayVisor.coneDir = 90-(dir*90);
-			global.gamePaused = true;
+			global.pauseState = PauseState.XRay;
 		}
 	}
 	else

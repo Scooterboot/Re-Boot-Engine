@@ -1,6 +1,6 @@
 /// @description Camera movement
-//if((!global.gamePaused || global.roomTrans) && instance_exists(obj_Player))
-if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRayVisor) && !obj_PauseMenu.pause)) && instance_exists(obj_Player))
+
+if((global.pauseState == PauseState.None || global.pauseState == PauseState.RoomTrans || global.pauseState == PauseState.XRay) && instance_exists(obj_Player))
 {
 	var player = obj_Player;
 	var xx = x + (camWidth()/2),
@@ -46,7 +46,7 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRayVisor) &&
 	playerX += fxsp;
 	playerY += fysp;
 	
-	if(global.roomTrans)
+	if(global.pauseState == PauseState.RoomTrans)
 	{
 		playerX = pX;
 		playerY = pY;
@@ -122,6 +122,59 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRayVisor) &&
 	camLimitMax_Top = camLimitDefault_Top;
 	camLimitMax_Bottom = camLimitDefault_Bottom;
 	
+	/*var _sp = abs(player.velX),
+		_spMin = player.maxSpeed[MaxSpeed.Sprint,0],
+		_spMax = player.maxSpeed[MaxSpeed.SpeedBoost,0];
+	_sp = max(_sp - _spMin, 0);
+	_spMax = max(_spMax - _spMin, 1);
+	
+	_sp *= 1.5;
+	var _sp2 = abs(player.velY),
+		_sp2Min = player.jumpSpeed[1,0];
+	_sp2 = max(_sp2 - _sp2Min, 0);
+	
+	_sp = max(_sp, _sp2);
+	
+	var _spNum = clamp(_sp / _spMax, 0, 1);
+	if(player.liquidState == 0 && _spNum > 0)
+	{
+		var _lNumX = lerp(0, 32, min(_spNum,1)),
+			_lNumY = lerp(0, 16, min(_spNum,1));
+		
+		camLimitMax_Left -= _lNumX;
+		camLimitMax_Right += _lNumX;
+		camLimitMax_Top -= _lNumY;
+		camLimitMax_Bottom += _lNumY;
+		camLimSpd += _spNum;
+	}*/
+	var _spX = abs(player.velX),
+		_spXMin = player.maxSpeed[MaxSpeed.Sprint,0],
+		_spXMax = player.maxSpeed[MaxSpeed.SpeedBoost,0];
+	_spX = max(_spX - _spXMin, 0);
+	_spXMax = max(_spXMax - _spXMin, 1);
+	var _spXNum = clamp((_spX / _spXMax)*1.5, 0, 1);
+	
+	if(_spXNum > 0)
+	{
+		var _lNumX = lerp(0, camLimit_ExtraX, _spXNum);
+		camLimitMax_Left -= _lNumX;
+		camLimitMax_Right += _lNumX;
+	}
+	
+	var _spY = abs(player.velY),
+		_spYMin = player.jumpSpeed[1,0],
+		_spYMax = player.maxSpeed[MaxSpeed.SpeedBoost,0];
+	_spY = max(_spY - _spYMin, 0);
+	_spYMax = max(_spYMax - _spYMin, 1);
+	var _spYNum = clamp(_spY / _spYMax, 0, 1);
+	
+	if(_spYNum > 0)
+	{
+		var _lNumY = lerp(0, camLimit_ExtraY, _spYNum);
+		camLimitMax_Top -= _lNumY;
+		camLimitMax_Bottom += _lNumY;
+	}
+	
 	var bossNum = instance_number(obj_NPC_Boss);
 	if(bossNum > 0)
 	{
@@ -137,13 +190,14 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRayVisor) &&
 		}
 	}
 	
-	if(player.state == State.Grapple || player.state == State.Elevator || (player.state == State.Morph && player.SpiderActive()))
+	if(player.GrappleActive() || player.state == State.Elevator || (player.state == State.Morph && player.SpiderActive()))
 	{
 		xDir = 0;
 		yDir = 0;
 		targetX = playerX;
 		targetY = playerY;
-		if(player.state == State.Morph && player.SpiderActive())
+		camLimSpd = 1;
+		if(player.state == State.Morph && player.SpiderActive() && !player.GrappleActive())
 		{
 			camLimSpd = 0.5;
 		}
@@ -262,7 +316,7 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRayVisor) &&
 	#region Collision
 	
 		var camSnap = false;
-		if(global.roomTrans || obj_Player.introAnimState == 0)
+		if(global.pauseState == PauseState.RoomTrans || obj_Player.introAnimState == 0)
 		{
 			camSnap = true;
 		}
@@ -277,7 +331,7 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRayVisor) &&
 			if((xx+fVelX) < _leftEdge)
 			{
 				fVelX = min(_leftEdge - xx, 1 + max((playerX-prevPlayerX) + sign(velX),0));
-				if(global.roomTrans)
+				if(global.pauseState == PauseState.RoomTrans)
 				{
 					fVelX = _leftEdge - xx;
 				}
@@ -285,7 +339,7 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRayVisor) &&
 			if((xx+fVelX) > _rightEdge)
 			{
 				fVelX = max(_rightEdge - xx, -1 + min((playerX-prevPlayerX) + sign(velX),0));
-				if(global.roomTrans)
+				if(global.pauseState == PauseState.RoomTrans)
 				{
 					fVelX = _rightEdge - xx;
 				}
@@ -388,7 +442,7 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRayVisor) &&
 			if((yy+fVelY) < _topEdge)
 			{
 				fVelY = min(_topEdge - yy, 1 + max((playerY-prevPlayerY) + sign(velY),0));
-				if(global.roomTrans)
+				if(global.pauseState == PauseState.RoomTrans)
 				{
 					fVelY = _topEdge - yy;
 				}
@@ -396,7 +450,7 @@ if((!global.gamePaused || global.roomTrans || (instance_exists(obj_XRayVisor) &&
 			if((yy+fVelY) > _bottomEdge)
 			{
 				fVelY = max(_bottomEdge - yy, -1 + min((playerY-prevPlayerY) + sign(velY),0));
-				if(global.roomTrans)
+				if(global.pauseState == PauseState.RoomTrans)
 				{
 					fVelY = _bottomEdge - yy;
 				}
@@ -508,7 +562,7 @@ if(room_height < camHeight())
 
 var shakeX = 0,
 	shakeY = 0;
-if(instance_exists(obj_ScreenShaker) && obj_ScreenShaker.active)// && !global.gamePaused)
+if(instance_exists(obj_ScreenShaker) && obj_ScreenShaker.active)
 {
 	shakeX += obj_ScreenShaker.shakeX;
 	shakeY += obj_ScreenShaker.shakeY;

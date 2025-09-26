@@ -10,7 +10,7 @@ kill = false;
 
 function PauseAI()
 {
-	return (global.gamePaused || frozen > 0 || dmgFlash > 0);
+	return (global.GamePaused() || frozen > 0 || dmgFlash > 0);
 }
 
 grav = 0.125;

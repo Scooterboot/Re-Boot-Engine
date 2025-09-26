@@ -10,7 +10,7 @@ if(stateFrame == State.CrystalFlash && torsoR == sprt_Player_CrystalFlash)
 }
 UpdatePlayerSurface(palSurf);
 
-if(drawAfterImage && !global.gamePaused)
+if(drawAfterImage && !global.GamePaused())
 {
 	var aftImg = new AfterImage(id,afterImgAlphaMult,afterImageNum);
 	ds_list_add(afterImageList, aftImg);
@@ -37,7 +37,7 @@ PreDrawPlayer(x,y,0,1);
 
 if(liquid && !liquidMovement && item[Item.GravitySuit])
 {
-	gravGlowAlpha += 0.01*gravGlowNum*(!global.gamePaused);
+	gravGlowAlpha += 0.01*gravGlowNum*(!global.GamePaused());
 	if(gravGlowAlpha <= 0.75)
 	{
 		gravGlowNum = max(gravGlowNum,1);
@@ -49,10 +49,10 @@ if(liquid && !liquidMovement && item[Item.GravitySuit])
 }
 else
 {
-	gravGlowAlpha = max(gravGlowAlpha - 0.05*(!global.gamePaused),0);
+	gravGlowAlpha = max(gravGlowAlpha - 0.05*(!global.GamePaused()),0);
 	gravGlowNum = 10;
 }
-var hurtflag = (dmgFlash <= 0 && invFrames > 0 && (invFrames&1) && !global.roomTrans);
+var hurtflag = (dmgFlash <= 0 && invFrames > 0 && (invFrames&1) && !global.pauseState != PauseState.RoomTrans);
 if(gravGlowAlpha > 0 && !hurtflag)
 {
 	var col = c_fuchsia,
@@ -90,7 +90,7 @@ if((state == State.Spark || state == State.BallSpark) && shineEnd > 0)
 DrawPlayer(x,y,rotation,1);
 PostDrawPlayer(x,y,0,1);
 
-if(!global.gamePaused)
+if(!global.GamePaused())
 {
 	chargeReleaseFlash = max(chargeReleaseFlash - 1, 0);
 }

@@ -108,7 +108,7 @@ for(var i = 0; i < 10; i++)
 
 function PauseAI()
 {
-	return (global.gamePaused || !scr_WithinCamRange() || frozen > 0 || dmgFlash > 0);
+	return (global.GamePaused() || !scr_WithinCamRange() || frozen > 0 || dmgFlash > 0);
 }
 
 /*function roundedAngle(x1,y1,x2,y2)

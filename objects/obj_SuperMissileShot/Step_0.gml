@@ -1,7 +1,7 @@
 /// @description Code
 event_inherited();
 
-if(!global.gamePaused)
+if(!global.GamePaused())
 {
     //velocity = min(velocity * 1.1, 15.75);
 	velX = min(abs(velX) * 1.1, abs(lengthdir_x(15.75,direction)))*sign(velX);

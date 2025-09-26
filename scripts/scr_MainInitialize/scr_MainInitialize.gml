@@ -1,7 +1,19 @@
 function scr_MainInitialize()
 {
-	global.roomTrans = false;	//variable that checks whether the player is transitioning from room to room
-	global.gamePaused = false;	//variable that checks if the game is paused
+	//global.roomTrans = false;	//variable that checks whether the player is transitioning from room to room
+	//global.gamePaused = false;	//variable that checks if the game is paused
+	enum PauseState
+	{
+		None,
+		PauseMenu,
+		MessageBox,
+		RoomTrans,
+		DeathAnim,
+		ItemMenu,
+		XRay
+	}
+	global.pauseState = PauseState.None;
+	global.GamePaused = function() { return global.pauseState != PauseState.None; }
 
 	global.currentPlayFile = 0; //file that is selected and will be saved over during gameplay
 

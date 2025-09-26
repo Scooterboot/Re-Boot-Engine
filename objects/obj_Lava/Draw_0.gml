@@ -27,7 +27,7 @@ draw_set_alpha(1);
 
 var fAlpha = alpha*image_alpha;
 
-if(!global.gamePaused)
+if(!global.GamePaused())
 {
 	imgIndex = scr_wrap(imgIndex + 0.2, 0, 8);
 }

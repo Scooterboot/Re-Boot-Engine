@@ -35,11 +35,11 @@ if(global.musicVolume > 0)
 		{
 			global.musCurrent.Gain(0,225);
 		}
-		if(!global.roomTrans)
+		if(global.pauseState != PauseState.RoomTrans)
 		{
 			if(global.musNext != noone && global.musNext.song != noone)
 			{
-				global.musNext.Play();
+				global.musNext.PlaySong();
 				global.musNext.Gain(1,0);
 			}
 			global.musPrev = global.musCurrent;
@@ -50,7 +50,7 @@ if(global.musicVolume > 0)
 	{
 		if(!global.musCurrent.IsPlaying())
 		{
-			global.musCurrent.Play();
+			global.musCurrent.PlaySong();
 		}
 		else
 		{
@@ -78,11 +78,11 @@ if(global.musicVolume > 0)
 			{
 				audio_stop_sound(fanfare);
 			}
-			global.musCurrent.Pause();
+			global.musCurrent.PauseSong();
 		}
 		else
 		{
-			global.musCurrent.Resume();
+			global.musCurrent.ResumeSong();
 			playIntroFanfare = false;
 		}
 			
@@ -107,11 +107,11 @@ if(global.musicVolume > 0)
 			{
 				audio_stop_sound(fanfare);
 			}
-			global.musCurrent.Pause();
+			global.musCurrent.PauseSong();
 		}
 		else
 		{
-			global.musCurrent.Resume();
+			global.musCurrent.ResumeSong();
 			playItemFanfare = false;
 		}
 			
@@ -126,10 +126,10 @@ if(global.musicVolume > 0)
 }
 else
 {
-	global.musPrev.Stop();
-	global.musCurrent.Stop();
-	global.musNext.Stop();
-	global.rmMusic.Stop();
+	global.musPrev.StopSong();
+	global.musCurrent.StopSong();
+	global.musNext.StopSong();
+	global.rmMusic.StopSong();
 		
 	fanfarePlayed = false;
 	playIntroFanfare = false;
@@ -145,7 +145,7 @@ if(room == rm_MainMenu || room == rm_GameOver)
 {
 	global.SilenceAudio();
 }
-else if(global.gamePaused)
+else if(global.GamePaused())
 {
 	for(var i = 0; i < array_length(sndPauseArray); i++)
 	{

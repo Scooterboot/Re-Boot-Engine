@@ -17,7 +17,7 @@ image_index = rFrame+frame;
 var dist = 0;
 if(projLength > 0)
 {
-	if(!global.gamePaused)
+	if(!global.GamePaused())
 	{
 	    xstart += speed_x;
 	    ystart += speed_y;
@@ -49,7 +49,7 @@ if(!isSpazer && !isPlasma)
 		{
 			i = -1;
 		}
-		rotation += rotspeed*dir*i*(!global.gamePaused);
+		rotation += rotspeed*dir*i*(!global.GamePaused());
 		angle = -rotation;
 	}
     
@@ -92,7 +92,7 @@ if(projLength > 0)
 
 draw_sprite_ext(sprite_index,image_index,scr_round(x),scr_round(y),xscale,yscale,angle,c_white,image_alpha);
 
-if(!global.gamePaused)
+if(!global.GamePaused())
 {
 	for(var i = 10; i > 0; i--)
 	{

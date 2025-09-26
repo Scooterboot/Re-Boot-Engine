@@ -18,7 +18,7 @@ if(!falseDestroy)
 	
     var prt = instance_create_layer(x,y,layer,obj_HatchOpen);
 	prt.sprite_index = sprite_index;
-    prt.image_index = 0;
+    prt.image_index = image_index;
     prt.direction = direction;
     prt.image_angle = image_angle;
     prt.image_xscale = image_xscale;

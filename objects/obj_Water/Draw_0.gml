@@ -9,7 +9,7 @@ var camX = camera_get_view_x(view_camera[0]),
 var pos = SurfPos();
 var fAlpha = alpha*image_alpha;
 
-if(!global.gamePaused)
+if(!global.GamePaused())
 {
 	imgIndex = scr_wrap(imgIndex + 0.075, 0, 6);
 }

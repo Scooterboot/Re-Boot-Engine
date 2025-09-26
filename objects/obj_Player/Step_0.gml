@@ -1,11 +1,11 @@
 /// @description Physics, States, etc.
 
-if(HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans && !obj_PauseMenu.pause && !pauseSelect)
+if(HUDVisorSelected(HUDVisor.XRay) && global.pauseState == PauseState.XRay)
 {
 	aimAngle = 0;
 }
 
-if(!global.gamePaused)
+if(!global.GamePaused())
 {
 	#region debug keys
 	if(instance_exists(obj_Display))
@@ -362,9 +362,10 @@ if(!global.gamePaused)
 				speedBoost = false;
 			}
 		}
+		var oldY = y;
 		ChangeState(State.Morph,State.Morph,mask_Player_Morph,grounded);
-		groundedMorph = grounded;
 		morphFrame = 8;
+		morphYDiff = y-oldY;
 		
 		if(GrappleActive() && (item[Item.MagniBall] || item[Item.SpiderBall]) && unmorphing == 0 && global.spiderBallStyle == 0)
 		{
@@ -406,9 +407,10 @@ if(!global.gamePaused)
 				if(item[Item.MorphBall] && morphFrame <= 0 && state == State.Jump && !grounded && aimAngle == -2 && move == 0 && cPlayerDown && rPlayerDown && !cPlayerUp && !cAimUp && !cAimDown)
 				{
 					audio_play_sound(snd_Morph,0,false);
+					var oldY = y;
 					ChangeState(State.Morph,State.Morph,mask_Player_Morph,false);
-					groundedMorph = false;
 					morphFrame = 8;
+					morphYDiff = y-oldY;
 				}
 			}
 			
@@ -1346,8 +1348,13 @@ if(!global.gamePaused)
 							velX = baseVel*m;
 						}
 						
-						ChangeState(State.Somersault,State.Somersault,mask_Player_Somersault,false);
 						wallJumped = true;
+						if(state == State.Grip || state == State.Grapple)
+						{
+							wallJumped = false;
+						}
+						ChangeState(State.Somersault,State.Somersault,mask_Player_Somersault,false);
+						//wallJumped = true;
 						
 						wjFrame = 8;
 						wjAnimDelay = 10;
@@ -1380,10 +1387,10 @@ if(!global.gamePaused)
 					{
 						dirFrame = dir;
 					}
-					else
+					/*else
 					{
 						wallJumped = false;
-					}
+					}*/
 					
 					ledgeFall = false;
 					ledgeFall2 = false;
@@ -2923,8 +2930,9 @@ if(!global.gamePaused)
 		if(item[Item.MorphBall] && crouchFrame <= 0 && ((cPlayerDown && (rPlayerDown || !CanChangeState(mask_Player_Stand)) && move2 == 0) || (cMorph && rMorph)) && stateFrame != State.Morph && morphFrame <= 0)
 		{
 			audio_play_sound(snd_Morph,0,false);
+			var oldY = y;
 			ChangeState(State.Morph,State.Morph,mask_Player_Morph,true);
-			groundedMorph = true;
+			morphYDiff = y-oldY;
 			morphFrame = 8;
 		}
 		else if(!grounded && CanChangeState(mask_Player_Jump))
@@ -2999,12 +3007,14 @@ if(!global.gamePaused)
 			if(grounded)
 			{
 				ChangeState(state,stateFrame,mask_Player_Crouch,false);
-				groundedMorph = true;
 			}
 			else
 			{
 				ChangeState(state,stateFrame,mask_Player_Somersault,false);
-				groundedMorph = false;
+			}
+			if(morphFrame >= 8)
+			{
+				morphYDiff = y-oldY;
 			}
 			
 			//aimUpDelay = 10;
@@ -3460,9 +3470,10 @@ if(!global.gamePaused)
 					if(climbIndex >= 3 && climbTarget == 1)
 					{
 						audio_play_sound(snd_Morph,0,false);
+						var oldY = y;
 						ChangeState(state,State.Morph,mask_Player_Morph,true);
 						morphFrame = 8;
-						groundedMorph = true;
+						morphYDiff = y-oldY;
 					}
 					else if(climbIndex > 17)
 					{
@@ -3481,7 +3492,6 @@ if(!global.gamePaused)
 				else if(climbIndex > 11 && !entity_place_collide(0,0))
 				{
 					ChangeState(State.Morph,State.Morph,mask_Player_Morph,true);
-					groundedMorph = true;
 				}
 			}
 		}
@@ -4218,11 +4228,11 @@ if(!global.gamePaused)
 	{
 		if(!instance_exists(obj_DeathAnim))
 		{
-			var d = instance_create_depth(x,y,-1,obj_DeathAnim);
+			var d = instance_create_depth(x,y,-6,obj_DeathAnim);
 			d.posX = x-camera_get_view_x(view_camera[0]);
 			d.posY = y-camera_get_view_y(view_camera[0]);
 			d.dir = dir;
-			global.gamePaused = true;
+			global.pauseState = PauseState.DeathAnim;
 		}
 	}
 #endregion

@@ -210,7 +210,7 @@ function CreateSelectedFileMenu(_yoffset, _fileIndex)
 	var btnW = 72;
 	
 	var str = fileOptionText[0];
-	var strH = string_height(str);
+	var strH = string_height(str)+1;
 	var startGameBtn = selectedFilePanel.CreateButton(fBtnW/2 - btnW/2, fBtnH/2 - strH - 2, btnW, strH, str);
 	startGameBtn.OnClick = function()
 	{
@@ -220,7 +220,7 @@ function CreateSelectedFileMenu(_yoffset, _fileIndex)
 	startGameBtn.DrawButton = DrawGenericButton;
 	
 	str = fileOptionText[1];
-	strH = string_height(str);
+	strH = string_height(str)+1;
 	var cancelBtn = selectedFilePanel.CreateButton(fBtnW/2 - btnW/2, fBtnH/2 + 2, btnW, strH, str);
 	cancelBtn.OnClick = function()
 	{
@@ -242,7 +242,7 @@ function CreateSelectedFileMenu(_yoffset, _fileIndex)
 		cancelBtn.x = scr_floor(fBtnW/2 - 44);
 		
 		str = fileOptionText[2];
-		strH = string_height(str);
+		strH = string_height(str)+1;
 		var copyBtn = selectedFilePanel.CreateButton(fBtnW/2 + 34, fBtnH/2 - strH - 2, btnW, strH, str);
 		copyBtn.OnClick = function()
 		{
@@ -253,7 +253,7 @@ function CreateSelectedFileMenu(_yoffset, _fileIndex)
 		copyBtn.DrawButton = DrawGenericButton;
 		
 		str = fileOptionText[3];
-		strH = string_height(str);
+		strH = string_height(str)+1;
 		var deleteBtn = selectedFilePanel.CreateButton(fBtnW/2 + 34, fBtnH/2 + 2, btnW, strH, str);
 		deleteBtn.OnClick = function()
 		{
@@ -378,7 +378,7 @@ function CreateConfirmCopyPanel(srcFile, destFile)
 	
 	draw_set_font(fnt_Menu2);
 	var str = confirmCopyText[0] + "["+copyFileText[srcFile]+"]" + confirmCopyText[1] + "["+copyFileText[destFile]+"]" + "\n\n" + confirmCopyText[2];
-	var pnlW = 248;//string_width(str) + 4,
+	var pnlW = 248,//string_width(str) + 4,
 		pnlH = string_height(str) + 24;
 	confirmCopyPanel = CreatePanel(ww/2 - pnlW/2, hh/2 - pnlH/2, pnlW, pnlH);
 	confirmCopyPanel.text = str;
@@ -387,7 +387,7 @@ function CreateConfirmCopyPanel(srcFile, destFile)
 	
 	draw_set_font(fnt_GUI);
 	str = confirmCopyText[3];
-	var yesBtn = confirmCopyPanel.CreateButton(pnlW/2 - 16 - string_width(str), pnlH - string_height(str) - 4, string_width(str) + 4, string_height(str), str);
+	var yesBtn = confirmCopyPanel.CreateButton(pnlW/2 - 16 - string_width(str), pnlH - string_height(str) - 4, string_width(str) + 4, string_height(str)+1, str);
 	yesBtn.DrawButton = DrawMainMenuButton;
 	yesBtn.srcFile = srcFile;
 	yesBtn.destFile = destFile;
@@ -416,7 +416,7 @@ function CreateConfirmCopyPanel(srcFile, destFile)
 	}
 	
 	str = confirmCopyText[4];
-	var noBtn = confirmCopyPanel.CreateButton(pnlW/2 + 16, pnlH - string_height(str) - 4, string_width(str) + 4, string_height(str), str);
+	var noBtn = confirmCopyPanel.CreateButton(pnlW/2 + 16, pnlH - string_height(str) - 4, string_width(str) + 4, string_height(str)+1, str);
 	noBtn.DrawButton = DrawMainMenuButton;
 	noBtn.OnClick = function()
 	{
@@ -450,7 +450,7 @@ function CreateConfirmDeletePanel()
 	
 	draw_set_font(fnt_Menu2);
 	var str = confirmDeleteText[0] + "["+fileMenuText[selectedFile]+"]" + "\n\n" + confirmDeleteText[1];
-	var pnlW = 248;//string_width(str) + 4,
+	var pnlW = 248,//string_width(str) + 4,
 		pnlH = string_height(str) + 24;
 	confirmDeletePanel = CreatePanel(ww/2 - pnlW/2, hh/2 - pnlH/2, pnlW, pnlH);
 	confirmDeletePanel.text = str;
@@ -458,7 +458,7 @@ function CreateConfirmDeletePanel()
 	confirmDeletePanel.DrawPanel = DrawConfirmPanel;
 	
 	str = confirmDeleteText[2];
-	var yesBtn = confirmDeletePanel.CreateButton(pnlW/2 - 16 - string_width(str), pnlH - string_height(str) - 4, string_width(str) + 4, string_height(str), str);
+	var yesBtn = confirmDeletePanel.CreateButton(pnlW/2 - 16 - string_width(str), pnlH - string_height(str) - 4, string_width(str) + 4, string_height(str)+1, str);
 	yesBtn.DrawButton = DrawMainMenuButton;
 	yesBtn.OnClick = function()
 	{
@@ -472,7 +472,7 @@ function CreateConfirmDeletePanel()
 	}
 	
 	str = confirmDeleteText[3];
-	var noBtn = confirmDeletePanel.CreateButton(pnlW/2 + 16, pnlH - string_height(str) - 4, string_width(str) + 4, string_height(str), str);
+	var noBtn = confirmDeletePanel.CreateButton(pnlW/2 + 16, pnlH - string_height(str) - 4, string_width(str) + 4, string_height(str)+1, str);
 	noBtn.DrawButton = DrawMainMenuButton;
 	noBtn.OnClick = function()
 	{
@@ -495,7 +495,7 @@ function CreateConfirmDeletePanel()
 function DrawGenericButton(_x, _y)
 {
 	//with(other)
-	{
+	/*{
 		var col = c_black,
 			alph = 0.5;
 		if(panel.selectedButton == id)
@@ -517,14 +517,37 @@ function DrawGenericButton(_x, _y)
 		draw_set_color(c_white);
 		draw_text(xx,yy,text);
 		draw_set_alpha(1);
+	}*/
+	var _sprt = sprt_UI_GenericButton,
+		_ind = 2,
+		_alph = 0.75,
+		_bAlph = 0.5;
+	if(panel.selectedButton == id)
+	{
+		_ind = 0;
+		_alph = 1;
+		_bAlph = 1;
 	}
+	var alph2 = alpha*panel.alpha;
+	draw_sprite_stretched_ext(_sprt,_ind+1, _x,_y, width,height, c_white,alph2*_bAlph);
+	draw_sprite_stretched_ext(_sprt,_ind, _x,_y, width,height, c_white,alph2*_alph);
+	
+	var xx = _x+width/2, yy = _y+height/2+1;
+	draw_set_alpha(alph2);
+	draw_set_font(fnt_GUI);
+	draw_set_align(fa_center,fa_middle);
+	draw_set_color(c_black);
+	draw_text(xx+1,yy+1,text);
+	draw_set_color(c_white);
+	draw_text(xx,yy,text);
+	draw_set_alpha(1);
 }
 #endregion
 #region DrawMainMenuButton
 function DrawMainMenuButton(_x, _y)
 {
 	//with(other)
-	{
+	/*{
 		var col = c_black,
 			alph = 0.5,
 			ol_col = c_black,
@@ -571,7 +594,8 @@ function DrawMainMenuButton(_x, _y)
 		draw_set_color(c_white);
 		draw_text(xx,yy,text);
 		draw_set_alpha(1);
-	}
+	}*/
+	DrawGenericButton(_x, _y);
 }
 #endregion
 #region DrawSaveFileButton

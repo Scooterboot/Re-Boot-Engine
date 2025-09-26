@@ -680,7 +680,6 @@ idleNum_Low = [12,4,4,4,10,4,4,4];
 idleSequence_Low = [0,2,4,4,5,3,3,1];
 
 wjFrame = 0;
-//wjSequence = array(3,3,3,2,2,1,1,1,0);
 wjSequence = [3,3,3,2,2,1,1,0,0];
 wjAnimDelay = 0;
 wjGripAnim = false;
@@ -690,8 +689,8 @@ crouchFrame = 0;
 morphFrame = 0;
 unmorphing = 0;
 morphYOffset = [5,3,2,1,0];
+morphYDiff = 0;
 morphNum = 0;
-groundedMorph = false;
 
 aimFrame = 0;
 
@@ -840,7 +839,6 @@ turnArmPosX[4,6] = 1;
 turnArmPosY[4] = -29;
 
 rotation = 0;
-rotReAlignStep = 3;
 
 dBoostFrame = 0;
 dBoostFrameCounter = 0;
@@ -1010,7 +1008,6 @@ enum PlayerUIState
 }
 uiState = PlayerUIState.None;
 
-pauseSelect = false;
 hudSelectWheelSize = 48;
 hudSelectWheelMin = 32;
 hudPauseAnim = 0;
@@ -1173,7 +1170,7 @@ function AfterImage(_player, _alpha, _num) constructor
 	
 	function Update()
 	{
-		if(!global.gamePaused)
+		if(!global.GamePaused())
 		{
 			alpha = max(alpha - fadeRate, 0);
 		}
@@ -3243,7 +3240,7 @@ function StrikePlayer(damage,knockTime,knockSpeedX,knockSpeedY,iframes,ignoreImm
 	//var dmg = scr_round(damage * (1-(0.5*item[0])) * (1-(0.5*item[1]))),
 	var dmg = scr_round(damage * damageReduct);
     
-	if(!global.gamePaused && !godmode && invFrames <= 0 && (!immune || ignoreImmunity))
+	if(!global.GamePaused() && !godmode && invFrames <= 0 && (!immune || ignoreImmunity))
 	{
 		energy = max(energy - dmg,0);
 		if(energy <= 0)
@@ -3600,13 +3597,13 @@ function SetArmPosClimb()
 }
 #endregion
 #region SetArmPosSpark
-function SetArmPosSpark(rotation)
+function SetArmPosSpark(_rotation)
 {
 	armOffsetX = -9 * dsin(22.5 * max(bodyFrame-1,0));
 	armOffsetY = 3;
 	
-	armOffsetX = lengthdir_x(armOffsetX,rotation);
-	armOffsetY = lengthdir_y(armOffsetY,rotation);
+	armOffsetX = lengthdir_x(armOffsetX,_rotation);
+	armOffsetY = lengthdir_y(armOffsetY,_rotation);
 }
 #endregion
 #region SetArmPosSomersault
@@ -3884,7 +3881,7 @@ function PaletteSurface()
 		if(fastWJFlash > 0)
 		{
 			DrawPalSprite(palSprite2,PlayerPal2.White,fastWJFlash);
-			if(!global.gamePaused)
+			if(!global.GamePaused())
 			{
 				fastWJFlash = max(fastWJFlash-0.2,0);
 			}
@@ -3946,7 +3943,7 @@ function PaletteSurface()
 		{
 			DrawPalSprite(palSprite2,PlayerPal2.White,0.8);
 		}
-		else if(invFrames > 0 && (invFrames&1) && !global.roomTrans)
+		else if(invFrames > 0 && (invFrames&1) && global.pauseState != PauseState.RoomTrans)
 		{
 			DrawPalSprite(palSprite2,PlayerPal2.Black,1);
 		}
@@ -3981,11 +3978,11 @@ function PaletteSurface()
 			{
 				glowSpeed = 0.375;
 			}
-			if(global.roomTrans)
+			if(global.pauseState == PauseState.RoomTrans)
 			{
 				glowSpeed *= 0.5;
 			}
-			else if(global.gamePaused)
+			else if(global.GamePaused())
 			{
 				glowSpeed = 0;
 			}
@@ -3997,7 +3994,7 @@ function PaletteSurface()
 			ballGlowIndex = 0;
 			ballGlowSpiderIndex = 0;
 		}
-		if(!global.gamePaused)
+		if(!global.GamePaused())
 		{
 			if(spiderBall)
 			{
@@ -4119,7 +4116,7 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 						tColor = merge_colour(mbTrailCol2[i],mbTrailCol1[i],tRatio*2-1);
 					}
 					
-					if(invFrames > 0 && (invFrames&1) && !global.roomTrans)
+					if(invFrames > 0 && (invFrames&1) && global.pauseState != PauseState.RoomTrans)
 					{
 						tColor = c_black;
 					}
@@ -4177,7 +4174,7 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 	
 	if(cBubbleScale > 0)
 	{
-		if(!global.gamePaused)
+		if(!global.GamePaused())
 		{
 			cBubblePal = scr_wrap(cBubblePal-0.1,0,7);
 		}
@@ -4296,18 +4293,18 @@ function UpdatePlayerSurface(_palSurface)
 }
 #endregion
 #region DrawPlayer
-function DrawPlayer(posX, posY, rotation, alpha)
+function DrawPlayer(posX, posY, _rotation, alpha)
 {
 	if(surface_exists(playerSurf2))
 	{
-		var surfCos = dcos(rotation),
-			surfSin = dsin(rotation),
+		var surfCos = dcos(_rotation),
+			surfSin = dsin(_rotation),
 			surfX = (surfW/2),
 			surfY = (surfH/2);
 		var surfFX = posX - surfCos*surfX - surfSin*surfY,
 			surfFY = posY - surfCos*surfY + surfSin*surfX;
 		
-		draw_surface_ext(playerSurf2,surfFX+sprtOffsetX,surfFY+sprtOffsetY,1/rotScale,1/rotScale,rotation,c_white,alpha);
+		draw_surface_ext(playerSurf2,surfFX+sprtOffsetX,surfFY+sprtOffsetY,1/rotScale,1/rotScale,_rotation,c_white,alpha);
 	}
 }
 #endregion
@@ -4395,7 +4392,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 				minGlow = 0.35;
 				maxGlow = 1;
 			}
-			spiderGlowAlpha = clamp(spiderGlowAlpha + 0.02 * spiderGlowNum * (!global.gamePaused), 0, maxGlow);
+			spiderGlowAlpha = clamp(spiderGlowAlpha + 0.02 * spiderGlowNum * (!global.GamePaused()), 0, maxGlow);
 			if(spiderGlowAlpha <= minGlow)
 			{
 				spiderGlowNum = max(spiderGlowNum,1);
@@ -4416,7 +4413,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		}
 		else
 		{
-			spiderGlowAlpha = max(spiderGlowAlpha - (0.1*(!global.gamePaused)), 0);
+			spiderGlowAlpha = max(spiderGlowAlpha - (0.1*(!global.GamePaused())), 0);
 			spiderGlowNum = 2;
 		}
 		if(spiderGlowAlpha > 0)
@@ -4466,7 +4463,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 			gpu_set_blendmode(bm_add);
 			draw_sprite_ext(sprt_Player_ShineSparkFX,shineFrame,xx+offset+sprtOffsetX,yy+sprtOffsetY,dodgeDir,1,0,c_lime,alph*0.75);
 			gpu_set_blendmode(bm_normal);
-			shineFrameCounter += 1*(!global.gamePaused);
+			shineFrameCounter += 1*(!global.GamePaused());
 			if(shineFrameCounter >= 2)
 			{
 				shineFrame++;
@@ -4497,7 +4494,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 			draw_sprite_ext(sprt_Player_ShineSparkFX,sFrame,shineX+sprtOffsetX,shineY+sprtOffsetY,dir*0.75,0.75,shineRot,c_white,alph*0.9);
 			gpu_set_blendmode(bm_normal);
 			
-			shineFrameCounter += 1*(!global.gamePaused);
+			shineFrameCounter += 1*(!global.GamePaused());
 			if(shineFrameCounter >= 2)
 			{
 				shineFrame++;
@@ -4511,7 +4508,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 	}
 	else if(state == State.Spark && shineStart <= 0 && shineEnd <= 0)
 	{
-		shineFrameCounter += 1*(!global.gamePaused);
+		shineFrameCounter += 1*(!global.GamePaused());
 		if(shineFrameCounter >= 2+(shineFrame == 0))
 		{
 			shineFrame = scr_wrap(shineFrame+1,0,4);
@@ -4543,7 +4540,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 
 	if(IsScrewAttacking() && frame[Frame.Somersault] >= 2 && !canWallJump && wjFrame <= 0)
 	{
-		screwFrameCounter += 1*(!global.gamePaused);
+		screwFrameCounter += 1*(!global.GamePaused());
 		if(screwFrameCounter >= 2)
 		{
 			screwFrame = scr_wrap(screwFrame+1,0,4);
@@ -4646,7 +4643,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		particleFrameMax = floor((maxCharge - statCharge) / 10);
 		if(statCharge >= 10)
 		{
-			if(!global.gamePaused)
+			if(!global.GamePaused())
 			{
 				chargeFrameCounter += 1;
 				if(chargeFrameCounter == 1 || chargeFrameCounter == 3)
@@ -4688,7 +4685,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 				isSpazer = (beamChargeAnim == sprt_SpazerChargeAnim),
 				isPlasma = (beamChargeAnim == sprt_PlasmaBeamChargeAnim);
 			
-			if(particleFrame >= particleFrameMax && !global.roomTrans && !global.gamePaused)
+			if(particleFrame >= particleFrameMax && !global.GamePaused())
 			{
 				var color1 = c_red, color2 = c_yellow;
 				var partType = 0;

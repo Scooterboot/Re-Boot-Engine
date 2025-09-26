@@ -1,6 +1,5 @@
 /// @description Initialize
-global.gamePaused = true;
-global.roomTrans = true;
+global.pauseState = PauseState.RoomTrans;
 alpha = 0;
 setFade = 1;
 fadeCounter = 0;

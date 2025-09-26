@@ -1,6 +1,6 @@
 /// @description Check for player & save
 
-if(global.gamePaused)
+if(global.GamePaused())
 {
 	exit;
 }

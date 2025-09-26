@@ -4,9 +4,11 @@ Set_Beams();
 
 var sndFlag = false;
 
-if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans) || (global.roomTrans && stateFrame != State.Grapple)) && !obj_PauseMenu.pause && !pauseSelect))
+if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && global.pauseState == PauseState.XRay) || global.pauseState == PauseState.RoomTrans)
 {
 	#region Update Anims
+	
+	var roomTrans = (global.pauseState == PauseState.RoomTrans);
 	
 	drawMissileArm = false;
 	shootFrame = (gunReady || justShot > 0 || instance_exists(grapple) || (cFire && (rFire || CanCharge())));
@@ -25,29 +27,6 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 	gripOverlayFrame = 0;
 	
 	rotation = 0;
-	/*if(rotation != 0 && rotReAlignStep > 0)
-	{
-		if(stateFrame == State.Somersault)
-		{
-			var step = (360 - scr_wrap(rotation, 0, 360)) / rotReAlignStep;
-			if(fDir == 1)
-			{
-				step = -scr_wrap(rotation, 0, 360) / rotReAlignStep;
-			}
-			rotation = scr_wrap(rotation + step, 0, 360);
-		}
-		else
-		{
-			var step = angle_difference(0,rotation) / rotReAlignStep;
-			rotation = scr_wrap(rotation + step, 0, 360);
-		}
-		
-		rotReAlignStep = max(rotReAlignStep-1,0);
-	}
-	else if(rotation != 0)
-	{
-		rotation = 0;
-	}*/
 	
 	var liquidMovement = (liquidState > 0);
 	
@@ -163,7 +142,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 			fDir = 1;*/
 		// ---
 	}
-	else if(abs(dirFrameF) < 4 && stateFrame != State.Somersault && stateFrame != State.Morph && stateFrame != State.Grip && (stateFrame != State.Spark || shineRestart) && stateFrame != State.Dodge)
+	else if(abs(dirFrameF) < 4 && stateFrame != State.Somersault && stateFrame != State.Morph && stateFrame != State.Grip && (stateFrame != State.Spark || shineRestart) && stateFrame != State.Grapple && stateFrame != State.Dodge)
 	{
 		fDir = 1;
 		var shootflag = (shootFrame || cMoonwalk || aimFrame != 0 || recoilCounter > 0);
@@ -446,7 +425,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 				{
 					numCounter = 1.875 * (1+liquidMovement);
 				}
-				if(global.roomTrans)
+				if(roomTrans)
 				{
 					numCounter = 5;
 				}
@@ -454,7 +433,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 				{
 					if(frame[Frame.Walk] == 6 || frame[Frame.Walk] == 12)
 					{
-						if(!audio_is_playing(snd_SpeedBooster) && !audio_is_playing(snd_SpeedBooster_Loop) && !global.roomTrans)
+						if(!audio_is_playing(snd_SpeedBooster) && !audio_is_playing(snd_SpeedBooster_Loop) && !roomTrans)
 						{
 							audio_play_sound(snd_Step,0,false);
 						}
@@ -607,7 +586,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 					}
 				}
 				
-				if(!global.roomTrans)
+				if(!roomTrans)
 				{
 					var num = clamp(4 * ((abs(velX)-maxSpeed[MaxSpeed.Run,liquidState]) / (maxSpeed[MaxSpeed.SpeedBoost,liquidState]-maxSpeed[MaxSpeed.Run,liquidState])), speedCounter, 4);
 					var num2 = runAnimCounterMax[0];
@@ -1019,7 +998,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 				}
 				xNum = xNum > 0 ? max(xNum,1) : 0;
 				
-				if(global.roomTrans)
+				if(roomTrans)
 				{
 					morphNum = 1.5;
 				}
@@ -1059,13 +1038,15 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 				}
 				torsoL = torsoR;
 				
-				if(groundedMorph)
+				if(unmorphing > 0)
 				{
-					sprtOffsetY = -morphYOffset[yOffFrame];
-					if(unmorphing > 0)
-					{
-						sprtOffsetY += 8;
-					}
+					var _yo = 8-morphYOffset[yOffFrame];
+					sprtOffsetY = clamp(-morphYDiff, -_yo, _yo);
+				}
+				else if(scr_round(morphFrame) >= 4)
+				{
+					var _yo = morphYOffset[yOffFrame];
+					sprtOffsetY = clamp(-morphYDiff, -_yo, _yo);
 				}
 				
 				break;
@@ -1126,7 +1107,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 					}
 					
 					legs = sprt_Player_JumpAimLeg;
-					if(!global.roomTrans)
+					if(!roomTrans)
 					{
 						if(velY <= 0)
 						{
@@ -1178,7 +1159,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 						
 						if(frameCounter[Frame.Jump] < 30)
 						{
-							if(!global.roomTrans)
+							if(!roomTrans)
 							{
 								frame[Frame.Jump] = min(frame[Frame.Jump] + max(0.5/max(frame[Frame.Jump],1),0.125), 4);
 								if(frame[Frame.Jump] >= 4)
@@ -1191,7 +1172,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 						}
 						else
 						{
-							if(!global.roomTrans)
+							if(!roomTrans)
 							{
 								frame[Frame.Jump] = clamp(frame[Frame.Jump] + 0.25,4,8);
 							}
@@ -1201,7 +1182,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 					}
 					else
 					{
-						if(!global.roomTrans)
+						if(!roomTrans)
 						{
 							if(velY <= 0 || frame[Frame.Jump] < 4)
 							{
@@ -1304,7 +1285,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 							num = 1+(frame[Frame.Somersault] == 0);
 						}
 						num += liquidMovement;
-						if(global.roomTrans)
+						if(roomTrans)
 						{
 							num = 4;
 						}
@@ -1605,7 +1586,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 						else if(shineEnd <= 0)
 						{
 							frameCounter[Frame.SparkV] += 1;
-							if(!global.roomTrans || frameCounter[Frame.SparkV] > 4)
+							if(!roomTrans || frameCounter[Frame.SparkV] > 4)
 							{
 								frame[Frame.SparkV] = scr_wrap(frame[Frame.SparkV]+1,1,17);
 								frameCounter[Frame.SparkV] = 0;
@@ -1644,7 +1625,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 							else if(shineEnd <= 0)
 							{
 								frameCounter[Frame.SparkV] += 1;
-								if(!global.roomTrans || frameCounter[Frame.SparkV] > 4)
+								if(!roomTrans || frameCounter[Frame.SparkV] > 4)
 								{
 									frame[Frame.SparkV] = scr_wrap(frame[Frame.SparkV]+1,1,17);
 									frameCounter[Frame.SparkV] = 0;
@@ -1654,7 +1635,6 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 							torsoL = sprt_Player_SparkVLeft;
 							bodyFrame = frame[Frame.SparkV];
 							rotation = shineDownRot;
-							rotReAlignStep = 4;
 							sprtOffsetY = 8;
 							
 							SetArmPosSpark(shineDownRot);
@@ -1784,7 +1764,6 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 					
 					legs = sprt_Player_GrappleLeg;
 	                rotation = scr_round(_grapAngle/2.8125)*2.8125;
-					rotReAlignStep = 4;
 
 	                ArmPos(lengthdir_x(31, rotation + 90),lengthdir_y(31, rotation + 90));
 	                if(grapDisVel <= -1 && grapWallBounceFrame <= 0)
@@ -1966,7 +1945,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 						}
 					
 						legs = sprt_Player_JumpAimLeg;
-						if(!global.roomTrans)
+						if(!roomTrans)
 						{
 							if(velY <= 0)
 							{
@@ -2012,7 +1991,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 						
 						if(frameCounter[Frame.Jump] < 30)
 						{
-							if(!global.roomTrans)
+							if(!roomTrans)
 							{
 								frame[Frame.Jump] = min(frame[Frame.Jump] + max(0.5/max(frame[Frame.Jump],1),0.125), 4);
 								if(frame[Frame.Jump] >= 4)
@@ -2025,7 +2004,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 						}
 						else
 						{
-							if(!global.roomTrans)
+							if(!roomTrans)
 							{
 								frame[Frame.Jump] = clamp(frame[Frame.Jump] + 0.25,4,8);
 							}
@@ -2238,12 +2217,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 		}
 	}
 	
-	if(rotation == 0)
-	{
-		rotReAlignStep = 4;
-	}
-	
-	if(!global.roomTrans)
+	if(!roomTrans)
 	{
 		var animDiv = (1+liquidMovement);
 		var animSpeed = 1/animDiv;
@@ -2490,7 +2464,7 @@ if(!global.gamePaused || (((HUDVisorSelected(HUDVisor.XRay) && !global.roomTrans
 	#endregion
 	
 	
-	if(!global.roomTrans)
+	if(global.pauseState == PauseState.None)
 	{
 		var canShoot = (!startClimb && !moonFallState && !isPushing && state != State.Somersault && state != State.Spark && state != State.BallSpark && 
 						state != State.Hurt && (stateFrame != State.DmgBoost || dBoostFrame >= 19) && state != State.Dodge && state != State.Death);

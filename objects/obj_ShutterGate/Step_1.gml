@@ -11,7 +11,7 @@ if(!init)
 	init = true;
 }
 
-if(global.gamePaused)
+if(global.GamePaused())
 {
 	exit;
 }

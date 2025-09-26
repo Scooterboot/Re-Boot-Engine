@@ -99,7 +99,7 @@ function OnDamageAbsorbed(damage, object, isProjectile)
 
 function PauseAI()
 {
-	return (global.gamePaused || dmgFlash > 0);
+	return (global.GamePaused() || dmgFlash > 0);
 }
 
 function CameraLogic()

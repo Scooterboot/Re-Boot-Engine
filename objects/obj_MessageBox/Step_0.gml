@@ -18,7 +18,7 @@ switch (messageType)
 				obj_Audio.skipItemFanfare = true;
 				messageDuration = messageDurMax_Item;
 			}
-			global.gamePaused = true;
+			global.pauseState = PauseState.MessageBox;
 		}
 		else
 		{

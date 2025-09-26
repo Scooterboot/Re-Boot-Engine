@@ -1,5 +1,5 @@
-global.gamePaused = true;
-global.roomTrans = true;
+
+global.pauseState = PauseState.RoomTrans;
 alpha = 0;
 playerX = -1;
 playerY = -1;

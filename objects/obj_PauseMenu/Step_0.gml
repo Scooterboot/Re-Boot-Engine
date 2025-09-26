@@ -9,7 +9,7 @@ cDown = cMenuDown;
 cSelect = cMenuAccept;
 cCancel = cMenuCancel;
 
-var canPause = (room != rm_MainMenu && instance_exists(obj_Player) && obj_Player.state != State.Elevator && obj_Player.state != State.Death && obj_Player.introAnimState == -1 && !instance_exists(obj_Transition) && !instance_exists(obj_DeathAnim));// && 
+/*var canPause = (room != rm_MainMenu && instance_exists(obj_Player) && obj_Player.state != State.Elevator && obj_Player.state != State.Death && obj_Player.introAnimState == -1 && !instance_exists(obj_Transition) && !instance_exists(obj_DeathAnim));// && 
 //(!instance_exists(obj_MessageBox) || obj_MessageBox.messageType == Message.Expansion || obj_MessageBox.messageType == Message.Simple || obj_MessageBox.kill));
 if(instance_exists(obj_MessageBox))
 {
@@ -22,7 +22,10 @@ if(instance_exists(obj_MessageBox))
 			break;
 		}
 	}
-}
+}*/
+
+var canPause = (room != rm_MainMenu && global.pauseState != PauseState.RoomTrans && global.pauseState != PauseState.MessageBox && global.pauseState != PauseState.DeathAnim && global.pauseState != PauseState.ItemMenu && 
+instance_exists(obj_Player) && obj_Player.state != State.Elevator && obj_Player.state != State.Death && obj_Player.introAnimState == -1);
 
 #region Pause Logic
 if(canPause)
@@ -54,16 +57,24 @@ else
 }
 pause = (pauseFade > 0);
 
+if(prevPauseState == PauseState.PauseMenu)
+{
+	prevPauseState = PauseState.None;
+}
 if(pause)
 {
-	global.gamePaused = true;
+	if(global.pauseState != PauseState.PauseMenu)
+	{
+		prevPauseState = global.pauseState;
+		global.pauseState = PauseState.PauseMenu;
+	}
 	unpause = false;
 }
 else
 {
 	if(!unpause)
 	{
-		global.gamePaused = false;
+		global.pauseState = prevPauseState;
 		unpause = true;
 	}
 }

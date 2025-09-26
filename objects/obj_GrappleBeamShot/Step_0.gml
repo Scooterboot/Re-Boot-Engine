@@ -1,7 +1,7 @@
 direction = 0;
 speed = 0;
 
-if(global.gamePaused)
+if(global.GamePaused())
 {
     exit;
 }

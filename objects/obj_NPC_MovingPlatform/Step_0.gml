@@ -1,6 +1,6 @@
 /// @description 
 event_inherited();
-if(global.gamePaused)
+if(global.GamePaused())
 {
 	exit;
 }
@@ -16,8 +16,10 @@ if(!PauseAI())
 	}
 	else
 	{
-		x += fVelX;
-		y += fVelY;
+		position.X += fVelX;
+		position.Y += fVelY;
+		x = scr_round(position.X);
+		y = scr_round(position.Y);
 	}
 }
 

@@ -1,5 +1,5 @@
 /// @description Code
-if(global.gamePaused)
+if(global.GamePaused())
 {
 	exit;
 }

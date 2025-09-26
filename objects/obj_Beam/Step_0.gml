@@ -23,7 +23,7 @@ if(isWave)
 	partEmit = obj_Particles.partEmitA;
 }
 
-if(!global.gamePaused)
+if(!global.GamePaused())
 {
 	if(!liquid || (isWave && !isIce && !isPlasma))
 	{

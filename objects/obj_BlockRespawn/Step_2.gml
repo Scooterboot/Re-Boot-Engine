@@ -1,5 +1,5 @@
 /// @description Timer
-if(global.gamePaused)
+if(global.GamePaused())
 {
     exit;
 }

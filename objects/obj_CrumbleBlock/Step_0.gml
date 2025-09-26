@@ -1,7 +1,7 @@
 /// @description Crumble Logic
 event_inherited();
 
-if(global.gamePaused)
+if(global.GamePaused())
 {
 	exit;
 }

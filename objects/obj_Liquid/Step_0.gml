@@ -1,6 +1,6 @@
 /// @description Update Bubbles and etc.
 
-if(global.gamePaused)
+if(global.GamePaused())
 {
 	exit;
 }

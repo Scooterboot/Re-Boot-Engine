@@ -76,7 +76,7 @@ function Chance(value) {
 * @param {real} offset Description
 * @returns {real} Description
 */
-function Wave(value1, value2, duration, offset) {
+function _Wave(value1, value2, duration, offset) {
 	var _a = (value2 - value1) * 0.5;
 	return value1 + _a + sin((((current_time * 0.001) + duration * offset) / duration) * (pi*2)) * _a;
 }

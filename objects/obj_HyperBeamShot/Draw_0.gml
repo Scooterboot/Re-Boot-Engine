@@ -95,7 +95,7 @@ if(fired < 4)
 	gpu_set_blendmode(bm_normal);
 }
 
-if(!global.gamePaused)
+if(!global.GamePaused())
 {
 	for(var i = 10; i > 0; i--)
 	{

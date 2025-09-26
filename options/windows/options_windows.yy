@@ -9,7 +9,7 @@
   "option_windows_copy_exe_to_dest":false,
   "option_windows_description_info":"A GameMaker Studio 2 Game",
   "option_windows_disable_sandbox":false,
-  "option_windows_display_cursor":false,
+  "option_windows_display_cursor":true,
   "option_windows_display_name":"Metroid: Re-Boot Engine",
   "option_windows_enable_steam":false,
   "option_windows_executable_name":"${project_name}",

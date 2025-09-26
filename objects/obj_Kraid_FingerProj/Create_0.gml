@@ -15,7 +15,7 @@ dropChance[5] = 0; // power bomb
 
 function PauseAI()
 {
-	return (global.gamePaused || frozen > 0 || dmgFlash > 0);
+	return (global.GamePaused() || frozen > 0 || dmgFlash > 0);
 }
 
 function OnDamagePlayer()

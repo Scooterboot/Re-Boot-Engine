@@ -1,6 +1,6 @@
 /// @description Set old values
 
-if(!global.gamePaused)
+if(!global.GamePaused())
 {
 	if(!oldPositionsSet)
 	{

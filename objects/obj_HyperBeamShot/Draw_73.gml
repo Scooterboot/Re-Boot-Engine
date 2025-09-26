@@ -1,7 +1,7 @@
 /// @description Set old values
 event_inherited();
 
-if(!global.gamePaused)
+if(!global.GamePaused())
 {
 	xstart += speed_x;
 	ystart += speed_y;
