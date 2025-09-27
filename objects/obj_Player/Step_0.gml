@@ -2927,7 +2927,8 @@ if(!global.GamePaused())
 			aimAnimDelay = 6;
 			ChangeState(State.Stand,State.Stand,mask_Player_Stand,true);
 		}
-		if(item[Item.MorphBall] && crouchFrame <= 0 && ((cPlayerDown && (rPlayerDown || !CanChangeState(mask_Player_Stand)) && move2 == 0) || (cMorph && rMorph)) && stateFrame != State.Morph && morphFrame <= 0)
+		//if(item[Item.MorphBall] && crouchFrame <= 0 && ((cPlayerDown && (rPlayerDown || !CanChangeState(mask_Player_Stand)) && move2 == 0) || (cMorph && rMorph)) && stateFrame != State.Morph && morphFrame <= 0)
+		if(item[Item.MorphBall] && crouchFrame <= 0 && ((cPlayerDown && rPlayerDown && move2 == 0) || (cMorph && rMorph)) && stateFrame != State.Morph && morphFrame <= 0)
 		{
 			audio_play_sound(snd_Morph,0,false);
 			var oldY = y;

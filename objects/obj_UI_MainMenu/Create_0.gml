@@ -207,7 +207,7 @@ function CreateSelectedFileMenu(_yoffset, _fileIndex)
 	selectedFilePanel.fileIndex = _fileIndex;
 	
 	draw_set_font(fnt_GUI);
-	var btnW = 72;
+	var btnW = 78;//72;
 	
 	var str = fileOptionText[0];
 	var strH = string_height(str)+1;
@@ -238,12 +238,12 @@ function CreateSelectedFileMenu(_yoffset, _fileIndex)
 	
 	if(file_exists(scr_GetFileName(_fileIndex)))
 	{
-		startGameBtn.x = scr_floor(fBtnW/2 - 44);
-		cancelBtn.x = scr_floor(fBtnW/2 - 44);
+		startGameBtn.x = scr_floor(fBtnW/2 - 52);
+		cancelBtn.x = scr_floor(fBtnW/2 - 52);
 		
 		str = fileOptionText[2];
 		strH = string_height(str)+1;
-		var copyBtn = selectedFilePanel.CreateButton(fBtnW/2 + 34, fBtnH/2 - strH - 2, btnW, strH, str);
+		var copyBtn = selectedFilePanel.CreateButton(fBtnW/2 + 28, fBtnH/2 - strH - 2, btnW, strH, str);
 		copyBtn.OnClick = function()
 		{
 			subState = MMSubState.FileCopy;
@@ -254,7 +254,7 @@ function CreateSelectedFileMenu(_yoffset, _fileIndex)
 		
 		str = fileOptionText[3];
 		strH = string_height(str)+1;
-		var deleteBtn = selectedFilePanel.CreateButton(fBtnW/2 + 34, fBtnH/2 + 2, btnW, strH, str);
+		var deleteBtn = selectedFilePanel.CreateButton(fBtnW/2 + 28, fBtnH/2 + 2, btnW, strH, str);
 		deleteBtn.OnClick = function()
 		{
 			subState = MMSubState.ConfirmDelete;
@@ -519,6 +519,8 @@ function DrawGenericButton(_x, _y)
 		draw_set_alpha(1);
 	}*/
 	var _sprt = sprt_UI_GenericButton,
+		_sw = sprite_get_width(_sprt),
+		_sh = sprite_get_height(_sprt),
 		_ind = 2,
 		_alph = 0.75,
 		_bAlph = 0.5;
@@ -526,11 +528,15 @@ function DrawGenericButton(_x, _y)
 	{
 		_ind = 0;
 		_alph = 1;
-		_bAlph = 1;
+		_bAlph = 0.75;
 	}
-	var alph2 = alpha*panel.alpha;
-	draw_sprite_stretched_ext(_sprt,_ind+1, _x,_y, width,height, c_white,alph2*_bAlph);
-	draw_sprite_stretched_ext(_sprt,_ind, _x,_y, width,height, c_white,alph2*_alph);
+	var alph2 = alpha*panel.alpha,
+		_ww = max(width,_sw),
+		_hh = max(height,_sh),
+		_xx = _x+width/2-_ww/2,
+		_yy = _y+height/2-_hh/2;
+	draw_sprite_stretched_ext(_sprt,_ind+1, _xx,_yy, _ww,_hh, c_white,alph2*_bAlph);
+	draw_sprite_stretched_ext(_sprt,_ind, _xx,_yy, _ww,_hh, c_white,alph2*_alph);
 	
 	var xx = _x+width/2, yy = _y+height/2+1;
 	draw_set_alpha(alph2);
@@ -664,7 +670,7 @@ function DrawSaveFileButton(_x, _y)
 		draw_set_align(fa_left,fa_middle);
 		scr_DrawOptionText(_x+3, _y + height/2, text, c_white, alpha, 0, c_black, 0);
 		
-		draw_sprite_ext(sprt_UI_FileIcon, icoFrame, _x+string_width(text)+8, _y+height/2, 1, 1, 0, c_white, alpha);
+		draw_sprite_ext(sprt_UI_FileIcon, icoFrame, _x+string_width(text)+7, _y+height/2, 1, 1, 0, c_white, alpha);
 		
 		if(creator.selectedFile != fileIndex || creator.subState == MMSubState.FileCopy || creator.subState == MMSubState.ConfirmCopy || creator.subState == MMSubState.ConfirmDelete)
 		{
@@ -759,13 +765,13 @@ function DrawConfirmPanel(_x, _y)
 		
 		var col = c_black,
 			alph = 0.75,
-			ol_col = c_lime,
+			//ol_col = c_lime,
 			ol_alph = 0.75;
 		draw_set_color(col);
 		draw_set_alpha(alph*alpha);
 		draw_rectangle(_x, _y, _x+width, _y+height, false);
 		
-		draw_set_color(ol_col);
+		/*draw_set_color(ol_col);
 		draw_set_alpha(ol_alph*alpha);
 		draw_line(_x, _y, _x+width, _y);
 		draw_line(_x, _y+height, _x+width, _y+height);
@@ -784,7 +790,8 @@ function DrawConfirmPanel(_x, _y)
 			draw_point(_x-i, _y+height);
 			draw_point(_x+width+i+1, _y);
 			draw_point(_x+width+i+1, _y+height);
-		}
+		}*/
+		draw_sprite_stretched_ext(sprt_UI_GenericButton,0, _x,_y, width,height, c_white,ol_alph*alpha);
 		
 		var _sx = _x+width/2, _sy = _y+4;
 		draw_set_font(fnt_Menu2);
