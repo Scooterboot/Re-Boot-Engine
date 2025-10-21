@@ -6,8 +6,8 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 	var xx = x + (camWidth()/2),
 		yy = y + (camHeight()/2);
 	
-	var xsp = player.x - player.xprevious,
-		ysp = player.y - player.yprevious;
+	var xsp = player.position.X - player.oldPosition.X,
+		ysp = player.position.Y - player.oldPosition.Y;
 	if(player.stallCamera)
 	{
 		ysp = 0;
@@ -16,12 +16,8 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 	var fxsp = xsp,
 		fysp = ysp;
 	
-	var pX = player.x,
-		pY = player.y;
-	//if(player.stateFrame == State.Morph)
-	//{
-	//	pY = player.y+8;
-	//}
+	var pX = player.position.X,
+		pY = player.position.Y;
 	
 	var num = 1 + scr_floor(abs(pX-playerX) / 7);
 	if(playerX < pX)
@@ -73,11 +69,11 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 		speedX = 0;
 		speedY = 0;
 	}
-	/*if(player.state == State.Grapple || (player.state == State.Morph && player.spiderBall && player.spiderEdge != Edge.None))
+	if(player.state == State.Grapple || (player.state == State.Morph && player.SpiderActive()))
 	{
-		speedX = player.x - player.xprevious;
-		speedY = player.y - player.yprevious;
-	}*/
+		speedX = xsp;
+		speedY = ysp;
+	}
 	
 	var playerMoveX = playerX - prevPlayerX,
 		playerMoveY = playerY - prevPlayerY;
@@ -96,10 +92,6 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 	{
 		yDir = sign(angle) * -1;
 	}
-	/*if(player.state == State.Grip && player.gripGunReady && player.move != xDir)
-	{
-		xDir *= -1;
-	}*/
 	
 	targetX = playerX + camLimit_Right;
 	if(xDir <= -1)
@@ -122,37 +114,12 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 	camLimitMax_Top = camLimitDefault_Top;
 	camLimitMax_Bottom = camLimitDefault_Bottom;
 	
-	/*var _sp = abs(player.velX),
-		_spMin = player.maxSpeed[MaxSpeed.Sprint,0],
-		_spMax = player.maxSpeed[MaxSpeed.SpeedBoost,0];
-	_sp = max(_sp - _spMin, 0);
-	_spMax = max(_spMax - _spMin, 1);
-	
-	_sp *= 1.5;
-	var _sp2 = abs(player.velY),
-		_sp2Min = player.jumpSpeed[1,0];
-	_sp2 = max(_sp2 - _sp2Min, 0);
-	
-	_sp = max(_sp, _sp2);
-	
-	var _spNum = clamp(_sp / _spMax, 0, 1);
-	if(player.liquidState == 0 && _spNum > 0)
-	{
-		var _lNumX = lerp(0, 32, min(_spNum,1)),
-			_lNumY = lerp(0, 16, min(_spNum,1));
-		
-		camLimitMax_Left -= _lNumX;
-		camLimitMax_Right += _lNumX;
-		camLimitMax_Top -= _lNumY;
-		camLimitMax_Bottom += _lNumY;
-		camLimSpd += _spNum;
-	}*/
 	var _spX = abs(player.velX),
 		_spXMin = player.maxSpeed[MaxSpeed.Sprint,0],
 		_spXMax = player.maxSpeed[MaxSpeed.SpeedBoost,0];
 	_spX = max(_spX - _spXMin, 0);
 	_spXMax = max(_spXMax - _spXMin, 1);
-	var _spXNum = clamp((_spX / _spXMax)*1.5, 0, 1);
+	var _spXNum = clamp((_spX / _spXMax)*2, 0, 1);
 	
 	if(_spXNum > 0)
 	{
@@ -224,15 +191,15 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 	{
 		if(player.HUDVisorSelected(HUDVisor.Scan))
 		{
-			var xdif = scr_round((player.scanVisor.GetRoomX() - playerX)*0.5),
-				ydif = scr_round((player.scanVisor.GetRoomY() - playerY)*0.5);
-			targetX = playerX + min(abs(xdif), 32) * sign(xdif);
-			targetY = playerY + min(abs(ydif), 32) * sign(ydif);
+			var xdif = scr_round((player.scanVisor.GetRoomX() - prevPlayerX)*0.5),
+				ydif = scr_round((player.scanVisor.GetRoomY() - prevPlayerY)*0.5);
+			targetX = prevPlayerX + min(abs(xdif), 32) * sign(xdif);
+			targetY = prevPlayerY + min(abs(ydif), 32) * sign(ydif);
 		}
 		if(player.HUDVisorSelected(HUDVisor.XRay))
 		{
-			targetX = playerX + scr_round(lengthdir_x(32,player.xrayVisor.coneDir));
-			targetY = playerY + scr_round(lengthdir_y(32,player.xrayVisor.coneDir));
+			targetX = prevPlayerX + scr_round(lengthdir_x(32,player.xrayVisor.coneDir));
+			targetY = prevPlayerY + scr_round(lengthdir_y(32,player.xrayVisor.coneDir));
 		}
 		
 		var num2 = 2 + scr_floor(abs(targetX-xx) / 7);

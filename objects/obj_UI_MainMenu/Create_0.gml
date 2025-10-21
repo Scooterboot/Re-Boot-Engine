@@ -522,13 +522,13 @@ function DrawGenericButton(_x, _y)
 		_sw = sprite_get_width(_sprt),
 		_sh = sprite_get_height(_sprt),
 		_ind = 2,
-		_alph = 0.75,
-		_bAlph = 0.5;
+		_alph = 0.65,
+		_bAlph = 0.65;
 	if(panel.selectedButton == id)
 	{
 		_ind = 0;
-		_alph = 1;
-		_bAlph = 0.75;
+		_alph = 0.85;
+		_bAlph = 0.85;
 	}
 	var alph2 = alpha*panel.alpha,
 		_ww = max(width,_sw),

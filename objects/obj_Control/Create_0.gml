@@ -44,7 +44,6 @@ function ControlInput(_verbIndex, _keyboardPressType, _keyboardComboType, _gamep
 			comboType = comboType_GP;
 		}
 		
-		//var _input = InputCheck(verbIndex);
 		var _input = false;
 		if(comboType == ComboType.None)
 		{
