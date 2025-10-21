@@ -11,8 +11,8 @@
 //                                                                        //
 ////////////////////////////////////////////////////////////////////////////
 
-#macro INPUT_VERSION  "10.2.0"
-#macro INPUT_DATE     "2025-08-09"
+#macro INPUT_VERSION  "10.2.2"
+#macro INPUT_DATE     "2025-09-20"
 
 #macro INPUT_NO_DEVICE       -666
 #macro INPUT_KBM             -1
@@ -109,7 +109,7 @@ enum INPUT_PLUG_IN_CALLBACK
 #macro INPUT_ON_IOS      (os_type == os_ios || os_type == os_tvos)
 #macro INPUT_ON_ANDROID  (os_type == os_android)
 //#macro INPUT_ON_XBOX     ((os_type == os_xboxone) || (os_type == os_xboxseriesxs))
-#macro INPUT_ON_XBOX     ((os_type == os_xboxone) || (os_type == os_gdk) || (os_type == os_xboxseriesxs))
+#macro INPUT_ON_XBOX     ((os_type == os_gdk) || (os_type == os_xboxone) || (os_type == os_xboxseriesxs))
 #macro INPUT_ON_PS4      (os_type == os_ps4)
 #macro INPUT_ON_PS5      (os_type == os_ps5)
 #macro INPUT_ON_SWITCH   (os_type == os_switch)
@@ -188,5 +188,6 @@ enum INPUT_PLUG_IN_CALLBACK
 // 32809 = gp_extra5
 // 32810 = gp_extra6
 
-#macro INPUT_GAMEPAD_BINDING_MIN  gp_face1
-#macro INPUT_GAMEPAD_BINDING_MAX  gp_extra6
+#macro INPUT_GAMEPAD_BINDING_MIN    gp_face1
+#macro INPUT_GAMEPAD_BINDING_MAX    gp_extra6
+#macro INPUT_GAMEPAD_BINDING_COUNT  (1 + INPUT_GAMEPAD_BINDING_MAX - INPUT_GAMEPAD_BINDING_MIN)
