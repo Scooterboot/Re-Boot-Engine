@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_IceBeamStartParticle",
   "bboxMode":0,
   "bbox_bottom":11,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"3d8dc103-6e27-4cda-8df0-8f761d9fa4b4","name":"3d8dc103-6e27-4cda-8df0-8f761d9fa4b4","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"141cee1c-4801-4e8e-b48f-36f4f14afc16","name":"141cee1c-4801-4e8e-b48f-36f4f14afc16","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"3d8dc103-6e27-4cda-8df0-8f761d9fa4b4","name":"3d8dc103-6e27-4cda-8df0-8f761d9fa4b4","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"141cee1c-4801-4e8e-b48f-36f4f14afc16","name":"141cee1c-4801-4e8e-b48f-36f4f14afc16","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Kraid_FingerProj",
   "bboxMode":2,
   "bbox_bottom":18,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"a1342584-469b-4c24-9414-d1b46793b310","name":"a1342584-469b-4c24-9414-d1b46793b310","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"a1342584-469b-4c24-9414-d1b46793b310","name":"a1342584-469b-4c24-9414-d1b46793b310","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

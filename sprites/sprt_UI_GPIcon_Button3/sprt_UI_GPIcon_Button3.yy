@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_UI_GPIcon_Button3",
   "bboxMode":0,
   "bbox_bottom":6,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"86539c8b-95cf-45d0-b6bc-b58fe01a86f1","name":"86539c8b-95cf-45d0-b6bc-b58fe01a86f1","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"86539c8b-95cf-45d0-b6bc-b58fe01a86f1","name":"86539c8b-95cf-45d0-b6bc-b58fe01a86f1","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
@@ -83,8 +83,8 @@
   "swatchColours":null,
   "swfPrecision":0.5,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"UserInterface",
+    "path":"texturegroups/UserInterface",
   },
   "type":0,
   "VTile":false,

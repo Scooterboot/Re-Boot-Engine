@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Player_GripTurnLeft_AimDownV",
   "bboxMode":0,
   "bbox_bottom":57,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"a11c7d8c-9722-4a93-ae78-57d49c7fca56","name":"a11c7d8c-9722-4a93-ae78-57d49c7fca56","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"091adab7-9ff7-42a3-9c32-140e84748ff8","name":"091adab7-9ff7-42a3-9c32-140e84748ff8","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"a11c7d8c-9722-4a93-ae78-57d49c7fca56","name":"a11c7d8c-9722-4a93-ae78-57d49c7fca56","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"091adab7-9ff7-42a3-9c32-140e84748ff8","name":"091adab7-9ff7-42a3-9c32-140e84748ff8","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
@@ -87,8 +87,8 @@
   "swatchColours":null,
   "swfPrecision":0.5,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"Player",
+    "path":"texturegroups/Player",
   },
   "type":0,
   "VTile":false,

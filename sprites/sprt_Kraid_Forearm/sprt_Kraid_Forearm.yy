@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Kraid_Forearm",
   "bboxMode":2,
   "bbox_bottom":38,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"e230b691-aa8c-48f4-a7ae-ae4b690422e0","name":"e230b691-aa8c-48f4-a7ae-ae4b690422e0","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"e230b691-aa8c-48f4-a7ae-ae4b690422e0","name":"e230b691-aa8c-48f4-a7ae-ae4b690422e0","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

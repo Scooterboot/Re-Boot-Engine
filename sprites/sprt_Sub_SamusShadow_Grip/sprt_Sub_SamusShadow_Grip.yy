@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Sub_SamusShadow_Grip",
   "bboxMode":0,
   "bbox_bottom":14,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"1cc51ce7-2a15-45de-b2ad-843f360fceaa","name":"1cc51ce7-2a15-45de-b2ad-843f360fceaa","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"1cc51ce7-2a15-45de-b2ad-843f360fceaa","name":"1cc51ce7-2a15-45de-b2ad-843f360fceaa","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,15 +1,17 @@
 {
-  "$GMSound":"",
+  "$GMSound":"v2",
   "%Name":"snd_Reflect",
   "audioGroupId":{
     "name":"audio_sound",
     "path":"audiogroups/audio_sound",
   },
   "bitDepth":1,
-  "bitRate":128,
+  "channelFormat":1,
   "compression":0,
+  "compressionQuality":4,
   "conversionMode":0,
   "duration":0.067483,
+  "exportDir":"",
   "name":"snd_Reflect",
   "parent":{
     "name":"NPCs",
@@ -20,6 +22,5 @@
   "resourceVersion":"2.0",
   "sampleRate":44100,
   "soundFile":"snd_Reflect",
-  "type":1,
   "volume":1.0,
 }

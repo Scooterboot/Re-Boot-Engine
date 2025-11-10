@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"bg_CrateriaSky_1",
   "bboxMode":0,
   "bbox_bottom":751,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"f3e415e1-30a0-45d1-a1b3-0a54a7129c33","name":"f3e415e1-30a0-45d1-a1b3-0a54a7129c33","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"f3e415e1-30a0-45d1-a1b3-0a54a7129c33","name":"f3e415e1-30a0-45d1-a1b3-0a54a7129c33","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

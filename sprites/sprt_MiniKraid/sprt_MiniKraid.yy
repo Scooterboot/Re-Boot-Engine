@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_MiniKraid",
   "bboxMode":2,
   "bbox_bottom":61,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"340eca26-4cc5-451c-a499-0c21041d575b","name":"340eca26-4cc5-451c-a499-0c21041d575b","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"340eca26-4cc5-451c-a499-0c21041d575b","name":"340eca26-4cc5-451c-a499-0c21041d575b","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

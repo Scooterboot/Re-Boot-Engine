@@ -1,15 +1,17 @@
 {
-  "$GMSound":"",
+  "$GMSound":"v2",
   "%Name":"mus_WreckedShip",
   "audioGroupId":{
     "name":"audio_music",
     "path":"audiogroups/audio_music",
   },
   "bitDepth":1,
-  "bitRate":192,
+  "channelFormat":1,
   "compression":1,
+  "compressionQuality":6,
   "conversionMode":0,
   "duration":281.0079,
+  "exportDir":"",
   "name":"mus_WreckedShip",
   "parent":{
     "name":"Areas",
@@ -20,6 +22,5 @@
   "resourceVersion":"2.0",
   "sampleRate":44100,
   "soundFile":"mus_WreckedShip.ogg",
-  "type":1,
   "volume":1.0,
 }

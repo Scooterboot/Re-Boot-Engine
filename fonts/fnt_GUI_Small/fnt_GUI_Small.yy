@@ -227,7 +227,10 @@
   "sdfSpread":8,
   "size":6.0,
   "styleName":"Regular",
-  "textureGroupId":null,
+  "textureGroupId":{
+    "name":"UserInterface",
+    "path":"texturegroups/UserInterface",
+  },
   "TTFName":"${project_dir}\\fonts\\GUIFontSmall\\GUIFontSmall.png",
   "usesSDF":false,
 }

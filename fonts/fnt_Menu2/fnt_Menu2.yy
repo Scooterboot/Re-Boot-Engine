@@ -229,8 +229,8 @@
   "size":6.0,
   "styleName":"Regular",
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"UserInterface",
+    "path":"texturegroups/UserInterface",
   },
   "TTFName":"${project_dir}\\fonts\\MenuFont2\\MenuFont2.png",
   "usesSDF":false,

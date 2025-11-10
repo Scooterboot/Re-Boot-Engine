@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Player_MagnetBallFX",
   "bboxMode":0,
   "bbox_bottom":29,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"19e2c9ca-7db4-444f-a584-e8ca0167e113","name":"19e2c9ca-7db4-444f-a584-e8ca0167e113","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"ac8d6de7-305d-4160-b144-4da22e75e750","name":"ac8d6de7-305d-4160-b144-4da22e75e750","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"19e2c9ca-7db4-444f-a584-e8ca0167e113","name":"19e2c9ca-7db4-444f-a584-e8ca0167e113","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"ac8d6de7-305d-4160-b144-4da22e75e750","name":"ac8d6de7-305d-4160-b144-4da22e75e750","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
@@ -87,8 +87,8 @@
   "swatchColours":null,
   "swfPrecision":0.5,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"Player",
+    "path":"texturegroups/Player",
   },
   "type":0,
   "VTile":false,

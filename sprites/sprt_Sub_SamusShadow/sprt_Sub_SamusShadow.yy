@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Sub_SamusShadow",
   "bboxMode":0,
   "bbox_bottom":167,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"ac29822a-3387-4612-bba2-a9cbcc79d72c","name":"ac29822a-3387-4612-bba2-a9cbcc79d72c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"99b20be5-9f6e-478a-93cd-a3516ab6b1a8","name":"99b20be5-9f6e-478a-93cd-a3516ab6b1a8","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"ac29822a-3387-4612-bba2-a9cbcc79d72c","name":"ac29822a-3387-4612-bba2-a9cbcc79d72c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"99b20be5-9f6e-478a-93cd-a3516ab6b1a8","name":"99b20be5-9f6e-478a-93cd-a3516ab6b1a8","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

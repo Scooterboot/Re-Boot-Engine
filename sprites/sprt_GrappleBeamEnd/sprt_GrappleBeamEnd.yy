@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_GrappleBeamEnd",
   "bboxMode":2,
   "bbox_bottom":9,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"ed6a0ad8-3131-4e9b-a31c-95894a864ebb","name":"ed6a0ad8-3131-4e9b-a31c-95894a864ebb","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"aad6a71a-a1f3-4849-99bf-d944196b5d08","name":"aad6a71a-a1f3-4849-99bf-d944196b5d08","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"ed6a0ad8-3131-4e9b-a31c-95894a864ebb","name":"ed6a0ad8-3131-4e9b-a31c-95894a864ebb","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"aad6a71a-a1f3-4849-99bf-d944196b5d08","name":"aad6a71a-a1f3-4849-99bf-d944196b5d08","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

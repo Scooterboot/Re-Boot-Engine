@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_HUD_Icon_GrappleBeam",
   "bboxMode":0,
   "bbox_bottom":11,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"95b2847a-40b8-4971-9adc-be723ba61746","name":"95b2847a-40b8-4971-9adc-be723ba61746","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"bb05231f-c0bd-4e28-8543-c5967b18e166","name":"bb05231f-c0bd-4e28-8543-c5967b18e166","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"95b2847a-40b8-4971-9adc-be723ba61746","name":"95b2847a-40b8-4971-9adc-be723ba61746","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"bb05231f-c0bd-4e28-8543-c5967b18e166","name":"bb05231f-c0bd-4e28-8543-c5967b18e166","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
@@ -24,7 +24,7 @@
   ],
   "name":"sprt_HUD_Icon_GrappleBeam",
   "nineSlice":null,
-  "origin":0,
+  "origin":9,
   "parent":{
     "name":"Icons",
     "path":"folders/Sprites/UI/HUD/Icons.yy",
@@ -81,8 +81,8 @@
     ],
     "visibleRange":null,
     "volume":1.0,
-    "xorigin":0,
-    "yorigin":0,
+    "xorigin":8,
+    "yorigin":7,
   },
   "swatchColours":null,
   "swfPrecision":0.5,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_MiniKraid_Spit",
   "bboxMode":0,
   "bbox_bottom":6,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"630e7d13-a0c2-48f7-aad5-9a7643b82686","name":"630e7d13-a0c2-48f7-aad5-9a7643b82686","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"630e7d13-a0c2-48f7-aad5-9a7643b82686","name":"630e7d13-a0c2-48f7-aad5-9a7643b82686","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Gunship_Lights",
   "bboxMode":0,
   "bbox_bottom":17,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"87961824-d596-4fdc-839e-ce3ca4a9d8b0","name":"87961824-d596-4fdc-839e-ce3ca4a9d8b0","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"87961824-d596-4fdc-839e-ce3ca4a9d8b0","name":"87961824-d596-4fdc-839e-ce3ca4a9d8b0","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Text_HUDIcon_2",
   "bboxMode":0,
   "bbox_bottom":11,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"f6f76f7e-7cf0-4d4d-8385-504ebf61002d","name":"f6f76f7e-7cf0-4d4d-8385-504ebf61002d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"f6f76f7e-7cf0-4d4d-8385-504ebf61002d","name":"f6f76f7e-7cf0-4d4d-8385-504ebf61002d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

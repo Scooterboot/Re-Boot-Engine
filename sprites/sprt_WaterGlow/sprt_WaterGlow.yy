@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_WaterGlow",
   "bboxMode":0,
   "bbox_bottom":126,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"66e328fa-bbbe-476d-b9ee-55b973c3cd61","name":"66e328fa-bbbe-476d-b9ee-55b973c3cd61","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"66e328fa-bbbe-476d-b9ee-55b973c3cd61","name":"66e328fa-bbbe-476d-b9ee-55b973c3cd61","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

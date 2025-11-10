@@ -201,7 +201,7 @@ rStart = !cStart;
 controlGroups = "menu";
 InitControlVars(controlGroups);
 
-footerText[0] = "${itemSelectButton} - World Map\n"+
+/*footerText[0] = "${itemSelectButton} - World Map\n"+
 				"${menuSelectButton} - Place Marker\n"+
 				"${menuCancelButton} - Menu Select";
 footerText[1] = "${itemSelectButton} - Ability Info\n"+
@@ -211,7 +211,18 @@ footerText[2] = "${menuSelectButton} - Choose Option\n"+
 				"${menuCancelButton} - Menu Select";
 footerText[3] = "${menuSelectButton} - Open Log\n"+
 				"${menuCancelButton} - Menu Select";
-footerText[4] = "${controlPad} - Choose Menu";
+footerText[4] = "${controlPad} - Choose Menu";*/
+footerText[0] = "${MenuSecondary_0} - World Map\n"+
+				"${MenuAccept_0} - Place Marker\n"+
+				"${MenuCancel_0} - Menu Select";
+footerText[1] = "${MenuSecondary_0} - Ability Info\n"+
+				"${MenuAccept_0} - Toggle Ability\n"+
+				"${MenuCancel_0} - Menu Select";
+footerText[2] = "${MenuAccept_0} - Choose Option\n"+
+				"${MenuCancel_0} - Menu Select";
+footerText[3] = "${MenuAccept_0} - Open Log\n"+
+				"${MenuCancel_0} - Menu Select";
+footerText[4] = "${MenuMove} - Choose Menu";
 
 footerScrib = scribble(footerText[0]);
 footerScrib.align(fa_center,fa_middle);

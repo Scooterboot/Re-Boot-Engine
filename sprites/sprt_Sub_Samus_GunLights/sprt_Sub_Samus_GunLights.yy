@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Sub_Samus_GunLights",
   "bboxMode":0,
   "bbox_bottom":30,
@@ -12,10 +12,10 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"4deb9de7-ef0a-46b2-83e4-5a96ff935a64","name":"4deb9de7-ef0a-46b2-83e4-5a96ff935a64","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"b2185d9f-7816-4092-92c6-783badf55be4","name":"b2185d9f-7816-4092-92c6-783badf55be4","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"a50046e9-f51e-40b3-9a5c-afc867087c8d","name":"a50046e9-f51e-40b3-9a5c-afc867087c8d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"d7e3dda0-f69e-42ed-aa41-c39c33d51ad5","name":"d7e3dda0-f69e-42ed-aa41-c39c33d51ad5","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"4deb9de7-ef0a-46b2-83e4-5a96ff935a64","name":"4deb9de7-ef0a-46b2-83e4-5a96ff935a64","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"b2185d9f-7816-4092-92c6-783badf55be4","name":"b2185d9f-7816-4092-92c6-783badf55be4","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"a50046e9-f51e-40b3-9a5c-afc867087c8d","name":"a50046e9-f51e-40b3-9a5c-afc867087c8d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"d7e3dda0-f69e-42ed-aa41-c39c33d51ad5","name":"d7e3dda0-f69e-42ed-aa41-c39c33d51ad5","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

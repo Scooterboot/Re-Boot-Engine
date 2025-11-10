@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_DoorHatch_Missile",
   "bboxMode":1,
   "bbox_bottom":63,
@@ -12,10 +12,10 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"3cdc22ee-e235-44c1-9cf3-c95d7efbce7c","name":"3cdc22ee-e235-44c1-9cf3-c95d7efbce7c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"47bd3295-660c-4073-ae1b-5760a6e22a55","name":"47bd3295-660c-4073-ae1b-5760a6e22a55","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"0acc52e7-29df-4fe4-bfbb-8efe4d8bba29","name":"0acc52e7-29df-4fe4-bfbb-8efe4d8bba29","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"8a317bfd-4394-4ede-aa46-96bc0cf2b4bf","name":"8a317bfd-4394-4ede-aa46-96bc0cf2b4bf","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"3cdc22ee-e235-44c1-9cf3-c95d7efbce7c","name":"3cdc22ee-e235-44c1-9cf3-c95d7efbce7c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"47bd3295-660c-4073-ae1b-5760a6e22a55","name":"47bd3295-660c-4073-ae1b-5760a6e22a55","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"0acc52e7-29df-4fe4-bfbb-8efe4d8bba29","name":"0acc52e7-29df-4fe4-bfbb-8efe4d8bba29","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"8a317bfd-4394-4ede-aa46-96bc0cf2b4bf","name":"8a317bfd-4394-4ede-aa46-96bc0cf2b4bf","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
@@ -73,18 +73,10 @@
     "timeUnits":1,
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"3cdc22ee-e235-44c1-9cf3-c95d7efbce7c","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"8cde254d-ff5f-4b78-8d5f-943cd698ff09","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"47bd3295-660c-4073-ae1b-5760a6e22a55","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"313c9fcf-2651-414e-9839-a0b9d0b9277c","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"0acc52e7-29df-4fe4-bfbb-8efe4d8bba29","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"343ce6de-a8fc-4d80-823b-4f1c12f1c525","IsCreationKey":false,"Key":2.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"8a317bfd-4394-4ede-aa46-96bc0cf2b4bf","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"edc4885a-9e90-434f-ab5e-126632df0338","IsCreationKey":false,"Key":3.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"3cdc22ee-e235-44c1-9cf3-c95d7efbce7c","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"8cde254d-ff5f-4b78-8d5f-943cd698ff09","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"47bd3295-660c-4073-ae1b-5760a6e22a55","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"313c9fcf-2651-414e-9839-a0b9d0b9277c","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"0acc52e7-29df-4fe4-bfbb-8efe4d8bba29","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"343ce6de-a8fc-4d80-823b-4f1c12f1c525","IsCreationKey":false,"Key":2.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"8a317bfd-4394-4ede-aa46-96bc0cf2b4bf","path":"sprites/sprt_DoorHatch_Missile/sprt_DoorHatch_Missile.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"edc4885a-9e90-434f-ab5e-126632df0338","IsCreationKey":false,"Key":3.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,

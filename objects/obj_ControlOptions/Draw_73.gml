@@ -388,8 +388,8 @@ if(surface_exists(surf))
 	
 		var col2 = make_color_rgb(26,108,0);
 		gpu_set_blendmode(bm_add);
-		draw_rectangle_color(-32,hh-height,(ww/2)-1,hh,c_black,col2,col2,c_black,false);
-		draw_rectangle_color((ww/2),hh-height,ww+31,hh,col2,c_black,c_black,col2,false);
+		draw_rectangle_color(-32,hh-height,(ww/2),hh,c_black,col2,col2,c_black,false);
+		draw_rectangle_color((ww/2),hh-height,ww+32,hh,col2,c_black,c_black,col2,false);
 		gpu_set_blendmode(bm_normal);
 	
 		draw_set_color(c_black);

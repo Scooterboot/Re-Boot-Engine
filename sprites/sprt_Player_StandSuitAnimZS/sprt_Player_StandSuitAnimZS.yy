@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Player_StandSuitAnimZS",
   "bboxMode":0,
   "bbox_bottom":47,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"671ed460-0ca3-4c3e-ae30-99de6a150238","name":"671ed460-0ca3-4c3e-ae30-99de6a150238","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"671ed460-0ca3-4c3e-ae30-99de6a150238","name":"671ed460-0ca3-4c3e-ae30-99de6a150238","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

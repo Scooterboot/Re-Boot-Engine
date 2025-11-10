@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_SporeSpawn_Stem",
   "bboxMode":0,
   "bbox_bottom":15,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"b5ba6487-f9ae-413c-a675-dc296c4b5a18","name":"b5ba6487-f9ae-413c-a675-dc296c4b5a18","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"b5ba6487-f9ae-413c-a675-dc296c4b5a18","name":"b5ba6487-f9ae-413c-a675-dc296c4b5a18","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

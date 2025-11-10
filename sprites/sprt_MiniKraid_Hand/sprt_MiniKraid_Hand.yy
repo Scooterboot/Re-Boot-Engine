@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_MiniKraid_Hand",
   "bboxMode":0,
   "bbox_bottom":7,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"73365aa9-78e1-4e8f-a178-e1963884490f","name":"73365aa9-78e1-4e8f-a178-e1963884490f","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"d60083fd-f19f-4233-9857-2d3a7b2133f9","name":"d60083fd-f19f-4233-9857-2d3a7b2133f9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"73365aa9-78e1-4e8f-a178-e1963884490f","name":"73365aa9-78e1-4e8f-a178-e1963884490f","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"d60083fd-f19f-4233-9857-2d3a7b2133f9","name":"d60083fd-f19f-4233-9857-2d3a7b2133f9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

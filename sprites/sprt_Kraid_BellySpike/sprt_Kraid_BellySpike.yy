@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Kraid_BellySpike",
   "bboxMode":2,
   "bbox_bottom":18,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"7f569a38-6229-4786-901f-e4b024ab805d","name":"7f569a38-6229-4786-901f-e4b024ab805d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"7f569a38-6229-4786-901f-e4b024ab805d","name":"7f569a38-6229-4786-901f-e4b024ab805d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

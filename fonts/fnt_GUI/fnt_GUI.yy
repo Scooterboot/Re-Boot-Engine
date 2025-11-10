@@ -134,8 +134,8 @@
   "size":6.0,
   "styleName":"Regular",
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"UserInterface",
+    "path":"texturegroups/UserInterface",
   },
   "TTFName":"${project_dir}\\fonts\\GUIFont\\GUIFont.png",
   "usesSDF":false,

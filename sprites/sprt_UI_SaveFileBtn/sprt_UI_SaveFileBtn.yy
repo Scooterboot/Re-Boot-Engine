@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_UI_SaveFileBtn",
   "bboxMode":0,
   "bbox_bottom":29,
@@ -12,9 +12,9 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"b139f480-945a-441a-bb49-5dc0b2c225ef","name":"b139f480-945a-441a-bb49-5dc0b2c225ef","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"ea42f1cd-014e-4e5b-84f5-a9514daaf35f","name":"ea42f1cd-014e-4e5b-84f5-a9514daaf35f","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"7f10c472-70f6-44a5-8edf-e527bda99dba","name":"7f10c472-70f6-44a5-8edf-e527bda99dba","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"b139f480-945a-441a-bb49-5dc0b2c225ef","name":"b139f480-945a-441a-bb49-5dc0b2c225ef","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"ea42f1cd-014e-4e5b-84f5-a9514daaf35f","name":"ea42f1cd-014e-4e5b-84f5-a9514daaf35f","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"7f10c472-70f6-44a5-8edf-e527bda99dba","name":"7f10c472-70f6-44a5-8edf-e527bda99dba","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
@@ -110,8 +110,8 @@
   "swatchColours":null,
   "swfPrecision":0.5,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"UserInterface",
+    "path":"texturegroups/UserInterface",
   },
   "type":0,
   "VTile":false,

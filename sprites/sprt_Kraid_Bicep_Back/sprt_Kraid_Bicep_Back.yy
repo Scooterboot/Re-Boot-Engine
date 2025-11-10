@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Kraid_Bicep_Back",
   "bboxMode":2,
   "bbox_bottom":42,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"cdb80c6c-a173-4fec-9cda-75f0dd94fbfc","name":"cdb80c6c-a173-4fec-9cda-75f0dd94fbfc","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"cdb80c6c-a173-4fec-9cda-75f0dd94fbfc","name":"cdb80c6c-a173-4fec-9cda-75f0dd94fbfc","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

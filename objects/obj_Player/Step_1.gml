@@ -1,257 +1,40 @@
-/// @description HUD Control
+/// @description HUD & Visor Control
+
 SetControlVars("menu hud visor");
 
-#region Check any visor exists
-var anyVisor = false;
-for(var i = 0; i < array_length(hudVisor); i++)
-{
-	if(HasHUDVisor(i))
-	{
-		anyVisor = true;
-		break;
-	}
-}
-if(!anyVisor)
-{
-	hudVisorIndex = -1;
-	hudAltVisorIndex = -1;
-}
-else
-{
-	if(!HasHUDVisor(hudAltVisorIndex))
-	{
-		hudVisorIndex = -1;
-		hudAltVisorIndex = -1;
-	}
-	
-	if(hudAltVisorIndex == -1)
-	{
-		for(var i = 0; i < array_length(hudVisor); i++)
-		{
-			if(HasHUDVisor(i))
-			{
-				hudAltVisorIndex = i;
-				break;
-			}
-		}
-	}
-}
-#endregion
-#region Check any off-hand weapon exists
-var anyWeap = false;
-for(var i = 0; i < array_length(hudWeapon); i++)
-{
-	if(HasHUDWeapon(i))
-	{
-		anyWeap = true;
-		break;
-	}
-}
-if(!anyWeap)
-{
-	hudWeaponIndex = -1;
-	hudAltWeaponIndex = -1;
-}
-else
-{
-	if(!HasHUDWeapon(hudAltWeaponIndex))
-	{
-		hudWeaponIndex = -1;
-		hudAltWeaponIndex = -1;
-	}
-	
-	if(hudAltWeaponIndex == -1)
-	{
-		for(var i = 0; i < array_length(hudWeapon); i++)
-		{
-			if(HasHUDWeapon(i))
-			{
-				hudAltWeaponIndex = i;
-				break;
-			}
-		}
-	}
-}
-#endregion
+var numWeaps = WeapIndexNum();
+var numVisors = VisorIndexNum();
 
-if(state == State.Elevator || state == State.Recharge || state == State.CrystalFlash || introAnimState != -1)
+if(global.pauseState == PauseState.None || global.pauseState == PauseState.RadialMenu || global.pauseState == PauseState.XRay)
 {
-	InitControlVars("hud visor");
-	
-	hudPauseAnim = 0;
-	uiState = PlayerUIState.None;
-	if(global.pauseState == PauseState.ItemMenu)
-	{
-		global.pauseState = PauseState.None;
-	}
-	
-	SetReleaseVars("menu");
-	exit;
-}
-
-if(global.pauseState == PauseState.None || global.pauseState == PauseState.ItemMenu || global.pauseState == PauseState.XRay)
-{
-	if(cWeapHUDOpen && hudVisorIndex != HUDVisor.Scan && hudVisorIndex != HUDVisor.XRay)
-	{
-		uiState = PlayerUIState.WeapWheel;
-	}
-	if(cVisorHUDOpen)
-	{
-		uiState = PlayerUIState.VisorWheel;
-	}
-	
-	if(uiState != PlayerUIState.None)
-	{
-		if(cWeapHUDOpen || cVisorHUDOpen)
-		{
-			hudPauseAnim = min(hudPauseAnim + 0.2, 1);
-		}
-		else
-		{
-			hudPauseAnim = max(hudPauseAnim - 0.34, 0);
-			if(hudPauseAnim <= 0)
-			{
-				uiState = PlayerUIState.None;
-			}
-		}
-	}
-	
-	if(hudPauseAnim > 0)
-	{
-		global.pauseState = PauseState.ItemMenu;
-	}
-	else
-	{
-		if(global.pauseState == PauseState.ItemMenu)
-		{
-			global.pauseState = PauseState.None;
-			if(instance_exists(xrayVisor))
-			{
-				global.pauseState = PauseState.XRay;
-			}
-		}
-	}
-	
-	#region Weapon Wheel
-	if(uiState == PlayerUIState.WeapWheel)
-	{
-		var hMoveDir = InputDirection(0, INPUT_CLUSTER.WeapHUDMove),
-			hMoveDist = InputDistance(INPUT_CLUSTER.WeapHUDMove) * hudSelectWheelSize;
-		
-		if(hMoveDist >= hudSelectWheelMin)
-		{
-			var _len = array_length(hudWeapon),
-				_rad = 360/_len;
-			for(var i = 0; i < _len; i++)
-			{
-				if(HasHUDWeapon(i))
-				{
-					var _dir = 90 - _rad*i;
-					if(abs(angle_difference(_dir,hMoveDir)) < (_rad/2))
-					{
-						if(HUDWeaponHasAmmo(i))
-						{
-							if(hudWeaponIndex != i)
-							{
-								audio_play_sound(snd_MenuTick,0,false);
-							}
-							hudAltWeaponIndex = i;
-							hudWeaponIndex = i;
-						}
-						else if(hudAltWeaponIndex != i)
-						{
-							audio_play_sound(snd_MenuTick,0,false);
-							hudAltWeaponIndex = i;
-							hudWeaponIndex = -1;
-						}
-					}
-				}
-			}
-		}
-	}
-	#endregion
-	#region Visor Wheel
-	if(uiState == PlayerUIState.VisorWheel)
-	{
-		var hMoveDir = InputDirection(0, INPUT_CLUSTER.VisorHUDMove),
-			hMoveDist = InputDistance(INPUT_CLUSTER.VisorHUDMove) * hudSelectWheelSize;
-		
-		if(hMoveDist >= hudSelectWheelMin)
-		{
-			var _len = array_length(hudVisor),
-				_rad = 360/_len;
-			for(var i = 0; i < _len; i++)
-			{
-				if(HasHUDVisor(i))
-				{
-					var _dir = 90 - _rad*i;
-					if(abs(angle_difference(_dir,hMoveDir)) < (_rad/2))
-					{
-						/*if(hudVisorIndex == hudAltVisorIndex)
-						{
-							if(hudVisorIndex != i)
-							{
-								audio_play_sound(snd_MenuTick,0,false);
-							}
-							hudAltVisorIndex = i;
-							hudVisorIndex = i;
-						}
-						else*/ if(hudAltVisorIndex != i)
-						{
-							audio_play_sound(snd_MenuTick,0,false);
-							hudAltVisorIndex = i;
-							hudVisorIndex = -1;
-						}
-					}
-				}
-			}
-		}
-	}
-	#endregion
-	
 	#region Toggle current weapon
-	if(HUDWeaponHasAmmo(hudAltWeaponIndex) && (hudWeaponIndex == -1 || hudWeaponIndex == hudAltWeaponIndex))
+	if(numWeaps > 0 && weapIndex >= 0 && WeaponHasAmmo(weapIndex))
 	{
-		if(hudVisorIndex != HUDVisor.Scan && hudVisorIndex != HUDVisor.XRay)
+		if(!visorSelected || (visorIndex != Visor.Scan && visorIndex != Visor.XRay))
 		{
-			if(hudWeaponIndex == -1)
+			if(cWeapToggle && rWeapToggle)
 			{
-				if(cWeapToggleOn && rWeapToggleOn)
-				{
-					hudWeaponIndex = hudAltWeaponIndex;
-					audio_play_sound(snd_MenuTick,0,false);
-				}
-			}
-			else if(cWeapToggleOff && rWeapToggleOff)
-			{
-				hudWeaponIndex = -1;
+				weapSelected = !weapSelected;
 				audio_play_sound(snd_MenuTick,0,false);
 			}
 		}
 	}
-	else
-	{
-		if(hudWeaponIndex >= 0)
-		{
-			audio_play_sound(snd_MenuTick,0,false);
-		}
-		hudWeaponIndex = -1;
-	}
 	#endregion
 	#region Toggle current visor
 	
-	var _tVisorOn = (cVisorToggleOn && rVisorToggleOn),
-		_tVisorOff = (cVisorToggleOff && rVisorToggleOff);
-	if(hudAltVisorIndex == HUDVisor.Scan)
+	var _tVisorOn = (cVisorToggle && rVisorToggle),
+		_tVisorOff = (cVisorToggle && rVisorToggle) || (cVisorCycle && rVisorCycle);
+	if(visorIndex == Visor.Scan)
 	{
 		_tVisorOn &= !cFire;
 		_tVisorOff |= cFire;
 	}
+	var _tvoff = false;
 	
-	if(HasHUDVisor(hudAltVisorIndex) && (hudVisorIndex == -1 || hudVisorIndex == hudAltVisorIndex))
+	if(numVisors > 0 && visorIndex >= 0 && global.pauseState != PauseState.RadialMenu)
 	{
 		var canUseVisor = true;
-		if(hudAltVisorIndex == HUDVisor.XRay)
+		if(visorIndex == Visor.XRay)
 		{
 			canUseVisor = false;
 			
@@ -274,7 +57,7 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.ItemM
 			{
 				var block_bl = instance_position(bb_left(),bb_bottom()+1,solids),
 					block_br = instance_position(bb_right(),bb_bottom()+1,solids),
-					platform = collision_line(bb_left(),bb_bottom()+1,bb_right(),bb_bottom()+1,obj_Platform,true,true);
+					platform = collision_line(bb_left(), bb_bottom()+1, bb_right(), bb_bottom()+1, obj_Platform,true,true);
 				if ((!instance_exists(block_bl) xor (instance_exists(block_bl) && block_bl.object_index == obj_CrumbleBlock)) && 
 					(!instance_exists(block_br) xor (instance_exists(block_br) && block_br.object_index == obj_CrumbleBlock)) && 
 					!instance_exists(platform))
@@ -292,35 +75,66 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.ItemM
 		
 		if(canUseVisor)
 		{
-			if(hudVisorIndex == -1)
+			if(!visorSelected)
 			{
 				if(_tVisorOn)
 				{
-					hudVisorIndex = hudAltVisorIndex;
+					visorSelected = true;
 					audio_play_sound(snd_MenuTick,0,false);
 				}
 			}
 			else if(_tVisorOff)
 			{
-				hudVisorIndex = -1;
+				visorSelected = false;
 				audio_play_sound(snd_MenuTick,0,false);
+				_tvoff = true;
 			}
 		}
 		else
 		{
-			hudVisorIndex = -1;
+			visorSelected = false;
 		}
 	}
-	else
+	
+	#endregion
+	#region Cycle Visors
+	
+	if(numVisors > 1 && visorIndex >= 0 && !visorSelected && !_tvoff && global.pauseState == PauseState.None)
 	{
-		hudVisorIndex = -1;
+		if(cVisorCycle && rVisorCycle)
+		{
+			var _len = ds_list_size(global.visorRadial),
+				_ind = -1;
+			for(var i = 0; i < _len; i++)
+			{
+				var _vInd = global.visorRadial[| i];
+				if(!is_undefined(_vInd) && visorIndex == _vInd)
+				{
+					_ind = i;
+					break;
+				}
+			}
+			var _dir = 1;
+			for(var i = 0; i < _len; i++)
+			{
+				var _index = scr_wrap(_ind+i + _dir, 0, _len);
+				var _vInd = global.visorRadial[| _index];
+				if(!is_undefined(_vInd) && HasVisor(_vInd))
+				{
+					visorIndex = _vInd;
+					visorSelected = false;
+					break;
+				}
+			}
+			audio_play_sound(snd_MenuTick,0,false);
+		}
 	}
 	
 	#endregion
 	
 	#region Scan Visor control
 	
-	if(hudVisorIndex == HUDVisor.Scan)
+	if(visorIndex == Visor.Scan && visorSelected)
 	{
 		if(instance_exists(scanVisor))
 		{
@@ -358,7 +172,7 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.ItemM
 	#endregion
 	#region XRay Visor control
 	
-	if(hudVisorIndex == HUDVisor.XRay)
+	if(visorIndex == Visor.XRay && visorSelected)
 	{
 		var xpos = new Vector2(x + 3*dir, y - 12);
 		if(stateFrame == State.Grip)
@@ -380,8 +194,10 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.ItemM
 			
 			if(global.pauseState == PauseState.XRay)
 			{
-				var moveDir = InputDirection(0,INPUT_CLUSTER.VisorMove),
-					moveDist = InputDistance(INPUT_CLUSTER.VisorMove);
+				var _moveX = clamp(InputX(INPUT_CLUSTER.VisorMove) + InputX(INPUT_CLUSTER.PlayerMove), -1,1),
+					_moveY = clamp(InputY(INPUT_CLUSTER.VisorMove) + InputY(INPUT_CLUSTER.PlayerMove), -1,1);
+				var moveDir = point_direction(0,0, _moveX,_moveY),//InputDirection(0,INPUT_CLUSTER.VisorMove),
+					moveDist = point_distance(0,0, _moveX,_moveY);//InputDistance(INPUT_CLUSTER.VisorMove);
 				if(InputPlayerGetDevice() == INPUT_KBM) // && visor uses mouse for control == true
 				{
 					var _mp = MousePos_Room();

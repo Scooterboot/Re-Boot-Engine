@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_PowerBombExplosionMask",
   "bboxMode":1,
   "bbox_bottom":319,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"3c4baeb5-e048-4705-abb5-4df42a337bb0","name":"3c4baeb5-e048-4705-abb5-4df42a337bb0","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"3c4baeb5-e048-4705-abb5-4df42a337bb0","name":"3c4baeb5-e048-4705-abb5-4df42a337bb0","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

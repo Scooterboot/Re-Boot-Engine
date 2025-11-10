@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Kraid_Leg_Back",
   "bboxMode":0,
   "bbox_bottom":61,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"b4c277b4-1ac6-4857-8c29-1d6e38d3f7e2","name":"b4c277b4-1ac6-4857-8c29-1d6e38d3f7e2","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"b4c277b4-1ac6-4857-8c29-1d6e38d3f7e2","name":"b4c277b4-1ac6-4857-8c29-1d6e38d3f7e2","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_HUD_Icon_Missile",
   "bboxMode":0,
   "bbox_bottom":11,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"d668b818-3334-4840-88fd-ae140033b7e5","name":"d668b818-3334-4840-88fd-ae140033b7e5","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"5f91d454-6c93-42ec-a8cd-9ea69e7ae05b","name":"5f91d454-6c93-42ec-a8cd-9ea69e7ae05b","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"d668b818-3334-4840-88fd-ae140033b7e5","name":"d668b818-3334-4840-88fd-ae140033b7e5","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"5f91d454-6c93-42ec-a8cd-9ea69e7ae05b","name":"5f91d454-6c93-42ec-a8cd-9ea69e7ae05b","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
@@ -24,7 +24,7 @@
   ],
   "name":"sprt_HUD_Icon_Missile",
   "nineSlice":null,
-  "origin":0,
+  "origin":9,
   "parent":{
     "name":"Icons",
     "path":"folders/Sprites/UI/HUD/Icons.yy",
@@ -81,8 +81,8 @@
     ],
     "visibleRange":null,
     "volume":1.0,
-    "xorigin":0,
-    "yorigin":0,
+    "xorigin":8,
+    "yorigin":7,
   },
   "swatchColours":null,
   "swfPrecision":0.5,

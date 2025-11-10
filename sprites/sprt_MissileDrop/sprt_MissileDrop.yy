@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_MissileDrop",
   "bboxMode":2,
   "bbox_bottom":18,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"62f2f52f-af21-49bf-9c34-fa6efd580923","name":"62f2f52f-af21-49bf-9c34-fa6efd580923","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"ac0f64cf-187f-4f51-bc93-d2ca9870fea6","name":"ac0f64cf-187f-4f51-bc93-d2ca9870fea6","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"62f2f52f-af21-49bf-9c34-fa6efd580923","name":"62f2f52f-af21-49bf-9c34-fa6efd580923","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"ac0f64cf-187f-4f51-bc93-d2ca9870fea6","name":"ac0f64cf-187f-4f51-bc93-d2ca9870fea6","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

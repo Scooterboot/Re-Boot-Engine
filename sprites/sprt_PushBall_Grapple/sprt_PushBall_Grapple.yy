@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_PushBall_Grapple",
   "bboxMode":1,
   "bbox_bottom":47,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"a671ff2f-7f22-4e8f-a233-1937f6bd4f2d","name":"a671ff2f-7f22-4e8f-a233-1937f6bd4f2d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"a671ff2f-7f22-4e8f-a233-1937f6bd4f2d","name":"a671ff2f-7f22-4e8f-a233-1937f6bd4f2d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

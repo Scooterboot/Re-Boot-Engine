@@ -1,3 +1,6 @@
+// Feather disable all
+// Feather ignore all
+
 /// @func Logger(filename, path)
 /// @param	{str}	filename
 /// @param	{str}	path

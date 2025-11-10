@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_SuperMissileShot",
   "bboxMode":2,
   "bbox_bottom":15,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"6aaf2264-a615-47a5-a22c-df0e4c25be6d","name":"6aaf2264-a615-47a5-a22c-df0e4c25be6d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"8f38faab-add1-4b4e-94ad-ee4476af3a83","name":"8f38faab-add1-4b4e-94ad-ee4476af3a83","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"6aaf2264-a615-47a5-a22c-df0e4c25be6d","name":"6aaf2264-a615-47a5-a22c-df0e4c25be6d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"8f38faab-add1-4b4e-94ad-ee4476af3a83","name":"8f38faab-add1-4b4e-94ad-ee4476af3a83","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

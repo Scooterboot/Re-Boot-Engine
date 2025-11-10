@@ -48,8 +48,8 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 		playerY = pY;
 	}
 	
-	playerXRayX = clamp(pX,xx-32,xx+32);
-	playerXRayY = clamp(pY,yy-32,yy+32);
+	playerXRayX = pX;
+	playerXRayY = pY;
 	targetX = playerX;
 	targetY = playerY;
 	velX = 0;
@@ -174,7 +174,7 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 		camLimitMax_Top = 0;
 		camLimitMax_Bottom = 0;
 	}
-	if(player.HUDVisorSelected(HUDVisor.Scan) || player.HUDVisorSelected(HUDVisor.XRay))
+	if(player.VisorSelected(Visor.Scan) || player.VisorSelected(Visor.XRay))
 	{
 		camLimitMax_Left = -32;
 		camLimitMax_Right = 32;
@@ -187,16 +187,16 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 	camLimit_Top = CamLimitIncr(camLimit_Top, camLimitMax_Top, camLimSpd, yy-prevPlayerY);
 	camLimit_Bottom = CamLimitIncr(camLimit_Bottom, camLimitMax_Bottom, camLimSpd, yy-prevPlayerY);
 	
-	if(player.HUDVisorSelected(HUDVisor.Scan) || player.HUDVisorSelected(HUDVisor.XRay))
+	if(player.VisorSelected(Visor.Scan) || player.VisorSelected(Visor.XRay))
 	{
-		if(player.HUDVisorSelected(HUDVisor.Scan))
+		if(player.VisorSelected(Visor.Scan))
 		{
 			var xdif = scr_round((player.scanVisor.GetRoomX() - prevPlayerX)*0.5),
 				ydif = scr_round((player.scanVisor.GetRoomY() - prevPlayerY)*0.5);
 			targetX = prevPlayerX + min(abs(xdif), 32) * sign(xdif);
 			targetY = prevPlayerY + min(abs(ydif), 32) * sign(ydif);
 		}
-		if(player.HUDVisorSelected(HUDVisor.XRay))
+		if(player.VisorSelected(Visor.XRay))
 		{
 			targetX = prevPlayerX + scr_round(lengthdir_x(32,player.xrayVisor.coneDir));
 			targetY = prevPlayerY + scr_round(lengthdir_y(32,player.xrayVisor.coneDir));

@@ -1,15 +1,17 @@
 {
-  "$GMSound":"",
+  "$GMSound":"v2",
   "%Name":"snd_Menu_Accept_2",
   "audioGroupId":{
     "name":"audio_sound",
     "path":"audiogroups/audio_sound",
   },
   "bitDepth":1,
-  "bitRate":128,
+  "channelFormat":1,
   "compression":0,
+  "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.322676,
+  "duration":0.32267573,
+  "exportDir":"",
   "name":"snd_Menu_Accept_2",
   "parent":{
     "name":"Menu",
@@ -20,6 +22,5 @@
   "resourceVersion":"2.0",
   "sampleRate":44100,
   "soundFile":"snd_Menu_Accept_2",
-  "type":1,
   "volume":1.0,
 }

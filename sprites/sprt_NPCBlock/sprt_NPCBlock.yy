@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_NPCBlock",
   "bboxMode":0,
   "bbox_bottom":15,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"b7f93c5e-919d-4368-8eba-a06d83ad13ed","name":"b7f93c5e-919d-4368-8eba-a06d83ad13ed","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"feb045ef-aa23-4fb6-bd32-05b9e547aa7e","name":"feb045ef-aa23-4fb6-bd32-05b9e547aa7e","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"b7f93c5e-919d-4368-8eba-a06d83ad13ed","name":"b7f93c5e-919d-4368-8eba-a06d83ad13ed","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"feb045ef-aa23-4fb6-bd32-05b9e547aa7e","name":"feb045ef-aa23-4fb6-bd32-05b9e547aa7e","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

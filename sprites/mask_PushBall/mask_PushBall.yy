@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"mask_PushBall",
   "bboxMode":1,
   "bbox_bottom":47,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"14d2098a-6964-423e-81bd-1ada754eaa2c","name":"14d2098a-6964-423e-81bd-1ada754eaa2c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"bba3b05e-8c61-430e-ac0a-b4b93974c315","name":"bba3b05e-8c61-430e-ac0a-b4b93974c315","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"14d2098a-6964-423e-81bd-1ada754eaa2c","name":"14d2098a-6964-423e-81bd-1ada754eaa2c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"bba3b05e-8c61-430e-ac0a-b4b93974c315","name":"bba3b05e-8c61-430e-ac0a-b4b93974c315","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

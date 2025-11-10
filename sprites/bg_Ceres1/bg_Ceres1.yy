@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"bg_Ceres1",
   "bboxMode":0,
   "bbox_bottom":222,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"70d43532-e358-410f-a946-076c609dc4e2","name":"70d43532-e358-410f-a946-076c609dc4e2","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"70d43532-e358-410f-a946-076c609dc4e2","name":"70d43532-e358-410f-a946-076c609dc4e2","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

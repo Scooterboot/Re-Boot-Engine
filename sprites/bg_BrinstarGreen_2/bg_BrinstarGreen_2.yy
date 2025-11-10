@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"bg_BrinstarGreen_2",
   "bboxMode":0,
   "bbox_bottom":191,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"71f9a07c-a2f0-4f40-a0f6-8354331e5521","name":"71f9a07c-a2f0-4f40-a0f6-8354331e5521","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"71f9a07c-a2f0-4f40-a0f6-8354331e5521","name":"71f9a07c-a2f0-4f40-a0f6-8354331e5521","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

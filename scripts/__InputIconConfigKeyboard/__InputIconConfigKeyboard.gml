@@ -56,83 +56,83 @@ InputIconDefineKeyboard(vk_lbracket,   "[");
 InputIconDefineKeyboard(vk_fslash,     "/");
 InputIconDefineKeyboard(vk_bslash,     "\\");
 
-InputIconDefineKeyboard(vk_scrollock, "scroll lock");
-InputIconDefineKeyboard(vk_capslock,  "caps lock");
-InputIconDefineKeyboard(vk_numlock,   "num lock");
-InputIconDefineKeyboard(vk_lmeta,     "left meta");
-InputIconDefineKeyboard(vk_rmeta,     "right meta");
-InputIconDefineKeyboard(vk_clear,     "clear");
-InputIconDefineKeyboard(vk_menu,      "menu");
+InputIconDefineKeyboard(vk_scrollock, "Scroll Lock");
+InputIconDefineKeyboard(vk_capslock,  "Caps Lock");
+InputIconDefineKeyboard(vk_numlock,   "Num Lock");
+InputIconDefineKeyboard(vk_lmeta,     "Left Meta");
+InputIconDefineKeyboard(vk_rmeta,     "Right Meta");
+InputIconDefineKeyboard(vk_clear,     "Clear");
+InputIconDefineKeyboard(vk_menu,      "Menu");
 
-InputIconDefineKeyboard(vk_printscreen, "print screen");
-InputIconDefineKeyboard(vk_pause,       "pause break");
+InputIconDefineKeyboard(vk_printscreen, "Print Screen");
+InputIconDefineKeyboard(vk_pause,       "Pause Break");
 
-InputIconDefineKeyboard(vk_escape,    "escape");
-InputIconDefineKeyboard(vk_backspace, "backspace");
-InputIconDefineKeyboard(vk_space,     "space");
-InputIconDefineKeyboard(vk_enter,     "enter");
+InputIconDefineKeyboard(vk_escape,    "Escape");
+InputIconDefineKeyboard(vk_backspace, "Backspace");
+InputIconDefineKeyboard(vk_space,     "Space");
+InputIconDefineKeyboard(vk_enter,     "Enter");
 
-InputIconDefineKeyboard(vk_up,    "arrow up");
-InputIconDefineKeyboard(vk_down,  "arrow down");
-InputIconDefineKeyboard(vk_left,  "arrow left");
-InputIconDefineKeyboard(vk_right, "arrow right");
+InputIconDefineKeyboard(vk_up,    "Up");
+InputIconDefineKeyboard(vk_down,  "Down");
+InputIconDefineKeyboard(vk_left,  "Left");
+InputIconDefineKeyboard(vk_right, "Right");
 
-InputIconDefineKeyboard(vk_tab,      "tab");
-InputIconDefineKeyboard(vk_ralt,     "right alt");
-InputIconDefineKeyboard(vk_lalt,     "left alt");
-InputIconDefineKeyboard(vk_alt,      "alt");
-InputIconDefineKeyboard(vk_rshift,   "right shift");
-InputIconDefineKeyboard(vk_lshift,   "left shift");
-InputIconDefineKeyboard(vk_shift,    "shift");
-InputIconDefineKeyboard(vk_rcontrol, "right ctrl");
-InputIconDefineKeyboard(vk_lcontrol, "left ctrl");
-InputIconDefineKeyboard(vk_control,  "ctrl");
+InputIconDefineKeyboard(vk_tab,      "Tab");
+InputIconDefineKeyboard(vk_ralt,     "Right Alt");
+InputIconDefineKeyboard(vk_lalt,     "Left Alt");
+InputIconDefineKeyboard(vk_alt,      "Alt");
+InputIconDefineKeyboard(vk_rshift,   "Right Shift");
+InputIconDefineKeyboard(vk_lshift,   "Left Shift");
+InputIconDefineKeyboard(vk_shift,    "Shift");
+InputIconDefineKeyboard(vk_rcontrol, "Right Ctrl");
+InputIconDefineKeyboard(vk_lcontrol, "Left Ctrl");
+InputIconDefineKeyboard(vk_control,  "Ctrl");
 
-InputIconDefineKeyboard(vk_f1,  "f1");
-InputIconDefineKeyboard(vk_f2,  "f2");
-InputIconDefineKeyboard(vk_f3,  "f3");
-InputIconDefineKeyboard(vk_f4,  "f4");
-InputIconDefineKeyboard(vk_f5,  "f5");
-InputIconDefineKeyboard(vk_f6,  "f6");
-InputIconDefineKeyboard(vk_f7,  "f7");
-InputIconDefineKeyboard(vk_f8,  "f8");
-InputIconDefineKeyboard(vk_f9,  "f9");
-InputIconDefineKeyboard(vk_f10, "f10");
-InputIconDefineKeyboard(vk_f11, "f11");
-InputIconDefineKeyboard(vk_f12, "f12");
+InputIconDefineKeyboard(vk_f1,  "F1");
+InputIconDefineKeyboard(vk_f2,  "F2");
+InputIconDefineKeyboard(vk_f3,  "F3");
+InputIconDefineKeyboard(vk_f4,  "F4");
+InputIconDefineKeyboard(vk_f5,  "F5");
+InputIconDefineKeyboard(vk_f6,  "F6");
+InputIconDefineKeyboard(vk_f7,  "F7");
+InputIconDefineKeyboard(vk_f8,  "F8");
+InputIconDefineKeyboard(vk_f9,  "F9");
+InputIconDefineKeyboard(vk_f10, "F10");
+InputIconDefineKeyboard(vk_f11, "F11");
+InputIconDefineKeyboard(vk_f12, "F12");
 
-InputIconDefineKeyboard(vk_divide,   "numpad /");
-InputIconDefineKeyboard(vk_multiply, "numpad *");
-InputIconDefineKeyboard(vk_subtract, "numpad -");
-InputIconDefineKeyboard(vk_add,      "numpad +");
-InputIconDefineKeyboard(vk_decimal,  "numpad .");
+InputIconDefineKeyboard(vk_divide,   "Numpad /");
+InputIconDefineKeyboard(vk_multiply, "Numpad *");
+InputIconDefineKeyboard(vk_subtract, "Numpad -");
+InputIconDefineKeyboard(vk_add,      "Numpad +");
+InputIconDefineKeyboard(vk_decimal,  "Numpad .");
 
-InputIconDefineKeyboard(vk_numpad0, "numpad 0");
-InputIconDefineKeyboard(vk_numpad1, "numpad 1");
-InputIconDefineKeyboard(vk_numpad2, "numpad 2");
-InputIconDefineKeyboard(vk_numpad3, "numpad 3");
-InputIconDefineKeyboard(vk_numpad4, "numpad 4");
-InputIconDefineKeyboard(vk_numpad5, "numpad 5");
-InputIconDefineKeyboard(vk_numpad6, "numpad 6");
-InputIconDefineKeyboard(vk_numpad7, "numpad 7");
-InputIconDefineKeyboard(vk_numpad8, "numpad 8");
-InputIconDefineKeyboard(vk_numpad9, "numpad 9");
+InputIconDefineKeyboard(vk_numpad0, "Numpad 0");
+InputIconDefineKeyboard(vk_numpad1, "Numpad 1");
+InputIconDefineKeyboard(vk_numpad2, "Numpad 2");
+InputIconDefineKeyboard(vk_numpad3, "Numpad 3");
+InputIconDefineKeyboard(vk_numpad4, "Numpad 4");
+InputIconDefineKeyboard(vk_numpad5, "Numpad 5");
+InputIconDefineKeyboard(vk_numpad6, "Numpad 6");
+InputIconDefineKeyboard(vk_numpad7, "Numpad 7");
+InputIconDefineKeyboard(vk_numpad8, "Numpad 8");
+InputIconDefineKeyboard(vk_numpad9, "Numpad 9");
 
-InputIconDefineKeyboard(vk_delete,   "delete");
-InputIconDefineKeyboard(vk_insert,   "insert");
-InputIconDefineKeyboard(vk_home,     "home");
-InputIconDefineKeyboard(vk_pageup,   "page up");
-InputIconDefineKeyboard(vk_pagedown, "page down");
-InputIconDefineKeyboard(vk_end,      "end");
+InputIconDefineKeyboard(vk_delete,   "Delete");
+InputIconDefineKeyboard(vk_insert,   "Insert");
+InputIconDefineKeyboard(vk_home,     "Home");
+InputIconDefineKeyboard(vk_pageup,   "Page up");
+InputIconDefineKeyboard(vk_pagedown, "Page down");
+InputIconDefineKeyboard(vk_end,      "End");
    
 //Name newline character after Enter
-InputIconDefineKeyboard(10, "enter");
+InputIconDefineKeyboard(10, "Enter");
 
 //Reset F11 and F12 keycodes on certain platforms
 if (INPUT_ON_LINUX || INPUT_ON_MACOS)
 {
-    InputIconDefineKeyboard(128, "f11");
-    InputIconDefineKeyboard(129, "f12");
+    InputIconDefineKeyboard(128, "F11");
+    InputIconDefineKeyboard(129, "F12");
 }
 
 //F13 to F32 on Windows and Web
@@ -140,6 +140,6 @@ if (INPUT_ON_WINDOWS || INPUT_ON_WEB)
 {
     for(var _i = vk_f1 + 12; _i < vk_f1 + 32; _i++)
     {
-        InputIconDefineKeyboard(_i, "f" + string(_i));
+        InputIconDefineKeyboard(_i, "F" + string(_i));
     }
 }

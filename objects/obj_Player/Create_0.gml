@@ -950,6 +950,8 @@ enum Item
 	MagniBall,
 	SpiderBall,
 	
+	ScanVisor,
+	
 	_Length
 }
 item = array_create(Item._Length);
@@ -988,33 +990,19 @@ function CanCharge()
 {
 	if(!item[Item.ChargeBeam]) { return false; }
 	if(hyperBeam) { return false; }
-	if(HUDWeaponSelected(HUDWeapon.Missile)) { return false; }
-	if(HUDWeaponSelected(HUDWeapon.SuperMissile)) { return false; }
-	if(HUDWeaponSelected(HUDWeapon.GrappleBeam)) { return false; }
-	if(HUDVisorSelected(HUDVisor.Scan)) { return false; }
-	if(HUDVisorSelected(HUDVisor.XRay)) { return false; }
+	if(WeaponSelected(Weapon.Missile)) { return false; }
+	if(WeaponSelected(Weapon.SuperMissile)) { return false; }
+	if(WeaponSelected(Weapon.GrappleBeam)) { return false; }
+	if(VisorSelected(Visor.Scan)) { return false; }
+	if(VisorSelected(Visor.XRay)) { return false; }
 	
 	return true;
 }
 
 #endregion
-#region HUD UI
+#region HUD & Radial UI
 
-enum PlayerUIState
-{
-	None,
-	WeapWheel,
-	VisorWheel
-}
-uiState = PlayerUIState.None;
-
-hudSelectWheelSize = 48;
-hudSelectWheelMin = 32;
-hudPauseAnim = 0;
-hudSlotAnim = 0;
-hudCursorAnim = 0;
-
-function HUDItem(_itemIndex, _hudIconSprt, _selectIconSprt, _getAmmo = undefined, _getAmmoMax = undefined, _ammoIconSprt = undefined, _ammoDigits = undefined) constructor
+function EquipItem(_itemIndex, _hudIconSprt, _selectIconSprt, _getAmmo = undefined, _getAmmoMax = undefined, _ammoIconSprt = undefined, _ammoDigits = undefined) constructor
 {
 	itemIndex = _itemIndex;
 	hudIconSprt = _hudIconSprt;
@@ -1026,45 +1014,38 @@ function HUDItem(_itemIndex, _hudIconSprt, _selectIconSprt, _getAmmo = undefined
 	ammoDigits = _ammoDigits;
 }
 
-enum HUDWeapon
+enum Weapon
 {
-	Missile,		// Top slot
-	//Slot2,			// Top-right slot
-	SuperMissile,	// Right slot
-	//Slot4,			// Bottom-right slot
-	PowerBomb,		// Bottom slot
-	//Slot6,			// Bottom-left slot
-	GrappleBeam,	// Left slot
-	//Slot8,			// Top-left slot
+	Missile,
+	SuperMissile,
+	PowerBomb,
+	GrappleBeam,
 	
 	_Length
 }
-hudWeapon = array_create(HUDWeapon._Length, 0);
+weap = array_create(Weapon._Length, undefined);
 
-hudWeapon[HUDWeapon.Missile] = new HUDItem(Item.Missile, sprt_HUD_Icon_Missile, sprt_UI_ItemWheel_Icon_Missile,
+weap[Weapon.Missile] = new EquipItem(Item.Missile, sprt_HUD_Icon_Missile, sprt_UI_Radial_Icon_Missile,
 	function(){ return missileStat; }, function(){ return missileMax; }, sprt_HUD_AmmoIcon_Missile, 3);
 
-hudWeapon[HUDWeapon.SuperMissile] = new HUDItem(Item.SuperMissile, sprt_HUD_Icon_SuperMissile, sprt_UI_ItemWheel_Icon_SuperMissile,
+weap[Weapon.SuperMissile] = new EquipItem(Item.SuperMissile, sprt_HUD_Icon_SuperMissile, sprt_UI_Radial_Icon_SuperMissile,
 	function(){ return superMissileStat; }, function(){ return superMissileMax; }, sprt_HUD_AmmoIcon_SuperMissile, 2);
 
-hudWeapon[HUDWeapon.PowerBomb] = new HUDItem(Item.PowerBomb, sprt_HUD_Icon_PowerBomb, sprt_UI_ItemWheel_Icon_PowerBomb,
+weap[Weapon.PowerBomb] = new EquipItem(Item.PowerBomb, sprt_HUD_Icon_PowerBomb, sprt_UI_Radial_Icon_PowerBomb,
 	function(){ return powerBombStat; }, function(){ return powerBombMax; }, sprt_HUD_AmmoIcon_PowerBomb, 2);
 
-hudWeapon[HUDWeapon.GrappleBeam] = new HUDItem(Item.GrappleBeam, sprt_HUD_Icon_GrappleBeam, sprt_UI_ItemWheel_Icon_GrappleBeam);
+weap[Weapon.GrappleBeam] = new EquipItem(Item.GrappleBeam, sprt_HUD_Icon_GrappleBeam, sprt_UI_Radial_Icon_GrappleBeam);
 
-hudWeaponIndex = -1;
-hudAltWeaponIndex = -1;
-weapHUDOpen = false;
-
-function HasHUDWeapon(_hudIndex)
+#region Weap functions
+function HasWeapon(_index)
 {
-	return (_hudIndex >= 0 && _hudIndex < array_length(hudWeapon) && is_struct(hudWeapon[_hudIndex]) && (hudWeapon[_hudIndex].itemIndex == undefined || item[hudWeapon[_hudIndex].itemIndex]));
+	return (_index >= 0 && _index < array_length(weap) && is_struct(weap[_index]) && (weap[_index].itemIndex == undefined || item[weap[_index].itemIndex]));
 }
-function HUDWeaponHasAmmo(_hudIndex)
+function WeaponHasAmmo(_index)
 {
-	if(HasHUDWeapon(_hudIndex))
+	if(HasWeapon(_index))
 	{
-		var hWep = hudWeapon[_hudIndex],
+		var hWep = weap[_index],
 			ammo = 1;
 		if(hWep.GetAmmo != undefined)
 		{
@@ -1074,50 +1055,159 @@ function HUDWeaponHasAmmo(_hudIndex)
 	}
 	return false;
 }
-function HUDWeaponSelected(_hudIndex)
+function WeaponSelected(_index)
 {
-	return (HUDWeaponHasAmmo(_hudIndex) && hudWeaponIndex == _hudIndex);
+	return (WeaponHasAmmo(_index) && weapIndex == _index && weapSelected);
 }
 
-scanVisor = noone;
-xrayVisor = noone;
+function WeapIndexNum()
+{
+	var numWeaps = 0;
+	for(var i = 0; i < Weapon._Length; i++)
+	{
+		if(HasWeapon(i))
+		{
+			numWeaps++;
+		}
+	}
+	if(numWeaps <= 0)
+	{
+		weapIndex = -1;
+		weapSelected = false;
+	}
+	else
+	{
+		if(!HasWeapon(weapIndex))
+		{
+			weapIndex = -1;
+			weapSelected = false;
+		}
+		if(weapIndex == -1)
+		{
+			for(var i = 0; i < Weapon._Length; i++)
+			{
+				if(HasWeapon(i))
+				{
+					weapIndex = i;
+					break;
+				}
+			}
+		}
+		else if(weapSelected && !WeaponHasAmmo(weapIndex))
+		{
+			weapSelected = false;
+			audio_play_sound(snd_MenuTick,0,false);
+		}
+	}
+	return numWeaps;
+}
+#endregion
 
-enum HUDVisor
+weapIndex = -1;
+weapSelected = false;
+WeapIndexNum();
+
+enum Visor
 {
 	Scan,
 	XRay,
 	
 	_Length
 }
-hudVisor = array_create(HUDVisor._Length, 0);
+visor = array_create(Visor._Length, undefined);
 
-hudVisor[HUDVisor.Scan] = new HUDItem(undefined, sprt_HUD_Icon_ScanVisor, sprt_UI_ItemWheel_Icon_ScanVisor);
-hudVisor[HUDVisor.XRay] = new HUDItem(Item.XRayVisor, sprt_HUD_Icon_XRayVisor, sprt_UI_ItemWheel_Icon_XRayVisor);
+visor[Visor.Scan] = new EquipItem(Item.ScanVisor, sprt_HUD_Icon_ScanVisor, sprt_UI_Radial_Icon_ScanVisor);
+visor[Visor.XRay] = new EquipItem(Item.XRayVisor, sprt_HUD_Icon_XRayVisor, sprt_UI_Radial_Icon_XRayVisor);
 
-hudVisorIndex = -1;
-hudAltVisorIndex = -1;
-visorHUDOpen = false;
-
-function HasHUDVisor(_hudIndex)
+#region Visor functions
+function HasVisor(_index)
 {
-	return (_hudIndex >= 0 && _hudIndex < array_length(hudVisor) && is_struct(hudVisor[_hudIndex]) && (hudVisor[_hudIndex].itemIndex == undefined || item[hudVisor[_hudIndex].itemIndex]));
+	return (_index >= 0 && _index < array_length(visor) && is_struct(visor[_index]) && (visor[_index].itemIndex == undefined || item[visor[_index].itemIndex]));
 }
-function HUDVisorSelected(_hudIndex)
+function VisorSelected(_index)
 {
-	if(HasHUDVisor(_hudIndex))
+	if(HasVisor(_index))
 	{
 		var _flag = true;
-		if(_hudIndex == HUDVisor.Scan)
+		if(_index == Visor.Scan)
 		{
 			_flag = instance_exists(scanVisor);
 		}
-		if(_hudIndex == HUDVisor.XRay)
+		if(_index == Visor.XRay)
 		{
 			_flag = instance_exists(xrayVisor);
 		}
-		return (_flag && hudVisorIndex == _hudIndex);
+		return (_flag && visorIndex == _index && visorSelected);
 	}
 	return false;
+}
+
+function VisorIndexNum()
+{
+	var numVisors = 0;
+	for(var i = 0; i < Visor._Length; i++)
+	{
+		if(HasVisor(i))
+		{
+			numVisors++;
+		}
+	}
+	if(numVisors <= 0)
+	{
+		visorIndex = -1;
+		visorSelected = false;
+	}
+	else
+	{
+		if(!HasVisor(visorIndex))
+		{
+			visorIndex = -1;
+			visorSelected = false;
+		}
+		if(visorIndex == -1)
+		{
+			for(var i = 0; i < Visor._Length; i++)
+			{
+				if(HasVisor(i))
+				{
+					visorIndex = i;
+					break;
+				}
+			}
+		}
+	}
+	return numVisors;
+}
+#endregion
+
+visorIndex = -1;
+visorSelected = false;
+VisorIndexNum();
+
+scanVisor = noone;
+xrayVisor = noone;
+
+enum Beam
+{
+	Charge,
+	Ice,
+	Wave,
+	Spazer,
+	Plasma,
+	
+	_Length
+}
+beam = array_create(Beam._Length, undefined);
+
+beam[Beam.Charge] = new EquipItem(Item.ChargeBeam, noone, sprt_UI_Radial_Icon_ChargeBeam);
+beam[Beam.Ice] = new EquipItem(Item.IceBeam, noone, sprt_UI_Radial_Icon_IceBeam);
+beam[Beam.Wave] = new EquipItem(Item.WaveBeam, noone, sprt_UI_Radial_Icon_WaveBeam);
+beam[Beam.Spazer] = new EquipItem(Item.Spazer, noone, sprt_UI_Radial_Icon_Spazer);
+beam[Beam.Plasma] = new EquipItem(Item.PlasmaBeam, noone, sprt_UI_Radial_Icon_PlasmaBeam);
+
+function HasBeam(_index)
+{
+	return (_index >= 0 && _index < array_length(beam) && is_struct(beam[_index]) && (beam[_index].itemIndex == undefined || hasItem[beam[_index].itemIndex]));
 }
 
 #endregion
@@ -2276,7 +2366,7 @@ function Crawler_OnSlopeYCollision_Right(fVY, xShift)
 	}
 	else
 	{
-		OnSlopeYCollision_Right();
+		OnSlopeYCollision_Right(fVY, xShift);
 	}
 }
 function Crawler_CanMoveDownSlope_Right()
@@ -3743,7 +3833,7 @@ function PaletteSurface()
 		}
 		#endregion
 		#region -- Visor flashing --
-		if(HUDVisorSelected(HUDVisor.Scan) || HUDVisorSelected(HUDVisor.XRay))
+		if(VisorSelected(Visor.Scan) || VisorSelected(Visor.XRay))
 		{
 			if(visorPalFlash >= 1)
             {
@@ -3755,12 +3845,12 @@ function PaletteSurface()
             }
             visorPalFlash = clamp(visorPalFlash + 0.125*visorPalNum,0,1);
 			
-			if(HUDVisorSelected(HUDVisor.Scan))
+			if(VisorSelected(Visor.Scan))
 			{
 				DrawPalSprite(pal_Player_Visor_Flash,0,1);
 				DrawPalSprite(pal_Player_Visor_Flash,1,visorPalFlash);
 			}
-			if(HUDVisorSelected(HUDVisor.XRay))
+			if(VisorSelected(Visor.XRay))
 			{
 				DrawPalSprite(pal_Player_Visor_XRay,0,1);
 				DrawPalSprite(pal_Player_Visor_XRay,1,visorPalFlash);
@@ -4224,7 +4314,7 @@ function UpdatePlayerSurface(_palSurface)
 			draw_sprite_ext(sprt_Player_MorphBallAlt_Shine,0,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),1,1,0,c_white,1);
 		}
 	
-		if(HUDWeaponSelected(HUDWeapon.Missile) || HUDWeaponSelected(HUDWeapon.SuperMissile) || HUDWeaponSelected(HUDWeapon.GrappleBeam))
+		if(WeaponSelected(Weapon.Missile) || WeaponSelected(Weapon.SuperMissile) || WeaponSelected(Weapon.GrappleBeam))
 		{
 			missileArmFrame = min(missileArmFrame + 1, 4);
 		}

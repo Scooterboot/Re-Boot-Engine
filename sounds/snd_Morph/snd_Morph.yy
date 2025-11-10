@@ -1,15 +1,17 @@
 {
-  "$GMSound":"",
+  "$GMSound":"v2",
   "%Name":"snd_Morph",
   "audioGroupId":{
     "name":"audio_sound",
     "path":"audiogroups/audio_sound",
   },
   "bitDepth":1,
-  "bitRate":128,
+  "channelFormat":1,
   "compression":0,
+  "compressionQuality":4,
   "conversionMode":0,
   "duration":0.317732,
+  "exportDir":"",
   "name":"snd_Morph",
   "parent":{
     "name":"Morph",
@@ -20,6 +22,5 @@
   "resourceVersion":"2.0",
   "sampleRate":44100,
   "soundFile":"snd_Morph",
-  "type":1,
   "volume":1.0,
 }

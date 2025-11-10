@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"pal_Player_CrystalFlash",
   "bboxMode":0,
   "bbox_bottom":8,
@@ -12,9 +12,9 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"8146d158-8317-4dee-be99-6b88c8a34b23","name":"8146d158-8317-4dee-be99-6b88c8a34b23","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"91f49bc0-a0be-4a8d-960d-4dcf92176754","name":"91f49bc0-a0be-4a8d-960d-4dcf92176754","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"ec579822-b157-4eda-8028-e3561ca12dbf","name":"ec579822-b157-4eda-8028-e3561ca12dbf","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"8146d158-8317-4dee-be99-6b88c8a34b23","name":"8146d158-8317-4dee-be99-6b88c8a34b23","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"91f49bc0-a0be-4a8d-960d-4dcf92176754","name":"91f49bc0-a0be-4a8d-960d-4dcf92176754","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"ec579822-b157-4eda-8028-e3561ca12dbf","name":"ec579822-b157-4eda-8028-e3561ca12dbf","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
@@ -91,8 +91,8 @@
   "swatchColours":null,
   "swfPrecision":2.525,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"Player",
+    "path":"texturegroups/Player",
   },
   "type":0,
   "VTile":false,

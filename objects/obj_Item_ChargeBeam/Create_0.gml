@@ -5,7 +5,8 @@ itemName = "chargeBeam";
 itemID = 0;
 
 itemHeader = "CHARGE BEAM";
-itemDesc = "Hold ${shootButton} to charge your beam\n"+"and release to fire a charge shot.";
+//itemDesc = "Hold ${shootButton} to charge your beam\n"+"and release to fire a charge shot.";
+itemDesc = "Hold ${Fire} to charge your beam\n"+"and release to fire a charge shot.";
 
 isMajorItem = true;
 

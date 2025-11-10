@@ -134,7 +134,10 @@
   "sdfSpread":8,
   "size":4.0,
   "styleName":"Regular",
-  "textureGroupId":null,
+  "textureGroupId":{
+    "name":"UserInterface",
+    "path":"texturegroups/UserInterface",
+  },
   "TTFName":"${project_dir}\\fonts\\fnt_GUI_Small2\\fnt_GUI_Small2.png",
   "usesSDF":false,
 }

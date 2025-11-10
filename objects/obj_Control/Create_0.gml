@@ -2,7 +2,6 @@
 
 enum ComboType
 {
-	None,
 	Or,
 	And,
 	AndNot
@@ -45,7 +44,7 @@ function ControlInput(_verbIndex, _keyboardPressType, _keyboardComboType, _gamep
 		}
 		
 		var _input = false;
-		if(comboType == ComboType.None)
+		if(comboType == ComboType.Or)
 		{
 			_input = InputCheck(verbIndex);
 		}
@@ -54,10 +53,6 @@ function ControlInput(_verbIndex, _keyboardPressType, _keyboardComboType, _gamep
 			_input = InputCheck_Alt(verbIndex, 0);
 			if(!is_undefined(InputBindingGet(InputPlayerUsingGamepad(), verbIndex, 1)))
 			{
-				if(comboType == ComboType.Or)
-				{
-					_input |= InputCheck_Alt(verbIndex, 1);
-				}
 				if(comboType == ComboType.And)
 				{
 					_input &= InputCheck_Alt(verbIndex, 1);
@@ -116,9 +111,9 @@ function ControlInput(_verbIndex, _keyboardPressType, _keyboardComboType, _gamep
 for(var i = 0; i < INPUT_VERB._Length; i++)
 {
 	var _pressTypeKB = PressType.Press,
-		_comboTypeKB = ComboType.None,
+		_comboTypeKB = ComboType.Or,
 		_pressTypeGP = PressType.Press,
-		_comboTypeGP = ComboType.None;
+		_comboTypeGP = ComboType.Or;
 	
 	if(i == INPUT_VERB.MenuScrollUp || i == INPUT_VERB.MenuScrollDown)
 	{

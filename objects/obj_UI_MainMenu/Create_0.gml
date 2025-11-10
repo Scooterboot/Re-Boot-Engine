@@ -819,8 +819,11 @@ buttonTip = [
 "Back",
 "Cancel"];
 
-buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1]+"   ${menuCancelButton} - "+buttonTip[2];
-buttonTipScrib = scribble(buttonTipString);
+//buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1]+"   ${menuCancelButton} - "+buttonTip[2];
+buttonTipString[0] = "${MenuMove} - "+buttonTip[0]+"   ${MenuAccept_0} - "+buttonTip[1];
+buttonTipString[1] = "${MenuMove} - "+buttonTip[0]+"   ${MenuAccept_0} - "+buttonTip[1]+"   ${MenuCancel_0} - "+buttonTip[2];
+buttonTipString[2] = "${MenuMove} - "+buttonTip[0]+"   ${MenuAccept_0} - "+buttonTip[1]+"   ${MenuCancel_0} - "+buttonTip[3];
+buttonTipScrib = scribble(buttonTipString[0]);
 buttonTipScrib.starting_format("fnt_GUI_Small2",c_white);
 buttonTipScrib.align(fa_center,fa_middle);
 

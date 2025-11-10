@@ -17,6 +17,7 @@ function __InputConfigVerbs()
 		MenuAccept,
 		MenuCancel,
 		MenuSecondary,
+		MenuTertiary,
 		MenuR1,
 		MenuR2,
 		MenuL1,
@@ -42,27 +43,22 @@ function __InputConfigVerbs()
 		ReverseAim,
 		Moonwalk,
 		
+		WeapToggle,
+		
+		VisorToggle,
+		VisorCycle,
+		
+		RadialUIOpen,
+		RadialUIUp,
+		RadialUIDown,
+		RadialUILeft,
+		RadialUIRight,
+		
 		VisorUse,
 		VisorUp,
 		VisorDown,
 		VisorLeft,
 		VisorRight,
-	
-		WeapToggleOn,
-		WeapToggleOff,
-		WeapHUDOpen,
-		WeapHUDUp,
-		WeapHUDDown,
-		WeapHUDLeft,
-		WeapHUDRight,
-		
-		VisorToggleOn,
-		VisorToggleOff,
-		VisorHUDOpen,
-		VisorHUDUp,
-		VisorHUDDown,
-		VisorHUDLeft,
-		VisorHUDRight,
 	
 		_Length
 	}
@@ -71,9 +67,10 @@ function __InputConfigVerbs()
 		MenuMove,
 		MenuScroll,
 		PlayerMove,
-		WeapHUDMove,
-		VisorHUDMove,
-		VisorMove
+		RadialUIMove,
+		VisorMove,
+		
+		_Length
 	}
 	
 	var _gp_face1 = gp_face1,
@@ -103,15 +100,16 @@ function __InputConfigVerbs()
 	InputDefineVerb(INPUT_VERB.MenuAccept,		"menu accept",		ord("Z"),	_gp_face1);
 	InputDefineVerb(INPUT_VERB.MenuCancel,		"menu cancel",		ord("X"),	[_gp_face2, gp_face3]);
 	InputDefineVerb(INPUT_VERB.MenuSecondary,	"menu secondary",	ord("C"),	gp_face4);
-	InputDefineVerb(INPUT_VERB.MenuR1,			"menu r1",			ord("E"),	gp_shoulderr);
-	InputDefineVerb(INPUT_VERB.MenuR2,			"menu r2",			ord("D"),	gp_shoulderrb);
+	InputDefineVerb(INPUT_VERB.MenuTertiary,	"menu tertiary",	ord("V"),	gp_select);
+	InputDefineVerb(INPUT_VERB.MenuR1,			"menu r1",			ord("W"),	gp_shoulderr);
+	InputDefineVerb(INPUT_VERB.MenuR2,			"menu r2",			ord("S"),	gp_shoulderrb);
 	InputDefineVerb(INPUT_VERB.MenuL1,			"menu l1",			ord("Q"),	gp_shoulderl);
 	InputDefineVerb(INPUT_VERB.MenuL2,			"menu l2",			ord("A"),	gp_shoulderlb);
 	
-	InputDefineVerb(INPUT_VERB.PlayerUp,	"player up",	vk_up,		gp_padu);
-	InputDefineVerb(INPUT_VERB.PlayerDown,	"player down",	vk_down,	gp_padd);
-	InputDefineVerb(INPUT_VERB.PlayerLeft,	"player left",	vk_left,	gp_padl);
-	InputDefineVerb(INPUT_VERB.PlayerRight,	"player right",	vk_right,	gp_padr);
+	InputDefineVerb(INPUT_VERB.PlayerUp,	"player up",	vk_up,		[-gp_axislv, gp_padu]);
+	InputDefineVerb(INPUT_VERB.PlayerDown,	"player down",	vk_down,	[ gp_axislv, gp_padd]);
+	InputDefineVerb(INPUT_VERB.PlayerLeft,	"player left",	vk_left,	[-gp_axislh, gp_padl]);
+	InputDefineVerb(INPUT_VERB.PlayerRight,	"player right",	vk_right,	[ gp_axislh, gp_padr]);
 	InputDefineCluster(INPUT_CLUSTER.PlayerMove, INPUT_VERB.PlayerUp, INPUT_VERB.PlayerRight, INPUT_VERB.PlayerDown, INPUT_VERB.PlayerLeft);
 	
 	InputDefineVerb(INPUT_VERB.Jump,		"jump",			ord("Z"),				gp_face1);
@@ -129,30 +127,24 @@ function __InputConfigVerbs()
 	InputDefineVerb(INPUT_VERB.ReverseAim,	"reverse aim",	ord("D"),				gp_shoulderl);
 	InputDefineVerb(INPUT_VERB.Moonwalk,	"moonwalk",		ord("F"),				gp_shoulderl);
 	
-	InputDefineVerb(INPUT_VERB.VisorUse,	"visor",		mb_left,	gp_stickr);
+	InputDefineVerb(INPUT_VERB.WeapToggle,	"weap toggle",	ord("R"),	gp_stickr);
+	
+	InputDefineVerb(INPUT_VERB.VisorToggle,	"visor toggle",	ord("Q"),	gp_stickl);
+	InputDefineVerb(INPUT_VERB.VisorCycle,	"visor cycle",	ord("W"),	gp_select);
+	
+	InputDefineVerb(INPUT_VERB.RadialUIOpen,	"weap menu open",	ord("E"),	[gp_axisrh, -gp_axisrh, gp_axisrv, -gp_axisrv]);
+	InputDefineVerb(INPUT_VERB.RadialUIUp,		"weap menu up",		vk_up,		-gp_axisrv);
+	InputDefineVerb(INPUT_VERB.RadialUIDown,	"weap menu down",	vk_down,	 gp_axisrv);
+	InputDefineVerb(INPUT_VERB.RadialUILeft,	"weap menu left",	vk_left,	-gp_axisrh);
+	InputDefineVerb(INPUT_VERB.RadialUIRight,	"weap menu right",	vk_right,	 gp_axisrh);
+	InputDefineCluster(INPUT_CLUSTER.RadialUIMove, INPUT_VERB.RadialUIUp, INPUT_VERB.RadialUIRight, INPUT_VERB.RadialUIDown, INPUT_VERB.RadialUILeft);
+	
+	InputDefineVerb(INPUT_VERB.VisorUse,	"visor use",	mb_left,	gp_stickr);
 	InputDefineVerb(INPUT_VERB.VisorUp,		"visor up",		undefined,	-gp_axisrv);
 	InputDefineVerb(INPUT_VERB.VisorDown,	"visor down",	undefined,	 gp_axisrv);
 	InputDefineVerb(INPUT_VERB.VisorLeft,	"visor left",	undefined,	-gp_axisrh);
 	InputDefineVerb(INPUT_VERB.VisorRight,	"visor right",	undefined,	 gp_axisrh);
 	InputDefineCluster(INPUT_CLUSTER.VisorMove, INPUT_VERB.VisorUp, INPUT_VERB.VisorRight, INPUT_VERB.VisorDown, INPUT_VERB.VisorLeft);
-	
-	InputDefineVerb(INPUT_VERB.WeapToggleOn,	"weap toggle on",	ord("R"),	gp_stickr);
-	InputDefineVerb(INPUT_VERB.WeapToggleOff,	"weap toggle off",	ord("R"),	gp_stickr);
-	InputDefineVerb(INPUT_VERB.WeapHUDOpen,		"weap hud open",	ord("E"),	[gp_axisrh, -gp_axisrh, gp_axisrv, -gp_axisrv]);
-	InputDefineVerb(INPUT_VERB.WeapHUDUp,		"weap hud up",		vk_up,		-gp_axisrv);
-	InputDefineVerb(INPUT_VERB.WeapHUDDown,		"weap hud down",	vk_down,	 gp_axisrv);
-	InputDefineVerb(INPUT_VERB.WeapHUDLeft,		"weap hud left",	vk_left,	-gp_axisrh);
-	InputDefineVerb(INPUT_VERB.WeapHUDRight,	"weap hud right",	vk_right,	 gp_axisrh);
-	InputDefineCluster(INPUT_CLUSTER.WeapHUDMove, INPUT_VERB.WeapHUDUp, INPUT_VERB.WeapHUDRight, INPUT_VERB.WeapHUDDown, INPUT_VERB.WeapHUDLeft);
-	
-	InputDefineVerb(INPUT_VERB.VisorToggleOn,	"visor toggle on",	ord("Q"),	gp_stickl);
-	InputDefineVerb(INPUT_VERB.VisorToggleOff,	"visor toggle off",	ord("Q"),	gp_stickl);
-	InputDefineVerb(INPUT_VERB.VisorHUDOpen,	"visor hud open",	vk_tab,		[gp_axislh, -gp_axislh, gp_axislv, -gp_axislv]);
-	InputDefineVerb(INPUT_VERB.VisorHUDUp,		"visor hud up",		vk_up,		-gp_axislv);
-	InputDefineVerb(INPUT_VERB.VisorHUDDown,	"visor hud down",	vk_down,	 gp_axislv);
-	InputDefineVerb(INPUT_VERB.VisorHUDLeft,	"visor hud left",	vk_left,	-gp_axislh);
-	InputDefineVerb(INPUT_VERB.VisorHUDRight,	"visor hud right",	vk_right,	 gp_axislh);
-	InputDefineCluster(INPUT_CLUSTER.VisorHUDMove, INPUT_VERB.VisorHUDUp, INPUT_VERB.VisorHUDRight, INPUT_VERB.VisorHUDDown, INPUT_VERB.VisorHUDLeft);
 }
 
 /*function __InputConfigVerbs()

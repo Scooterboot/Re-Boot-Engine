@@ -4,7 +4,7 @@ Set_Beams();
 
 var sndFlag = false;
 
-if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && global.pauseState == PauseState.XRay) || global.pauseState == PauseState.RoomTrans)
+if(global.pauseState == PauseState.None || (VisorSelected(Visor.XRay) && global.pauseState == PauseState.XRay) || global.pauseState == PauseState.RoomTrans)
 {
 	#region Update Anims
 	
@@ -38,7 +38,7 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 	}
 	
 	var aimFrameTarget = aimAngle*2;
-	if(HUDVisorSelected(HUDVisor.XRay))
+	if(VisorSelected(Visor.XRay))
 	{
 		aimFrameTarget = 0;
 	}
@@ -267,7 +267,7 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 					frame[Frame.Idle] = scr_wrap(frame[Frame.Idle] + 1,0,array_length(iNum));
 					frameCounter[Frame.Idle] = 0;
 				}
-				if(HUDVisorSelected(HUDVisor.Scan) || HUDVisorSelected(HUDVisor.XRay) || aimFrame != 0 || landFrame > 0 || recoilCounter > 0 || runToStandFrame[0] > 0 || runToStandFrame[1] > 0 || walkToStandFrame > 0)
+				if(VisorSelected(Visor.Scan) || VisorSelected(Visor.XRay) || aimFrame != 0 || landFrame > 0 || recoilCounter > 0 || runToStandFrame[0] > 0 || runToStandFrame[1] > 0 || walkToStandFrame > 0)
 				{
 					frame[Frame.Idle] = 0;
 					frameCounter[Frame.Idle] = 0;
@@ -321,7 +321,7 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 							bodyFrame = scr_round(walkToStandFrame)-1;
 							ArmPos((18+(3*bodyFrame))*dir,-(1+bodyFrame));
 						}
-						else if(HUDVisorSelected(HUDVisor.Scan))
+						else if(VisorSelected(Visor.Scan))
 						{
 							torsoR = sprt_Player_XRayRight;
 							torsoL = sprt_Player_XRayLeft;
@@ -329,7 +329,7 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 							var xcone = abs(scr_wrap(sdir-90, -180, 180));
 							bodyFrame = 4-scr_round(xcone/45);
 						}
-						else if(HUDVisorSelected(HUDVisor.XRay))
+						else if(VisorSelected(Visor.XRay))
 						{
 							torsoR = sprt_Player_XRayRight;
 							torsoL = sprt_Player_XRayLeft;
@@ -885,7 +885,7 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 					frame[Frame.Idle] = scr_wrap(frame[Frame.Idle] + 1,0,array_length(iNum));
 					frameCounter[Frame.Idle] = 0;
 				}
-				if(aimFrame != 0 || crouchFrame > 0 || recoilCounter > 0 || HUDVisorSelected(HUDVisor.Scan) || HUDVisorSelected(HUDVisor.XRay))
+				if(aimFrame != 0 || crouchFrame > 0 || recoilCounter > 0 || VisorSelected(Visor.Scan) || VisorSelected(Visor.XRay))
 				{
 					frame[Frame.Idle] = 0;
 					frameCounter[Frame.Idle] = 0;
@@ -899,7 +899,7 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 					{
 						if(aimFrame == 0)
 						{
-							if(HUDVisorSelected(HUDVisor.Scan))
+							if(VisorSelected(Visor.Scan))
 							{
 								torsoR = sprt_Player_XRayRight;
 								torsoL = sprt_Player_XRayLeft;
@@ -907,7 +907,7 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 								var xcone = abs(scr_wrap(sdir-90, -180, 180));
 								bodyFrame = 4-scr_round(xcone/45);
 							}
-							else if(HUDVisorSelected(HUDVisor.XRay))
+							else if(VisorSelected(Visor.XRay))
 							{
 								torsoR = sprt_Player_XRayRight;
 								torsoL = sprt_Player_XRayLeft;
@@ -1332,15 +1332,15 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 				fDir = grippedDir;
 				if(climbIndex <= 0)
 				{
-					var usingVisor = (HUDVisorSelected(HUDVisor.Scan) || HUDVisorSelected(HUDVisor.XRay));
+					var usingVisor = (VisorSelected(Visor.Scan) || VisorSelected(Visor.XRay));
 					var visorFrame = 2;
-					if(HUDVisorSelected(HUDVisor.Scan))
+					if(VisorSelected(Visor.Scan))
 					{
 						var sdir = point_direction(x,y, scanVisor.GetRoomX(),scanVisor.GetRoomY());
 						var xcone = abs(scr_wrap(sdir-90, -180, 180));
 						visorFrame = 4-scr_round(xcone/45);
 					}
-					if(HUDVisorSelected(HUDVisor.XRay))
+					if(VisorSelected(Visor.XRay))
 					{
 						var xcone = abs(scr_wrap(xrayVisor.coneDir-90, -180, 180));
 						visorFrame = 4-scr_round(xcone/45);
@@ -2483,7 +2483,7 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 			amount = beamAmt,
 			sound = beamSound,
 			autoFire = 1;
-		if(HUDWeaponSelected(HUDWeapon.Missile))
+		if(WeaponSelected(Weapon.Missile))
 		{
 			shotIndex = obj_MissileShot;
 			damage = 100;
@@ -2493,7 +2493,7 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 			sound = snd_Missile_Shot;
 			autoFire = 0;
 		}
-		else if(HUDWeaponSelected(HUDWeapon.SuperMissile))
+		else if(WeaponSelected(Weapon.SuperMissile))
 		{
 			shotIndex = obj_SuperMissileShot;
 			damage = 300;
@@ -2518,7 +2518,7 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 			chargeBombDmg = 30, // Bomb spread damage.
 			pBombDmg = 40; // Power bomb explosions deal damage per frame (well, not really, because enemies have i-frames).
 		
-		if(!HUDVisorSelected(HUDVisor.XRay))
+		if(!VisorSelected(Visor.XRay))
 		{
 			// ----- Shoot -----
 			#region Shoot
@@ -2526,7 +2526,7 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 			{
 				if(state != State.Morph && stateFrame != State.Morph)
 				{
-					if(HUDWeaponSelected(HUDWeapon.GrappleBeam) && canShoot)
+					if(WeaponSelected(Weapon.GrappleBeam) && canShoot)
 					{
 						delay = 14;
 					
@@ -2575,7 +2575,7 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 						instance_destroy(grapple);
 						grappleDist = 0;
 					
-						if(canShoot && (hudWeaponIndex <= -1 || HUDWeaponHasAmmo(hudWeaponIndex)))
+						if(canShoot && (weapIndex <= -1 || WeaponHasAmmo(weapIndex)))
 						{
 							if(autoFire > 0)
 							{
@@ -2587,11 +2587,11 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 							{
 								if(rFire || enqueShot || (!item[Item.ChargeBeam] && autoFire > 0) || autoFire == 2)
 								{
-									if(HUDWeaponSelected(HUDWeapon.Missile))
+									if(WeaponSelected(Weapon.Missile))
 									{
 										missileStat--;
 									}
-									if(HUDWeaponSelected(HUDWeapon.SuperMissile))
+									if(WeaponSelected(Weapon.SuperMissile))
 									{
 										superMissileStat--;
 									}
@@ -2674,7 +2674,7 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 								}
 							}
 							
-							if(HUDWeaponSelected(HUDWeapon.PowerBomb) || (item[Item.PowerBomb] && hudWeaponIndex >= 0 && powerBombStat > 0))
+							if(WeaponSelected(Weapon.PowerBomb) || (item[Item.PowerBomb] && weapIndex >= 0 && weapSelected && powerBombStat > 0))
 							{
 								var pBomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_PowerBomb);
 								pBomb.damage = pBombDmg;
@@ -2826,7 +2826,7 @@ if(global.pauseState == PauseState.None || (HUDVisorSelected(HUDVisor.XRay) && g
 							recoil = true;
 						}
 					}
-					else if(item[Item.MBBomb] && !HUDWeaponSelected(HUDWeapon.PowerBomb))
+					else if(item[Item.MBBomb] && !WeaponSelected(Weapon.PowerBomb))
 					{
 						var bombPosX = x,
 							bombPosY = y+3;

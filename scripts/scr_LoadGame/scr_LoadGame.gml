@@ -39,12 +39,25 @@ function scr_LoadGame()
 
 				for(var i = 0; i < array_length(item); i++)
 				{
-					item[i] = _map[? "item"+string(i)];
+					var _item = _map[? "item"+string(i)];
+					if(!is_undefined(_item))
+					{
+						item[i] = _item;
+					}
 				}
 				for(var i = 0; i < array_length(hasItem); i++)
 				{
-					hasItem[i] = _map[? "hasItem"+string(i)];
+					var _hasItem = _map[? "hasItem"+string(i)];
+					if(!is_undefined(_hasItem))
+					{
+						hasItem[i] = _hasItem;
+					}
 				}
+				
+				var _wIndex = _map[? "weapIndex"];
+				weapIndex = !is_undefined(_wIndex) ? _wIndex : -1;
+				var _vIndex = _map[? "visorIndex"];
+				visorIndex = !is_undefined(_vIndex) ? _vIndex : -1;
 			
 				instance_create_layer(x-(global.resWidth/2),y-(global.resHeight/2),"Camera",obj_Camera);
 			}

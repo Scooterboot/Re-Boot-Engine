@@ -1,8 +1,8 @@
 /// @description Draw Game Over Menu
-var xx = 0,//camera_get_view_x(view_camera[0]),
-	yy = 0,//camera_get_view_y(view_camera[0]),
-	ww = room_width,//global.resWidth,
-	hh = room_height,//global.resHeight,
+var xx = max(camera_get_view_x(view_camera[0]),0),
+	yy = max(camera_get_view_y(view_camera[0]),0),
+	ww = min(room_width,global.resWidth),
+	hh = min(room_height,global.resHeight),
 	alpha = screenFade;
 
 if(room == rm_GameOver)
@@ -12,7 +12,7 @@ if(room == rm_GameOver)
 	draw_set_font(fnt_Menu);
 	draw_set_halign(fa_center);
 	draw_set_valign(fa_top);
-	scr_DrawOptionText(ww/2,hh/6,gameOverText,c_red,1,string_width(gameOverText)+1,c_black,0);
+	scr_DrawOptionText(xx+ww/2,yy+hh/6,gameOverText,c_red,1,string_width(gameOverText)+1,c_black,0);
 	
 	cursorFrameCounter++;
 	if(cursorFrameCounter > 5)
@@ -30,15 +30,15 @@ if(room == rm_GameOver)
 	draw_set_font(fnt_GUI);
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
-	var oX = scr_round(ww/2 - 64),
-		oY = scr_round(hh/2 + space);
+	var oX = xx+scr_round(ww/2 - 64),
+		oY = yy+scr_round(hh/2 + space);
 
 	if(confirmQuitMM == -1 && confirmQuitDT == -1)
 	{
 		for(var i = 0; i < array_length(option); i++)
 		{
 			var oY2 = oY + i*space;
-			oX = scr_round(ww/2 - string_width(option[i])/2);
+			oX = xx+scr_round(ww/2 - string_width(option[i])/2);
 	
 			var col = c_black,
 				alph = 0.5,
@@ -56,15 +56,15 @@ if(room == rm_GameOver)
 	}
 	else
 	{
-		oX = scr_round(ww/2);
-		oY = scr_round(hh/2);// - space*2);
+		oX = xx+scr_round(ww/2);
+		oY = yy+scr_round(hh/2);// - space*2);
 					
 		var text = option[optionPos];
 		scr_DrawOptionText(scr_round(oX-string_width(text)/2),oY,text,c_white,1,string_width(text)+1,c_black,0.5);
 		text = confirmText[0];
 		scr_DrawOptionText(scr_round(oX-string_width(text)/2),oY+space*1.5,text,c_white,1,string_width(text)+1,c_black,0.5);
 					
-		var oY2 = scr_round(hh/2 + space*3);
+		var oY2 = yy+scr_round(hh/2 + space*3);
 		for(var i = 0; i < 2; i++)
 		{
 			text = confirmText[1+i];
@@ -86,12 +86,14 @@ if(room == rm_GameOver)
 		}
 	}
 
-	buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1];
+	//buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1];
+	var _tipStr = buttonTipString[0];
 	if(confirmQuitMM != -1 || confirmQuitDT != -1)
 	{
-		buttonTipString = buttonTipString + "   ${menuCancelButton} - "+buttonTip[2];
+		//buttonTipString = buttonTipString + "   ${menuCancelButton} - "+buttonTip[2];
+		_tipStr = buttonTipString[1];
 	}
-	var str = InsertIconsIntoString(buttonTipString);
+	var str = obj_UIHandler.InsertIconsIntoString(_tipStr);
 	if(buttonTipScrib.get_text() != str)
 	{
 		buttonTipScrib.overwrite(str);
@@ -107,8 +109,8 @@ if(room == rm_GameOver)
 
 	var col2 = make_color_rgb(26,108,0);
 	gpu_set_blendmode(bm_add);
-	draw_rectangle_color(xx-32,yy+hh-height,xx+(ww/2)-1,yy+hh,c_black,col2,col2,c_black,false);
-	draw_rectangle_color(xx+(ww/2),yy+hh-height,xx+ww+31,yy+hh,col2,c_black,c_black,col2,false);
+	draw_rectangle_color(xx-32,yy+hh-height,xx+(ww/2),yy+hh,c_black,col2,col2,c_black,false);
+	draw_rectangle_color(xx+(ww/2),yy+hh-height,xx+ww+32,yy+hh,col2,c_black,c_black,col2,false);
 	gpu_set_blendmode(bm_normal);
 	
 	var tipx = scr_round(xx+(ww/2)),

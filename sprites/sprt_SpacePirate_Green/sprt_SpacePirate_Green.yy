@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_SpacePirate_Green",
   "bboxMode":2,
   "bbox_bottom":48,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"87be3b01-6f58-4f22-8dd7-96cef618253e","name":"87be3b01-6f58-4f22-8dd7-96cef618253e","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"87be3b01-6f58-4f22-8dd7-96cef618253e","name":"87be3b01-6f58-4f22-8dd7-96cef618253e","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

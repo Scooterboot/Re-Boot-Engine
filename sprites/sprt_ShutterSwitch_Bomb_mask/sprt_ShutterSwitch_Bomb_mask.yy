@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_ShutterSwitch_Bomb_mask",
   "bboxMode":1,
   "bbox_bottom":15,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"16898426-ce33-40a7-9a77-626f1ea6f9f6","name":"16898426-ce33-40a7-9a77-626f1ea6f9f6","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"16898426-ce33-40a7-9a77-626f1ea6f9f6","name":"16898426-ce33-40a7-9a77-626f1ea6f9f6","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

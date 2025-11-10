@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"bg_Kraid04",
   "bboxMode":0,
   "bbox_bottom":191,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"b192a8ef-d3c2-4072-97d3-35d006bdf43c","name":"b192a8ef-d3c2-4072-97d3-35d006bdf43c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"b192a8ef-d3c2-4072-97d3-35d006bdf43c","name":"b192a8ef-d3c2-4072-97d3-35d006bdf43c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_SkreeProjectile",
   "bboxMode":0,
   "bbox_bottom":7,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"05ce2f11-09e7-4b7f-9094-7c70c54dc297","name":"05ce2f11-09e7-4b7f-9094-7c70c54dc297","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"05ce2f11-09e7-4b7f-9094-7c70c54dc297","name":"05ce2f11-09e7-4b7f-9094-7c70c54dc297","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

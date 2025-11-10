@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Item_PlasmaBeam",
   "bboxMode":0,
   "bbox_bottom":15,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"1fae3df3-e37d-4f9e-9581-1de4c4da7a99","name":"1fae3df3-e37d-4f9e-9581-1de4c4da7a99","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"fae0c6e0-9840-4f92-8a6d-67325f35d766","name":"fae0c6e0-9840-4f92-8a6d-67325f35d766","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"1fae3df3-e37d-4f9e-9581-1de4c4da7a99","name":"1fae3df3-e37d-4f9e-9581-1de4c4da7a99","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"fae0c6e0-9840-4f92-8a6d-67325f35d766","name":"fae0c6e0-9840-4f92-8a6d-67325f35d766","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

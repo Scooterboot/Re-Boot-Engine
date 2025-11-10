@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"bg_Norfair2",
   "bboxMode":0,
   "bbox_bottom":192,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"ea313080-23cb-4877-a76c-e702a4727fc1","name":"ea313080-23cb-4877-a76c-e702a4727fc1","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"ea313080-23cb-4877-a76c-e702a4727fc1","name":"ea313080-23cb-4877-a76c-e702a4727fc1","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

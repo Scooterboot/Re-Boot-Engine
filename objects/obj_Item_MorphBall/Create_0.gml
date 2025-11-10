@@ -5,7 +5,8 @@ itemName = "morphBall";
 itemID = 0;
 
 itemHeader = "MORPH BALL";
-itemDesc = "Press ${controlPad} down twice to morph into a ball.";
+//itemDesc = "Press ${controlPad} down twice to morph into a ball.";
+itemDesc = "Press ${Morph} or ${PlayerDown} twice to morph into a ball.";
 
 isMajorItem = true;
 

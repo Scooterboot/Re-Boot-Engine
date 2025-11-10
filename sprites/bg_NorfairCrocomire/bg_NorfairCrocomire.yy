@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"bg_NorfairCrocomire",
   "bboxMode":0,
   "bbox_bottom":255,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"a29a6db3-f362-40ed-8e8c-4a72979b0b3c","name":"a29a6db3-f362-40ed-8e8c-4a72979b0b3c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"a29a6db3-f362-40ed-8e8c-4a72979b0b3c","name":"a29a6db3-f362-40ed-8e8c-4a72979b0b3c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

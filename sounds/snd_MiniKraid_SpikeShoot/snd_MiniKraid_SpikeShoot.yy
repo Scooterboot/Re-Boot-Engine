@@ -1,15 +1,17 @@
 {
-  "$GMSound":"",
+  "$GMSound":"v2",
   "%Name":"snd_MiniKraid_SpikeShoot",
   "audioGroupId":{
     "name":"audio_sound",
     "path":"audiogroups/audio_sound",
   },
   "bitDepth":1,
-  "bitRate":128,
+  "channelFormat":1,
   "compression":0,
+  "compressionQuality":4,
   "conversionMode":0,
   "duration":0.186508,
+  "exportDir":"",
   "name":"snd_MiniKraid_SpikeShoot",
   "parent":{
     "name":"MiniKraid",
@@ -20,6 +22,5 @@
   "resourceVersion":"2.0",
   "sampleRate":44100,
   "soundFile":"snd_minikraid_spikeshoot.wav",
-  "type":1,
   "volume":1.0,
 }

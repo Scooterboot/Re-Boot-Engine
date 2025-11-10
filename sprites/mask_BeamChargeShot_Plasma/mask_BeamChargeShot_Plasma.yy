@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"mask_BeamChargeShot_Plasma",
   "bboxMode":0,
   "bbox_bottom":17,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"cbcf6f7a-957d-485c-be51-96d3d1a76358","name":"cbcf6f7a-957d-485c-be51-96d3d1a76358","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"cbcf6f7a-957d-485c-be51-96d3d1a76358","name":"cbcf6f7a-957d-485c-be51-96d3d1a76358","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

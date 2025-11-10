@@ -2,8 +2,8 @@
 
 var x1 = bb_left(0),
 	y1 = bb_top(0),
-	x2 = bb_right(0),
-	y2 = bb_bottom(0);
+	x2 = bb_right(0)+1,
+	y2 = bb_bottom(0)+1;
 
 draw_set_color(c_yellow);
 

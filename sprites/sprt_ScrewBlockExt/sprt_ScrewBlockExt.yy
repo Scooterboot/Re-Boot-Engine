@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_ScrewBlockExt",
   "bboxMode":0,
   "bbox_bottom":31,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"6cd09b0d-9769-45a7-9524-a631fb2fd1dc","name":"6cd09b0d-9769-45a7-9524-a631fb2fd1dc","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"6cd09b0d-9769-45a7-9524-a631fb2fd1dc","name":"6cd09b0d-9769-45a7-9524-a631fb2fd1dc","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

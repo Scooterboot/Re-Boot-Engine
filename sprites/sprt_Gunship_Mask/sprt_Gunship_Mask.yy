@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Gunship_Mask",
   "bboxMode":0,
   "bbox_bottom":79,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"89b45810-dcd0-4ace-a722-3ef64f35e9ca","name":"89b45810-dcd0-4ace-a722-3ef64f35e9ca","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"bf113bd5-3de3-41eb-be9a-aa5cf56bff63","name":"bf113bd5-3de3-41eb-be9a-aa5cf56bff63","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"89b45810-dcd0-4ace-a722-3ef64f35e9ca","name":"89b45810-dcd0-4ace-a722-3ef64f35e9ca","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"bf113bd5-3de3-41eb-be9a-aa5cf56bff63","name":"bf113bd5-3de3-41eb-be9a-aa5cf56bff63","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

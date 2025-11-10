@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_ConveyerTile",
   "bboxMode":0,
   "bbox_bottom":15,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"69a05603-7aeb-404a-b71b-1d320076ce11","name":"69a05603-7aeb-404a-b71b-1d320076ce11","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"cc14d4a0-e165-4870-b6fe-5b3f42d80c0b","name":"cc14d4a0-e165-4870-b6fe-5b3f42d80c0b","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"69a05603-7aeb-404a-b71b-1d320076ce11","name":"69a05603-7aeb-404a-b71b-1d320076ce11","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"cc14d4a0-e165-4870-b6fe-5b3f42d80c0b","name":"cc14d4a0-e165-4870-b6fe-5b3f42d80c0b","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

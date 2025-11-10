@@ -28,8 +28,8 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		draw_set_alpha(0.6);
 		var xx = mapX-1,
 			yy = mapY-1,
-			ww = mapWidth + 1,
-			hh = mapHeight + 1;
+			ww = mapWidth + 2,
+			hh = mapHeight + 2;
 		draw_rectangle(xx,yy,ww+xx,hh+yy,false);
 		draw_set_color(c_white);
 		draw_set_alpha(1);
@@ -111,7 +111,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		draw_set_alpha(hudMapFlashAlpha);
 		var rectX = mapX+mapDifX,//-pMapOffsetX,
 			rectY = mapY+mapDifY;//-pMapOffsetY;
-		draw_rectangle(rectX,rectY,rectX+msSizeW-1,rectY+msSizeH-1,false);
+		draw_rectangle(rectX,rectY,rectX+msSizeW,rectY+msSizeH,false);
 		draw_set_alpha(1);
 		
 		surface_reset_target();
@@ -166,8 +166,8 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			
 			var x2 = xx-1,
 				y2 = yy-1,
-				ww = 49,
-				hh = 8;
+				ww = 50,
+				hh = 9;
 			draw_set_color(bgCol);
 			draw_set_alpha(bgAlph);
 			
@@ -175,7 +175,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			
 			if(energyTanks > 0)
 			{
-				draw_rectangle(x2, y2, x2+ww, y2+yDiff-1, false);
+				draw_rectangle(x2, y2, x2+ww, y2+yDiff, false);
 				
 				if(energyTanks > defaultETankRowNum*2)
 				{
@@ -228,7 +228,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					ww = width+1, hh = height;
 				draw_set_color(bgCol);
 				draw_set_alpha(bgAlph);
-				draw_rectangle(x2, y2, x2+ww, y2+hh, false);
+				draw_rectangle(x2, y2, x2+ww+1, y2+hh+1, false);
 				draw_set_color(c_white);
 				draw_set_alpha(1);
 				
@@ -361,7 +361,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					ww = (width-1)*dodgeChargeCells+2, hh = height;
 				draw_set_color(bgCol);
 				draw_set_alpha(bgAlph);
-				draw_rectangle(x2, y2, x2+ww, y2+hh, false);
+				draw_rectangle(x2, y2, x2+ww+1, y2+hh+1, false);
 				draw_set_color(c_white);
 				draw_set_alpha(1);
 				
@@ -401,20 +401,20 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			
 			#region Visor Icon
 			
-			if(HasHUDVisor(hudAltVisorIndex))
+			if(HasVisor(visorIndex))
 			{
-				var hItem = hudVisor[hudAltVisorIndex],
+				var hItem = visor[visorIndex],
 					hSprt = hItem.hudIconSprt;
 				
 				var ww = sprite_get_width(hSprt),
 					hh = sprite_get_height(hSprt);
 				draw_set_color(bgCol);
 				draw_set_alpha(bgAlph);
-				draw_roundrect_ext(iX-2, iY-2, iX+ww, iY+hh, 8, 8, false);
+				draw_roundrect_ext(iX-1, iY-1, iX+ww+1, iY+hh+1, 8, 8, false);
 				draw_set_color(c_white);
 				draw_set_alpha(1);
 				
-				draw_sprite_ext(hSprt, (hudVisorIndex == hudAltVisorIndex), iX, iY, 1,1,0,c_white,1);
+				draw_sprite_ext(hSprt, visorSelected, iX+sprite_get_xoffset(hSprt), iY+sprite_get_yoffset(hSprt), 1,1,0,c_white,1);
 				
 				iX += 22;
 			}
@@ -422,31 +422,25 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			#endregion
 			#region Weapon Icon
 			
-			var _weapIndex = hudWeaponIndex,
-				_weapAltIndex = hudAltWeaponIndex;
+			var _weapIndex = weapIndex;
 			if(state == State.Morph && item[Item.PowerBomb])
 			{
-				_weapAltIndex = HUDWeapon.PowerBomb;
-				if(hudWeaponIndex != -1)
-				{
-					_weapIndex = _weapAltIndex;
-				}
+				_weapIndex = Weapon.PowerBomb;
 			}
-				
-			if(HasHUDWeapon(_weapAltIndex))
+			if(HasWeapon(_weapIndex))
 			{
-				var hItem = hudWeapon[_weapAltIndex],
+				var hItem = weap[_weapIndex],
 					hSprt = hItem.hudIconSprt;
 				
 				var ww = sprite_get_width(hSprt),
 					hh = sprite_get_height(hSprt);
 				draw_set_color(bgCol);
 				draw_set_alpha(bgAlph);
-				draw_roundrect_ext(iX-2, iY-2, iX+ww, iY+hh, 8, 8, false);
+				draw_roundrect_ext(iX-1, iY-1, iX+ww+1, iY+hh+1, 8, 8, false);
 				draw_set_color(c_white);
 				draw_set_alpha(1);
 				
-				draw_sprite_ext(hSprt, (_weapIndex == _weapAltIndex), iX, iY, 1,1,0,c_white,1);
+				draw_sprite_ext(hSprt, weapSelected, iX+sprite_get_xoffset(hSprt), iY+sprite_get_yoffset(hSprt), 1,1,0,c_white,1);
 				
 				iX += 22;
 			}
@@ -454,25 +448,25 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			#endregion
 			#region Ammo Icons
 			
-			for(var i = 0; i < array_length(hudWeapon); i++)
+			for(var i = 0; i < array_length(weap); i++)
 			{
-				if(HasHUDWeapon(i) && hudWeapon[i].GetAmmo != undefined)
+				if(HasWeapon(i) && weap[i].GetAmmo != undefined)
 				{
-					var hItem = hudWeapon[i],
+					var hItem = weap[i],
 						hSprt = hItem.ammoIconSprt,
 						ww = sprite_get_width(hSprt),
 						hh = sprite_get_height(hSprt),
-						backW = ww+5 + 6*hudWeapon[i].ammoDigits;
+						backW = ww+5 + 6*weap[i].ammoDigits;
 					
 					draw_set_color(bgCol);
 					draw_set_alpha(bgAlph);
-					draw_roundrect_ext(iX-2, iY-2, iX+backW, iY+hh, 4, 4, false);
+					draw_roundrect_ext(iX-1, iY-1, iX+backW+1, iY+hh+1, 4, 4, false);
 					draw_set_color(c_black);
 					draw_set_alpha(1);
-					draw_roundrect_ext(iX-1, iY-1, iX+backW-1, iY+hh-1, 4, 4, false);
+					draw_roundrect_ext(iX, iY, iX+backW, iY+hh, 4, 4, false);
 					draw_set_color(c_white);
 					
-					draw_sprite_ext(hSprt, (_weapIndex == i), iX, iY, 1,1,0,c_white,1);
+					draw_sprite_ext(hSprt, (_weapIndex == i && weapSelected), iX, iY, 1,1,0,c_white,1);
 					
 					var ammo = hItem.GetAmmo(),
 						aX = iX+backW-9,
@@ -499,136 +493,6 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					
 					iX += backW+4;
 				}
-			}
-			
-			#endregion
-			#region Item Wheel
-			
-			if(hudPauseAnim > 0)
-			{
-				draw_set_color(c_black);
-				draw_set_alpha(0.75*hudPauseAnim);
-				draw_rectangle(-1, -1, global.resWidth+1, global.resHeight+1, false);
-				draw_set_color(c_white);
-				draw_set_alpha(1);
-				
-				var centX = global.resWidth/2,
-					centY = global.resHeight/2;
-				
-				var alph = hudPauseAnim,
-					scale = lerp(0.5, 1, hudPauseAnim);
-				
-				draw_set_color(c_black);
-				draw_set_alpha(0.375*hudPauseAnim);
-				draw_circle(centX-1, centY-1, 64*scale, false);
-				draw_set_color(c_white);
-				draw_set_alpha(1);
-				
-				draw_sprite_ext(sprt_UI_ItemWheel_BG, 0, scr_round(centX), scr_round(centY), scale, scale, 0, c_white, alph*0.5);
-				
-				var dist = hudSelectWheelSize * scale;
-				hudSlotAnim = scr_wrap(hudSlotAnim+0.5,0,2);
-				
-				var hMoveDir,
-					hMoveDist,
-					cursorAnimFlag = false;
-				if(uiState == PlayerUIState.VisorWheel)
-				{
-					var _len = array_length(hudVisor),
-						_rad = 360/_len;
-					
-					hMoveDir = InputDirection(0, INPUT_CLUSTER.VisorHUDMove);
-					hMoveDist = InputDistance(INPUT_CLUSTER.VisorHUDMove) * dist;
-					
-					for(var i = 0; i < _len; i++)
-					{
-						var dir = 90 - _rad*i;
-						var itemX = centX + lengthdir_x(dist,dir),
-							itemY = centY + lengthdir_y(dist,dir);
-						
-						var subImg = 0;
-						if(hMoveDist >= hudSelectWheelMin && HasHUDVisor(i) && abs(angle_difference(dir,hMoveDir)) < (_rad/2))
-						{
-							subImg = 1 + floor(hudSlotAnim);
-							cursorAnimFlag = true;
-						}
-						draw_sprite_ext(sprt_UI_ItemWheel_Slot, subImg, scr_round(itemX), scr_round(itemY), scale, scale, 0, c_white, alph*0.8);
-						
-						if(HasHUDVisor(i))
-						{
-							subImg = 0;
-							if(hudAltVisorIndex == i)
-							{
-								subImg = 1;
-							}
-							draw_sprite_ext(hudVisor[i].selectIconSprt, subImg, scr_round(itemX), scr_round(itemY), scale, scale, 0, c_white, alph);
-						}
-					}
-				}
-				if(uiState == PlayerUIState.WeapWheel)
-				{
-					var _len = array_length(hudWeapon),
-						_rad = 360/_len;
-					
-					hMoveDir = InputDirection(0, INPUT_CLUSTER.WeapHUDMove);
-					hMoveDist = InputDistance(INPUT_CLUSTER.WeapHUDMove) * dist;
-					
-					for(var i = 0; i < _len; i++)
-					{
-						var dir = 90 - _rad*i;
-						var itemX = centX + lengthdir_x(dist,dir),
-							itemY = centY + lengthdir_y(dist,dir);
-						
-						var subImg = 0;
-						if(hMoveDist >= hudSelectWheelMin && HasHUDWeapon(i) && abs(angle_difference(dir,hMoveDir)) < (_rad/2))
-						{
-							subImg = 1 + floor(hudSlotAnim);
-							cursorAnimFlag = true;
-						}
-						draw_sprite_ext(sprt_UI_ItemWheel_Slot, subImg, scr_round(itemX), scr_round(itemY), scale, scale, 0, c_white, alph*0.8);
-						
-						if(HasHUDWeapon(i))
-						{
-							subImg = 0;
-							if(hudWeaponIndex == i)
-							{
-								subImg = 1;
-							}
-							else if(hudAltWeaponIndex == i)
-							{
-								subImg = 2;
-							}
-							draw_sprite_ext(hudWeapon[i].selectIconSprt, subImg, scr_round(itemX), scr_round(itemY), scale, scale, 0, c_white, alph);
-						}
-					}
-				}
-				
-				if(cursorAnimFlag)
-				{
-					hudCursorAnim = min(hudCursorAnim+0.25,1);
-				}
-				else
-				{
-					hudCursorAnim = max(hudCursorAnim-0.25,0);
-				}
-				
-				var cx = centX + lengthdir_x(hMoveDist,hMoveDir),
-					cy = centY + lengthdir_y(hMoveDist,hMoveDir);
-				
-				var sO = lerp(8, 10, hudCursorAnim),
-					sI = lerp(4, 2, hudCursorAnim);
-				draw_set_color(c_aqua);
-				draw_set_alpha(0.3*hudPauseAnim);
-				draw_circle(cx, cy, sO, false);
-				draw_set_color(c_white);
-				draw_set_alpha(0.4*hudPauseAnim);
-				draw_circle(cx, cy, sI, false);
-				draw_circle(cx, cy, sO, true);
-				draw_set_alpha(1);
-			}
-			else
-			{
-				hudCursorAnim = 0;
 			}
 			
 			#endregion

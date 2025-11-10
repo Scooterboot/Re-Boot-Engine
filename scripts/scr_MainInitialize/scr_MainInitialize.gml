@@ -9,7 +9,7 @@ function scr_MainInitialize()
 		MessageBox,
 		RoomTrans,
 		DeathAnim,
-		ItemMenu,
+		RadialMenu,
 		XRay
 	}
 	global.pauseState = PauseState.None;
@@ -34,7 +34,8 @@ function scr_MainInitialize()
 	instance_create_depth(0,0,-8,obj_UIHandler);
 	instance_create_depth(0,0,-7,obj_UI_MainMenu);
 	instance_create_depth(0,0,-6,obj_PauseMenu);//instance_create_depth(0,0,-6,obj_UI_PauseMenu);
-	instance_create_depth(0,0,-5,obj_UI_HUD);
+	instance_create_depth(0,0,-5,obj_UI_RadialMenu);
+	instance_create_depth(0,0,-4,obj_UI_HUD);
 
 	room_goto(rm_MainMenu); //go to the main menu
 	//instance_create_depth(0,0,-7,obj_MainMenu);

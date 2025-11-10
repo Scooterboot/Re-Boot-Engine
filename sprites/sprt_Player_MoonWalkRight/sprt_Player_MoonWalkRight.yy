@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Player_MoonWalkRight",
   "bboxMode":0,
   "bbox_bottom":19,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"1a08dfa3-f8db-40dd-b2c0-2c504ec9fcff","name":"1a08dfa3-f8db-40dd-b2c0-2c504ec9fcff","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"2c235e71-8fb0-4780-84a5-cdd75c37a79a","name":"2c235e71-8fb0-4780-84a5-cdd75c37a79a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"1a08dfa3-f8db-40dd-b2c0-2c504ec9fcff","name":"1a08dfa3-f8db-40dd-b2c0-2c504ec9fcff","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"2c235e71-8fb0-4780-84a5-cdd75c37a79a","name":"2c235e71-8fb0-4780-84a5-cdd75c37a79a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

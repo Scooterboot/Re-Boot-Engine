@@ -27,6 +27,7 @@ function InitControlVars(varGroups = undefined)
 		cMenuAccept = false;
 		cMenuCancel = false;
 		cMenuSecondary = false;
+		cMenuTertiary = false;
 		cMenuR1 = false;
 		cMenuR2 = false;
 		cMenuL1 = false;
@@ -34,6 +35,7 @@ function InitControlVars(varGroups = undefined)
 		rMenuAccept = true;
 		rMenuCancel = true;
 		rMenuSecondary = true;
+		rMenuTertiary = true;
 		rMenuR1 = true;
 		rMenuR2 = true;
 		rMenuL1 = true;
@@ -78,10 +80,33 @@ function InitControlVars(varGroups = undefined)
 		rReverseAim = true;
 		rMoonwalk = true;
 	}
+	if(is_undefined(varGroups) || (is_string(varGroups) && string_pos("hud", varGroups) > 0))
+	{
+		cWeapToggle = false;
+		rWeapToggle = !cWeapToggle;
+		
+		cVisorToggle = false;
+		rVisorToggle = !cVisorToggle;
+		cVisorCycle = false;
+		rVisorCycle = !cVisorCycle;
+	}
+	if(is_undefined(varGroups) || (is_string(varGroups) && string_pos("radial", varGroups) > 0))
+	{
+		cRadialUIOpen = false;
+		cRadialUIUp = false;
+		cRadialUIDown = false;
+		cRadialUILeft = false;
+		cRadialUIRight = false;
+		rRadialUIOpen = !cRadialUIOpen;
+		rRadialUIUp = !cRadialUIUp;
+		rRadialUIDown = !cRadialUIDown;
+		rRadialUILeft = !cRadialUILeft;
+		rRadialUIRight = !cRadialUIRight;
+	}
 	if(is_undefined(varGroups) || (is_string(varGroups) && string_pos("visor", varGroups) > 0))
 	{
-		cVisor = false;
-		rVisor = true;
+		cVisorUse = false;
+		rVisorUse = true;
 		
 		cVisorUp = false;
 		cVisorDown = false;
@@ -91,38 +116,6 @@ function InitControlVars(varGroups = undefined)
 		rVisorDown = true;
 		rVisorLeft = true;
 		rVisorRight = true;
-	}
-	if(is_undefined(varGroups) || (is_string(varGroups) && string_pos("hud", varGroups) > 0))
-	{
-		cWeapToggleOn = false;
-		cWeapToggleOff = false;
-		cWeapHUDOpen = false;
-		cWeapHUDUp = false;
-		cWeapHUDDown = false;
-		cWeapHUDLeft = false;
-		cWeapHUDRight = false;
-		rWeapToggleOn = true;
-		rWeapToggleOff = true;
-		rWeapHUDOpen = true;
-		rWeapHUDUp = true;
-		rWeapHUDDown = true;
-		rWeapHUDLeft = true;
-		rWeapHUDRight = true;
-		
-		cVisorToggleOn = false;
-		cVisorToggleOff = false;
-		cVisorHUDOpen = false;
-		cVisorHUDUp = false;
-		cVisorHUDDown = false;
-		cVisorHUDLeft = false;
-		cVisorHUDRight = false;
-		rVisorToggleOn = true;
-		rVisorToggleOff = true;
-		rVisorHUDOpen = true;
-		rVisorHUDUp = true;
-		rVisorHUDDown = true;
-		rVisorHUDLeft = true;
-		rVisorHUDRight = true;
 	}
 }
 function SetControlVars(varGroups = undefined)
@@ -144,6 +137,7 @@ function SetControlVars(varGroups = undefined)
 		cMenuAccept = global.control[INPUT_VERB.MenuAccept];
 		cMenuCancel = global.control[INPUT_VERB.MenuCancel];
 		cMenuSecondary = global.control[INPUT_VERB.MenuSecondary];
+		cMenuTertiary = global.control[INPUT_VERB.MenuTertiary];
 		cMenuR1 = global.control[INPUT_VERB.MenuR1];
 		cMenuR2 = global.control[INPUT_VERB.MenuR2];
 		cMenuL1 = global.control[INPUT_VERB.MenuL1];
@@ -171,6 +165,21 @@ function SetControlVars(varGroups = undefined)
 		cReverseAim = global.control[INPUT_VERB.ReverseAim];
 		cMoonwalk = global.control[INPUT_VERB.Moonwalk];
 	}
+	if(is_undefined(varGroups) || (is_string(varGroups) && string_pos("hud", varGroups) > 0))
+	{
+		cWeapToggle = global.control[INPUT_VERB.WeapToggle];
+		
+		cVisorToggle = global.control[INPUT_VERB.VisorToggle];
+		cVisorCycle = global.control[INPUT_VERB.VisorCycle];
+	}
+	if(is_undefined(varGroups) || (is_string(varGroups) && string_pos("radial", varGroups) > 0))
+	{
+		cRadialUIOpen = global.control[INPUT_VERB.RadialUIOpen];
+		cRadialUIUp = global.control[INPUT_VERB.RadialUIUp];
+		cRadialUIDown = global.control[INPUT_VERB.RadialUIDown];
+		cRadialUILeft = global.control[INPUT_VERB.RadialUILeft];
+		cRadialUIRight = global.control[INPUT_VERB.RadialUIRight];
+	}
 	if(is_undefined(varGroups) || (is_string(varGroups) && string_pos("visor", varGroups) > 0))
 	{
 		cVisor = global.control[INPUT_VERB.VisorUse];
@@ -179,24 +188,6 @@ function SetControlVars(varGroups = undefined)
 		cVisorDown = global.control[INPUT_VERB.VisorDown];
 		cVisorLeft = global.control[INPUT_VERB.VisorLeft];
 		cVisorRight = global.control[INPUT_VERB.VisorRight];
-	}
-	if(is_undefined(varGroups) || (is_string(varGroups) && string_pos("hud", varGroups) > 0))
-	{
-		cWeapToggleOn = global.control[INPUT_VERB.WeapToggleOn];
-		cWeapToggleOff = global.control[INPUT_VERB.WeapToggleOff];
-		cWeapHUDOpen = global.control[INPUT_VERB.WeapHUDOpen];
-		cWeapHUDUp = global.control[INPUT_VERB.WeapHUDUp];
-		cWeapHUDDown = global.control[INPUT_VERB.WeapHUDDown];
-		cWeapHUDLeft = global.control[INPUT_VERB.WeapHUDLeft];
-		cWeapHUDRight = global.control[INPUT_VERB.WeapHUDRight];
-		
-		cVisorToggleOn = global.control[INPUT_VERB.VisorToggleOn];
-		cVisorToggleOff = global.control[INPUT_VERB.VisorToggleOff];
-		cVisorHUDOpen = global.control[INPUT_VERB.VisorHUDOpen];
-		cVisorHUDUp = global.control[INPUT_VERB.VisorHUDUp];
-		cVisorHUDDown = global.control[INPUT_VERB.VisorHUDDown];
-		cVisorHUDLeft = global.control[INPUT_VERB.VisorHUDLeft];
-		cVisorHUDRight = global.control[INPUT_VERB.VisorHUDRight];
 	}
 }
 function SetReleaseVars(varGroups = undefined)
@@ -218,6 +209,7 @@ function SetReleaseVars(varGroups = undefined)
 		rMenuAccept = !cMenuAccept;
 		rMenuCancel = !cMenuCancel;
 		rMenuSecondary = !cMenuSecondary;
+		rMenuTertiary = !cMenuTertiary;
 		rMenuR1 = !cMenuR1;
 		rMenuR2 = !cMenuR2;
 		rMenuL1 = !cMenuL1;
@@ -245,6 +237,21 @@ function SetReleaseVars(varGroups = undefined)
 		rReverseAim = !cReverseAim;
 		rMoonwalk = !cMoonwalk;
 	}
+	if(is_undefined(varGroups) || (is_string(varGroups) && string_pos("hud", varGroups) > 0))
+	{
+		rWeapToggle = !cWeapToggle;
+		
+		rVisorToggle = !cVisorToggle;
+		rVisorCycle = !cVisorCycle;
+	}
+	if(is_undefined(varGroups) || (is_string(varGroups) && string_pos("radial", varGroups) > 0))
+	{
+		rRadialUIOpen = !cRadialUIOpen;
+		rRadialUIUp = !cRadialUIUp;
+		rRadialUIDown = !cRadialUIDown;
+		rRadialUILeft = !cRadialUILeft;
+		rRadialUIRight = !cRadialUIRight;
+	}
 	if(is_undefined(varGroups) || (is_string(varGroups) && string_pos("visor", varGroups) > 0))
 	{
 		rVisor = !cVisor;
@@ -253,23 +260,5 @@ function SetReleaseVars(varGroups = undefined)
 		rVisorDown = !cVisorDown;
 		rVisorLeft = !cVisorLeft;
 		rVisorRight = !cVisorRight;
-	}
-	if(is_undefined(varGroups) || (is_string(varGroups) && string_pos("hud", varGroups) > 0))
-	{
-		rWeapToggleOn = !cWeapToggleOn;
-		rWeapToggleOff = !cWeapToggleOff;
-		rWeapHUDOpen = !cWeapHUDOpen;
-		rWeapHUDUp = !cWeapHUDUp;
-		rWeapHUDDown = !cWeapHUDDown;
-		rWeapHUDLeft = !cWeapHUDLeft;
-		rWeapHUDRight = !cWeapHUDRight;
-		
-		rVisorToggleOn = !cVisorToggleOn;
-		rVisorToggleOff = !cVisorToggleOff;
-		rVisorHUDOpen = !cVisorHUDOpen;
-		rVisorHUDUp = !cVisorHUDUp;
-		rVisorHUDDown = !cVisorHUDDown;
-		rVisorHUDLeft = !cVisorHUDLeft;
-		rVisorHUDRight = !cVisorHUDRight;
 	}
 }

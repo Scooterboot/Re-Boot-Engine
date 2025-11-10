@@ -1,15 +1,17 @@
 {
-  "$GMSound":"",
+  "$GMSound":"v2",
   "%Name":"amb_Rain",
   "audioGroupId":{
     "name":"audio_ambiance",
     "path":"audiogroups/audio_ambiance",
   },
   "bitDepth":1,
-  "bitRate":128,
+  "channelFormat":1,
   "compression":1,
+  "compressionQuality":4,
   "conversionMode":0,
   "duration":162.00563,
+  "exportDir":"",
   "name":"amb_Rain",
   "parent":{
     "name":"Ambience",
@@ -20,6 +22,5 @@
   "resourceVersion":"2.0",
   "sampleRate":44100,
   "soundFile":"amb_Rain.ogg",
-  "type":1,
   "volume":1.0,
 }

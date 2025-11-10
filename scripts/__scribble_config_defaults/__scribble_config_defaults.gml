@@ -17,7 +17,7 @@
 #macro SCRIBBLE_DEFAULT_VALIGN  fa_top
 
 //The default animation speed for sprites inserted into text.
-#macro SCRIBBLE_DEFAULT_SPRITE_SPEED  1
+#macro SCRIBBLE_DEFAULT_SPRITE_SPEED  0.1
 
 //Set to <False> to use the old animation speed system which ignores the IDE sprite speed.
 #macro SCRIBBLE_LEGACY_ANIMATION_SPEED  false

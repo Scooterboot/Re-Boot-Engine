@@ -35,8 +35,8 @@ for(var i = 0; i < array_length(bgTileLayers); i++)
 xRaySound = noone;
 xRaySoundPlayed = false;
 
-width = surface_get_width(application_surface) + 80;
-height = surface_get_height(application_surface) + 80;
+width = surface_get_width(application_surface)*2 + 8;
+height = surface_get_height(application_surface)*2 + 8;
 
 surfaceFront = surface_create(width,height);
 surfaceBack = surface_create(width,height);

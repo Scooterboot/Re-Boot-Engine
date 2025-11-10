@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"mask_RechargeStation",
   "bboxMode":0,
   "bbox_bottom":39,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"e5430d25-6b89-41e5-90ff-4dc816b80e76","name":"e5430d25-6b89-41e5-90ff-4dc816b80e76","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"e627e4e4-3660-4718-a634-b1a15c1e1584","name":"e627e4e4-3660-4718-a634-b1a15c1e1584","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"e5430d25-6b89-41e5-90ff-4dc816b80e76","name":"e5430d25-6b89-41e5-90ff-4dc816b80e76","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"e627e4e4-3660-4718-a634-b1a15c1e1584","name":"e627e4e4-3660-4718-a634-b1a15c1e1584","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_ts_WreckedShip_Active",
   "bboxMode":0,
   "bbox_bottom":223,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"a7d2d577-91d8-4b13-bd3f-05d01d01bb09","name":"a7d2d577-91d8-4b13-bd3f-05d01d01bb09","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"a7d2d577-91d8-4b13-bd3f-05d01d01bb09","name":"a7d2d577-91d8-4b13-bd3f-05d01d01bb09","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

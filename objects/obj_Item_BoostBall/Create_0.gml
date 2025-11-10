@@ -5,7 +5,8 @@ itemName = "boostBall";
 itemID = 0;
 
 itemHeader = "BOOST BALL";
-itemDesc = "During [sprt_Text_MiniMorph], hold ${sprintButton} to charge"+"\n"+"and release to boost.";
+//itemDesc = "During [sprt_Text_MiniMorph], hold ${sprintButton} to charge"+"\n"+"and release to boost.";
+itemDesc = "During [sprt_Text_MiniMorph], hold ${Sprint} to charge"+"\n"+"and release to boost.";
 
 isMajorItem = true;
 

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"mask_MapStation",
   "bboxMode":0,
   "bbox_bottom":47,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"51c9a3dc-66e7-4d5d-9c11-0d042615de8c","name":"51c9a3dc-66e7-4d5d-9c11-0d042615de8c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"b47bb13e-4815-4d5c-9a8a-5c8369ddd415","name":"b47bb13e-4815-4d5c-9a8a-5c8369ddd415","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"51c9a3dc-66e7-4d5d-9c11-0d042615de8c","name":"51c9a3dc-66e7-4d5d-9c11-0d042615de8c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"b47bb13e-4815-4d5c-9a8a-5c8369ddd415","name":"b47bb13e-4815-4d5c-9a8a-5c8369ddd415","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

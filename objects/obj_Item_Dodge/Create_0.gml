@@ -5,7 +5,8 @@ itemName = "dodge";
 itemID = 0;
 
 itemHeader = "ACCEL DASH";
-itemDesc = "Tap ${aimLockButton} to perform a dash.\n" + "Dashing grants invulnerability.";
+//itemDesc = "Tap ${aimLockButton} to perform a dash.\n" + "Dashing grants invulnerability.";
+itemDesc = "Tap ${Dodge} to perform a dash.\n" + "Dashing grants invulnerability.";
 
 isMajorItem = true;
 

@@ -1,15 +1,17 @@
 {
-  "$GMSound":"",
+  "$GMSound":"v2",
   "%Name":"snd_LavaAmbiance_0",
   "audioGroupId":{
     "name":"audio_ambiance",
     "path":"audiogroups/audio_ambiance",
   },
   "bitDepth":1,
-  "bitRate":128,
+  "channelFormat":1,
   "compression":0,
+  "compressionQuality":4,
   "conversionMode":0,
   "duration":2.435771,
+  "exportDir":"",
   "name":"snd_LavaAmbiance_0",
   "parent":{
     "name":"Lava",
@@ -20,6 +22,5 @@
   "resourceVersion":"2.0",
   "sampleRate":44100,
   "soundFile":"snd_LavaAmbiance_0.wav",
-  "type":1,
   "volume":1.0,
 }

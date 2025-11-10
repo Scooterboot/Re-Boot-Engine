@@ -55,6 +55,9 @@ function scr_SaveGame()
 		{
 			ds_map_add(_map, "hasItem"+string(i), hasItem[i]);
 		}
+		
+		ds_map_add(_map, "weapIndex", weapIndex);
+		ds_map_add(_map, "visorIndex", visorIndex);
 	}
 
 	var _map_map = ds_map_create();

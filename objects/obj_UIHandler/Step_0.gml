@@ -1,4 +1,8 @@
 /// @description 
+
+GetClusterIcons();
+GetButtonIcons();
+
 /*
 var moveKeys = scr_CorrectKeyboardString(global.key[0])+","+scr_CorrectKeyboardString(global.key[2])+","+scr_CorrectKeyboardString(global.key[1])+","+scr_CorrectKeyboardString(global.key[3]);
 if(global.key[0] == vk_up && global.key[1] == vk_down && global.key[2] == vk_left && global.key[3] == vk_right)

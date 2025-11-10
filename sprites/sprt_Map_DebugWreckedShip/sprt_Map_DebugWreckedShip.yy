@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Map_DebugWreckedShip",
   "bboxMode":0,
   "bbox_bottom":79,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"70c0da2f-beea-42fb-bdf2-d58715bf8f1d","name":"70c0da2f-beea-42fb-bdf2-d58715bf8f1d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"a6a214b3-3ed4-4d75-8c1f-a0c53d86c790","name":"a6a214b3-3ed4-4d75-8c1f-a0c53d86c790","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"70c0da2f-beea-42fb-bdf2-d58715bf8f1d","name":"70c0da2f-beea-42fb-bdf2-d58715bf8f1d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"a6a214b3-3ed4-4d75-8c1f-a0c53d86c790","name":"a6a214b3-3ed4-4d75-8c1f-a0c53d86c790","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

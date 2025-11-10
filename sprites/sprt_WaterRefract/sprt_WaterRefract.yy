@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_WaterRefract",
   "bboxMode":0,
   "bbox_bottom":63,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"2a1eeb98-83b0-4a4a-bde0-79ba2423bff9","name":"2a1eeb98-83b0-4a4a-bde0-79ba2423bff9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"2a1eeb98-83b0-4a4a-bde0-79ba2423bff9","name":"2a1eeb98-83b0-4a4a-bde0-79ba2423bff9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

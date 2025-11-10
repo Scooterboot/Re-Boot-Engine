@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_IceBeamChargeShot",
   "bboxMode":2,
   "bbox_bottom":18,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"e45b7a5d-d273-4435-ac1e-5f7750aff205","name":"e45b7a5d-d273-4435-ac1e-5f7750aff205","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"e45b7a5d-d273-4435-ac1e-5f7750aff205","name":"e45b7a5d-d273-4435-ac1e-5f7750aff205","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

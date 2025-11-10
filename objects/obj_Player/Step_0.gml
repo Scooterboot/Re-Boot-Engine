@@ -1,6 +1,6 @@
 /// @description Physics, States, etc.
 
-if(HUDVisorSelected(HUDVisor.XRay) && global.pauseState == PauseState.XRay)
+if(VisorSelected(Visor.XRay) && global.pauseState == PauseState.XRay)
 {
 	aimAngle = 0;
 }
@@ -278,7 +278,7 @@ if(!global.GamePaused())
 		damageReduct *= 0.5;
 	}
 	
-	if(global.grappleAimAssist && state != State.Morph && HUDWeaponSelected(HUDWeapon.GrappleBeam))
+	if(global.grappleAimAssist && state != State.Morph && WeaponSelected(Weapon.GrappleBeam))
 	{
 		if(!instance_exists(grapReticle))
 		{
@@ -3410,8 +3410,6 @@ if(!global.GamePaused())
 		else
 		{
 			landFrame = 0;
-			//var unchargeable = ((hudSlot == 1 && (hudSlotItem[1] == 0 || hudSlotItem[1] == 1 || hudSlotItem[1] == 3)) || hyperBeam);
-			//if(prAngle || (cPlayerUp && rPlayerUp) || (cPlayerDown && rPlayerDown) || (cFire && rFire) || (!cFire && !rFire && !unchargeable) || (!cFire && rFire && statCharge >= 20))
 			if(prAngle || (cPlayerUp && rPlayerUp) || (cPlayerDown && rPlayerDown) || (cFire && rFire) || (!cFire && !rFire && CanCharge()) || (!cFire && rFire && statCharge >= 20))
 			{
 				if(!CanChangeState(mask_Player_Jump))
@@ -4281,8 +4279,6 @@ if(!global.GamePaused())
 		ledgeFall = true;
 		ledgeFall2 = true;
 		
-		//var unchargeable = ((hudSlot == 1 && (hudSlotItem[1] == 0 || hudSlotItem[1] == 1 || hudSlotItem[1] == 3)) || hyperBeam);
-		//var shoot = _DASH_SHOOT_CANCEL && ((cFire && rFire) || (!cFire && !rFire && !unchargeable));
 		var shoot = _DASH_SHOOT_CANCEL && ((cFire && rFire) || (!cFire && !rFire && CanCharge()));
 		if(dodgeLength >= dodgeLengthMax || shoot)
 		{

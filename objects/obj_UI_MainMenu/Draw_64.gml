@@ -109,17 +109,23 @@ if(room == rm_MainMenu)
 	}
 	if(buttonTipY > 0)
 	{
-		var bTip = buttonTip[2];
+		/*var bTip = buttonTip[2];
 		if(subState != MMSubState.None)
 		{
 			bTip = buttonTip[3];
-		}
-		buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1];
+		}*/
+		//buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1];
+		var _tipStr = buttonTipString[0];
 		if(state == MMState.FileMenu)
 		{
-			buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1]+"   ${menuCancelButton} - "+bTip;
+			//buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1]+"   ${menuCancelButton} - "+bTip;
+			_tipStr = buttonTipString[1];
 		}
-		var str = obj_UIHandler.InsertIconsIntoString(buttonTipString);
+		if(subState != MMSubState.None)
+		{
+			_tipStr = buttonTipString[2];
+		}
+		var str = obj_UIHandler.InsertIconsIntoString(_tipStr);
 		if(buttonTipScrib.get_text() != str)
 		{
 			buttonTipScrib.overwrite(str);
@@ -136,8 +142,8 @@ if(room == rm_MainMenu)
 
 		var col2 = make_color_rgb(26,108,0);
 		gpu_set_blendmode(bm_add);
-		draw_rectangle_color(-32, hh-_height + _yoff, (ww/2)-1, hh + _yoff, c_black,col2,col2,c_black, false);
-		draw_rectangle_color((ww/2), hh-_height + _yoff, ww+31, hh + _yoff, col2,c_black,c_black,col2, false);
+		draw_rectangle_color(-32, hh-_height + _yoff, (ww/2), hh + _yoff, c_black,col2,col2,c_black, false);
+		draw_rectangle_color((ww/2), hh-_height + _yoff, ww+32, hh + _yoff, col2,c_black,c_black,col2, false);
 		bm_set_one();
 	
 		var tipx = ww/2,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_Kraid_Rock",
   "bboxMode":2,
   "bbox_bottom":12,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"42f9f397-e2ac-4d40-9231-b5a851a3ece9","name":"42f9f397-e2ac-4d40-9231-b5a851a3ece9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"42f9f397-e2ac-4d40-9231-b5a851a3ece9","name":"42f9f397-e2ac-4d40-9231-b5a851a3ece9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

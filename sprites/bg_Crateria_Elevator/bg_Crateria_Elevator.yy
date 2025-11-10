@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"bg_Crateria_Elevator",
   "bboxMode":0,
   "bbox_bottom":192,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"3d296b2a-932e-4c53-a05f-8cedc7a05b1f","name":"3d296b2a-932e-4c53-a05f-8cedc7a05b1f","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"3d296b2a-932e-4c53-a05f-8cedc7a05b1f","name":"3d296b2a-932e-4c53-a05f-8cedc7a05b1f","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprt_HUD_Icon_XRayVisor",
   "bboxMode":0,
   "bbox_bottom":11,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"b5b3dc1c-11e8-44cb-b1c0-2860bd7db42c","name":"b5b3dc1c-11e8-44cb-b1c0-2860bd7db42c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"86db4598-c37b-45f9-9a28-ce2062636dd4","name":"86db4598-c37b-45f9-9a28-ce2062636dd4","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"b5b3dc1c-11e8-44cb-b1c0-2860bd7db42c","name":"b5b3dc1c-11e8-44cb-b1c0-2860bd7db42c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"86db4598-c37b-45f9-9a28-ce2062636dd4","name":"86db4598-c37b-45f9-9a28-ce2062636dd4","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
@@ -24,7 +24,7 @@
   ],
   "name":"sprt_HUD_Icon_XRayVisor",
   "nineSlice":null,
-  "origin":0,
+  "origin":9,
   "parent":{
     "name":"Icons",
     "path":"folders/Sprites/UI/HUD/Icons.yy",
@@ -81,8 +81,8 @@
     ],
     "visibleRange":null,
     "volume":1.0,
-    "xorigin":0,
-    "yorigin":0,
+    "xorigin":8,
+    "yorigin":7,
   },
   "swatchColours":null,
   "swfPrecision":0.5,

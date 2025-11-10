@@ -24,7 +24,7 @@ if(instance_exists(obj_MessageBox))
 	}
 }*/
 
-var canPause = (room != rm_MainMenu && global.pauseState != PauseState.RoomTrans && global.pauseState != PauseState.MessageBox && global.pauseState != PauseState.DeathAnim && global.pauseState != PauseState.ItemMenu && 
+var canPause = (room != rm_MainMenu && global.pauseState != PauseState.RoomTrans && global.pauseState != PauseState.MessageBox && global.pauseState != PauseState.DeathAnim && global.pauseState != PauseState.RadialMenu && 
 instance_exists(obj_Player) && obj_Player.state != State.Elevator && obj_Player.state != State.Death && obj_Player.introAnimState == -1);
 
 #region Pause Logic

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"bg_BrinstarRed_1",
   "bboxMode":0,
   "bbox_bottom":191,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"2ba1d529-0e19-47d9-a02a-32d6de92be46","name":"2ba1d529-0e19-47d9-a02a-32d6de92be46","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"2ba1d529-0e19-47d9-a02a-32d6de92be46","name":"2ba1d529-0e19-47d9-a02a-32d6de92be46","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
