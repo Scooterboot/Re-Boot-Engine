@@ -147,15 +147,14 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 			if(hMoveDist >= radialMin)
 			{
 				var _len = ds_list_size(global.visorRadial),
-					_rad = 360/_len,
-					_rad2 = 45;
+					_rad = 360/_len;
 				for(var i = 0; i < _len; i++)
 				{
 					var visorInd = global.visorRadial[| i];
 					if(!is_undefined(visorInd) && player.HasVisor(visorInd))
 					{
 						var _dir = 90 - _rad*i;
-						if(abs(angle_difference(_dir,hMoveDir)) < (_rad2/2))
+						if(abs(angle_difference(_dir,hMoveDir)) < (_rad/2))
 						{
 							if(player.visorIndex != visorInd)
 							{

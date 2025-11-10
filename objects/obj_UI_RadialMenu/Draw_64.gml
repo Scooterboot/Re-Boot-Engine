@@ -215,8 +215,7 @@ if(room != rm_MainMenu && pauseAnim > 0)
 		}
 		
 		var _len = ds_list_size(global.visorRadial),
-			_rad = 360/_len,
-			_rad2 = 45;
+			_rad = 360/_len;
 		
 		for(var i = 0; i < _len; i++)
 		{
@@ -228,7 +227,7 @@ if(room != rm_MainMenu && pauseAnim > 0)
 					itemY = centY + lengthdir_y(dist*anim,dir);
 				
 				var subImg = 0;
-				if(player.HasVisor(visInd) && hMoveDist >= radialMin && abs(angle_difference(dir,hMoveDir)) < (_rad2/2))
+				if(player.HasVisor(visInd) && hMoveDist >= radialMin && abs(angle_difference(dir,hMoveDir)) < (_rad/2))
 				{
 					subImg = 1 + floor(slotAnim);
 					cursorAnimFlag = true;

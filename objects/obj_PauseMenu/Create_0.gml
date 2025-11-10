@@ -124,6 +124,7 @@ equipName = [
 "SUPER MISSILE",
 "POWER BOMB",
 "GRAPPLE BEAM",
+"SCAN VISOR",
 "X-RAY VISOR"];
 
 miscName = [
@@ -158,6 +159,7 @@ Item.Missile,
 Item.SuperMissile,
 Item.PowerBomb,
 Item.GrappleBeam,
+Item.ScanVisor,
 Item.XRayVisor];
 
 miscIndex = [
@@ -283,9 +285,9 @@ function DrawItemHeader(_x,_y,_name,_height,_facing)
 	if(sign(_facing) == -1)
 	{
 		rx2 = _x-1;
-		rx1 = rx2-string_width(_name)-3;
-		tx1 = rx1-1;
-		tx2 = rx1-1;
+		rx1 = rx2-string_width(_name)-2;
+		tx1 = rx1;
+		tx2 = rx1;
 		tx3 = tx2-6;
 	}
 	draw_rectangle(rx1,ry1,rx2,ry2,false);
@@ -672,6 +674,7 @@ function DrawInventoryPlayer_Retro()
 		{
 			l = 2;
 			if(index = array_get_index(equipIndex,Item.PowerBomb) || 
+				index = array_get_index(equipIndex,Item.ScanVisor) || 
 				index = array_get_index(equipIndex,Item.XRayVisor))
 			{
 				l = 3;
@@ -883,7 +886,7 @@ function DrawInventoryPlayer_Retro()
 			{
 				playerGlowInd = 3;
 			}
-			if(index = array_get_index(equipIndex,Item.XRayVisor))
+			if(index = array_get_index(equipIndex,Item.ScanVisor) || index = array_get_index(equipIndex,Item.XRayVisor))
 			{
 				playerGlowInd = 7;
 			}

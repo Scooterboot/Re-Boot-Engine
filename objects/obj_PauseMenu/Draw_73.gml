@@ -169,18 +169,21 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 						iBoxY = 160+10*(i-suitMax-beamMax);
 						text = equipName[index];
 						enabled = P.item[equipIndex[index]];
-						isEquip = true;
+						//isEquip = true;
 						if(text == equipName[0])
 						{
 							text = string(P.missileStat)+"/"+string(P.missileMax);
+							isEquip = true;
 						}
 						if(text == equipName[1])
 						{
 							text = string(P.superMissileStat)+"/"+string(P.superMissileMax);
+							isEquip = true;
 						}
 						if(text == equipName[2])
 						{
 							text = string(P.powerBombStat)+"/"+string(P.powerBombMax);
+							isEquip = true;
 						}
 					}
 					

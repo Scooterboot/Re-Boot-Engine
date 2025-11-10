@@ -1,31 +1,35 @@
 
-//TODO: Rewrite when UI framework is done.
-// Is functional and fairly flexible for now, however.
+//TODO: 
+//- Rewrite when UI framework is done.
+//- Implement "proper" keyboard support (keyboard is functional, but weird).
+//- Mouse support as well?
+
+// The radial is functional and fairly flexible for now, however.
 
 global.weaponRadial = ds_list_create();
-global.weaponRadial[| 0] = Weapon.Missile;
-global.weaponRadial[| 1] = -1;
-global.weaponRadial[| 2] = Weapon.SuperMissile;
-global.weaponRadial[| 3] = -1;
-global.weaponRadial[| 4] = Weapon.PowerBomb;
-global.weaponRadial[| 5] = -1;
-global.weaponRadial[| 6] = Weapon.GrappleBeam;
-global.weaponRadial[| 7] = -1;
+ds_list_add(global.weaponRadial, Weapon.Missile);
+ds_list_add(global.weaponRadial, -1);
+ds_list_add(global.weaponRadial, Weapon.SuperMissile);
+ds_list_add(global.weaponRadial, -1);
+ds_list_add(global.weaponRadial, Weapon.PowerBomb);
+ds_list_add(global.weaponRadial, -1);
+ds_list_add(global.weaponRadial, Weapon.GrappleBeam);
+ds_list_add(global.weaponRadial, -1);
 
 global.beamRadial = ds_list_create();
-global.beamRadial[| 0] = Beam.Charge;
-global.beamRadial[| 1] = undefined;
-global.beamRadial[| 2] = Beam.Ice;
-global.beamRadial[| 3] = Beam.Wave;
-global.beamRadial[| 4] = undefined;
-global.beamRadial[| 5] = Beam.Spazer;
-global.beamRadial[| 6] = Beam.Plasma;
-global.beamRadial[| 7] = undefined;
+ds_list_add(global.beamRadial, Beam.Charge);
+ds_list_add(global.beamRadial, undefined);
+ds_list_add(global.beamRadial, Beam.Ice);
+ds_list_add(global.beamRadial, Beam.Wave);
+ds_list_add(global.beamRadial, undefined);
+ds_list_add(global.beamRadial, Beam.Spazer);
+ds_list_add(global.beamRadial, Beam.Plasma);
+ds_list_add(global.beamRadial, undefined);
 
 global.visorRadial = ds_list_create();
-global.visorRadial[| 0] = Visor.Scan;
-global.visorRadial[| 1] = Visor.XRay;
-global.visorRadial[| 2] = -1;
+ds_list_add(global.visorRadial, Visor.Scan);
+ds_list_add(global.visorRadial, Visor.XRay);
+ds_list_add(global.visorRadial, -1);
 
 InitControlVars("menu radial");
 
@@ -68,7 +72,6 @@ beamToggleScrib = scribble(beamToggleText);
 beamToggleScrib.starting_format("fnt_GUI_Small2",c_white);
 beamToggleScrib.align(fa_center,fa_middle);
 
-// temp
 weapName[Weapon.Missile] = "MISSILE";
 weapName[Weapon.SuperMissile] = "SUPER MISSILE";
 weapName[Weapon.PowerBomb] = "POWER BOMB";
