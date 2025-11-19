@@ -268,8 +268,8 @@ function xray_redraw_outline2()
 		var outlineW = shader_get_uniform(shd_Outline,"outlineW");
 		shader_set_uniform_f(outlineW, 1/width);
 
-		var outlineH = shader_get_uniform(shd_Outline,"outlineH")
-		shader_set_uniform_f(outlineH, 1/height)
+		var outlineH = shader_get_uniform(shd_Outline,"outlineH");
+		shader_set_uniform_f(outlineH, 1/height);
 	
 		draw_surface_ext(outlineSurf,0,0,1,1,0,c_white,1);
 		shader_reset();

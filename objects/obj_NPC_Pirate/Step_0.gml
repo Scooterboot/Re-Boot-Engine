@@ -1,7 +1,7 @@
 /// @description 
 event_inherited();
 
-if(PauseAI())
+if(self.PauseAI())
 {
     exit;
 }
@@ -11,12 +11,12 @@ if(state != PirateState.Turn)
 {
     var xplus = 0;
     var num = 10;
-    while(!collision_rectangle(max(bb_left()+xplus,bb_left()),bb_top(),min(bb_right()+xplus,bb_right()),bb_bottom()-16,solids,false,true) && num > 0)
+    while(!collision_rectangle(max(self.bb_left()+xplus,self.bb_left()),self.bb_top(),min(self.bb_right()+xplus,self.bb_right()),self.bb_bottom()-16,solids,false,true) && num > 0)
     {
         xplus += 16*dir;
         num--;
     }
-    if(collision_rectangle(max(bb_left()+xplus,bb_left()),bb_top(),min(bb_right()+xplus,bb_right()),bb_bottom()-16,obj_Player,false,true))
+    if(collision_rectangle(max(self.bb_left()+xplus,self.bb_left()),self.bb_top(),min(self.bb_right()+xplus,self.bb_right()),self.bb_bottom()-16,obj_Player,false,true))
     {
         playerDetected = true;
     }
@@ -104,18 +104,18 @@ if(state == PirateState.Run)
     runCounter++;
     
     var num2 = 0;
-    while(entity_place_collide(num2*sign(velX),1) && num2 <= abs(velX))
+    while(self.entity_place_collide(num2*sign(velX),1) && num2 <= abs(velX))
     {
         num2 = min(num2 + 1, abs(velX)+1);
     }
     
-    if(entity_place_collide(sign(velX),-3))
+    if(self.entity_place_collide(sign(velX),-3))
     {
         state = PirateState.Turn;
         currentSprt = sprtTurn;
         currentFrame = 0;
     }
-    else if(runCounter > 90 || !entity_place_collide(num2*sign(velX),4))
+    else if(runCounter > 90 || !self.entity_place_collide(num2*sign(velX),4))
     {
         state = PirateState.Stand;
         currentSprt = sprtStand;
@@ -166,6 +166,7 @@ if(state == PirateState.Shoot)
 				dpth = depth+1;
 			}
 			var shot = instance_create_depth(x+sX[i],y+sY[i],dpth,obj_PirateBeam);
+			shot.creator = id;
 	        shot.damage = damage;
 	        shot.velX = 4*dir;
 	        shot.direction = 0;
@@ -206,7 +207,7 @@ else
 	shotsFired = false;
 }
 
-grounded = (entity_place_collide(0,1) || (bb_bottom()+1) >= room_height);// && velY == 0);
+grounded = (self.entity_place_collide(0,1) || (self.bb_bottom()+1) >= room_height);// && velY == 0);
 fGrav = grav[instance_exists(liquid)];
 
 if(!grounded)
@@ -216,6 +217,6 @@ if(!grounded)
 
 fVelX = velX;
 fVelY = velY;
-Collision_Normal(fVelX,fVelY,true);
+self.Collision_Normal(fVelX,fVelY,true);
 
-EntityLiquid_Large(x-xprevious,y-yprevious);
+self.EntityLiquid_Large(x-xprevious,y-yprevious);

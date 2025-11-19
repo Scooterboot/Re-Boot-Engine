@@ -5,12 +5,11 @@ life = 800;
 lifeMax = 800;
 damage = 0;
 
-dmgMult[DmgType.Beam][0] = 0; // all
-dmgMult[DmgType.Charge][0] = 0; // all
-dmgMult[DmgType.Explosive][0] = 0; // all
-dmgMult[DmgType.Misc][2] = 0; // speed booster / shine spark
-dmgMult[DmgType.Misc][3] = 0; // screw attack
-dmgMult[DmgType.Misc][5] = 0; // boost ball
+dmgResist[DmgType.Beam][DmgSubType_Beam.All] = 0;
+dmgResist[DmgType.Charge][DmgSubType_Beam.All] = 0;
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.All] = 0;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.All] = 0;
+dmgResist[DmgType.Misc][DmgSubType_Misc.All] = 0;
 
 freezeImmune = true;
 createPlatformOnFrozen = false;
@@ -69,7 +68,7 @@ function ChangeDir(newDir)
 
 function OnXCollision(fVX, isOOB = false)
 {
-	ChangeDir(-sign(fVX));
+	self.ChangeDir(-sign(fVX));
 	velX = 0;
 	fVelX = 0;
 }

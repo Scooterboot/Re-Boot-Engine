@@ -11,7 +11,6 @@ if(!global.GamePaused())
     {
 		if(!liquid)
 		{
-			//part_particles_create(obj_Particles.partSystemC,x-lengthdir_x(velocity,direction),y-lengthdir_y(velocity,direction),obj_Particles.mTrail[0],1);
 			part_particles_create(obj_Particles.partSystemC,x-fVelX,y-fVelY,obj_Particles.mTrail[0],1);
 			particleDelay = 3;
 		}

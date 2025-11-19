@@ -1,5 +1,5 @@
 /// @description 
-if(!PauseAI())
+if(!self.PauseAI())
 {
 	if(instance_exists(realLife) && realLife.object_index == obj_Kraid)
 	{

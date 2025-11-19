@@ -193,7 +193,7 @@ function DrawLimb(_name, _sprt, _bone, _bone2 = pointer_null) constructor
 			surface_set_target(limbSurf);
 			draw_clear_alpha(c_black,0);
 			
-			Shader();
+			self.Shader();
 			draw_sprite_ext(sprt,frame,xOffset,yOffset,1,1,0,c_white,1);
 			shader_reset();
 			

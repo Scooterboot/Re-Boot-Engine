@@ -1,5 +1,5 @@
 ///scr_DamageNPC(x,y,damage,dmgType,freezeType,deathType,npcInvFrames)
-function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType,_invFrames)
+/*function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType,_invFrames)
 {
 	///@description scr_DamageNPC
 	///@param x
@@ -233,3 +233,4 @@ function scr_DamageNPC(posX,posY,_damage,dmgType,dmgSubType,freezeType,deathType
 	    }
 	}
 }
+*/

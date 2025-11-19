@@ -45,29 +45,12 @@ timeLeft = 300;
 isCharge = false;
 
 damage = 0;
-damageType = DmgType.Beam;
-damageSubType[0] = true; // all
-damageSubType[1] = false; // power beam (Beam/Charge) | missile (Explosive) | grapple beam (Misc)
-damageSubType[2] = false; // ice beam (Beam/Charge) | super missile (Explosive) | speed boost/shine spark (Misc)
-damageSubType[3] = false; // wave beam (Beam/Charge) | bomb (Explosive) | screw attack (Misc)
-damageSubType[4] = false; // spazer (Beam/Charge) | power bomb (Explosive) | hyper beam (Misc)
-damageSubType[5] = false; // plasma beam (Beam/Charge) | splash damage (Explosive) | boost ball (Misc)
-
-freezeType = 0;
-freezeKill = false;
-
-knockBack = 4;//9;
-knockBackSpeed = 5;
-damageInvFrames = 96;
-
 dmgDelay = 0;
+npcDeathType = -1;
 
 ignoreCamera = false;
 extCamRange = 48;
 outsideCam = 0;
-
-npcInvFrames[instance_number(obj_NPC)] = 0;
-npcDeathType = -1;
 
 creator = noone;
 
@@ -75,6 +58,7 @@ particleType = -1;
 impactSnd = noone;
 
 impacted = 0;
+dmgImpacted = false;
 reflected = false;
 
 shift = 0;
@@ -96,14 +80,9 @@ delay = 0;
 lastReflec = noone;
 reflecList = ds_list_create();
 
-//speed = 0;
-//velocity = 0;
-//direction = 0;
-//image_angle = direction;
 speed_x = 0;
 speed_y = 0;
 
-//particleDelay = 0;
 rotation = direction;
 for(var i = 0; i < 11; i++)
 {
@@ -127,22 +106,161 @@ type = ProjType.Beam;
 projLength = 0;
 rotFrame = 0;
 
-//frame = 0;
-//frameCounter = 0;
-
 #endregion
 
 #region Damage
 
-function CanDamageNPC(damage,npc)
+dmgBoxMask = noone;
+dmgBoxOffsetX = 0;
+dmgBoxOffsetY = 0;
+function DamageBoxes()
 {
-	return true;
+	if(damage > 0)
+	{
+		var _mask = sprite_exists(mask_index) ? mask_index : sprite_index;
+		if(dmgBoxMask != noone && sprite_exists(dmgBoxMask))
+		{
+			_mask = dmgBoxMask;
+		}
+		
+		if(!instance_exists(dmgBoxes[0]))
+		{
+			dmgBoxes[0] = self.CreateDamageBox(dmgBoxOffsetX,dmgBoxOffsetY,_mask,hostile);
+		}
+		else
+		{
+			dmgBoxes[0].mask_index = _mask;
+			dmgBoxes[0].image_xscale = image_xscale;
+			dmgBoxes[0].image_yscale = image_yscale;
+			dmgBoxes[0].image_angle = image_angle;
+			dmgBoxes[0].direction = direction;
+			dmgBoxes[0].Damage(x,y,damage,damageType,damageSubType,freezeType,freezeTime,npcDeathType);
+		}
+		
+		if(projLength > 0)
+		{
+			var numw = max(abs(bb_right(0) - bb_left(0)),1),
+		        numd = max(scr_ceil(clamp(point_distance(x,y,xstart,ystart),1,projLength) / numw), 1);
+			
+			for(var i = 1; i < numd; i++)
+			{
+				var xw = x-lengthdir_x(numw*i,direction),
+					yw = y-lengthdir_y(numw*i,direction);
+				
+				if(array_length(dmgBoxes) < i+1)
+				{
+					dmgBoxes[i] = noone;
+				}
+				
+				if(!instance_exists(dmgBoxes[i]))
+				{
+					dmgBoxes[i] = self.CreateDamageBox(dmgBoxOffsetX,dmgBoxOffsetY,_mask,hostile);
+				}
+				else
+				{
+					dmgBoxes[i].mask_index = _mask;
+					dmgBoxes[i].image_xscale = image_xscale;
+					dmgBoxes[i].image_yscale = image_yscale;
+					dmgBoxes[i].image_angle = image_angle;
+					dmgBoxes[i].direction = direction;
+					dmgBoxes[i].Damage(xw,yw,damage,damageType,damageSubType,freezeType,freezeTime,npcDeathType);
+				}
+			}
+		}
+	}
 }
-function ModifyDamageNPC(damage,npc)
+
+function Entity_CanDealDamage(_selfDmgBox, _lifeBox, _damage, _dmgType, _dmgSubType)
 {
-	return damage;
+	return (!dmgImpacted);
 }
-function OnDamageNPC(damage,npc) {}
+
+function DmgPartEmitRegion(partSys, partEmit, _selfDmgBox, _lifeBox)
+{
+	var partX1 = max(_selfDmgBox.bb_left()+4, _lifeBox.bb_left()),
+		partX2 = min(_selfDmgBox.bb_right()-4, _lifeBox.bb_right()),
+		partY1 = max(_selfDmgBox.bb_top()+4, _lifeBox.bb_top()),
+		partY2 = min(_selfDmgBox.bb_bottom()-4, _lifeBox.bb_bottom());
+	
+	part_emitter_region(partSys,partEmit,partX1,partX2,partY1,partY2,ps_shape_ellipse,ps_distr_linear);
+}
+
+function Entity_OnDamageDealt(_selfDmgBox, _lifeBox, _finalDmg, _dmg, _dmgType, _dmgSubType)
+{
+	var partSys = obj_Particles.partSystemA,
+		partEmit = obj_Particles.partEmitA;
+	self.DmgPartEmitRegion(partSys, partEmit, _selfDmgBox, _lifeBox);
+	
+	var ent = _lifeBox.creator;
+	if(freezeType > 0 && !ent.freezeImmune)
+	{
+		part_emitter_burst(partSys,partEmit,obj_Particles.partFreeze,21*(1+isCharge));
+	}
+}
+function Entity_OnDamageDealt_Blocked(_selfDmgBox, _lifeBox, _dmg, _dmgType, _dmgSubType)
+{
+	var partSys = obj_Particles.partSystemA,
+		partEmit = obj_Particles.partEmitA;
+	self.DmgPartEmitRegion(partSys, partEmit, _selfDmgBox, _lifeBox);
+	
+	var ent = _lifeBox.creator;
+	
+	if(freezeType > 0 && !ent.freezeImmune)
+	{
+		part_emitter_burst(partSys,partEmit,obj_Particles.partFreeze,21*(1+isCharge));
+	}
+	else if(_dmgType != DmgType.ExplSplash)
+	{
+		if(ent.dmgAbsorb)
+		{
+			audio_stop_sound(snd_ProjAbsorbed);
+			audio_play_sound(snd_ProjAbsorbed,0,false);
+				
+			part_particles_create(partSys,x,y,obj_Particles.partAbsorb,1);
+		}
+		else if(!reflected || multiHit)
+		{
+			reflected = true;
+				
+			audio_stop_sound(snd_Reflect);
+			audio_play_sound(snd_Reflect,0,false);
+				
+			part_emitter_burst(partSys,partEmit,obj_Particles.partDeflect,42);
+		}
+	}
+	
+	if(particleType != -1)
+	{
+		var partAmt = 7*(1+isCharge);
+		if(multiHit)
+		{
+			partAmt = (1+isCharge);
+		}
+		part_emitter_burst(partSys,partEmit,obj_Particles.bTrails[particleType],partAmt);
+	}
+}
+
+function Entity_OnDmgBoxCollision(_selfDmgBox, _lifeBox, _finalDmg, _dmg, _dmgType, _dmgSubType)
+{
+	var partSys = obj_Particles.partSystemA,
+		partEmit = obj_Particles.partEmitA;
+	self.DmgPartEmitRegion(partSys, partEmit, _selfDmgBox, _lifeBox);
+	
+	var ent = _lifeBox.creator;
+	if(_finalDmg > 0)
+	{
+		if(particleType != -1 && multiHit)
+		{
+			part_emitter_burst(partSys,partEmit,obj_Particles.bTrails[particleType],(1+isCharge));
+		}
+	}
+	
+	if(!multiHit)
+	{
+		impacted = max(impacted,1);
+		dmgImpacted = true;
+	}
+}
 
 #endregion
 
@@ -194,9 +312,9 @@ function entity_collision(listNum)
 
 #endregion
 
-function OnImpact(posX,posY,waveImpact = false)
+function OnImpact(posX, posY, silentImpact = false)
 {
-	if(impactSnd != noone && !waveImpact)
+	if(impactSnd != noone && !silentImpact)
 	{
 		if(audio_is_playing(impactSnd))
 		{

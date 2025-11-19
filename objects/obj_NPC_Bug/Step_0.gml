@@ -1,7 +1,7 @@
 /// @description 
 event_inherited();
 
-if(PauseAI())
+if(self.PauseAI())
 {
 	exit;
 }
@@ -16,7 +16,7 @@ if(state == 0)
 	velX = 0;
 	velY = 0;
 	
-	player = GetPlayer();
+	player = self.GetPlayer();
 	if(instance_exists(player))
 	{
 		image_xscale = 1;

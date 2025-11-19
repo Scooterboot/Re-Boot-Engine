@@ -1,7 +1,7 @@
 // Inherit the parent event
 event_inherited();
 
-if(!PauseAI())
+if(!self.PauseAI())
 {
     var fspeed = mSpeed;
 	if(frame < 3)
@@ -47,9 +47,9 @@ if(!PauseAI())
 
 	fVelX = velX;
 	fVelY = velY;
-	Collision_Normal(fVelX,fVelY,true);
+	self.Collision_Normal(fVelX,fVelY,true);
 
-	EntityLiquid_Large(x-xprevious,y-yprevious);
+	self.EntityLiquid_Large(x-xprevious,y-yprevious);
 }
 
 //var xdiff = LerpArray(topOffsetX,scr_floor(max(frame-3,0)),true) * dir;

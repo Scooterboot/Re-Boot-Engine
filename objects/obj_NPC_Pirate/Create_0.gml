@@ -30,7 +30,6 @@ frame[3] = 0;
 frameCounter[3] = 0;
 
 standFrameSequence = [2,1,0,1,2,3,4,3,2];
-//shootFrameSequence = [0,1,2,3,4,3,2,1,0];
 shootFrameSequence = [0,1,2,3,4,5,4,3,2,1,0];
 
 shotsFired = false;
@@ -53,11 +52,5 @@ justFell = false;
 
 grounded = false;
 
-function DmgCollide(posX,posY,object,isProjectile)
-{
-	if(!instance_exists(object)) { return false; }
-	
-	var offX = object.x-posX,
-		offY = object.y-posY;
-	return collision_rectangle(bb_left()-4 + offX,bb_top()-2 + offY,bb_right()+4 + offX,bb_bottom()+1 + offY,object,true,true);
-}
+dmgBoxMask = mask_SpacePirate_HitBox;
+lifeBoxMask = mask_SpacePirate_HitBox;

@@ -3,7 +3,6 @@ event_inherited();
 
 image_speed = 0.25;
 bombTimer = 55;//60;
-//exploded = false;
 ignoreCamera = true;
 
 velX = 0;
@@ -15,7 +14,7 @@ spreadFrict = 4;
 
 type = ProjType.Bomb;
 
-damageSubType[3] = true;
+damageSubType[DmgSubType_Explosive.Bomb] = true;
 
 exploProj = obj_MBBombExplosion;
 exploDmgMult = 1;
@@ -36,7 +35,7 @@ function OnXCollision(fVX, isOOB = false)
 	{
 		velX = 0;
 	}
-	ImpactBreak();
+	self.ImpactBreak();
 }
 function OnYCollision(fVY, isOOB = false)
 {
@@ -48,7 +47,7 @@ function OnYCollision(fVY, isOOB = false)
 	{
 		velY = 0;
 	}
-	ImpactBreak();
+	self.ImpactBreak();
 }
 function ImpactBreak()
 {

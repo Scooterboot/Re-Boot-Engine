@@ -12,9 +12,10 @@ if(outsideCam <= 1 && exploProj != noone)
 	}
     var explo = instance_create_layer(x,y,"Projectiles_fg",exploProj);
     explo.damage = damage * exploDmgMult;
-	explo.npcInvFrames = npcInvFrames;
 	explo.sourceVelX = x-xprevious;
 	explo.sourceVelY = y-yprevious;
+	
+	ds_list_copy(explo.iFrameCounters, iFrameCounters);
 	
 	self.MovePushBlock();
 }

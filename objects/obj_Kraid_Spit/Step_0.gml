@@ -1,7 +1,7 @@
 /// @description 
 event_inherited();
 
-if(PauseAI())
+if(self.PauseAI())
 {
 	exit;
 }
@@ -10,7 +10,7 @@ velY += grav;
 
 fVelX = velX;
 fVelY = velY;
-Collision_Normal(fVelX,fVelY,false);
+self.Collision_Normal(fVelX,fVelY,false);
 
 if(kill)
 {

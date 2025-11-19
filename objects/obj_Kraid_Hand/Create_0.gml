@@ -1,6 +1,6 @@
 /// @description Initialize
 event_inherited();
-
+/*
 life = 2000;
 lifeMax = 2000;
 

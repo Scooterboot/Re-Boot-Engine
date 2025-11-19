@@ -19,5 +19,5 @@ movedVelY = 0;
 
 if(dead)
 {
-    NPCDeath(x+deathOffsetX,y+deathOffsetY);
+    self.NPCDeath(x+deathOffsetX,y+deathOffsetY);
 }

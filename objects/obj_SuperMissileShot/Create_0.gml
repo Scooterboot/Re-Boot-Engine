@@ -6,7 +6,7 @@ doorOpenType[DoorOpenType.SMissile] = true;
 blockBreakType[BlockBreakType.Missile] = true;
 blockBreakType[BlockBreakType.SMissile] = true;
 
-damageSubType[2] = true;
+damageSubType[DmgSubType_Explosive.SuperMissile] = true;
 
 exploProj = obj_SuperMissileExplosion;
 
@@ -17,9 +17,4 @@ extCamRange = 96;
 
 particleDelay = 4;
 
-function TileInteract(_x,_y)
-{
-	//BreakBlock(_x,_y,blockBreakType);
-	//OpenDoor(_x,_y,doorOpenType);
-	//ShutterSwitch(_x,_y,doorOpenType);
-}
+function TileInteract(_x,_y) {}

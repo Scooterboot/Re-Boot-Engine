@@ -1,6 +1,6 @@
 /// @description 
 
-if(!PauseAI())
+if(!self.PauseAI())
 {
 	velX = mSpeed*dir;
 
@@ -8,7 +8,7 @@ if(!PauseAI())
 		moveY = y-oldPosY[0];
 
 	var player = obj_Player;
-	if (instance_exists(player) && (player.bb_bottom() <= bb_top() || player.bb_bottom() <= (bb_top()-moveY)) &&
+	if (instance_exists(player) && (player.bb_bottom() <= self.bb_top() || player.bb_bottom() <= (self.bb_top()-moveY)) &&
 		player.grounded && (place_meeting(x,y-2,player) || place_meeting(x-moveX,y-moveY-2,player)))
 	{
 		gravCounter++;

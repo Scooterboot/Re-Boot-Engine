@@ -1,5 +1,5 @@
 event_inherited();
-if(PauseAI())
+if(self.PauseAI())
 {
     image_speed = 0;
     exit;

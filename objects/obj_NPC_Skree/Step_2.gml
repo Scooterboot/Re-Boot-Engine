@@ -3,5 +3,5 @@ event_inherited();
 
 if(dead)
 {
-	FireProjectiles();
+	self.FireProjectiles();
 }

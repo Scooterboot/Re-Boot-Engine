@@ -1,6 +1,6 @@
 /// @description 
 //event_inherited();
-if(PauseAI())
+if(self.PauseAI())
 {
 	exit;
 }
@@ -28,7 +28,10 @@ if (point_distance(x,y,player.x,player.y) <= 150 &&
 	}
 }
 
-DamagePlayer();
+self.DamageBoxes();
+self.LifeBoxes();
+
+self.IncrInvFrames();
 
 if(!dead)
 {
@@ -94,6 +97,7 @@ if(!dead)
 		if(eyeTimer == 60)
 		{
 			var proj = instance_create_depth(x,y,depth-1,obj_Gadora_EyeBeam);
+			proj.creator = id;
 			proj.damage = damage*2;
 			proj.velX = lengthdir_x(5,image_angle)*image_xscale;
 			proj.velY = lengthdir_y(5,image_angle)*image_xscale;

@@ -1,6 +1,6 @@
 /// @description Behavior
 event_inherited();
-if(PauseAI())
+if(self.PauseAI())
 {
 	exit;
 }
@@ -43,9 +43,9 @@ if(gravDir == -1)
 	velY = max(velY-fGrav,-fallSpeedMax);
 }
 
-Collision_Normal(velX,velY,true);
+self.Collision_Normal(velX,velY,true);
 
-if(!entity_place_collide(0,2*gravDir))
+if(!self.entity_place_collide(0,2*gravDir))
 {
 	grounded = false;
 }

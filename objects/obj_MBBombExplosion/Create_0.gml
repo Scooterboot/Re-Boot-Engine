@@ -9,8 +9,8 @@ multiHit = true;
 
 type = ProjType.Bomb;
 
-damageSubType[3] = true;
-damageSubType[5] = true;
+damageType = DmgType.ExplSplash;
+damageSubType[DmgSubType_Explosive.Bomb] = true;
 
 explode = 0;
 

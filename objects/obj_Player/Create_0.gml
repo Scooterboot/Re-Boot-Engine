@@ -72,6 +72,12 @@ godmode = false;
 // To still use Chain Spark, press in the direction of the wall you're sliding on to initiate
 #macro _SPARK_DAIG_SLIDE true
 
+// Allow Shine Sparking vertically and diagonally downward
+// 0: Fully disabled
+// 1: Enabled always
+// 2: Granted by Chain Spark item
+#macro _SPARK_DOWN 1
+
 // Allow downward diagonal sparks to transfer to speed boost upon hitting flat ground
 // Disabled by default because it is overpowered
 #macro _SPARK_DOWN_BOOST false
@@ -156,6 +162,7 @@ aimAngle = 0; //2 = verticle up, 1 = diagonal up, 0 = forward, -1 = diagonal dow
 prevAimAngle = aimAngle;
 lastAimAngle = prevAimAngle;
 aimAnimDelay = 0;
+aimAnimDelayMax = 6;
 
 extAimAngle = 0;
 extAimPreAngle = 0;
@@ -905,7 +912,12 @@ powerBombTanks = 10;*/
 
 energyMax = 99;//1499;//99 + (100 * energyTanks);
 energy = energyMax;
-lowEnergyThresh = 30;
+
+function GetLowEnergyThreshold()
+{
+	return max(30, floor(energyMax/100)*10);
+}
+lowEnergyThresh = GetLowEnergyThreshold();
 
 damageReduct = 1;
 
@@ -3242,110 +3254,153 @@ function Set_Beams()
 	#endregion
 	#region Damage & Firerate
 	
-	beamDmg = 20;
-	beamDelay = 8;
-	beamChargeDelay = 20;
+	var baseDmg = 20,
+		iceDmg = 10,
+		waveDmg = 30,
+		spazerDmg = 20,
+		plasmaDmg = 130,
+		plasDmgMult = 5;
+	
+	var dmgMult = 1;
+	if(item[Item.PlasmaBeam])
+	{
+		dmgMult = plasDmgMult;
+	}
+	
 	var iceDelay = 4,
 		waveDelay = 0,//2,
 		spazerDelay = 0,//-2,
 		plasmaDelay = 3;
+	
+	beamDmg = baseDmg;
+	beamDelay = 8;
+	beamChargeDelay = 20;
 	if(item[Item.IceBeam])
 	{
-		beamDmg = 30;
+		beamDmg += iceDmg * dmgMult;
 		beamDelay += iceDelay;
 		beamChargeDelay += iceDelay;
 	}
 	if(item[Item.WaveBeam])
 	{
-		beamDmg = 50;
+		beamDmg += waveDmg * dmgMult;
 		beamDelay += waveDelay;
 		beamChargeDelay += waveDelay;
 	}
 	if(item[Item.Spazer])
 	{
-		beamDmg = 40;
+		beamDmg += spazerDmg * dmgMult;
 		beamDelay += spazerDelay;
 		beamChargeDelay += spazerDelay;
 	}
 	if(item[Item.PlasmaBeam])
 	{
-		beamDmg = 150;
+		beamDmg += plasmaDmg;
 		beamDelay += plasmaDelay;
 		beamChargeDelay += plasmaDelay;
 	}
 	
-	// ice, wave, spazer
-	if(item[Item.IceBeam] && item[Item.WaveBeam])
-	{
-		beamDmg = 60;
-	}
-	if(item[Item.IceBeam] && item[Item.Spazer])
-	{
-		beamDmg = 60;
-	}
-	if(item[Item.WaveBeam] && item[Item.Spazer])
-	{
-		beamDmg = 70;
-	}
-	if(item[Item.IceBeam] && item[Item.WaveBeam] && item[Item.Spazer])
-	{
-		beamDmg = 100;
-	}
+	/*
+	-- OG Super Metroid damage reference
 	
-	// ice, wave, plasma
-	if(item[Item.IceBeam] && item[Item.PlasmaBeam])
-	{
-		beamDmg = 200;
-	}
-	if(item[Item.WaveBeam] && item[Item.PlasmaBeam])
-	{
-		beamDmg = 250;
-	}
-	if(item[Item.IceBeam] && item[Item.WaveBeam] && item[Item.PlasmaBeam])
-	{
-		beamDmg = 300;
-	}
+	Power Beam:		20
+	Ice Beam:		30
+	Wave Beam:		50
+	Spazer:			40
+	Plasma Beam:	150
 	
-	// ice, wave, spazer+plasma
-	if(item[Item.IceBeam] && item[Item.Spazer] && item[Item.PlasmaBeam])
-	{
-		beamDmg = 300;
-	}
-	if(item[Item.WaveBeam] && item[Item.Spazer] && item[Item.PlasmaBeam])
-	{
-		beamDmg = 350;
-	}
-	if(item[Item.IceBeam] && item[Item.WaveBeam] && item[Item.Spazer] && item[Item.PlasmaBeam])
-	{
-		beamDmg = 400;
-	}
+	Ice + Wave:		60
+	
+	Ice + Spazer:			60
+	Wave + Spazer:			70
+	Ice + Wave + Spazer:	100
+	
+	Ice + Plasma:			200
+	Wave + Plasma:			250
+	Ice + Wave + Plasma:	300
+	
+	
+	-- Extra numbers ref
+	
+	Spazer + Plasma:				200
+	Ice + Spazer + Plasma:			250
+	Wave + Spazer + Plasma:			300
+	Ice + Wave + Spazer + Plasma:	350
+	*/
 	
 	#endregion
 }
 #endregion
 
-#region StrikePlayer
-function StrikePlayer(damage,knockTime,knockSpeedX,knockSpeedY,iframes,ignoreImmunity = false)
+#region Damage
+
+lifeBoxes[0] = self.CreateLifeBox(0,0,mask_index,false);
+
+function Entity_CanTakeDamage(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType)
 {
-	//var dmg = scr_round(damage * (1-(0.5*item[0])) * (1-(0.5*item[1]))),
-	var dmg = scr_round(damage * damageReduct);
-    
-	if(!global.GamePaused() && !godmode && invFrames <= 0 && (!immune || ignoreImmunity))
+	return (!global.GamePaused() && !godmode && invFrames <= 0 && (!immune || _dmgBox.creator.ignorePlayerImmunity));
+}
+function Entity_ModifyDamageTaken(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType)
+{
+	return scr_round(_dmg * damageReduct);
+}
+function Entity_OnDamageTaken(_selfLifeBox, _dmgBox, _finalDmg, _dmg, _dmgType, _dmgSubType, _freezeType = 0, _freezeTime = 600, _npcDeathType = -1)
+{
+	var _enemy = _dmgBox.creator;
+	var knockBack = _enemy.playerKnockBackDur;
+	
+	var ang = _enemy.PlayerKnockBackDir(id);
+	var knockX = lengthdir_x(_enemy.playerKnockBackSpd,ang),
+		knockY = lengthdir_y(_enemy.playerKnockBackSpd,ang);
+	
+	self.StrikePlayer(_finalDmg, knockBack, knockX, knockY, _enemy.playerInvFrames, _enemy.ignorePlayerImmunity);
+}
+
+enum PlayerDmgBox
+{
+	PseudoScrew,
+	BoostBall,
+	SpeedBoost,
+	ShineSpark,
+	ScrewAttack
+}
+
+dmgBoxes[PlayerDmgBox.PseudoScrew] = noone;
+dmgBoxes[PlayerDmgBox.BoostBall] = noone;
+dmgBoxes[PlayerDmgBox.SpeedBoost] = noone;
+dmgBoxes[PlayerDmgBox.ShineSpark] = noone;
+dmgBoxes[PlayerDmgBox.ScrewAttack] = noone;
+
+shineSparkMask = mask_Player_ShineSpark;
+screwAttackMask = mask_Player_ScrewAttack;
+
+function Entity_OnDamageDealt(_selfDmgBox, _lifeBox, _finalDmg, _dmg, _dmgType, _dmgSubType)
+{
+	if(IsChargeSomersaulting() && !IsSpeedBoosting() && !IsScrewAttacking() && _finalDmg > 0)
 	{
-		energy = max(energy - dmg,0);
+		statCharge = 0;
+	}
+}
+
+function StrikePlayer(_dmg, _knockTime, _knockSpeedX, _knockSpeedY, _iframes, _ignoreImmunity = false)
+{
+	if(!global.GamePaused() && !godmode && invFrames <= 0 && (!immune || _ignoreImmunity))
+	{
+		energy = max(energy - _dmg,0);
 		if(energy <= 0)
 		{
 			state = State.Death;
 		}
 		else
 		{
-			if(knockTime > 0 && dir != 0 && state != State.Hurt && state != State.Grapple)
+			
+			if(_knockTime > 0)
 			{
 				lastState = state;
 				state = State.Hurt;
-				hurtTime = knockTime;
-				hurtSpeedX = knockSpeedX;
-				hurtSpeedY = knockSpeedY;
+				hurtTime = _knockTime;
+				hurtSpeedX = _knockSpeedX;
+				hurtSpeedY = _knockSpeedY;
 				jump = 0;
 				jumping = false;
 			}
@@ -3355,14 +3410,15 @@ function StrikePlayer(damage,knockTime,knockSpeedX,knockSpeedY,iframes,ignoreImm
 				audio_play_sound(snd_Hurt,0,false);
 			}
 			dmgFlash = 2;
-			
-			if(iframes > 0)
-			{
-				invFrames = iframes;
-			}
+		}
+		
+		if(_iframes > 0)
+		{
+			invFrames = _iframes;
 		}
 	}
 }
+
 #endregion
 #region ConstantDamage
 function ConstantDamage(damage,delay)

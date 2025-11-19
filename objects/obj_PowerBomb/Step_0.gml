@@ -33,7 +33,6 @@ if(bombTimer <= 0)
 				player.bombJumpX = player.bombXSpeed[player.liquidState] * sign(num);
 			}
 			player.bombJump = player.bombJumpMax[player.liquidState];
-			//player.SpiderEnable(false);
 		}
 	}
 	

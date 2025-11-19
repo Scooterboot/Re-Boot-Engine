@@ -23,16 +23,14 @@ lifeMax = 960;
 
 freezeImmune = true;
 
-dmgMult[DmgType.Beam][0] = 0; // all
-dmgMult[DmgType.Charge][0] = 2; // all
+dmgResist[DmgType.Beam][DmgSubType_Beam.All] = 0;
+dmgResist[DmgType.Charge][DmgSubType_Beam.All] = 2;
 
-dmgMult[DmgType.Explosive][3] = 0; // bomb
-dmgMult[DmgType.Explosive][4] = 0; // power bomb
-dmgMult[DmgType.Explosive][5] = 0; // splash 
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.Bomb] = 0;
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.PowerBomb] = 0;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.All] = 0;
 
-dmgMult[DmgType.Misc][2] = 0; // speed booster / shine spark
-dmgMult[DmgType.Misc][3] = 0; // screw attack
-dmgMult[DmgType.Misc][5] = 0; // boost ball
+dmgResist[DmgType.Misc][DmgSubType_Misc.All] = 0;
 
 dropChance[0] = 0; // nothing
 dropChance[1] = 20; // energy
@@ -57,20 +55,22 @@ moveAngle = 90;
 moveAngleSpd = 1.4;
 moveDir = -1;
 
-function ModifyDamageTaken(damage,object,isProjectile)
+function Entity_ModifyDamageTaken(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType)
 {
-	if(isProjectile && image_yscale != 0)
+	if(_dmgBox.creator.object_index != obj_Player && image_yscale != 0)
 	{
-		if(ai[0] == 2)
-		{
-			moveDir *= -1;
-		}
-		ai[0] = 1;
-		ai[1] = 0;
-		
-		return damage;
+		return self.CalcDamageResist(_dmg, _dmgType, _dmgSubType);
 	}
 	return 0;
+}
+function NPC_OnDamageTaken(_selfLifeBox, _dmgBox, _finalDmg, _dmg, _dmgType, _dmgSubType, _freezeType = 0, _freezeTime = 600, _npcDeathType = -1)
+{
+	if(ai[0] == 2)
+	{
+		moveDir *= -1;
+	}
+	ai[0] = 1;
+	ai[1] = 0;
 }
 
 function PauseAI()

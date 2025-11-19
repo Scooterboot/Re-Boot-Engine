@@ -1,5 +1,4 @@
 /// @description Draw
-//scr_PlasmaDraw(x,y,image_xscale,image_yscale,image_angle,image_alpha);
 
 if(!global.GamePaused())
 {

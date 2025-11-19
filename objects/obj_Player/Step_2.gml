@@ -1747,7 +1747,7 @@ if(global.pauseState == PauseState.None || (VisorSelected(Visor.XRay) && global.
 					
 					ArmPos(lengthdir_x(armL,armR+rotation),lengthdir_y(armL,armR+rotation));
 				}
-	            else if(instance_exists(grapple))
+	            else
 	            {
 	                torsoR = sprt_Player_GrappleRight;
 	                torsoL = sprt_Player_GrappleLeft;
@@ -1780,46 +1780,49 @@ if(global.pauseState == PauseState.None || (VisorSelected(Visor.XRay) && global.
 	                    legFrame = scr_ceil(grapFrame);
 	                }
 	                else
-	                {
-						var grapAngVel = angle_difference(point_direction(x+velX,y+velY,grapple.x,grapple.y),point_direction(x,y,grapple.x,grapple.y));
+					{
+						if(instance_exists(grapple))
+		                {
+							var grapAngVel = angle_difference(point_direction(x+velX,y+velY,grapple.x,grapple.y),point_direction(x,y,grapple.x,grapple.y));
 						
-						var gFrameDest = 0;
-	                    if(grapDisVel >= 1)
-	                    {
-	                        gFrameDest = 2*dir;
-	                    }
-	                    else
-						{
-							if(move != 0 && move == sign(grapAngVel))
+							var gFrameDest = 0;
+		                    if(grapDisVel >= 1)
+		                    {
+		                        gFrameDest = 2*dir;
+		                    }
+		                    else
 							{
-								gFrameDest = move;
+								if(move != 0 && move == sign(grapAngVel))
+								{
+									gFrameDest = move;
+								}
 							}
-						}
-	                    if(grapWallBounceFrame > 0)
-	                    {
-	                        gFrameDest = 2*sign(grapAngVel);
-	                        frame[Frame.GrappleLeg] = gFrameDest;
-	                    }
-						if(frame[Frame.GrappleLeg] != gFrameDest)
-						{
-							var fnum = 3 * (1 + liquidMovement);
-							frameCounter[Frame.GrappleLeg]++;
-							if(frameCounter[Frame.GrappleLeg] > fnum)
+		                    if(grapWallBounceFrame > 0)
+		                    {
+		                        gFrameDest = 2*sign(grapAngVel);
+		                        frame[Frame.GrappleLeg] = gFrameDest;
+		                    }
+							if(frame[Frame.GrappleLeg] != gFrameDest)
 							{
-								if(frame[Frame.GrappleLeg] < gFrameDest)
+								var fnum = 3 * (1 + liquidMovement);
+								frameCounter[Frame.GrappleLeg]++;
+								if(frameCounter[Frame.GrappleLeg] > fnum)
 								{
-									frame[Frame.GrappleLeg] = min(frame[Frame.GrappleLeg]+1,gFrameDest);
+									if(frame[Frame.GrappleLeg] < gFrameDest)
+									{
+										frame[Frame.GrappleLeg] = min(frame[Frame.GrappleLeg]+1,gFrameDest);
+									}
+									else
+									{
+										frame[Frame.GrappleLeg] = max(frame[Frame.GrappleLeg]-1,gFrameDest);
+									}
+									frameCounter[Frame.GrappleLeg] = 0;
 								}
-								else
-								{
-									frame[Frame.GrappleLeg] = max(frame[Frame.GrappleLeg]-1,gFrameDest);
-								}
+							}
+							else
+							{
 								frameCounter[Frame.GrappleLeg] = 0;
 							}
-						}
-						else
-						{
-							frameCounter[Frame.GrappleLeg] = 0;
 						}
 	                    legFrame = 5+(scr_round(frame[Frame.GrappleLeg])*dir);
 	                }
@@ -2518,564 +2521,641 @@ if(global.pauseState == PauseState.None || (VisorSelected(Visor.XRay) && global.
 			chargeBombDmg = 30, // Bomb spread damage.
 			pBombDmg = 40; // Power bomb explosions deal damage per frame (well, not really, because enemies have i-frames).
 		
-		if(!VisorSelected(Visor.XRay))
+		// ----- Shoot -----
+		#region Shoot
+		if((cFire || enqueShot) && dir != 0 && state != State.Death)
 		{
-			// ----- Shoot -----
-			#region Shoot
-			if((cFire || enqueShot) && dir != 0 && state != State.Death)
+			if(state != State.Morph && stateFrame != State.Morph)
 			{
-				if(state != State.Morph && stateFrame != State.Morph)
+				if(WeaponSelected(Weapon.GrappleBeam) && canShoot)
 				{
-					if(WeaponSelected(Weapon.GrappleBeam) && canShoot)
-					{
-						delay = 14;
+					delay = 14;
 					
-						if(!instance_exists(grapple))
+					if(!instance_exists(grapple))
+					{
+						if(shotDelayTime <= 0)
 						{
-							if(shotDelayTime <= 0)
+							if(rFire || enqueShot)
 							{
-								if(rFire || enqueShot)
-								{
-									grapple = Shoot(obj_GrappleBeamShot,20,0,0,1,snd_GrappleBeam_Shoot);
-									grapple.shootDir = shootDir;
-									recoil = true;
-								}
-								enqueShot = false;
+								grapple = Shoot(obj_GrappleBeamShot,20,0,0,1,snd_GrappleBeam_Shoot);
+								grapple.shootDir = shootDir;
+								recoil = true;
 							}
-							else if(rFire && shotDelayTime < delay/2)
-							{
-								enqueShot = true;
-							}
-						}
-						else
-						{
 							enqueShot = false;
 						}
-					
-					
-						if(instance_exists(grapple))
+						else if(rFire && shotDelayTime < delay/2)
 						{
-							if(state != State.Grapple)
-							{
-								gunReady = true;
-								justShot = 90;
-							}
-							else
-							{
-								shotDelayTime = delay;
-							}
-						}
-						else
-						{
-							grappleDist = 0;
+							enqueShot = true;
 						}
 					}
 					else
 					{
-						instance_destroy(grapple);
-						grappleDist = 0;
-					
-						if(canShoot && (weapIndex <= -1 || WeaponHasAmmo(weapIndex)))
-						{
-							if(autoFire > 0)
-							{
-								gunReady = true;
-								justShot = 90;
-							}
-						
-							if(shotDelayTime <= 0)
-							{
-								if(rFire || enqueShot || (!item[Item.ChargeBeam] && autoFire > 0) || autoFire == 2)
-								{
-									if(WeaponSelected(Weapon.Missile))
-									{
-										missileStat--;
-									}
-									if(WeaponSelected(Weapon.SuperMissile))
-									{
-										superMissileStat--;
-									}
-									
-									if(!rFire && !enqueShot && autoFire == 1)
-									{
-										delay *= 2;
-									}
-									Shoot(shotIndex,damage,sSpeed,delay,amount,sound,beamIsWave,beamWaveStyleOffset);
-									if(hyperBeam && shotIndex == obj_HyperBeamShot)
-									{
-										if(item[Item.Spazer])
-										{
-											Shoot(obj_HyperBeamLesserShot,damage,sSpeed,delay,2+2*beamIsWave,noone,beamIsWave,1);
-										}
-									
-										var flareDir = shootDir;
-										if(dir2 == -1)
-										{
-											flareDir = angle_difference(shootDir,180);
-										}
-										var flare = instance_create_layer(shootPosX+lengthdir_x(5,shootDir),shootPosY+lengthdir_y(5,shootDir),layer_get_id("Projectiles_fg"),obj_ChargeFlare);
-										flare.damage = damage;
-										flare.sprite_index = sprt_HyperBeamChargeFlare;
-										flare.damageType = DmgType.Misc;
-										flare.damageSubType[1] = false;
-										flare.damageSubType[2] = false;
-										flare.damageSubType[3] = false;
-										flare.damageSubType[4] = true;
-										flare.damageSubType[5] = false;
-										flare.direction = flareDir;
-										flare.image_angle = flareDir;
-										flare.image_xscale = dir2;
-										flare.creator = id;
-									
-										hyperFired = delay+2;
-									}
-								
-									gunReady = true;
-									justShot = 90;
-									recoil = true;
-								}
-								enqueShot = false;
-							}
-							else if(rFire && shotDelayTime < delay/2)
-							{
-								enqueShot = true;
-							}
-						}
-						else
-						{
-							enqueShot = false;
-						}
-					}
-				}
-				else if(canShoot)
-				{
-					if(bombDelayTime <= 0)
-					{
-						if(rFire || enqueShot)
-						{
-							var bombPosX = x,
-								bombPosY = y+3,
-								instaBomb = cPlayerDown;
-							if(SpiderActive())
-							{
-								bombPosX = x + lengthdir_x(-2,spiderJumpDir);
-								bombPosY = y+1 + lengthdir_y(-2,spiderJumpDir);
-								if(spiderEdge == Edge.Top)
-								{
-									instaBomb = cPlayerUp;
-								}
-								if(spiderEdge == Edge.Left)
-								{
-									instaBomb = cPlayerLeft;
-								}
-								if(spiderEdge == Edge.Right)
-								{
-									instaBomb = cPlayerRight;
-								}
-							}
-							
-							if(WeaponSelected(Weapon.PowerBomb) || (item[Item.PowerBomb] && weapIndex >= 0 && weapSelected && powerBombStat > 0))
-							{
-								var pBomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_PowerBomb);
-								pBomb.damage = pBombDmg;
-								bombDelayTime = 30;
-								powerBombStat--;
-								cFlashStartCounter++;
-								//audio_play_sound(snd_PowerBombSet,0,false);
-							}
-							else if(item[Item.MBBomb] && (instance_number(obj_MBBomb) < 3 || cPlayerDown))
-							{
-								if(instaBomb)
-								{
-									var explo = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBombExplosion);
-									explo.damage = instaBombDmg;
-									explo.MovePushBlock();
-									scr_PlayExplodeSnd(0,false);
-								}
-								else
-								{
-									var mbBomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBomb);
-									mbBomb.damage = bombDmg;
-									//audio_play_sound(snd_BombSet,0,false);
-								}
-								bombDelayTime = 8;
-							}
-						}
 						enqueShot = false;
 					}
-					else if(rFire && bombDelayTime < 4)
+					
+					
+					if(instance_exists(grapple))
 					{
-						enqueShot = true;
-					}
-				}
-				else
-				{
-					enqueShot = false;
-				}
-				
-				var cflag = (state != State.Morph && state != State.BallSpark);
-				if((state == State.Morph || state == State.BallSpark) && statCharge > 0)
-				{
-					cflag = true;
-				}
-				
-				if(item[Item.ChargeBeam] && CanCharge() && !enqueShot && !isPushing && cflag)
-				{
-					var chargeRate = 1;
-					if(state == State.DmgBoost && dBoostFrame < 19)
-					{
-						chargeRate *= 3;
-					}
-					statCharge = min(statCharge + chargeRate, maxCharge * 2);
-					if(statCharge >= 10)
-					{
-						if(!chargeSoundPlayed)
+						if(state != State.Grapple)
 						{
-							audio_play_sound(snd_Charge,0,false);
-							chargeSoundPlayed = true;
+							gunReady = true;
+							justShot = 90;
 						}
 						else
 						{
-							if(audio_is_playing(snd_Charge) && state == State.DmgBoost && dBoostFrame < 19 && statCharge >= maxCharge)
-							{
-								audio_stop_sound(snd_Charge);
-							}
-						
-							if(!audio_is_playing(snd_Charge) && !audio_is_playing(snd_Charge_Loop))
-							{
-								audio_play_sound(snd_Charge_Loop,0,true);
-							}
+							shotDelayTime = delay;
 						}
 					}
 					else
 					{
-						audio_stop_sound(snd_Charge);
-						audio_stop_sound(snd_Charge_Loop);
-						chargeSoundPlayed = false;
+						grappleDist = 0;
 					}
 				}
 				else
 				{
-					statCharge = 0;
-					audio_stop_sound(snd_Charge);
-					audio_stop_sound(snd_Charge_Loop);
-					chargeSoundPlayed = false;
+					instance_destroy(grapple);
+					grappleDist = 0;
+					
+					if(canShoot && (weapIndex <= -1 || WeaponHasAmmo(weapIndex)))
+					{
+						if(autoFire > 0)
+						{
+							gunReady = true;
+							justShot = 90;
+						}
+						
+						if(shotDelayTime <= 0)
+						{
+							if(rFire || enqueShot || (!item[Item.ChargeBeam] && autoFire > 0) || autoFire == 2)
+							{
+								if(WeaponSelected(Weapon.Missile))
+								{
+									missileStat--;
+								}
+								if(WeaponSelected(Weapon.SuperMissile))
+								{
+									superMissileStat--;
+								}
+									
+								if(!rFire && !enqueShot && autoFire == 1)
+								{
+									delay *= 2;
+								}
+								Shoot(shotIndex,damage,sSpeed,delay,amount,sound,beamIsWave,beamWaveStyleOffset);
+								if(hyperBeam && shotIndex == obj_HyperBeamShot)
+								{
+									if(item[Item.Spazer])
+									{
+										Shoot(obj_HyperBeamLesserShot,damage,sSpeed,delay,2+2*beamIsWave,noone,beamIsWave,1);
+									}
+									
+									var flareDir = shootDir;
+									if(dir2 == -1)
+									{
+										flareDir = angle_difference(shootDir,180);
+									}
+									var flare = instance_create_layer(shootPosX+lengthdir_x(5,shootDir),shootPosY+lengthdir_y(5,shootDir),layer_get_id("Projectiles_fg"),obj_ChargeFlare);
+									flare.damage = damage;
+									flare.sprite_index = sprt_HyperBeamChargeFlare;
+									flare.damageSubType[DmgSubType_Beam.Hyper] = true;
+									flare.direction = flareDir;
+									flare.image_angle = flareDir;
+									flare.image_xscale = dir2;
+									flare.creator = id;
+									
+									hyperFired = delay+2;
+								}
+								
+								gunReady = true;
+								justShot = 90;
+								recoil = true;
+							}
+							enqueShot = false;
+						}
+						else if(rFire && shotDelayTime < delay/2)
+						{
+							enqueShot = true;
+						}
+					}
+					else
+					{
+						enqueShot = false;
+					}
 				}
 			}
-			else
+			else if(canShoot)
 			{
-				if(instance_exists(grapple))
+				if(bombDelayTime <= 0)
 				{
-					if((state != State.Grapple || grapWJCounter <= 0))
-					{
-						if(grapple.grappleState != GrappleState.None)
-						{
-							instance_destroy(grapple);
-						}
-						else
-						{
-							grapple.impacted = max(grapple.impacted,1);
-						}
-					}
-				}
-		
-				if(statCharge <= 0)
-				{
-					audio_stop_sound(snd_Charge);
-					audio_stop_sound(snd_Charge_Loop);
-					chargeSoundPlayed = false;
-				}
-		
-				if(canShoot && CanCharge() && dir != 0)
-				{
-					if(state != State.Morph && stateFrame != State.Morph)
-					{
-						if(statCharge >= maxCharge)
-						{
-							var flareDir = shootDir;
-							if(dir2 == -1)
-							{
-								flareDir = angle_difference(shootDir,180);
-							}
-							var flare = instance_create_layer(shootPosX+lengthdir_x(5,shootDir),shootPosY+lengthdir_y(5,shootDir),layer_get_id("Projectiles_fg"),obj_ChargeFlare);
-							flare.damage = (beamDmg*chargeMult);
-							flare.sprite_index = beamFlare;
-							flare.damageSubType[2] = item[Item.IceBeam];
-							flare.damageSubType[3] = item[Item.WaveBeam];
-							flare.damageSubType[4] = item[Item.Spazer];
-							flare.damageSubType[5] = item[Item.PlasmaBeam];
-							flare.direction = flareDir;
-							flare.image_angle = flareDir;
-							flare.image_xscale = dir2;
-							flare.creator = id;
-							if(item[Item.IceBeam])
-							{
-								flare.freezeType = 2;
-								flare.freezeKill = true;
-							}
-							
-							damage = (beamDmg*chargeMult) / beamChargeAmt;
-							Shoot(beamCharge,damage,sSpeed,beamChargeDelay,beamChargeAmt,beamChargeSound,beamIsWave,beamWaveStyleOffset);
-							
-							chargeReleaseFlash = 4;
-							recoil = true;
-						}
-						else if(statCharge >= 20)
-						{
-							Shoot(shotIndex,damage,sSpeed,delay,amount,sound,beamIsWave,beamWaveStyleOffset);
-							recoil = true;
-						}
-					}
-					else if(item[Item.MBBomb] && !WeaponSelected(Weapon.PowerBomb))
+					if(rFire || enqueShot)
 					{
 						var bombPosX = x,
-							bombPosY = y+3;
+							bombPosY = y+3,
+							instaBomb = cPlayerDown;
 						if(SpiderActive())
 						{
 							bombPosX = x + lengthdir_x(-2,spiderJumpDir);
 							bombPosY = y+1 + lengthdir_y(-2,spiderJumpDir);
-						}
-						
-						if(statCharge >= 20)
-						{
-							var bChargeScale = min(statCharge / (maxCharge*1.5), 1);
-							
-							if(!grounded && !SpiderActive() && cPlayerDown)
+							if(spiderEdge == Edge.Top)
 							{
-								var bombDir = [0,90,210,330],
-									bombTime = [0,30,30,30],
-									bombSpd = 2 + 4*bChargeScale;
-								for(var i = 0; i < 4; i++)
-								{
-									var bomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBomb);
-									bomb.damage = chargeBombDmg * bChargeScale;
-									bomb.spreadType = 2;
-									if(i > 0)
-									{
-										bomb.spreadSpeed = bombSpd;
-									}
-									bomb.spreadDir = bombDir[i];
-									bomb.spreadFrict = 0.5;
-									bomb.bombTimer = bombTime[i];
-								}
-								bombDelayTime = 60;
-								audio_play_sound(snd_BombSet,0,false);
+								instaBomb = cPlayerUp;
 							}
-							else if(SpiderActive())
+							if(spiderEdge == Edge.Left)
 							{
-								var bombDir = [0, 45, 90, 135, 180],
-									bombTime = [30, 30, 30, 30, 30],
-									bombSpd = 2 + 4*bChargeScale;
-								for(var i = 0; i < 5; i++)
-								{
-									bombDir[i] += spiderJumpDir-90;
-									
-									var bomb = instance_create_layer(x,y,"Projectiles_fg",obj_MBBomb);
-									bomb.damage = chargeBombDmg * bChargeScale;
-									bomb.spreadType = 2;
-									bomb.spreadSpeed = bombSpd;
-									bomb.spreadDir = bombDir[i];
-									bomb.spreadFrict = 0.5;
-									bomb.bombTimer = bombTime[i];
-								}
-								bombDelayTime = 60;
-								audio_play_sound(snd_BombSet,0,false);
+								instaBomb = cPlayerLeft;
+							}
+							if(spiderEdge == Edge.Right)
+							{
+								instaBomb = cPlayerRight;
+							}
+						}
+							
+						if(WeaponSelected(Weapon.PowerBomb) || (item[Item.PowerBomb] && weapIndex >= 0 && weapSelected && powerBombStat > 0))
+						{
+							var pBomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_PowerBomb);
+							pBomb.damage = pBombDmg;
+							bombDelayTime = 30;
+							powerBombStat--;
+							cFlashStartCounter++;
+							//audio_play_sound(snd_PowerBombSet,0,false);
+						}
+						else if(item[Item.MBBomb] && (instance_number(obj_MBBomb) < 3 || cPlayerDown))
+						{
+							if(instaBomb)
+							{
+								var explo = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBombExplosion);
+								explo.damage = instaBombDmg;
+								explo.MovePushBlock();
+								scr_PlayExplodeSnd(0,false);
 							}
 							else
 							{
-								var bombDirection = [60, 120, 75, 105, 90],
-									bombDirectionR = [45, 56.25, 67.5, 78.75, 90],
-									bombDirectionL = [135, 123.75, 112.5, 101.25, 90],
-									bombSpeed = 6*bChargeScale,
-									spreadFrict = 2,
-									spreadType = 0;
-								
-								for(var i = 0; i < 5; i++)
-								{
-									var bombTime = 100 - 5*i;
-									var bDir = bombDirection[i];
-									if(move2 != 0)
-									{
-										if(move2 == 1)
-										{
-											bDir = bombDirectionR[i];
-										}
-										else
-										{
-											bDir = bombDirectionL[i];
-										}
-									}
-									else if(cPlayerDown)
-									{
-										bDir = 90;
-										bombSpeed = 3 + 4*bChargeScale;
-										spreadFrict = 2 / max(3*i,1);
-										spreadType = 1;
-										bombTime = 55 + 20*i;
-									}
-									
-									var bomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBomb);
-									bomb.damage = chargeBombDmg * bChargeScale;
-									bomb.velX = lengthdir_x(bombSpeed,bDir);
-									bomb.velY = lengthdir_y(bombSpeed,bDir);
-									bomb.spreadType = spreadType;
-									bomb.spreadFrict = spreadFrict;
-									bomb.bombTimer = bombTime;
-								}
-								bombDelayTime = 120 + (30*spreadType);
-								audio_play_sound(snd_BombSet,0,false);
+								var mbBomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBomb);
+								mbBomb.damage = bombDmg;
+								//audio_play_sound(snd_BombSet,0,false);
 							}
+							bombDelayTime = 8;
+						}
+					}
+					enqueShot = false;
+				}
+				else if(rFire && bombDelayTime < 4)
+				{
+					enqueShot = true;
+				}
+			}
+			else
+			{
+				enqueShot = false;
+			}
+				
+			var cflag = (state != State.Morph && state != State.BallSpark);
+			if((state == State.Morph || state == State.BallSpark) && statCharge > 0)
+			{
+				cflag = true;
+			}
+				
+			if(item[Item.ChargeBeam] && CanCharge() && !enqueShot && !isPushing && cflag)
+			{
+				var chargeRate = 1;
+				if(state == State.DmgBoost && dBoostFrame < 19)
+				{
+					chargeRate *= 3;
+				}
+				statCharge = min(statCharge + chargeRate, maxCharge * 2);
+				if(statCharge >= 10)
+				{
+					if(!chargeSoundPlayed)
+					{
+						audio_play_sound(snd_Charge,0,false);
+						chargeSoundPlayed = true;
+					}
+					else
+					{
+						if(audio_is_playing(snd_Charge) && state == State.DmgBoost && dBoostFrame < 19 && statCharge >= maxCharge)
+						{
+							audio_stop_sound(snd_Charge);
+						}
+						
+						if(!audio_is_playing(snd_Charge) && !audio_is_playing(snd_Charge_Loop))
+						{
+							audio_play_sound(snd_Charge_Loop,0,true);
 						}
 					}
 				}
+				else
+				{
+					audio_stop_sound(snd_Charge);
+					audio_stop_sound(snd_Charge_Loop);
+					chargeSoundPlayed = false;
+				}
+			}
+			else
+			{
 				statCharge = 0;
-				enqueShot = false;
+				audio_stop_sound(snd_Charge);
+				audio_stop_sound(snd_Charge_Loop);
+				chargeSoundPlayed = false;
 			}
-			#endregion
-	
-			if(IsSpeedBoosting() || IsScrewAttacking())
+		}
+		else
+		{
+			if(instance_exists(grapple))
 			{
-				var dmgST;
-				dmgST[0] = true;
-				dmgST[1] = false;
-				dmgST[2] = IsSpeedBoosting();
-				dmgST[3] = IsScrewAttacking();
-				dmgST[4] = false;
-				dmgST[5] = false;
-			    scr_DamageNPC(x,y,2000,DmgType.Misc,dmgST,0,3,0);
+				if((state != State.Grapple || grapWJCounter <= 0))
+				{
+					if(grapple.grappleState != GrappleState.None)
+					{
+						instance_destroy(grapple);
+					}
+					else
+					{
+						grapple.impacted = max(grapple.impacted,1);
+					}
+				}
 			}
-			else if(IsChargeSomersaulting())
+		
+			if(statCharge <= 0)
 			{
-			    var psDmg = beamDmg*chargeMult * 2;
-				var dmgST;
-				dmgST[0] = true;
-				dmgST[1] = true;
-				dmgST[2] = item[Item.IceBeam];
-				dmgST[3] = item[Item.WaveBeam];
-				dmgST[4] = item[Item.Spazer];
-				dmgST[5] = item[Item.PlasmaBeam];
-			    scr_DamageNPC(x,y,psDmg,DmgType.Charge,dmgST,0,3,0);
+				audio_stop_sound(snd_Charge);
+				audio_stop_sound(snd_Charge_Loop);
+				chargeSoundPlayed = false;
 			}
-			if(boostBallDmgCounter > 0)
+		
+			if(canShoot && CanCharge() && dir != 0)
 			{
-				var dmgST;
-				dmgST[0] = true;
-				dmgST[1] = false;
-				dmgST[2] = false;
-				dmgST[3] = false;
-				dmgST[4] = false;
-				dmgST[5] = true;
-			    scr_DamageNPC(x,y,300*boostBallDmgCounter,DmgType.Misc,dmgST,0,3,0);
+				if(state != State.Morph && stateFrame != State.Morph)
+				{
+					if(statCharge >= maxCharge)
+					{
+						var flareDir = shootDir;
+						if(dir2 == -1)
+						{
+							flareDir = angle_difference(shootDir,180);
+						}
+						var flare = instance_create_layer(shootPosX+lengthdir_x(5,shootDir),shootPosY+lengthdir_y(5,shootDir),layer_get_id("Projectiles_fg"),obj_ChargeFlare);
+						flare.damage = (beamDmg*chargeMult);
+						flare.sprite_index = beamFlare;
+						flare.damageSubType[DmgSubType_Beam.Ice] = item[Item.IceBeam];
+						flare.damageSubType[DmgSubType_Beam.Wave] = item[Item.WaveBeam];
+						flare.damageSubType[DmgSubType_Beam.Spazer] = item[Item.Spazer];
+						flare.damageSubType[DmgSubType_Beam.Plasma] = item[Item.PlasmaBeam];
+						flare.direction = flareDir;
+						flare.image_angle = flareDir;
+						flare.image_xscale = dir2;
+						flare.creator = id;
+						if(item[Item.IceBeam])
+						{
+							flare.freezeType = 2;
+							flare.freezeKill = true;
+						}
+							
+						damage = (beamDmg*chargeMult) / beamChargeAmt;
+						Shoot(beamCharge,damage,sSpeed,beamChargeDelay,beamChargeAmt,beamChargeSound,beamIsWave,beamWaveStyleOffset);
+							
+						chargeReleaseFlash = 4;
+						recoil = true;
+					}
+					else if(statCharge >= 20)
+					{
+						Shoot(shotIndex,damage,sSpeed,delay,amount,sound,beamIsWave,beamWaveStyleOffset);
+						recoil = true;
+					}
+				}
+				else if(item[Item.MBBomb] && !WeaponSelected(Weapon.PowerBomb))
+				{
+					var bombPosX = x,
+						bombPosY = y+3;
+					if(SpiderActive())
+					{
+						bombPosX = x + lengthdir_x(-2,spiderJumpDir);
+						bombPosY = y+1 + lengthdir_y(-2,spiderJumpDir);
+					}
+						
+					if(statCharge >= 20)
+					{
+						var bChargeScale = min(statCharge / (maxCharge*1.5), 1);
+							
+						if(!grounded && !SpiderActive() && cPlayerDown)
+						{
+							var bombDir = [0,90,210,330],
+								bombTime = [0,30,30,30],
+								bombSpd = 2 + 4*bChargeScale;
+							for(var i = 0; i < 4; i++)
+							{
+								var bomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBomb);
+								bomb.damage = chargeBombDmg * bChargeScale;
+								bomb.spreadType = 2;
+								if(i > 0)
+								{
+									bomb.spreadSpeed = bombSpd;
+								}
+								bomb.spreadDir = bombDir[i];
+								bomb.spreadFrict = 0.5;
+								bomb.bombTimer = bombTime[i];
+							}
+							bombDelayTime = 60;
+							audio_play_sound(snd_BombSet,0,false);
+						}
+						else if(SpiderActive())
+						{
+							var bombDir = [0, 45, 90, 135, 180],
+								bombTime = [30, 30, 30, 30, 30],
+								bombSpd = 2 + 4*bChargeScale;
+							for(var i = 0; i < 5; i++)
+							{
+								bombDir[i] += spiderJumpDir-90;
+									
+								var bomb = instance_create_layer(x,y,"Projectiles_fg",obj_MBBomb);
+								bomb.damage = chargeBombDmg * bChargeScale;
+								bomb.spreadType = 2;
+								bomb.spreadSpeed = bombSpd;
+								bomb.spreadDir = bombDir[i];
+								bomb.spreadFrict = 0.5;
+								bomb.bombTimer = bombTime[i];
+							}
+							bombDelayTime = 60;
+							audio_play_sound(snd_BombSet,0,false);
+						}
+						else
+						{
+							var bombDirection = [60, 120, 75, 105, 90],
+								bombDirectionR = [45, 56.25, 67.5, 78.75, 90],
+								bombDirectionL = [135, 123.75, 112.5, 101.25, 90],
+								bombSpeed = 6*bChargeScale,
+								spreadFrict = 2,
+								spreadType = 0;
+								
+							for(var i = 0; i < 5; i++)
+							{
+								var bombTime = 100 - 5*i;
+								var bDir = bombDirection[i];
+								if(move2 != 0)
+								{
+									if(move2 == 1)
+									{
+										bDir = bombDirectionR[i];
+									}
+									else
+									{
+										bDir = bombDirectionL[i];
+									}
+								}
+								else if(cPlayerDown)
+								{
+									bDir = 90;
+									bombSpeed = 3 + 4*bChargeScale;
+									spreadFrict = 2 / max(3*i,1);
+									spreadType = 1;
+									bombTime = 55 + 20*i;
+								}
+									
+								var bomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBomb);
+								bomb.damage = chargeBombDmg * bChargeScale;
+								bomb.velX = lengthdir_x(bombSpeed,bDir);
+								bomb.velY = lengthdir_y(bombSpeed,bDir);
+								bomb.spreadType = spreadType;
+								bomb.spreadFrict = spreadFrict;
+								bomb.bombTimer = bombTime;
+							}
+							bombDelayTime = 120 + (30*spreadType);
+							audio_play_sound(snd_BombSet,0,false);
+						}
+					}
+				}
+			}
+			statCharge = 0;
+			enqueShot = false;
+		}
+		#endregion
+		
+		if(IsChargeSomersaulting() && !IsSpeedBoosting() && !IsScrewAttacking())
+		{
+			var psDmg = beamDmg*chargeMult * 2;
+			var dmgST = array_create(DmgSubType_Beam._Length,false);
+			dmgST[DmgSubType_Beam.All] = true;
+			dmgST[DmgSubType_Beam.Power] = true;
+			dmgST[DmgSubType_Beam.Ice] = item[Item.IceBeam];
+			dmgST[DmgSubType_Beam.Wave] = item[Item.WaveBeam];
+			dmgST[DmgSubType_Beam.Spazer] = item[Item.Spazer];
+			dmgST[DmgSubType_Beam.Plasma] = item[Item.PlasmaBeam];
 			
-				boostBallDmgCounter = max(boostBallDmgCounter - 0.0375, 0);
-			}
-		
-			// ----- Environmental Damage -----
-			#region Environmental Damage
-		
-			var palFlag = false;
-		
-			if(global.rmHeated && !item[Item.VariaSuit])
+			if(!instance_exists(dmgBoxes[PlayerDmgBox.PseudoScrew]))
 			{
-				ConstantDamage(1, 4 + (2 * item[Item.GravitySuit]));
-			
-				if(!audio_is_playing(snd_HealthDrainLoop) && !audio_is_playing(heatDmgSnd))
-		        {
-		            heatDmgSnd = audio_play_sound(snd_HealthDrainLoop,0,true);
-					audio_sound_gain(heatDmgSnd,0.7,0);
-		        }
-			
-				palFlag = true;
+				dmgBoxes[PlayerDmgBox.PseudoScrew] = self.CreateDamageBox(0,0,screwAttackMask,false);
 			}
-			else
+			if(instance_exists(dmgBoxes[PlayerDmgBox.PseudoScrew]))
 			{
-				audio_stop_sound(heatDmgSnd);
+				dmgBoxes[PlayerDmgBox.PseudoScrew].Damage(x, y, psDmg, DmgType.Charge, dmgST, , , 3);
 			}
+		}
+		else if(instance_exists(dmgBoxes[PlayerDmgBox.PseudoScrew]))
+		{
+			instance_destroy(dmgBoxes[PlayerDmgBox.PseudoScrew]);
+		}
 		
-			var sndFlag2 = false;
-			var sndFlag3 = false;
-			if(liquid && liquid.liquidType == LiquidType.Lava && !item[Item.GravitySuit])
+		if(boostBallDmgCounter > 0)
+		{
+			var dmgST = array_create(DmgSubType_Misc._Length,false);
+			dmgST[DmgSubType_Misc.All] = true;
+			dmgST[DmgSubType_Misc.BoostBall] = true;
+			
+			if(!instance_exists(dmgBoxes[PlayerDmgBox.BoostBall]))
+			{
+				dmgBoxes[PlayerDmgBox.BoostBall] = self.CreateDamageBox(0,0,mask_index,false);
+			}
+			if(instance_exists(dmgBoxes[PlayerDmgBox.BoostBall]))
+			{
+				dmgBoxes[PlayerDmgBox.BoostBall].mask_index = mask_index;
+				dmgBoxes[PlayerDmgBox.BoostBall].Damage(x, y, 300*boostBallDmgCounter, DmgType.Misc, dmgST, , , 3);
+			}
+			
+			boostBallDmgCounter = max(boostBallDmgCounter - 0.0375, 0);
+		}
+		else if(instance_exists(dmgBoxes[PlayerDmgBox.BoostBall]))
+		{
+			instance_destroy(dmgBoxes[PlayerDmgBox.BoostBall]);
+		}
+		
+		if(IsSpeedBoosting())
+		{
+			var dmgST = array_create(DmgSubType_Misc._Length,false);
+			dmgST[DmgSubType_Misc.All] = true;
+			dmgST[DmgSubType_Misc.SpeedBoost] = true;
+			
+			if(!instance_exists(dmgBoxes[PlayerDmgBox.SpeedBoost]))
+			{
+				dmgBoxes[PlayerDmgBox.SpeedBoost] = self.CreateDamageBox(0,0,mask_index,false);
+			}
+			if(instance_exists(dmgBoxes[PlayerDmgBox.SpeedBoost]))
+			{
+				dmgBoxes[PlayerDmgBox.SpeedBoost].mask_index = mask_index;
+				dmgBoxes[PlayerDmgBox.SpeedBoost].Damage(x, y, 2000, DmgType.Misc, dmgST, , , 3);
+			}
+			
+			if(state == State.Spark )//|| state == State.BallSpark)
+			{
+				if(!instance_exists(dmgBoxes[PlayerDmgBox.ShineSpark]))
+				{
+					dmgBoxes[PlayerDmgBox.ShineSpark] = self.CreateDamageBox(0,0,shineSparkMask,false);
+				}
+				if(instance_exists(dmgBoxes[PlayerDmgBox.ShineSpark]))
+				{
+					var shineRot = shineDir - 90;
+					var len = 6;
+					var shineX = scr_round(x + lengthdir_x(len,shineRot)),
+						shineY = scr_round(y + lengthdir_y(len,shineRot));
+					
+					var ssbox = dmgBoxes[PlayerDmgBox.ShineSpark];
+					ssbox.direction = shineRot;
+					ssbox.image_angle = shineRot;
+					ssbox.Damage(shineX, shineY, 2000, DmgType.Misc, dmgST, , , 3);
+				}
+			}
+			else if(instance_exists(dmgBoxes[PlayerDmgBox.ShineSpark]))
+			{
+				instance_destroy(dmgBoxes[PlayerDmgBox.ShineSpark]);
+			}
+		}
+		else
+		{
+			if(instance_exists(dmgBoxes[PlayerDmgBox.SpeedBoost]))
+			{
+				instance_destroy(dmgBoxes[PlayerDmgBox.SpeedBoost]);
+			}
+			if(instance_exists(dmgBoxes[PlayerDmgBox.ShineSpark]))
+			{
+				instance_destroy(dmgBoxes[PlayerDmgBox.ShineSpark]);
+			}
+		}
+		
+		if(IsScrewAttacking())
+		{
+			var dmgST = array_create(DmgSubType_Misc._Length,false);
+			dmgST[DmgSubType_Misc.All] = true;
+			dmgST[DmgSubType_Misc.ScrewAttack] = true;
+			
+			if(!instance_exists(dmgBoxes[PlayerDmgBox.ScrewAttack]))
+			{
+				dmgBoxes[PlayerDmgBox.ScrewAttack] = self.CreateDamageBox(0,0,screwAttackMask,false);
+			}
+			if(instance_exists(dmgBoxes[PlayerDmgBox.ScrewAttack]))
+			{
+				dmgBoxes[PlayerDmgBox.ScrewAttack].Damage(x, y, 2000, DmgType.Misc, dmgST, , , 3);
+			}
+		}
+		else if(instance_exists(dmgBoxes[PlayerDmgBox.ScrewAttack]))
+		{
+			instance_destroy(dmgBoxes[PlayerDmgBox.ScrewAttack]);
+		}
+		
+		self.IncrInvFrames();
+		
+		// ----- Environmental Damage -----
+		#region Environmental Damage
+		
+		var palFlag = false;
+		
+		if(global.rmHeated && !item[Item.VariaSuit])
+		{
+			ConstantDamage(1, 4 + (2 * item[Item.GravitySuit]));
+			
+			if(!audio_is_playing(snd_HealthDrainLoop) && !audio_is_playing(heatDmgSnd))
 		    {
-		        ConstantDamage(1, 2 + (2 * (item[Item.VariaSuit])));
-			
-		        palFlag = true;
-		        sndFlag2 = true;
-				if(!liquidTop)
-				{
-					sndFlag3 = true;
-				}
+		        heatDmgSnd = audio_play_sound(snd_HealthDrainLoop,0,true);
+				audio_sound_gain(heatDmgSnd,0.7,0);
 		    }
-			if(liquid && liquid.liquidType == LiquidType.Acid)
-			{
-				ConstantDamage(3, 2 + (2 * (item[Item.VariaSuit] + item[Item.GravitySuit])));
 			
-				palFlag = true;
-				sndFlag2 = true;
-				if(!liquidTop)
-				{
-					sndFlag3 = true;
-				}
-			}
+			palFlag = true;
+		}
+		else
+		{
+			audio_stop_sound(heatDmgSnd);
+		}
 		
-			if(sndFlag2)
-			{
-				if(!audio_is_playing(snd_LavaDamageLoop))
-		        {
-		            var snd = audio_play_sound(snd_LavaDamageLoop,0,true);
-		            audio_sound_gain(snd,0.6,2000);
-		        }
-			}
-			else
-			{
-				audio_stop_sound(snd_LavaDamageLoop);
-			}
-			if(sndFlag3)
-			{
-				if(!audio_is_playing(snd_LiquidTopDmgLoop))
-		        {
-		            audio_play_sound(snd_LiquidTopDmgLoop,0,true);
-		        }
-			}
-			else
-			{
-				audio_stop_sound(snd_LiquidTopDmgLoop);
-			}
-		
-			if(palFlag)
-			{
-				heatDmgPalCounter += 1;
-			}
-			else
-			{
-				heatDmgPalCounter = 0;
-			}
-		
-			#endregion
+		var sndFlag2 = false;
+		var sndFlag3 = false;
+		if(liquid && liquid.liquidType == LiquidType.Lava && !item[Item.GravitySuit])
+		{
+		    ConstantDamage(1, 2 + (2 * (item[Item.VariaSuit])));
 			
-			if(stateFrame == State.Grip)
+		    palFlag = true;
+		    sndFlag2 = true;
+			if(!liquidTop)
 			{
-				if(aimAngle != 0 || dir != grippedDir)
-				{
-					justShot = 0;
-				}
+				sndFlag3 = true;
 			}
-			else
-			{
-				if(aimAngle != 0 || (velX == 0 && stateFrame != State.Brake) || !grounded || abs(dirFrame) < 4 || state == State.Morph)
-				{
-					justShot = 0;
-				}
-			}
-			if(stateFrame != State.Brake)
-			{
-				justShot = max(justShot - 1, 0);
-			}
+		}
+		if(liquid && liquid.liquidType == LiquidType.Acid)
+		{
+			ConstantDamage(3, 2 + (2 * (item[Item.VariaSuit] + item[Item.GravitySuit])));
 			
-			shotDelayTime = max(shotDelayTime - 1, 0);
-			if(!instance_exists(obj_PowerBomb) && !instance_exists(obj_PowerBombExplosion))
+			palFlag = true;
+			sndFlag2 = true;
+			if(!liquidTop)
 			{
-				bombDelayTime = max(bombDelayTime - 1, 0);
+				sndFlag3 = true;
 			}
+		}
+		
+		if(sndFlag2)
+		{
+			if(!audio_is_playing(snd_LavaDamageLoop))
+		    {
+		        var snd = audio_play_sound(snd_LavaDamageLoop,0,true);
+		        audio_sound_gain(snd,0.6,2000);
+		    }
+		}
+		else
+		{
+			audio_stop_sound(snd_LavaDamageLoop);
+		}
+		if(sndFlag3)
+		{
+			if(!audio_is_playing(snd_LiquidTopDmgLoop))
+		    {
+		        audio_play_sound(snd_LiquidTopDmgLoop,0,true);
+		    }
+		}
+		else
+		{
+			audio_stop_sound(snd_LiquidTopDmgLoop);
+		}
+		
+		if(palFlag)
+		{
+			heatDmgPalCounter += 1;
+		}
+		else
+		{
+			heatDmgPalCounter = 0;
+		}
+		
+		#endregion
+		
+		if(stateFrame == State.Grip)
+		{
+			if(aimAngle != 0 || dir != grippedDir)
+			{
+				justShot = 0;
+			}
+		}
+		else
+		{
+			if(aimAngle != 0 || (velX == 0 && stateFrame != State.Brake) || !grounded || abs(dirFrame) < 4 || state == State.Morph)
+			{
+				justShot = 0;
+			}
+		}
+		if(stateFrame != State.Brake)
+		{
+			justShot = max(justShot - 1, 0);
+		}
+		
+		shotDelayTime = max(shotDelayTime - 1, 0);
+		if(!instance_exists(obj_PowerBomb) && !instance_exists(obj_PowerBombExplosion))
+		{
+			bombDelayTime = max(bombDelayTime - 1, 0);
 		}
 	
 		SetReleaseVars("player");

@@ -9,7 +9,7 @@ if(dead)
 		{
 			if(irandom(2) == 0)
 			{
-				NPCDropItem(i,j);
+				self.NPCDropItem(i,j);
 			}
 		}
 	}
@@ -20,6 +20,6 @@ else
 }
 
 instance_destroy(head);
-instance_destroy(rHand);
+//instance_destroy(rHand);
 
 global.rmMusic = global.music_ItemRoom;

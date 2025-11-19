@@ -4,7 +4,7 @@ event_inherited();
 freezeImmune = true;
 ignorePlayerImmunity = true;
 
-function ModifyDamageTaken(damage,object,isProjectile)
+function Entity_ModifyDamageTaken(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType)
 {
 	return 0;
 }

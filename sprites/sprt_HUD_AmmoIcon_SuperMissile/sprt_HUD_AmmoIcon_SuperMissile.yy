@@ -24,7 +24,7 @@
   ],
   "name":"sprt_HUD_AmmoIcon_SuperMissile",
   "nineSlice":null,
-  "origin":0,
+  "origin":9,
   "parent":{
     "name":"Icons",
     "path":"folders/Sprites/UI/HUD/Icons.yy",
@@ -71,14 +71,18 @@
     "timeUnits":1,
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"4c8c1a36-da1a-4b01-9899-aaa9ca007570","path":"sprites/sprt_HUD_AmmoIcon_SuperMissile/sprt_HUD_AmmoIcon_SuperMissile.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"88f58414-0543-4814-952e-9307c1cb3d12","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"9ac1c379-1e89-40c2-9cd1-e89e5b545792","path":"sprites/sprt_HUD_AmmoIcon_SuperMissile/sprt_HUD_AmmoIcon_SuperMissile.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"b7452bbe-212f-409f-96b7-b4d1ef44c984","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"4c8c1a36-da1a-4b01-9899-aaa9ca007570","path":"sprites/sprt_HUD_AmmoIcon_SuperMissile/sprt_HUD_AmmoIcon_SuperMissile.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"88f58414-0543-4814-952e-9307c1cb3d12","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"9ac1c379-1e89-40c2-9cd1-e89e5b545792","path":"sprites/sprt_HUD_AmmoIcon_SuperMissile/sprt_HUD_AmmoIcon_SuperMissile.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"b7452bbe-212f-409f-96b7-b4d1ef44c984","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
     "volume":1.0,
-    "xorigin":0,
-    "yorigin":0,
+    "xorigin":7,
+    "yorigin":5,
   },
   "swatchColours":null,
   "swfPrecision":0.5,

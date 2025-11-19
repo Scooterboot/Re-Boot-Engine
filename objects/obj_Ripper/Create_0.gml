@@ -5,13 +5,17 @@ life = 200;
 lifeMax = 200;
 damage = 5;
 
-dmgMult[DmgType.Beam][0] = 0; // all
-dmgMult[DmgType.Charge][0] = 0; // all
-dmgMult[DmgType.Explosive][1] = 0; // missile
-dmgMult[DmgType.Explosive][2] = 1; // super missile
-dmgMult[DmgType.Explosive][3] = 0; // bomb
-dmgMult[DmgType.Explosive][4] = 1; // power bomb
-dmgMult[DmgType.Misc][5] = 0; // boost ball
+dmgResist[DmgType.Beam][DmgSubType_Beam.All] = 0;
+dmgResist[DmgType.Charge][DmgSubType_Beam.All] = 0;
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.Missile] = 0;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.Missile] = 0;
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.SuperMissile] = 1;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.SuperMissile] = 1;
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.Bomb] = 0;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.Bomb] = 0;
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.PowerBomb] = 1;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.PowerBomb] = 1;
+dmgResist[DmgType.Misc][DmgSubType_Misc.BoostBall] = 0;
 
 dropChance[0] = 26; // nothing
 dropChance[1] = 32; // energy

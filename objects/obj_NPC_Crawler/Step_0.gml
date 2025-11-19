@@ -1,6 +1,6 @@
 /// @description AI Behavior
 event_inherited();
-if(PauseAI())
+if(self.PauseAI())
 {
 	exit;
 }
@@ -9,10 +9,10 @@ var rot = rotation2;
 
 var xcheck = 2,//max(abs(velX),2),
 	ycheck = 2;//max(abs(velY),2);
-var collideAny = (entity_place_collide(xcheck,0) || entity_place_collide(-xcheck,0) || entity_place_collide(0,ycheck) || entity_place_collide(0,-ycheck) ||
-				entity_place_collide(xcheck,ycheck) || entity_place_collide(-xcheck,ycheck) || entity_place_collide(xcheck,-ycheck) || entity_place_collide(-xcheck,-ycheck));
+var collideAny = (self.entity_place_collide(xcheck,0) || self.entity_place_collide(-xcheck,0) || self.entity_place_collide(0,ycheck) || self.entity_place_collide(0,-ycheck) ||
+				self.entity_place_collide(xcheck,ycheck) || self.entity_place_collide(-xcheck,ycheck) || self.entity_place_collide(xcheck,-ycheck) || self.entity_place_collide(-xcheck,-ycheck));
 
-if(instance_exists(obj_ScreenShaker) && obj_ScreenShaker.active && colEdge != Edge.Bottom && !entity_place_collide(0,ycheck))
+if(instance_exists(obj_ScreenShaker) && obj_ScreenShaker.active && colEdge != Edge.Bottom && !self.entity_place_collide(0,ycheck))
 {
 	collideAny = false;
 }
@@ -34,38 +34,38 @@ if(colEdge == Edge.None)
 	
 	/*if(collideAny)
 	{
-		if(entity_place_collide(0,ycheck))
+		if(self.entity_place_collide(0,ycheck))
 		{
 			colEdge = Edge.Bottom;
 		}
-		else if(entity_place_collide(0,-ycheck))
+		else if(self.entity_place_collide(0,-ycheck))
 		{
 			colEdge = Edge.Top;
 		}
-		else if(entity_place_collide(xcheck,0))
+		else if(self.entity_place_collide(xcheck,0))
 		{
 			colEdge = Edge.Right;
 		}
-		else if(entity_place_collide(-xcheck,0))
+		else if(self.entity_place_collide(-xcheck,0))
 		{
 			colEdge = Edge.Left;
 		}
 	}*/
 }
 
-var colL = entity_collision_line(bb_left(),bb_top(),bb_left(),bb_bottom()),
-	colR = entity_collision_line(bb_right(),bb_top(),bb_right(),bb_bottom()),
-	colT = entity_collision_line(bb_left(),bb_top(),bb_right(),bb_top()),
-	colB = entity_collision_line(bb_left(),bb_bottom(),bb_right(),bb_bottom());
-if(entity_place_collide(0,0) && colL+colR+colT+colB >= 3)
+var colL = self.entity_collision_line(self.bb_left(),self.bb_top(),self.bb_left(),self.bb_bottom()),
+	colR = self.entity_collision_line(self.bb_right(),self.bb_top(),self.bb_right(),self.bb_bottom()),
+	colT = self.entity_collision_line(self.bb_left(),self.bb_top(),self.bb_right(),self.bb_top()),
+	colB = self.entity_collision_line(self.bb_left(),self.bb_bottom(),self.bb_right(),self.bb_bottom());
+if(self.entity_place_collide(0,0) && colL+colR+colT+colB >= 3)
 {
 	var flag3 = false;
 	var dirX = 0, dirY = 0;
-	if(!entity_collision_line(bb_right()+1,bb_top(),bb_right()+1,bb_bottom()))
+	if(!self.entity_collision_line(self.bb_right()+1,self.bb_top(),self.bb_right()+1,self.bb_bottom()))
 	{
 		dirX = 1;
 	}
-	else if(!entity_collision_line(bb_left()-1,bb_top(),bb_left()-1,bb_bottom()))
+	else if(!self.entity_collision_line(self.bb_left()-1,self.bb_top(),self.bb_left()-1,self.bb_bottom()))
 	{
 		dirX = -1;
 	}
@@ -75,11 +75,11 @@ if(entity_place_collide(0,0) && colL+colR+colT+colB >= 3)
 		flag3 = true;
 	}
 	
-	if(!entity_collision_line(bb_left(),bb_bottom()+1,bb_right(),bb_bottom()+1))
+	if(!self.entity_collision_line(self.bb_left(),self.bb_bottom()+1,self.bb_right(),self.bb_bottom()+1))
 	{
 		dirY = 1;
 	}
-	else if(!entity_collision_line(bb_left(),bb_top()-1,bb_right(),bb_top()-1) || flag3)
+	else if(!self.entity_collision_line(self.bb_left(),self.bb_top()-1,self.bb_right(),self.bb_top()-1) || flag3)
 	{
 		dirY = -1;
 	}
@@ -128,12 +128,12 @@ else
 	
 	if(colEdge != Edge.None)
 	{
-		rotation2 = GetEdgeAngle(colEdge);
+		rotation2 = self.GetEdgeAngle(colEdge);
 	}
 	
 	fVelX = velX;
 	fVelY = velY;
-	Collision_Crawler(fVelX,fVelY,true);
+	self.Collision_Crawler(fVelX,fVelY,true);
 }
 
 var rot2 = scr_wrap(scr_round(rotation2),0,360);

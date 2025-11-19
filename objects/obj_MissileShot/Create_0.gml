@@ -4,7 +4,7 @@ event_inherited();
 doorOpenType[DoorOpenType.Missile] = true;
 blockBreakType[BlockBreakType.Missile] = true;
 
-damageSubType[1] = true;
+damageSubType[DmgSubType_Explosive.Missile] = true;
 
 exploProj = obj_MissileExplosion;
 
@@ -13,9 +13,4 @@ depth -= 1;
 
 particleDelay = 1;
 
-function TileInteract(_x,_y)
-{
-	//BreakBlock(_x,_y,blockBreakType);
-	//OpenDoor(_x,_y,doorOpenType);
-	//ShutterSwitch(_x,_y,doorOpenType);
-}
+function TileInteract(_x,_y) {}

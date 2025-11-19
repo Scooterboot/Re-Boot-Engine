@@ -22,8 +22,22 @@ multiHit = true;
 
 type = ProjType.Bomb;
 
-damageSubType[3] = true;
-damageSubType[4] = true;
-damageSubType[5] = true;
+damageType = DmgType.ExplSplash;
+damageSubType[DmgSubType_Explosive.PowerBomb] = true;
+
+dmgBoxes[0] = self.CreateDamageBox(0,0,sprite_index,hostile);
+function DamageBoxes()
+{
+	if(damage > 0)
+	{
+		if(instance_exists(dmgBoxes[0]))
+		{
+			dmgBoxes[0].mask_index = sprite_index;
+			dmgBoxes[0].image_xscale = image_xscale;
+			dmgBoxes[0].image_yscale = image_yscale;
+			dmgBoxes[0].Damage(x,y,damage,damageType,damageSubType,freezeType,freezeTime,npcDeathType);
+		}
+	}
+}
 
 distort = instance_create_depth(x,y,depth-1,obj_Distort);

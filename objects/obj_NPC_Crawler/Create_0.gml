@@ -42,3 +42,12 @@ function MovingSolid_OnTopCollision(fVY)
 {
 	colEdge = Edge.Top;
 }
+
+function DmgBoxRot()
+{
+	return rotation;
+}
+function LifeBoxRot()
+{
+	return rotation;
+}

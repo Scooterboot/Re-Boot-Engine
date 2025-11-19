@@ -8,8 +8,7 @@ forceJump = false;
 
 type = ProjType.Bomb;
 
-damageSubType[3] = true;
-damageSubType[4] = true;
+damageSubType[DmgSubType_Explosive.PowerBomb] = true;
 
 doorOpenType[DoorOpenType.Bomb] = true;
 doorOpenType[DoorOpenType.PBomb] = true;

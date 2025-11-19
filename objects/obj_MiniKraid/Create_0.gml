@@ -10,8 +10,11 @@ deathType = 2;
 
 freezeImmune = true;
 
-dmgMult[DmgType.Explosive][1] = 1;//2; // missile
-dmgMult[DmgType.Explosive][2] = 1;//2; // super missile
+// In vanilla SM, these are set to 2, but imo that makes it feel very weak
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.Missile] = 1;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.Missile] = 1;
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.SuperMissile] = 1;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.SuperMissile] = 1;
 
 dropChance[0] = 0; // nothing
 dropChance[1] = 10; // energy
@@ -69,6 +72,6 @@ function NPCDropItem(_x,_y)
 {
 	for(var i = 0; i < 5; i++)
 	{
-		_NPCDropItem(_x+irandom_range(-12,12),_y+irandom_range(-12,12));
+		self._NPCDropItem(_x+irandom_range(-12,12),_y+irandom_range(-12,12));
 	}
 }

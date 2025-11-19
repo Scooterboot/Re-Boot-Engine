@@ -14,11 +14,11 @@ if (camX < 0 || camY < 0)
 	
 	var x1 = camX,
 		x2 = 0;
-	draw_rectangle(x1,camY-2,x2-1,camY+camH+2,false);
+	draw_rectangle(x1,camY-2,x2,camY+camH+2,false);
 	
 	var y1 = camY,
 		y2 = 0;
-	draw_rectangle(camX-2,y1,camX+camW+2,y2-1,false);
+	draw_rectangle(camX-2,y1,camX+camW+2,y2,false);
 	
 	draw_set_color(c_white);
 }
@@ -29,11 +29,11 @@ if (camX+camW > room_width || camY+camH > room_height)
 	
 	var x1 = room_width,
 		x2 = camX+camW;
-	draw_rectangle(x1,camY-2,x2-1,camY+camH+2,false);
+	draw_rectangle(x1,camY-2,x2,camY+camH+2,false);
 	
 	var y1 = room_height,
 		y2 = camY+camH;
-	draw_rectangle(camX-2,y1,camX+camW+2,y2-1,false);
+	draw_rectangle(camX-2,y1,camX+camW+2,y2,false);
 	
 	draw_set_color(c_white);
 }
@@ -58,9 +58,10 @@ if(debug == 1)
 			{
 				draw_set_color(c_white);
 				draw_set_alpha(0.33);
-			
-				draw_rectangle(i+global.rmMapPixX, j+global.rmMapPixY, i+global.rmMapPixX+global.rmMapSizeW-1, j+global.rmMapPixY+global.rmMapSizeH-1, true);
-			
+				
+				//draw_rectangle(i+global.rmMapPixX, j+global.rmMapPixY, i+global.rmMapPixX+global.rmMapSizeW-1, j+global.rmMapPixY+global.rmMapSizeH-1, true);
+				draw_rectangle_betterOutline(i+global.rmMapPixX, j+global.rmMapPixY, i+global.rmMapPixX+global.rmMapSizeW, j+global.rmMapPixY+global.rmMapSizeH);
+				
 				draw_set_alpha(1);
 			}
 		}
@@ -73,26 +74,6 @@ if(debug == 1)
 		draw_surface_ext(surf2, surfX, surfY, 1,1,0,c_white,image_alpha);
 	}*/
 	
-	with(obj_NPC)
-	{
-		draw_set_color(c_red);
-        draw_set_alpha(0.75);
-        
-		if(mask_index != sprite_index && sprite_exists(mask_index))
-		{
-			gpu_set_fog(true,c_red,0,0);
-			draw_sprite_ext(mask_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,0.75);
-			gpu_set_fog(false,0,0,0);
-		}
-		else
-		{
-	        draw_rectangle(bb_left(),bb_top(),bb_right(),bb_bottom(),0);
-		}
-		
-		draw_set_color(c_white);
-        draw_set_alpha(1);
-	}
-	
 	with(obj_Liquid)
 	{
 		if(_SurfWidth() > 0 && _SurfHeight() > 0)
@@ -101,7 +82,8 @@ if(debug == 1)
 	        draw_set_alpha(0.5);
 		
 			var pos = SurfPos();
-			draw_rectangle(pos.X+1,pos.Y+1,pos.X+SurfWidth()-2,pos.Y+SurfHeight()-2,true);
+			//draw_rectangle(pos.X+1,pos.Y+1,pos.X+SurfWidth()-2,pos.Y+SurfHeight()-2,true);
+			draw_rectangle_betterOutline(pos.X,pos.Y,pos.X+SurfWidth(),pos.Y+SurfHeight());
         
 	        draw_set_color(c_white);
 	        draw_set_alpha(1);
@@ -180,7 +162,8 @@ if(debug == 1)
 		}
 		else
 		{
-			draw_rectangle(x-sizeX,y-sizeY,x+sizeX-1,y+sizeY-1,true);
+			//draw_rectangle(x-sizeX,y-sizeY,x+sizeX-1,y+sizeY-1,true);
+			draw_rectangle_betterOutline(x-sizeX,y-sizeY,x+sizeX,y+sizeY);
 		}
 		draw_set_color(c_white);
 		
@@ -207,50 +190,68 @@ if(debug == 1)
 		}
 	}
 	
-	if(instance_exists(obj_Projectile))
+	with(obj_Entity)
 	{
-		with(obj_Projectile)
+		draw_set_color(c_white);
+        draw_set_alpha(0.5);
+        
+		if(mask_index != sprite_index && sprite_exists(mask_index))
 		{
-			draw_set_color(c_fuchsia);
-			draw_set_alpha(0.75);
-			
-			if(projLength > 0)
-			{
-				var numw = max(abs(bb_right() - bb_left()),1),
-			        numd = clamp(point_distance(x,y,xstart,ystart),1,projLength);
-				for(var j = numw; j < numd; j += numw)
-				{
-					var xw = x-lengthdir_x(j,direction),
-						yw = y-lengthdir_y(j,direction);
-					
-					if(mask_index != sprite_index && sprite_exists(mask_index))
-					{
-						gpu_set_fog(true,c_fuchsia,0,0);
-						draw_sprite_ext(mask_index,0,xw,yw,image_xscale,image_yscale,image_angle,c_white,0.75);
-						gpu_set_fog(false,0,0,0);
-					}
-					else
-					{
-					    var bleft = bb_left(xw),
-							btop = bb_top(yw),
-							bright = bb_right(xw),
-							bbottom = bb_bottom(yw);
-						draw_rectangle(bleft,btop,bright,bbottom,0);
-					}
-				}
-			}
-			
-			if(mask_index != sprite_index && sprite_exists(mask_index))
-			{
-				gpu_set_fog(true,c_fuchsia,0,0);
-				draw_sprite_ext(mask_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,0.75);
-				gpu_set_fog(false,0,0,0);
-			}
-			else
-			{
-				draw_rectangle(bb_left(),bb_top(),bb_right(),bb_bottom(),0);
-			}
+			gpu_set_fog(true,c_aqua,0,0);
+			draw_sprite_ext(mask_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,0.5);
+			gpu_set_fog(false,0,0,0);
 		}
+		else
+		{
+	        //draw_rectangle(bb_left(),bb_top(),bb_right(),bb_bottom(),0);
+			draw_rectangle_betterOutline(bb_left(),bb_top(),bb_right(),bb_bottom());
+		}
+		
+		draw_set_color(c_white);
+        draw_set_alpha(1);
+	}
+	with(obj_LifeBox)
+	{
+		draw_set_color(c_green);
+        draw_set_alpha(0.5);
+        
+		if((!instance_exists(creator) || mask_index != creator.sprite_index) && sprite_exists(mask_index))
+		{
+			gpu_set_fog(true,c_green,0,0);
+			draw_sprite_ext(mask_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,0.5);
+			gpu_set_fog(false,0,0,0);
+		}
+		else
+		{
+	        draw_rectangle(bb_left(),bb_top(),bb_right(),bb_bottom(),0);
+		}
+		
+		draw_set_color(c_white);
+        draw_set_alpha(1);
+	}
+	with(obj_DamageBox)
+	{
+		var col = c_red;
+		if(!hostile)
+		{
+			col = c_aqua;
+		}
+		draw_set_color(col);
+        draw_set_alpha(0.5);
+        
+		if((!instance_exists(creator) || mask_index != creator.sprite_index) && sprite_exists(mask_index))
+		{
+			gpu_set_fog(true,col,0,0);
+			draw_sprite_ext(mask_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,0.5);
+			gpu_set_fog(false,0,0,0);
+		}
+		else
+		{
+	        draw_rectangle(bb_left(),bb_top(),bb_right(),bb_bottom(),0);
+		}
+		
+		draw_set_color(c_white);
+        draw_set_alpha(1);
 	}
 	
     with(obj_Player)
@@ -259,15 +260,15 @@ if(debug == 1)
 		//DrawPlayer(x,y,rotation,0.5);
 		//shader_reset();
 		
-        draw_set_color(c_aqua);
-        draw_set_alpha(0.75);
+        //draw_set_color(c_aqua);
+        //draw_set_alpha(0.75);
         
         //draw_rectangle(x+6*dir,y+11,x+19*dir,y+24,0);
         //draw_rectangle(x+6*dir,y-5,x+19*dir,y+8,0);
         //draw_rectangle(x+6*dir,y-21,x+19*dir,y-8,0);
         //draw_rectangle(x+6*dir,y-37,x+19*dir,y-24,0);
         
-        draw_rectangle(bb_left(),bb_top(),bb_right(),bb_bottom(),0);
+        //draw_rectangle(bb_left(),bb_top(),bb_right(),bb_bottom(),0);
         
 		draw_set_font(fnt_GUI);
 		draw_set_color(c_white);
@@ -311,8 +312,10 @@ if(debug == 1)
 		draw_set_color(c_white);
         draw_set_alpha(0.5);
 		
-		draw_rectangle(scr_round(xx-camLimit_Right),scr_round(yy-camLimit_Bottom),scr_round(xx-camLimit_Left)-1,scr_round(yy-camLimit_Top)-1, true);
-		draw_rectangle(scr_round(playerX),scr_round(playerY),scr_round(playerX)-1,scr_round(playerY)-1,true);
+		//draw_rectangle(scr_round(xx-camLimit_Right),scr_round(yy-camLimit_Bottom),scr_round(xx-camLimit_Left)-1,scr_round(yy-camLimit_Top)-1, true);
+		//draw_rectangle(scr_round(playerX),scr_round(playerY),scr_round(playerX)-1,scr_round(playerY)-1,true);
+		draw_rectangle_betterOutline(scr_round(xx-camLimit_Right),scr_round(yy-camLimit_Bottom),scr_round(xx-camLimit_Left),scr_round(yy-camLimit_Top));
+		draw_rectangle_betterOutline(scr_round(playerX),scr_round(playerY),scr_round(playerX),scr_round(playerY));
 		
 		draw_set_alpha(1);
 	}

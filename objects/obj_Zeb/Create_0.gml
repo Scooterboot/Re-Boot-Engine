@@ -4,7 +4,7 @@ event_inherited();
 life = 9;
 lifeMax = 9;
 damage = 6;
-dmgMult[DmgType.Misc][1] = 1; // grapple beam
+dmgResist[DmgType.Misc][DmgSubType_Misc.Grapple] = 1;
 
 dropChance[0] = 2; // nothing
 dropChance[1] = 24; // energy

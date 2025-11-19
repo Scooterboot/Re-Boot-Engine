@@ -21,12 +21,9 @@ firedY = ystart;
 
 setWave = true;
 
-damageType = DmgType.Misc;
-damageSubType[1] = false;
-damageSubType[2] = false;
-damageSubType[3] = false;
-damageSubType[4] = true;
-damageSubType[5] = false;
+isCharge = true;
+damageType = DmgType.Charge;
+damageSubType[DmgSubType_Beam.Hyper] = true;
 
 array_fill(blockBreakType, true);
 array_fill(doorOpenType, true);
@@ -42,6 +39,8 @@ function OnImpact(posX,posY,waveImpact = false)
 		}
 		audio_play_sound(impactSnd,0,false);
 	}
+	
+	part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.bTrails[particleType],7*(1+isCharge));
 	
 	if(impactObj != noone)
 	{

@@ -6,9 +6,11 @@ lifeMax = 90;
 damage = 20;
 deathType = 2;
 
-dmgMult[DmgType.Beam][1] = 0; // power beam
-dmgMult[DmgType.Explosive][1] = 2; // missile
-dmgMult[DmgType.Explosive][2] = 2; // super missile
+dmgResist[DmgType.Beam][DmgSubType_Beam.Power] = 0;
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.Missile] = 2;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.Missile] = 2;
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.SuperMissile] = 2;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.SuperMissile] = 2;
 
 palIndex = pal_SpacePirate_Green;
 

@@ -9,3 +9,6 @@ wavesPerSecond = 4;//2.75;
 delay = 0;//2;//5;
 
 impactObj = obj_HyperBeamLesserImpact;
+
+isCharge = false;
+damageType = DmgType.Beam;

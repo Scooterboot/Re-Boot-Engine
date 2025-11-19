@@ -1,10 +1,8 @@
 /// @description 
 
-//scr_OpenDoor(x,y,1);
-//scr_BreakBlock(x,y,2);
-TileInteract(x,y);
+self.TileInteract(x,y);
 
-scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,10);
+self.DamageBoxes();
 
 frameCounter++;
 if(frameCounter > 1)

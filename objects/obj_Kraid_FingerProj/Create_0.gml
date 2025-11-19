@@ -18,7 +18,7 @@ function PauseAI()
 	return (global.GamePaused() || frozen > 0 || dmgFlash > 0);
 }
 
-function OnDamagePlayer()
+function Entity_OnDamageDealt(_selfDmgBox, _lifeBox, _finalDmg, _dmg, _dmgType, _dmgSubType)
 {
 	dead = true;
 }
@@ -36,12 +36,12 @@ function BounceLimit()
 function OnXCollision(fVX, isOOB = false)
 {
 	velX *= -1;
-	BounceLimit();
+	self.BounceLimit();
 }
 function OnYCollision(fVY, isOOB = false)
 {
 	velY *= -1;
-	BounceLimit();
+	self.BounceLimit();
 }
 
 palSurface = surface_create(sprite_get_height(pal_Kraid),sprite_get_width(pal_Kraid));

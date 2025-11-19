@@ -3,6 +3,8 @@ event_inherited();
 
 type = ProjType.Missile;
 damageType = DmgType.Explosive;
+damageSubType = array_create(DmgSubType_Explosive._Length,false);
+damageSubType[DmgSubType_Explosive.All] = true;
 
 doorOpenType[DoorOpenType.Beam] = true;
 blockBreakType[BlockBreakType.Shot] = true;

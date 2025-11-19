@@ -1,7 +1,7 @@
 /// @description 
 event_inherited();
 
-if(PauseAI())
+if(self.PauseAI())
 {
 	exit;
 }

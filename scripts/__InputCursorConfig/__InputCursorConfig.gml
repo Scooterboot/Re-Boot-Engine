@@ -12,7 +12,7 @@
 
 //Cluster to read to move cursors when using a gamepad or keyboard. This cluster should be defined
 //alongside verbs and other clusters in `__InputConfigVerbs()`, for example INPUT_CLUSTER.NAVIGATION
-#macro INPUT_CURSOR_CLUSTER  -1
+#macro INPUT_CURSOR_CLUSTER  INPUT_CLUSTER.MenuMove
 
 //Default speed of the cursor when using a gamepad or keyboard. This value is measured in pixels
 //per frame and as such is *not* inherently delta-timed. You can change the cursor speed at runtime

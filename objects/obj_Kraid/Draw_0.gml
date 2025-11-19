@@ -1,6 +1,6 @@
 /// @description 
 
-Palette();
+self.Palette();
 
 for(var i = 0; i < array_length(Limbs); i++)
 {

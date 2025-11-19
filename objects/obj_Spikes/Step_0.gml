@@ -1,34 +1,24 @@
 /// @description 
 event_perform_object(obj_Breakable,ev_step,0);
 
-//var player = instance_place(x,y,obj_Player);
-var player = noone;//collision_rectangle(bbox_left-1,bbox_top-1,bbox_right+1,bbox_bottom+1,obj_Player,false,true);
-for(var i = 0; i < 360; i+= 90)
+if(!instance_exists(dmgBoxes[0]))
 {
-	if(place_meeting(x+lengthdir_x(1.5,i),y+lengthdir_y(1.5,i),obj_Player))
-	{
-		player = instance_place(x+lengthdir_x(1.5,i),y+lengthdir_y(1.5,i),obj_Player);
-		break;
-	}
+	var spW = sprite_get_width(sprite_index),
+		spH = sprite_get_height(sprite_index),
+		oLenX = -1 * sign(image_xscale),
+		oLenY = -1 * sign(image_yscale),
+		oX = (lengthdir_x(oLenX,image_angle) - lengthdir_y(oLenY,image_angle)),
+		oY = (lengthdir_x(oLenY,image_angle) + lengthdir_y(oLenX,image_angle));
+	dmgBoxes[0] = self.CreateDamageBox(oX,oY,sprite_index,true);
+	dmgBoxes[0].image_xscale = ((spW*abs(image_xscale)) + 2) / spW * sign(image_xscale);//(sprite_width+2*sign(image_xscale)) / sprite_get_width(sprite_index);
+	dmgBoxes[0].image_yscale = ((spH*abs(image_yscale)) + 2) / spH * sign(image_yscale);//(sprite_height+2*sign(image_yscale)) / sprite_get_height(sprite_index);
+	dmgBoxes[0].image_angle = image_angle;
+	dmgBoxes[0].direction = direction;
 }
-if(instance_exists(player))
+else
 {
-	var ang = 45;
-	if(player.y > bbox_top+(bbox_bottom-bbox_top)/2)
-	{
-		ang = 315;
-	}
-	if(player.dir == 1)
-	{
-		ang = 135;
-		if(player.y > bbox_top+(bbox_bottom-bbox_top)/2)
-		{
-			ang = 225;
-		}
-	}
-	var knockX = lengthdir_x(knockBackSpeed,ang),
-		knockY = lengthdir_y(knockBackSpeed,ang);
-	player.StrikePlayer(damage,knockBack,knockX,knockY,damageInvFrames,true);
+	dmgBoxes[0].Damage(x,y,damage,damageType,damageSubType);
+	self.IncrInvFrames();
 }
 
 frameCounter++;

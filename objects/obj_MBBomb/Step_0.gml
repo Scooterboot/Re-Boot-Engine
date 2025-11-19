@@ -48,7 +48,7 @@ if(spreadType != -1)
 		spreadSpeed = max(spreadSpeed-spreadFrict,0);
 	}
 	
-	Collision_Normal(velX,velY,false);
+	self.Collision_Normal(velX,velY,false);
 }
 else
 {
@@ -69,7 +69,7 @@ else
 	}
 }
 
-scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,4);
+self.DamageBoxes();
 
 if(bombTimer <= 0 || impacted > 0)
 {
@@ -89,7 +89,6 @@ if(bombTimer <= 0 || impacted > 0)
 				flag = true;
 			}
 		}
-		//if(!player.entity_place_collide(0,-11) || ((player.state != State.Crouch || !player.grounded) && player.morphFrame <= 0))
 		if(!flag)
 		{
 			var num = player.x - x;

@@ -2,12 +2,9 @@
 event_inherited();
 
 damageType = DmgType.Misc;
-damageSubType[0] = true;
-damageSubType[1] = false;
-damageSubType[2] = true;
-damageSubType[3] = false;
-damageSubType[4] = false;
-damageSubType[5] = false;
+damageSubType = array_create(DmgSubType_Misc._Length, false);
+damageSubType[DmgSubType_Misc.All] = true;
+damageSubType[DmgSubType_Misc.SpeedBoost] = true;
 
 freezeType = 0;
 

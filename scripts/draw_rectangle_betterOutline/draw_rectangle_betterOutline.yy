@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"draw_rectangle_betterOutline",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"draw_rectangle_betterOutline",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

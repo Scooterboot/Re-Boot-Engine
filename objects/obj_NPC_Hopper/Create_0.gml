@@ -30,20 +30,6 @@ function OnXCollision(fVX, isOOB = false)
 function CanMoveUpSlope_Top() { return true; }
 function CanMoveDownSlope_Top() { return true; }
 
-/*function OnSlopeXCollision_Bottom(fVX)
-{
-	if(gravDir == 1 && velY >= 0)
-	{
-		grounded = true;
-	}
-}
-function OnSlopeXCollision_Top(fVX)
-{
-	if(gravDir == -1 && velY <= 0)
-	{
-		grounded = true;
-	}
-}*/
 function OnYCollision(fVY, isOOB = false)
 {
 	if(gravDir == 1 && velY >= 0)

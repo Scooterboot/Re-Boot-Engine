@@ -14,17 +14,13 @@ if(scaleTimer >= 60)
 
 self.TileInteract(x,y);
 
-scr_DamageNPC(x,y,damage,damageType,damageSubType,0,-1,8);
-
 scale = scaleMult*scaleTimer;
 image_xscale = scale;
 image_yscale = scale;
 image_alpha = pAlpha*alpha2 * 0.5;
 
-for(var i = 0; i < array_length(npcInvFrames); i++)
-{
-	npcInvFrames[i] = max(npcInvFrames[i]-1,0);
-}
+self.DamageBoxes();
+self.IncrInvFrames();
 
 var x1 = bb_left(0),
 	y1 = bb_top(0),

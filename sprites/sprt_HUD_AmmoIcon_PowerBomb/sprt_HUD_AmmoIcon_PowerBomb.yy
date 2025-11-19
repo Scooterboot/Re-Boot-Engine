@@ -24,7 +24,7 @@
   ],
   "name":"sprt_HUD_AmmoIcon_PowerBomb",
   "nineSlice":null,
-  "origin":0,
+  "origin":9,
   "parent":{
     "name":"Icons",
     "path":"folders/Sprites/UI/HUD/Icons.yy",
@@ -71,14 +71,18 @@
     "timeUnits":1,
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"73f909d8-be7a-4a24-a1da-9bf718079b93","path":"sprites/sprt_HUD_AmmoIcon_PowerBomb/sprt_HUD_AmmoIcon_PowerBomb.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"8d152494-4665-4913-97f4-43832b3c9efc","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"a7947f4b-eeab-465f-82d0-3127128a9486","path":"sprites/sprt_HUD_AmmoIcon_PowerBomb/sprt_HUD_AmmoIcon_PowerBomb.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"99b48ae2-187b-43f7-9e0a-742c18cb63a8","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"73f909d8-be7a-4a24-a1da-9bf718079b93","path":"sprites/sprt_HUD_AmmoIcon_PowerBomb/sprt_HUD_AmmoIcon_PowerBomb.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"8d152494-4665-4913-97f4-43832b3c9efc","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"a7947f4b-eeab-465f-82d0-3127128a9486","path":"sprites/sprt_HUD_AmmoIcon_PowerBomb/sprt_HUD_AmmoIcon_PowerBomb.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"99b48ae2-187b-43f7-9e0a-742c18cb63a8","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
     "volume":1.0,
-    "xorigin":0,
-    "yorigin":0,
+    "xorigin":4,
+    "yorigin":5,
   },
   "swatchColours":null,
   "swfPrecision":0.5,

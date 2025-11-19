@@ -31,5 +31,7 @@ if(createPlatformOnFrozen && !freezeImmune)
 frozenInvFrames = max(frozenInvFrames-1,0);
 frozen = max(frozen - 1, 0);
 
-DamagePlayer();
+self.DamageBoxes();
+self.LifeBoxes();
 
+self.IncrInvFrames();

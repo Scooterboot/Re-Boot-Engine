@@ -7,10 +7,11 @@ damage = 10;
 
 freezeImmune = true;
 
-dmgMult[DmgType.Beam][0] = 0;
-dmgMult[DmgType.Charge][0] = 0;
-dmgMult[DmgType.Explosive][0] = 0;
-dmgMult[DmgType.Misc][0] = 0;
+dmgResist[DmgType.Beam][DmgSubType_Beam.All] = 0;
+dmgResist[DmgType.Charge][DmgSubType_Beam.All] = 0;
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.All] = 0;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.All] = 0;
+dmgResist[DmgType.Misc][DmgSubType_Misc.All] = 0;
 
 dir = sign(image_xscale);
 posType = 0;

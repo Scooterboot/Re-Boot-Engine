@@ -2,7 +2,6 @@
 
 if(dead)
 {
-    //NPCDeath(x+deathOffsetX,y+deathOffsetY);
 	deathTimer++;
 	if(deathTimer > 30)
 	{

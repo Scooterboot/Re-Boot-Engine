@@ -7,8 +7,8 @@ blockBreakType[BlockBreakType.SMissile] = true;
 
 multiHit = true;
 
-damageSubType[2] = true;
-damageSubType[5] = true;
+damageType = DmgType.ExplSplash;
+damageSubType[DmgSubType_Explosive.SuperMissile] = true;
 
 explode = 0;
 

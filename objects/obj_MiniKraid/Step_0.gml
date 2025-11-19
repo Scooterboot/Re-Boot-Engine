@@ -1,5 +1,5 @@
 /// @description 
-if(PauseAI())
+if(self.PauseAI())
 {
 	exit;
 }
@@ -61,6 +61,7 @@ for(var i = 0; i < 3; i++)
 	if(spikeFire[i] > spikeFireMax)
 	{
 		var proj = instance_create_depth(x+spikePosX[i]*dir,y+spikePosY[i],depth+1,obj_MiniKraid_Spike);
+		proj.creator = id;
 		proj.image_xscale = dir;
 		proj.velX = 3*dir;
 		
@@ -92,6 +93,7 @@ if(spitCounter >= 80 && spitCounter < 85)
 				spVelY = lengthdir_y(spSpeed,spDir);
 			
 			var proj = instance_create_depth(x,y-17,depth+1,obj_MiniKraid_Spit);
+			proj.creator = id;
 			proj.velX = spVelX*dir;
 			proj.velY = spVelY;
 		}
@@ -156,4 +158,4 @@ velY = min(velY+fGrav,fallSpeedMax);
 
 fVelX = velX;
 fVelY = velY;
-Collision_Normal(fVelX,fVelY,true);
+self.Collision_Normal(fVelX,fVelY,true);

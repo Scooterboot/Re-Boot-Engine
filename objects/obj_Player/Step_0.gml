@@ -246,7 +246,7 @@ if(!global.GamePaused())
 	
 	immune = false;
 	
-	lowEnergyThresh = max(30, floor(energyMax/100)*10);
+	lowEnergyThresh = GetLowEnergyThreshold();
 	
 	if(energy < lowEnergyThresh)
 	{
@@ -323,7 +323,7 @@ if(!global.GamePaused())
 	pMove = ((cPlayerRight && rPlayerRight) - (cPlayerLeft && rPlayerLeft));
 	
 	if(move != 0 && !brake && morphFrame <= 0 && wjFrame <= 0 && (state != State.Grip || !startClimb) && 
-	(!cMoonwalk || state == State.Somersault || state == State.Morph || (global.aimStyle == 2 && cAimUp)) && 
+	(!cMoonwalk || state == State.Somersault || state == State.Morph || state == State.Grip || (global.aimStyle == 2 && cAimUp)) && 
 	!instance_exists(grapple) && state != State.Spark && state != State.BallSpark && state != State.Hurt && stateFrame != State.DmgBoost && dmgBoost <= 0 && state != State.Dodge)
 	{
 		dir = move;
@@ -425,7 +425,7 @@ if(!global.GamePaused())
 				{
 					aimAngle = 1;
 				}
-				if(_up && (move == 0 || _aimUp))
+				if(_up && (move == 0 || _aimUp) && aimAnimDelay < aimAnimDelayMax-2)
 				{
 					aimAngle = 2;
 				}
@@ -436,7 +436,7 @@ if(!global.GamePaused())
 				{
 					aimAngle = -1;
 				}
-				if(_down && (move == 0 || _aimDown))
+				if(_down && (move == 0 || _aimDown) && aimAnimDelay < aimAnimDelayMax-2)
 				{
 					aimAngle = -2;
 				}
@@ -1230,8 +1230,8 @@ if(!global.GamePaused())
 		
 		if(jump <= 0)
 		{
-			if(shineCharge > 0 && rJump && (CanChangeState(mask_Player_Jump) || state == State.Morph) && !entity_place_collide(0,-1) && 
-			(move == 0 || velX == 0 || state == State.Jump) && state != State.Somersault && state != State.DmgBoost && ((!cAimDown && !cPlayerDown) || item[Item.ChainSpark]) && 
+			if(shineCharge > 0 && rJump && (CanChangeState(mask_Player_Jump) || state == State.Morph) && !entity_place_collide(0,-1) && !moonFallState && 
+			(move == 0 || velX == 0 || state == State.Jump) && state != State.Somersault && state != State.DmgBoost && ((!cAimDown && !cPlayerDown) || _SPARK_DOWN == 1 || (_SPARK_DOWN == 2 && item[Item.ChainSpark])) && 
 			(state != State.Morph || item[Item.SpringBall]) && morphFrame <= 0 && state != State.Grip)
 			{
 				audio_stop_sound(snd_ShineSpark_Charge);
@@ -2780,7 +2780,7 @@ if(!global.GamePaused())
 		if(canCrouch && move2 == 0 && cPlayerDown && dir != 0 && grounded)
 		{
 			crouchFrame = 5;
-			aimAnimDelay = 6;
+			aimAnimDelay = aimAnimDelayMax;
 			ChangeState(State.Crouch,State.Crouch,mask_Player_Crouch,true);
 		}
 		if(!grounded && dir != 0)
@@ -2924,7 +2924,7 @@ if(!global.GamePaused())
 		if(((cPlayerUp && rPlayerUp) || uncrouch >= 7) && CanChangeState(mask_Player_Stand) && crouchFrame <= 0)
 		{
 			//aimUpDelay = 6;//10;
-			aimAnimDelay = 6;
+			aimAnimDelay = aimAnimDelayMax;
 			ChangeState(State.Stand,State.Stand,mask_Player_Stand,true);
 		}
 		//if(item[Item.MorphBall] && crouchFrame <= 0 && ((cPlayerDown && (rPlayerDown || !CanChangeState(mask_Player_Stand)) && move2 == 0) || (cMorph && rMorph)) && stateFrame != State.Morph && morphFrame <= 0)
@@ -2982,7 +2982,7 @@ if(!global.GamePaused())
 				unmorphing = 1;
 				morphFrame = 8;
 				//aimUpDelay = 10;
-				aimAnimDelay = 6;
+				aimAnimDelay = aimAnimDelayMax;
 				
 				if(cPlayerUp && rPlayerUp && move2 == 0)
 				{
@@ -3019,7 +3019,7 @@ if(!global.GamePaused())
 			}
 			
 			//aimUpDelay = 10;
-			aimAnimDelay = 6;
+			aimAnimDelay = aimAnimDelayMax;
 			if(morphFrame <= 0)
 			{
 				if(morphSpinJump || (!grounded && unmorphing == 1))
@@ -3642,7 +3642,7 @@ if(!global.GamePaused())
 			aUp = (aimAngle == 1);
 			aDown = (aimAngle == -1);
 		}
-		var allowDown = true; //item[Item.ChainSpark];
+		var allowDown = (_SPARK_DOWN == 1 || (_SPARK_DOWN == 2 && item[Item.ChainSpark]));
 		
 		if(shineStart > 0)
 		{
@@ -4703,4 +4703,14 @@ if(!global.GamePaused())
 		}
 		DestroyBlock(x+xv,y+fVelY);
 	}
+}
+
+if(!instance_exists(lifeBoxes[0]))
+{
+	lifeBoxes[0] = CreateLifeBox(0,0,mask_index,false);
+}
+if(instance_exists(lifeBoxes[0]))
+{
+	lifeBoxes[0].mask_index = mask_index;
+	lifeBoxes[0].UpdatePos(x,y);
 }

@@ -6,8 +6,8 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 	var xx = x + (camWidth()/2),
 		yy = y + (camHeight()/2);
 	
-	var xsp = player.position.X - player.oldPosition.X,
-		ysp = player.position.Y - player.oldPosition.Y;
+	var xsp = player.x - player.xprevious,
+		ysp = player.y - player.yprevious;
 	if(player.stallCamera)
 	{
 		ysp = 0;
@@ -16,8 +16,8 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 	var fxsp = xsp,
 		fysp = ysp;
 	
-	var pX = player.position.X,
-		pY = player.position.Y;
+	var pX = player.x,
+		pY = player.y;
 	
 	var num = 1 + scr_floor(abs(pX-playerX) / 7);
 	if(playerX < pX)
@@ -121,7 +121,7 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 	_spXMax = max(_spXMax - _spXMin, 1);
 	var _spXNum = clamp((_spX / _spXMax)*2, 0, 1);
 	
-	if(_spXNum > 0)
+	if(abs(player.velX) > _spXMin && _spXNum > 0)
 	{
 		var _lNumX = lerp(0, camLimit_ExtraX, _spXNum);
 		camLimitMax_Left -= _lNumX;
@@ -129,13 +129,13 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 	}
 	
 	var _spY = abs(player.velY),
-		_spYMin = player.jumpSpeed[1,0],
+		_spYMin = max(player.jumpSpeed[1,0], player.fallSpeedMax),
 		_spYMax = player.maxSpeed[MaxSpeed.SpeedBoost,0];
 	_spY = max(_spY - _spYMin, 0);
 	_spYMax = max(_spYMax - _spYMin, 1);
 	var _spYNum = clamp(_spY / _spYMax, 0, 1);
 	
-	if(_spYNum > 0)
+	if(abs(player.velY) > _spYMin && _spYNum > 0)
 	{
 		var _lNumY = lerp(0, camLimit_ExtraY, _spYNum);
 		camLimitMax_Top -= _lNumY;
@@ -203,10 +203,6 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 		}
 		
 		var num2 = 2 + scr_floor(abs(targetX-xx) / 7);
-		if(abs(targetX-xx) < 2)
-		{
-			num2 = 10;
-		}
 		if(targetX > xx)
 		{
 			velX = min(num2,targetX-xx);
@@ -218,10 +214,6 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 		velX += playerMoveX;
 		
 		num2 = 2 + scr_floor(abs(targetY-yy) / 7);
-		if(abs(targetY-yy) < 2)
-		{
-			num2 = 10;
-		}
 		if(targetY > yy)
 		{
 			velY = min(num2,targetY-yy);

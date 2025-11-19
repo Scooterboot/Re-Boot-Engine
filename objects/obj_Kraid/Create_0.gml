@@ -17,15 +17,13 @@ lifeMax = 2000;
 
 freezeImmune = true;
 
-dmgMult[DmgType.Beam][0] = 0; // all
+dmgResist[DmgType.Beam][DmgSubType_Beam.All] = 0;
 
-dmgMult[DmgType.Explosive][3] = 0; // bomb
-dmgMult[DmgType.Explosive][4] = 0; // power bomb
-dmgMult[DmgType.Explosive][5] = 0; // splash 
+//dmgResist[DmgType.Explosive][DmgSubType_Explosive.Bomb] = 0;
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.PowerBomb] = 0;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.All] = 0;
 
-dmgMult[DmgType.Misc][2] = 0; // speed booster / shine spark
-dmgMult[DmgType.Misc][3] = 0; // screw attack
-dmgMult[DmgType.Misc][5] = 0; // boost ball
+dmgResist[DmgType.Misc][DmgSubType_Misc.All] = 0;
 
 dropChance[0] = 0; // nothing
 dropChance[1] = 20; // energy
@@ -67,30 +65,28 @@ haltArmMove = 0;
 haltArmMax = 90;
 armAnimSpeed = 0.1;
 
-function ModifyDamageTaken(damage,object,isProjectile)
+function Entity_CanTakeDamage(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType)
 {
-	//dmgAbsorb = false;
-	if(isProjectile && (phase == 1 || phase == 3))
+	return (_dmgBox.creator.object_index != obj_Player);
+}
+function Entity_ModifyDamageTaken(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType)
+{
+	if(phase == 1 || phase == 3)
 	{
-		//dmgAbsorb = object.y <= y-140;
-		
-		//if(headFrame >= 3 && point_distance(object.x,object.y,HeadBone.position.X,HeadBone.position.Y) <= 32)
-		var col = collision_ellipse(HeadBone.position.X-16*dir,HeadBone.position.Y-16,HeadBone.position.X+32*dir,HeadBone.position.Y+32,object,true,true)
+		var col = collision_ellipse(HeadBone.position.X-16*dir,HeadBone.position.Y-16,HeadBone.position.X+32*dir,HeadBone.position.Y+32,_dmgBox,true,true)
 		if(headFrame > 3 && col)
 		{
-			return damage;
+			return self.CalcDamageResist(_dmg, _dmgType, _dmgSubType);
 		}
 	}
 	return 0;
 }
-function OnDamageAbsorbed(damage, object, isProjectile)
+function OnDamageAbsorbed(_selfLifeBox, _dmgBox, _damage, _dmgType, _dmgSubType)
 {
-	if(mouthCounter < 0 && ((phase == 1 && ai[0] != 2) || phase == 3) && object.y <= y-140)
+	if(mouthCounter < 0 && ((phase == 1 && ai[0] != 2) || phase == 3) && _dmgBox.y <= y-140)
 	{
 		mouthCounter = 0;
-		//eyeGlowNum = 1;
-		//blinkCounter = blinkCounterMax;
-		if(isProjectile && object.damageType = DmgType.Charge)
+		if(_dmgType = DmgType.Charge)
 		{
 			haltArmMove = haltArmMax;
 		}
@@ -435,7 +431,35 @@ head.image_xscale = image_xscale;
 head.image_yscale = image_yscale;
 head.image_angle = 45;
 
-rHand = instance_create_layer(x,y,layer,obj_Kraid_Hand);
+/*rHand = instance_create_layer(x,y,layer,obj_Kraid_Hand);
 rHand.realLife = id;
 rHand.image_xscale = image_xscale;
-rHand.image_yscale = image_yscale;
+rHand.image_yscale = image_yscale;*/
+
+function DamageBoxes() {}
+function LifeBoxes() {}
+
+enum KraidHitBoxes
+{
+	Body,
+	Hand,
+	
+	_Length
+}
+dmgBoxes[KraidHitBoxes.Body] = self.CreateDamageBox(0,0,mask_Kraid,true);
+dmgBoxes[KraidHitBoxes.Hand] = self.CreateDamageBox(0,0,mask_Kraid_Hand,true);
+lifeBoxes[KraidHitBoxes.Body] = self.CreateLifeBox(0,0,mask_Kraid,true);
+lifeBoxes[KraidHitBoxes.Hand] = self.CreateLifeBox(0,0,mask_Kraid_Hand,true);
+
+for(var i = 0; i < KraidHitBoxes._Length; i++)
+{
+	dmgBoxes[i].image_xscale = image_xscale;
+	dmgBoxes[i].image_yscale = image_yscale;
+	lifeBoxes[i].image_xscale = image_xscale;
+	lifeBoxes[i].image_yscale = image_yscale;
+}
+
+lifeBoxes[KraidHitBoxes.Hand].Life_ModifyDamageTaken = function(_dmgBox, _dmg, _dmgType, _dmgSubType)
+{
+	return 0;
+}

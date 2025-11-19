@@ -466,7 +466,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					draw_roundrect_ext(iX, iY, iX+backW, iY+hh, 4, 4, false);
 					draw_set_color(c_white);
 					
-					draw_sprite_ext(hSprt, (_weapIndex == i && weapSelected), iX, iY, 1,1,0,c_white,1);
+					draw_sprite_ext(hSprt, (_weapIndex == i && weapSelected), iX+sprite_get_xoffset(hSprt), iY+sprite_get_yoffset(hSprt), 1,1,0,c_white,1);
 					
 					var ammo = hItem.GetAmmo(),
 						aX = iX+backW-9,
@@ -481,14 +481,14 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					if(hItem.ammoDigits > 1)
 					{
 						aX -= 6;
-						ammo = floor(ammo/10);
-						draw_sprite_ext(sprt_HUD_NumFont2, ammo, aX, aY, 1,1,0,col2,1);
+						var ammo2 = floor(ammo/10);
+						draw_sprite_ext(sprt_HUD_NumFont2, ammo2, aX, aY, 1,1,0,col2,1);
 					}
 					if(hItem.ammoDigits > 2)
 					{
 						aX -= 6;
-						ammo = floor(ammo/100);
-						draw_sprite_ext(sprt_HUD_NumFont2, ammo, aX, aY, 1,1,0,col2,1);
+						var ammo3 = floor(ammo/100);
+						draw_sprite_ext(sprt_HUD_NumFont2, ammo3, aX, aY, 1,1,0,col2,1);
 					}
 					
 					iX += backW+4;

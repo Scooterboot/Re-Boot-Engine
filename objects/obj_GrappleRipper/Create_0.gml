@@ -5,16 +5,19 @@ life = 200;
 lifeMax = 200;
 damage = 10;
 
-dmgMult[DmgType.Beam][0] = 0; // all
-dmgMult[DmgType.Charge][0] = 0; // all
-dmgMult[DmgType.Explosive][1] = 0; // missile
-dmgMult[DmgType.Explosive][2] = 1; // super missile
-dmgMult[DmgType.Explosive][3] = 0; // bomb
-dmgMult[DmgType.Explosive][4] = 1; // power bomb
-
-//dmgMult[DmgType.Misc][2] = 0; // speed booster / shine spark
-//dmgMult[DmgType.Misc][3] = 0; // screw attack
-dmgMult[DmgType.Misc][5] = 0; // boost ball
+dmgResist[DmgType.Beam][DmgSubType_Beam.All] = 0;
+dmgResist[DmgType.Charge][DmgSubType_Beam.All] = 0;
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.Missile] = 0;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.Missile] = 0;
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.SuperMissile] = 1;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.SuperMissile] = 1;
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.Bomb] = 0;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.Bomb] = 0;
+dmgResist[DmgType.Explosive][DmgSubType_Explosive.PowerBomb] = 1;
+dmgResist[DmgType.ExplSplash][DmgSubType_Explosive.PowerBomb] = 1;
+dmgResist[DmgType.Misc][DmgSubType_Misc.BoostBall] = 0;
+//dmgResist[DmgType.Misc][DmgSubType_Misc.SpeedBoost] = 0;
+//dmgResist[DmgType.Misc][DmgSubType_Misc.ScrewAttack] = 0;
 
 dropChance[0] = 0; // nothing
 dropChance[1] = 0; // energy
@@ -41,19 +44,3 @@ function PauseAI()
 {
 	return (global.GamePaused() || /*!scr_WithinCamRange() ||*/ frozen > 0 || dmgFlash > 0);
 }
-
-/*function ModifyDamageTaken(damage,object,isProjectile)
-{
-	dmgAbsorb = (object.object_index == obj_GrappleBeamShot);
-	return damage;
-}
-function OnDamageAbsorbed(damage, object, isProjectile)
-{
-	if(object.object_index == obj_GrappleBeamShot)
-	{
-		object.grappled = true;
-		//object.grapBlockPosX = x + abs(bbox_right-bbox_left)/2;
-		//object.grapBlockPosY = y + abs(bbox_bottom-bbox_top)/2;
-		object.grapBlock = id;
-	}
-}*/

@@ -30,6 +30,7 @@ function FireProjectiles()
 			//proj.velY = lengthdir_y(3,ang);
 			proj.velX = -2 + i + (i >= 2);
 			proj.velY = -(3 + (i == 1 || i == 2));
+			proj.creator = id;
 		}
 		projFired = true;
 	}

@@ -5,14 +5,14 @@ if(global.GamePaused())
 	exit;
 }
 
-if(!PauseAI())
+if(!self.PauseAI())
 {
 	fVelX = velX;
 	fVelY = velY;
 
 	if(tileCollide)
 	{
-		Collision_Normal(fVelX,fVelY,false);
+		self.Collision_Normal(fVelX,fVelY,false);
 	}
 	else
 	{

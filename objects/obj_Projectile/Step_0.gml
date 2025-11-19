@@ -268,9 +268,6 @@ else if(impacted == 0)
 
 #region Damage to enemies & tiles
 
-var deathType = npcDeathType,
-    invFrames = 10;//4;
-
 if(impacted > 0)
 {
 	self.TileInteract(x+fVelX,y+fVelY);
@@ -286,7 +283,6 @@ else
 	}
 }
 
-var player = noone;
 if(projLength > 0)
 {
 	var numw = max(abs(bb_right(0) - bb_left(0)),1),
@@ -309,82 +305,27 @@ if(projLength > 0)
 				self.TileInteract(xw,yw);
 			}
 		}
-			
-		if(damage > 0 && dmgDelay <= 0)
-		{
-			if(hostile)
-			{
-				if(place_meeting(xw,yw,obj_Player))
-	            {
-	                player = instance_place(xw,yw,obj_Player);
-	            }
-			}
-			else
-			{
-				scr_DamageNPC(xw,yw,damage,damageType,damageSubType,freezeType,deathType,invFrames);
-			}
-		}
 	}
 }
 
 if(dmgDelay <= 0)
 {
-	if(damage > 0)
-	{
-		if(hostile)
-		{
-			if(!instance_exists(player) && place_meeting(x,y,obj_Player))
-			{
-				player = instance_place(x,y,obj_Player);
-			}
-			if(instance_exists(player))
-	        {
-				var ang = 45;
-				if(player.y > y)
-				{
-					ang = 315;
-				}
-				if(player.x < x)
-				{
-					ang = 135;
-					if(player.y > y)
-					{
-						ang = 225;
-					}
-				}
-				var knockX = lengthdir_x(knockBackSpeed,ang),
-					knockY = lengthdir_y(knockBackSpeed,ang);
-				player.StrikePlayer(damage,knockBack,knockX,knockY,damageInvFrames)
-				if(!multiHit)
-				{
-					//instance_destroy();
-					impacted = 1;
-					damage = 0;
-				}
-	        }
-		}
-		else
-		{
-			scr_DamageNPC(x,y,damage,damageType,damageSubType,freezeType,deathType,invFrames);
-		}
-	}
+	self.DamageBoxes();
 }
 else
 {
 	dmgDelay--;
 }
 
-for(var i = 0; i < array_length(npcInvFrames); i++)
-{
-	npcInvFrames[i] = max(npcInvFrames[i]-1,0);
-}
+self.IncrInvFrames();
+
 #endregion
 
-if(impacted == 1)
+if(impacted == 1 && !reflected)
 {
-	self.OnImpact(x,y);
+	self.OnImpact(x,y,dmgImpacted);
 }
-
+	
 if(impacted > 0)
 {
 	if(impacted > 1)

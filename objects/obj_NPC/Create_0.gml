@@ -28,9 +28,6 @@ life = 0;
 lifeMax = 0;
 
 damage = 0;
-knockBack = 5;//9;
-knockBackSpeed = 5;
-damageInvFrames = 96;
 
 // damage player through things like speed booster and screw attack
 // does not affect i-frames
@@ -40,54 +37,13 @@ boss = false;
 
 dmgFlash = 0;
 dead = false;
-//deathPersistant = false;
 deathType = 0;
-friendly = false;
+hostile = true;
 immune = false;
 
 respawning = false;
 
-enum DmgType
-{
-	Beam = 0,
-	Charge = 1,
-	Explosive = 2,
-	Misc = 3
-};
-
-// beams
-dmgMult[DmgType.Beam][0] = 1; // all
-dmgMult[DmgType.Beam][1] = 1; // power beam
-dmgMult[DmgType.Beam][2] = 1; // ice beam
-dmgMult[DmgType.Beam][3] = 1; // wave beam
-dmgMult[DmgType.Beam][4] = 1; // spazer
-dmgMult[DmgType.Beam][5] = 1; // plasma beam
-
-// charge shot / psuedo screw attack
-dmgMult[DmgType.Charge][0] = 1; // all
-dmgMult[DmgType.Charge][1] = 1; // power beam
-dmgMult[DmgType.Charge][2] = 1; // ice beam
-dmgMult[DmgType.Charge][3] = 1; // wave beam
-dmgMult[DmgType.Charge][4] = 1; // spazer
-dmgMult[DmgType.Charge][5] = 1; // plasma beam
-
-// explosives
-dmgMult[DmgType.Explosive][0] = 1; // all
-dmgMult[DmgType.Explosive][1] = 1; // missile
-dmgMult[DmgType.Explosive][2] = 1; // super missile
-dmgMult[DmgType.Explosive][3] = 1; // bomb
-dmgMult[DmgType.Explosive][4] = 1; // power bomb
-dmgMult[DmgType.Explosive][5] = 1; // splash damage
-
-// misc
-dmgMult[DmgType.Misc][0] = 1; // all
-dmgMult[DmgType.Misc][1] = 0; // grapple beam
-dmgMult[DmgType.Misc][2] = 1; // speed booster / shine spark
-dmgMult[DmgType.Misc][3] = 1; // screw attack
-dmgMult[DmgType.Misc][4] = 1; // hyper beam
-dmgMult[DmgType.Misc][5] = 1; // boost ball
-
-dmgAbsorb = false;
+dmgResist[DmgType.Misc][DmgSubType_Misc.Grapple] = 0;
 
 realLife = noone;
 
@@ -111,54 +67,83 @@ function PauseAI()
 	return (global.GamePaused() || !scr_WithinCamRange() || frozen > 0 || dmgFlash > 0);
 }
 
-/*function roundedAngle(x1,y1,x2,y2)
+dmgBoxMask = noone;
+dmgBoxOffsetX = 0;
+dmgBoxOffsetY = 0;
+function DmgBoxRot()
 {
-	return point_direction(scr_round(x1),scr_round(y1),scr_round(x2),scr_round(y2));
-}*/
-
-function DmgColPlayer()
-{
-	return instance_place(x,y,obj_Player);
+	return image_angle;
 }
-function DamagePlayer()
+
+function DamageBoxes()
 {
-	if(!friendly && damage > 0 && !frozen && !dead)
+	var _mask = sprite_exists(mask_index) ? mask_index : sprite_index;
+	if(dmgBoxMask != noone && sprite_exists(dmgBoxMask))
 	{
-	    var player = DmgColPlayer();
-	    if(instance_exists(player))
-	    {
-	        var ang = 45;
-			if(player.bb_bottom() > bb_bottom())
-			{
-				ang = 315;
-			}
-			if(player.x < x)
-			{
-				ang = 135;
-				if(player.bb_bottom() > bb_bottom())
-				{
-					ang = 225;
-				}
-			}
-			var knockX = lengthdir_x(knockBackSpeed,ang),
-				knockY = lengthdir_y(knockBackSpeed,ang);
-			player.StrikePlayer(damage,knockBack,knockX,knockY,damageInvFrames,ignorePlayerImmunity);
-			
-			OnDamagePlayer();
-	    }
+		_mask = dmgBoxMask;
+	}
+	
+	if(!instance_exists(dmgBoxes[0]))
+	{
+		dmgBoxes[0] = self.CreateDamageBox(dmgBoxOffsetX,dmgBoxOffsetY,_mask,hostile);
+	}
+	else
+	{
+		dmgBoxes[0].offsetX = dmgBoxOffsetX;
+		dmgBoxes[0].offsetY = dmgBoxOffsetY;
+		dmgBoxes[0].mask_index = _mask;
+		dmgBoxes[0].image_xscale = image_xscale;
+		dmgBoxes[0].image_yscale = image_yscale;
+		dmgBoxes[0].image_angle = self.DmgBoxRot();
+		dmgBoxes[0].direction = self.DmgBoxRot();
+		dmgBoxes[0].Damage(x+velX,y+velY,damage,damageType,damageSubType);
 	}
 }
-function OnDamagePlayer() {}
 
-function DmgCollide(posX,posY,object,isProjectile)
+function Entity_CanDealDamage(_selfDmgBox, _lifeBox, _damage, _dmgType, _dmgSubType)
 {
-	if(!instance_exists(object)) { return false; }
-	
-	var offX = object.x-posX,
-		offY = object.y-posY;
-	return place_meeting(x+offX,y+offY,object);
+	return (damage > 0 && !frozen && !dead);
 }
-function StrikeNPC(damage, dmgType, dmgSubType, lifeEnd = 0, dethType = -1)
+
+lifeBoxMask = noone;
+lifeBoxOffsetX = 0;
+lifeBoxOffsetY = 0;
+function LifeBoxRot()
+{
+	return image_angle;
+}
+
+function LifeBoxes()
+{
+	var _mask = sprite_exists(mask_index) ? mask_index : sprite_index;
+	if(lifeBoxMask != noone && sprite_exists(lifeBoxMask))
+	{
+		_mask = lifeBoxMask;
+	}
+	
+	if(!instance_exists(lifeBoxes[0]))
+	{
+		lifeBoxes[0] = self.CreateLifeBox(lifeBoxOffsetX,lifeBoxOffsetY,_mask,hostile);
+	}
+	else
+	{
+		lifeBoxes[0].offsetX = lifeBoxOffsetX;
+		lifeBoxes[0].offsetY = lifeBoxOffsetY;
+		lifeBoxes[0].mask_index = _mask;
+		lifeBoxes[0].image_xscale = image_xscale;
+		lifeBoxes[0].image_yscale = image_yscale;
+		lifeBoxes[0].image_angle = self.LifeBoxRot();
+		lifeBoxes[0].direction = self.LifeBoxRot();
+		lifeBoxes[0].UpdatePos(x+velX,y+velY);
+	}
+}
+
+function Entity_CanTakeDamage(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType)
+{
+	return (!immune && !dead);
+}
+
+function StrikeNPC(damage, lifeEnd = 0, _deathType = -1)
 {
 	if(instance_exists(realLife))
 	{
@@ -170,13 +155,13 @@ function StrikeNPC(damage, dmgType, dmgSubType, lifeEnd = 0, dethType = -1)
 		
 		if(realLife.life <= 0)
 		{
-		    if(dethType >= 0)
+		    if(_deathType >= 0)
 		    {
-		        realLife.deathType = dethType;
+		        realLife.deathType = _deathType;
 		    }
 		    realLife.dead = true;
 		}
-		else if(dethType == 3)
+		else if(_deathType == 3)
 		{
 			audio_stop_sound(snd_InstaKillNPC_Failed);
 			audio_play_sound(snd_InstaKillNPC_Failed,0,false);
@@ -189,13 +174,13 @@ function StrikeNPC(damage, dmgType, dmgSubType, lifeEnd = 0, dethType = -1)
 		
 		if(life <= 0)
 		{
-		    if(dethType >= 0)
+		    if(_deathType >= 0)
 		    {
-		        deathType = dethType;
+		        deathType = _deathType;
 		    }
 		    dead = true;
 		}
-		else if(dethType == 3)
+		else if(_deathType == 3)
 		{
 			audio_stop_sound(snd_InstaKillNPC_Failed);
 			audio_play_sound(snd_InstaKillNPC_Failed,0,false);
@@ -204,25 +189,86 @@ function StrikeNPC(damage, dmgType, dmgSubType, lifeEnd = 0, dethType = -1)
 	
 	dmgFlash = 8;
 
-	if(hurtSound != noone && (dmgType != DmgType.Explosive || !dmgSubType[4]))
+	if(hurtSound != noone)
 	{
 		audio_stop_sound(hurtSound);
 		audio_play_sound(hurtSound,0,false);
 	}
 }
 
-function ModifyDamageTaken(damage,object,isProjectile)
+function OnDamageAbsorbed(_selfLifeBox, _dmgBox, _damage, _dmgType, _dmgSubType) {}
+
+function Entity_OnDamageTaken(_selfLifeBox, _dmgBox, _finalDmg, _dmg, _dmgType, _dmgSubType, _freezeType = 0, _freezeTime = 600, _npcDeathType = -1)
 {
-	return damage;
-}
-function OnDamageTaken(damage, object, isProjectile)
-{
+	var ent = _dmgBox.creator;
+	var lifeEnd = 0;
+	if(!freezeImmune && ((_freezeType == 1 && life <= (_finalDmg*2)) || _freezeType == 2))
+	{
+		if(frozen <= 0)
+		{
+			lifeEnd = 1;
+			audio_stop_sound(snd_FreezeNPC);
+			audio_play_sound(snd_FreezeNPC,0,false);
+		}
+		frozen = _freezeTime;
+		if(ent.freezeKill)
+		{
+			lifeEnd = 0;
+		}
+	}
+	if(frozenInvFrames <= 0)
+	{
+		if(!freezeImmune && _freezeType > 0 && life <= (_finalDmg*2))
+		{
+			frozenInvFrames = ent.npcInvFrames;
+		}
+		
+		self.StrikeNPC(_finalDmg, lifeEnd, _npcDeathType);
+		self.NPC_OnDamageTaken(_selfLifeBox, _dmgBox, _finalDmg, _freezeType, _freezeTime, _npcDeathType)
+	}
 	
+	if(ds_exists(ent.iFrameCounters,ds_type_list))
+	{
+		if(instance_exists(realLife) && ent.GetInvFrames(realLife) <= 0)
+		{
+			ds_list_add(ent.iFrameCounters, new InvFrameCounter(realLife, ent.npcInvFrames));
+		}
+		
+		for(var j = 0; j < instance_number(obj_NPC); j++)
+		{
+			var rlnpc = instance_find(obj_NPC,j);
+			if(!instance_exists(rlnpc) || rlnpc == id || rlnpc.dead || rlnpc.immune)
+			{
+				continue;
+			}
+		
+			if(rlnpc.realLife == id && ent.GetInvFrames(rlnpc) <= 0)
+			{
+				ds_list_add(ent.iFrameCounters, new InvFrameCounter(rlnpc, ent.npcInvFrames));
+			}
+		}
+	}
 }
-function OnDamageAbsorbed(damage, object, isProjectile)
+function Entity_OnDamageTaken_Blocked(_selfLifeBox, _dmgBox, _damage, _dmgType, _dmgSubType, _freezeType = 0, _freezeTime = 600)
 {
-	
+	if(_freezeType > 0 && !freezeImmune)
+	{
+	    if(frozen <= 0)
+	    {
+	        audio_stop_sound(snd_FreezeNPC);
+	        audio_play_sound(snd_FreezeNPC,0,false);
+	    }
+	    frozen = _freezeTime;
+	}
+	else if(_dmgType != DmgType.ExplSplash)
+	{
+		if(dmgAbsorb)
+		{
+			self.OnDamageAbsorbed(_selfLifeBox, _dmgBox, _damage, _dmgType, _dmgSubType);
+		}
+	}
 }
+function NPC_OnDamageTaken(_selfLifeBox, _dmgBox, _finalDmg, _dmg, _dmgType, _dmgSubType, _freezeType = 0, _freezeTime = 600, _npcDeathType = -1) {}
 
 deathOffsetX = 0;
 deathOffsetY = 0;
@@ -254,7 +300,7 @@ function NPCDeath(_x,_y)
         audio_play_sound(snd_InstaKillNPC,0,false);
     }
 	
-	NPCDropItem(_x,_y);
+	self.NPCDropItem(_x,_y);
 	
     instance_destroy();
 }
@@ -263,7 +309,7 @@ spawnerObj = noone;
 
 function NPCDropItem(_x,_y)
 {
-	var item = _NPCDropItem(_x,_y);
+	var item = self._NPCDropItem(_x,_y);
 	if(instance_exists(spawnerObj))
 	{
 		for(var i = 0; i < array_length(spawnerObj.spawnedNPC); i++)
@@ -276,12 +322,23 @@ function NPCDropItem(_x,_y)
 		}
 	}
 }
-dropChance[0] = 5; // nothing
-dropChance[1] = 50; // energy
-dropChance[2] = 50; // large energy
-dropChance[3] = 50; // missile
-dropChance[4] = 50; // super missile
-dropChance[5] = 50; // power bomb
+
+enum ItemDropChance
+{
+	None,
+	Energy,
+	BigEnergy,
+	Missile,
+	SuperMissile,
+	PowerBomb
+}
+
+dropChance[ItemDropChance.None] = 5;
+dropChance[ItemDropChance.Energy] = 50;
+dropChance[ItemDropChance.BigEnergy] = 50;
+dropChance[ItemDropChance.Missile] = 50;
+dropChance[ItemDropChance.SuperMissile] = 50;
+dropChance[ItemDropChance.PowerBomb] = 50;
 // Chances don't need to add up to 100. In fact, they can technically be anything.
 // But the total value of them all added together does matter.
 // For example, if all values are set 1, 10, or 100, they'd all be a 1/6 chance.
@@ -295,9 +352,9 @@ function _NPCDropItem(_x,_y)
 		var item = noone;
 		
 		// "Health Bomb" - always drop health when player is low
-		if(player.energy <= player.lowEnergyThresh && (dropChance[1] > 0 || dropChance[2] > 0))
+		if(player.energy <= player.lowEnergyThresh && (dropChance[ItemDropChance.Energy] > 0 || dropChance[ItemDropChance.BigEnergy] > 0))
 		{
-			if(dropChance[1] > 0 && irandom(dropChance[1]+dropChance[2]) <= dropChance[1])
+			if(dropChance[ItemDropChance.Energy] > 0 && irandom(dropChance[ItemDropChance.Energy]+dropChance[ItemDropChance.BigEnergy]) <= dropChance[ItemDropChance.Energy])
 			{
 				item = obj_EnergyDrop;
 			}
@@ -308,24 +365,27 @@ function _NPCDropItem(_x,_y)
 		}
 		else // Normal drop behavior
 		{
-			var dChNum = dropChance[0];
+			var dChNum = dropChance[ItemDropChance.None];
 			var dChFlag = array_create(6,false);
 			dChFlag[0] = true;
 			if(player.energy < player.energyMax)
 			{
-				dChNum += dropChance[1];
-				dChNum += dropChance[2];
+				dChNum += dropChance[ItemDropChance.Energy];
+				dChNum += dropChance[ItemDropChance.BigEnergy];
 				dChFlag[1] = true;
 				dChFlag[2] = true;
 			}
 			if(player.hasItem[Item.Missile] && player.missileStat < player.missileMax)
 			{
-				dChNum += dropChance[3];
+				dChNum += dropChance[ItemDropChance.Missile];
 				dChFlag[3] = true;
 			}
+			
+			// Super Missiles and Power Bombs are rarer drops, stacking the other chance
+			//  values against themselves an additional time.
 			if(player.hasItem[Item.SuperMissile] && player.superMissileStat < player.superMissileMax)
 			{
-				dChNum += dropChance[4];
+				dChNum += dropChance[ItemDropChance.SuperMissile];
 				dChFlag[4] = true;
 				
 				for(var i = 1; i <= 3; i++)
@@ -338,7 +398,7 @@ function _NPCDropItem(_x,_y)
 			}
 			if(player.hasItem[Item.PowerBomb] && player.powerBombStat < player.powerBombMax)
 			{
-				dChNum += dropChance[5];
+				dChNum += dropChance[ItemDropChance.PowerBomb];
 				dChFlag[5] = true;
 				
 				for(var i = 1; i <= 3; i++)
@@ -358,7 +418,7 @@ function _NPCDropItem(_x,_y)
 			items[4] = obj_SuperMissileDrop;
 			items[5] = obj_PowerBombDrop;
 			
-			if(dChNum > dropChance[0])
+			if(dChNum > dropChance[ItemDropChance.None])
 			{
 				var dChRand = irandom(dChNum-1)+1;
 				var dChNum2 = 0;

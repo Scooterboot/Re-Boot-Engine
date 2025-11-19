@@ -27,7 +27,12 @@ grapSignY = lengthdir_y(1,shootDir);
 
 if(grappleState != GrappleState.None)
 {
-    if(instance_exists(grapBlock))
+    for(var i = 0; i < array_length(dmgBoxes); i++)
+	{
+		instance_destroy(dmgBoxes[i]);
+	}
+	
+	if(instance_exists(grapBlock))
     {
 		grappled = true;
         if(grapBlockPosX > -1)
@@ -136,7 +141,7 @@ else
 		else
 		{
 			grapSpeed = grapSpeedMax;
-			while(grapSpeed > 0 && !entity_collision_line(xprevious-grapSignX,yprevious-grapSignY,x+grapSignX,y+grapSignY))
+			while(grapSpeed > 0 && !self.entity_collision_line(xprevious-grapSignX,yprevious-grapSignY,x+grapSignX,y+grapSignY))
 		    {
 		        grappleDist += 1;
 				x = player.shootPosX+lengthdir_x(grappleDist,shootDir);
@@ -172,8 +177,8 @@ else
 			
 			if(impactFlag)
 			{
-				TileInteract(x+grapSignX,y+grapSignY);
-				OnImpact(x,y);
+				self.TileInteract(x+grapSignX,y+grapSignY);
+				self.OnImpact(x,y);
 				impacted = 1;
 			}
 			else if(point_distance(player.x, player.y, x, y) > player.grappleMaxDist-(grapSpeedMax/2))
@@ -245,16 +250,8 @@ else
 			}
 	    }
 		
-		if(damage > 0)
-		{
-			for(var j = 0; j < point_distance(player.position.X,player.position.Y, x,y); j += 8)
-			{
-				var _dir = point_direction(player.position.X,player.position.Y, x,y),
-					xw = x-lengthdir_x(j,_dir),
-					yw = y-lengthdir_y(j,_dir);
-				scr_DamageNPC(xw,yw,damage,damageType,damageSubType,0,-1,10);
-			}
-		}
+		self.DamageBoxes();
+		self.IncrInvFrames();
 	}
 	else
 	{

@@ -3,8 +3,7 @@ event_inherited();
 
 if(!global.GamePaused())
 {
-    //velocity = min(velocity * 1.1, 15.75);
-	velX = min(abs(velX) * 1.1, abs(lengthdir_x(15.75,direction)))*sign(velX);
+    velX = min(abs(velX) * 1.1, abs(lengthdir_x(15.75,direction)))*sign(velX);
 	velY = min(abs(velY) * 1.1, abs(lengthdir_y(15.75,direction)))*sign(velY);
 	var velocity = point_distance(0,0,velX,velY);
     if(particleDelay <= 0)

@@ -36,11 +36,12 @@ if(isCharge)
 	damageType = DmgType.Charge;
 	dmgDelay = 1;
 }
-damageSubType[1] = true;
-damageSubType[2] = isIce;
-damageSubType[3] = isWave;
-damageSubType[4] = isSpazer;
-damageSubType[5] = isPlasma;
+damageSubType[DmgSubType_Beam.All] = true;
+damageSubType[DmgSubType_Beam.Power] = true;
+damageSubType[DmgSubType_Beam.Ice] = isIce;
+damageSubType[DmgSubType_Beam.Wave] = isWave;
+damageSubType[DmgSubType_Beam.Spazer] = isSpazer;
+damageSubType[DmgSubType_Beam.Plasma] = isPlasma;
 
 blockBreakType[BlockBreakType.Shot] = true;
 doorOpenType[DoorOpenType.Beam] = true;
@@ -146,9 +147,9 @@ image_speed = 0;//(image_number > 1 && rotFrame == 0);
 
 #endregion
 
-function OnImpact(posX,posY,waveImpact = false)
+function OnImpact(posX, posY, silentImpact = false)
 {
-	if(impactSnd != noone && !waveImpact)
+	if(impactSnd != noone && !silentImpact)
 	{
 		if(audio_is_playing(impactSnd))
 		{

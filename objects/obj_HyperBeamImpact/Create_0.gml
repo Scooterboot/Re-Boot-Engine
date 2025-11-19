@@ -4,12 +4,9 @@ event_inherited();
 multiHit = true;
 tileCollide = false;
 
-damageType = DmgType.Misc;
-damageSubType[1] = false;
-damageSubType[2] = false;
-damageSubType[3] = false;
-damageSubType[4] = true;
-damageSubType[5] = false;
+isCharge = true;
+damageType = DmgType.Charge;
+damageSubType[DmgSubType_Beam.Hyper] = true;
 
 array_fill(blockBreakType, true);
 array_fill(doorOpenType, true);

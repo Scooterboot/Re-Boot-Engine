@@ -1,7 +1,7 @@
 /// @description 
 event_inherited();
 
-if(PauseAI())
+if(self.PauseAI())
 {
 	exit;
 }
@@ -17,7 +17,6 @@ if(instance_exists(player))
 	var spMaxX = maxSpeed,
 		spMaxY = maxSpeed;
 	
-	//if(point_distance(x,y,playerX,playerY) < 24 || place_meeting(x,y,obj_Player))
 	if(collision_rectangle(x-5,y-6,x+5,y+6,obj_Player,false,true))
 	{
 		spMaxX = maxSpeed * min(abs(x - playerX) / 24, 1);
@@ -28,7 +27,7 @@ if(instance_exists(player))
 	velY = clamp(velY+spMoveY, -spMaxY, spMaxY);
 }
 
-Collision_Normal(velX,velY,false);
+self.Collision_Normal(velX,velY,false);
 
 var drainFlag = place_meeting(x,y,obj_Player);
 frameCounter++;

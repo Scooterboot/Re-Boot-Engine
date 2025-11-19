@@ -4,7 +4,7 @@ event_inherited();
 life = 100;
 lifeMax = 100;
 damage = 90;
-dmgMult[DmgType.Misc][1] = 10; // grapple beam
+dmgResist[DmgType.Misc][DmgSubType_Misc.Grapple] = 10;
 
 dropChance[0] = 2; // nothing
 dropChance[1] = 24; // energy
@@ -26,16 +26,29 @@ dmgCounter = dmgCounterMax;
 
 drainSnd = noone;
 
-function DamagePlayer()
+playerKnockBackDur = 0;
+playerInvFrames = 0;
+
+function DamageBoxes()
 {
-	if(!friendly && damage > 0 && !frozen && !dead)
+	var _mask = sprite_exists(mask_index) ? mask_index : sprite_index;
+	if(dmgBoxMask != noone && sprite_exists(dmgBoxMask))
+	{
+		_mask = dmgBoxMask;
+	}
+	
+	if(!instance_exists(dmgBoxes[0]))
+	{
+		dmgBoxes[0] = self.CreateDamageBox(0,0,_mask,hostile);
+	}
+	else if(hostile && damage > 0 && !frozen && !dead)
 	{
 	    var player = collision_rectangle(x-5,y-6,x+5,y+6,obj_Player,false,true);
 	    if(instance_exists(player))
 	    {
 			if(dmgCounter <= 0)
 			{
-				player.StrikePlayer(damage,0,0,0,0,true);
+				dmgBoxes[0].Damage(x,y,damage,damageType,damageSubType);
 				
 				dmgCounter = dmgCounterMax;
 			}

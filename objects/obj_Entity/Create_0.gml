@@ -2420,225 +2420,212 @@ function EntityLiquid_Large(_velX, _velY)
 
 #endregion
 
-
-// WIP
-npcList = ds_list_create();
-#region DamageNPC
-
-function DamageNPC(_colNum, _dmg, _dmgType, _dmgSubType, _freezeType, _freezeMax, _deathType, _invFrames)
+enum DmgType
 {
-	///@description scr_DamageNPC
-	///@param collision_list_num
-	///@param damage
-	///@param damageType
-	///@param damageSubType
-	///@param freezeType
-	///@param freezeMax
-	///@param deathType
-	///@param npcInvFrames
+	None,
 	
-	if(_colNum > 0)
+	Beam,
+	Charge,
+	
+	Explosive,
+	ExplSplash,
+	
+	Misc,
+	
+	_Length
+}
+enum DmgSubType_Beam
+{
+	All,
+	
+	Power,
+	Ice,
+	Wave,
+	Spazer,
+	Plasma,
+	
+	Hyper,
+	
+	_Length
+}
+enum DmgSubType_Explosive
+{
+	All,
+	
+	Missile,
+	SuperMissile,
+	Bomb,
+	PowerBomb,
+	
+	_Length
+}
+enum DmgSubType_Misc
+{
+	All,
+	
+	Grapple,
+	BoostBall,
+	SpeedBoost,
+	ScrewAttack,
+	
+	_Length
+}
+
+hostile = false;
+
+#region Taking Damage
+
+dmgResist = array_create(DmgType._Length);
+dmgResist[DmgType.None] = array_create(1, 1);
+
+dmgResist[DmgType.Beam] = array_create(DmgSubType_Beam._Length, 1);
+dmgResist[DmgType.Charge] = array_create(DmgSubType_Beam._Length, 1);
+
+dmgResist[DmgType.Explosive] = array_create(DmgSubType_Explosive._Length, 1);
+dmgResist[DmgType.ExplSplash] = array_create(DmgSubType_Explosive._Length, 1);
+
+dmgResist[DmgType.Misc] = array_create(DmgSubType_Misc._Length, 1);
+
+function CalcDamageResist(_dmg, _dmgType, _dmgSubType)
+{
+	if ((_dmgType == DmgType.Beam || _dmgType == DmgType.Charge) && 
+		array_length(_dmgSubType) > DmgSubType_Beam.Hyper && _dmgSubType[DmgSubType_Beam.Hyper])
 	{
-		var isProjectile = object_is_ancestor(object_index,obj_Projectile);
-		
-		for(var i = 0; i < _colNum; i++)
+		return _dmg;
+	}
+	
+	var _dmgMult = 0;
+	for(var i = 1; i < array_length(dmgResist[_dmgType]); i++)
+	{
+		if(array_length(_dmgSubType) > i && _dmgSubType[i])
 		{
-			var npc = npcList[| i];
-			if(!instance_exists(npc) || npc.dead || npc.immune)
+			_dmgMult = max(_dmgMult, dmgResist[_dmgType][i]);
+		}
+	}
+	_dmgMult *= dmgResist[_dmgType][0];
+	
+	return _dmg * _dmgMult;
+}
+
+frozen = 0;
+frozenInvFrames = 0;
+freezeImmune = false;
+
+dmgAbsorb = false;
+
+function Entity_CanTakeDamage(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType) { return true; }
+function Entity_ModifyDamageTaken(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType)
+{
+	return self.CalcDamageResist(_dmg, _dmgType, _dmgSubType);
+}
+function Entity_OnDamageTaken(_selfLifeBox, _dmgBox, _finalDmg, _dmg, _dmgType, _dmgSubType, _freezeType = 0, _freezeTime = 600, _npcDeathType = -1) {}
+function Entity_OnDamageTaken_Blocked(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType, _freezeType = 0, _freezeTime = 600) {}
+
+lifeBoxes = [noone];
+function CreateLifeBox(_offsetX,_offsetY,_mask,_hostile)
+{
+	var lifeBox = instance_create_depth(x+_offsetX,y+_offsetY,0,obj_LifeBox);
+	lifeBox.creator = id;
+	lifeBox.offsetX = _offsetX;
+	lifeBox.offsetY = _offsetY;
+	lifeBox.mask_index = _mask;
+	lifeBox.hostile = _hostile;
+	
+	return lifeBox;
+}
+
+
+#endregion
+
+#region Dealing Damage
+
+damageType = DmgType.None;
+damageSubType = array_create(1,true);
+
+freezeType = 0;
+freezeTime = 600;
+freezeKill = false;
+
+playerInvFrames = 96; // 96 default | 60 for spikes
+npcInvFrames = 8;
+
+playerKnockBackDur = 5;
+playerKnockBackSpd = 5;
+function PlayerKnockBackDir(_player)
+{
+	var vec = self.Center(true),
+		pVec = _player.Center(true);
+	
+	return point_direction(vec.X,vec.Y, pVec.X,pVec.Y);
+}
+
+ignorePlayerImmunity = false;
+
+function Entity_CanDealDamage(_selfDmgBox, _lifeBox, _dmg, _dmgType, _dmgSubType) { return true; }
+function Entity_ModifyDamageDealt(_selfDmgBox, _lifeBox, _dmg, _dmgType, _dmgSubType) { return _dmg; }
+function Entity_OnDamageDealt(_selfDmgBox, _lifeBox, _finalDmg, _dmg, _dmgType, _dmgSubType) {}
+function Entity_OnDamageDealt_Blocked(_selfDmgBox, _lifeBox, _dmg, _dmgType, _dmgSubType) {}
+
+function Entity_OnDmgBoxCollision(_selfDmgBox, _lifeBox, _finalDmg, _dmg, _dmgType, _dmgSubType) {}
+
+dmgBoxes = [noone];
+function CreateDamageBox(_offsetX,_offsetY,_mask,_hostile)
+{
+	var dmgBox = instance_create_depth(x+_offsetX,y+_offsetY,0,obj_DamageBox);
+	dmgBox.creator = id;
+	dmgBox.offsetX = _offsetX;
+	dmgBox.offsetY = _offsetY;
+	dmgBox.mask_index = _mask;
+	dmgBox.hostile = _hostile;
+	
+	return dmgBox;
+}
+
+#endregion
+
+#region I-Frames
+
+iFrameCounters = ds_list_create();
+function InvFrameCounter(_instance, _invFrames) constructor
+{
+	instanceID = _instance;
+	invFrames = _invFrames;
+	
+	function Update()
+	{
+		invFrames = max(invFrames - 1, 0);
+	}
+}
+function GetInvFrames(_instance)
+{
+	if(ds_exists(iFrameCounters,ds_type_list))
+	{
+		for(var i = 0; i < ds_list_size(iFrameCounters); i++)
+		{
+			if(is_struct(iFrameCounters[| i]) && instance_exists(_instance) && iFrameCounters[| i].instanceID == _instance)
 			{
-				continue;
+				return iFrameCounters[| i].invFrames;
 			}
-			if(npc.friendly && isProjectile && !hostile)
+		}
+	}
+	return 0;
+}
+function IncrInvFrames()
+{
+	if(ds_exists(iFrameCounters,ds_type_list))
+	{
+		for(var i = 0; i < ds_list_size(iFrameCounters); i++)
+		{
+			if(is_struct(iFrameCounters[| i]))
 			{
-				continue;
-			}
-			
-			var dmgMult = 0;
-			var arrLength = 5;
-			if(_dmgType == DmgType.Explosive)
-			{
-				arrLength = 4;
-			}
-			for(var d = 1; d <= arrLength; d++)
-			{
-				if(_dmgSubType[d])
+				if(iFrameCounters[| i].invFrames > 0)
 				{
-					dmgMult = max(dmgMult, npc.dmgMult[_dmgType][d]);
+					iFrameCounters[| i].Update();
 				}
-			}
-			dmgMult *= npc.dmgMult[_dmgType][0];
-			if(_dmgType == DmgType.Explosive && _dmgSubType[5])
-			{
-				dmgMult *= npc.dmgMult[_dmgType][5];
-			}
-			
-			_dmg *= dmgMult;
-			
-			_dmg = npc.ModifyDamageTaken(_dmg,id,isProjectile);
-			if(isProjectile)
-			{
-				_dmg = ModifyDamageNPC(_dmg,npc);
-			}
-			
-			if(isProjectile && !CanDamageNPC(_dmg,npc))
-			{
-				continue;
-			}
-			
-			var partSys = obj_Particles.partSystemA,
-				partEmit = obj_Particles.partEmitA,
-				partX1 = posX+(bbox_left-x)+4,
-				partX2 = posX+(bbox_right-x)-4,
-				partY1 = posY+(bbox_top-y)+4,
-				partY2 = posY+(bbox_bottom-y)-4;
-			if(isProjectile)
-			{
-				part_emitter_region(partSys,partEmit,partX1,partX2,partY1,partY2,ps_shape_ellipse,ps_distr_linear);
-			}
-			
-			if(_dmg > 0)
-			{
-				if(!isProjectile || (npcInvFrames[i] <= 0))// && impacted <= 0))
+				else
 				{
-					var lifeEnd = 0;
-					if(!npc.freezeImmune && ((freezeType == 1 && npc.life <= (_dmg*2)) || freezeType == 2))
-					{
-						if(npc.frozen <= 0)
-						{
-							lifeEnd = 1;
-							audio_stop_sound(snd_FreezeNPC);
-							audio_play_sound(snd_FreezeNPC,0,false);
-						}
-						npc.frozen = freezeMax;
-						if(isProjectile)
-						{
-							part_emitter_burst(partSys,partEmit,obj_Particles.partFreeze,21*(1+isCharge));
-							
-							if(freezeKill)
-							{
-								lifeEnd = 0;
-							}
-						}
-					}
-					if(npc.frozenInvFrames <= 0)
-					{
-						if(!npc.freezeImmune && freezeType > 0 && npc.life <= (_dmg*2))
-						{
-							npc.frozenInvFrames = _invFrames;
-						}
-						
-						npc.StrikeNPC(_dmg, dmgType, dmgSubType, lifeEnd, deathType);
-						
-						npc.OnDamageTaken(_dmg,id,isProjectile);
-						if(isProjectile)
-						{
-							OnDamageNPC(_dmg,npc);
-						}
-					}
-					if(isProjectile && particleType != -1)
-					{
-						part_emitter_burst(partSys,partEmit,obj_Particles.bTrails[particleType],7*(1+isCharge));
-					}
-				}
-				if(isProjectile && particleType != -1 && multiHit)
-				{
-					part_emitter_burst(partSys,partEmit,obj_Particles.bTrails[particleType],(1+isCharge));
-				}
-			}
-			else if(isProjectile)
-			{
-				if(freezeType > 0 && !npc.freezeImmune)
-				{
-					if(npc.frozen <= 0)
-					{
-						audio_stop_sound(snd_FreezeNPC);
-						audio_play_sound(snd_FreezeNPC,0,false);
-					}
-					npc.frozen = freezeMax;
-                        
-					part_emitter_burst(partSys,partEmit,obj_Particles.partFreeze,21*(1+isCharge));
-				}
-				else if(dmgType != DmgType.Explosive || !dmgSubType[5])
-				{
-					if(npc.dmgAbsorb)
-					{
-						if(impacted <= 0)
-						{
-							npc.OnDamageAbsorbed(_damage,id,isProjectile);
-							
-							audio_stop_sound(snd_ProjAbsorbed);
-							audio_play_sound(snd_ProjAbsorbed,0,false);
-							
-							part_particles_create(obj_Particles.partSystemA,posX,posY,obj_Particles.partAbsorb,1);
-							
-							if(!multiHit)
-							{
-								//instance_destroy();
-								impacted = max(impacted,1);
-							}
-						}
-					}
-					else if(!reflected || multiHit)
-					{
-						reflected = true;
-						
-						audio_stop_sound(snd_Reflect);
-						audio_play_sound(snd_Reflect,0,false);
-						
-						part_emitter_burst(partSys,partEmit,obj_Particles.partDeflect,42);
-					}
-				}
-				
-				if(particleType != -1)
-				{
-					var partAmt = 7*(1+isCharge);
-					if(multiHit)
-					{
-						partAmt = (1+isCharge);
-					}
-					part_emitter_burst(partSys,partEmit,obj_Particles.bTrails[particleType],partAmt);
-				}
-			}
-			
-			if(isProjectile && (_dmg > 0 || !npc.dmgAbsorb))
-			{
-				if(_dmg > 0 && npcInvFrames[i] <= 0)
-				{
-					npcInvFrames[i] = _invFrames;
-					
-					for(var j = 0; j < instance_number(obj_NPC); j++)
-					{
-						var rlnpc = instance_find(obj_NPC,j);
-						if(!instance_exists(rlnpc) || rlnpc.dead || rlnpc.immune)
-						{
-							continue;
-						}
-						
-						if(rlnpc.realLife == npc)
-						{
-							npcInvFrames[j] = _invFrames;
-						}
-						else if(instance_exists(npc.realLife) && rlnpc == npc.realLife)
-						{
-							npcInvFrames[j] = _invFrames;
-							break;
-						}
-					}
-				}
-				
-				if(!multiHit)
-				{
-					//instance_destroy();
-					impacted = max(impacted,1);
-					//damage = 0;
-					//break;
-				}
-			}
-			else if(object_index == obj_Player)
-			{
-				if(IsChargeSomersaulting() && !IsSpeedBoosting() && !IsScrewAttacking() && dmgType == 1 && _dmg > 0)
-				{
-					statCharge = 0;
+					delete iFrameCounters[| i];
+					ds_list_delete(iFrameCounters,i);
 				}
 			}
 		}

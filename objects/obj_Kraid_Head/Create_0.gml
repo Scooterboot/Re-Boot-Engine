@@ -5,55 +5,33 @@ life = 2000;
 lifeMax = 2000;
 
 freezeImmune = true;
-
-dmgMult[DmgType.Beam][0] = 0; // all
-
-dmgMult[DmgType.Explosive][3] = 0; // bomb
-dmgMult[DmgType.Explosive][4] = 0; // power bomb
-dmgMult[DmgType.Explosive][5] = 0; // splash 
-
-dmgMult[DmgType.Misc][2] = 0; // speed booster / shine spark
-dmgMult[DmgType.Misc][3] = 0; // screw attack
-dmgMult[DmgType.Misc][5] = 0; // boost ball
-
 dmgAbsorb = true;
-
 damage = 20;
-
 ignorePlayerImmunity = true;
 
-/*function DmgCollide(posX,posY,object,isProjectile)
-{
-	var npc = id;
-	
-	var adposX = lengthdir_x(8,image_angle-90),
-		adposY = lengthdir_y(8,image_angle-90);
-	
-	with(object)
-	{
-		return place_meeting(posX,posY,npc) || place_meeting(posX-adposX,posY-adposY,npc);
-	}
-	return false;
-}*/
-function ModifyDamageTaken(damage,object,isProjectile)
+function Entity_CanTakeDamage(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType)
 {
 	if(instance_exists(realLife))
 	{
-		var adposX = lengthdir_x(8,image_angle-90),
-			adposY = lengthdir_y(8,image_angle-90);
-		if(isProjectile && !place_meeting(x-adposX,y-adposY,object))
-		{
-			return realLife.ModifyDamageTaken(damage,object,isProjectile);
-		}
+		return realLife.Entity_CanTakeDamage(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType);
+	}
+	return false;
+}
+function Entity_ModifyDamageTaken(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType)
+{
+	var adposX = lengthdir_x(8,image_angle-90),
+		adposY = lengthdir_y(8,image_angle-90);
+	if(instance_exists(realLife) && !place_meeting(x-adposX,y-adposY,_dmgBox))
+	{
+		return realLife.Entity_ModifyDamageTaken(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType);
 	}
 	return 0;
 }
-
-function OnDamageAbsorbed(damage, object, isProjectile)
+function OnDamageAbsorbed(_selfLifeBox, _dmgBox, _damage, _dmgType, _dmgSubType)
 {
 	if(instance_exists(realLife))
 	{
-		realLife.OnDamageAbsorbed(damage, object, isProjectile);
+		realLife.OnDamageAbsorbed(_selfLifeBox, _dmgBox, _damage, _dmgType, _dmgSubType);
 	}
 }
 
