@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"snd_SpiderLoop1",
+  "audioGroupId":{
+    "name":"audio_sound",
+    "path":"audiogroups/audio_sound",
+  },
+  "bitDepth":1,
+  "channelFormat":1,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":2.47839,
+  "exportDir":"",
+  "name":"snd_SpiderLoop1",
+  "parent":{
+    "name":"Morph",
+    "path":"folders/Sounds/Player/Morph.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"snd_SpiderLoop1.wav",
+  "volume":1.0,
+}

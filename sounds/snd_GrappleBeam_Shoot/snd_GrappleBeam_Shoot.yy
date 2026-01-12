@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.703651,
+  "duration":0.7036508,
   "exportDir":"",
   "name":"snd_GrappleBeam_Shoot",
   "parent":{

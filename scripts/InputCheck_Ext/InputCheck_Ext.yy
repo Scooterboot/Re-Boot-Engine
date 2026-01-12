@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"InputCheck_Ext",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"InputCheck_Ext",
+  "parent":{
+    "name":"_Custom",
+    "path":"folders/Scripts/Input/_Custom.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

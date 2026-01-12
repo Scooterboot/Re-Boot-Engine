@@ -1,5 +1,10 @@
 /// @description Initialize
 
+application_surface_draw_enable(false); //disable default application surface drawing
+display_set_gui_maximize(1, 1, 0, 0);
+gpu_set_zwriteenable(false);
+surface_depth_disable(true);
+
 ini_open("settings.ini");
 	global.fullScreen = ini_read_real("Display", "fullscreen", false);
 	global.screenScale = ini_read_real("Display", "scale", 3);
@@ -11,9 +16,6 @@ ini_open("settings.ini");
 	global.waterDistortion = ini_read_real("Display", "water distortion", true);
 ini_close();
 
-global.maxScreenScale = 1;
-global.zoomScale = 1;
-
 // Reference of resolutions from other games
 // Super Metroid:	256 x 224 (widescreen: 400 x 224) | in tiles: 16 x 14		(ws: 25 x 14)
 // AM2R:			320 x 240 (widescreen: 426 x 240) | in tiles: 20 x 15		(ws: 26.625 x 15)
@@ -21,23 +23,6 @@ global.zoomScale = 1;
 global.wideResWidth = 426;
 global.ogResWidth = 320;
 global.resHeight = 240;
-	
-global.resWidth = global.ogResWidth;
-global.zoomResWidth = global.resWidth*global.zoomScale;
-global.zoomResHeight = global.resHeight*global.zoomScale;
-
-application_surface_draw_enable(false); //disable default application surface drawing
-display_set_gui_maximize(1, 1, 0, 0);
-gpu_set_zwriteenable(false);
-surface_depth_disable(true);
-
-debug = 0;
-
-screenScale = 1;
-if(global.screenScale > 0)
-{
-	screenScale = global.screenScale;
-}
 
 global.resWidth = global.ogResWidth;
 if(global.widescreenEnabled)
@@ -45,9 +30,15 @@ if(global.widescreenEnabled)
 	global.resWidth = global.wideResWidth;
 }
 
-global.screenX = (window_get_width() - (global.resWidth*screenScale)) / 2;
-global.screenY = (window_get_height() - (global.resHeight*screenScale)) / 2;
+global.maxScreenScale = 1;
 
+screenScale = 1;
+if(global.screenScale > 0)
+{
+	screenScale = global.screenScale;
+}
+
+global.zoomScale = 1;
 global.zoomResWidth = global.resWidth*global.zoomScale;
 global.zoomResHeight = global.resHeight*global.zoomScale;
 
@@ -65,44 +56,12 @@ camera_set_view_size(view_camera[0],ceil(global.zoomResWidth),ceil(global.zoomRe
 window_set_fullscreen(global.fullScreen);
 display_reset(0, global.vsync);
 window_set_size(global.resWidth*screenScale,global.resHeight*screenScale);
-//windowResizeTimer = 0;
 window_center();
 
-oldDelta = delta_time;
+global.screenX = (window_get_width() - (global.resWidth*screenScale)) / 2;
+global.screenY = (window_get_height() - (global.resHeight*screenScale)) / 2;
 
 hyperRainbowCycle = 0;
-
-
-stateText[0] = "Stand";
-stateText[1] = "Elevator";
-stateText[2] = "Recharge";
-stateText[3] = "Crouch";
-stateText[4] = "Walk";
-stateText[5] = "Moon";
-stateText[6] = "Run";
-stateText[7] = "Brake";
-stateText[8] = "Morph";
-stateText[9] = "Jump";
-stateText[10] = "Somersault";
-stateText[11] = "Grip";
-stateText[12] = "Spark";
-stateText[13] = "BallSpark";
-stateText[14] = "Grapple";
-stateText[15] = "Hurt";
-stateText[16] = "DmgBoost";
-stateText[17] = "Death";
-stateText[18] = "Dodge";
-stateText[19] = "CrystalFlash";
-stateText[20] = "Push";
-
-edgeText[Edge.None] = "None";
-edgeText[Edge.Bottom] = "Bottom";
-edgeText[Edge.Top] = "Top";
-edgeText[Edge.Right] = "Right";
-edgeText[Edge.Left] = "Left";
-
-zoomTempFlag = false;
-fastforwardtoggle = false;
 
 surfUI = surface_create(global.resWidth,global.resHeight);
 finalAppSurf = surface_create(global.resWidth,global.resHeight);

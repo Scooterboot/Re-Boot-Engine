@@ -1,4 +1,3 @@
-image_speed = 0.5;
 
 if(drawGrapEffect)
 {
@@ -6,5 +5,3 @@ if(drawGrapEffect)
     grapFrame = scr_wrap(grapFrame - 0.5, 0, 4);
     draw_sprite_ext(sprt_GrappleBeamImpact,grapFrame,scr_round(x),scr_round(y),1,1,0,c_white,1);
 }
-
-drawGrapDelay = max(drawGrapDelay-1,0);

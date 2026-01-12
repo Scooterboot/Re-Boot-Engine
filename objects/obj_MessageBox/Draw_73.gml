@@ -15,7 +15,7 @@ switch (messageType)
 			draw_set_valign(fa_top);
 			
 			var str = header;
-			var str2 = obj_UIHandler.InsertIconsIntoString(description);
+			var str2 = obj_UI.InsertIconsIntoString(description);
 			if(descScrib.get_text() != str2)
 			{
 				descScrib.overwrite(str2);

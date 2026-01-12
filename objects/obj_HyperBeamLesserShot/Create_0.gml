@@ -3,7 +3,7 @@ event_inherited();
 
 fired = 4;
 
-aiStyle = 1;
+projStyle = ProjStyle.Wave;
 amplitude = 12;//16;
 wavesPerSecond = 4;//2.75;
 delay = 0;//2;//5;

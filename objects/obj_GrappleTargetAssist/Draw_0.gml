@@ -6,7 +6,7 @@ if(!instance_exists(obj_Player))
 	exit;
 }
 var player = obj_Player;
-var pos = GetPlayerPos();
+var pos = self.GetPlayerPos();
 var pX = pos.X, pY = pos.Y;
 
 if(is_struct(targetPoint))
@@ -62,36 +62,6 @@ else
 	frame = 0;
 	frameNum = 1;
 }
-
-//debug
-if(obj_Display.debug > 0)
-{
-	draw_set_alpha(0.5);
-	draw_set_color(c_gray);
-	draw_line(pX,pY, pX+lengthdir_x(player.grappleMaxDist,shootDir),pY+lengthdir_y(player.grappleMaxDist,shootDir));
-	draw_line(pX,pY, pX+lengthdir_x(player.grappleMaxDist,shootDir+assistRadius),pY+lengthdir_y(player.grappleMaxDist,shootDir+assistRadius));
-	draw_line(pX,pY, pX+lengthdir_x(player.grappleMaxDist,shootDir-assistRadius),pY+lengthdir_y(player.grappleMaxDist,shootDir-assistRadius));
-	
-	if(is_struct(targetPoint))
-	{
-		draw_set_color(c_lime);
-		draw_line(pX,pY, targetPoint.x,targetPoint.y);
-	}
-	
-	if(obj_Display.debug == 1)
-	{
-		draw_set_color(c_orange);
-		for(var i = 0; i < ds_list_size(grapPoint_list); i++)
-		{
-			var gp = grapPoint_list[| i];
-			draw_circle(gp.x-1,gp.y-1,4,false);
-		}
-	}
-	
-	draw_set_alpha(1);
-	draw_set_color(c_white);
-}
-//
 
 ds_list_clear(grapPoint_list);
 targetPoint = noone;

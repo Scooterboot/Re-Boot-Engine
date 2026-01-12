@@ -16,9 +16,9 @@ if(room != goal)
 
         playerX = obj_Player.position.X - camera_get_view_x(view_camera[0]);
         playerY = obj_Player.position.Y - camera_get_view_y(view_camera[0]);
-		if(obj_Player.state == State.Stand && obj_Player.stateFrame == State.Stand)
+		if(obj_Player.state == State.Stand && obj_Player.animState == AnimState.Stand)
 		{
-			obj_Player.stateFrame = State.Run;
+			obj_Player.animState = AnimState.Run;
 		}
 
         transSprtDraw = true;

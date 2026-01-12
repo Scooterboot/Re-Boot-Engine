@@ -1,5 +1,5 @@
 /// @description 
-event_perform_object(obj_Breakable,ev_step,0);
+//event_perform_object(obj_Breakable,ev_step,0);
 
 if(!instance_exists(dmgBoxes[0]))
 {
@@ -10,8 +10,8 @@ if(!instance_exists(dmgBoxes[0]))
 		oX = (lengthdir_x(oLenX,image_angle) - lengthdir_y(oLenY,image_angle)),
 		oY = (lengthdir_x(oLenY,image_angle) + lengthdir_y(oLenX,image_angle));
 	dmgBoxes[0] = self.CreateDamageBox(oX,oY,sprite_index,true);
-	dmgBoxes[0].image_xscale = ((spW*abs(image_xscale)) + 2) / spW * sign(image_xscale);//(sprite_width+2*sign(image_xscale)) / sprite_get_width(sprite_index);
-	dmgBoxes[0].image_yscale = ((spH*abs(image_yscale)) + 2) / spH * sign(image_yscale);//(sprite_height+2*sign(image_yscale)) / sprite_get_height(sprite_index);
+	dmgBoxes[0].image_xscale = ((spW*abs(image_xscale)) + 2) / spW * sign(image_xscale);
+	dmgBoxes[0].image_yscale = ((spH*abs(image_yscale)) + 2) / spH * sign(image_yscale);
 	dmgBoxes[0].image_angle = image_angle;
 	dmgBoxes[0].direction = direction;
 }

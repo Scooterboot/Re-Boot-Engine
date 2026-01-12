@@ -43,7 +43,7 @@ function __InputConfigVerbs()
 		ReverseAim,
 		Moonwalk,
 		
-		WeapToggle,
+		EquipToggle,
 		
 		VisorToggle,
 		VisorCycle,
@@ -112,6 +112,8 @@ function __InputConfigVerbs()
 	InputDefineVerb(INPUT_VERB.PlayerRight,	"player right",	vk_right,	[ gp_axislh, gp_padr]);
 	InputDefineCluster(INPUT_CLUSTER.PlayerMove, INPUT_VERB.PlayerUp, INPUT_VERB.PlayerRight, INPUT_VERB.PlayerDown, INPUT_VERB.PlayerLeft);
 	
+	// my config
+	
 	InputDefineVerb(INPUT_VERB.Jump,		"jump",			ord("Z"),				gp_face1);
 	InputDefineVerb(INPUT_VERB.Fire,		"fire",			ord("X"),				gp_face3);
 	InputDefineVerb(INPUT_VERB.Sprint,		"sprint",		ord("C"),				gp_face2);
@@ -127,16 +129,36 @@ function __InputConfigVerbs()
 	InputDefineVerb(INPUT_VERB.ReverseAim,	"reverse aim",	ord("D"),				gp_shoulderl);
 	InputDefineVerb(INPUT_VERB.Moonwalk,	"moonwalk",		ord("F"),				gp_shoulderl);
 	
-	InputDefineVerb(INPUT_VERB.WeapToggle,	"weap toggle",	ord("R"),	gp_stickr);
+	//
+	/* friend's config
+	
+	InputDefineVerb(INPUT_VERB.Jump,		"jump",			ord("Z"),				gp_face2);
+	InputDefineVerb(INPUT_VERB.Fire,		"fire",			ord("X"),				gp_face3);
+	InputDefineVerb(INPUT_VERB.Sprint,		"sprint",		ord("C"),				gp_face1);
+	InputDefineVerb(INPUT_VERB.Dodge,		"dodge",		vk_lshift,				gp_face4);
+	InputDefineVerb(INPUT_VERB.InstaShield, "instashield",	ord("C"),				gp_face1);
+	InputDefineVerb(INPUT_VERB.Morph,		"morph",		ord("V"),				gp_shoulderrb);
+	InputDefineVerb(INPUT_VERB.BoostBall,	"boost ball",	ord("C"),				gp_face1);
+	InputDefineVerb(INPUT_VERB.SpiderBall,	"spider ball",	[ord("A"), ord("S")],	[gp_shoulderl, gp_shoulderr]);
+	
+	InputDefineVerb(INPUT_VERB.AimUp,		"aim up",		ord("S"),				gp_shoulderl);
+	InputDefineVerb(INPUT_VERB.AimDown,		"aim down",		ord("A"),				gp_shoulderr);
+	InputDefineVerb(INPUT_VERB.AimLock,		"aim lock",		[ord("S"), ord("A")],	[gp_shoulderl, gp_shoulderr]);
+	InputDefineVerb(INPUT_VERB.ReverseAim,	"reverse aim",	ord("D"),				gp_shoulderlb);
+	InputDefineVerb(INPUT_VERB.Moonwalk,	"moonwalk",		ord("F"),				gp_shoulderlb);
+	
+	*/
+	
+	InputDefineVerb(INPUT_VERB.EquipToggle,	"equip toggle",	ord("R"),	gp_stickr);
 	
 	InputDefineVerb(INPUT_VERB.VisorToggle,	"visor toggle",	ord("Q"),	gp_stickl);
 	InputDefineVerb(INPUT_VERB.VisorCycle,	"visor cycle",	ord("W"),	gp_select);
 	
-	InputDefineVerb(INPUT_VERB.RadialUIOpen,	"weap menu open",	ord("E"),	[gp_axisrh, -gp_axisrh, gp_axisrv, -gp_axisrv]);
-	InputDefineVerb(INPUT_VERB.RadialUIUp,		"weap menu up",		vk_up,		-gp_axisrv);
-	InputDefineVerb(INPUT_VERB.RadialUIDown,	"weap menu down",	vk_down,	 gp_axisrv);
-	InputDefineVerb(INPUT_VERB.RadialUILeft,	"weap menu left",	vk_left,	-gp_axisrh);
-	InputDefineVerb(INPUT_VERB.RadialUIRight,	"weap menu right",	vk_right,	 gp_axisrh);
+	InputDefineVerb(INPUT_VERB.RadialUIOpen,	"equip menu open",	ord("E"),	undefined);
+	InputDefineVerb(INPUT_VERB.RadialUIUp,		"equip menu up",		vk_up,		-gp_axisrv);
+	InputDefineVerb(INPUT_VERB.RadialUIDown,	"equip menu down",	vk_down,	 gp_axisrv);
+	InputDefineVerb(INPUT_VERB.RadialUILeft,	"equip menu left",	vk_left,	-gp_axisrh);
+	InputDefineVerb(INPUT_VERB.RadialUIRight,	"equip menu right",	vk_right,	 gp_axisrh);
 	InputDefineCluster(INPUT_CLUSTER.RadialUIMove, INPUT_VERB.RadialUIUp, INPUT_VERB.RadialUIRight, INPUT_VERB.RadialUIDown, INPUT_VERB.RadialUILeft);
 	
 	InputDefineVerb(INPUT_VERB.VisorUse,	"visor use",	mb_left,	gp_stickr);

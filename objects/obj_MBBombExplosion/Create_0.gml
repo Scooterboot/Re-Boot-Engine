@@ -13,6 +13,7 @@ damageType = DmgType.ExplSplash;
 damageSubType[DmgSubType_Explosive.Bomb] = true;
 
 explode = 0;
+self.DamageBoxes();
 
 part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.explosion[0],1);
 

@@ -73,7 +73,7 @@ function CreateMainMenuPanel()
 		hh = global.resHeight;
 	draw_set_font(fnt_GUI);
 	
-	mainMenuPanel = CreatePanel(0,0,ww,hh);
+	mainMenuPanel = self.CreatePanel(0,0,ww,hh);
 	mainMenuPanel.alpha = 0;
 	mainMenuPanel.MoveSelectX = MoveSelectX;
 	mainMenuPanel.MoveSelectY = MoveSelectY;
@@ -84,7 +84,7 @@ function CreateMainMenuPanel()
 		var str = mainMenuText[i];
 		var btnW = max(string_width(str),104), btnH = string_height(str)+1;
 		btn[i] = mainMenuPanel.CreateButton(ww/2 - btnW/2, hh/2 + 48 + 12*i, btnW, btnH, str);
-		btn[i].DrawButton = DrawMainMenuButton;
+		btn[i].DrawButton = DrawGenericButton;
 	}
 	
 	btn[0].button_up = btn[2];
@@ -128,7 +128,7 @@ function CreateFileMenuPanel()
 {
 	var ww = global.resWidth,
 		hh = global.resHeight;
-	fileMenuPanel = CreatePanel(0,0,ww,hh);
+	fileMenuPanel = self.CreatePanel(0,0,ww,hh);
 	fileMenuPanel.MoveSelectX = MoveSelectX;
 	fileMenuPanel.MoveSelectY = MoveSelectY;
 	
@@ -159,7 +159,7 @@ function CreateFileMenuPanel()
 	var str = fileMenuText[5];
 	var bBtnW = max(string_width(str),48), bBtnH = string_height(str)+1;
 	var backBtn = fileMenuPanel.CreateButton(ww/2 - 96, hh - 32, bBtnW, bBtnH, str);
-	backBtn.DrawButton = DrawMainMenuButton;
+	backBtn.DrawButton = DrawGenericButton;
 	backBtn.OnClick = function()
 	{
 		targetState = MMState.MainMenu;
@@ -247,7 +247,7 @@ function CreateSelectedFileMenu(_yoffset, _fileIndex)
 		copyBtn.OnClick = function()
 		{
 			subState = MMSubState.FileCopy;
-			CreateCopyMenu();
+			self.CreateCopyMenu();
 			audio_play_sound(snd_MenuTick,0,false);
 		}
 		copyBtn.DrawButton = DrawGenericButton;
@@ -258,7 +258,7 @@ function CreateSelectedFileMenu(_yoffset, _fileIndex)
 		deleteBtn.OnClick = function()
 		{
 			subState = MMSubState.ConfirmDelete;
-			CreateConfirmDeletePanel();
+			self.CreateConfirmDeletePanel();
 			audio_play_sound(snd_MenuBoop,0,false);
 		}
 		deleteBtn.DrawButton = DrawGenericButton;
@@ -297,7 +297,7 @@ function CreateCopyMenu()
 {
 	var ww = global.resWidth,
 		hh = global.resHeight;
-	copyFilePanel = CreatePanel(0,0,ww,hh);
+	copyFilePanel = self.CreatePanel(0,0,ww,hh);
 	copyFilePanel.MoveSelectX = MoveSelectX;
 	copyFilePanel.MoveSelectY = MoveSelectY;
 	
@@ -313,7 +313,7 @@ function CreateCopyMenu()
 		copyBtn[i].OnClick = function()
 		{
 			subState = MMSubState.ConfirmCopy;
-			CreateConfirmCopyPanel(selectedFile, other.fileIndex);
+			self.CreateConfirmCopyPanel(selectedFile, other.fileIndex);
 			audio_play_sound(snd_MenuBoop,0,false);
 		}
 		copyBtn[i].DrawButton = DrawSaveFileButton;
@@ -334,7 +334,7 @@ function CreateCopyMenu()
 	var str = copyFileText[5];
 	var bBtnW = max(string_width(str),48), bBtnH = string_height(str)+1;
 	copyBtn[cbtn] = copyFilePanel.CreateButton(ww/2 - 96, hh - 32, bBtnW, bBtnH, str);
-	copyBtn[cbtn].DrawButton = DrawMainMenuButton;
+	copyBtn[cbtn].DrawButton = DrawGenericButton;
 	copyBtn[cbtn].OnClick = function()
 	{
 		subState = MMSubState.FileSelected;
@@ -380,7 +380,7 @@ function CreateConfirmCopyPanel(srcFile, destFile)
 	var str = confirmCopyText[0] + "["+copyFileText[srcFile]+"]" + confirmCopyText[1] + "["+copyFileText[destFile]+"]" + "\n\n" + confirmCopyText[2];
 	var pnlW = 248,//string_width(str) + 4,
 		pnlH = string_height(str) + 24;
-	confirmCopyPanel = CreatePanel(ww/2 - pnlW/2, hh/2 - pnlH/2, pnlW, pnlH);
+	confirmCopyPanel = self.CreatePanel(ww/2 - pnlW/2, hh/2 - pnlH/2, pnlW, pnlH);
 	confirmCopyPanel.text = str;
 	confirmCopyPanel.alpha = 0;
 	confirmCopyPanel.DrawPanel = DrawConfirmPanel;
@@ -388,7 +388,7 @@ function CreateConfirmCopyPanel(srcFile, destFile)
 	draw_set_font(fnt_GUI);
 	str = confirmCopyText[3];
 	var yesBtn = confirmCopyPanel.CreateButton(pnlW/2 - 16 - string_width(str), pnlH - string_height(str) - 4, string_width(str) + 4, string_height(str)+1, str);
-	yesBtn.DrawButton = DrawMainMenuButton;
+	yesBtn.DrawButton = DrawGenericButton;
 	yesBtn.srcFile = srcFile;
 	yesBtn.destFile = destFile;
 	yesBtn.OnClick = function()
@@ -417,7 +417,7 @@ function CreateConfirmCopyPanel(srcFile, destFile)
 	
 	str = confirmCopyText[4];
 	var noBtn = confirmCopyPanel.CreateButton(pnlW/2 + 16, pnlH - string_height(str) - 4, string_width(str) + 4, string_height(str)+1, str);
-	noBtn.DrawButton = DrawMainMenuButton;
+	noBtn.DrawButton = DrawGenericButton;
 	noBtn.OnClick = function()
 	{
 		subState = MMSubState.FileCopy;
@@ -452,14 +452,14 @@ function CreateConfirmDeletePanel()
 	var str = confirmDeleteText[0] + "["+fileMenuText[selectedFile]+"]" + "\n\n" + confirmDeleteText[1];
 	var pnlW = 248,//string_width(str) + 4,
 		pnlH = string_height(str) + 24;
-	confirmDeletePanel = CreatePanel(ww/2 - pnlW/2, hh/2 - pnlH/2, pnlW, pnlH);
+	confirmDeletePanel = self.CreatePanel(ww/2 - pnlW/2, hh/2 - pnlH/2, pnlW, pnlH);
 	confirmDeletePanel.text = str;
 	confirmDeletePanel.alpha = 0;
 	confirmDeletePanel.DrawPanel = DrawConfirmPanel;
 	
 	str = confirmDeleteText[2];
 	var yesBtn = confirmDeletePanel.CreateButton(pnlW/2 - 16 - string_width(str), pnlH - string_height(str) - 4, string_width(str) + 4, string_height(str)+1, str);
-	yesBtn.DrawButton = DrawMainMenuButton;
+	yesBtn.DrawButton = DrawGenericButton;
 	yesBtn.OnClick = function()
 	{
 		scr_DeleteGame(selectedFile);
@@ -473,7 +473,7 @@ function CreateConfirmDeletePanel()
 	
 	str = confirmDeleteText[3];
 	var noBtn = confirmDeletePanel.CreateButton(pnlW/2 + 16, pnlH - string_height(str) - 4, string_width(str) + 4, string_height(str)+1, str);
-	noBtn.DrawButton = DrawMainMenuButton;
+	noBtn.DrawButton = DrawGenericButton;
 	noBtn.OnClick = function()
 	{
 		subState = MMSubState.FileSelected;
@@ -494,30 +494,6 @@ function CreateConfirmDeletePanel()
 #region DrawGenericButton
 function DrawGenericButton(_x, _y)
 {
-	//with(other)
-	/*{
-		var col = c_black,
-			alph = 0.5;
-		if(panel.selectedButton == id)
-		{
-			col = c_aqua;
-			alph = 0.5;
-		}
-		var alph2 = alpha*panel.alpha;
-		draw_set_color(col);
-		draw_set_alpha(alph*alph2);
-		draw_roundrect(_x-2, _y-2, _x+width, _y+height, false);
-			
-		var xx = _x+width/2, yy = _y+height/2;
-		draw_set_alpha(alph2);
-		draw_set_font(fnt_GUI);
-		draw_set_align(fa_center,fa_middle);
-		draw_set_color(c_black);
-		draw_text(xx+1,yy+1,text);
-		draw_set_color(c_white);
-		draw_text(xx,yy,text);
-		draw_set_alpha(1);
-	}*/
 	var _sprt = sprt_UI_GenericButton,
 		_sw = sprite_get_width(_sprt),
 		_sh = sprite_get_height(_sprt),
@@ -549,61 +525,6 @@ function DrawGenericButton(_x, _y)
 	draw_set_alpha(1);
 }
 #endregion
-#region DrawMainMenuButton
-function DrawMainMenuButton(_x, _y)
-{
-	//with(other)
-	/*{
-		var col = c_black,
-			alph = 0.5,
-			ol_col = c_black,
-			ol_alph = 0;
-		if(panel.selectedButton == id)
-		{
-			col = c_aqua;
-			alph = 0.25;
-			ol_col = c_aqua;
-			ol_alph = 0.75;
-		}
-		var alph2 = alpha*panel.alpha;
-		draw_set_color(col);
-		draw_set_alpha(alph*alph2);
-		draw_rectangle(_x, _y, _x+width, _y+height, false);
-		
-		draw_set_color(ol_col);
-		draw_set_alpha(ol_alph*alph2);
-		draw_line(_x, _y, _x+width, _y);
-		draw_line(_x, _y+height, _x+width, _y+height);
-		
-		var w2 = max(scr_ceil(width/4),8);
-		for(var i = 0; i < w2; i++)
-		{
-			draw_set_color(col);
-			draw_set_alpha(alph*alph2 * ((w2-i)/w2));
-			draw_line(_x-i-1, _y-1, _x-i-1, _y+height);
-			draw_line(_x+width+i+1, _y-1, _x+width+i+1, _y+height);
-			
-			draw_set_color(ol_col);
-			draw_set_alpha(ol_alph*alph2 * ((w2-i)/w2));
-			draw_point(_x-i, _y);
-			draw_point(_x-i, _y+height);
-			draw_point(_x+width+i+1, _y);
-			draw_point(_x+width+i+1, _y+height);
-		}
-			
-		var xx = _x+width/2, yy = _y+height/2 + 1;
-		draw_set_alpha(alph2);
-		draw_set_font(fnt_GUI);
-		draw_set_align(fa_center,fa_middle);
-		draw_set_color(c_black);
-		draw_text(xx+1,yy+1,text);
-		draw_set_color(c_white);
-		draw_text(xx,yy,text);
-		draw_set_alpha(1);
-	}*/
-	DrawGenericButton(_x, _y);
-}
-#endregion
 #region DrawSaveFileButton
 
 noDataText = "NO DATA";
@@ -617,39 +538,7 @@ fileIconFrameCounter = 0;
 function DrawSaveFileButton(_x, _y)
 {
 	//with(other)
-	{
-		/*
-		var col = c_black,
-			alph = 0.5,
-			ol_col = c_black,
-			ol_alph = 0,
-			frame = 0;
-		if(panel.selectedButton == id)
-		{
-			col = c_lime;
-			alph = 0.4;
-			ol_col = c_lime;
-			ol_alph = 0.6;
-			frame = creator.fileIconFrame;
-		}
-		if((creator.subState == MMSubState.FileCopy || creator.subState == MMSubState.ConfirmCopy) && creator.selectedFile == fileIndex)
-		{
-			col = c_yellow;
-			alph = 0.4;
-			ol_col = c_yellow;
-			ol_alph = 0.4;
-		}
-		
-		draw_set_alpha(alph*alpha);
-		draw_set_color(col);
-		draw_roundrect(_x-2, _y-2, _x+width, _y+height, false);
-		if(ol_alph > 0)
-		{
-			draw_set_alpha(ol_alph*alpha);
-			draw_set_color(ol_col);
-			draw_roundrect(_x-2, _y-2, _x+width, _y+height, true);
-		}
-		*/
+	//{
 		var alph = 0.5,
 			btnFrame = 0,
 			icoFrame = 0;
@@ -753,44 +642,23 @@ function DrawSaveFileButton(_x, _y)
 				}
 			}
 		}
-	}
+	//}
 }
 #endregion
 #region DrawConfirmPanel
 function DrawConfirmPanel(_x, _y)
 {
 	//with(other)
-	{
+	//{
 		alpha = min(alpha+0.15,1);
 		
 		var col = c_black,
 			alph = 0.75,
-			//ol_col = c_lime,
 			ol_alph = 0.75;
 		draw_set_color(col);
 		draw_set_alpha(alph*alpha);
 		draw_rectangle(_x, _y, _x+width, _y+height, false);
 		
-		/*draw_set_color(ol_col);
-		draw_set_alpha(ol_alph*alpha);
-		draw_line(_x, _y, _x+width, _y);
-		draw_line(_x, _y+height, _x+width, _y+height);
-		
-		var w2 = 8;
-		for(var i = 0; i < w2; i++)
-		{
-			draw_set_color(col);
-			draw_set_alpha(alph*alpha * ((w2-i)/w2));
-			draw_line(_x-i-1, _y-1, _x-i-1, _y+height);
-			draw_line(_x+width+i+1, _y-1, _x+width+i+1, _y+height);
-			
-			draw_set_color(ol_col);
-			draw_set_alpha(ol_alph*alpha * ((w2-i)/w2));
-			draw_point(_x-i, _y);
-			draw_point(_x-i, _y+height);
-			draw_point(_x+width+i+1, _y);
-			draw_point(_x+width+i+1, _y+height);
-		}*/
 		draw_sprite_stretched_ext(sprt_UI_GenericButton,0, _x,_y, width,height, c_white,ol_alph*alpha);
 		
 		var _sx = _x+width/2, _sy = _y+4;
@@ -808,7 +676,7 @@ function DrawConfirmPanel(_x, _y)
 			var btn = buttonList[| i];
 			btn.DrawButton(btn.GetX(),btn.GetY());
 		}
-	}
+	//}
 }
 #endregion
 

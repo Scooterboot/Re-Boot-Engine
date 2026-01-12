@@ -5,10 +5,10 @@ for(var i = 0; i < ds_list_size(afterImageList); i++)
 	afterImageList[| i].Clear();
 }
 
-liquid = liquid_place();
+liquid = self.liquid_place();
 liquidPrev = liquid;
-liquidTop = liquid_top();
+liquidTop = self.liquid_top();
 liquidTopPrev = liquidTop;
 
-prevTop = bb_top();
-prevBottom = bb_bottom();
+prevTop = self.bb_top();
+prevBottom = self.bb_bottom();

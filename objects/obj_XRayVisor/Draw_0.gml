@@ -164,7 +164,7 @@ for(var i = -radius; i < radius; i += 0.75)
 	var alph = clamp(lerp(1, 0, (abs(i)/radius)), 0, 1);
 	draw_set_alpha(alph);
 	
-	var num = 4;
+	var num = 8;//4;
 	for(var j = 0; j < num; j++)
 	{
 		var rad2 = scr_wrap(rad + scr_floor(totRadius/num)*j,0,totRadius);

@@ -8,18 +8,21 @@ var pos = SurfPos();
 draw_set_alpha(gradAlpha);
 gpu_set_blendmode(bm_add);
 
-draw_rectangle_color(bb_left(),bb_top()-32,bb_right(),bb_top(),0,0,gradCol,gradCol,false);
-draw_rectangle_color(bb_left(),bb_top()+64,bb_right(),bb_top(),gradCol,gradCol,0,0,false);
+var ltop = 32,
+	lbot = clamp(bb_bottom()-bb_top(), 32, 64);
+
+draw_rectangle_color(bb_left(),bb_top()-ltop,bb_right(),bb_top(),0,0,gradCol,gradCol,false);
+draw_rectangle_color(bb_left(),bb_top()+lbot,bb_right(),bb_top(),gradCol,gradCol,0,0,false);
 
 for(var i = 1; i < 16; i++)
 {
 	draw_set_alpha(gradAlpha*((17-i)/16));
 	
-	draw_line_color(bb_left()-i,bb_top()-32,bb_left()-i,bb_top(),0,gradCol);
-	draw_line_color(bb_right()+i,bb_top()-32,bb_right()+i,bb_top(),0,gradCol);
+	draw_line_color(bb_left()+1-i,bb_top()-ltop,bb_left()+1-i,bb_top(),0,gradCol);
+	draw_line_color(bb_left()+1-i,bb_top()+lbot,bb_left()+1-i,bb_top(),0,gradCol);
 	
-	draw_line_color(bb_left()-i,bb_top()+64,bb_left()-i,bb_top(),0,gradCol);
-	draw_line_color(bb_right()+i,bb_top()+64,bb_right()+i,bb_top(),0,gradCol);
+	draw_line_color(bb_right()+i,bb_top()-ltop,bb_right()+i,bb_top(),0,gradCol);
+	draw_line_color(bb_right()+i,bb_top()+lbot,bb_right()+i,bb_top(),0,gradCol);
 }
 
 gpu_set_blendmode(bm_normal);

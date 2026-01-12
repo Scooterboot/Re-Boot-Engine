@@ -27,7 +27,7 @@ if(surface_exists(darkSurf))
 surface_set_target(obj_Display.surfUI);
 bm_set_one();
 
-draw_surface_ext(darkSurf, 0,0, 1,1, 0, c_white, 0.625*scanAlpha);
+draw_surface_ext(darkSurf, 0,0, 1,1, 0, c_white, 0.5*scanAlpha);
 
 draw_sprite_ext(sprt_ScanReticle, 1, visorX, visorY, retScale1, retScale1, 0,c_white,scanAlpha);
 draw_sprite_ext(sprt_ScanReticle, 0, visorX, visorY, retScale2, retScale2, 0,c_white,scanAlpha);

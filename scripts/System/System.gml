@@ -66,7 +66,7 @@ function Vector2(_x = 0, _y = 0) constructor
 	{
 		_vector2.Subtract(self);
 		_vector2.Multiply(_value);
-		Add(_vector2);
+		self.Add(_vector2);
 	}
 	
 	#endregion

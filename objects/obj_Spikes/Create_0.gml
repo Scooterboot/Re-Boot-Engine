@@ -9,6 +9,7 @@ damage = 16;
 playerKnockBackDur = 10;
 playerKnockBackSpd = 5;
 playerInvFrames = 60;
+ignorePlayerImmunity = true;
 function PlayerKnockBackDir(_player)
 {
 	var ang = 45;

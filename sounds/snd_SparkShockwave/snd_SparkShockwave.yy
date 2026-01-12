@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.606354,
+  "duration":0.6063719,
   "exportDir":"",
   "name":"snd_SparkShockwave",
   "parent":{

@@ -218,11 +218,19 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		
 		with(obj_Player)
 		{
-			if(item[Item.SpeedBooster] || (stateFrame == State.Morph && item[Item.BoostBall]))
-			{
+			//if(item[Item.SpeedBooster] || (animState == AnimState.Morph && item[Item.BoostBall]))
+			//{
+				var _sprt = sprt_HUD_Speedometer;
+				var spdMax = maxSpeed[MaxSpeed.Sprint,liquidState];
+				if(item[Item.SpeedBooster] || (animState == AnimState.Morph && item[Item.BoostBall]))
+				{
+					_sprt = sprt_HUD_Speedometer_SB;
+					spdMax = self.MinimumBoostSpeed();
+				}
+				
 				var _meterY = yy+yDiff+8;
-				var width = sprite_get_width(sprt_HUD_SpeedMeter);
-				var height = sprite_get_height(sprt_HUD_SpeedMeter);
+				var width = sprite_get_width(_sprt);
+				var height = sprite_get_height(_sprt);
 				
 				var x2 = xx-1, y2 = _meterY,
 					ww = width+1, hh = height;
@@ -232,31 +240,31 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				draw_set_color(c_white);
 				draw_set_alpha(1);
 				
-				draw_sprite_ext(sprt_HUD_SpeedMeter,0,xx,_meterY,1,1,0,c_white,1);
+				draw_sprite_ext(_sprt,0,xx,_meterY,1,1,0,c_white,1);
 				
 				if(shineCharge > 0)
 				{
-					width = sprite_get_width(sprt_HUD_SpeedMeter) * (shineCharge / shineChargeMax);
+					width = sprite_get_width(_sprt) * (shineCharge / shineChargeMax);
 					for(var j = 0; j < height; j++)
 					{
 						var rw = min(width-j+1,width);
 						if(rw > 0)
 						{
-							draw_sprite_part_ext(sprt_HUD_SpeedMeter,1,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
+							draw_sprite_part_ext(_sprt,1,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
 						}
 					}
 				}
 				
-				if(stateFrame == State.Morph && item[Item.BoostBall] && boostBallCharge > 0)
+				if(animState == AnimState.Morph && item[Item.BoostBall] && boostBallCharge > 0)
 				{
-					width = sprite_get_width(sprt_HUD_SpeedMeter);
+					width = sprite_get_width(_sprt);
 					if(SpiderActive())
 					{
-						width *= power((abs(spiderSpeed) / minBoostSpeed),2);
+						width *= power((abs(spiderSpeed) / spdMax),2);
 					}
 					else
 					{
-						width *= power((abs(velX) / minBoostSpeed),2);
+						width *= power((abs(velX) / spdMax),2);
 					}
 						
 					for(var j = 0; j < height; j++)
@@ -264,17 +272,17 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 						var rw = min(width-j+1,width);
 						if(rw > 0)
 						{
-							draw_sprite_part_ext(sprt_HUD_SpeedMeter,2,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
+							draw_sprite_part_ext(_sprt,2,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
 						}
 					}
 				
-					width = sprite_get_width(sprt_HUD_SpeedMeter) * (boostBallCharge / boostBallChargeMax);
+					width = sprite_get_width(_sprt) * (boostBallCharge / boostBallChargeMax);
 					for(var j = 0; j < height; j++)
 					{
 						var rw = min(width-j+1,width);
 						if(rw > 0)
 						{
-							draw_sprite_part_ext(sprt_HUD_SpeedMeter,3,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
+							draw_sprite_part_ext(_sprt,3,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
 						}
 					}
 				}
@@ -287,7 +295,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 						_prevWidth += _widths[i];
 					}
 				
-					if(speedCounter < 4 && (state == State.Stand || _SPEED_KEEP == 1 || (_SPEED_KEEP == 2 && liquidState <= 0)))
+					if(item[Item.SpeedBooster] && speedCounter < 4 && (state == State.Stand || _SPEED_KEEP == 1 || (_SPEED_KEEP == 2 && liquidState <= 0)))
 					{
 						width = _prevWidth + _widths[speedCounter] * ((speedBuffer+1) / speedBufferMax);
 						for(var j = 0; j < height; j++)
@@ -295,55 +303,55 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 							var rw = min(width-j+1,width);
 							if(rw > 0)
 							{
-								draw_sprite_part_ext(sprt_HUD_SpeedMeter,2,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
+								draw_sprite_part_ext(_sprt,2,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
 							}
 						}
 					}
 					
-					width = sprite_get_width(sprt_HUD_SpeedMeter);
+					width = sprite_get_width(_sprt);
 					if(SpiderActive())
 					{
-						width *= power((abs(spiderSpeed) / minBoostSpeed),2);
+						width *= power((abs(spiderSpeed) / spdMax),2);
 					}
 					else
 					{
-						width *= power((abs(velX) / minBoostSpeed),2);
+						width *= power((abs(velX) / spdMax),2);
 					}
 					for(var j = 0; j < height; j++)
 					{
 						var rw = min(width-j+1,width);
 						if(rw > 0)
 						{
-							draw_sprite_part_ext(sprt_HUD_SpeedMeter,3,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
+							draw_sprite_part_ext(_sprt,3,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
 						}
 					}
 				}
 				
 				if(speedCounter >= 4 || state == State.Spark || state == State.BallSpark)
 				{
-					draw_sprite_ext(sprt_HUD_SpeedMeter,3,xx,_meterY,1,1,0,c_white,1);
+					draw_sprite_ext(_sprt,3,xx,_meterY,1,1,0,c_white,1);
 					
-					width = sprite_get_width(sprt_HUD_SpeedMeter);
+					width = sprite_get_width(_sprt);
 					if(SpiderActive())
 					{
-						width *= power((abs(spiderSpeed) / minBoostSpeed),2);
+						width *= power((abs(spiderSpeed) / spdMax),2);
 					}
 					else
 					{
-						width *= power((abs(velX) / minBoostSpeed),2);
+						width *= power((abs(velX) / spdMax),2);
 					}
 					for(var j = 0; j < height; j++)
 					{
 						var rw = min(width-j+1,width);
 						if(rw > 0)
 						{
-							draw_sprite_part_ext(sprt_HUD_SpeedMeter,4,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
+							draw_sprite_part_ext(_sprt,4,0,j,rw,1,xx,_meterY+j,1,1,c_white,1);
 						}
 					}
 				}
 				
 				yDiff += 5;
-			}
+			//}
 		}
 		#endregion
 		#region Dash Charges
@@ -399,6 +407,12 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			var iX = 57 + xDiff,
 				iY = 4;
 			
+			var _equipIndex = equipIndex;
+			if(state == State.Morph && item[Item.PowerBomb])
+			{
+				_equipIndex = Equipment.PowerBomb;
+			}
+			
 			#region Visor Icon
 			
 			if(HasVisor(visorIndex))
@@ -420,16 +434,11 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			}
 			
 			#endregion
-			#region Weapon Icon
+			#region Equipment Icon
 			
-			var _weapIndex = weapIndex;
-			if(state == State.Morph && item[Item.PowerBomb])
+			if(HasEquipment(_equipIndex))
 			{
-				_weapIndex = Weapon.PowerBomb;
-			}
-			if(HasWeapon(_weapIndex))
-			{
-				var hItem = weap[_weapIndex],
+				var hItem = equip[_equipIndex],
 					hSprt = hItem.hudIconSprt;
 				
 				var ww = sprite_get_width(hSprt),
@@ -440,7 +449,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				draw_set_color(c_white);
 				draw_set_alpha(1);
 				
-				draw_sprite_ext(hSprt, weapSelected, iX+sprite_get_xoffset(hSprt), iY+sprite_get_yoffset(hSprt), 1,1,0,c_white,1);
+				draw_sprite_ext(hSprt, equipSelected, iX+sprite_get_xoffset(hSprt), iY+sprite_get_yoffset(hSprt), 1,1,0,c_white,1);
 				
 				iX += 22;
 			}
@@ -448,15 +457,31 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			#endregion
 			#region Ammo Icons
 			
-			for(var i = 0; i < array_length(weap); i++)
+			for(var i = 0; i < EquipAmmoType._Length; i++)
 			{
-				if(HasWeapon(i) && weap[i].GetAmmo != undefined)
+				var aIcon = equipAmmoIcon[i];
+				
+				var hasEquip = false;
+				var eqSelected = false;
+				for(var j = 0; j < array_length(aIcon.equipIndexes); j++)
 				{
-					var hItem = weap[i],
-						hSprt = hItem.ammoIconSprt,
+					var eqInd = aIcon.equipIndexes[j];
+					if(self.HasEquipment(eqInd) && aIcon.GetAmmo != undefined)
+					{
+						hasEquip = true;
+						if(_equipIndex == eqInd && equipSelected)
+						{
+							eqSelected = true;
+							break;
+						}
+					}
+				}
+				if(hasEquip)
+				{
+					var hSprt = aIcon.ammoIconSprt,
 						ww = sprite_get_width(hSprt),
 						hh = sprite_get_height(hSprt),
-						backW = ww+5 + 6*weap[i].ammoDigits;
+						backW = ww+5 + 6*aIcon.ammoDigits;
 					
 					draw_set_color(bgCol);
 					draw_set_alpha(bgAlph);
@@ -466,25 +491,25 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					draw_roundrect_ext(iX, iY, iX+backW, iY+hh, 4, 4, false);
 					draw_set_color(c_white);
 					
-					draw_sprite_ext(hSprt, (_weapIndex == i && weapSelected), iX+sprite_get_xoffset(hSprt), iY+sprite_get_yoffset(hSprt), 1,1,0,c_white,1);
+					draw_sprite_ext(hSprt, eqSelected, iX+sprite_get_xoffset(hSprt), iY+sprite_get_yoffset(hSprt), 1,1,0,c_white,1);
 					
-					var ammo = hItem.GetAmmo(),
+					var ammo = aIcon.GetAmmo(),
 						aX = iX+backW-9,
 						aY = iY+1;
 					var col2 = c_white;
-					if(ammo >= hItem.GetAmmoMax())
+					if(ammo >= aIcon.GetAmmoMax())
 					{
 						col2 = c_lime;
 					}
 					
 					draw_sprite_ext(sprt_HUD_NumFont2, ammo, aX, aY, 1,1,0,col2,1);
-					if(hItem.ammoDigits > 1)
+					if(aIcon.ammoDigits > 1)
 					{
 						aX -= 6;
 						var ammo2 = floor(ammo/10);
 						draw_sprite_ext(sprt_HUD_NumFont2, ammo2, aX, aY, 1,1,0,col2,1);
 					}
-					if(hItem.ammoDigits > 2)
+					if(aIcon.ammoDigits > 2)
 					{
 						aX -= 6;
 						var ammo3 = floor(ammo/100);
@@ -720,7 +745,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			if(item[Item.AccelDash])
 			{
 				var _meterY = yy+yDiff+8;
-				if(item[Item.SpeedBooster] || (stateFrame == State.Morph && item[Item.BoostBall]))
+				if(item[Item.SpeedBooster] || (animState == AnimState.Morph && item[Item.BoostBall]))
 				{
 					_meterY += 5;
 				}
@@ -751,7 +776,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				}
 			}
 			
-			if(item[Item.SpeedBooster] || (stateFrame == State.Morph && item[Item.BoostBall]))
+			if(item[Item.SpeedBooster] || (animState == AnimState.Morph && item[Item.BoostBall]))
 			{
 				var _meterY = yy+yDiff+8;
 				var width = sprite_get_width(sprt_UI_SpeedMeter);
@@ -772,7 +797,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					}
 				}
 				
-				if(stateFrame == State.Morph && item[Item.BoostBall] && boostBallCharge > 0)
+				if(animState == AnimState.Morph && item[Item.BoostBall] && boostBallCharge > 0)
 				{
 					width = sprite_get_width(sprt_UI_SpeedMeter);
 					if(SpiderActive())
@@ -972,7 +997,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				    {
 				        draw_sprite_ext(sprt_UI_HWepSlot,(hudSlot == 1),floor(vX2+94),floor(vY+10),1,1,0,c_white,1);
 				        var iconIndex = hudSlotItem[1];
-				        if(stateFrame == State.Morph && item[Item.PowerBomb])
+				        if(animState == AnimState.Morph && item[Item.PowerBomb])
 				        {
 				            iconIndex = 2;
 				        }
@@ -1128,7 +1153,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
     
 				    if(item[Item.Missile])
 				    {
-				        draw_sprite_ext(sprt_UI_HAmmoIcon,(hudSlot == 1 && hudSlotItem[1] == 0 && stateFrame != State.Morph),floor(vX2+110),floor(vY+4),1,1,0,c_white,1);
+				        draw_sprite_ext(sprt_UI_HAmmoIcon,(hudSlot == 1 && hudSlotItem[1] == 0 && animState != AnimState.Morph),floor(vX2+110),floor(vY+4),1,1,0,c_white,1);
 			
 						var col2 = c_white;
 						if(missileStat >= missileMax)
@@ -1144,7 +1169,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				    }
 				    if(item[Item.SuperMissile])
 				    {
-				        draw_sprite_ext(sprt_UI_HAmmoIcon,2+(hudSlot == 1 && hudSlotItem[1] == 1 && stateFrame != State.Morph),floor(vX2+150),floor(vY+4),1,1,0,c_white,1);
+				        draw_sprite_ext(sprt_UI_HAmmoIcon,2+(hudSlot == 1 && hudSlotItem[1] == 1 && animState != AnimState.Morph),floor(vX2+150),floor(vY+4),1,1,0,c_white,1);
     
 				        var col2 = c_white;
 						if(superMissileStat >= superMissileMax)
@@ -1158,7 +1183,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				    }
 				    if(item[Item.PowerBomb])
 				    {
-				        draw_sprite_ext(sprt_UI_HAmmoIcon,4+(hudSlot == 1 && (hudSlotItem[1] == 2 || stateFrame == State.Morph)),floor(vX2+184),floor(vY+4),1,1,0,c_white,1);
+				        draw_sprite_ext(sprt_UI_HAmmoIcon,4+(hudSlot == 1 && (hudSlotItem[1] == 2 || animState == AnimState.Morph)),floor(vX2+184),floor(vY+4),1,1,0,c_white,1);
     
 						var col2 = c_white;
 						if(powerBombStat >= powerBombMax)
@@ -1242,7 +1267,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 								}
 							}
 							var index = 0;
-							if((hudSlotItem[1] == i && (global.HUD == 0 || stateFrame != State.Morph)) || (global.HUD == 1 && stateFrame == State.Morph && i == 2))
+							if((hudSlotItem[1] == i && (global.HUD == 0 || animState != AnimState.Morph)) || (global.HUD == 1 && animState == AnimState.Morph && i == 2))
 							{
 								if(global.HUD == 1)
 								{

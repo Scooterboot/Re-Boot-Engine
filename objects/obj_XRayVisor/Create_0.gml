@@ -242,7 +242,11 @@ function xray_redraw_outline()
 		_t = -camy,
 		_b = room_height-camy;
 	
-	draw_rectangle(_l, _t, _r-1, _b-1, true);
+	draw_rectangle(_l-2, _t-2, _r+2, _t, false);
+	draw_rectangle(_l-2, _b, _r+2, _b+2, false);
+	
+	draw_rectangle(_l-2, _t-2, _l, _b+2, false);
+	draw_rectangle(_r, _t-2, _r+2, _b+2, false);
 	
 	draw_set_color(c_white);
 

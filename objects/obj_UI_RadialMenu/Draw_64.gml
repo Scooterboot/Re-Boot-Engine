@@ -40,80 +40,82 @@ if(room != rm_MainMenu && pauseAnim > 0)
 		}
 	}
 	
-	draw_sprite_ext(sprt_UI_Radial_BG, 0, scr_round(centX), scr_round(centY), 1, 1, 0, c_white, 0.5*alph*stateAnim[RadialState.WeaponMenu]);
+	#region Base
+	
+	draw_sprite_ext(sprt_UI_Radial_BG, 0, scr_round(centX), scr_round(centY), 1, 1, 0, c_white, 0.5*alph*stateAnim[RadialState.EquipMenu]);
 	draw_sprite_ext(sprt_UI_Radial_BG, 1, scr_round(centX), scr_round(centY), 1, 1, 0, c_white, 0.5*alph*stateAnim[RadialState.BeamMenu]);
 	draw_sprite_ext(sprt_UI_Radial_BG, 2, scr_round(centX), scr_round(centY), 1, 1, 0, c_white, 0.5*alph*stateAnim[RadialState.VisorMenu]);
 	
 	var sflag = (state != RadialState.VisorMenu);
-	var lstr = obj_UIHandler.InsertIconsIntoString(changeMenuText_L);
+	var lstr = obj_UI.InsertIconsIntoString(changeMenuText_L);
 	if(changeMenuScrib_L.get_text() != lstr)
 	{
 		changeMenuScrib_L.overwrite(lstr);
 	}
-	var lButtonPosX = centX - 68, lButtonPosY = centY;
-	var _ww = changeMenuScrib_L.get_width(),
-		_hh = changeMenuScrib_L.get_height();
+	var _ww = 38,
+		_hh = 16;
+	var lButtonPosX = centX - 68 - (_ww/2), lButtonPosY = centY;
 	
-	draw_sprite_stretched_ext(sprt_UI_GenericButton,1+2*sflag, lButtonPosX-_ww-3,lButtonPosY-_hh/2-3,_ww+6,_hh+6, c_white,alph);
-	draw_sprite_stretched_ext(sprt_UI_GenericButton,0+2*sflag, lButtonPosX-_ww-3,lButtonPosY-_hh/2-3,_ww+6,_hh+6, c_white,alph);
+	draw_sprite_stretched_ext(sprt_UI_GenericButton,1+2*sflag, lButtonPosX-(_ww/2)-3,lButtonPosY-_hh/2-3,_ww+6,_hh+6, c_white,alph);
+	draw_sprite_stretched_ext(sprt_UI_GenericButton,0+2*sflag, lButtonPosX-(_ww/2)-3,lButtonPosY-_hh/2-3,_ww+6,_hh+6, c_white,alph);
 	
 	changeMenuScrib_L.blend(c_black, alph);
-	changeMenuScrib_L.draw(lButtonPosX+1,lButtonPosY+1);
+	changeMenuScrib_L.draw(lButtonPosX-1+1,lButtonPosY+1+1);
 	changeMenuScrib_L.blend(c_white, alph);
-	changeMenuScrib_L.draw(lButtonPosX,lButtonPosY);
+	changeMenuScrib_L.draw(lButtonPosX-1,lButtonPosY+1);
 	
 	sflag = (state != RadialState.BeamMenu);
-	var rstr = obj_UIHandler.InsertIconsIntoString(changeMenuText_R);
+	var rstr = obj_UI.InsertIconsIntoString(changeMenuText_R);
 	if(changeMenuScrib_R.get_text() != rstr)
 	{
 		changeMenuScrib_R.overwrite(rstr);
 	}
-	lButtonPosX = centX + 68;
-	_ww = changeMenuScrib_R.get_width();
-	_hh = changeMenuScrib_R.get_height();
+	lButtonPosX = centX + 68 + (_ww/2);
 	
-	draw_sprite_stretched_ext(sprt_UI_GenericButton,1+2*sflag, lButtonPosX-3,lButtonPosY-_hh/2-3,_ww+6,_hh+6, c_white,alph);
-	draw_sprite_stretched_ext(sprt_UI_GenericButton,0+2*sflag, lButtonPosX-3,lButtonPosY-_hh/2-3,_ww+6,_hh+6, c_white,alph);
+	draw_sprite_stretched_ext(sprt_UI_GenericButton,1+2*sflag, lButtonPosX-(_ww/2)-3,lButtonPosY-_hh/2-3,_ww+6,_hh+6, c_white,alph);
+	draw_sprite_stretched_ext(sprt_UI_GenericButton,0+2*sflag, lButtonPosX-(_ww/2)-3,lButtonPosY-_hh/2-3,_ww+6,_hh+6, c_white,alph);
 	
 	changeMenuScrib_R.blend(c_black, alph);
-	changeMenuScrib_R.draw(lButtonPosX+1,lButtonPosY+1);
+	changeMenuScrib_R.draw(lButtonPosX-1+1,lButtonPosY+1+1);
 	changeMenuScrib_R.blend(c_white, alph);
-	changeMenuScrib_R.draw(lButtonPosX, lButtonPosY);
+	changeMenuScrib_R.draw(lButtonPosX-1,lButtonPosY+1);
+	
+	#endregion
 	
 	slotAnim = scr_wrap(slotAnim+0.5, 0, 2);
 	
 	var dist = radialSize * scale;
 	var hMoveDir = InputDirection(0, INPUT_CLUSTER.RadialUIMove),
-		hMoveDist = InputDistance(INPUT_CLUSTER.RadialUIMove),// * dist,
+		hMoveDist = InputDistance(INPUT_CLUSTER.RadialUIMove) * radialSize,
 		cursorAnimFlag = false;
-	hMoveDist = radialSize * power(hMoveDist, 2);
 	
 	draw_set_font(fnt_Menu);
 	draw_set_halign(fa_center);
 	draw_set_valign(fa_middle);
 	
-	if(stateAnim[RadialState.WeaponMenu] > 0)
+	#region Equipment Menu
+	if(stateAnim[RadialState.EquipMenu] > 0)
 	{
-		var anim = stateAnim[RadialState.WeaponMenu],
+		var anim = stateAnim[RadialState.EquipMenu],
 			anim2 = stateAnim[RadialState.BeamMenu],
 			anim3 = stateAnim[RadialState.VisorMenu];
 		
-		if(player.HasWeapon(curWeap))
+		if(player.HasEquipment(curEquip))
 		{
 			draw_set_alpha(anim*alph);
 			draw_set_color(c_black);
-			draw_text_ext(centX+1,centY+1, weapName[curWeap], 10,64);
+			draw_text_ext(centX+1,centY+1, equipName[curEquip], 10,64);
 			draw_set_color(c_white);
-			draw_text_ext(centX,centY, weapName[curWeap], 10,64);
+			draw_text_ext(centX,centY, equipName[curEquip], 10,64);
 			draw_set_alpha(1);
 		}
 		
-		var _len = ds_list_size(global.weaponRadial),
+		var _len = ds_list_size(global.equipRadial),
 			_rad = 360/_len;
 		
 		for(var i = 0; i < _len; i++)
 		{
-			var wepInd = global.weaponRadial[| i];
+			var wepInd = global.equipRadial[| i];
 			if(!is_undefined(wepInd))
 			{
 				var dir = 90 - _rad*i - 120*(anim2 - anim3);
@@ -121,29 +123,31 @@ if(room != rm_MainMenu && pauseAnim > 0)
 					itemY = centY + lengthdir_y(dist*anim,dir);
 				
 				var subImg = 0;
-				if(player.HasWeapon(wepInd) && hMoveDist >= radialMin && abs(angle_difference(dir,hMoveDir)) < (_rad/2))
+				if(player.HasEquipment(wepInd) && hMoveDist >= radialMin && abs(angle_difference(dir,hMoveDir)) < (_rad/2))
 				{
 					subImg = 1 + floor(slotAnim);
 					cursorAnimFlag = true;
 				}
 				draw_sprite_ext(sprt_UI_Radial_Slot, subImg, scr_round(itemX), scr_round(itemY), 1, 1, 0, c_white, 0.9*alph*anim);
 				
-				if(player.HasWeapon(wepInd))
+				if(player.HasEquipment(wepInd))
 				{
 					subImg = 0;
-					if(player.weapIndex == wepInd)
+					if(player.equipIndex == wepInd)
 					{
 						subImg = 2;
-						if(player.weapSelected)
+						if(player.equipSelected)
 						{
 							subImg = 1;
 						}
 					}
-					draw_sprite_ext(player.weap[wepInd].selectIconSprt, subImg, scr_round(itemX), scr_round(itemY), 1, 1, 0, c_white, alph*anim);
+					draw_sprite_ext(player.equip[wepInd].selectIconSprt, subImg, scr_round(itemX), scr_round(itemY), 1, 1, 0, c_white, alph*anim);
 				}
 			}
 		}
 	}
+	#endregion
+	#region Beam Menu
 	if(stateAnim[RadialState.BeamMenu] > 0)
 	{
 		var anim = stateAnim[RadialState.BeamMenu];
@@ -158,7 +162,7 @@ if(room != rm_MainMenu && pauseAnim > 0)
 			draw_set_alpha(1);
 		}
 		
-		var btStr = obj_UIHandler.InsertIconsIntoString(beamToggleText);
+		var btStr = obj_UI.InsertIconsIntoString(beamToggleText);
 		if(beamToggleScrib.get_text() != btStr)
 		{
 			beamToggleScrib.overwrite(btStr);
@@ -200,6 +204,8 @@ if(room != rm_MainMenu && pauseAnim > 0)
 			}
 		}
 	}
+	#endregion
+	#region Visor Menu
 	if(stateAnim[RadialState.VisorMenu] > 0)
 	{
 		var anim = stateAnim[RadialState.VisorMenu];
@@ -239,13 +245,18 @@ if(room != rm_MainMenu && pauseAnim > 0)
 					subImg = 0;
 					if(player.visorIndex == visInd)
 					{
-						subImg = 1;
+						subImg = 2;
+						if(player.visorSelected)
+						{
+							subImg = 1;
+						}
 					}
 					draw_sprite_ext(player.visor[visInd].selectIconSprt, subImg, scr_round(itemX), scr_round(itemY), 1, 1, 0, c_white, alph*anim);
 				}
 			}
 		}
 	}
+	#endregion
 	
 	if(cursorAnimFlag)
 	{
@@ -279,5 +290,7 @@ else
 	{
 		stateAnim[i] = 0;
 	}
-	stateAnim[RadialState.WeaponMenu] = 1;
+	stateAnim[RadialState.EquipMenu] = 1;
+	slotAnim = 0;
+	cursorAnim = 0;
 }

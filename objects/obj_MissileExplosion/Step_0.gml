@@ -1,7 +1,10 @@
-if(explode <= 0)
+if(explode <= 5)
 {
-	self.TileInteract(x,y);
-	self.TileInteract(x-sourceVelX,y-sourceVelY);
+	if(explode <= 0)
+	{
+		self.TileInteract(x,y);
+		self.TileInteract(x-sourceVelX,y-sourceVelY);
+	}
 	
 	self.DamageBoxes();
 	

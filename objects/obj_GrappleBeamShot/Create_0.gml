@@ -1,5 +1,7 @@
 event_inherited();
 
+InitControlVars("player");
+
 damageType = DmgType.Misc;
 damageSubType = array_create(DmgSubType_Misc._Length,false);
 damageSubType[DmgSubType_Misc.All] = true;
@@ -33,8 +35,6 @@ grapFrame = 0;
 direction = 0;
 speed = 0;
 image_speed = 0.5;
-
-drawGrapDelay = 1;
 
 //timeLeft = 8;
 

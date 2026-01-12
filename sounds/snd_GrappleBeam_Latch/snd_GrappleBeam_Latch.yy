@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.116077,
+  "duration":0.116077095,
   "exportDir":"",
   "name":"snd_GrappleBeam_Latch",
   "parent":{

@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":3.589342,
+  "duration":3.5893424,
   "exportDir":"",
   "name":"snd_BoostBall_Charge",
   "parent":{

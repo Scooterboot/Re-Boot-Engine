@@ -78,7 +78,7 @@ if(room == rm_MainMenu)
 		{
 			if(!instance_exists(mainMenuPanel))
 			{
-				CreateMainMenuPanel();
+				self.CreateMainMenuPanel();
 			}
 			else
 			{
@@ -109,7 +109,7 @@ if(room == rm_MainMenu)
 		{
 			if(!instance_exists(fileMenuPanel))
 			{
-				CreateFileMenuPanel();
+				self.CreateFileMenuPanel();
 			}
 			
 			switch(subState)

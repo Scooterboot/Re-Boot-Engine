@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.208798,
+  "duration":0.20879818,
   "exportDir":"",
   "name":"snd_ShineSpark_Charge",
   "parent":{

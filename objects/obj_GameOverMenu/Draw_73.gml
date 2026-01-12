@@ -93,7 +93,7 @@ if(room == rm_GameOver)
 		//buttonTipString = buttonTipString + "   ${menuCancelButton} - "+buttonTip[2];
 		_tipStr = buttonTipString[1];
 	}
-	var str = obj_UIHandler.InsertIconsIntoString(_tipStr);
+	var str = obj_UI.InsertIconsIntoString(_tipStr);
 	if(buttonTipScrib.get_text() != str)
 	{
 		buttonTipScrib.overwrite(str);

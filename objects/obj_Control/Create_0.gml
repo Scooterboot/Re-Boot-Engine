@@ -50,16 +50,16 @@ function ControlInput(_verbIndex, _keyboardPressType, _keyboardComboType, _gamep
 		}
 		else
 		{
-			_input = InputCheck_Alt(verbIndex, 0);
+			_input = InputCheck_Ext(verbIndex, 0);
 			if(!is_undefined(InputBindingGet(InputPlayerUsingGamepad(), verbIndex, 1)))
 			{
 				if(comboType == ComboType.And)
 				{
-					_input &= InputCheck_Alt(verbIndex, 1);
+					_input &= InputCheck_Ext(verbIndex, 1);
 				}
 				if(comboType == ComboType.AndNot)
 				{
-					_input &= !InputCheck_Alt(verbIndex, 1);
+					_input &= !InputCheck_Ext(verbIndex, 1);
 				}
 			}
 		}
@@ -152,6 +152,10 @@ ini_open("settings.ini");
 	
 	global.grappleAimAssist = ini_read_real("Controls", "grapple aim assist", true);
 ini_close();
+
+// temp
+InputPlayerSetMinThreshold(INPUT_THRESHOLD.BOTH, 0.35);
+InputPlayerSetMaxThreshold(INPUT_THRESHOLD.BOTH, 0.9);
 
 
 

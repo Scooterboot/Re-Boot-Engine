@@ -114,32 +114,35 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 	camLimitMax_Top = camLimitDefault_Top;
 	camLimitMax_Bottom = camLimitDefault_Bottom;
 	
-	var _spX = abs(player.velX),
-		_spXMin = player.maxSpeed[MaxSpeed.Sprint,0],
-		_spXMax = player.maxSpeed[MaxSpeed.SpeedBoost,0];
-	_spX = max(_spX - _spXMin, 0);
-	_spXMax = max(_spXMax - _spXMin, 1);
-	var _spXNum = clamp((_spX / _spXMax)*2, 0, 1);
-	
-	if(abs(player.velX) > _spXMin && _spXNum > 0)
+	if(!player.GrappleActive())
 	{
-		var _lNumX = lerp(0, camLimit_ExtraX, _spXNum);
-		camLimitMax_Left -= _lNumX;
-		camLimitMax_Right += _lNumX;
-	}
-	
-	var _spY = abs(player.velY),
-		_spYMin = max(player.jumpSpeed[1,0], player.fallSpeedMax),
-		_spYMax = player.maxSpeed[MaxSpeed.SpeedBoost,0];
-	_spY = max(_spY - _spYMin, 0);
-	_spYMax = max(_spYMax - _spYMin, 1);
-	var _spYNum = clamp(_spY / _spYMax, 0, 1);
-	
-	if(abs(player.velY) > _spYMin && _spYNum > 0)
-	{
-		var _lNumY = lerp(0, camLimit_ExtraY, _spYNum);
-		camLimitMax_Top -= _lNumY;
-		camLimitMax_Bottom += _lNumY;
+		var _spX = abs(player.velX),
+			_spXMin = max(player.maxSpeed[MaxSpeed.Sprint,0], player.maxSpeed[MaxSpeed.MockBall,0]),
+			_spXMax = player.maxSpeed[MaxSpeed.SpeedBoost,0];
+		_spX = max(_spX - _spXMin, 0);
+		_spXMax = max(_spXMax - _spXMin, 1);
+		var _spXNum = clamp((_spX / _spXMax)*2, 0, 1);
+		
+		if(abs(player.velX) > _spXMin && _spXNum > 0)
+		{
+			var _lNumX = lerp(0, camLimit_ExtraX, _spXNum);
+			camLimitMax_Left -= _lNumX;
+			camLimitMax_Right += _lNumX;
+		}
+		
+		var _spY = abs(player.velY),
+			_spYMin = max(player.jumpSpeed[1,0], player.fallSpeedMax),
+			_spYMax = player.maxSpeed[MaxSpeed.SpeedBoost,0];
+		_spY = max(_spY - _spYMin, 0);
+		_spYMax = max(_spYMax - _spYMin, 1);
+		var _spYNum = clamp(_spY / _spYMax, 0, 1);
+		
+		if(abs(player.velY) > _spYMin && _spYNum > 0)
+		{
+			var _lNumY = lerp(0, camLimit_ExtraY, _spYNum);
+			camLimitMax_Top -= _lNumY;
+			camLimitMax_Bottom += _lNumY;
+		}
 	}
 	
 	var bossNum = instance_number(obj_NPC_Boss);
@@ -157,13 +160,12 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 		}
 	}
 	
-	if(player.GrappleActive() || player.state == State.Elevator || (player.state == State.Morph && player.SpiderActive()))
+	if(player.GrappleActive() || (player.state == State.Morph && player.SpiderActive()))
 	{
 		xDir = 0;
 		yDir = 0;
 		targetX = playerX;
 		targetY = playerY;
-		camLimSpd = 1;
 		if(player.state == State.Morph && player.SpiderActive() && !player.GrappleActive())
 		{
 			camLimSpd = 0.5;
@@ -176,10 +178,27 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 	}
 	if(player.VisorSelected(Visor.Scan) || player.VisorSelected(Visor.XRay))
 	{
-		camLimitMax_Left = -32;
-		camLimitMax_Right = 32;
-		camLimitMax_Top = -32;
-		camLimitMax_Bottom = 32;
+		//camLimitMax_Left = -32;
+		//camLimitMax_Right = 32;
+		//camLimitMax_Top = -32;
+		//camLimitMax_Bottom = 32;
+		
+		camLimitMax_Left = camLimitDefault_Left - camLimit_ExtraX;
+		camLimitMax_Right = camLimitDefault_Right + camLimit_ExtraX;
+		camLimitMax_Top = camLimitDefault_Top - camLimit_ExtraY;
+		camLimitMax_Bottom = camLimitDefault_Bottom + camLimit_ExtraY;
+	}
+	
+	if(player.state == State.Elevator)
+	{
+		xDir = 0;
+		yDir = 0;
+		targetX = playerX;
+		targetY = playerY;
+		camLimitMax_Left = 0;
+		camLimitMax_Right = 0;
+		camLimitMax_Top = 0;
+		camLimitMax_Bottom = 0;
 	}
 	
 	camLimit_Left = CamLimitIncr(camLimit_Left, camLimitMax_Left, camLimSpd, xx-prevPlayerX);
@@ -193,13 +212,15 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 		{
 			var xdif = scr_round((player.scanVisor.GetRoomX() - prevPlayerX)*0.5),
 				ydif = scr_round((player.scanVisor.GetRoomY() - prevPlayerY)*0.5);
-			targetX = prevPlayerX + min(abs(xdif), 32) * sign(xdif);
-			targetY = prevPlayerY + min(abs(ydif), 32) * sign(ydif);
+			targetX = prevPlayerX + clamp(xdif, camLimitMax_Left, camLimitMax_Right);
+			targetY = prevPlayerY + clamp(ydif, camLimitMax_Top, camLimitMax_Bottom);
 		}
 		if(player.VisorSelected(Visor.XRay))
 		{
-			targetX = prevPlayerX + scr_round(lengthdir_x(32,player.xrayVisor.coneDir));
-			targetY = prevPlayerY + scr_round(lengthdir_y(32,player.xrayVisor.coneDir));
+			var _lx = lengthdir_x(1,player.xrayVisor.coneDir),
+				_ly = lengthdir_y(1,player.xrayVisor.coneDir);
+			targetX = prevPlayerX + scr_round(_lx * (_lx < 0 ? abs(camLimitMax_Left) : abs(camLimitMax_Right)));
+			targetY = prevPlayerY + scr_round(_ly * (_ly < 0 ? abs(camLimitMax_Top) : abs(camLimitMax_Bottom)));
 		}
 		
 		var num2 = 2 + scr_floor(abs(targetX-xx) / 7);

@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.199546,
+  "duration":0.19954649,
   "exportDir":"",
   "name":"snd_MorphLocked",
   "parent":{

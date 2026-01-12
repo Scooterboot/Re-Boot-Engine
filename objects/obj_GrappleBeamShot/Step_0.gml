@@ -6,6 +6,8 @@ if(global.GamePaused())
     exit;
 }
 
+SetControlVars("player");
+
 var player = creator;
 if(!instance_exists(player))
 {
@@ -58,14 +60,14 @@ if(grappleState != GrappleState.None)
 		{
 	        if(!stateChanged && player.state != State.Grapple)
 	        {
-	            if(player.stateFrame == State.Grip)
+	            if(player.animState == AnimState.Grip)
 	            {
 	                player.dir *= -1;
 	                player.dirFrame = 4*dir;
 	            }
 	            player.grappleDist = point_distance(player.position.X, player.position.Y, x, y);
 	            player.grapAngle = point_direction(player.position.X, player.position.Y, x, y) - 90;
-				player.ChangeState(State.Grapple,State.Grapple,mask_Player_Somersault,false,true);
+				player.ChangeState(State.Grapple, AnimState.Grapple, MoveState.Custom, mask_Player_Somersault, false, true);
 				stateChanged = true;
 	        }
 			if(grapBlock.object_index == obj_GrappleBlockCracked)
@@ -84,14 +86,14 @@ if(grappleState != GrappleState.None)
 				}
 				else if(!stateChanged)
 				{
-					if(player.stateFrame == State.Grip)
+					if(player.animState == AnimState.Grip)
 		            {
 		                player.dir *= -1;
 		                player.dirFrame = 4*dir;
 		            }
 		            player.grappleDist = point_distance(player.position.X, player.position.Y, x, y);
 		            player.grapAngle = point_direction(player.position.X, player.position.Y, x, y) - 90;
-		            player.ChangeState(State.Grapple,State.Grapple,mask_Player_Somersault,false,true);
+		            player.ChangeState(State.Grapple, AnimState.Grapple, MoveState.Custom, mask_Player_Somersault, false, true);
 					grappleState = GrappleState.Swing;
 					stateChanged = true;
 				}
@@ -121,6 +123,16 @@ if(grappleState != GrappleState.None)
         instance_destroy();
 		exit;
     }
+	
+	if(!cFire && (player.state != State.Grapple || player.grapWJCounter <= 0))
+	{
+		if(player.state == State.Grapple)
+		{
+			player.shotDelayTime = 14;
+		}
+		instance_destroy();
+		exit;
+	}
 }
 else
 {
@@ -185,6 +197,10 @@ else
 		    {
 		        impacted = 1;
 		    }
+			else if(!cFire)
+			{
+				impacted = 1;
+			}
 		}
 		
 		for(var i = 0; i < point_distance(player.shootPosX,player.shootPosY,x,y); i++)
@@ -256,6 +272,9 @@ else
 	else
 	{
 		instance_destroy();
-		exit;
 	}
 }
+position.X = x;
+position.Y = y;
+
+SetReleaseVars("player");

@@ -6,7 +6,7 @@ image_index = 0;
 
 #region -- DEBUG --
 
-// enable/disable debug controls - synced with obj_Display's debug variable
+// enable/disable debug controls - synced with obj_Debug's debug variable
 debug = false;
 // press 0 to refill health & ammo
 // press 9 to face toward screen / activate elevator pose
@@ -118,10 +118,6 @@ enum State
 	Elevator,
 	Recharge,
 	Crouch,
-	Walk,
-	Moon,
-	Run,
-	Brake,
 	Morph,
 	Jump,
 	Somersault,
@@ -129,14 +125,14 @@ enum State
 	Spark,
 	BallSpark,
 	Grapple,
+	GravGrapple,
 	Hurt,
 	DmgBoost,
 	Death,
 	Dodge,
-	CrystalFlash,
-	Push
+	CrystalFlash
 };
-state = State.Stand; //stand, crouch, morph, jump, somersault, grip, spark, ballSpark, grapple, hurt
+state = State.Stand;
 prevState = state;
 lastState = prevState;
 
@@ -231,11 +227,11 @@ shineLauncherStart = 0;
 	due to the existence of omni-directional reflec panels.
 */
 function GetSparkDir() { return scr_wrap(shineDir+shineDirDiff,-180,180); }
-function SparkDir_VertUp() { return abs(GetSparkDir()) > 157.5; }
-function SparkDir_DiagUp() { return abs(GetSparkDir()) >= 112.5 && abs(GetSparkDir()) <= 157.5; }
-function SparkDir_Hori() { return abs(GetSparkDir()) > 67.5 && abs(GetSparkDir()) < 112.5; }
-function SparkDir_DiagDown() { return abs(GetSparkDir()) >= 22.5 && abs(GetSparkDir()) <= 67.5; }
-function SparkDir_VertDown() { return abs(GetSparkDir()) < 22.5; }
+function SparkDir_VertUp() { return abs(self.GetSparkDir()) > 157.5; }
+function SparkDir_DiagUp() { return abs(self.GetSparkDir()) >= 112.5 && abs(self.GetSparkDir()) <= 157.5; }
+function SparkDir_Hori() { return abs(self.GetSparkDir()) > 67.5 && abs(self.GetSparkDir()) < 112.5; }
+function SparkDir_DiagDown() { return abs(self.GetSparkDir()) >= 22.5 && abs(self.GetSparkDir()) <= 67.5; }
+function SparkDir_VertDown() { return abs(self.GetSparkDir()) < 22.5; }
 
 shineReflecCounter = 0;
 
@@ -340,22 +336,6 @@ outOfLiquid = (liquidState == 0);
 liquidLevel = 0;
 //gunLiquidLevel = 0;
 
-statCharge = 0;
-maxCharge = 60;
-
-shootDir = 0;
-shootSpeed = 10;//8;
-
-shotDelayTime = 0;
-bombDelayTime = 0;
-
-enqueShot = false;
-
-waveDir = 1;
-
-immune = false;
-constantDamageDelay = 0;
-
 grapple = noone;
 grappleDist = 0;
 grappleOldDist = 0;
@@ -382,6 +362,11 @@ grapWallBounceCounter = 0;
 prevGrapVelocity = 0;
 
 grapReticle = noone;
+
+gravGrapple = noone;
+gravGrapDist = 0;
+gravGrapAngle = 0;
+gravGrapRotAnim = 0;
 
 cFlashStartCounter = 0;
 cFlashStartMove = 0;
@@ -476,7 +461,7 @@ enum MoveSpeed
 // Out of water
 moveSpeed[MoveSpeed.Normal,0]			= 0.1875;
 moveSpeed[MoveSpeed.Sprint,0]			= 0.0625;
-moveSpeed[MoveSpeed.WallJump,0]			= 1.375;
+moveSpeed[MoveSpeed.WallJump,0]			= 0.5625;//1.375;
 moveSpeed[MoveSpeed.ClingWallJump,0]	= 2.25;
 moveSpeed[MoveSpeed.Spark,0]			= 0.109375;
 moveSpeed[MoveSpeed.Dodge,0]			= 2.25;
@@ -549,8 +534,8 @@ jumpSpeed[4,0] = 4;		// Damage Boost	 - (SM: 5)
 // Underwater
 jumpSpeed[0,1] = 1.75;	// Normal Jump
 jumpSpeed[1,1] = 2.5;	// Hi Jump
-jumpSpeed[2,1] = 1.375;	// Wall Jump	 - (SM: 0.25)
-jumpSpeed[3,1] = 1.5;	// Hi Wall Jump	 - (SM: 0.5)
+jumpSpeed[2,1] = 1.34375;//1.375;	// Wall Jump	 - (SM: 0.25)
+jumpSpeed[3,1] = 1.46875;//1.5;	// Hi Wall Jump	 - (SM: 0.5)
 jumpSpeed[4,1] = 2;		// Damage Boost
 // In lava/acid
 jumpSpeed[0,2] = 2;		// Normal Jump	 - (SM: 2.75)
@@ -560,14 +545,26 @@ jumpSpeed[3,2] = 1.5;	// Hi Wall Jump	 - (SM: 3.5)
 jumpSpeed[4,2] = 2;		// Damage Boost
 
 // Out of water
-jumpHeight[0,0] = 2; // Normal
-jumpHeight[1,0] = 2; // Hi Jump
+jumpHeight[0,0] = 1; // Normal
+jumpHeight[1,0] = 1; // Hi Jump
+jumpHeight[2,0] = 1; // Wall Jump (Normal)
+jumpHeight[3,0] = 1; // Wall Jump (Hi Jump)
+jumpHeight[4,0] = 4; // Crouch Jump (Normal)
+jumpHeight[5,0] = 4; // Crouch Jump (Hi Jump)
 // Underwater
-jumpHeight[0,1] = 2; // Normal
-jumpHeight[1,1] = 2; // Hi Jump
+jumpHeight[0,1] = 1; // Normal
+jumpHeight[1,1] = 1; // Hi Jump
+jumpHeight[2,1] = 1; // Wall Jump (Normal)
+jumpHeight[3,1] = 1; // Wall Jump (Hi Jump)
+jumpHeight[4,1] = 4; // Crouch Jump (Normal)
+jumpHeight[5,1] = 4; // Crouch Jump (Hi Jump)
 // In lava/acid
-jumpHeight[0,2] = 2; // Normal
-jumpHeight[1,2] = 2; // Hi Jump
+jumpHeight[0,2] = 1; // Normal
+jumpHeight[1,2] = 1; // Hi Jump
+jumpHeight[2,2] = 1; // Wall Jump (Normal)
+jumpHeight[3,2] = 1; // Wall Jump (Hi Jump)
+jumpHeight[4,2] = 4; // Crouch Jump (Normal)
+jumpHeight[5,2] = 4; // Crouch Jump (Hi Jump)
 
 grav[0] = 0.109375;		// Out of water
 grav[1] = 0.03125;		// Underwater
@@ -575,7 +572,7 @@ grav[2] = 0.03515625;	// In lava/acid
 
 grapGrav[0] = 0.21875;		// Out of water
 grapGrav[1] = 0.0546;		// Underwater
-grapGrav[2] = 0.0615;	// In lava/acid
+grapGrav[2] = 0.0615;		// In lava/acid
 
 fallSpeedMax = 5; // Maximum fall speed - soft cap
 moonFallMax = 32;
@@ -584,14 +581,25 @@ moonFallMax = 32;
 spaceJumpFallThresh[0] = 2; // In Air
 spaceJumpFallThresh[1] = 2; // Underwater (with Grav) - SM: 1
 
-bombJumpMax[0] = 13;	// air
+bombJumpMax[0] = 12;	// air
 bombJumpMax[1] = 1;		// underwater
 bombJumpMax[2] = 1;//3;		// under lava/acid
 
-bombJumpSpeed[0] = 2;		// air
+bombJumpSpeed[0] = 1.890625;		// air
 bombJumpSpeed[1] = 1;		// underwater
 bombJumpSpeed[2] = 1;//0.01;	// under lava/acid
 
+// -- experimental --
+
+// grav increased by 8%
+//jumpSpeed[0,0] = 5.07;	// Normal Jump
+//jumpSpeed[1,0] = 6.24;	// Hi Jump
+//jumpSpeed[2,0] = 4.81;	// Wall Jump
+//jumpSpeed[3,0] = 5.72;	// Hi Wall Jump
+//jumpSpeed[4,0] = 4.16;	// Damage Boost
+//grav[0] = 0.118125;
+
+// -- --
 
 // -- (f)inalized variables --
 fMaxSpeed = maxSpeed[0,0];
@@ -599,7 +607,6 @@ fMoveSpeed = moveSpeed[0,0];
 fFrict = frict[0];
 fGrav = grav[0];
 fJumpSpeed = jumpSpeed[0,0];
-fJumpHeight = jumpHeight[0,0];
 
 
 // -- other variables --
@@ -607,6 +614,9 @@ jump = 0;
 jumping = false;
 jumpStart = false;
 jumpStop = !jumpStart;
+
+liqGrav = fGrav;
+liqGravShift = 0;
 
 coyoteJumpMax = 3;
 coyoteJump = coyoteJumpMax;
@@ -630,13 +640,100 @@ fVelY = 0;
 shiftX = 0;
 shiftY = 0;
 
+function MinimumBoostSpeed() { return lerp(maxSpeed[MaxSpeed.Sprint,liquidState], maxSpeed[MaxSpeed.SpeedBoost,liquidState], 0.75); }
+
 #endregion
+#region MoveState
+
+enum MoveState
+{
+	Normal,
+	Somersault,
+	Halted,
+	Custom
+}
+moveState = MoveState.Normal;
+
+function PerformMovement(_move, _moveSpd, _turnSpd, _frict, _maxSpd)
+{
+	if(_move >= 1)
+	{
+		if(velX <= _maxSpd)
+		{
+			if(velX < 0)
+			{
+				velX = min(velX + _turnSpd, 0);
+			}
+			else if(_move == 1)
+			{
+				velX = 0;
+			}
+			else
+			{
+				velX = min(velX + _moveSpd, _maxSpd);
+			}
+		}
+	}
+	if(_move <= -1)
+	{
+		if(velX >= -_maxSpd)
+		{
+			if(velX > 0)
+			{
+				velX = max(velX - _turnSpd, 0);
+			}
+			else if(_move == -1)
+			{
+				velX = 0;
+			}
+			else
+			{
+				velX = max(velX - _moveSpd, -_maxSpd);
+			}
+		}
+	}
+	
+	if(_move == 0 && _frict > 0)
+	{
+		if(velX > 0)
+		{
+			velX = max(velX - _frict, 0);
+		}
+		if(velX < 0)
+		{
+			velX = min(velX + _frict, 0);
+		}
+	}
+}
+
+#endregion
+
 #region Animation
 
-stateFrame = State.Stand;
-//stand, crouch, walk, run, brake, morph, jump, somersault, grip, spark, grapple, hurt
-prevStateFrame = stateFrame;
-lastStateFrame = prevStateFrame;
+enum AnimState
+{
+	Stand,
+	Walk,
+	Moon,
+	Run,
+	Brake,
+	Crouch,
+	Morph,
+	Jump,
+	Somersault,
+	Grip,
+	Spark,
+	Grapple,
+	GravGrapple,
+	Hurt,
+	DmgBoost,
+	Dodge,
+	CrystalFlash,
+	Push
+};
+animState = AnimState.Stand;
+prevAnimState = animState;
+lastAnimState = prevAnimState;
 
 dirFrame = 0;
 
@@ -668,9 +765,9 @@ enum Frame
 	SparkV,
 	SparkH,
 	SparkStart,
+	GrappleBody,
 	GrappleLeg,
 	Dodge,
-	GrappleBody,
 	CFlash,
 	Push,
 	
@@ -903,326 +1000,6 @@ screwSoundPlayed = false;
 heatDmgSnd = noone;
 
 #endregion
-#region Item Vars
-
-/*energyTanks = 14;
-missileTanks = 51;
-superMissileTanks = 15;
-powerBombTanks = 10;*/
-
-energyMax = 99;//1499;//99 + (100 * energyTanks);
-energy = energyMax;
-
-function GetLowEnergyThreshold()
-{
-	return max(30, floor(energyMax/100)*10);
-}
-lowEnergyThresh = GetLowEnergyThreshold();
-
-damageReduct = 1;
-
-missileMax = 0;//250;//5 * missileTanks;
-missileStat = missileMax;
-
-superMissileMax = 0;//50;//2 * superMissileTanks;
-superMissileStat = superMissileMax;
-
-powerBombMax = 0;//50;//2 * powerBombTanks;
-powerBombStat = powerBombMax;
-
-enum Item
-{
-	VariaSuit,
-	GravitySuit,
-	
-	ChargeBeam,
-	IceBeam,
-	WaveBeam,
-	Spazer,
-	PlasmaBeam,
-	
-	Missile,
-	SuperMissile,
-	PowerBomb,
-	GrappleBeam,
-	XRayVisor,
-	
-	PowerGrip,
-	HiJump,
-	SpaceJump,
-	ScrewAttack,
-	AccelDash,
-	SpeedBooster,
-	ChainSpark,
-	
-	MorphBall,
-	MBBomb,
-	SpringBall,
-	BoostBall,
-	MagniBall,
-	SpiderBall,
-	
-	ScanVisor,
-	
-	_Length
-}
-item = array_create(Item._Length);
-hasItem = array_create(Item._Length);
-
-// Set starting items here
-/* Example:
-item[Item.PowerGrip] = true;
-hasItem[Item.PowerGrip] = true;
-*/
-
-hyperBeam = false;
-
-
-//beam variables
-
-chargeMult = 5;
-beamDmg = 20;
-beamShot = obj_PowerBeamShot;
-beamCharge = obj_PowerBeamChargeShot;
-beamDelay = 6;
-beamChargeDelay = 18;
-beamChargeAnim = sprt_PowerBeamChargeAnim;
-beamSound = snd_PowerBeam_Shot;
-beamChargeSound = snd_PowerBeam_ChargeShot;
-beamAmt = 1;
-beamChargeAmt = 1;
-beamIconIndex = 0;
-
-beamIsWave = false;
-beamWaveStyleOffset = 1;
-
-beamFlare = sprt_PowerBeamChargeFlare;
-
-function CanCharge()
-{
-	if(!item[Item.ChargeBeam]) { return false; }
-	if(hyperBeam) { return false; }
-	if(WeaponSelected(Weapon.Missile)) { return false; }
-	if(WeaponSelected(Weapon.SuperMissile)) { return false; }
-	if(WeaponSelected(Weapon.GrappleBeam)) { return false; }
-	if(VisorSelected(Visor.Scan)) { return false; }
-	if(VisorSelected(Visor.XRay)) { return false; }
-	
-	return true;
-}
-
-#endregion
-#region HUD & Radial UI
-
-function EquipItem(_itemIndex, _hudIconSprt, _selectIconSprt, _getAmmo = undefined, _getAmmoMax = undefined, _ammoIconSprt = undefined, _ammoDigits = undefined) constructor
-{
-	itemIndex = _itemIndex;
-	hudIconSprt = _hudIconSprt;
-	selectIconSprt = _selectIconSprt;
-	
-	GetAmmo = _getAmmo;
-	GetAmmoMax = _getAmmoMax;
-	ammoIconSprt = _ammoIconSprt;
-	ammoDigits = _ammoDigits;
-}
-
-enum Weapon
-{
-	Missile,
-	SuperMissile,
-	PowerBomb,
-	GrappleBeam,
-	
-	_Length
-}
-weap = array_create(Weapon._Length, undefined);
-
-weap[Weapon.Missile] = new EquipItem(Item.Missile, sprt_HUD_Icon_Missile, sprt_UI_Radial_Icon_Missile,
-	function(){ return missileStat; }, function(){ return missileMax; }, sprt_HUD_AmmoIcon_Missile, 3);
-
-weap[Weapon.SuperMissile] = new EquipItem(Item.SuperMissile, sprt_HUD_Icon_SuperMissile, sprt_UI_Radial_Icon_SuperMissile,
-	function(){ return superMissileStat; }, function(){ return superMissileMax; }, sprt_HUD_AmmoIcon_SuperMissile, 2);
-
-weap[Weapon.PowerBomb] = new EquipItem(Item.PowerBomb, sprt_HUD_Icon_PowerBomb, sprt_UI_Radial_Icon_PowerBomb,
-	function(){ return powerBombStat; }, function(){ return powerBombMax; }, sprt_HUD_AmmoIcon_PowerBomb, 2);
-
-weap[Weapon.GrappleBeam] = new EquipItem(Item.GrappleBeam, sprt_HUD_Icon_GrappleBeam, sprt_UI_Radial_Icon_GrappleBeam);
-
-#region Weap functions
-function HasWeapon(_index)
-{
-	return (_index >= 0 && _index < array_length(weap) && is_struct(weap[_index]) && (weap[_index].itemIndex == undefined || item[weap[_index].itemIndex]));
-}
-function WeaponHasAmmo(_index)
-{
-	if(HasWeapon(_index))
-	{
-		var hWep = weap[_index],
-			ammo = 1;
-		if(hWep.GetAmmo != undefined)
-		{
-			ammo = hWep.GetAmmo();
-		}
-		return (ammo > 0);
-	}
-	return false;
-}
-function WeaponSelected(_index)
-{
-	return (WeaponHasAmmo(_index) && weapIndex == _index && weapSelected);
-}
-
-function WeapIndexNum()
-{
-	var numWeaps = 0;
-	for(var i = 0; i < Weapon._Length; i++)
-	{
-		if(HasWeapon(i))
-		{
-			numWeaps++;
-		}
-	}
-	if(numWeaps <= 0)
-	{
-		weapIndex = -1;
-		weapSelected = false;
-	}
-	else
-	{
-		if(!HasWeapon(weapIndex))
-		{
-			weapIndex = -1;
-			weapSelected = false;
-		}
-		if(weapIndex == -1)
-		{
-			for(var i = 0; i < Weapon._Length; i++)
-			{
-				if(HasWeapon(i))
-				{
-					weapIndex = i;
-					break;
-				}
-			}
-		}
-		else if(weapSelected && !WeaponHasAmmo(weapIndex))
-		{
-			weapSelected = false;
-			audio_play_sound(snd_MenuTick,0,false);
-		}
-	}
-	return numWeaps;
-}
-#endregion
-
-weapIndex = -1;
-weapSelected = false;
-WeapIndexNum();
-
-enum Visor
-{
-	Scan,
-	XRay,
-	
-	_Length
-}
-visor = array_create(Visor._Length, undefined);
-
-visor[Visor.Scan] = new EquipItem(Item.ScanVisor, sprt_HUD_Icon_ScanVisor, sprt_UI_Radial_Icon_ScanVisor);
-visor[Visor.XRay] = new EquipItem(Item.XRayVisor, sprt_HUD_Icon_XRayVisor, sprt_UI_Radial_Icon_XRayVisor);
-
-#region Visor functions
-function HasVisor(_index)
-{
-	return (_index >= 0 && _index < array_length(visor) && is_struct(visor[_index]) && (visor[_index].itemIndex == undefined || item[visor[_index].itemIndex]));
-}
-function VisorSelected(_index)
-{
-	if(HasVisor(_index))
-	{
-		var _flag = true;
-		if(_index == Visor.Scan)
-		{
-			_flag = instance_exists(scanVisor);
-		}
-		if(_index == Visor.XRay)
-		{
-			_flag = instance_exists(xrayVisor);
-		}
-		return (_flag && visorIndex == _index && visorSelected);
-	}
-	return false;
-}
-
-function VisorIndexNum()
-{
-	var numVisors = 0;
-	for(var i = 0; i < Visor._Length; i++)
-	{
-		if(HasVisor(i))
-		{
-			numVisors++;
-		}
-	}
-	if(numVisors <= 0)
-	{
-		visorIndex = -1;
-		visorSelected = false;
-	}
-	else
-	{
-		if(!HasVisor(visorIndex))
-		{
-			visorIndex = -1;
-			visorSelected = false;
-		}
-		if(visorIndex == -1)
-		{
-			for(var i = 0; i < Visor._Length; i++)
-			{
-				if(HasVisor(i))
-				{
-					visorIndex = i;
-					break;
-				}
-			}
-		}
-	}
-	return numVisors;
-}
-#endregion
-
-visorIndex = -1;
-visorSelected = false;
-VisorIndexNum();
-
-scanVisor = noone;
-xrayVisor = noone;
-
-enum Beam
-{
-	Charge,
-	Ice,
-	Wave,
-	Spazer,
-	Plasma,
-	
-	_Length
-}
-beam = array_create(Beam._Length, undefined);
-
-beam[Beam.Charge] = new EquipItem(Item.ChargeBeam, noone, sprt_UI_Radial_Icon_ChargeBeam);
-beam[Beam.Ice] = new EquipItem(Item.IceBeam, noone, sprt_UI_Radial_Icon_IceBeam);
-beam[Beam.Wave] = new EquipItem(Item.WaveBeam, noone, sprt_UI_Radial_Icon_WaveBeam);
-beam[Beam.Spazer] = new EquipItem(Item.Spazer, noone, sprt_UI_Radial_Icon_Spazer);
-beam[Beam.Plasma] = new EquipItem(Item.PlasmaBeam, noone, sprt_UI_Radial_Icon_PlasmaBeam);
-
-function HasBeam(_index)
-{
-	return (_index >= 0 && _index < array_length(beam) && is_struct(beam[_index]) && (beam[_index].itemIndex == undefined || hasItem[beam[_index].itemIndex]));
-}
-
-#endregion
 #region MB Trail
 
 mbTrailColor_Start = c_lime;
@@ -1278,7 +1055,7 @@ function AfterImage(_player, _alpha, _num) constructor
 		}
 		if(alpha <= 0)
 		{
-			Clear();
+			self.Clear();
 		}
 	}
 	
@@ -1341,6 +1118,770 @@ function SparkDistort(_alphaMult = 0.75, _colorMult = -0.25)
 }
 #endregion
 
+#region Item Vars
+
+/*energyTanks = 14;
+missileTanks = 51;
+superMissileTanks = 15;
+powerBombTanks = 10;*/
+
+energyMax = 99;//1499;//99 + (100 * energyTanks);
+energy = energyMax;
+
+function GetLowEnergyThreshold()
+{
+	return max(30, floor(energyMax/100)*10);
+}
+lowEnergyThresh = self.GetLowEnergyThreshold();
+
+damageReduct = 1;
+immune = false;
+constantDamageDelay = 0;
+
+missileMax = 0;//250;//5 * missileTanks;
+missileStat = missileMax;
+
+superMissileMax = 0;//50;//2 * superMissileTanks;
+superMissileStat = superMissileMax;
+
+powerBombMax = 0;//50;//2 * powerBombTanks;
+powerBombStat = powerBombMax;
+
+enum Item
+{
+	VariaSuit,
+	GravitySuit,
+	
+	ChargeBeam,
+	IceBeam,
+	WaveBeam,
+	Spazer,
+	PlasmaBeam,
+	
+	Missile,
+	SuperMissile,
+	PowerBomb,
+	GrappleBeam,
+	XRayVisor,
+	
+	PowerGrip,
+	HiJump,
+	SpaceJump,
+	ScrewAttack,
+	AccelDash,
+	SpeedBooster,
+	ChainSpark,
+	
+	MorphBall,
+	MBBomb,
+	SpringBall,
+	BoostBall,
+	MagniBall,
+	SpiderBall,
+	
+	ScanVisor,
+	GravGrapple,
+	
+	_Length
+}
+item = array_create(Item._Length);
+hasItem = array_create(Item._Length);
+
+// Set starting items here
+/* Example:
+item[Item.PowerGrip] = true;
+hasItem[Item.PowerGrip] = true;
+*/
+
+hyperBeam = false;
+
+#endregion
+#region HUD & Radial UI
+
+function RadialUIItem(_itemIndex, _hudIconSprt, _selectIconSprt, _getAmmo = undefined) constructor
+{
+	itemIndex = _itemIndex;
+	hudIconSprt = _hudIconSprt;
+	selectIconSprt = _selectIconSprt;
+	
+	GetAmmo = _getAmmo;
+}
+
+#region --- Equipment ---
+
+enum Equipment
+{
+	Missile,
+	SuperMissile,
+	PowerBomb,
+	GrappleBeam,
+	
+	GravGrapple,
+	
+	_Length
+}
+equip = array_create(Equipment._Length, undefined);
+
+equip[Equipment.Missile] = new self.RadialUIItem(Item.Missile, sprt_HUD_Icon_Missile, sprt_UI_Radial_Icon_Missile, function(){ return missileStat; });
+
+equip[Equipment.SuperMissile] = new self.RadialUIItem(Item.SuperMissile, sprt_HUD_Icon_SuperMissile, sprt_UI_Radial_Icon_SuperMissile, function(){ return superMissileStat; });
+
+equip[Equipment.PowerBomb] = new self.RadialUIItem(Item.PowerBomb, sprt_HUD_Icon_PowerBomb, sprt_UI_Radial_Icon_PowerBomb, function(){ return powerBombStat; });
+
+equip[Equipment.GrappleBeam] = new self.RadialUIItem(Item.GrappleBeam, sprt_HUD_Icon_GrappleBeam, sprt_UI_Radial_Icon_GrappleBeam);
+
+equip[Equipment.GravGrapple] = new self.RadialUIItem(Item.GravGrapple, sprt_HUD_Icon_GravGrapple, sprt_UI_Radial_Icon_GravGrapple);
+
+#region Equipment functions
+function HasEquipment(_index)
+{
+	return (_index >= 0 && _index < array_length(equip) && is_struct(equip[_index]) && (equip[_index].itemIndex == undefined || item[equip[_index].itemIndex]));
+}
+function EquipmentHasAmmo(_index)
+{
+	if(self.HasEquipment(_index))
+	{
+		var hWep = equip[_index],
+			ammo = 1;
+		if(hWep.GetAmmo != undefined)
+		{
+			ammo = hWep.GetAmmo();
+		}
+		return (ammo > 0);
+	}
+	return false;
+}
+function EquipmentSelected(_index)
+{
+	return (self.EquipmentHasAmmo(_index) && equipIndex == _index && equipSelected);
+}
+
+function EquipIndexNum()
+{
+	var numEquips = 0;
+	for(var i = 0; i < Equipment._Length; i++)
+	{
+		if(self.HasEquipment(i))
+		{
+			numEquips++;
+		}
+	}
+	if(numEquips <= 0)
+	{
+		equipIndex = -1;
+		equipSelected = false;
+	}
+	else
+	{
+		if(!self.HasEquipment(equipIndex))
+		{
+			equipIndex = -1;
+			equipSelected = false;
+		}
+		if(equipIndex == -1)
+		{
+			for(var i = 0; i < Equipment._Length; i++)
+			{
+				if(self.HasEquipment(i))
+				{
+					equipIndex = i;
+					break;
+				}
+			}
+		}
+		else if(equipSelected && !self.EquipmentHasAmmo(equipIndex))
+		{
+			equipSelected = false;
+			audio_play_sound(snd_MenuTick,0,false);
+		}
+	}
+	return numEquips;
+}
+#endregion
+
+equipIndex = -1;
+equipSelected = false;
+self.EquipIndexNum();
+
+#endregion
+#region --- Visors ---
+
+enum Visor
+{
+	Scan,
+	XRay,
+	
+	_Length
+}
+visor = array_create(Visor._Length, undefined);
+
+visor[Visor.Scan] = new self.RadialUIItem(Item.ScanVisor, sprt_HUD_Icon_ScanVisor, sprt_UI_Radial_Icon_ScanVisor);
+visor[Visor.XRay] = new self.RadialUIItem(Item.XRayVisor, sprt_HUD_Icon_XRayVisor, sprt_UI_Radial_Icon_XRayVisor);
+
+#region Visor functions
+function HasVisor(_index)
+{
+	return (_index >= 0 && _index < array_length(visor) && is_struct(visor[_index]) && (visor[_index].itemIndex == undefined || item[visor[_index].itemIndex]));
+}
+function VisorSelected(_index)
+{
+	if(self.HasVisor(_index))
+	{
+		var _flag = true;
+		if(_index == Visor.Scan)
+		{
+			_flag = instance_exists(scanVisor);
+		}
+		if(_index == Visor.XRay)
+		{
+			_flag = instance_exists(xrayVisor);
+		}
+		return (_flag && visorIndex == _index && visorSelected);
+	}
+	return false;
+}
+
+function VisorIndexNum()
+{
+	var numVisors = 0;
+	for(var i = 0; i < Visor._Length; i++)
+	{
+		if(self.HasVisor(i))
+		{
+			numVisors++;
+		}
+	}
+	if(numVisors <= 0)
+	{
+		visorIndex = -1;
+		visorSelected = false;
+	}
+	else
+	{
+		if(!self.HasVisor(visorIndex))
+		{
+			visorIndex = -1;
+			visorSelected = false;
+		}
+		if(visorIndex == -1)
+		{
+			for(var i = 0; i < Visor._Length; i++)
+			{
+				if(self.HasVisor(i))
+				{
+					visorIndex = i;
+					break;
+				}
+			}
+		}
+	}
+	return numVisors;
+}
+#endregion
+
+visorIndex = -1;
+visorSelected = false;
+self.VisorIndexNum();
+
+scanVisor = noone;
+xrayVisor = noone;
+
+#endregion
+#region --- Beams ---
+
+enum Beam
+{
+	Charge,
+	Ice,
+	Wave,
+	Spazer,
+	Plasma,
+	
+	_Length
+}
+beam = array_create(Beam._Length, undefined);
+
+beam[Beam.Charge] = new self.RadialUIItem(Item.ChargeBeam, noone, sprt_UI_Radial_Icon_ChargeBeam);
+beam[Beam.Ice] = new self.RadialUIItem(Item.IceBeam, noone, sprt_UI_Radial_Icon_IceBeam);
+beam[Beam.Wave] = new self.RadialUIItem(Item.WaveBeam, noone, sprt_UI_Radial_Icon_WaveBeam);
+beam[Beam.Spazer] = new self.RadialUIItem(Item.Spazer, noone, sprt_UI_Radial_Icon_Spazer);
+beam[Beam.Plasma] = new self.RadialUIItem(Item.PlasmaBeam, noone, sprt_UI_Radial_Icon_PlasmaBeam);
+
+function HasBeam(_index)
+{
+	return (_index >= 0 && _index < array_length(beam) && is_struct(beam[_index]) && (beam[_index].itemIndex == undefined || hasItem[beam[_index].itemIndex]));
+}
+
+#endregion
+
+function EquipAmmoIcon(_equipInds, _ammoIconSprt, _ammoDigits, _getAmmo, _getAmmoMax) constructor
+{
+	equipIndexes = _equipInds;
+	
+	ammoIconSprt = _ammoIconSprt;
+	ammoDigits = _ammoDigits;
+	GetAmmo = _getAmmo;
+	GetAmmoMax = _getAmmoMax;
+}
+enum EquipAmmoType
+{
+	Missile,
+	SuperMissile,
+	PowerBomb,
+	
+	_Length
+}
+equipAmmoIcon = array_create(EquipAmmoType._Length, undefined);
+
+equipAmmoIcon[EquipAmmoType.Missile] = new self.EquipAmmoIcon([Equipment.Missile], sprt_HUD_AmmoIcon_Missile, 3, function(){ return missileStat; }, function(){ return missileMax; });
+equipAmmoIcon[EquipAmmoType.SuperMissile] = new self.EquipAmmoIcon([Equipment.SuperMissile], sprt_HUD_AmmoIcon_SuperMissile, 2, function(){ return superMissileStat; }, function(){ return superMissileMax; });
+equipAmmoIcon[EquipAmmoType.PowerBomb] = new self.EquipAmmoIcon([Equipment.PowerBomb], sprt_HUD_AmmoIcon_PowerBomb, 2, function(){ return powerBombStat; }, function(){ return powerBombMax; });
+
+#endregion
+#region Weapon vars
+
+statCharge = 0;
+maxCharge = 60;
+
+shootDir = 0;
+shootSpeed = 10;//8;
+
+shotDelayTime = 0;
+bombDelayTime = 0;
+
+enqueShot = false;
+
+tetherProj = noone;
+
+waveDir = 1;
+
+//beam variables
+
+//chargeMult = 5;
+//beamDmg = 20;
+//beamShot = obj_PowerBeamShot;
+//beamCharge = obj_PowerBeamChargeShot;
+//beamDelay = 6;
+//beamChargeDelay = 18;
+beamChargeAnim = sprt_PowerBeamChargeAnim;
+//beamSound = snd_PowerBeam_Shot;
+//beamChargeSound = snd_PowerBeam_ChargeShot;
+//beamAmt = 1;
+//beamChargeAmt = 1;
+//beamIconIndex = 0;
+
+beamIsWave = false;
+beamWaveStyleOffset = 1;
+
+beamFlare = sprt_PowerBeamChargeFlare;
+
+enum AutoFireStyle
+{
+	None,
+	SoftAuto,
+	FullAuto,
+	Tether
+}
+
+currentWeapon = undefined;
+function PlayerWeapon(_shotIndex, _sndIndex, _damage, _delay, _speed, _autoFire = AutoFireStyle.None, _missileMode = false) constructor
+{
+	shotIndex = _shotIndex;
+	soundIndex = _sndIndex;
+	damage = _damage;
+	shotDelay = _delay;
+	shotSpeed = _speed;
+	autoFireStyle = _autoFire;
+	shotAmount = 1;
+	
+	missileMode = _missileMode;
+	
+	canCharge = false;
+	chargeShotIndex = noone;
+	chargeSoundIndex = noone;
+	chargeDamage = 0;
+	chargeShotDelay = _delay;
+	chargeShotSpeed = _speed;
+	chargeShotAmount = 1;
+	
+	CanShoot = function() { return true; };
+	OnShoot = function() {};
+	OnChargeShoot = function() {};
+}
+
+enum Weapon
+{
+	Beam,
+	HyperBeam,
+	
+	Missile,
+	SuperMissile,
+	
+	GrappleBeam,
+	GravGrapple,
+	
+	_Length
+}
+weap = array_create(Weapon._Length, noone);
+
+weap[Weapon.Beam] = new self.PlayerWeapon(obj_PowerBeamShot, snd_PowerBeam_Shot, 20, 8, 10, AutoFireStyle.SoftAuto);
+weap[Weapon.Beam].OnChargeShoot = function()
+{
+	var wep = other;
+	var flareDir = shootDir;
+	if(dir2 == -1)
+	{
+		flareDir = angle_difference(shootDir,180);
+	}
+	var flare = instance_create_layer(shootPosX+lengthdir_x(5,shootDir),shootPosY+lengthdir_y(5,shootDir),layer_get_id("Projectiles_fg"),obj_ChargeFlare);
+	flare.damage = wep.chargeDamage * wep.chargeShotAmount;
+	flare.sprite_index = beamFlare;
+	flare.damageSubType[DmgSubType_Beam.Ice] = item[Item.IceBeam];
+	flare.damageSubType[DmgSubType_Beam.Wave] = item[Item.WaveBeam];
+	flare.damageSubType[DmgSubType_Beam.Spazer] = item[Item.Spazer];
+	flare.damageSubType[DmgSubType_Beam.Plasma] = item[Item.PlasmaBeam];
+	flare.direction = flareDir;
+	flare.image_angle = flareDir;
+	flare.image_xscale = dir2;
+	flare.creator = id;
+	if(item[Item.IceBeam])
+	{
+		flare.freezeType = 2;
+		flare.freezeKill = true;
+	}
+}
+#region UpdateBeam
+
+function UpdateBeam()
+{
+	var chargeMult = 5;
+	
+	var bShot = obj_PowerBeamShot,
+		bSound = snd_PowerBeam_Shot,
+		bDmg = 20,
+		bDelay = 8,
+		bAmt = 1,
+		bChShot = obj_PowerBeamChargeShot,
+		bChSound = snd_PowerBeam_ChargeShot,
+		bChDmg = bDmg * chargeMult,
+		bChDelay = 20,
+		bChAmt = 1;
+	
+	beamIsWave = item[Item.WaveBeam];
+	beamWaveStyleOffset = item[Item.Spazer] ? 0 : 1;
+	
+	beamChargeAnim = sprt_PowerBeamChargeAnim;
+	beamFlare = sprt_PowerBeamChargeFlare;
+	if(item[Item.IceBeam])
+	{
+		beamChargeAnim = sprt_IceBeamChargeAnim;
+		beamFlare = sprt_IceBeamChargeFlare;
+	}
+	else if(item[Item.PlasmaBeam])
+	{
+		beamChargeAnim = sprt_PlasmaBeamChargeAnim;
+		beamFlare = sprt_PlasmaBeamChargeFlare;
+	}
+	else if(item[Item.WaveBeam])
+	{
+		beamChargeAnim = sprt_WaveBeamChargeAnim;
+		beamFlare = sprt_WaveBeamChargeFlare;
+	}
+	else if(item[Item.Spazer])
+	{
+		beamChargeAnim = sprt_SpazerChargeAnim;
+		beamFlare = sprt_SpazerChargeFlare;
+	}
+	
+	// Shot Amount
+	if(item[Item.Spazer])
+	{
+		bAmt = 3;
+		bChAmt = 3;
+	}
+	else if(item[Item.WaveBeam])
+	{
+		bChAmt = 2;
+		if(item[Item.PlasmaBeam])
+		{
+			//bAmt = 2; // <- uncomment to make wave plasma shoot dual shots
+		}
+	}
+	
+	#region Damage & Firerate
+	
+	var baseDmg = 20,
+		iceDmg = 10,
+		waveDmg = 30,
+		spazerDmg = 20,
+		plasmaDmg = 130,
+		plasDmgMult = 5;
+	
+	var dmgMult = 1;
+	if(item[Item.PlasmaBeam])
+	{
+		dmgMult = plasDmgMult;
+	}
+	
+	var iceDelay = 4,
+		waveDelay = 0,//2,
+		spazerDelay = 0,//-2,
+		plasmaDelay = 3;
+	
+	bDmg = baseDmg;
+	if(item[Item.IceBeam])
+	{
+		bDmg += iceDmg * dmgMult;
+		bDelay += iceDelay;
+		bChDelay += iceDelay;
+	}
+	if(item[Item.WaveBeam])
+	{
+		bDmg += waveDmg * dmgMult;
+		bDelay += waveDelay;
+		bChDelay += waveDelay;
+	}
+	if(item[Item.Spazer])
+	{
+		bDmg += spazerDmg * dmgMult;
+		bDelay += spazerDelay;
+		bChDelay += spazerDelay;
+	}
+	if(item[Item.PlasmaBeam])
+	{
+		bDmg += plasmaDmg;
+		bDelay += plasmaDelay;
+		bChDelay += plasmaDelay;
+	}
+	
+	bChDmg = (bDmg * chargeMult) / bChAmt;
+	bDmg /= bAmt;
+	
+	/*
+	-- OG Super Metroid damage reference
+	
+	-Beam							-raw dmg value	|-Difference from base power beam
+	Power Beam:						20				|	
+	Ice Beam:						30				|	+10
+	Wave Beam:						50				|	+30
+	Spazer:							40				|	+20
+	Plasma Beam:					150				|	+130
+													|
+													|			|-Calculated combo damage
+	Ice + Wave:						60				|	+40		|	10(I) + 30(W) =				40	<- checks out
+													|			|
+	Spazer + Ice:					60				|	+40		|	20(S) + 10(I) =				30	<- 10 under
+	Spazer + Wave:					70				|	+50		|	20(S) + 30(W) =				50	<- checks out
+	Spazer + Ice + Wave:			100				|	+80		|	20(S) + 10(I) + 30(W) =		60	<- 20 under
+													|			|
+	Plasma + Ice:					200				|	+180	|	130(P) + 10(I) =			140	<- 40 under		if multiplied:	130+(10*5) =		130+50 =		180	<- checks out
+	Plasma + Wave:					250				|	+230	|	130(P) + 30(W) =			160	<- 70 under						130+(30*5) =		130+150 =		280	<- 50 over
+	Plasma + Ice + Wave:			300				|	+280	|	130(P) + 10(I) + 30(W) =	170	<- 110 under					130+(10*5)+(30*5) = 130+50+150 =	330	<- 50 over
+													|			|
+													|			|
+	-- Spazer+Plasma numbers ref					|			|
+	-(These are made up, SM has no Spazer+Plasma)	|			|
+	Spazer + Plasma:				200				|	+180	|	20(S) + 130(P) =				150		if multiplied:	(20*5)+130 =				100+130 =			230		+20=250
+	Spazer + Plasma + Ice:			250				|	+230	|	20(S) + 130(P) + 10(I) =		160						(20*5)+130+(10*5) =			100+130+50 =		270		+20=290
+	Spazer + Plasma + Wave:			300				|	+280	|	20(S) + 130(P) + 30(W) =		180						(20*5)+130+(30*5) =			100+130+150 =		380		+20=400
+	Spazer + Plasma + Ice + Wave:	350				|	+330	|	20(S) + 130(P) + 10(I)+30(W) =	190						(20*5)+130+(10*5)+(30*5) =	100+130+50+150 =	430		+20=450
+	
+	Hyper Beam: 1000
+	*/
+	
+	#endregion
+	#region Shot Type & FX
+	
+	if(item[Item.IceBeam]) // Ice
+	{
+		bShot = obj_IceBeamShot;
+		bSound = snd_IceBeam_Shot;
+		bChShot = obj_IceBeamChargeShot;
+		bChSound = snd_IceBeam_ChargeShot;
+		
+		if(item[Item.PlasmaBeam]) // Ice Plasma
+		{
+			bShot = obj_IcePlasmaBeamShot;
+			bSound = snd_IceComboShot;
+			bChShot = obj_IcePlasmaBeamChargeShot;
+			
+			if(item[Item.WaveBeam]) // Ice Wave Plasma
+			{
+				bShot = obj_IceWavePlasmaBeamShot;
+				bChShot = obj_IceWavePlasmaBeamChargeShot;
+				
+				if(item[Item.Spazer]) // Ice Wave Spazer Plasma
+				{
+					bShot = obj_IceWaveSpazerPlasmaBeamShot;
+					bChShot = obj_IceWaveSpazerPlasmaBeamChargeShot;
+				}
+			}
+			else if(item[Item.Spazer]) // Ice Spazer Plasma
+			{
+				bShot = obj_IceSpazerPlasmaBeamShot;
+				bChShot = obj_IceSpazerPlasmaBeamChargeShot;
+			}
+		}
+		else if(item[Item.Spazer]) // Ice Spazer
+		{
+			bShot = obj_IceSpazerBeamShot;
+			bSound = snd_IceComboShot;
+			bChShot = obj_IceSpazerBeamChargeShot;
+			
+			if(item[Item.WaveBeam]) // Ice Wave Spazer
+			{
+				bShot = obj_IceWaveSpazerBeamShot;
+				bChShot = obj_IceWaveSpazerBeamChargeShot;
+			}
+		}
+		else if(item[Item.WaveBeam]) // Ice Wave
+		{
+			bShot = obj_IceWaveBeamShot;
+			bChShot = obj_IceWaveBeamChargeShot;
+		}
+	}
+	else if(item[Item.PlasmaBeam]) // Plasma
+	{
+		bShot = obj_PlasmaBeamShot;
+		bSound = snd_PlasmaBeam_Shot;
+		bChShot = obj_PlasmaBeamChargeShot;
+		bChSound = snd_PlasmaBeam_ChargeShot;
+		
+		if(item[Item.WaveBeam]) // Wave Plasma
+		{
+			bShot = obj_WavePlasmaBeamShot;
+			bChShot = obj_WavePlasmaBeamChargeShot;
+			
+			if(item[Item.Spazer]) // Wave Spazer Plasma
+			{
+				bShot = obj_WaveSpazerPlasmaBeamShot;
+				bChShot = obj_WaveSpazerPlasmaBeamChargeShot;
+			}
+		}
+		else if(item[Item.Spazer]) // Spazer Plasma
+		{
+			bShot = obj_SpazerPlasmaBeamShot;
+			bChShot = obj_SpazerPlasmaBeamChargeShot;
+		}
+	}
+	else if(item[Item.WaveBeam]) // Wave
+	{
+		bShot = obj_WaveBeamShot;
+		bSound = snd_WaveBeam_Shot;
+		bChShot = obj_WaveBeamChargeShot;
+		bChSound = snd_WaveBeam_ChargeShot;
+		
+		if(item[Item.Spazer]) // Wave Spazer
+		{
+			bShot = obj_WaveSpazerBeamShot;
+			bSound = snd_Spazer_Shot;
+			bChShot = obj_WaveSpazerBeamChargeShot;
+			bChSound = snd_Spazer_ChargeShot;
+		}
+	}
+	else if(item[Item.Spazer]) // Spazer
+	{
+		bShot = obj_SpazerBeamShot;
+		bSound = snd_Spazer_Shot;
+		bChShot = obj_SpazerBeamChargeShot;
+		bChSound = snd_Spazer_ChargeShot;
+	}
+	
+	#endregion
+	
+	var beam = weap[Weapon.Beam];
+	
+	beam.shotIndex = bShot;
+	beam.soundIndex = bSound;
+	beam.damage = bDmg;
+	beam.shotDelay = bDelay;
+	beam.shotAmount = bAmt;
+	
+	beam.canCharge = item[Item.ChargeBeam];
+	beam.autoFireStyle = AutoFireStyle.SoftAuto;
+	beam.OnShoot = function() {};
+	
+	beam.chargeShotIndex = bChShot;
+	beam.chargeSoundIndex = bChSound;
+	beam.chargeDamage = bChDmg;
+	beam.chargeShotDelay = bChDelay;
+	beam.chargeShotAmount = bChAmt;
+}
+
+#endregion
+
+weap[Weapon.HyperBeam] = new self.PlayerWeapon(obj_HyperBeamShot, snd_PlasmaBeam_ChargeShot, 1000, 20, 10, AutoFireStyle.FullAuto);
+weap[Weapon.HyperBeam].OnShoot = function()
+{
+	var wep = other;
+	if(item[Item.Spazer])
+	{
+		self.PlayerShoot(obj_HyperBeamLesserShot,wep.damage,wep.shotSpeed,wep.shotDelay,2+2*beamIsWave,noone,beamIsWave,1);
+	}
+	
+	var flareDir = shootDir;
+	if(dir2 == -1)
+	{
+		flareDir = angle_difference(shootDir,180);
+	}
+	var flare = instance_create_layer(shootPosX+lengthdir_x(5,shootDir),shootPosY+lengthdir_y(5,shootDir),layer_get_id("Projectiles_fg"),obj_ChargeFlare);
+	flare.damage = wep.damage;
+	flare.sprite_index = sprt_HyperBeamChargeFlare;
+	flare.damageSubType[DmgSubType_Beam.Hyper] = true;
+	flare.direction = flareDir;
+	flare.image_angle = flareDir;
+	flare.image_xscale = dir2;
+	flare.creator = id;
+	
+	hyperFired = wep.shotDelay+2;
+}
+
+weap[Weapon.Missile] = new self.PlayerWeapon(obj_MissileShot, snd_Missile_Shot, 100, 9, 5,, true);
+weap[Weapon.Missile].CanShoot = function() { return missileStat > 0; };
+weap[Weapon.Missile].OnShoot = function() { missileStat--; };
+
+weap[Weapon.SuperMissile] = new self.PlayerWeapon(obj_SuperMissileShot, snd_SuperMissile_Shot, 100, 19, 3,, true);
+weap[Weapon.SuperMissile].CanShoot = function() { return superMissileStat > 0; };
+weap[Weapon.SuperMissile].OnShoot = function() { superMissileStat--; };
+
+weap[Weapon.GrappleBeam] = new self.PlayerWeapon(obj_GrappleBeamShot, snd_GrappleBeam_Shoot, 20, 1, 0, AutoFireStyle.Tether, true);
+weap[Weapon.GrappleBeam].OnShoot = function()
+{
+	grapple = tetherProj;
+	grapple.shootDir = shootDir;
+}
+
+weap[Weapon.GravGrapple] = new self.PlayerWeapon(obj_GravGrappleShot, snd_GrappleBeam_Shoot, 20, 1, 0, AutoFireStyle.Tether, true);
+weap[Weapon.GravGrapple].OnShoot = function()
+{
+	gravGrapple = tetherProj;
+	gravGrapple.shootDir = shootDir;
+}
+
+
+
+function CanCharge()
+{
+	/*if(!item[Item.ChargeBeam]) { return false; }
+	if(hyperBeam) { return false; }
+	if(self.EquipmentSelected(Equipment.Missile)) { return false; }
+	if(self.EquipmentSelected(Equipment.SuperMissile)) { return false; }
+	if(self.EquipmentSelected(Equipment.GrappleBeam)) { return false; }
+	if(self.VisorSelected(Visor.Scan)) { return false; }
+	if(self.VisorSelected(Visor.XRay)) { return false; }
+	
+	return true;*/
+	
+	if(is_undefined(currentWeapon)) { return false; }
+	if(!currentWeapon.CanShoot()) { return false; }
+	if(self.VisorSelected(Visor.Scan)) { return false; }
+	if(self.VisorSelected(Visor.XRay)) { return false; }
+	
+	return currentWeapon.canCharge;
+}
+
+#endregion
+
 #region IsChargeSomersaulting
 function IsChargeSomersaulting()
 {
@@ -1356,7 +1897,7 @@ function IsSpeedBoosting()
 #region IsScrewAttacking
 function IsScrewAttacking()
 {
-	return (item[Item.ScrewAttack] && liquidState <= 0 && state == State.Somersault && stateFrame == State.Somersault);
+	return (item[Item.ScrewAttack] && liquidState <= 0 && state == State.Somersault && animState == AnimState.Somersault);
 }
 #endregion
 
@@ -1373,7 +1914,7 @@ function entity_collision(listNum)
 	{
 		for(var i = 0; i < listNum; i++)
 		{
-			if(instance_exists(blockList[| i]) && isValidSolid(blockList[| i]))
+			if(instance_exists(blockList[| i]) && self.isValidSolid(blockList[| i]))
 			{
 				ds_list_clear(blockList);
 				return true;
@@ -1395,8 +1936,8 @@ function isValidSolid(block)
 		}
 	}
 	var bb = (object_is_in_array(block.object_index, ColType_BoostBallBlock) && boostBallDmgCounter > 0),
-		sp = (object_is_in_array(block.object_index, ColType_SpeedBlock) && IsSpeedBoosting() && shineStart <= 0 && shineLauncherStart <= 0),
-		sc = (object_is_in_array(block.object_index, ColType_ScrewBlock) && IsScrewAttacking());
+		sp = (object_is_in_array(block.object_index, ColType_SpeedBlock) && self.IsSpeedBoosting() && shineStart <= 0 && shineLauncherStart <= 0),
+		sc = (object_is_in_array(block.object_index, ColType_ScrewBlock) && self.IsScrewAttacking());
 	if(bb || sp || sc)
 	{
 		isSolid = false;
@@ -1419,11 +1960,11 @@ function ModifyFinalVelY(fVY)
 
 function ModifySlopeXSteepness_Up()
 {
-	if(spiderBall && (spiderEdge != Edge.None || Crawler_CanStickRight() || Crawler_CanStickLeft()))
+	if(spiderBall && (spiderEdge != Edge.None || self.Crawler_CanStickRight() || self.Crawler_CanStickLeft()))
 	{
 		return 1;
 	}
-	if((speedBoost && grounded) || state == State.Grapple || ((state == State.Spark || state == State.BallSpark) && !SparkDir_Hori()))
+	if((speedBoost && grounded) || state == State.Grapple || ((state == State.Spark || state == State.BallSpark) && !self.SparkDir_Hori()))
 	{
 		return 2;
 	}
@@ -1431,7 +1972,7 @@ function ModifySlopeXSteepness_Up()
 }
 function ModifySlopeXSteepness_Down()
 {
-	if(spiderBall && (spiderEdge != Edge.None || Crawler_CanStickRight() || Crawler_CanStickLeft()))
+	if(spiderBall && (spiderEdge != Edge.None || self.Crawler_CanStickRight() || self.Crawler_CanStickLeft()))
 	{
 		return 1;
 	}
@@ -1439,7 +1980,7 @@ function ModifySlopeXSteepness_Down()
 }
 function ModifySlopeYSteepness_Up()
 {
-	if(spiderBall && (spiderEdge != Edge.None || Crawler_CanStickBottom() || Crawler_CanStickTop()))
+	if(spiderBall && (spiderEdge != Edge.None || self.Crawler_CanStickBottom() || self.Crawler_CanStickTop()))
 	{
 		return 1;
 	}
@@ -1451,7 +1992,7 @@ function ModifySlopeYSteepness_Up()
 }
 function ModifySlopeYSteepness_Down()
 {
-	if(spiderBall && (spiderEdge != Edge.None || Crawler_CanStickBottom() || Crawler_CanStickTop()))
+	if(spiderBall && (spiderEdge != Edge.None || self.Crawler_CanStickBottom() || self.Crawler_CanStickTop()))
 	{
 		return 1;
 	}
@@ -1508,12 +2049,12 @@ function OnXCollision(fVX, isOOB = false)
 	move = 0;
 	bombJumpX = 0;
 	
-	var diagSparkSlide = (_SPARK_DAIG_SLIDE && (SparkDir_DiagUp() || SparkDir_DiagDown()) && (cPlayerRight - cPlayerLeft) != dir);
+	var diagSparkSlide = (_SPARK_DAIG_SLIDE && (self.SparkDir_DiagUp() || self.SparkDir_DiagDown()) && (cPlayerRight - cPlayerLeft) != dir);
 	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0)
 	{
 		if(!diagSparkSlide)
 		{
-			if(item[Item.ChainSpark] && !instance_exists(pBlock) && (abs(GetSparkDir()) == 90 || (!entity_place_collide(0,3) && abs(GetSparkDir()) < 90) || (!entity_place_collide(0,-3) && abs(GetSparkDir()) > 90)))
+			if(item[Item.ChainSpark] && !instance_exists(pBlock) && (abs(self.GetSparkDir()) == 90 || (!self.entity_place_collide(0,3) && abs(self.GetSparkDir()) < 90) || (!self.entity_place_collide(0,-3) && abs(self.GetSparkDir()) > 90)))
 			{
 				shineRestart = true;
 				audio_stop_sound(snd_ShineSpark_Charge);
@@ -1534,7 +2075,7 @@ function OnXCollision(fVX, isOOB = false)
 
 function CanMoveUpSlope_Bottom()
 {
-	if((state == State.Spark || state == State.BallSpark) && abs(GetSparkDir()) < 90)
+	if((state == State.Spark || state == State.BallSpark) && abs(self.GetSparkDir()) < 90)
 	{
 		return false;
 	}
@@ -1542,26 +2083,26 @@ function CanMoveUpSlope_Bottom()
 }
 function OnSlopeXCollision_Bottom(fVX, yShift)
 {
-	if(!grounded && velY == 0 && PlayerGrounded())
+	if(!grounded && velY == 0 && self.PlayerGrounded())
 	{
 		grounded = true;
 	}
-	if(!onPlatform && velY == 0 && PlayerOnPlatform())
+	if(!onPlatform && velY == 0 && self.PlayerOnPlatform())
 	{
 		onPlatform = true;
 	}
 	
-	if((state == State.Spark || state == State.BallSpark) && abs(GetSparkDir()) >= 90 && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0 && move == dir && yShift < 0)
+	if((state == State.Spark || state == State.BallSpark) && abs(self.GetSparkDir()) >= 90 && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0 && move == dir && yShift < 0)
 	{
 		shineEnd = 0;
 		shineDir = 0;
 		if(state == State.BallSpark)
 		{
-			ChangeState(State.Morph,State.Morph,mask_Player_Morph,true);
+			self.ChangeState(State.Morph, AnimState.Morph, MoveState.Normal, mask_Player_Morph, true);
 		}
 		else
 		{
-			ChangeState(State.Stand,State.Stand,mask_Player_Stand,true);
+			self.ChangeState(State.Stand, AnimState.Stand, MoveState.Normal, mask_Player_Stand, true);
 		}
 		speedBoost = true;
 		speedCounter = speedCounterMax;
@@ -1571,25 +2112,25 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		
 		velY = 0;
 	}
-	else if(yShift < 0 && (state == State.Stand || state == State.Morph) && abs(fVelX) >= maxSpeed[1,liquidState] && !entity_place_collide(fVX+fVelX,yShift))
+	else if(yShift < 0 && (state == State.Stand || state == State.Morph) && abs(fVelX) >= maxSpeed[1,liquidState] && !self.entity_place_collide(fVX+fVelX,yShift))
 	{
 		var flag = false;
 		
-		var bbottom = bb_bottom(),
-			bright = bb_right(),
-			bleft = bb_left();
-		if(fVelX > 0 && !entity_collision_line(bright+fVX+fVelX, position.Y+yShift, bright+fVX+fVelX, bbottom+yShift+1) && !collision_line(bright+fVX+fVelX, position.Y+yShift, bright+fVX+fVelX, bbottom+yShift+1, ColType_Platform, true, true))
+		var bbottom = self.bb_bottom(),
+			bright = self.bb_right(),
+			bleft = self.bb_left();
+		if(fVelX > 0 && !self.entity_collision_line(bright+fVX+fVelX, position.Y+yShift, bright+fVX+fVelX, bbottom+yShift+1) && !collision_line(bright+fVX+fVelX, position.Y+yShift, bright+fVX+fVelX, bbottom+yShift+1, ColType_Platform, true, true))
 		{
 			flag = true;
 		}
-		if(fVelX < 0 && !entity_collision_line(bleft+fVX+fVelX, position.Y+yShift, bleft+fVX+fVelX, bbottom+yShift+1) && !collision_line(bleft+fVX+fVelX, position.Y+yShift, bleft+fVX+fVelX, bbottom+yShift+1, ColType_Platform, true, true))
+		if(fVelX < 0 && !self.entity_collision_line(bleft+fVX+fVelX, position.Y+yShift, bleft+fVX+fVelX, bbottom+yShift+1) && !collision_line(bleft+fVX+fVelX, position.Y+yShift, bleft+fVX+fVelX, bbottom+yShift+1, ColType_Platform, true, true))
 		{
 			flag = true;
 		}
 		
 		if(flag && velY >= 0)
 		{
-			var sAngle = GetEdgeAngle(Edge.Bottom);
+			var sAngle = self.GetEdgeAngle(Edge.Bottom);
 			var vx = velX;
 			//velX = lengthdir_x(vx,sAngle);
 			velY = lengthdir_y(vx,sAngle);
@@ -1605,7 +2146,7 @@ function CanMoveDownSlope_Bottom()
 
 function CanMoveUpSlope_Top()
 {
-	return (((state == State.Spark || state == State.BallSpark) && abs(GetSparkDir()) <= 90) || state == State.Dodge || state == State.Grapple);
+	return (((state == State.Spark || state == State.BallSpark) && abs(self.GetSparkDir()) <= 90) || state == State.Dodge || state == State.Grapple);
 }
 function OnSlopeXCollision_Top(fVX, yShift)
 {
@@ -1618,7 +2159,7 @@ function OnBottomCollision(fVY)
 {
 	grounded = true;
 	
-	if(entityPlatformCheck(0,fVY))
+	if(self.entityPlatformCheck(0,fVY))
 	{
 		onPlatform = true;
 	}
@@ -1631,17 +2172,17 @@ function OnYCollision(fVY, isOOB = false)
 {
 	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0)
 	{
-		if(abs(GetSparkDir()) <= 90 && !SparkDir_VertDown() && !entity_place_collide(3*sign(velX),0) && (_SPARK_DOWN_BOOST || (!entity_place_collide(3*sign(velX),1) && entity_place_collide(1*sign(velX),2))))
+		if(abs(self.GetSparkDir()) <= 90 && !self.SparkDir_VertDown() && !self.entity_place_collide(3*sign(velX),0) && (_SPARK_DOWN_BOOST || (!self.entity_place_collide(3*sign(velX),1) && self.entity_place_collide(1*sign(velX),2))))
 		{
 			shineEnd = 0;
 			shineDir = 0;
 			if(state == State.BallSpark)
 			{
-				ChangeState(State.Morph,State.Morph,mask_Player_Morph,true);
+				self.ChangeState(State.Morph, AnimState.Morph, MoveState.Normal, mask_Player_Morph, true);
 			}
 			else
 			{
-				ChangeState(State.Stand,State.Stand,mask_Player_Stand,true);
+				self.ChangeState(State.Stand, AnimState.Stand, MoveState.Normal, mask_Player_Stand, true);
 			}
 			speedBoost = true;
 			speedCounter = speedCounterMax;
@@ -1660,18 +2201,18 @@ function OnYCollision(fVY, isOOB = false)
 	}
 	
 	var bFlag = true;
-	if(velY > 0 && (entity_place_collide(2,0) ^^ entity_place_collide(-2,0)))
+	if(velY > 0 && (self.entity_place_collide(2,0) ^^ self.entity_place_collide(-2,0)))
 	{
 		var sideAng = 0;
-		if(entity_place_collide(2,0))
+		if(self.entity_place_collide(2,0))
 		{
-			sideAng = GetEdgeAngle(Edge.Right);
+			sideAng = self.GetEdgeAngle(Edge.Right);
 		}
-		if(entity_place_collide(-2,0))
+		if(self.entity_place_collide(-2,0))
 		{
-			sideAng = GetEdgeAngle(Edge.Left);
+			sideAng = self.GetEdgeAngle(Edge.Left);
 		}
-		var botAng = GetEdgeAngle(Edge.Bottom);
+		var botAng = self.GetEdgeAngle(Edge.Bottom);
 		if(abs(sideAng) > 45 && abs(sideAng) < 90 && abs(botAng) > 0 && abs(botAng) <= 45)
 		{
 			velX = lengthdir_y(velY,sideAng);
@@ -1711,7 +2252,7 @@ function OnYCollision(fVY, isOOB = false)
 
 function CanMoveUpSlope_Right()
 {
-	return CanMoveUpSlope_LeftRight(-1);
+	return self.CanMoveUpSlope_LeftRight(-1);
 }
 function OnSlopeYCollision_Right(fVY, xShift)
 {
@@ -1722,7 +2263,7 @@ function CanMoveDownSlope_Right() { return false; }
 
 function CanMoveUpSlope_Left()
 {
-	return CanMoveUpSlope_LeftRight(1);
+	return self.CanMoveUpSlope_LeftRight(1);
 }
 function OnSlopeYCollision_Left(fVY, xShift)
 {
@@ -1737,12 +2278,12 @@ function CanMoveUpSlope_LeftRight(dir)
 	{
 		var yspeed = abs(fVelY);
 		var ynum = 0;
-		while(!entity_place_collide(0,ynum*sign(fVelY)) && ynum <= yspeed)
+		while(!self.entity_place_collide(0,ynum*sign(fVelY)) && ynum <= yspeed)
 		{
 			ynum++;
 		}
 		
-		var steepFlag = !entity_place_collide(dir,(ynum+1)*sign(fVelY));
+		var steepFlag = !self.entity_place_collide(dir,(ynum+1)*sign(fVelY));
 		return ((fVelY >= 0 && steepFlag) || (fVelY < 0 && (sign(fVelX) == dir || steepFlag)));
 	}
 	return false;
@@ -1755,24 +2296,24 @@ function DestroyBlock(bx,by)
 		var _type = array_create(BlockBreakType._Length,false);
 		_type[BlockBreakType.Shot] = true;
 		_type[BlockBreakType.BoostBall] = true;
-		BreakBlock(bx,by,_type);
+		self.BreakBlock(bx,by,_type);
 	}
-	if(IsSpeedBoosting())
+	if(self.IsSpeedBoosting())
 	{
 		var _type = array_create(BlockBreakType._Length,false);
 		_type[BlockBreakType.Shot] = true;
 		_type[BlockBreakType.Bomb] = true;
 		_type[BlockBreakType.BoostBall] = true;
 		_type[BlockBreakType.Speed] = true;
-		BreakBlock(bx,by,_type);
+		self.BreakBlock(bx,by,_type);
 	}
-	if(IsScrewAttacking())
+	if(self.IsScrewAttacking())
 	{
 		var _type = array_create(BlockBreakType._Length,false);
 		_type[BlockBreakType.Shot] = true;
 		_type[BlockBreakType.Bomb] = true;
 		_type[BlockBreakType.Screw] = true;
-		BreakBlock(bx,by,_type);
+		self.BreakBlock(bx,by,_type);
 	}
 }
 
@@ -1793,7 +2334,7 @@ function Crawler_ModifyFinalVelX(fVX)
 	{
 		return fVX;
 	}
-	return ModifyFinalVelX(fVX);
+	return self.ModifyFinalVelX(fVX);
 }
 function Crawler_ModifyFinalVelY(fVY)
 {
@@ -1809,7 +2350,7 @@ function Crawler_ModifyFinalVelY(fVY)
 			return 0;
 		}
 	}
-	return ModifyFinalVelY(fVY);
+	return self.ModifyFinalVelY(fVY);
 }
 
 function Crawler_CanStickTo(offsetX, offsetY, edgeCheck, xx = undefined, yy = undefined)
@@ -1862,7 +2403,7 @@ function Crawler_CanStickRight()
 	{
 		return true;
 	}
-	if(Crawler_CanStickTo(1,0, Edge.Right) && !GrappleActive())
+	if(self.Crawler_CanStickTo(1,0, Edge.Right) && !self.GrappleActive())
 	{
 		return true;
 	}
@@ -1874,7 +2415,7 @@ function Crawler_CanStickLeft()
 	{
 		return true;
 	}
-	if(Crawler_CanStickTo(-1,0, Edge.Left) && !GrappleActive())
+	if(self.Crawler_CanStickTo(-1,0, Edge.Left) && !self.GrappleActive())
 	{
 		return true;
 	}
@@ -1882,7 +2423,7 @@ function Crawler_CanStickLeft()
 }
 function Crawler_CanStickBottom()
 {
-	if(Crawler_CanStickTo(0,1, Edge.Bottom) && !GrappleActive())
+	if(self.Crawler_CanStickTo(0,1, Edge.Bottom) && !self.GrappleActive())
 	{
 		return true;
 	}
@@ -1890,7 +2431,7 @@ function Crawler_CanStickBottom()
 }
 function Crawler_CanStickTop()
 {
-	if(Crawler_CanStickTo(0,-1, Edge.Top) && !GrappleActive())
+	if(self.Crawler_CanStickTo(0,-1, Edge.Top) && !self.GrappleActive())
 	{
 		return true;
 	}
@@ -1909,21 +2450,21 @@ function Crawler_CanStickOuter(fVX, fVY, edge)
 	}
 	
 	var xdir = 0;
-	if(colEdge == Edge.Right || (colEdge == Edge.None && entity_place_collide(1,0)))
+	if(colEdge == Edge.Right || (colEdge == Edge.None && self.entity_place_collide(1,0)))
 	{
 		xdir = 1;
 	}
-	if(colEdge == Edge.Left || (colEdge == Edge.None && entity_place_collide(-1,0)))
+	if(colEdge == Edge.Left || (colEdge == Edge.None && self.entity_place_collide(-1,0)))
 	{
 		xdir = -1;
 	}
 	
 	var ydir = 0;
-	if(colEdge == Edge.Bottom || (colEdge == Edge.None && entity_place_collide(0,1)))
+	if(colEdge == Edge.Bottom || (colEdge == Edge.None && self.entity_place_collide(0,1)))
 	{
 		ydir = 1;
 	}
-	if(colEdge == Edge.Top || (colEdge == Edge.None && entity_place_collide(0,-1)))
+	if(colEdge == Edge.Top || (colEdge == Edge.None && self.entity_place_collide(0,-1)))
 	{
 		ydir = -1;
 	}
@@ -1939,16 +2480,16 @@ function Crawler_CanStickOuter(fVX, fVY, edge)
 		{
 			checkPos.X = scr_floor(position.X);
 		}
-		if(entity_place_collide(0,ydir, checkPos.X,checkPos.Y))
+		if(self.entity_place_collide(0,ydir, checkPos.X,checkPos.Y))
 		{
 			checkPos.X += sign(fVX);
 		}
-		if(!entity_place_collide(0,ydir, checkPos.X,checkPos.Y))
+		if(!self.entity_place_collide(0,ydir, checkPos.X,checkPos.Y))
 		{
 			checkPos.Y += ydir;
 		}
 		
-		if(Crawler_CanStickTo(-sign(fVX), 0, edge, checkPos.X,checkPos.Y))
+		if(self.Crawler_CanStickTo(-sign(fVX), 0, edge, checkPos.X,checkPos.Y))
 		{
 			if(spiderEdge == Edge.None)
 			{
@@ -1958,7 +2499,7 @@ function Crawler_CanStickOuter(fVX, fVY, edge)
 			spiderEdge = edge;
 			return true;
 		}
-		else if(colEdge != Edge.None && !entity_place_collide(0,ydir, checkPos.X,checkPos.Y))
+		else if(colEdge != Edge.None && !self.entity_place_collide(0,ydir, checkPos.X,checkPos.Y))
 		{
 			velY = 0;
 			fVelY = 0;
@@ -1976,15 +2517,15 @@ function Crawler_CanStickOuter(fVX, fVY, edge)
 		{
 			checkPos.Y = scr_floor(position.Y);
 		}
-		if(entity_place_collide(xdir,0, checkPos.X,checkPos.Y))
+		if(self.entity_place_collide(xdir,0, checkPos.X,checkPos.Y))
 		{
 			checkPos.Y += sign(fVY);
 		}
-		if(!entity_place_collide(xdir,0, checkPos.X,checkPos.Y))
+		if(!self.entity_place_collide(xdir,0, checkPos.X,checkPos.Y))
 		{
 			checkPos.X += xdir;
 		}
-		if(Crawler_CanStickTo(0, -sign(fVY), edge, checkPos.X,checkPos.Y))
+		if(self.Crawler_CanStickTo(0, -sign(fVY), edge, checkPos.X,checkPos.Y))
 		{
 			if(spiderEdge == Edge.None)
 			{
@@ -1994,7 +2535,7 @@ function Crawler_CanStickOuter(fVX, fVY, edge)
 			spiderEdge = edge;
 			return true;
 		}
-		else if(colEdge != Edge.None && !entity_place_collide(xdir,0, checkPos.X,checkPos.Y))
+		else if(colEdge != Edge.None && !self.entity_place_collide(xdir,0, checkPos.X,checkPos.Y))
 		{
 			velX = 0;
 			fVelX = 0;
@@ -2006,7 +2547,7 @@ function Crawler_CanStickOuter(fVX, fVY, edge)
 }
 function Crawler_CanStickOuterLeft()
 {
-	if(Crawler_CanStickOuter(1, 0, Edge.Left) && !GrappleActive() && state != State.BallSpark)
+	if(self.Crawler_CanStickOuter(1, 0, Edge.Left) && !self.GrappleActive() && state != State.BallSpark)
 	{
 		return true;
 	}
@@ -2014,7 +2555,7 @@ function Crawler_CanStickOuterLeft()
 }
 function Crawler_CanStickOuterRight()
 {
-	if(Crawler_CanStickOuter(-1, 0, Edge.Right) && !GrappleActive() && state != State.BallSpark)
+	if(self.Crawler_CanStickOuter(-1, 0, Edge.Right) && !self.GrappleActive() && state != State.BallSpark)
 	{
 		return true;
 	}
@@ -2022,7 +2563,7 @@ function Crawler_CanStickOuterRight()
 }
 function Crawler_CanStickOuterTop()
 {
-	if(Crawler_CanStickOuter(0, 1, Edge.Top) && !GrappleActive() && state != State.BallSpark)
+	if(self.Crawler_CanStickOuter(0, 1, Edge.Top) && !self.GrappleActive() && state != State.BallSpark)
 	{
 		return true;
 	}
@@ -2034,7 +2575,7 @@ function Crawler_CanStickOuterBottom()
 	{
 		return true;
 	}
-	if(Crawler_CanStickOuter(0, -1, Edge.Bottom) && !GrappleActive() && state != State.BallSpark)
+	if(self.Crawler_CanStickOuter(0, -1, Edge.Bottom) && !self.GrappleActive() && state != State.BallSpark)
 	{
 		return true;
 	}
@@ -2057,7 +2598,7 @@ function Crawler_OnRightCollision(fVX)
 	}
 	else
 	{
-		OnRightCollision(fVX);
+		self.OnRightCollision(fVX);
 	}
 }
 function Crawler_OnLeftCollision(fVX)
@@ -2076,7 +2617,7 @@ function Crawler_OnLeftCollision(fVX)
 	}
 	else
 	{
-		OnLeftCollision(fVX);
+		self.OnLeftCollision(fVX);
 	}
 }
 function Crawler_OnXCollision(fVX, isOOB = false)
@@ -2085,7 +2626,7 @@ function Crawler_OnXCollision(fVX, isOOB = false)
 	{
 		if(state == State.BallSpark && shineStart <= 0 && shineLauncherStart <= 0)
 		{
-			if(!SparkDir_Hori() && !entity_place_collide(0,2*sign(velY)) && shineEnd <= 0)
+			if(!self.SparkDir_Hori() && !self.entity_place_collide(0,2*sign(velY)) && shineEnd <= 0)
 			{
 				shineDir = 0;
 				state = State.Morph;
@@ -2123,17 +2664,17 @@ function Crawler_OnXCollision(fVX, isOOB = false)
 	}
 	else
 	{
-		OnXCollision(fVX);
+		self.OnXCollision(fVX);
 	}
 }
 
 function Crawler_CanMoveUpSlope_Bottom()
 {
-	if(Crawler_CanStickBottom())
+	if(self.Crawler_CanStickBottom())
 	{
 		if(state == State.BallSpark)
 		{
-			if(shineStart <= 0 && shineLauncherStart <= 0 && abs(GetSparkDir()) >= 90)
+			if(shineStart <= 0 && shineLauncherStart <= 0 && abs(self.GetSparkDir()) >= 90)
 			{
 				return true;
 			}
@@ -2143,11 +2684,11 @@ function Crawler_CanMoveUpSlope_Bottom()
 			return true;
 		}
 	}
-	return CanMoveUpSlope_Bottom();
+	return self.CanMoveUpSlope_Bottom();
 }
 function Crawler_OnSlopeXCollision_Bottom(fVX, yShift)
 {
-	if(Crawler_CanStickBottom())
+	if(self.Crawler_CanStickBottom())
 	{
 		if(state == State.BallSpark)
 		{
@@ -2174,28 +2715,28 @@ function Crawler_OnSlopeXCollision_Bottom(fVX, yShift)
 	}
 	else
 	{
-		OnSlopeXCollision_Bottom(fVX, yShift);
+		self.OnSlopeXCollision_Bottom(fVX, yShift);
 	}
 }
 function Crawler_CanMoveDownSlope_Bottom()
 {
-	if(Crawler_CanStickBottom())
+	if(self.Crawler_CanStickBottom())
 	{
 		if(colEdge == Edge.Bottom)
 		{
 			return true;
 		}
 	}
-	return CanMoveDownSlope_Bottom();
+	return self.CanMoveDownSlope_Bottom();
 }
 
 function Crawler_CanMoveUpSlope_Top()
 {
-	if(Crawler_CanStickTop())
+	if(self.Crawler_CanStickTop())
 	{
 		if(state == State.BallSpark)
 		{
-			if(shineStart <= 0 && shineLauncherStart <= 0 && abs(GetSparkDir()) <= 90)
+			if(shineStart <= 0 && shineLauncherStart <= 0 && abs(self.GetSparkDir()) <= 90)
 			{
 				return true;
 			}
@@ -2205,11 +2746,11 @@ function Crawler_CanMoveUpSlope_Top()
 			return true;
 		}
 	}
-	return CanMoveUpSlope_Top();
+	return self.CanMoveUpSlope_Top();
 }
 function Crawler_OnSlopeXCollision_Top(fVX, yShift)
 {
-	if(Crawler_CanStickTop())
+	if(self.Crawler_CanStickTop())
 	{
 		if(state == State.BallSpark)
 		{
@@ -2236,19 +2777,19 @@ function Crawler_OnSlopeXCollision_Top(fVX, yShift)
 	}
 	else
 	{
-		OnSlopeXCollision_Top(fVX, yShift);
+		self.OnSlopeXCollision_Top(fVX, yShift);
 	}
 }
 function Crawler_CanMoveDownSlope_Top()
 {
-	if(Crawler_CanStickTop())
+	if(self.Crawler_CanStickTop())
 	{
 		if(colEdge == Edge.Top)
 		{
 			return true;
 		}
 	}
-	return CanMoveDownSlope_Top();
+	return self.CanMoveDownSlope_Top();
 }
 
 
@@ -2268,7 +2809,7 @@ function Crawler_OnBottomCollision(fVY)
 	}
 	else
 	{
-		OnBottomCollision(fVY);
+		self.OnBottomCollision(fVY);
 	}
 }
 function Crawler_OnTopCollision(fVY)
@@ -2287,7 +2828,7 @@ function Crawler_OnTopCollision(fVY)
 	}
 	else
 	{
-		OnTopCollision(fVY);
+		self.OnTopCollision(fVY);
 	}
 }
 function Crawler_OnYCollision(fVY, isOOB = false)
@@ -2296,7 +2837,7 @@ function Crawler_OnYCollision(fVY, isOOB = false)
 	{
 		if(state == State.BallSpark && shineStart <= 0 && shineLauncherStart <= 0)
 		{
-			if(!SparkDir_VertUp() && !SparkDir_VertDown() && !entity_place_collide(2*sign(velX),0) && shineEnd <= 0)
+			if(!self.SparkDir_VertUp() && !self.SparkDir_VertDown() && !self.entity_place_collide(2*sign(velX),0) && shineEnd <= 0)
 			{
 				shineDir = 0;
 				state = State.Morph;
@@ -2327,17 +2868,17 @@ function Crawler_OnYCollision(fVY, isOOB = false)
 	}
 	else
 	{
-		OnYCollision(fVY);
+		self.OnYCollision(fVY);
 	}
 }
 
 function Crawler_CanMoveUpSlope_Right()
 {
-	if(Crawler_CanStickRight())
+	if(self.Crawler_CanStickRight())
 	{
 		if(state == State.BallSpark)
 		{
-			if(shineStart <= 0 && shineLauncherStart <= 0 && (GetSparkDir() <= 0 || abs(GetSparkDir()) == 180))
+			if(shineStart <= 0 && shineLauncherStart <= 0 && (self.GetSparkDir() <= 0 || abs(self.GetSparkDir()) == 180))
 			{
 				return true;
 			}
@@ -2347,11 +2888,11 @@ function Crawler_CanMoveUpSlope_Right()
 			return true;
 		}
 	}
-	return CanMoveUpSlope_Right();
+	return self.CanMoveUpSlope_Right();
 }
 function Crawler_OnSlopeYCollision_Right(fVY, xShift)
 {
-	if(Crawler_CanStickRight())
+	if(self.Crawler_CanStickRight())
 	{
 		if(state == State.BallSpark)
 		{
@@ -2378,28 +2919,28 @@ function Crawler_OnSlopeYCollision_Right(fVY, xShift)
 	}
 	else
 	{
-		OnSlopeYCollision_Right(fVY, xShift);
+		self.OnSlopeYCollision_Right(fVY, xShift);
 	}
 }
 function Crawler_CanMoveDownSlope_Right()
 {
-	if(Crawler_CanStickRight())
+	if(self.Crawler_CanStickRight())
 	{
 		if(colEdge == Edge.Right)
 		{
 			return true;
 		}
 	}
-	return CanMoveDownSlope_Right();
+	return self.CanMoveDownSlope_Right();
 }
 
 function Crawler_CanMoveUpSlope_Left()
 {
-	if(Crawler_CanStickLeft())
+	if(self.Crawler_CanStickLeft())
 	{
 		if(state == State.BallSpark)
 		{
-			if(shineStart <= 0 && shineLauncherStart <= 0 && (GetSparkDir() >= 0 || abs(GetSparkDir()) == 180))
+			if(shineStart <= 0 && shineLauncherStart <= 0 && (self.GetSparkDir() >= 0 || abs(self.GetSparkDir()) == 180))
 			{
 				return true;
 			}
@@ -2409,11 +2950,11 @@ function Crawler_CanMoveUpSlope_Left()
 			return true;
 		}
 	}
-	return CanMoveUpSlope_Left();
+	return self.CanMoveUpSlope_Left();
 }
 function Crawler_OnSlopeYCollision_Left(fVY, xShift)
 {
-	if(Crawler_CanStickLeft())
+	if(self.Crawler_CanStickLeft())
 	{
 		if(state == State.BallSpark)
 		{
@@ -2440,19 +2981,19 @@ function Crawler_OnSlopeYCollision_Left(fVY, xShift)
 	}
 	else
 	{
-		OnSlopeYCollision_Left(fVY, xShift);
+		self.OnSlopeYCollision_Left(fVY, xShift);
 	}
 }
 function Crawler_CanMoveDownSlope_Left()
 {
-	if(Crawler_CanStickLeft())
+	if(self.Crawler_CanStickLeft())
 	{
 		if(colEdge == Edge.Left)
 		{
 			return true;
 		}
 	}
-	return CanMoveDownSlope_Left();
+	return self.CanMoveDownSlope_Left();
 }
 
 /*function Crawler_DestroyBlock(bx,by)
@@ -2468,35 +3009,35 @@ passthruMax = 2;
 
 function MoveStickBottom_X(movingTile)
 {
-	return (colEdge == Edge.Bottom || colEdge == Edge.None || (spiderBall && Crawler_CanStickBottom()));
+	return (colEdge == Edge.Bottom || colEdge == Edge.None || (spiderBall && self.Crawler_CanStickBottom()));
 }
 function MoveStickBottom_Y(movingTile)
 {
-	return (colEdge == Edge.Bottom || colEdge == Edge.None || (spiderBall && Crawler_CanStickBottom()));
+	return (colEdge == Edge.Bottom || colEdge == Edge.None || (spiderBall && self.Crawler_CanStickBottom()));
 }
 function MoveStickTop_X(movingTile)
 {
-	return (colEdge == Edge.Top || (spiderBall && Crawler_CanStickTop()));
+	return (colEdge == Edge.Top || (spiderBall && self.Crawler_CanStickTop()));
 }
 function MoveStickTop_Y(movingTile)
 {
-	return (colEdge == Edge.Top || (spiderBall && Crawler_CanStickTop()));
+	return (colEdge == Edge.Top || (spiderBall && self.Crawler_CanStickTop()));
 }
 function MoveStickRight_X(movingTile)
 {
-	return (colEdge == Edge.Right || (spiderBall && Crawler_CanStickRight()) || MoveStick_CheckPGrip(1, movingTile) || (isPushing && dir == 1));
+	return (colEdge == Edge.Right || (spiderBall && self.Crawler_CanStickRight()) || self.MoveStick_CheckPGrip(1, movingTile) || (isPushing && dir == 1));
 }
 function MoveStickRight_Y(movingTile)
 {
-	return (colEdge == Edge.Right || (spiderBall && Crawler_CanStickRight()) || MoveStick_CheckPGrip(1, movingTile));
+	return (colEdge == Edge.Right || (spiderBall && self.Crawler_CanStickRight()) || self.MoveStick_CheckPGrip(1, movingTile));
 }
 function MoveStickLeft_X(movingTile)
 {
-	return (colEdge == Edge.Left || (spiderBall && Crawler_CanStickLeft()) || MoveStick_CheckPGrip(-1, movingTile) || (isPushing && dir == -1));
+	return (colEdge == Edge.Left || (spiderBall && self.Crawler_CanStickLeft()) || self.MoveStick_CheckPGrip(-1, movingTile) || (isPushing && dir == -1));
 }
 function MoveStickLeft_Y(movingTile)
 {
-	return (colEdge == Edge.Left || (spiderBall && Crawler_CanStickLeft()) || MoveStick_CheckPGrip(-1, movingTile));
+	return (colEdge == Edge.Left || (spiderBall && self.Crawler_CanStickLeft()) || self.MoveStick_CheckPGrip(-1, movingTile));
 }
 
 function MoveStick_CheckPGrip(_dir, movingTile)
@@ -2534,33 +3075,33 @@ function MovingSolid_OnRightCollision(fVX)
 {
 	if(spiderBall)
 	{
-		Crawler_OnRightCollision(fVX);
+		self.Crawler_OnRightCollision(fVX);
 	}
 	else
 	{
-		OnRightCollision(fVX);
+		self.OnRightCollision(fVX);
 	}
 }
 function MovingSolid_OnLeftCollision(fVX)
 {
 	if(spiderBall)
 	{
-		Crawler_OnLeftCollision(fVX);
+		self.Crawler_OnLeftCollision(fVX);
 	}
 	else
 	{
-		OnLeftCollision(fVX);
+		self.OnLeftCollision(fVX);
 	}
 }
 function MovingSolid_OnXCollision(fVX)
 {
 	if(spiderBall)
 	{
-		Crawler_OnXCollision(fVX);
+		self.Crawler_OnXCollision(fVX);
 	}
 	else
 	{
-		OnXCollision(fVX);
+		self.OnXCollision(fVX);
 	}
 }
 
@@ -2568,33 +3109,33 @@ function MovingSolid_OnBottomCollision(fVY)
 {
 	if(spiderBall)
 	{
-		Crawler_OnBottomCollision(fVY);
+		self.Crawler_OnBottomCollision(fVY);
 	}
 	else
 	{
-		OnBottomCollision(fVY);
+		self.OnBottomCollision(fVY);
 	}
 }
 function MovingSolid_OnTopCollision(fVY)
 {
 	if(spiderBall)
 	{
-		Crawler_OnTopCollision(fVY);
+		self.Crawler_OnTopCollision(fVY);
 	}
 	else
 	{
-		OnTopCollision(fVY);
+		self.OnTopCollision(fVY);
 	}
 }
 function MovingSolid_OnYCollision(fVY)
 {
 	if(spiderBall)
 	{
-		Crawler_OnYCollision(fVY);
+		self.Crawler_OnYCollision(fVY);
 	}
 	else
 	{
-		OnYCollision(fVY);
+		self.OnYCollision(fVY);
 	}
 }
 
@@ -2605,40 +3146,40 @@ function CanChangeState(newMask)
 {
 	if(mask_index != newMask)
 	{
-		var bright = scr_round(bb_right()),
-			bleft = scr_round(bb_left());
+		var bright = scr_round(self.bb_right()),
+			bleft = scr_round(self.bb_left());
 		
 		var curMask = mask_index,
-			curTop = scr_round(bb_top()),
-			curBottom = scr_round(bb_bottom());
+			curTop = scr_round(self.bb_top()),
+			curBottom = scr_round(self.bb_bottom());
 		
 		mask_index = newMask;
-		var newTop = scr_round(bb_top()),
-			newBottom = scr_round(bb_bottom());
+		var newTop = scr_round(self.bb_top()),
+			newBottom = scr_round(self.bb_bottom());
 		
 		var checkYTop = 0,
 			checkYBottom = 0;
 		for(var i = 0; i < newBottom-curBottom; i++)
 		{
-			if((entity_place_collide(0,checkYBottom) || (onPlatform && place_meeting(position.X,position.Y+checkYBottom,ColType_Platform))) && !entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
+			if((self.entity_place_collide(0,checkYBottom) || (onPlatform && place_meeting(position.X,position.Y+checkYBottom,ColType_Platform))) && !self.entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
 			{
 				checkYBottom--;
 			}
 		}
 		for(var i = 0; i < curTop-newTop; i++)
 		{
-			if(entity_place_collide(0,checkYTop) && !entity_collision_line(bleft,newBottom+checkYTop,bright,newBottom+checkYTop))
+			if(self.entity_place_collide(0,checkYTop) && !self.entity_collision_line(bleft,newBottom+checkYTop,bright,newBottom+checkYTop))
 			{
 				checkYTop++;
 			}
 		}
 		
 		var flag = false;
-		if(!entity_place_collide(0,checkYBottom))
+		if(!self.entity_place_collide(0,checkYBottom))
 		{
 			flag = true;
 		}
-		if(!entity_place_collide(0,checkYTop) && (!onPlatform || !place_meeting(position.X,position.Y+checkYTop,ColType_Platform)))
+		if(!self.entity_place_collide(0,checkYTop) && (!onPlatform || !place_meeting(position.X,position.Y+checkYTop,ColType_Platform)))
 		{
 			flag = true;
 		}
@@ -2652,22 +3193,23 @@ function CanChangeState(newMask)
 }
 #endregion
 #region ChangeState
-function ChangeState(newState,newStateFrame,newMask,isGrounded,stallCam = true)
+function ChangeState(newState, newAnimState, newMoveState = MoveState.Normal, newMask, isGrounded, stallCam = true)
 {
-	stateFrame = newStateFrame;
+	moveState = newMoveState;
+	animState = newAnimState;
 	
 	if(mask_index != newMask)
 	{
-		var bright = scr_round(bb_right()),
-			bleft = scr_round(bb_left());
+		var bright = scr_round(self.bb_right()),
+			bleft = scr_round(self.bb_left());
 		
 		var curMask = mask_index,
-			curTop = scr_round(bb_top()),
-			curBottom = scr_round(bb_bottom());
+			curTop = scr_round(self.bb_top()),
+			curBottom = scr_round(self.bb_bottom());
 		
 		mask_index = newMask;
-		var newTop = scr_round(bb_top()),
-			newBottom = scr_round(bb_bottom());
+		var newTop = scr_round(self.bb_top()),
+			newBottom = scr_round(self.bb_bottom());
 		
 		var checkYTop = 0,
 			checkYBottom = 0;
@@ -2676,14 +3218,14 @@ function ChangeState(newState,newStateFrame,newMask,isGrounded,stallCam = true)
 		{
 			if(newBottom-curBottom > 0)
 			{
-				if((entity_place_collide(0,checkYBottom) || (onPlatform && place_meeting(position.X,position.Y+checkYBottom,ColType_Platform))) && !entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
+				if((self.entity_place_collide(0,checkYBottom) || (onPlatform && place_meeting(position.X,position.Y+checkYBottom,ColType_Platform))) && !self.entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
 				{
 					checkYBottom--;
 				}
 			}
 			else if(isGrounded)
 			{
-				if(!entity_place_collide(0,checkYBottom+1))
+				if(!self.entity_place_collide(0,checkYBottom+1))
 				{
 					checkYBottom++;
 				}
@@ -2692,17 +3234,17 @@ function ChangeState(newState,newStateFrame,newMask,isGrounded,stallCam = true)
 		
 		for(var i = 0; i < curTop-newTop; i++)
 		{
-			if(entity_place_collide(0,checkYTop) && !entity_collision_line(bleft,newBottom+checkYTop,bright,newBottom+checkYTop))
+			if(self.entity_place_collide(0,checkYTop) && !self.entity_collision_line(bleft,newBottom+checkYTop,bright,newBottom+checkYTop))
 			{
 				checkYTop++;
 			}
 		}
 		
-		if(!entity_place_collide(0,checkYBottom))
+		if(!self.entity_place_collide(0,checkYBottom))
 		{
 			position.Y += checkYBottom;
 		}
-		if(!entity_place_collide(0,checkYTop))
+		if(!self.entity_place_collide(0,checkYTop))
 		{
 			position.Y += checkYTop;
 		}
@@ -2766,50 +3308,102 @@ function GetShootDirection(_aimAngle, _dir)
 	return _shootDir;
 }
 #endregion
-#region Shoot
-function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWave = false, WaveStyleOffset = 0)
+#region PlayerShoot
+function PlayerShoot(_shotIndex, _damage, _speed, _coolDown, _shotAmount, _soundIndex, _isWave = false, _waveStyleOffset = 0)
 {
 	var spawnX = scr_round(shootPosX - 2*sign(lengthdir_x(2,shootDir))),
 		spawnY = scr_round(shootPosY - 2*sign(lengthdir_y(2,shootDir)));
 
-	if(SoundIndex != noone)
+	if(_soundIndex != noone)
 	{
 		if(audio_is_playing(global.prevShotSndIndex))
 		{
 			var gain = 0;
-			if(asset_get_index(audio_get_name(global.prevShotSndIndex)) != SoundIndex)
+			if(asset_get_index(audio_get_name(global.prevShotSndIndex)) != _soundIndex)
 			{
 				gain = audio_sound_get_gain(global.prevShotSndIndex);
 			}
 			audio_sound_gain(global.prevShotSndIndex,gain,25);
 		}
-		var snd = audio_play_sound(SoundIndex,1,false);
+		var snd = audio_play_sound(_soundIndex,1,false);
 		audio_sound_gain(snd,1,0);
 		global.prevShotSndIndex = snd;
 	}
-
-	if(ShotIndex != noone)
+	
+	var shot = [];
+	if(_shotIndex != noone)
 	{
-		var shot = noone;
-		for(var i = 0; i < ShotAmount; i++)
+		for(var i = 0; i < _shotAmount; i++)
 		{
-			shot = instance_create_layer(spawnX,spawnY,layer_get_id("Projectiles"),ShotIndex);
-			shot.damage = Damage;
-			shot.velX = lengthdir_x(Speed,shootDir);
-			shot.velY = lengthdir_y(Speed,shootDir);
+			shot[i] = instance_create_layer(spawnX,spawnY,layer_get_id("Projectiles"),_shotIndex);
+			shot[i].damage = _damage;
+			shot[i].velX = lengthdir_x(_speed,shootDir);
+			shot[i].velY = lengthdir_y(_speed,shootDir);
+			shot[i].direction = shootDir;
+			shot[i].waveStyle = i + _waveStyleOffset;
+			shot[i].dir = dir2;
+			shot[i].waveDir = waveDir;
+			shot[i].creator = id;
+			
+			var hSpeed = position.X - oldPosition.X;
+			if(sign(shot[i].velX) == sign(hSpeed))
+			{
+				shot[i].speed_x = hSpeed;
+			}
+			var vSpeed = position.Y - oldPosition.Y;
+			if(sign(shot[i].velY) == sign(vSpeed))
+			{
+				shot[i].speed_y = vSpeed;
+			}
+		}
+		
+		if(instance_exists(shot[0]) && shot[0].particleType >= 0 && !shot[0].isGrapple)
+		{
+			var partSys = obj_Particles.partSystemB;
+			if(_isWave)
+			{
+				partSys = obj_Particles.partSystemA;
+			}
+		
+			part_particles_create(partSys,shootPosX,shootPosY,obj_Particles.bTrails[shot[0].particleType],7+(5*(statCharge >= maxCharge)));
+		    part_particles_create(partSys,shootPosX,shootPosY,obj_Particles.mFlare[shot[0].particleType],1);
+		}
+		
+		shotDelayTime = _coolDown;
+		recoil = true;
+		waveDir *= -1;
+		
+		/*var shot = noone;
+		for(var i = 0; i < _shotAmount; i++)
+		{
+			shot = instance_create_layer(spawnX,spawnY,layer_get_id("Projectiles"),_shotIndex);
+			shot.damage = _damage;
+			shot.velX = lengthdir_x(_speed,shootDir);
+			shot.velY = lengthdir_y(_speed,shootDir);
 			shot.direction = shootDir;
-			shot.waveStyle = i + WaveStyleOffset;
+			shot.waveStyle = i + _waveStyleOffset;
 			shot.dir = dir2;
 			shot.waveDir = waveDir;
 			shot.creator = id;
+			
+			var hSpeed = position.X - oldPosition.X;
+			if(sign(shot.velX) == sign(hSpeed))
+			{
+				shot.speed_x = hSpeed;
+			}
+			var vSpeed = position.Y - oldPosition.Y;
+			if(sign(shot.velY) == sign(vSpeed))
+			{
+				shot.speed_y = vSpeed;
+			}
 		}
 		if(instance_exists(shot))
 		{
-			shotDelayTime = CoolDown;
+			shotDelayTime = _coolDown;
 			if(shot.particleType >= 0 && !shot.isGrapple)
 			{
 				var partSys = obj_Particles.partSystemB;
-				if(IsWave)
+				if(_isWave)
 				{
 					partSys = obj_Particles.partSystemA;
 				}
@@ -2819,9 +3413,10 @@ function Shoot(ShotIndex, Damage, Speed, CoolDown, ShotAmount, SoundIndex, IsWav
 			}
 			waveDir *= -1;
 			return shot;
-		}
+		}*/
 	}
-	return noone;
+	//return noone;
+	return shot;
 }
 #endregion
 
@@ -2877,13 +3472,8 @@ function SpiderEnable(flag)
 	if(spiderBall != flag)
 	{
 		spiderBall = flag;
-		//audio_play_sound(snd_SpiderStart,0,false);
 		if(flag)
 		{
-			/*if(!audio_is_playing(snd_SpiderLoop))
-			{
-				audio_play_sound(snd_SpiderLoop,0,true);
-			}*/
 			if(grounded && Crawler_CanStickBottom())
 			{
 				spiderEdge = Edge.Bottom;
@@ -2892,13 +3482,13 @@ function SpiderEnable(flag)
 		}
 		else
 		{
-			audio_stop_sound(snd_SpiderLoop);
+			audio_stop_sound(snd_SpiderLoop1);
+			audio_stop_sound(snd_SpiderLoop2);
 			if(spiderEdge == Edge.Top && spiderSpeed != 0)
 			{
 				dir *= -1;
 				dirFrame = 4*dir;
 			}
-			//spiderEdge = Edge.None;
 		}
 	}
 }
@@ -3076,7 +3666,7 @@ function EntityLiquid_Large(_velX, _velY)
 			bub.canSpread = false;
 		}
 		
-		if(stateFrame == State.Brake && brakeFrame >= 9)
+		if(animState == AnimState.Brake && brakeFrame >= 9)
 		{
 			var bub = liquid.CreateBubble(x-random(12)*dir,bb_bottom()+4-random(8),0,0);
 			bub.kill = true;
@@ -3090,6 +3680,7 @@ function EntityLiquid_Large(_velX, _velY)
 #endregion
 
 #region Set Beams
+/*
 function Set_Beams()
 {
 	beamShot = obj_PowerBeamShot;
@@ -3303,33 +3894,38 @@ function Set_Beams()
 	/*
 	-- OG Super Metroid damage reference
 	
-	Power Beam:		20
-	Ice Beam:		30
-	Wave Beam:		50
-	Spazer:			40
-	Plasma Beam:	150
+	-Beam							-raw dmg value	|-Difference from base power beam
+	Power Beam:						20				|	
+	Ice Beam:						30				|	+10
+	Wave Beam:						50				|	+30
+	Spazer:							40				|	+20
+	Plasma Beam:					150				|	+130
+													|
+													|			|-Calculated combo damage
+	Ice + Wave:						60				|	+40		|	10(I) + 30(W) =				40	<- checks out
+													|			|
+	Spazer + Ice:					60				|	+40		|	20(S) + 10(I) =				30	<- 10 under
+	Spazer + Wave:					70				|	+50		|	20(S) + 30(W) =				50	<- checks out
+	Spazer + Ice + Wave:			100				|	+80		|	20(S) + 10(I) + 30(W) =		60	<- 20 under
+													|			|
+	Plasma + Ice:					200				|	+180	|	130(P) + 10(I) =			140	<- 40 under		if multiplied:	130+(10*5) =		130+50 =		180	<- checks out
+	Plasma + Wave:					250				|	+230	|	130(P) + 30(W) =			160	<- 70 under						130+(30*5) =		130+150 =		280	<- 50 over
+	Plasma + Ice + Wave:			300				|	+280	|	130(P) + 10(I) + 30(W) =	170	<- 110 under					130+(10*5)+(30*5) = 130+50+150 =	330	<- 50 over
+													|			|
+													|			|
+	-- Spazer+Plasma numbers ref					|			|
+	-(These are made up, SM has no Spazer+Plasma)	|			|
+	Spazer + Plasma:				200				|	+180	|	20(S) + 130(P) =				150		if multiplied:	(20*5)+130 =				100+130 =			230		+20=250
+	Spazer + Plasma + Ice:			250				|	+230	|	20(S) + 130(P) + 10(I) =		160						(20*5)+130+(10*5) =			100+130+50 =		270		+20=290
+	Spazer + Plasma + Wave:			300				|	+280	|	20(S) + 130(P) + 30(W) =		180						(20*5)+130+(30*5) =			100+130+150 =		380		+20=400
+	Spazer + Plasma + Ice + Wave:	350				|	+330	|	20(S) + 130(P) + 10(I)+30(W) =	190						(20*5)+130+(10*5)+(30*5) =	100+130+50+150 =	430		+20=450
 	
-	Ice + Wave:		60
-	
-	Ice + Spazer:			60
-	Wave + Spazer:			70
-	Ice + Wave + Spazer:	100
-	
-	Ice + Plasma:			200
-	Wave + Plasma:			250
-	Ice + Wave + Plasma:	300
-	
-	
-	-- Extra numbers ref
-	
-	Spazer + Plasma:				200
-	Ice + Spazer + Plasma:			250
-	Wave + Spazer + Plasma:			300
-	Ice + Wave + Spazer + Plasma:	350
-	*/
+	Hyper Beam: 1000
+	//
 	
 	#endregion
 }
+*/
 #endregion
 
 #region Damage
@@ -3356,6 +3952,47 @@ function Entity_OnDamageTaken(_selfLifeBox, _dmgBox, _finalDmg, _dmg, _dmgType, 
 	self.StrikePlayer(_finalDmg, knockBack, knockX, knockY, _enemy.playerInvFrames, _enemy.ignorePlayerImmunity);
 }
 
+function IsKnockBackImmune()
+{
+	return (state == State.Elevator || state == State.Recharge || state == State.DmgBoost || state == State.CrystalFlash);
+}
+function StrikePlayer(_dmg, _knockTime, _knockSpeedX, _knockSpeedY, _iframes, _ignoreImmunity = false)
+{
+	if(!global.GamePaused() && !godmode && invFrames <= 0 && (!immune || _ignoreImmunity))
+	{
+		energy = max(energy - _dmg,0);
+		if(energy <= 0)
+		{
+			state = State.Death;
+		}
+		else
+		{
+			
+			if(_knockTime > 0 && !self.IsKnockBackImmune())
+			{
+				lastState = state;
+				state = State.Hurt;
+				hurtTime = _knockTime;
+				hurtSpeedX = _knockSpeedX;
+				hurtSpeedY = _knockSpeedY;
+				jump = 0;
+				jumping = false;
+			}
+			
+			if(!audio_is_playing(snd_Hurt))
+			{
+				audio_play_sound(snd_Hurt,0,false);
+			}
+			dmgFlash = 2;
+		}
+		
+		if(_iframes > 0)
+		{
+			invFrames = _iframes;
+		}
+	}
+}
+
 enum PlayerDmgBox
 {
 	PseudoScrew,
@@ -3379,43 +4016,6 @@ function Entity_OnDamageDealt(_selfDmgBox, _lifeBox, _finalDmg, _dmg, _dmgType, 
 	if(IsChargeSomersaulting() && !IsSpeedBoosting() && !IsScrewAttacking() && _finalDmg > 0)
 	{
 		statCharge = 0;
-	}
-}
-
-function StrikePlayer(_dmg, _knockTime, _knockSpeedX, _knockSpeedY, _iframes, _ignoreImmunity = false)
-{
-	if(!global.GamePaused() && !godmode && invFrames <= 0 && (!immune || _ignoreImmunity))
-	{
-		energy = max(energy - _dmg,0);
-		if(energy <= 0)
-		{
-			state = State.Death;
-		}
-		else
-		{
-			
-			if(_knockTime > 0)
-			{
-				lastState = state;
-				state = State.Hurt;
-				hurtTime = _knockTime;
-				hurtSpeedX = _knockSpeedX;
-				hurtSpeedY = _knockSpeedY;
-				jump = 0;
-				jumping = false;
-			}
-			
-			if(!audio_is_playing(snd_Hurt))
-			{
-				audio_play_sound(snd_Hurt,0,false);
-			}
-			dmgFlash = 2;
-		}
-		
-		if(_iframes > 0)
-		{
-			invFrames = _iframes;
-		}
 	}
 }
 
@@ -3543,7 +4143,7 @@ function SetArmPosJump()
 	    case -2:
 	    {
 	        ArmPos(18*dir,8);
-	        if(recoilCounter > 0 && stateFrame != State.Walk && stateFrame != State.Run)
+	        if(recoilCounter > 0 && animState != AnimState.Walk && animState != AnimState.Run)
 	        {
 	            armOffsetX -= 1*dir;
 	            armOffsetY -= 1;
@@ -3563,7 +4163,7 @@ function SetArmPosJump()
 	    case 2:
 	    {
 	        ArmPos(17*dir, -20);
-	        if(recoilCounter > 0 && stateFrame != State.Walk && stateFrame != State.Run)
+	        if(recoilCounter > 0 && animState != AnimState.Walk && animState != AnimState.Run)
 	        {
 	            armOffsetX -= 1*dir;
 	            armOffsetY += 1;
@@ -4117,7 +4717,7 @@ function PaletteSurface()
 	
 	if(surface_exists(ballGlowSurf))
 	{
-		if((item[Item.MagniBall] || item[Item.SpiderBall]) && stateFrame == State.Morph)
+		if((item[Item.MagniBall] || item[Item.SpiderBall]) && animState == AnimState.Morph)
 		{
 			var glowSpeed = 0.25;
 			if(state == State.BallSpark || speedBoost)
@@ -4236,7 +4836,7 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 			camW = camera_get_view_width(view_camera[0]),
 			camH = camera_get_view_height(view_camera[0]);
 		
-		if(stateFrame == State.Morph || mbTrailAlpha > 0)
+		if(animState == AnimState.Morph || mbTrailAlpha > 0)
 		{
 			if(surface_exists(mbTrailSurface) && mbTrailSurface != -1)
 			{
@@ -4268,7 +4868,7 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 					}
 
 					var dist = min(i+2,8);
-					if(mbTrailDir[i] == noone || (i >= mbTrailLength-1 && stateFrame != State.Morph))
+					if(mbTrailDir[i] == noone || (i >= mbTrailLength-1 && animState != AnimState.Morph))
 					{
 						dist = 0;
 						tColor = c_black;
@@ -4365,12 +4965,13 @@ function UpdatePlayerSurface(_palSurface)
 		}
 		draw_sprite_ext(torso,bodyFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),fDir,1,0,c_white,1);
 		
-		if((item[Item.MagniBall] || item[Item.SpiderBall]) && stateFrame == State.Morph && morphFrame == 0 && unmorphing == 0)
+		if((item[Item.MagniBall] || item[Item.SpiderBall]) && animState == AnimState.Morph && morphFrame == 0 && unmorphing == 0)
 		{
 			draw_sprite_ext(sprt_Player_MorphBallAlt_Shine,0,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),1,1,0,c_white,1);
 		}
 	
-		if(WeaponSelected(Weapon.Missile) || WeaponSelected(Weapon.SuperMissile) || WeaponSelected(Weapon.GrappleBeam))
+		//if(self.EquipmentSelected(Equipment.Missile) || self.EquipmentSelected(Equipment.SuperMissile) || self.EquipmentSelected(Equipment.GrappleBeam))
+		if(!is_undefined(currentWeapon) && currentWeapon.missileMode)
 		{
 			missileArmFrame = min(missileArmFrame + 1, 4);
 		}
@@ -4395,7 +4996,7 @@ function UpdatePlayerSurface(_palSurface)
 		
 		shader_reset();
 		
-		if((item[Item.MagniBall] || item[Item.SpiderBall]) && stateFrame == State.Morph)
+		if((item[Item.MagniBall] || item[Item.SpiderBall]) && animState == AnimState.Morph)
 		{
 			chameleon_set_surface(ballGlowSurf);
 			draw_sprite_ext(sprt_Player_MorphBallAlt_Glow,bodyFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),1,1,0,c_white,1);
@@ -4522,7 +5123,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		}
 	}
 	
-	if(stateFrame == State.Morph)
+	if(animState == AnimState.Morph)
 	{
 		if((state == State.Morph || state == State.BallSpark) && morphFrame <= 0 && spiderBall)
 		{
@@ -4709,43 +5310,122 @@ function PostDrawPlayer(posX, posY, rot, alph)
 	
 	if(instance_exists(grapple))
 	{
-	    var sPosX = xx+sprtOffsetX+armOffsetX,
-	        sPosY = yy+sprtOffsetY+runYOffset+armOffsetY;
-
-	    var gx = scr_round(sPosX),
-	        gy = scr_round(sPosY);
-	    draw_sprite_ext(sprt_GrappleBeamStart,grapPartFrame,gx,gy,1,1,0,c_white,1);
-
-	    if(grapple.drawGrapDelay <= 0)
+	    var sprt = sprt_GrappleBeamChain,
+	        startX = scr_round(xx+sprtOffsetX+armOffsetX),
+	        startY = scr_round(yy+sprtOffsetY+runYOffset+armOffsetY),
+	        endX = scr_round(xx + (grapple.x - x)),
+	        endY = scr_round(yy + (grapple.y - y));
+    
+	    var linklength = sprite_get_width(sprt),
+	        chainX = endX - startX,
+	        chainY = endY - startY;
+    
+	    var length = point_distance(startX, startY, endX, endY);
+	    if(length >= linklength)
 	    {
-	        var sprt = sprt_GrappleBeamChain,
-	            startX = scr_round(sPosX),
-	            startY = scr_round(sPosY),
-	            endX = scr_round(xx + (grapple.x - obj_Player.x)),
-	            endY = scr_round(yy + (grapple.y - obj_Player.y));
+	        var numlinks = ceil(length/linklength);
+	        var rotation2 = point_direction(startX, startY, endX, endY);
+			rotation2 = scr_round(rotation2/2.8125)*2.8125;
     
-	        var linklength = sprite_get_width(sprt),
-	            chainX = endX - startX,
-	            chainY = endY - startY;
-    
-	        var length = point_distance(startX, startY, endX, endY);
-	        if(length >= linklength)
+	        for(var i = 1; i < numlinks+1; i++)
 	        {
-	            var numlinks = ceil(length/linklength);
-	            linksX[numlinks] = 0;
-	            linksY[numlinks] = 0;
-	            var rotation2 = point_direction(startX, startY, endX, endY);
-				rotation2 = scr_round(rotation2/2.8125)*2.8125;
-    
-	            for(var i = 1; i < numlinks+1; i++)
-	            {
-	                linksX[i] = startX + chainX/numlinks * i;
-	                linksY[i] = startY + chainY/numlinks * i;
+	            var linkX = startX + chainX/numlinks * i,
+					linkY = startY + chainY/numlinks * i;
                 
-	                draw_sprite_ext(sprt,random_range(0,3),linksX[i],linksY[i],image_xscale,image_yscale,rotation2,c_white,1);
-	            }
+	            draw_sprite_ext(sprt,random_range(0,3),linkX,linkY,1,1,rotation2,c_white,1);
 	        }
 	    }
+
+	    draw_sprite_ext(sprt_GrappleBeamStart,grapPartFrame,startX,startY,1,1,0,c_white,1);
+	    if(grapPartCounter > 1)
+	    {
+	        grapPartFrame = scr_wrap(grapPartFrame+1,0,2);
+	        grapPartCounter = 0;
+	    }
+	    grapPartCounter += 1;
+	}
+	else if(instance_exists(gravGrapple))
+	{
+		gravGrapRotAnim = scr_wrap(gravGrapRotAnim - 5, 0, 360);
+		
+		var sprt = sprt_GravGrappleChain,
+			linklength = sprite_get_width(sprt);
+		
+		var startX = scr_round(xx+sprtOffsetX+armOffsetX),
+	        startY = scr_round(yy+sprtOffsetY+runYOffset+armOffsetY),
+	        endX = scr_round(xx + (gravGrapple.x - x)),
+	        endY = scr_round(yy + (gravGrapple.y - y));
+		var length = point_distance(startX, startY, endX, endY),
+			chainX = endX - startX,
+	        chainY = endY - startY;
+		var pointerX = lengthdir_x(length, shootDir),
+			pointerY = lengthdir_y(length, shootDir);
+		
+		var linkX = array_create(length+1),
+			linkY = array_create(length+1);
+		for(var i = 0; i <= length; i++)
+		{
+			var perc = i/length;
+			
+			linkX[i] = startX + lerp(pointerX*perc, chainX*perc, perc);
+			linkY[i] = startY + lerp(pointerY*perc, chainY*perc, perc);
+		}
+		
+		for(var j = 0; j < 2; j++)
+		{
+			var r_rotMult = choose(4,8),
+				r_dist = choose(2,4,6);
+			draw_primitive_begin(pr_linestrip);
+			for(var i = 1; i <= length; i++)
+			{
+				var rotation2 = point_direction(linkX[i-1], linkY[i-1], linkX[i], linkY[i])
+				if(i <= 1)
+				{
+					draw_vertex_colour(scr_round(linkX[i]), scr_round(linkY[i]), c_purple, 1);
+				}
+				else if(i >= length)
+				{
+					draw_vertex_colour(scr_round(linkX[i]), scr_round(linkY[i]), c_purple, 1);
+				}
+				else
+				{
+					var perc = clamp(i/8, 0, 1);
+					if(i >= length-4)
+					{
+						perc = clamp(abs(i-length)/4, 0, 1);
+					}
+					
+					var _rot = gravGrapRotAnim + i * r_rotMult,
+						_amp = lengthdir_y(r_dist * perc, _rot),
+						_col = merge_colour(c_fuchsia, c_purple, _amp/6);
+					
+					if(j == 1)
+					{
+						_amp *= -1;
+					}
+					
+					var rx = lengthdir_x(_amp, rotation2 + 90),
+						ry = lengthdir_y(_amp, rotation2 + 90);
+					draw_vertex_colour(scr_round(linkX[i] + rx), scr_round(linkY[i] + ry), _col, 1);
+				}
+			}
+			draw_primitive_end();
+		}
+		
+		var lastLinkDrawn = 0;
+		for(var i = 1; i <= length; i++)
+		{
+			var j = lastLinkDrawn,
+				linkDist = point_distance(linkX[i], linkY[i], linkX[j], linkY[j]);
+			if(linkDist >= linklength)
+			{
+				var rotation3 = point_direction(linkX[i], linkY[i], linkX[j], linkY[j]);
+				draw_sprite_ext(sprt,random_range(0,3),scr_round(linkX[i]),scr_round(linkY[i]),(linkDist+1)/linklength,1,rotation3,c_white,1);
+				lastLinkDrawn = i;
+			}
+		}
+		
+		draw_sprite_ext(sprt_GravGrappleStart,grapPartFrame,startX,startY,1,1,0,c_white,1);
 	    if(grapPartCounter > 1)
 	    {
 	        grapPartFrame = scr_wrap(grapPartFrame+1,0,2);
@@ -4876,7 +5556,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		
 				particleFrame = 0;
 			}
-			if(stateFrame != State.Morph)
+			if(animState != AnimState.Morph)
 			{
 				draw_sprite_ext(beamChargeAnim,chargeSetFrame,xx+sprtOffsetX+armOffsetX,yy+sprtOffsetY+runYOffset+armOffsetY,image_xscale,image_yscale,0,c_white,alph);
 				var blend = make_color_rgb(230,120,32);

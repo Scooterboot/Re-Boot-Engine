@@ -54,8 +54,8 @@ function scr_LoadGame()
 					}
 				}
 				
-				var _wIndex = _map[? "weapIndex"];
-				weapIndex = !is_undefined(_wIndex) ? _wIndex : -1;
+				var _wIndex = _map[? "equipIndex"];
+				equipIndex = !is_undefined(_wIndex) ? _wIndex : -1;
 				var _vIndex = _map[? "visorIndex"];
 				visorIndex = !is_undefined(_vIndex) ? _vIndex : -1;
 			

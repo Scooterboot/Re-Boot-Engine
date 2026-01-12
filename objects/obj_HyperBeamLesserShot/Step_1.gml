@@ -3,7 +3,7 @@ event_inherited();
 
 if(!isWave)
 {
-	aiStyle = 2;
+	projStyle = ProjStyle.Spazer;
 	amplitude = 14;
 }
 else

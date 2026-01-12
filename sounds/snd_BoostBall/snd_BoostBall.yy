@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.823741,
+  "duration":0.8237415,
   "exportDir":"",
   "name":"snd_BoostBall",
   "parent":{

@@ -109,23 +109,16 @@ if(room == rm_MainMenu)
 	}
 	if(buttonTipY > 0)
 	{
-		/*var bTip = buttonTip[2];
-		if(subState != MMSubState.None)
-		{
-			bTip = buttonTip[3];
-		}*/
-		//buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1];
 		var _tipStr = buttonTipString[0];
 		if(state == MMState.FileMenu)
 		{
-			//buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1]+"   ${menuCancelButton} - "+bTip;
 			_tipStr = buttonTipString[1];
 		}
 		if(subState != MMSubState.None)
 		{
 			_tipStr = buttonTipString[2];
 		}
-		var str = obj_UIHandler.InsertIconsIntoString(_tipStr);
+		var str = obj_UI.InsertIconsIntoString(_tipStr);
 		if(buttonTipScrib.get_text() != str)
 		{
 			buttonTipScrib.overwrite(str);

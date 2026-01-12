@@ -114,7 +114,7 @@ if (instance_exists(player) && player.state == State.Elevator &&
 				
 				scr_SaveGame(global.currentPlayFile,x,ystart-18);
 				audio_play_sound(snd_Save,0,false);
-				obj_UI_Old.CreateMessageBox(gameSavedText,"",Message.Simple);
+				obj_UI.CreateMessageBox(gameSavedText,"",Message.Simple);
 			}
 			if(saving < maxSave)
 			{

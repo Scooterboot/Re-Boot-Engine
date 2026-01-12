@@ -16,8 +16,8 @@ InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_shoulderr,  sprt_UI_PSIcon_R1B
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_shoulderlb, sprt_UI_PSIcon_L2Trigger); //"L2"); //L2
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_shoulderrb, sprt_UI_PSIcon_R2Trigger); //"R2"); //R2
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_select, sprt_UI_GPIcon_Select); //sprt_UI_PSIcon_Share); //"create" ); //Select
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_start,  sprt_UI_GPIcon_Start); //sprt_UI_PSIcon_Options); //"options"); //Start
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_select, sprt_UI_PSIcon_Share); //"create" ); //Select
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_start,  sprt_UI_PSIcon_Options); //"options"); //Start
 
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_padl, sprt_UI_GPIcon_DPad_Left); //"dpad left" ); //D-pad left
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_padr, sprt_UI_GPIcon_DPad_Right); //"dpad right"); //D-pad right
@@ -63,8 +63,8 @@ InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_shoulderr,  sprt_UI_PSIcon_R1B
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_shoulderlb, sprt_UI_PSIcon_L2Trigger); //"L2"); //L2
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_shoulderrb, sprt_UI_PSIcon_R2Trigger); //"R2"); //R2
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_select, sprt_UI_GPIcon_Select); //sprt_UI_PSIcon_Share); //"share"  ); //Select
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_start,  sprt_UI_GPIcon_Start); //sprt_UI_PSIcon_Options); //"options"); //Start
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_select, sprt_UI_PSIcon_Share); //"share"  ); //Select
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_start,  sprt_UI_PSIcon_Options); //"options"); //Start
 
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_padl, sprt_UI_GPIcon_DPad_Left); //"dpad left" ); //D-pad left
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_padr, sprt_UI_GPIcon_DPad_Right); //"dpad right"); //D-pad right

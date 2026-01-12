@@ -36,7 +36,14 @@ function bb_bottom(yy = undefined)
 
 image_speed = 0;
 
-aiStyle = 0;
+enum ProjStyle
+{
+	Default,
+	Wave,
+	Spazer
+}
+projStyle = ProjStyle.Default;
+
 hostile = false;
 tileCollide = true;
 multiHit = false;

@@ -1,4 +1,4 @@
-/// @description 
+/// @description Redraw Application Surface
 var screenX = scr_round(global.screenX),
 	screenY = scr_round(global.screenY),
 	screenW = global.resWidth*screenScale,

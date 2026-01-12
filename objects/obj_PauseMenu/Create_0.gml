@@ -124,6 +124,7 @@ equipName = [
 "SUPER MISSILE",
 "POWER BOMB",
 "GRAPPLE BEAM",
+"GRAVITY COIL",
 "SCAN VISOR",
 "X-RAY VISOR"];
 
@@ -159,6 +160,7 @@ Item.Missile,
 Item.SuperMissile,
 Item.PowerBomb,
 Item.GrappleBeam,
+Item.GravGrapple,
 Item.ScanVisor,
 Item.XRayVisor];
 

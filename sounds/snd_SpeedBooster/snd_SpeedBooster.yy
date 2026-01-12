@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":1.344292,
+  "duration":1.3443084,
   "exportDir":"",
   "name":"snd_SpeedBooster",
   "parent":{

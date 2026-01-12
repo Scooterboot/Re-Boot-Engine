@@ -2,17 +2,17 @@
 
 var liquidMovement = (liquidState > 0);
 
-PaletteSurface();
+self.PaletteSurface();
 var palSurf = palSurface;
-if(stateFrame == State.CrystalFlash && torsoR == sprt_Player_CrystalFlash)
+if(animState == AnimState.CrystalFlash && torsoR == sprt_Player_CrystalFlash)
 {
 	palSurf = cFlashPalSurf;
 }
-UpdatePlayerSurface(palSurf);
+self.UpdatePlayerSurface(palSurf);
 
 if(drawAfterImage && !global.GamePaused())
 {
-	var aftImg = new AfterImage(id,afterImgAlphaMult,afterImageNum);
+	var aftImg = new self.AfterImage(id,afterImgAlphaMult,afterImageNum);
 	ds_list_add(afterImageList, aftImg);
 }
 for(var i = ds_list_size(afterImageList)-1; i >= 0; i--)
@@ -33,7 +33,7 @@ for(var i = 0; i < ds_list_size(afterImageList); i++)
 	}
 }
 
-PreDrawPlayer(x,y,0,1);
+self.PreDrawPlayer(x,y,0,1);
 
 if(liquid && !liquidMovement && item[Item.GravitySuit])
 {
@@ -65,7 +65,7 @@ if(gravGlowAlpha > 0 && !hurtflag)
 		{
 			var gx = x+scr_ceil(lengthdir_x(j,i)),
 				gy = y+scr_ceil(lengthdir_y(j,i));
-			DrawPlayer(gx, gy, rotation, alp * 0.08);
+			self.DrawPlayer(gx, gy, rotation, alp * 0.08);
 		}
 	}
 	gpu_set_blendmode(bm_normal);
@@ -82,13 +82,13 @@ if((state == State.Spark || state == State.BallSpark) && shineEnd > 0)
 		for(var i = 0; i < 2; i++)
 		{
 			var edir = shineDir + (sEnd/sEndMax * 360) + 180*i;
-			DrawPlayer(x+lengthdir_x(dist,edir),y+lengthdir_y(dist,edir),rotation,0.5);
+			self.DrawPlayer(x+lengthdir_x(dist,edir),y+lengthdir_y(dist,edir),rotation,0.5);
 		}
 	}
 }
 
-DrawPlayer(x,y,rotation,1);
-PostDrawPlayer(x,y,0,1);
+self.DrawPlayer(x,y,rotation,1);
+self.PostDrawPlayer(x,y,0,1);
 
 if(!global.GamePaused())
 {

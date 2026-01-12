@@ -30,12 +30,14 @@ function scr_MainInitialize()
 	instance_create_depth(0,0,0,obj_TileFadeHandler);
 	instance_create_depth(0,0,0,obj_ScreenShaker);
 	
-	instance_create_depth(mouse_x,mouse_y,-9,obj_Mouse);
-	instance_create_depth(0,0,-8,obj_UIHandler);
+	instance_create_depth(MousePos().X,MousePos().Y,-9,obj_Mouse);
+	instance_create_depth(0,0,-8,obj_UI);
 	instance_create_depth(0,0,-7,obj_UI_MainMenu);
-	instance_create_depth(0,0,-6,obj_PauseMenu);//instance_create_depth(0,0,-6,obj_UI_PauseMenu);
+	instance_create_depth(0,0,-6,obj_PauseMenu);//obj_UI_PauseMenu);
 	instance_create_depth(0,0,-5,obj_UI_RadialMenu);
 	instance_create_depth(0,0,-4,obj_UI_HUD);
+	
+	instance_create_depth(0,0,-3,obj_Debug);
 
 	room_goto(rm_MainMenu); //go to the main menu
 	//instance_create_depth(0,0,-7,obj_MainMenu);

@@ -41,7 +41,7 @@ if (instance_exists(player) && (player.state == State.Stand || player.state == S
 				player.saveAnimCounter = maxSave;
 				scr_SaveGame(global.currentPlayFile,xx,yy);
 				audio_play_sound(snd_Save,0,false);
-				obj_UI_Old.CreateMessageBox(gameSavedText,"",Message.Simple);
+				obj_UI.CreateMessageBox(gameSavedText,"",Message.Simple);
 			}
 			
 			if(player.position.X < xx)

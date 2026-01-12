@@ -11,6 +11,7 @@ damageType = DmgType.ExplSplash;
 damageSubType[DmgSubType_Explosive.SuperMissile] = true;
 
 explode = 0;
+self.DamageBoxes();
 
 part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.explosion[2],1);
 

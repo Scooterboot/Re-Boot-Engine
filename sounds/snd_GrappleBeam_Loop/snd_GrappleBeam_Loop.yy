@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.716961,
+  "duration":0.71696144,
   "exportDir":"",
   "name":"snd_GrappleBeam_Loop",
   "parent":{

@@ -2,19 +2,19 @@
 
 SetControlVars("menu hud visor");
 
-var numWeaps = WeapIndexNum();
-var numVisors = VisorIndexNum();
+var numEquips = self.EquipIndexNum();
+var numVisors = self.VisorIndexNum();
 
 if(global.pauseState == PauseState.None || global.pauseState == PauseState.RadialMenu || global.pauseState == PauseState.XRay)
 {
-	#region Toggle current weapon
-	if(numWeaps > 0 && weapIndex >= 0 && WeaponHasAmmo(weapIndex))
+	#region Toggle current equipment
+	if(numEquips > 0 && equipIndex >= 0 && self.EquipmentHasAmmo(equipIndex))
 	{
 		if(!visorSelected || (visorIndex != Visor.Scan && visorIndex != Visor.XRay))
 		{
-			if(cWeapToggle && rWeapToggle)
+			if(cEquipToggle && rEquipToggle)
 			{
-				weapSelected = !weapSelected;
+				equipSelected = !equipSelected;
 				audio_play_sound(snd_MenuTick,0,false);
 			}
 		}
@@ -67,7 +67,7 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 			}
 			
 			if(canXRay && dir != 0 && fVelX == 0 && fVelY == 0 && !cPlayerRight && !cPlayerLeft && 
-				(((stateFrame == State.Stand || stateFrame == State.Crouch) && grounded) || stateFrame == State.Grip))
+				(((animState == AnimState.Stand || animState == AnimState.Crouch) && grounded) || animState == AnimState.Grip))
 			{
 				canUseVisor = true;
 			}
@@ -119,7 +119,7 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 			{
 				var _index = scr_wrap(_ind+i + _dir, 0, _len);
 				var _vInd = global.visorRadial[| _index];
-				if(!is_undefined(_vInd) && HasVisor(_vInd))
+				if(!is_undefined(_vInd) && self.HasVisor(_vInd))
 				{
 					visorIndex = _vInd;
 					visorSelected = false;
@@ -175,7 +175,7 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 	if(visorIndex == Visor.XRay && visorSelected)
 	{
 		var xpos = new Vector2(x + 3*dir, y - 12);
-		if(stateFrame == State.Grip)
+		if(animState == AnimState.Grip)
 		{
 			if(dir == grippedDir)
 			{

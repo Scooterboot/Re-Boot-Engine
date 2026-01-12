@@ -21,7 +21,7 @@ if(instance_exists(player.grapple) && player.grapple.grappleState != GrappleStat
 
 shootDir = player.GetShootDirection(player.aimAngle, player.dir2);
 
-var pos = GetPlayerPos();
+var pos = self.GetPlayerPos();
 var pX = pos.X, pY = pos.Y;
 
 var num = collision_circle_list(player.x,player.y,player.grappleMaxDist, ColType_GrapplePoint, true,true,grapObj_list,true);
@@ -39,17 +39,17 @@ if(num > 0)
 				{
 					for(var yy = 0; yy < gpObj.image_yscale; yy++)
 					{
-						AddPointToList(gpObj.x+8 + 16*xx, gpObj.y+8 + 16*yy);
+						self.AddPointToList(gpObj.x+8 + 16*xx, gpObj.y+8 + 16*yy);
 					}
 				}
 			}
 			else if(object_is_ancestor(gpObj.object_index,obj_Entity))
 			{
-				AddPointToList(scr_round(gpObj.Center(true).X), scr_round(gpObj.Center(true).Y));
+				self.AddPointToList(scr_round(gpObj.Center(true).X), scr_round(gpObj.Center(true).Y));
 			}
 			else
 			{
-				AddPointToList(gpObj.x, gpObj.y);
+				self.AddPointToList(gpObj.x, gpObj.y);
 			}
 		}
 	}

@@ -7,20 +7,6 @@ if(global.GamePaused())
 	exit;
 }
 
-if(instance_exists(creator) && creator.object_index == obj_Player && lastReflec == noone)
-{
-	var hSpeed = creator.fVelX;
-	if(sign(velX) == sign(hSpeed) && abs(speed_x) < abs(hSpeed))
-	{
-		speed_x = hSpeed;
-	}
-	var vSpeed = creator.fVelY * 0.75;
-	if(sign(velY) == sign(vSpeed) && abs(speed_y) < abs(vSpeed))
-	{
-		speed_y = vSpeed;
-	}
-}
-
 fVelX = velX + speed_x;
 fVelY = velY + speed_y;
 
@@ -28,7 +14,7 @@ fVelY = velY + speed_y;
 
 var _x = x,
 	_y = y;
-if(aiStyle == 1)
+if(projStyle == ProjStyle.Wave)
 {
 	_x = xx;
 	_y = yy;
@@ -128,7 +114,7 @@ if(instance_exists(reflec) && lastReflec != reflec)
 	
 	direction = _ang;
 	waveDir *= -1;
-	if(aiStyle == 1)
+	if(projStyle == ProjStyle.Wave)
 	{
 		t = 0;
 		t2 = 0;
@@ -142,23 +128,10 @@ if(instance_exists(reflec) && lastReflec != reflec)
 
 #endregion
 
-#region AI Styles
-if(aiStyle == 0)
+#region Proj Styles
+
+if(projStyle == ProjStyle.Wave || projStyle == ProjStyle.Spazer)
 {
-	/*if(x <= -abs(velX)*2 || x >= room_width+abs(velX)*2 || y <= -abs(velY)*2 || y >= room_height+abs(velY)*2)
-	{
-		instance_destroy();
-		exit;
-	}*/
-}
-if(aiStyle == 1 || aiStyle == 2)
-{
-	/*if(x <= -(amplitude*2) || x >= room_width+(amplitude*2) || y <= -(amplitude*2) || y >= room_height+(amplitude*2))
-	{
-		instance_destroy();
-		exit;
-	}*/
-	
 	var i = 0;
 	if(waveStyle > 0)
 	{
@@ -167,12 +140,11 @@ if(aiStyle == 1 || aiStyle == 2)
 		{
 			i *= -1;
 		}
-		//i *= 1 + scr_floor(waveStyle/3);
 	}
 	delay = max(delay - 1, 0);
 	if(delay <= 0)
 	{
-		if(aiStyle == 2)
+		if(projStyle == ProjStyle.Spazer)
 		{
 			t = min(t + increment * wavesPerSecond, pi/2);
 		}
@@ -185,7 +157,7 @@ if(aiStyle == 1 || aiStyle == 2)
 			t -= pi*2;
 		}
 		
-		if(waveStyle >= 3 && aiStyle == 1)
+		if(waveStyle >= 3 && projStyle == ProjStyle.Wave)
 		{
 			t2 = min(t2 + increment * (wavesPerSecond / 2) * (abs(i)-1), (pi / 2) * (abs(i)-1));
 		}
@@ -196,7 +168,7 @@ if(aiStyle == 1 || aiStyle == 2)
 	
 	var fVX = fVelX,
 		fVY = fVelY;
-	if(aiStyle == 1)
+	if(projStyle == ProjStyle.Wave)
 	{
 		var destX = xx + lengthdir_x(shift * i, direction + 90),
 			destY = yy + lengthdir_y(shift * i, direction + 90);
@@ -264,6 +236,9 @@ else if(impacted == 0)
 	x += fVelX;
 	y += fVelY;
 }
+
+position.X = x;
+position.Y = y;
 #endregion
 
 #region Damage to enemies & tiles

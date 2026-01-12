@@ -11,11 +11,21 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 		exit;
 	}
 	
+	var _openRadial = cRadialUIOpen;
+	// if global open radial with any stick movement
+	//{
+		var _device = InputPlayerGetDevice();
+		if(_device >= 0)
+		{
+			_openRadial |= (InputDistance(INPUT_CLUSTER.RadialUIMove) > 0);
+		}
+	//}
+	
 	if(!player.visorSelected || (player.visorIndex != Visor.Scan && player.visorIndex != Visor.XRay))
 	{
-		if(cRadialUIOpen || state > -1)
+		if(_openRadial || state > -1)
 		{
-			state = RadialState.WeaponMenu;
+			state = RadialState.EquipMenu;
 			var _mdir = (cMenuR1 || cMenuR2) - (cMenuL1 || cMenuL2);
 			if(_mdir > 0)
 			{
@@ -27,7 +37,7 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 			}
 		}
 		
-		if(state == RadialState.WeaponMenu && !cRadialUIOpen)
+		if(state == RadialState.EquipMenu && !_openRadial)
 		{
 			state = -1;
 		}
@@ -65,43 +75,45 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 		global.pauseState = prevPauseState;
 	}
 	
-	curWeap = -1;
+	curEquip = -1;
 	curBeam = -1;
 	curVisor = -1;
 	
 	if(paused)
 	{
 		var hMoveDir = InputDirection(0, INPUT_CLUSTER.RadialUIMove),
-			hMoveDist = InputDistance(INPUT_CLUSTER.RadialUIMove);// * radialSize;
-		hMoveDist = radialSize * power(hMoveDist, 2);
+			hMoveDist = InputDistance(INPUT_CLUSTER.RadialUIMove) * radialSize;
 		
-		if(state == RadialState.WeaponMenu)
+		#region Equipment Menu
+		if(state == RadialState.EquipMenu)
 		{
 			if(hMoveDist >= radialMin)
 			{
-				var _len = ds_list_size(global.weaponRadial),
+				var _len = ds_list_size(global.equipRadial),
 					_rad = 360/_len;
 				for(var i = 0; i < _len; i++)
 				{
-					var wepInd = global.weaponRadial[| i];
-					if(!is_undefined(wepInd) && player.HasWeapon(wepInd))
+					var wepInd = global.equipRadial[| i];
+					if(!is_undefined(wepInd) && player.HasEquipment(wepInd))
 					{
 						var _dir = 90 - _rad*i;
 						if(abs(angle_difference(_dir,hMoveDir)) < (_rad/2))
 						{
-							if(player.weapIndex != wepInd)
+							if(player.equipIndex != wepInd || !player.equipSelected)
 							{
+								audio_stop_sound(snd_MenuTick);
 								audio_play_sound(snd_MenuTick,0,false);
 							}
-							player.weapIndex = wepInd;
-							//player.weapSelected = player.WeaponHasAmmo(wepInd);
-							curWeap = !is_undefined(wepInd) ? wepInd : -1;
+							player.equipIndex = wepInd;
+							player.equipSelected = player.EquipmentHasAmmo(wepInd);
+							curEquip = !is_undefined(wepInd) ? wepInd : -1;
 						}
 					}
 				}
 			}
 		}
-		
+		#endregion
+		#region Beam Menu
 		if(state == RadialState.BeamMenu)
 		{
 			if(hMoveDist >= radialMin)
@@ -141,7 +153,8 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 		{
 			beamIndex = -1;
 		}
-		
+		#endregion
+		#region Visor Menu
 		if(state == RadialState.VisorMenu)
 		{
 			if(hMoveDist >= radialMin)
@@ -167,6 +180,7 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 				}
 			}
 		}
+		#endregion
 	}
 	
 	SetReleaseVars("menu radial");

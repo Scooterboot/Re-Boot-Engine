@@ -16,8 +16,8 @@ InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_shoulderr,  sprt_UI_XBIcon_RB
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_shoulderlb, sprt_UI_XBIcon_LTrigger); //"LT"); //LT
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_shoulderrb, sprt_UI_XBIcon_RTrigger); //"RT"); //RT
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_select, sprt_UI_GPIcon_Select); //sprt_UI_XBIcon_View); //"view"); //View
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_start,  sprt_UI_GPIcon_Start); //sprt_UI_XBIcon_Menu); //"menu"); //Menu
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_select, sprt_UI_XBIcon_View); //"view"); //View
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_start,  sprt_UI_XBIcon_Menu); //"menu"); //Menu
 
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_padl, sprt_UI_GPIcon_DPad_Left); //"dpad left" ); //D-pad left
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_padr, sprt_UI_GPIcon_DPad_Right); //"dpad right"); //D-pad right

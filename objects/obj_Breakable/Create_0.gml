@@ -23,8 +23,6 @@ for(var i = 0; i < array_length(tileLayers); i++)
 	}
 }
 
-revealTile = visible;
-
 hiddenDestroy = false;
 
 function RevealTile()

@@ -32,7 +32,7 @@ if(instance_exists(obj_Player))
 		
 		var offset = 14;
 		//p.state = State.Recharge;
-		p.ChangeState(State.Recharge,State.Stand,mask_Player_Stand,true,false);
+		p.ChangeState(State.Recharge, AnimState.Stand, MoveState.Custom, mask_Player_Stand, true, false);
 		p.activeStation = id;
 		p.dir = -activeDir;
 		var xPos = bbox_right+offset;
@@ -59,7 +59,7 @@ if(instance_exists(obj_Player))
 		if(activeTime == 11)
 		{
 			//audio_play_sound(snd_Save,0,false);
-			obj_UI_Old.CreateMessageBox(stationMessage,"",Message.Simple);
+			obj_UI.CreateMessageBox(stationMessage,"",Message.Simple);
 		}
 		activeTime++;
 		if(activeTime > activeTimeMax)

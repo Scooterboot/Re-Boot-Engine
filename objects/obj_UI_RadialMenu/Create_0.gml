@@ -6,15 +6,15 @@
 
 // The radial is functional and fairly flexible for now, however.
 
-global.weaponRadial = ds_list_create();
-ds_list_add(global.weaponRadial, Weapon.Missile);
-ds_list_add(global.weaponRadial, -1);
-ds_list_add(global.weaponRadial, Weapon.SuperMissile);
-ds_list_add(global.weaponRadial, -1);
-ds_list_add(global.weaponRadial, Weapon.PowerBomb);
-ds_list_add(global.weaponRadial, -1);
-ds_list_add(global.weaponRadial, Weapon.GrappleBeam);
-ds_list_add(global.weaponRadial, -1);
+global.equipRadial = ds_list_create();
+ds_list_add(global.equipRadial, Equipment.Missile);
+ds_list_add(global.equipRadial, -1);
+ds_list_add(global.equipRadial, Equipment.SuperMissile);
+ds_list_add(global.equipRadial, -1);
+ds_list_add(global.equipRadial, Equipment.PowerBomb);
+ds_list_add(global.equipRadial, -1);
+ds_list_add(global.equipRadial, Equipment.GrappleBeam);
+ds_list_add(global.equipRadial, Equipment.GravGrapple);
 
 global.beamRadial = ds_list_create();
 ds_list_add(global.beamRadial, Beam.Charge);
@@ -42,12 +42,12 @@ prevPauseState = PauseState.None;
 
 enum RadialState
 {
-	WeaponMenu,
+	EquipMenu,
 	BeamMenu,
 	VisorMenu
 }
 state = -1;
-stateAnim[RadialState.WeaponMenu] = 0;
+stateAnim[RadialState.EquipMenu] = 0;
 stateAnim[RadialState.BeamMenu] = 0;
 stateAnim[RadialState.VisorMenu] = 0;
 
@@ -57,25 +57,26 @@ cursorAnim = 0;
 beamIndex = -1;
 
 
-changeMenuText_L = "${MenuL1}/${MenuL2}\nVISORS";
+changeMenuText_L = "${MenuL1} / ${MenuL2}\nVISORS";
 changeMenuScrib_L = scribble(changeMenuText_L);
 changeMenuScrib_L.starting_format("fnt_GUI",c_white);
-changeMenuScrib_L.align(fa_right,fa_middle);
+changeMenuScrib_L.align(fa_center,fa_middle);
 
-changeMenuText_R = "${MenuR1}/${MenuR2}\nBEAMS";
+changeMenuText_R = "${MenuR1} / ${MenuR2}\nBEAMS";
 changeMenuScrib_R = scribble(changeMenuText_R);
 changeMenuScrib_R.starting_format("fnt_GUI",c_white);
-changeMenuScrib_R.align(fa_left,fa_middle);
+changeMenuScrib_R.align(fa_center,fa_middle);
 
 beamToggleText = "Toggle ${MenuAccept} / ${MenuTertiary}";
 beamToggleScrib = scribble(beamToggleText);
 beamToggleScrib.starting_format("fnt_GUI_Small2",c_white);
 beamToggleScrib.align(fa_center,fa_middle);
 
-weapName[Weapon.Missile] = "MISSILE";
-weapName[Weapon.SuperMissile] = "SUPER MISSILE";
-weapName[Weapon.PowerBomb] = "POWER BOMB";
-weapName[Weapon.GrappleBeam] = "GRAPPLE BEAM";
+equipName[Equipment.Missile] = "MISSILE";
+equipName[Equipment.SuperMissile] = "SUPER MISSILE";
+equipName[Equipment.PowerBomb] = "POWER BOMB";
+equipName[Equipment.GrappleBeam] = "GRAPPLE BEAM";
+equipName[Equipment.GravGrapple] = "GRAVITY COIL";
 
 beamName[Beam.Charge] = "CHARGE BEAM";
 beamName[Beam.Ice] = "ICE BEAM";
@@ -86,6 +87,6 @@ beamName[Beam.Plasma] = "PLASMA BEAM";
 visorName[Visor.Scan] = "SCAN VISOR";
 visorName[Visor.XRay] = "X-RAY VISOR";
 
-curWeap = -1;
+curEquip = -1;
 curBeam = -1;
 curVisor = -1;

@@ -90,7 +90,7 @@ if((isIce || isCharge) && !isSpazer && !isPlasma)
 
 if(isWave)
 {
-	aiStyle = 1;
+	projStyle = ProjStyle.Wave;
 	amplitude = 8 + (2*isCharge);
 	if(isSpazer)
 	{
@@ -110,7 +110,7 @@ if(isWave)
 }
 else if(isSpazer)
 {
-	aiStyle = 2;
+	projStyle = ProjStyle.Spazer;
 	amplitude = 12 + isCharge;
 	wavesPerSecond = 4;
 }

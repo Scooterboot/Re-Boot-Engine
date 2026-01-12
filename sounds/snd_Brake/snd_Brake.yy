@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.435375,
+  "duration":0.43539682,
   "exportDir":"",
   "name":"snd_Brake",
   "parent":{
