@@ -575,6 +575,7 @@ if(!global.GamePaused())
 	
 	#region Momentum Logic
 	
+	var _moving = 0;
 	if(moveState == MoveState.Normal)
 	{
 		var _move = 2*move;
@@ -582,15 +583,20 @@ if(!global.GamePaused())
 		{
 			_move = move;
 		}
+		else
+		{
+			_moving = move;
+		}
 		
 		var _frict = fFrict;
 		if(cAimLock)
 		{
 			_frict = turnaroundSpd + sprintTurnSpeed[liquidState];
 		}
-		else if(move == 0 && ((state != State.Morph && aimAngle <= -2 && !grounded) || (state == State.Morph && abs(velX) > maxSpeed[MaxSpeed.MorphBall,liquidState] && (morphFrame > 0 || (cJump && !grounded)))))
+		else if(move == 0 && sign(dirFrame) == dir && ((state != State.Morph && aimAngle <= -2 && !grounded) || (state == State.Morph && abs(velX) > maxSpeed[MaxSpeed.MorphBall,liquidState] && (morphFrame > 0 || (cJump && !grounded)))))
 		{
 			_frict = 0;
+			_moving = dir;
 		}
 		
 		if(fastWJGrace && move != -sign(velX))
@@ -618,6 +624,7 @@ if(!global.GamePaused())
 		{
 			_move = -2;
 		}
+		_moving = sign(_move);
 		
 		var _frict = fFrict;
 		if(fastWJGrace)
@@ -651,259 +658,6 @@ if(!global.GamePaused())
 		}
 	}
 	
-	/*
-	var moveState = MaxSpeed.Run;
-	if(state == State.Morph)
-	{
-		if(grounded)
-		{
-			if(abs(velX) > lerp(maxSpeed[MaxSpeed.MorphBall,liquidState],maxSpeed[MaxSpeed.MockBall,liquidState],0.5) && liquidState <= 0)
-			{
-				moveState = MaxSpeed.MockBall;
-				//if(speedBoost && sprint)
-				//{
-				//	moveState = MaxSpeed.SpeedBoost;
-				//}
-			}
-			else
-			{
-				moveState = MaxSpeed.MorphBall;
-			}
-		}
-		else
-		{
-			if(item[Item.SpringBall])
-			{
-				moveState = MaxSpeed.AirSpring;
-			}
-			else
-			{
-				moveState = MaxSpeed.AirMorph;
-			}
-		}
-	}
-	else if(state == State.Jump)
-	{
-		moveState = MaxSpeed.Jump;
-		if(animState == AnimState.DmgBoost)
-		{
-			moveState = MaxSpeed.Somersault;
-		}
-	}
-	else if(state == State.Somersault)
-	{
-		moveState = MaxSpeed.Somersault;
-	}
-	else
-	{
-		if(sprint && !liquidMovement)
-		{
-			if(item[Item.SpeedBooster])
-			{
-				moveState = MaxSpeed.SpeedBoost;
-			}
-			else
-			{
-				moveState = MaxSpeed.Sprint;
-			}
-		}
-	}
-	
-	fMaxSpeed = maxSpeed[moveState,liquidState];
-	fMoveSpeed = moveSpeed[MoveSpeed.Normal,liquidState];
-	if(state == State.Morph)
-	{
-		fMoveSpeed = moveSpeed[MoveSpeed.MorphBall,liquidState];
-	}
-	fFrict = frict[!grounded,liquidState];
-	
-	if(moveState == MaxSpeed.Sprint || moveState == MaxSpeed.SpeedBoost)
-	{
-		var runMaxSpd = maxSpeed[MaxSpeed.Run,liquidState],
-			sprintMaxSpd = maxSpeed[MaxSpeed.Sprint,liquidState],
-			runMoveSpd = moveSpeed[MoveSpeed.Normal,liquidState],
-			sprintMoveSpd = moveSpeed[MoveSpeed.Sprint,liquidState],
-			spd = abs(velX);
-		
-		if(spd < runMaxSpd)
-		{
-			fMoveSpeed = lerp(runMoveSpd+sprintMoveSpd,runMoveSpd, clamp(spd / runMaxSpd,0,1));
-		}
-		else if(spd < sprintMaxSpd)
-		{
-			fMoveSpeed = lerp(runMoveSpd,sprintMoveSpd, (abs(velX)-runMaxSpd) / (sprintMaxSpd-runMaxSpd));
-		}
-		else
-		{
-			fMoveSpeed = sprintMoveSpd;
-		}
-	}
-	
-	#region Momentum Logic
-	
-	if(state == State.Stand)
-	{
-		if((walkState && sign(velX) != dir) || moonFallState)
-		{
-			fMaxSpeed = maxSpeed[MaxSpeed.MoonWalk,liquidState];
-			if(sprint)
-			{
-				fMaxSpeed = maxSpeed[MaxSpeed.MoonSprint,liquidState];
-			}
-			var _frict = fFrict*0.25;
-			if(moonFallState)
-			{
-				fMaxSpeed = 0;
-				_frict = fFrict*2;
-			}
-			if(abs(velX) > fMaxSpeed)
-			{
-				if(velX > 0)
-				{
-					velX = max(velX - _frict, fMaxSpeed);
-				}
-				if(velX < 0)
-				{
-					velX = min(velX + _frict, -fMaxSpeed);
-				}
-			}
-		}
-	}
-	else if(moonFall && !grounded)
-	{
-		fMaxSpeed = maxSpeed[MaxSpeed.MoonFall,liquidState];
-	}
-	
-	var maxSpeed2 = maxSpeed[MaxSpeed.SpeedBoost,liquidState];
-	if(abs(velX) > maxSpeed2 && state != State.Spark && state != State.BallSpark && state != State.Grapple && state != State.Dodge && state != State.DmgBoost && (speedCounter > 0 || grounded))
-	{
-		if(sign(velX) == 1)
-		{
-			velX = max(velX - fFrict*0.25, maxSpeed2);
-		}
-		if(sign(velX) == -1)
-		{
-			velX = min(velX + fFrict*0.25, -maxSpeed2);
-		}
-	}
-	var turnaroundSpd = fMoveSpeed + fFrict;
-	if(sprint && state == State.Stand)
-	{
-		turnaroundSpd += sprintTurnSpeed[liquidState];
-	}
-	
-	if(state != State.Crouch && (state != State.Grip || startClimb) && state != State.Spark && state != State.BallSpark && state != State.Grapple && 
-	state != State.Hurt && !self.SpiderActive() && !self.GrappleActive() && state != State.Dodge)
-	{
-		var spinJumpMoveFlag = (state == State.Somersault && (frame[Frame.Somersault] >= 2 || abs(velX) > 2*moveSpeed[MoveSpeed.Normal,liquidState]));
-		
-		var moveflag = false;
-		if((move == 1 && !brake && !cAimLock) || (spinJumpMoveFlag && dir == 1 && velX > 0))
-		{
-			moveflag = true;
-			if(velX <= fMaxSpeed)
-			{
-				if(velX < 0)
-				{
-					velX = min(velX + turnaroundSpd, 0);
-				}
-				else if(sign(dirFrame) != dir && sign(dirFrame) != 0 && !speedBoost && state != State.Somersault)
-				{
-					velX = 0;
-				}
-				else
-				{
-					velX = min(velX + fMoveSpeed, fMaxSpeed);
-				}
-			}
-		}
-		if((move == -1 && !brake && !cAimLock) || (spinJumpMoveFlag && dir == -1 && velX < 0))
-		{
-			moveflag = true;
-			if(velX >= -fMaxSpeed)
-			{
-				if(velX > 0)
-				{
-					velX = max(velX - turnaroundSpd, 0);
-				}
-				else if(sign(dirFrame) != dir && sign(dirFrame) != 0 && !speedBoost && state != State.Somersault)
-				{
-					velX = 0;
-				}
-				else
-				{
-					velX = max(velX - fMoveSpeed, -fMaxSpeed);
-				}
-			}
-		}
-		if(spinJumpMoveFlag && sign(velX) == dir)
-		{
-			moveflag = true;
-		}
-		
-		if(fastWJGrace && move != -sign(velX))
-		{
-			var fwjFrict = turnaroundSpd;//max(fastWJGraceVel*0.34,turnaroundSpd);
-			if(velX > 0)
-			{
-				velX = max(velX - fwjFrict, 0);
-			}
-			if(velX < 0)
-			{
-				velX = min(velX + fwjFrict, 0);
-			}
-		}
-		else if(!moveflag)
-		{
-			var _frict = fFrict;
-			if(cAimLock)
-			{
-				_frict = turnaroundSpd;
-			}
-			if((aimAngle > -2 /*|| !cJump//) && 
-			(state != State.Morph || (state == State.Morph && abs(velX) <= maxSpeed[MaxSpeed.MorphBall,liquidState]) || grounded) && morphFrame <= 0)
-			{
-				if(velX > 0)
-				{
-					velX = max(velX - _frict, 0);
-				}
-				if(velX < 0)
-				{
-					velX = min(velX + _frict, 0);
-				}
-			}
-		}
-	}
-	else
-	{
-		if(state == State.Crouch)
-		{
-			if(uncrouch < 7)
-			{
-				if(velX > 0)
-				{
-					velX = max(velX - fFrict*2, 0);
-				}
-				if(velX < 0)
-				{
-					velX = min(velX + fFrict*2, 0);
-				}
-			}
-		}
-		else if(state == State.Dodge && dodgeLength >= dodgeLengthEnd && !speedBoost)
-		{
-			var flag = (!liquidMovement && (move != dir || dodgeDir == -dir));
-			if(velX > 0)
-			{
-				velX = max(velX - fFrict*(1+flag), 0);
-			}
-			if(velX < 0)
-			{
-				velX = min(velX + fFrict*(1+flag), 0);
-			}
-		}
-	}
-	*/
 	#endregion
 	
 	#region Speed Booster Logic
@@ -984,10 +738,11 @@ if(!global.GamePaused())
 				speedCounter = 0;
 			}
 		}
-		if(move != dir && (speedCounter > 0 || !grounded) && morphFrame <= 0 && (aimAngle > -2 || !cJump))
+		//if(move != dir && (speedCounter > 0 || !grounded) && morphFrame <= 0 && (aimAngle > -2 || !cJump))
+		if(_moving != dir && (speedCounter > 0 || !grounded))
 		{
-			if((state != State.Somersault && state != State.Morph) || (state == State.Morph && abs(velX) <= maxSpeed[MaxSpeed.MorphBall,liquidState]) || grounded)
-			{
+			//if((state != State.Somersault && state != State.Morph) || (state == State.Morph && abs(velX) <= maxSpeed[MaxSpeed.MorphBall,liquidState]) || grounded)
+			//{
 				stopBoosting = true;
 				
 				if(!spiderBoosting)
@@ -995,7 +750,7 @@ if(!global.GamePaused())
 					speedCounter = 0;
 					speedBoost = false;
 				}
-			}
+			//}
 		}
 	}
 	

@@ -3478,6 +3478,7 @@ function SpiderEnable(flag)
 			{
 				spiderEdge = Edge.Bottom;
 				spiderSpeed = velX;
+				spiderMove = move;
 			}
 		}
 		else
