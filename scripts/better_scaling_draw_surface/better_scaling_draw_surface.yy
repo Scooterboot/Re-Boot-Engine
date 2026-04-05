@@ -6,7 +6,7 @@
   "name":"better_scaling_draw_surface",
   "parent":{
     "name":"Better Scaling",
-    "path":"folders/Scripts/Better Scaling.yy",
+    "path":"folders/Scripts/Libraries/Better Scaling.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

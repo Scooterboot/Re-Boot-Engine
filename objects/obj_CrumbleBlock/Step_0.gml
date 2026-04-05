@@ -6,13 +6,14 @@ if(global.GamePaused())
 	exit;
 }
 
+var _timeLeft = timeLeft;
 var player = instance_place(x,y-2,obj_Player);
-if(instance_exists(player) && player.fVelY >= 0 )//&& !player.spiderBall)
+if(timeLeft <= 3 && instance_exists(player) && player.fVelY >= 0 )//&& !player.spiderBall)
 {
 	crumble = true;
 	if(abs(player.velX) > player.maxSpeed[MaxSpeed.MorphBall,player.liquidState])
 	{
-		timeLeft = 4;
+		_timeLeft += 1;
 	}
 }
 
@@ -34,7 +35,7 @@ if(instance_exists(pushBlock) && pushBlock.grounded && pushBlock.fVelY >= 0)
 
 if(crumble)
 {
-    if(time >= timeLeft)
+    if(time >= _timeLeft)
     {
         instance_destroy();
     }

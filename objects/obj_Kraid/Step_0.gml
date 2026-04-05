@@ -559,17 +559,6 @@ if(eyeGlow >= 1)
 	eyeGlowNum = -1;
 }
 
-if(instance_exists(dmgBoxes[KraidHitBoxes.Body]))
-{
-	dmgBoxes[KraidHitBoxes.Body].Damage(x,y,damage,damageType,damageSubType);
-}
-if(instance_exists(dmgBoxes[KraidHitBoxes.Hand]))
-{
-	dmgBoxes[KraidHitBoxes.Hand].image_angle = RArmBone[2].rotation * dir;
-	dmgBoxes[KraidHitBoxes.Hand].image_xscale = lerp(2/3, 1, clamp(rHandFrame-3,0,5) / 5) * dir;
-	dmgBoxes[KraidHitBoxes.Hand].Damage(RArmBone[2].position.X,RArmBone[2].position.Y,damage,damageType,damageSubType);
-}
-
 if(instance_exists(head))
 {
 	head.x = HeadBone.position.X;
@@ -579,26 +568,7 @@ if(instance_exists(head))
 	head.image_angle = (HeadBone.rotation - headBoxRotSeq[headFrame]) * dir;
 }
 
-/*if(instance_exists(rHand))
-{
-	rHand.x = RArmBone[2].position.X;
-	rHand.y = RArmBone[2].position.Y;
-
-	rHand.image_angle = RArmBone[2].rotation * dir;
-
-	rHand.image_xscale = lerp(2/3, 1, clamp(rHandFrame-3,0,5) / 5) * dir;
-}*/
-
-for(var i = 0; i < KraidHitBoxes._Length; i++)
-{
-	if(instance_exists(dmgBoxes[i]) && instance_exists(lifeBoxes[i]))
-	{
-		lifeBoxes[i].x = dmgBoxes[i].x;
-		lifeBoxes[i].y = dmgBoxes[i].y;
-		lifeBoxes[i].image_angle = dmgBoxes[i].image_angle;
-		lifeBoxes[i].image_xscale = dmgBoxes[i].image_xscale;
-	}
-}
+self.LifeBoxes();
 
 if(phase < 4)
 {

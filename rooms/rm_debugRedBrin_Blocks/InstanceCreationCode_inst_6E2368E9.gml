@@ -1,3 +1,3 @@
-nextroom = rm_debugRedBrin_BlocksElevator;
+nextRoom = rm_debugRedBrin_BlocksElevator;
 doorID = 1;
 nextDoorID = 1;

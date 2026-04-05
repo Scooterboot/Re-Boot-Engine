@@ -3,7 +3,7 @@ event_inherited();
 
 if(destroy)
 {
-    if(time >= 3)
+    if(time >= timeLeft)
     {
         instance_destroy();
     }

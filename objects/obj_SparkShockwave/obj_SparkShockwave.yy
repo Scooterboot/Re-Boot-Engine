@@ -38,6 +38,9 @@
     "name":"sprt_Player_ShineSparkFX",
     "path":"sprites/sprt_Player_ShineSparkFX/sprt_Player_ShineSparkFX.yy",
   },
-  "spriteMaskId":null,
+  "spriteMaskId":{
+    "name":"mask_Player_ShineSpark",
+    "path":"sprites/mask_Player_ShineSpark/mask_Player_ShineSpark.yy",
+  },
   "visible":true,
 }

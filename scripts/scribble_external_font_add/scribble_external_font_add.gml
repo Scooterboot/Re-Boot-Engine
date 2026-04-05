@@ -21,8 +21,13 @@ function scribble_external_font_add(_sprite, _image, _json, _font_name = undefin
     var _frame_info = _source_font_info.frames[_image]
     
     var _texture_index  = _frame_info.texture;
+    
+    //Ensure this texture has been fetched so we get valid texture dimensions
+    texture_prefetch(_texture_index);
+    
     var _texture_width  = texture_get_width(_texture_index);
     var _texture_height = texture_get_height(_texture_index);
+    
     
     var _texture_uvs = [
         _frame_info.x / _texture_width,
@@ -40,6 +45,7 @@ function scribble_external_font_add(_sprite, _image, _json, _font_name = undefin
     var _font_info = {
         texture: _texture_index,
         glyphs: {},
+        ascender: _json.ascender,
         ascenderOffset: _json.ascenderOffset,
         sdfEnabled: _json.usesSDF,
         sdfSpread: _json.sdfSpread,
@@ -71,7 +77,7 @@ function scribble_external_font_add(_sprite, _image, _json, _font_name = undefin
         ++_i;
     }
     
-    __scribble_font_add_from_info(_font_name, _texture_uvs, _font_info, _is_krutidev, false);
+    __scribble_font_add_from_info(_font_name, undefined, _texture_uvs, _font_info, _json.lineHeight, _is_krutidev, false);
     
     return _font_name;
 }

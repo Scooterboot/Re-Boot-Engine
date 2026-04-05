@@ -1,3 +1,3 @@
-nextroom = rm_debugKraid_Hall01;
+nextRoom = rm_debugKraid_Hall01;
 doorID = 0;
 nextDoorID = 0;

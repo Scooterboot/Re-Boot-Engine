@@ -1,5 +1,4 @@
 // Feather disable all
-// Feather ignore all
 #macro __SCRIBBLE_VBUFF_READ_GLYPH  var _quad_l = _vbuff_pos_grid[# _i, __SCRIBBLE_GEN_VBUFF_POS.__QUAD_L];\
                                     var _quad_t = _vbuff_pos_grid[# _i, __SCRIBBLE_GEN_VBUFF_POS.__QUAD_T];\
                                     var _quad_r = _vbuff_pos_grid[# _i, __SCRIBBLE_GEN_VBUFF_POS.__QUAD_R];\
@@ -65,17 +64,19 @@
 
 function __scribble_gen_10_write_vbuffs()
 {
-    static _string_buffer   = __scribble_initialize().__buffer_a;
-    static _effects_map     = __scribble_initialize().__effects_map;
-    static _generator_state = __scribble_initialize().__generator_state;
+    static _string_buffer   = __scribble_system().__buffer_a;
+    static _effects_map     = __scribble_system().__effects_map;
+    static _generator_state = __scribble_system().__generator_state;
     
     with(_generator_state)
     {
-        var _glyph_grid     = __glyph_grid;
-        var _control_grid   = __control_grid;
-        var _vbuff_pos_grid = __vbuff_pos_grid;
-        var _element        = __element;
-        var _glyph_count    = __glyph_count;
+        var _glyph_grid        = __glyph_grid;
+        var _control_grid      = __control_grid;
+        var _vbuff_pos_grid    = __vbuff_pos_grid;
+        var _element           = __element;
+        var _glyph_count       = __glyph_count;
+        var _text_getter       = __element.__allow_text_getter;
+        var _glyph_data_getter = __element.__allow_glyph_data_getter;
     }
     
     
@@ -119,7 +120,7 @@ function __scribble_gen_10_write_vbuffs()
     
     var _func_region_pop = function(_page_data, _region_name, _region_start, _region_end)
     {
-        static _generator_state = __scribble_initialize().__generator_state;
+        static _generator_state = __scribble_system().__generator_state;
         
         if (_region_start > _region_end) return;
         
@@ -173,19 +174,20 @@ function __scribble_gen_10_write_vbuffs()
         var _material_prev         = undefined;
         var _packed_indexes        = 0;
         
-        if (SCRIBBLE_ALLOW_TEXT_GETTER)
-        {
-            buffer_seek(_string_buffer, buffer_seek_start, 0);
-        }
-        
-        if (SCRIBBLE_ALLOW_GLYPH_DATA_GETTER)
+        if (_glyph_data_getter)
         {
             with(_page_data)
             {
                 __ensure_glyph_grid();
                 ds_grid_set_grid_region(__glyph_grid, _glyph_grid, __glyph_start, __SCRIBBLE_GEN_GLYPH.__UNICODE, __glyph_end, __SCRIBBLE_GEN_GLYPH.__UNICODE, 0, __SCRIBBLE_GLYPH_LAYOUT.__UNICODE);
+                ds_grid_set_grid_region(__glyph_grid, _glyph_grid, __glyph_start, __SCRIBBLE_GEN_GLYPH.__Y, __glyph_end, __SCRIBBLE_GEN_GLYPH.__Y, 0, __SCRIBBLE_GLYPH_LAYOUT.__Y_OFFSET);
                 ds_grid_set_grid_region(__glyph_grid, _vbuff_pos_grid, __glyph_start, 0, __glyph_end, __SCRIBBLE_GEN_VBUFF_POS.__SIZE-1, 0, __SCRIBBLE_GLYPH_LAYOUT.__LEFT);
             }
+        }
+        
+        if (_text_getter)
+        {
+            buffer_seek(_string_buffer, buffer_seek_start, 0);
         }
         
         var _i = _page_data.__glyph_start;
@@ -279,7 +281,7 @@ function __scribble_gen_10_write_vbuffs()
             var _glyph_ord = _glyph_grid[# _i, __SCRIBBLE_GEN_GLYPH.__UNICODE];
             if (_glyph_ord >= 0)
             {
-                if (SCRIBBLE_ALLOW_TEXT_GETTER)
+                if (_text_getter)
                 {
                     __scribble_buffer_write_unicode(_string_buffer, _glyph_ord);
                 }
@@ -294,7 +296,7 @@ function __scribble_gen_10_write_vbuffs()
             {
                 #region Write sprite
                 
-                if (SCRIBBLE_ALLOW_TEXT_GETTER)
+                if (_text_getter)
                 {
                     buffer_write(_string_buffer, buffer_u8, 0x1A); //Unicode/ASCII "substitute character"
                 }
@@ -410,7 +412,7 @@ function __scribble_gen_10_write_vbuffs()
             {
                 #region Write surface or texture
                 
-                if (SCRIBBLE_ALLOW_TEXT_GETTER)
+                if (_text_getter)
                 {
                     buffer_write(_string_buffer, buffer_u8, 0x1A); //Unicode/ASCII "substitute character"
                 }
@@ -453,7 +455,7 @@ function __scribble_gen_10_write_vbuffs()
             _region_start = _i;
         }
         
-        if (SCRIBBLE_ALLOW_TEXT_GETTER)
+        if (_text_getter)
         {
             //Write a null terminator to finish off the string
             buffer_write(_string_buffer, buffer_u8, 0);

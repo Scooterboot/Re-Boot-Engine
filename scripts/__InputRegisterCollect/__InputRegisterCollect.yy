@@ -6,7 +6,7 @@
   "name":"__InputRegisterCollect",
   "parent":{
     "name":"Callbacks",
-    "path":"folders/Scripts/Input/(System)/Callbacks.yy",
+    "path":"folders/Scripts/Libraries/Input/(System)/Callbacks.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

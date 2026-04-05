@@ -13,7 +13,7 @@ array_fill(doorOpenType, true);
 
 particleType = -1;
 
-image_speed = 0;//0.5;
+image_speed = 0;
 
 frame = 0;
 frameCounter = 0;

@@ -1,5 +1,4 @@
 // Feather disable all
-// Feather ignore all
 #macro __SCRIBBLE_GEN_WORD_START  _word_grid[# _word_count, __SCRIBBLE_GEN_WORD.__GLYPH_START] = _word_glyph_start;\
                                   _word_grid[# _word_count, __SCRIBBLE_GEN_WORD.__BIDI_RAW   ] = _word_bidi;\
                                   _word_grid[# _word_count, __SCRIBBLE_GEN_WORD.__BIDI       ] = ((_word_bidi == __SCRIBBLE_BIDI.ISOLATED) || (_word_bidi == __SCRIBBLE_BIDI.ISOLATED_CJK))? __SCRIBBLE_BIDI.L2R : _word_bidi; //CJK isolated characters are written L2R
@@ -44,7 +43,7 @@
 function __scribble_gen_4_build_words()
 {
     //Unpack generator state
-    static _generator_state = __scribble_initialize().__generator_state;
+    static _generator_state = __scribble_system().__generator_state;
     with(_generator_state)
     {
         var _glyph_grid   = __glyph_grid;

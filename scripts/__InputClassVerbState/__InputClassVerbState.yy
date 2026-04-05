@@ -6,7 +6,7 @@
   "name":"__InputClassVerbState",
   "parent":{
     "name":"Classes",
-    "path":"folders/Scripts/Input/(System)/Classes.yy",
+    "path":"folders/Scripts/Libraries/Input/(System)/Classes.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

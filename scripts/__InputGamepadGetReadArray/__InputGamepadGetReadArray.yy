@@ -6,7 +6,7 @@
   "name":"__InputGamepadGetReadArray",
   "parent":{
     "name":"Gamepads",
-    "path":"folders/Scripts/Input/(System)/Gamepads.yy",
+    "path":"folders/Scripts/Libraries/Input/(System)/Gamepads.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -26,7 +26,7 @@
   "origin":9,
   "parent":{
     "name":"Gamepad_Nintendo",
-    "path":"folders/Sprites/UI/ButtonIcons/Gamepad_Nintendo.yy",
+    "path":"folders/Sprites/UI/ButtonIcons/Gamepad/Gamepad_Nintendo.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",
@@ -78,7 +78,7 @@
     "visibleRange":null,
     "volume":1.0,
     "xorigin":3,
-    "yorigin":4,
+    "yorigin":2,
   },
   "swatchColours":null,
   "swfPrecision":0.5,

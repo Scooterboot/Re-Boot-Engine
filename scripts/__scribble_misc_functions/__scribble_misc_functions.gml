@@ -1,5 +1,4 @@
 // Feather disable all
-// Feather ignore all
 
 function __scribble_trace()
 {
@@ -8,7 +7,7 @@ function __scribble_trace()
     var _i = 0
     repeat(argument_count)
     {
-        if (is_real(argument[_i]))
+        if (is_real(argument[_i]) && (floor(argument[_i]) != argument[_i]))
         {
             _string += string_format(argument[_i], 0, 4);
         }
@@ -63,13 +62,13 @@ function __scribble_error()
 
 function __scribble_get_font_data(_name)
 {
-    static _font_data_map = __scribble_initialize().__font_data_map;
+    static _font_data_map = __scribble_system().__font_data_map;
     var _data = _font_data_map[? _name];
     if (_data == undefined)
     {
         var _string = "Font \"" + string(_name) + "\" not recognised";
         
-        if (__scribble_initialize().__gmMightRemoveUnusedAssets)
+        if (__scribble_system().__gmMightRemoveUnusedAssets)
         {
             _string += "\nThis may indicate that unused assets have been stripped from the project\nPlease untick \"Automatically remove unused assets when compiling\" in Game Options";
         }
@@ -364,12 +363,13 @@ function __scribble_matrix_inverse(_matrix)
 
 enum __SCRIBBLE_GLYPH_LAYOUT
 {
-    __UNICODE, // 0
-    __LEFT,    // 1
-    __TOP,     // 2
-    __RIGHT,   // 3
-    __BOTTOM,  // 4
-    __SIZE,    // 5
+    __UNICODE,  // 0
+    __LEFT,     // 1
+    __TOP,      // 2
+    __RIGHT,    // 3
+    __BOTTOM,   // 4
+    __Y_OFFSET, // 5
+    __SIZE,     // 7
 }
 
 #macro __SCRIBBLE_RENDER_RASTER               0
@@ -493,16 +493,17 @@ enum __SCRIBBLE_GEN_STRETCH
 
 enum __SCRIBBLE_GEN_LINE
 {
-    __X,                  //0
-    __Y,                  //1
-    __WORD_START,         //2
-    __WORD_END,           //3
-    __WIDTH,              //4
-    __HEIGHT,             //5
-    __HALIGN,             //6
-    __DISABLE_JUSTIFY,    //7
-    __STARTS_MANUAL_PAGE, //8
-    __SIZE,               //9
+    __X,                  // 0
+    __Y,                  // 1
+    __WORD_START,         // 2
+    __WORD_END,           // 3
+    __WIDTH,              // 4
+    __HEIGHT,             // 5
+    __HALIGN,             // 6
+    __DISABLE_JUSTIFY,    // 7
+    __STARTS_MANUAL_PAGE, // 8
+    __FORCED_BREAK,       // 9
+    __SIZE,               //10
 }
 
 #endregion
@@ -521,6 +522,9 @@ enum __SCRIBBLE_GEN_LINE
 #macro __SCRIBBLE_PIN_CENTRE           4
 #macro __SCRIBBLE_PIN_RIGHT            5
 #macro __SCRIBBLE_FA_JUSTIFY           6
+#macro __SCRIBBLE_PIN_TOP              3
+#macro __SCRIBBLE_PIN_MIDDLE           4
+#macro __SCRIBBLE_PIN_BOTTOM           5
 #macro __SCRIBBLE_WINDOW_COUNT         3
 #macro __SCRIBBLE_GC_STEP_SIZE         3
 #macro __SCRIBBLE_CACHE_TIMEOUT        10 //How long to wait (in frames) before the text element cache automatically cleans up unused data

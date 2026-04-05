@@ -1,5 +1,4 @@
 // Feather disable all
-// Feather ignore all
 
 /// @param textureIndexOrPointer
 /// @param renderType

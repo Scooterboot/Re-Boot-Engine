@@ -1,12 +1,11 @@
 
-if(InputPlayerGetDevice() == INPUT_KBM) // && visor uses mouse for control == true
+if(InputPlayerGetDevice() == INPUT_KBM && instance_exists(obj_Mouse)) // && visor uses mouse for control == true
 {
 	surface_set_target(obj_Display.surfUI);
 	bm_set_one();
 	
-	var _mp = MousePos();
-	var cx = _mp.X,
-		cy = _mp.Y;
+	var cx = obj_Mouse.PosX(),
+		cy = obj_Mouse.PosY();
 	
 	var sO = 8,
 		sI = 4;

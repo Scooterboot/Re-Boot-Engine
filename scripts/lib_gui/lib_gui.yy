@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"lib_gui",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"lib_gui",
+  "parent":{
+    "name":"Optional",
+    "path":"folders/Scripts/Libraries/GML-Extended/Functions/Optional.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "iceBeam";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "ICE BEAM";
 itemDesc = "Your beam can now freeze most enemies.";

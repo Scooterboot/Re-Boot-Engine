@@ -265,9 +265,6 @@ else
 		        grappleState = GrappleState.Swing;
 			}
 	    }
-		
-		self.DamageBoxes();
-		self.IncrInvFrames();
 	}
 	else
 	{

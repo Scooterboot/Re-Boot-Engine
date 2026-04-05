@@ -1,3 +1,3 @@
-nextroom = rm_debugNorfair_MapStation;
+nextRoom = rm_debugNorfair_MapStation;
 doorID = 2;
 nextDoorID = 0;

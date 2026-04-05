@@ -1,10 +1,7 @@
 /// @description Set position
 
-x = MousePos().X;
-y = MousePos().Y;
-
-posX = MousePos_Room().X;
-posY = MousePos_Room().Y;
+x = scr_round(self.PosX());
+y = scr_round(self.PosY());
 
 velX = x - xprevious;
 velY = y - yprevious;

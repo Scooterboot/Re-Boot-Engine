@@ -10,7 +10,7 @@
   "overriddenProperties":[],
   "parent":{
     "name":"(System)",
-    "path":"folders/Scripts/Input/(System).yy",
+    "path":"folders/Scripts/Libraries/Input/(System).yy",
   },
   "parentObjectId":null,
   "persistent":true,

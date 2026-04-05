@@ -2,9 +2,9 @@
 event_inherited();
 
 itemName = "powerBombTank";
-itemID = 0;
+//itemID = 0;
 
-pBombAmount = 5;
+//pBombAmount = 5;
 
 itemHeader = "POWER BOMB";
 //itemDesc = "While Morphed, select it and press [Shoot]";

@@ -9,10 +9,6 @@ if(keyboard_check_pressed(vk_divide) || keyboard_check_pressed(vk_f1) || keyboar
 var gameSpeed = defaultGameSpeed;
 if(debug > 0)
 {
-	if(keyboard_check(vk_shift))
-	{
-		gameSpeed = 2;
-	}
 	if(keyboard_check_pressed(vk_control))
 	{
 		//gameSpeed = 999;
@@ -22,15 +18,12 @@ if(debug > 0)
 	{
 		gameSpeed = 999;
 	}
-}
-else
-{
-	fastforwardtoggle = false;
-}
-game_set_speed(gameSpeed, gamespeed_fps);
-
-if(debug > 0)
-{
+	if(keyboard_check(vk_shift))
+	{
+		gameSpeed = 2;
+		fastforwardtoggle = false;
+	}
+	
 	if(keyboard_check(vk_add))
 	{
 		if(!zoomTempFlag)
@@ -73,8 +66,32 @@ if(debug > 0)
 	{
 		zoomTempFlag = false;
 	}
+	
+	if(mouse_check_button(mb_left) && global.pauseState == PauseState.None)
+	{
+		with(obj_Player)
+		{
+			if(instance_exists(obj_Mouse))
+			{
+				velX = 0;
+				velY = 0;
+				position.X = obj_Mouse.PosX_Room();
+				position.Y = obj_Mouse.PosY_Room();
+				x = scr_round(position.X);
+				y = scr_round(position.Y);
+			}
+		}
+		with(obj_Camera)
+		{
+			stallX = true;
+			stallY = true;
+		}
+	}
 }
 else
 {
+	fastforwardtoggle = false;
 	global.zoomScale = 1;
 }
+
+game_set_speed(gameSpeed, gamespeed_fps);

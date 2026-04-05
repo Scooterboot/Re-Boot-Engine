@@ -140,11 +140,10 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 		{
 			if(global.pauseState == PauseState.None)
 			{
-				if(InputPlayerGetDevice() == INPUT_KBM) // && visor uses mouse for control == true
+				if(InputPlayerGetDevice() == INPUT_KBM && instance_exists(obj_Mouse)) // && visor uses mouse for control == true
 				{
-					var _mp = MousePos();
-					scanVisor.x = _mp.X;
-					scanVisor.y = _mp.Y;
+					scanVisor.x = obj_Mouse.PosX();
+					scanVisor.y = obj_Mouse.PosY();
 				}
 				else
 				{
@@ -198,10 +197,9 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 					_moveY = clamp(InputY(INPUT_CLUSTER.VisorMove) + InputY(INPUT_CLUSTER.PlayerMove), -1,1);
 				var moveDir = point_direction(0,0, _moveX,_moveY),//InputDirection(0,INPUT_CLUSTER.VisorMove),
 					moveDist = point_distance(0,0, _moveX,_moveY);//InputDistance(INPUT_CLUSTER.VisorMove);
-				if(InputPlayerGetDevice() == INPUT_KBM) // && visor uses mouse for control == true
+				if(InputPlayerGetDevice() == INPUT_KBM && instance_exists(obj_Mouse)) // && visor uses mouse for control == true
 				{
-					var _mp = MousePos_Room();
-					moveDir = point_direction(x,y, _mp.X,_mp.Y);
+					moveDir = point_direction(x,y, obj_Mouse.PosX_Room(),obj_Mouse.PosY_Room());
 					moveDist = 1;
 				}
 				

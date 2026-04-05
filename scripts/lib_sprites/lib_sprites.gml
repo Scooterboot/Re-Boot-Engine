@@ -1,10 +1,7 @@
-// feather disable all
-// feather ignore all
-
 /// @func Sprite(sprite_index)
-/// @param {real}	sprite_index 
+/// @param {Real}	sprite_index 
 function Sprite(_spr_index) constructor {
-	function __init__(_spr_index) {
+	function __init_sprite__(_spr_index) {
 		if !(sprite_exists(_spr_index)) return undefined;
 		var _info = sprite_get_info(_spr_index);
 		
@@ -31,8 +28,8 @@ function Sprite(_spr_index) constructor {
 		self.uvs		= [];
 		
 		for (var i = 0; i < self.frames; i++) {
-			self.texture.push(sprite_get_texture(self.index, i));
-			self.uvs.push(sprite_get_uvs(self.index, i));
+			array_push(self.texture, sprite_get_texture(self.index, i));
+			array_push(self.uvs, sprite_get_uvs(self.index, i));
 		}
 		
 		delete _info;
@@ -41,7 +38,7 @@ function Sprite(_spr_index) constructor {
 	/// @func	getSize()
 	/// @desc	Returns an array with the size of the sprite
 	function getSize() {
-		return new Array([self.width, self.height]);
+		return [self.width, self.height];
 	}
 	
 	/// @func	getOrigin()
@@ -104,5 +101,5 @@ function Sprite(_spr_index) constructor {
 		return self.nineslice;
 	}
 	
-	__init__(_spr_index);
+	__init_sprite__(_spr_index);
 }

@@ -1,12 +1,12 @@
 {
   "$GMObject":"",
   "%Name":"obj_NPCBreakable",
-  "eventList":[
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-  ],
+  "eventList":[],
   "managed":true,
   "name":"obj_NPCBreakable",
-  "overriddenProperties":[],
+  "overriddenProperties":[
+    {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_Breakable","path":"objects/obj_Breakable/obj_Breakable.yy",},"propertyId":{"name":"respawnTime","path":"objects/obj_Breakable/obj_Breakable.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"0",},
+  ],
   "parent":{
     "name":"BTSTiles",
     "path":"folders/Objects/Room Elements/BTSTiles.yy",

@@ -24,7 +24,7 @@
   ],
   "name":"sprt_HUD_Icon_Missile",
   "nineSlice":null,
-  "origin":9,
+  "origin":4,
   "parent":{
     "name":"Icons",
     "path":"folders/Sprites/UI/HUD/Icons.yy",
@@ -82,7 +82,7 @@
     "visibleRange":null,
     "volume":1.0,
     "xorigin":8,
-    "yorigin":7,
+    "yorigin":6,
   },
   "swatchColours":null,
   "swfPrecision":0.5,

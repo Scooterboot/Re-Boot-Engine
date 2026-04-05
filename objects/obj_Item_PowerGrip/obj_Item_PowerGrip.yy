@@ -8,8 +8,8 @@
   "name":"obj_Item_PowerGrip",
   "overriddenProperties":[],
   "parent":{
-    "name":"MiscItems",
-    "path":"folders/Objects/Room Elements/ItemPickups/MiscItems.yy",
+    "name":"MobilityItems",
+    "path":"folders/Objects/Room Elements/ItemPickups/MobilityItems.yy",
   },
   "parentObjectId":{
     "name":"obj_Item",

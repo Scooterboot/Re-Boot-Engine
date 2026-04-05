@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "scanVisor";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "SCAN VISOR";
 itemDesc = "Select ["+sprite_get_name(sprt_HUD_Icon_ScanVisor)+",0] with ${VisorCycle} and press ${VisorToggle} to activate."

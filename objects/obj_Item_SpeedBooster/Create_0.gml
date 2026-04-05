@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "speedBooster";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "SPEED BOOSTER";
 //itemDesc = "Hold ${sprintButton} while moving to run extremely fast.\n" +

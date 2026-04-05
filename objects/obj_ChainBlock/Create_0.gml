@@ -6,13 +6,14 @@ extSprt = sprt_BombBlockExt;
 
 destroy = false;
 time = 0;
+//timeLeft = 3;
 
-right = false;
-left = false;
-up = false;
-down = false;
+//right = false;
+//left = false;
+//up = false;
+//down = false;
 
-upright = false;
-upleft = false;
-downright = false;
-downleft = false;
+//upright = false;
+//upleft = false;
+//downright = false;
+//downleft = false;

@@ -4,6 +4,7 @@ position = new Vector2(x,y);
 oldPosition = new Vector2(position.X,position.Y);
 
 #region BBox vars
+
 function bb_left(xx = undefined)
 {
 	/// @description bb_left
@@ -32,16 +33,25 @@ function bb_bottom(yy = undefined)
 	yy = is_undefined(yy) ? position.Y : yy;
 	return bbox_bottom-y + yy - 1;
 }
-#endregion
 
-function Center(useRealXY = false)
+function bb_width(xx = undefined)
+{
+	return self.bb_right(xx)-self.bb_left(xx);
+}
+function bb_height(yy = undefined)
+{
+	return self.bb_bottom(yy)-self.bb_top(yy);
+}
+function Center(useRealXY = false, xx = undefined, yy = undefined)
 {
 	if(useRealXY)
 	{
-		return new Vector2(self.bb_left(x) + (self.bb_right(x)-self.bb_left(x))/2, self.bb_top(y) + (self.bb_bottom(y)-self.bb_top(y))/2);
+		return new Vector2(self.bb_left(x) + self.bb_width(x)/2, self.bb_top(y) + self.bb_height(y)/2);
 	}
-	return new Vector2(self.bb_left() + (self.bb_right()-self.bb_left())/2, self.bb_top() + (self.bb_bottom()-self.bb_top())/2);
+	return new Vector2(self.bb_left(xx) + self.bb_width(xx)/2, self.bb_top(yy) + self.bb_height(yy)/2);
 }
+
+#endregion
 
 velX = 0; // velocity x
 velY = 0; // velocity y

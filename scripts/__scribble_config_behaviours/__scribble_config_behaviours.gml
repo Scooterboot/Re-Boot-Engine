@@ -1,7 +1,7 @@
-// Feather disable all
-/// Scribble's macros, used to customise and control behaviour throughout the library
-///
-/// N.B. You never need to run this script yourself! All of these macros are handled automatically when Scribble is compiled into your project
+//Whether to automatically initialize Scribble Deluxe when your game boots. Set this macro to
+//`true` if you don't want to make initialization manually. If you set this function to `false`
+//then you will need to call `scribble_initialize()` before calling other Scribble Deluxe functions.
+#macro SCRIBBLE_INITIALIZE_ON_BOOT  true
 
 //Replaces hashes (#) with newlines (ASCII chr10) to emulate GMS1's newline behaviour.
 #macro SCRIBBLE_HASH_NEWLINE  false
@@ -14,7 +14,7 @@
 
 //Whether to use sprite origins. Setting this to <false> will vertically centre sprites on the line
 //of text.
-#macro SCRIBBLE_ADD_SPRITE_ORIGINS  true
+#macro SCRIBBLE_ADD_SPRITE_ORIGINS  true//false
 
 //Character to use when another character is missing from a font.
 #macro SCRIBBLE_MISSING_CHARACTER  "?"
@@ -39,11 +39,15 @@
 
 //Set to <true> to enable the `.get_text()` method on text elements. This will apply to all text
 //elements and carries a performance penalty.
-#macro SCRIBBLE_ALLOW_TEXT_GETTER  true
+#macro SCRIBBLE_FORCE_TEXT_GETTER  true//false
 
 //Set to <true> to enable the `.get_glyph_data()` method on text elements (and a few other features
 //too). This will apply to all text elements and carries a performance penalty.
-#macro SCRIBBLE_ALLOW_GLYPH_DATA_GETTER  false
+#macro SCRIBBLE_FORCE_GLYPH_DATA_GETTER  false
+
+//Set to <true> to enable the `.get_line_data()` method on text elements (and a few other features
+//too). This will apply to all text elements and carries a performance penalty.
+#macro SCRIBBLE_FORCE_LINE_DATA_GETTER  false
 
 //Whether to automatically scale sprites to fit into the line of text. This is based on the font
 //height of the current font.
@@ -55,7 +59,21 @@
 
 //Whether to automatically scale textures to fit into the line of text. This is based on the font
 //height of the current font.
-#macro SCRIBBLE_AUTOFIT_INLINE_TEXTURES  false  
+#macro SCRIBBLE_AUTOFIT_INLINE_TEXTURES  false
+
+// Controls how in-line sprites are positioned on a line of text. The position is based on the
+// font's ascender and ascender offset as well as the sprite's overall height. The sprite height
+// used to calculate positioning includes empty space around the image.
+// 
+// N.B. GameMaker seems to not export valid ascender information for some fonts. I have not been
+//      able to find a pattern. If Scribble detects an invalid/nonsensical ascender then a
+//      warning message will be shown in the debug log and Scribble will estimate an appropriate
+//      ascender.
+// 
+// 0 = Legacy. Align centre of sprites to the centre of the line height
+// 1 = Recommended. Align centre of sprites to the centre of the ascender
+// 2 = Align bottom of sprites to the baseline
+#macro SCRIBBLE_SPRITE_ALIGN_MODE  1
 
 //Whether to adjust the horizontal distance between glyphs depending on special per-font rules. Set
 //to `false` for legacy pre-8.2 behaviour.
@@ -92,12 +110,12 @@
 
 #region Advanced Features
 
-//Animation tick size per step. The default macro `(delta_time / 16666)` ensures that animations
-//are smooth and consistent at all framerates.
-#macro SCRIBBLE_TICK_SIZE  (delta_time / 16666)
+//Animation tick size per step. The out-of-the-box macro ensures that animations are smooth and
+//consistent at all framerates.
+#macro SCRIBBLE_TICK_SIZE  min(5, (delta_time / 16666))
 
 //Default value to use for text element unique IDs. This is used when no unique ID is specified.
-//This value must be a string, and must start with a colon (:).
+//This value must be a string, and must end with a colon (:).
 #macro SCRIBBLE_DEFAULT_UNIQUE_ID  "default:"
 
 //Enables verbose console output to aid with debugging

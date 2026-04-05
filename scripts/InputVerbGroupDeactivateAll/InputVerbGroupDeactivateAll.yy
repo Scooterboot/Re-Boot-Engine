@@ -6,7 +6,7 @@
   "name":"InputVerbGroupDeactivateAll",
   "parent":{
     "name":"Verb Groups",
-    "path":"folders/Scripts/Input Plug-Ins/Verb Groups.yy",
+    "path":"folders/Scripts/Libraries/Input Plug-Ins/Verb Groups.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

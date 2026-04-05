@@ -1,10 +1,9 @@
 // Feather disable all
-// Feather ignore all
 function __scribble_gen_5_finalize_bidi()
 {
     if (!__has_r2l) exit;
     
-    static _generator_state = __scribble_initialize().__generator_state;
+    static _generator_state = __scribble_system().__generator_state;
     with(_generator_state)
     {
         var _word_grid    = __word_grid;

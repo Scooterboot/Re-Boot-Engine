@@ -1,5 +1,4 @@
 // Feather disable all
-// Feather ignore all
 
 function __scribble_glyph_data_initialize()
 {

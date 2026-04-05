@@ -1,5 +1,4 @@
 /// @description 
-
 var ww = global.resWidth,
 	hh = global.resHeight;
 
@@ -8,17 +7,15 @@ bm_set_one();
 
 if(room == rm_MainMenu)
 {
-	if(state == MMState.TitleIntro)
+	if(state == UI_MMState.TitleIntro)
 	{
 		// stuff
 	}
-
-	if(state == MMState.Title || state == MMState.MainMenu)
+	if(state == UI_MMState.Title || state == UI_MMState.MainMenu)
 	{
 		draw_sprite_ext(sprt_Title, 0, (ww/2), (hh/2) - 81, 1, 1, 0, c_white, titleAlpha);
 	}
-
-	if(state == MMState.Title)
+	if(state == UI_MMState.Title)
 	{
 		if(pressStartAnim < 40)
 		{
@@ -46,128 +43,86 @@ if(room == rm_MainMenu)
 			}
 		}
 	}
-
-	if(state == MMState.MainMenu)
+	if(state == UI_MMState.MainMenu)
 	{
-		if(instance_exists(mainMenuPanel))
+		if(instance_exists(mainMenuPage))
 		{
-			mainMenuPanel.alpha = min(mainMenuPanel.alpha+0.15,1);
-			mainMenuPanel.DrawPanel(0,0);
+			mainMenuPage.DrawPage();
 		}
 	}
-
-	if(state == MMState.FileMenu)
+	
+	if(state == UI_MMState.FileMenu)
 	{
 		draw_set_color(c_black);
 		draw_set_alpha(1);
 		draw_rectangle(-1,-1,ww+1,hh+1,false);
 		draw_sprite_ext(bg_Zebes, 0, ww/2, hh/2, 1, 1, 0,c_white,1);
 		
-		if(instance_exists(copyFilePanel))
+		if(instance_exists(copyFilePage))
 		{
-			copyFilePanel.DrawPanel(0,0);
+			copyFilePage.DrawPage();
 		}
 		else
 		{
-			if(instance_exists(fileMenuPanel))
+			if(instance_exists(fileMenuPage))
 			{
-				fileMenuPanel.DrawPanel(0,0);
+				fileMenuPage.DrawPage();
 			}
-			if(subState == MMSubState.FileSelected && instance_exists(selectedFilePanel))
+			if(subState == UI_MMSubState.FileSelected && instance_exists(selectedFilePage))
 			{
-				selectedFilePanel.DrawPanel(0,0);
+				selectedFilePage.DrawPage();
 			}
 		}
 		
-		if(subState == MMSubState.ConfirmCopy && instance_exists(confirmCopyPanel))
+		if(instance_exists(confirmCopyPage))
 		{
-			draw_set_color(c_black);
-			draw_set_alpha(0.5 * confirmCopyPanel.alpha);
-			draw_rectangle(-1,-1,ww+1,hh+1,false);
-			draw_set_alpha(1);
-			
-			confirmCopyPanel.DrawPanel(confirmCopyPanel.x,confirmCopyPanel.y);
+			confirmCopyPage.DrawPage();
 		}
-		if(subState == MMSubState.ConfirmDelete && instance_exists(confirmDeletePanel))
+		if(instance_exists(confirmDeletePage))
 		{
-			draw_set_color(c_black);
-			draw_set_alpha(0.5 * confirmDeletePanel.alpha);
-			draw_rectangle(-1,-1,ww+1,hh+1,false);
-			draw_set_alpha(1);
-			
-			confirmDeletePanel.DrawPanel(confirmDeletePanel.x,confirmDeletePanel.y);
+			confirmDeletePage.DrawPage();
 		}
 	}
-
-	if(state != MMState.TitleIntro && state != MMState.Title)
+	
+	var footerSprt = sprt_UI_Footer;
+	if(state != UI_MMState.TitleIntro && state != UI_MMState.Title)
 	{
-		buttonTipY = min(buttonTipY+1,buttonTipScrib.get_height());
+		footerY = min(footerY+1, 12);
 	}
 	else
 	{
-		buttonTipY = 0;
+		footerY = 0;
 	}
-	if(buttonTipY > 0)
+	if(footerY > 0)
 	{
-		var _tipStr = buttonTipString[0];
-		if(state == MMState.FileMenu)
+		var _tipStr = footerString[0];
+		if(state == UI_MMState.FileMenu)
 		{
-			_tipStr = buttonTipString[1];
+			_tipStr = footerString[1];
 		}
-		if(subState != MMSubState.None)
+		if(subState != UI_MMSubState.None)
 		{
-			_tipStr = buttonTipString[2];
+			_tipStr = footerString[2];
 		}
-		var str = obj_UI.InsertIconsIntoString(_tipStr);
-		if(buttonTipScrib.get_text() != str)
+		var str = obj_UI_Icons.InsertIconsIntoString(_tipStr);
+		if(footerScrib.get_text() != str)
 		{
-			buttonTipScrib.overwrite(str);
+			footerScrib.overwrite(str);
 		}
 	
-		var _height = buttonTipScrib.get_height();
-		var _yoff = _height - buttonTipY;
-
-		draw_set_alpha(0.75);
-		draw_set_color(c_black);
-		draw_rectangle(-32, hh-_height + _yoff, ww+31, hh + _yoff, false);
-		draw_set_alpha(1);
-		draw_set_color(c_white);
-
-		var col2 = make_color_rgb(26,108,0);
-		gpu_set_blendmode(bm_add);
-		draw_rectangle_color(-32, hh-_height + _yoff, (ww/2), hh + _yoff, c_black,col2,col2,c_black, false);
-		draw_rectangle_color((ww/2), hh-_height + _yoff, ww+32, hh + _yoff, col2,c_black,c_black,col2, false);
-		bm_set_one();
+		var _fSprt = sprt_UI_MainMenu_Footer,
+			_fW = sprite_get_width(_fSprt),
+			_fH = sprite_get_height(_fSprt);
+		draw_sprite_ext(_fSprt,0, ww/2, hh-footerY, global.wideResWidth/_fW,footerY/_fH,0, c_white,1);
 	
 		var tipx = ww/2,
-			tipy = hh-4;
+			tipy = hh-footerY+7;
 	
-		buttonTipScrib.blend(c_black,1);
-		buttonTipScrib.draw(tipx+1,tipy+1 + _yoff);
-		buttonTipScrib.blend(c_white,1);
-		buttonTipScrib.draw(tipx,tipy + _yoff);
-
-		draw_set_font(fnt_GUI);
-		draw_set_halign(fa_left);
-		draw_set_valign(fa_top);
-
-		draw_set_alpha(1);
-		draw_set_color(c_black);
+		footerScrib.blend(c_black,1);
+		footerScrib.draw(tipx+1,tipy+1);
+		footerScrib.blend(c_white,1);
+		footerScrib.draw(tipx,tipy);
 	}
-	
-	//debug
-	/*
-	draw_set_alpha(1);
-	draw_set_color(c_white);
-	draw_set_font(fnt_GUI_Small);
-	draw_set_align(fa_left,fa_top);
-	draw_text(24,24,"state: "+string(state));
-	draw_text(24,24 + 10,"subState: "+string(subState));
-	draw_text(24,24 + 20,"mainMenuPanel: "+string(instance_exists(mainMenuPanel)));
-	draw_text(24,24 + 30,"fileMenuPanel: "+string(instance_exists(fileMenuPanel)));
-	draw_text(24,24 + 40,"selectedFilePanel: "+string(instance_exists(selectedFilePanel)));
-	draw_text(24,24 + 50,"copyFilePanel: "+string(instance_exists(copyFilePanel)));
-	*/
 }
 
 draw_set_color(c_black);
@@ -175,5 +130,5 @@ draw_set_alpha(min(screenFade,1));
 draw_rectangle(-1,-1,ww+1,hh+1,false);
 draw_set_alpha(1);
 
-gpu_set_blendmode(bm_normal);
+bm_reset();
 surface_reset_target();

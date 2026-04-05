@@ -1,3 +1,3 @@
-nextroom = rm_debugGreenBrin_Jungle01;
+nextRoom = rm_debugGreenBrin_Jungle01;
 doorID = 1;
 nextDoorID = 0;

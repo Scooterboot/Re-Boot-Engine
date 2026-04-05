@@ -75,3 +75,44 @@ function NPCDropItem(_x,_y)
 		self._NPCDropItem(_x+irandom_range(-12,12),_y+irandom_range(-12,12));
 	}
 }
+
+boxMask = [mask_MiniKraid_Head, mask_MiniKraid_UpperBody, mask_MiniKraid_LowerBody];
+dmgBoxes = array_create(array_length(boxMask),noone);
+lifeBoxes = array_create(array_length(boxMask),noone);
+
+function DamageBoxes()
+{
+	for(var i = 0; i < array_length(boxMask); i++)
+	{
+		var _mask = boxMask[i];
+		if(!instance_exists(dmgBoxes[i]))
+		{
+			dmgBoxes[i] = self.CreateDamageBox(0,0,_mask,hostile);
+		}
+		else
+		{
+			dmgBoxes[i].mask_index = _mask;
+			dmgBoxes[i].image_xscale = dir;
+			dmgBoxes[i].image_yscale = 1;
+			dmgBoxes[i].Damage(x,y+sprtOffsetY,damage,damageType,damageSubType);
+		}
+	}
+}
+function LifeBoxes()
+{
+	for(var i = 0; i < array_length(boxMask); i++)
+	{
+		var _mask = boxMask[i];
+		if(!instance_exists(lifeBoxes[i]))
+		{
+			lifeBoxes[i] = self.CreateLifeBox(0,0,_mask,hostile);
+		}
+		else
+		{
+			lifeBoxes[i].mask_index = _mask;
+			lifeBoxes[i].image_xscale = dir;
+			lifeBoxes[i].image_yscale = 1;
+			lifeBoxes[i].UpdatePos(x,y+sprtOffsetY);
+		}
+	}
+}

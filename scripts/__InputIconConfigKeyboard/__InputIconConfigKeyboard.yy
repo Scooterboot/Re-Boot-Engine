@@ -6,7 +6,7 @@
   "name":"__InputIconConfigKeyboard",
   "parent":{
     "name":"Config",
-    "path":"folders/Scripts/Input Plug-Ins/Binding Icons/Config.yy",
+    "path":"folders/Scripts/Libraries/Input Plug-Ins/Binding Icons/Config.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

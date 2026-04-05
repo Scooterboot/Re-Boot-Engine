@@ -1,7 +1,5 @@
 function scr_MainInitialize()
 {
-	//global.roomTrans = false;	//variable that checks whether the player is transitioning from room to room
-	//global.gamePaused = false;	//variable that checks if the game is paused
 	enum PauseState
 	{
 		None,
@@ -29,10 +27,11 @@ function scr_MainInitialize()
 	instance_create_depth(0,0,0,obj_Particles);
 	instance_create_depth(0,0,0,obj_TileFadeHandler);
 	instance_create_depth(0,0,0,obj_ScreenShaker);
+	instance_create_depth(0,0,0,obj_UI_Icons);
 	
-	instance_create_depth(MousePos().X,MousePos().Y,-9,obj_Mouse);
-	instance_create_depth(0,0,-8,obj_UI);
-	instance_create_depth(0,0,-7,obj_UI_MainMenu);
+	instance_create_depth(0,0,-9,obj_Mouse);
+	instance_create_depth(0,0,-7,obj_UI_SettingsMenu);
+	instance_create_depth(0,0,-6,obj_UI_MainMenu);
 	instance_create_depth(0,0,-6,obj_PauseMenu);//obj_UI_PauseMenu);
 	instance_create_depth(0,0,-5,obj_UI_RadialMenu);
 	instance_create_depth(0,0,-4,obj_UI_HUD);

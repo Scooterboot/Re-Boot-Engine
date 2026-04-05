@@ -2,9 +2,9 @@
 event_inherited();
 
 itemName = "energyTank";
-itemID = 0;
+//itemID = 0;
 
-energyAmount = 100;
+//energyAmount = 100;
 
 itemHeader = "ENERGY TANK";
 itemDesc = "Maximum energy increased by "+string(energyAmount)+" units.";

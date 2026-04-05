@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "variaSuit";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "VARIA SUIT";
 itemDesc = "Traverse heated areas undamaged." + "\n" + "Halves damage taken.";

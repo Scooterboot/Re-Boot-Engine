@@ -12,9 +12,7 @@ type = ProjType.Bomb;
 damageType = DmgType.ExplSplash;
 damageSubType[DmgSubType_Explosive.Bomb] = true;
 
-explode = 0;
-self.DamageBoxes();
-
+isExploProj = true;
 part_particles_create(obj_Particles.partSystemA,x,y,obj_Particles.explosion[0],1);
 
 var dist = instance_create_depth(0,0,depth-1,obj_Distort);

@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "hiJump";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "HI-JUMP BOOTS";
 itemDesc = "Jump height increased.";

@@ -1,9 +1,4 @@
 /// @description 
-event_inherited();
-if(global.GamePaused())
-{
-	exit;
-}
 
 if(!self.PauseAI())
 {
@@ -23,4 +18,9 @@ if(!self.PauseAI())
 	}
 }
 
-self.UpdateMovingTiles();
+if(!global.GamePaused())
+{
+	self.UpdateMovingTiles();
+}
+
+event_inherited();

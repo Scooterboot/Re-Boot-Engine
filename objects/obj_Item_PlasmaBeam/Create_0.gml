@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "plasmaBeam";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "PLASMA BEAM";
 itemDesc = "Your beam now pierces enemies.";

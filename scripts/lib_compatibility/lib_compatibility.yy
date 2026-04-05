@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"lib_compatibility",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"lib_compatibility",
+  "parent":{
+    "name":"Compatibility",
+    "path":"folders/Scripts/Libraries/GML-Extended/Functions/Compatibility.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

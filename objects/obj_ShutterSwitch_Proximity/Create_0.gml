@@ -1,13 +1,13 @@
 /// @description 
 event_inherited();
 
-sizeX = 120;
-sizeY = 120;
-shape = "rectangle"; // "rectangle", "circle"
-lineOfSight = true;
-stayClosed = true;//false;
+//sizeX = 120;
+//sizeY = 120;
+//shape = "rectangle"; // "rectangle", "circle"
+//lineOfSight = true;
+//stayClosed = true;//false;
 
-shutterID = 0;
+//shutterID = 0;
 
 playerDetected = false;
 

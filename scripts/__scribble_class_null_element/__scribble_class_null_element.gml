@@ -1,5 +1,4 @@
 // Feather disable all
-// Feather ignore all
 function __scribble_class_null_element() constructor
 {
     static __error = function()

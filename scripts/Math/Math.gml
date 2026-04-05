@@ -33,11 +33,11 @@ function scr_wrap(val,vmin,vmax)
 	return val;
 }
 
-function AngleFlip(angle, dir)
+function AngleFlip(angle, dirX = 1, dirY = 1)
 {
 	var c = dcos(angle),
 		s = dsin(angle);
-	return darctan2(s,c*dir);
+	return darctan2(s*dirY, c*dirX);
 }
 
 function ReflectAngle(_src, _dest)

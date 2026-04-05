@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "spazer";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "SPAZER";
 itemDesc = "Fire 3 beams at once.";

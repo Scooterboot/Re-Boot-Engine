@@ -1,5 +1,4 @@
 // Feather disable all
-// Feather ignore all
 
 function __scribble_krutidev_matra_lookup_map_initialize()
 {

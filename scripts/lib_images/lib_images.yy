@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"lib_images",
   "parent":{
-    "name":"Libraries",
-    "path":"folders/Scripts/Libraries.yy",
+    "name":"Optional",
+    "path":"folders/Scripts/Libraries/GML-Extended/Functions/Optional.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

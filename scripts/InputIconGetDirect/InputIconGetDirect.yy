@@ -6,7 +6,7 @@
   "name":"InputIconGetDirect",
   "parent":{
     "name":"Binding Icons",
-    "path":"folders/Scripts/Input Plug-Ins/Binding Icons.yy",
+    "path":"folders/Scripts/Libraries/Input Plug-Ins/Binding Icons.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -1,5 +1,7 @@
 // Feather disable all
 
+#macro __INPUT_GAMEPAD_AXIS_BLOCKS_HOTSWAP  false
+
 #macro __INPUT_VERB_STATE_HEADER  "<PWP"
 #macro __INPUT_VERB_STATE_FOOTER  ">"
 
@@ -48,23 +50,13 @@
                                          }\
                                      }
 
-#macro __INPUT_VALIDATE_CURSOR_CLUSTER if (INPUT_SAFETY_CHECKS)\
-                                     {\
-                                         if (not is_numeric(INPUT_CURSOR_CLUSTER))\
-                                         {\
-                                             __InputError("Cursor cluster index must be a number (typeof = \"", typeof(INPUT_CURSOR_CLUSTER), "\")");\
-                                         }\
-                                         if (INPUT_CURSOR_CLUSTER < 0)\
-                                         {\
-                                             __InputError("Cursor cluster index ", INPUT_CURSOR_CLUSTER, " less than zero");\
-                                         }\
-                                     }
-
 __InputSystem();
 function __InputSystem()
 {
     static _system = undefined;
     if (_system != undefined) return _system;
+    
+    global.__inputPlugInGuard = true;
     
     __InputTrace("Welcome to Input by Juju Adams, Alynne Keith, and friends! This is version " + INPUT_VERSION + ", " + INPUT_DATE + " (GM version " + string(GM_runtime_version) + ")");
     
@@ -222,6 +214,13 @@ function __InputSystem()
             keyboard_virtual_hide();
         }
         
+        //Disable mouse input on PlayStation 5
+        if (INPUT_ON_PS5)
+        {
+            ps5_touchpad_mouse_enable(false);
+        }
+        
+        
         
         //Create a time source if the library needs to self-manage
         if (INPUT_COLLECT_MODE != 2)
@@ -321,6 +320,8 @@ function __InputSystem()
             [], -1));
         }
     }
+    
+    struct_remove(global, "__inputPlugInGuard");
     
     return _system;
 }

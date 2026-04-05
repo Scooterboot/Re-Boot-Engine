@@ -1,5 +1,4 @@
 // Feather disable all
-// Feather ignore all
 #macro __SCRIBBLE_PARSER_PUSH_SCALE  if (_state_scale != 1)\
                                      {\
                                             ds_grid_multiply_region(_glyph_grid, _state_scale_start_glyph, __SCRIBBLE_GEN_GLYPH.__X, _glyph_count, __SCRIBBLE_GEN_GLYPH.__SCALE, _state_scale);\ //Covers x, y, width, height, and separation
@@ -69,7 +68,8 @@
 
 
 
-#macro __SCRIBBLE_PARSER_SET_FONT   var _font_data            = __scribble_get_font_data(_font_name);\
+#macro __SCRIBBLE_PARSER_SET_FONT   var _font_data = __scribble_get_font_data(_font_name);\
+                                    _font_data.__ensure_texel_data();\
                                     if (_font_data.__is_krutidev) __has_devanagari = true;\
                                     ;\
                                     var _font_glyph_data_grid     = _font_data.__glyph_data_grid;\
@@ -88,8 +88,10 @@
                                         return false;\
                                     }\
                                     ;\
-                                    var _font_space_width = _font_glyph_data_grid[# _space_data_index, SCRIBBLE_GLYPH.SEPARATION ];\
-                                    var _font_line_height = _font_glyph_data_grid[# _space_data_index, SCRIBBLE_GLYPH.FONT_HEIGHT];\
+                                    var _font_space_width     = _font_glyph_data_grid[# _space_data_index, SCRIBBLE_GLYPH.SEPARATION ];\
+                                    var _font_line_height     = _font_glyph_data_grid[# _space_data_index, SCRIBBLE_GLYPH.FONT_HEIGHT];\
+                                    var _font_ascender        = _font_data.__ascender;\
+                                    var _font_ascender_offset = _font_data.__ascender_offset;\
                                     _control_grid[# _control_count, __SCRIBBLE_GEN_CONTROL.__TYPE] = __SCRIBBLE_GEN_CONTROL_TYPE.__FONT;\
                                     _control_grid[# _control_count, __SCRIBBLE_GEN_CONTROL.__DATA] = _font_name;\
                                     ++_control_count;
@@ -159,11 +161,14 @@ function __scribble_gen_2_parser()
         _command_tag_lookup_accelerator_map[? "offset"            ] = 38;
         _command_tag_lookup_accelerator_map[? "offsetPop"         ] = 39;
         _command_tag_lookup_accelerator_map[? "texture"           ] = 40;
+        _command_tag_lookup_accelerator_map[? "pin_top"           ] = 41;
+        _command_tag_lookup_accelerator_map[? "pin_middle"        ] = 42;
+        _command_tag_lookup_accelerator_map[? "pin_bottom"        ] = 43;
     }
     
     #endregion
     
-    static _system                = __scribble_initialize();
+    static _system                = __scribble_system();
     static _useHandleParse        = _system.__useHandleParse;
     static _effects_map           = _system.__effects_map;
     static _effects_slash_map     = _system.__effects_slash_map;
@@ -187,7 +192,7 @@ function __scribble_gen_2_parser()
         var _element        = __element;
     }
     
-    static _glyph_data_struct = __scribble_initialize().__glyph_data;
+    static _glyph_data_struct = __scribble_system().__glyph_data;
     static _global_glyph_bidi_map = _glyph_data_struct.__bidi_map;
     
     //Arabic look-up tables
@@ -217,6 +222,7 @@ function __scribble_gen_2_parser()
     var _starting_font = _element.__starting_font;
     if (_starting_font == undefined) __scribble_error("The default font has not been set\nCheck that you've added fonts to Scribble (scribble_font_add() / scribble_font_add_from_sprite() etc.)");
     
+    _starting_font = scribble_font_get_remap(_starting_font);
     var _font_name = _starting_font;
     
     //Run the pre-processor
@@ -422,7 +428,7 @@ function __scribble_gen_2_parser()
                         
                             if (_font_name != _starting_font)
                             {
-                                _font_name = _starting_font;
+                                _font_name = _starting_font; //Starting font already remapped
                                 __SCRIBBLE_PARSER_SET_FONT;
                             }
                         
@@ -446,7 +452,7 @@ function __scribble_gen_2_parser()
                         case 1:
                             if (_font_name != _starting_font)
                             {
-                                _font_name = _starting_font;
+                                _font_name = _starting_font; //Starting font already remapped
                                 __SCRIBBLE_PARSER_SET_FONT;
                             }
                         break;
@@ -585,7 +591,7 @@ function __scribble_gen_2_parser()
                         case 13:
                             _new_halign = fa_right;
                         break;
-                            
+                        
                         // [fa_top]
                         case 14:
                             _new_valign = fa_top;
@@ -600,23 +606,38 @@ function __scribble_gen_2_parser()
                         case 16:
                             _new_valign = fa_bottom;
                         break;
-                    
+                        
                         // [pin_left]   
                         case 17:
                             _new_halign = __SCRIBBLE_PIN_LEFT;
                         break;
-                    
+                        
                         // [pin_center]
                         // [pin_centre]
                         case 18:
                             _new_halign = __SCRIBBLE_PIN_CENTRE;
                         break;
-                    
+                        
                         // [pin_right]
                         case 19:
                             _new_halign = __SCRIBBLE_PIN_RIGHT;
                         break;
-                    
+                        
+                        // [pin_top]
+                        case 41:
+                            _new_valign = __SCRIBBLE_PIN_TOP;
+                        break;
+                         
+                        // [pin_middle]   
+                        case 42:
+                            _new_valign = __SCRIBBLE_PIN_MIDDLE;
+                        break;
+                        
+                        // [pin_bottom]    
+                        case 43:
+                            _new_valign = __SCRIBBLE_PIN_BOTTOM;
+                        break;
+                        
                         // [fa_justify]
                         case 20:
                             _new_halign = __SCRIBBLE_FA_JUSTIFY;
@@ -774,7 +795,7 @@ function __scribble_gen_2_parser()
                             }
                             else
                             {
-                                _font_name = _new_font;
+                                _font_name = scribble_font_get_remap(_new_font);
                                 __SCRIBBLE_PARSER_SET_FONT;
                                 __SCRIBBLE_PARSER_PUSH_SCALE;
                             }
@@ -794,7 +815,7 @@ function __scribble_gen_2_parser()
                             }
                             else
                             {
-                                _font_name = _new_font;
+                                _font_name = scribble_font_get_remap(_new_font);
                                 __SCRIBBLE_PARSER_SET_FONT;
                             }
                         break;
@@ -813,7 +834,7 @@ function __scribble_gen_2_parser()
                             }
                             else
                             {
-                                _font_name = _new_font;
+                                _font_name = scribble_font_get_remap(_new_font);
                                 __SCRIBBLE_PARSER_SET_FONT;
                             }
                         break;
@@ -832,7 +853,7 @@ function __scribble_gen_2_parser()
                             }
                             else
                             {
-                                _font_name = _new_font;
+                                _font_name = scribble_font_get_remap(_new_font);
                                 __SCRIBBLE_PARSER_SET_FONT;
                             }
                         break;
@@ -1092,12 +1113,17 @@ function __scribble_gen_2_parser()
                             }                        
                             else if (ds_map_exists(_font_data_map, _tag_command_name)) //Change font
                             {
-                                _font_name = _tag_command_name;
+                                _font_name = scribble_font_get_remap(_tag_command_name);
                                 __SCRIBBLE_PARSER_SET_FONT;
                             }
                             else
                             {
                                 var _sprite_index = _external_sprite_map[? _tag_command_name] ?? asset_get_index(_tag_command_name); 
+                                if ((not sprite_exists(_sprite_index)) && _useHandleParse)
+                                {
+                                    _sprite_index = handle_parse(_tag_command_name);
+                                }
+                                
                                 if (sprite_exists(_sprite_index))
                                 {
                                     #region Sprite
@@ -1106,10 +1132,26 @@ function __scribble_gen_2_parser()
                                     {
                                         var _sprite_w = sprite_get_width( _sprite_index);
                                         var _sprite_h = sprite_get_height(_sprite_index);
-                                
+                                        
+                                        if (SCRIBBLE_SPRITE_ALIGN_MODE == 0) //Align to centre of line height
+                                        {
+                                            var _sprite_y_offset = 0;
+                                            var _sprite_space_h  = _font_line_height;
+                                        }
+                                        else if (SCRIBBLE_SPRITE_ALIGN_MODE == 1) //Align to centre of ascender
+                                        {
+                                            var _sprite_y_offset = floor(_font_ascender_offset + _font_ascender/2 - _font_line_height/2);
+                                            var _sprite_space_h  = _font_ascender;
+                                        }
+                                        else if (SCRIBBLE_SPRITE_ALIGN_MODE == 2) //Align bottom to baseline
+                                        {
+                                            var _sprite_y_offset = floor(_font_ascender_offset + _font_ascender - _sprite_h/2 - _font_line_height/2);
+                                            var _sprite_space_h  = _font_ascender;
+                                        }
+                                        
                                         if (SCRIBBLE_AUTOFIT_INLINE_SPRITES)
                                         {
-                                            var _scale = min(1, (_font_line_height+2)/_sprite_h);
+                                            var _scale = min(1, _sprite_space_h / _sprite_h);
                                             _sprite_w *= _scale;
                                             _sprite_h *= _scale;
                                         }
@@ -1145,7 +1187,7 @@ function __scribble_gen_2_parser()
                                         _glyph_grid[# _glyph_count, __SCRIBBLE_GEN_GLYPH.__BIDI         ] = __SCRIBBLE_BIDI.SYMBOL;
                                 
                                         _glyph_grid[# _glyph_count, __SCRIBBLE_GEN_GLYPH.__X            ] = _state_halign_offset;
-                                        _glyph_grid[# _glyph_count, __SCRIBBLE_GEN_GLYPH.__Y            ] = _state_valign_offset;
+                                        _glyph_grid[# _glyph_count, __SCRIBBLE_GEN_GLYPH.__Y            ] = _state_valign_offset + _sprite_y_offset;
                                         _glyph_grid[# _glyph_count, __SCRIBBLE_GEN_GLYPH.__WIDTH        ] = _sprite_w;
                                         _glyph_grid[# _glyph_count, __SCRIBBLE_GEN_GLYPH.__HEIGHT       ] = _sprite_h;
                                         _glyph_grid[# _glyph_count, __SCRIBBLE_GEN_GLYPH.__FONT_HEIGHT  ] = _sprite_h;
@@ -1751,7 +1793,7 @@ function __scribble_gen_2_parser()
     if (__valign == undefined) __valign = _starting_valign;
     
     //Create a null terminator so we correctly handle the last character in the string
-    _glyph_grid[# _glyph_count, __SCRIBBLE_GEN_GLYPH.__UNICODE      ] = 0x00; //ASCII line break (dec = 10)
+    _glyph_grid[# _glyph_count, __SCRIBBLE_GEN_GLYPH.__UNICODE      ] = 0x00;
     _glyph_grid[# _glyph_count, __SCRIBBLE_GEN_GLYPH.__BIDI         ] = _overall_bidi;
     _glyph_grid[# _glyph_count, __SCRIBBLE_GEN_GLYPH.__X            ] = 0;
     _glyph_grid[# _glyph_count, __SCRIBBLE_GEN_GLYPH.__Y            ] = 0;

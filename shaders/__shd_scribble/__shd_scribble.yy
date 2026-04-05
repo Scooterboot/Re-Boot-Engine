@@ -4,7 +4,7 @@
   "name":"__shd_scribble",
   "parent":{
     "name":"Shaders",
-    "path":"folders/Scripts/Scribble/(System - don't call these functions)/Shaders.yy",
+    "path":"folders/Scripts/Libraries/Scribble/(System - don't call these functions)/Shaders.yy",
   },
   "resourceType":"GMShader",
   "resourceVersion":"2.0",

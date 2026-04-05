@@ -1,30 +1,42 @@
-/// @func	http_request_send(url, method, data)
-/// @param {str}	url
-/// @param {str}	method
-/// @param {any}	data
-function http_request_send(_url="", _method="GET", _data={}) {
+#macro	http_method_get		"GET"
+#macro	http_method_post	"POST"
+#macro	http_method_put		"PUT"
+#macro	http_method_delete	"DELETE"
+
+/// @func	http_request_send(url, method, body, headers)
+/// @param	{String}	url
+/// @param	{String}	method
+/// @param	{Struct}	body
+/// @param	{Struct}	headers
+function http_request_send(_url="", _method=http_method_get, _body={}, _headers={}) {
 	var _map = ds_map_create();
+	
+	/* Default headers */
 	_map[? "Connection"]		= "keep-alive";
 	_map[? "Cache-Control"]		= "max-age=0";
 	_map[? "Content-Type"]		= "application/json";
 	_map[? "x-access-tokens"]	= "";
 	
-	_data = json_stringify(_data);
-	return http_request(_url, _method, _map, _data);
+	/* Add headers */
+	var _headers_keys = struct_keys(_headers);
+	var _headers_size = get_size(_headers_keys);
+	for (var i = 0; i < _headers_size; i++) {
+		_map[? _headers_keys[i]] = _headers[$ _headers_keys[i]];
+	}
+	
+	return http_request(_url, _method, _map, __gml_ext_comp_json_stringify(_body));
 }
 
 /// @func	http_async_get_message(show_on_console)
-/// @param	{bool}	show_on_console
+/// @param	{Bool}	show_on_console
 /// @desc	Get the message from an async request.
 function http_async_get_message(_show_on_console = false) {	
 	try {
-		var _headers = [];
-		var _values = [];
-		ds_map_keys_to_array(async_load[? "response_headers"], _headers);
-		ds_map_values_to_array(async_load[? "response_headers"], _values);
+		var _headers = ds_map_keys_to_array(async_load[? "response_headers"]);
+		var _values = ds_map_values_to_array(async_load[? "response_headers"]);		
 
 		if (_show_on_console) {
-			show_debug_message({
+			trace({
 				id: async_load[? "id"],
 				url: async_load[? "url"],
 				header: _headers,
@@ -40,7 +52,7 @@ function http_async_get_message(_show_on_console = false) {
 }
 
 /// @func	http_async_handle_request(message_type)
-/// @param	{real}	message_type
+/// @param	{Real}	message_type
 /// @desc	Handle the result of an async request.
 function http_async_handle_request(_msgType) {
 	switch (_msgType) {

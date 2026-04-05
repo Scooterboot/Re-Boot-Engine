@@ -4,7 +4,8 @@ enum ComboType
 {
 	Or,
 	And,
-	AndNot
+	AndNot,
+	Xor
 }
 enum PressType
 {
@@ -60,6 +61,10 @@ function ControlInput(_verbIndex, _keyboardPressType, _keyboardComboType, _gamep
 				if(comboType == ComboType.AndNot)
 				{
 					_input &= !InputCheck_Ext(verbIndex, 1);
+				}
+				if(comboType == ComboType.Xor)
+				{
+					_input ^= InputCheck_Ext(verbIndex, 1);
 				}
 			}
 		}
@@ -154,8 +159,8 @@ ini_open("settings.ini");
 ini_close();
 
 // temp
-InputPlayerSetMinThreshold(INPUT_THRESHOLD.BOTH, 0.35);
-InputPlayerSetMaxThreshold(INPUT_THRESHOLD.BOTH, 0.9);
+//InputPlayerSetMinThreshold(INPUT_THRESHOLD.BOTH, 0.35);
+//InputPlayerSetMaxThreshold(INPUT_THRESHOLD.BOTH, 0.9);
 
 
 

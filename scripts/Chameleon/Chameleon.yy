@@ -6,7 +6,7 @@
   "name":"Chameleon",
   "parent":{
     "name":"PaletteSwap",
-    "path":"folders/Scripts/PaletteSwap.yy",
+    "path":"folders/Scripts/Libraries/PaletteSwap.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

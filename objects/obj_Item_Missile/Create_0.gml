@@ -2,9 +2,9 @@
 event_inherited();
 
 itemName = "missileTank";
-itemID = 0;
+//itemID = 0;
 
-missileAmount = 5;
+//missileAmount = 5;
 
 itemHeader = "MISSILE";
 //itemDesc = "Select it and press [Shoot]";

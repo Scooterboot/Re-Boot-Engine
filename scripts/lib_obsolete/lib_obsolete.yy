@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"lib_obsolete",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"lib_obsolete",
+  "parent":{
+    "name":"Obsolete",
+    "path":"folders/Scripts/Libraries/GML-Extended/Functions/Obsolete.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

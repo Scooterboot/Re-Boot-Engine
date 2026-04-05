@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.296485,
+  "duration":0.29648528,
   "exportDir":"",
   "name":"snd_MenuShwsh",
   "parent":{

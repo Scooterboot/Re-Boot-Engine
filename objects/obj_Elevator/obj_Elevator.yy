@@ -31,7 +31,19 @@
   "physicsShape":1,
   "physicsShapePoints":[],
   "physicsStartAwake":true,
-  "properties":[],
+  "properties":[
+    {"$GMObjectProperty":"v2","%Name":"elevatorID","filters":[],"listItems":[],"multiselect":false,"name":"elevatorID","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"-1","varDescription":"ID of the elevator object","varType":4,},
+    {"$GMObjectProperty":"v2","%Name":"upward","filters":[],"listItems":[],"multiselect":false,"name":"upward","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"False","varType":3,},
+    {"$GMObjectProperty":"v2","%Name":"up_nextRoom","filters":[
+        "GMRoom",
+      ],"listItems":[],"multiselect":false,"name":"up_nextRoom","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"","varType":5,},
+    {"$GMObjectProperty":"v2","%Name":"up_nextElevatorID","filters":[],"listItems":[],"multiselect":false,"name":"up_nextElevatorID","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"-1","varDescription":"ID of the elevator object in the next room","varType":4,},
+    {"$GMObjectProperty":"v2","%Name":"downward","filters":[],"listItems":[],"multiselect":false,"name":"downward","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"False","varType":3,},
+    {"$GMObjectProperty":"v2","%Name":"down_nextRoom","filters":[
+        "GMRoom",
+      ],"listItems":[],"multiselect":false,"name":"down_nextRoom","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"","varType":5,},
+    {"$GMObjectProperty":"v2","%Name":"down_nextElevatorID","filters":[],"listItems":[],"multiselect":false,"name":"down_nextElevatorID","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"-1","varDescription":"ID of the elevator object in the next room","varType":4,},
+  ],
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,

@@ -1,7 +1,7 @@
 /// @description 
 event_inherited();
 
-shutterID = 0;
+//shutterID = 0;
 
 frame = 2;
 frameCounter = 0;

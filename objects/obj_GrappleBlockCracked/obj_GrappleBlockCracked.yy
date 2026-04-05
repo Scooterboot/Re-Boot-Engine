@@ -7,7 +7,9 @@
   ],
   "managed":true,
   "name":"obj_GrappleBlockCracked",
-  "overriddenProperties":[],
+  "overriddenProperties":[
+    {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"obj_Breakable","path":"objects/obj_Breakable/obj_Breakable.yy",},"propertyId":{"name":"respawnTime","path":"objects/obj_Breakable/obj_Breakable.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"20",},
+  ],
   "parent":{
     "name":"BTSTiles",
     "path":"folders/Objects/Room Elements/BTSTiles.yy",
@@ -29,7 +31,9 @@
   "physicsShape":1,
   "physicsShapePoints":[],
   "physicsStartAwake":true,
-  "properties":[],
+  "properties":[
+    {"$GMObjectProperty":"v2","%Name":"timeLeft","filters":[],"listItems":[],"multiselect":false,"name":"timeLeft","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"300","varDescription":"Number frames before breaking.","varType":1,},
+  ],
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,

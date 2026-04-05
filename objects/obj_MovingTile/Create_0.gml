@@ -2,9 +2,9 @@
 
 isSolid = true;
 
-canGrip = true;
-canWallJump = true;
-grappleCollision = true;
+//canGrip = true;
+//canWallJump = true;
+//grappleCollision = true;
 
 entityList = ds_list_create();
 

@@ -1,5 +1,8 @@
 /// @description 
 
+self.DamageBoxes();
+self.IncrInvFrames();
+
 if(dead && phase != 4)
 {
     //NPCDeath(x+deathOffsetX,y+deathOffsetY);

@@ -1,35 +1,23 @@
-/// @func	string_fill_zero(string, size, [on_left])
-/// @param	{string}	string
-/// @param	{real}		size
-/// @param	{bool}		[on_left]
-/// @desc	Returns a string filled with 0's on any side.
-function string_fill_zero(_org_str, _size, _on_left = true) {
-	// Calculate how many 0's need to be padded on to the string
-	var _str = string(_org_str);
-	var _pad = "";
-
-	for (var i = 0; i < _size - string_length(_str); i++) {
-		_pad += "0";
-	}
-	
-	return ( _on_left ? _pad + _str : _str + _pad );
-}
-
 /// @func	string_contains(string, substring)
-/// @param	{str}	string
-/// @param	{str}	substring
+/// @param	{String}	string		The string to check.
+/// @param	{String}	substring	The substring to use.
+/// @desc	Returns true if the string contains the substring.
+///	@return	{Bool}
 function string_contains(_str, _substr) {
 	return string_pos(_substr, _str) > 0;
 }
 
 /// @func string_title(string)
-/// @param	{str}	string
+/// @param	{String}	string		The string to check
+/// @desc	Returns a string with the first letter of each word capitalized.
+///	@return	{String}
 function string_title(_str) {
-	var _out = "";
-	var _prev_char = " ";
+	var _out		= "";
+	var _prev_char	= " ";
+	var _str_len	= string_length(_str);
 	
-	for (var i = 1; i <= string_length(_str); i++) {
-		var _char = string_copy(_str, i, 1);
+	for (var i = 1; i <= _str_len; i++) {
+		var _char = string_char_at(_str, i);
 		if (_prev_char == " ") {
 			_out += string_upper(_char);
 			_prev_char = "";
@@ -41,4 +29,69 @@ function string_title(_str) {
 	}
 	
     return _out;
+}
+
+/// @func	string_remove(string, substring)
+/// @param	{String}					string		The string to check.
+/// @param	{String | Array<String>}	substring	The array of strings or substring to use.
+/// @desc	Returns a string with the specified substring removed.
+///	@return	{String}
+function string_remove(_str, _substr) {
+	if (is_array(_substr)) {
+		var _arr_len = array_length(_substr);
+		for (var i = 0; i < _arr_len; i++) {
+			_str = string_remove(_str, _substr[i]);
+		}
+		
+		return _str;
+	}
+	
+	return string_replace_all(_str, _substr, "");
+}
+
+/// @func	string_pad_left(string, char, size)
+/// @param	{String}	string		The string to fill.
+/// @param	{String}	char		The character to fill the string with.
+/// @param	{Real}		size		The final size of the string.
+/// @desc	Returns a string with the specified number of characters on the left side. If the string is already bigger than the specified size, the string will be returned as is. If the string is smaller than the specified size, the string will be filled with the specified character on the left side.
+///	@return	{String}
+function string_pad_left(_str, _char, _size) {
+	_str = string(_str);
+	if (_char == "") return _str;
+	var _pad = "";
+	var _pad_size = _size - string_length(_str);
+	
+	for (var i = 0; i < _pad_size; i++) {
+		_pad += _char;
+	}
+	
+	return _pad + _str;
+}
+
+/// @func	string_pad_right(string, char, size)
+/// @param	{String}	string
+/// @param	{String}	char
+/// @param	{Real}		size
+/// @desc	Returns a string with the specified number of characters on the right side. If the string is already bigger than the specified size, the string will be returned as is. If the string is smaller than the specified size, the string will be filled with the specified character on the right side.
+///	@return	{String}
+function string_pad_right(_str, _char, _size) {
+	_str = string(_str);
+	if (_char == "") return _str;
+	var _pad = "";
+	var _pad_size = _size - string_length(_str);
+	
+	for (var i = 0; i < _pad_size; i++) {
+		_pad += _char;
+	}
+	
+	return _str + _pad;
+}
+
+/// @func	string_percentage(current_value, total_value)
+/// @param	{Real}	current_value		The current value.
+/// @param	{Real}	total_value			The total value to compare.
+/// @desc	Returns a string with the percentage of the given values.
+///	@return	{String}
+function string_percentage(_val, _max) {	
+	return string(percentage(_val, _max)) + "%";
 }

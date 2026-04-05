@@ -81,6 +81,12 @@ function __InputConfigVerbs()
 		_gp_face2 = gp_face1;
 	}
 	
+	var _gp_select = gp_select;
+	if(INPUT_ON_PS5)
+	{
+		_gp_select = gp_touchpadbutton;
+	}
+	
 	// i have no idea what constitutes as a 'good' keyboard control scheme
 	// so imma just throw some shit up and hope people will suggest better default schemes
 	
@@ -100,7 +106,7 @@ function __InputConfigVerbs()
 	InputDefineVerb(INPUT_VERB.MenuAccept,		"menu accept",		ord("Z"),	_gp_face1);
 	InputDefineVerb(INPUT_VERB.MenuCancel,		"menu cancel",		ord("X"),	[_gp_face2, gp_face3]);
 	InputDefineVerb(INPUT_VERB.MenuSecondary,	"menu secondary",	ord("C"),	gp_face4);
-	InputDefineVerb(INPUT_VERB.MenuTertiary,	"menu tertiary",	ord("V"),	gp_select);
+	InputDefineVerb(INPUT_VERB.MenuTertiary,	"menu tertiary",	ord("V"),	_gp_select);
 	InputDefineVerb(INPUT_VERB.MenuR1,			"menu r1",			ord("W"),	gp_shoulderr);
 	InputDefineVerb(INPUT_VERB.MenuR2,			"menu r2",			ord("S"),	gp_shoulderrb);
 	InputDefineVerb(INPUT_VERB.MenuL1,			"menu l1",			ord("Q"),	gp_shoulderl);
@@ -152,7 +158,7 @@ function __InputConfigVerbs()
 	InputDefineVerb(INPUT_VERB.EquipToggle,	"equip toggle",	ord("R"),	gp_stickr);
 	
 	InputDefineVerb(INPUT_VERB.VisorToggle,	"visor toggle",	ord("Q"),	gp_stickl);
-	InputDefineVerb(INPUT_VERB.VisorCycle,	"visor cycle",	ord("W"),	gp_select);
+	InputDefineVerb(INPUT_VERB.VisorCycle,	"visor cycle",	ord("W"),	_gp_select);
 	
 	InputDefineVerb(INPUT_VERB.RadialUIOpen,	"equip menu open",	ord("E"),	undefined);
 	InputDefineVerb(INPUT_VERB.RadialUIUp,		"equip menu up",		vk_up,		-gp_axisrv);
@@ -183,6 +189,7 @@ function __InputConfigVerbs()
         ACTION,
         SPECIAL,
         PAUSE,
+        MAP,
     }
     
     enum INPUT_CLUSTER
@@ -192,30 +199,35 @@ function __InputConfigVerbs()
         NAVIGATION,
     }
     
-    if (not INPUT_ON_SWITCH)
+    InputDefineVerb(INPUT_VERB.UP,      "up",         [vk_up,    "W"],    [-gp_axislv, gp_padu]);
+    InputDefineVerb(INPUT_VERB.DOWN,    "down",       [vk_down,  "S"],    [ gp_axislv, gp_padd]);
+    InputDefineVerb(INPUT_VERB.LEFT,    "left",       [vk_left,  "A"],    [-gp_axislh, gp_padl]);
+    InputDefineVerb(INPUT_VERB.RIGHT,   "right",      [vk_right, "D"],    [ gp_axislh, gp_padr]);
+    InputDefineVerb(INPUT_VERB.ACTION,  "action",      vk_enter,            gp_face3);
+    InputDefineVerb(INPUT_VERB.SPECIAL, "special",     vk_shift,            gp_face4);
+    
+    if (INPUT_ON_SWITCH)
     {
-        InputDefineVerb(INPUT_VERB.UP,      "up",         [vk_up,    "W"],    [-gp_axislv, gp_padu]);
-        InputDefineVerb(INPUT_VERB.DOWN,    "down",       [vk_down,  "S"],    [ gp_axislv, gp_padd]);
-        InputDefineVerb(INPUT_VERB.LEFT,    "left",       [vk_left,  "A"],    [-gp_axislh, gp_padl]);
-        InputDefineVerb(INPUT_VERB.RIGHT,   "right",      [vk_right, "D"],    [ gp_axislh, gp_padr]);
-        InputDefineVerb(INPUT_VERB.ACCEPT,  "accept",      vk_space,            gp_face1);
-        InputDefineVerb(INPUT_VERB.CANCEL,  "cancel",      vk_backspace,        gp_face2);
-        InputDefineVerb(INPUT_VERB.ACTION,  "action",      vk_enter,            gp_face3);
-        InputDefineVerb(INPUT_VERB.SPECIAL, "special",     vk_shift,            gp_face4);
-        InputDefineVerb(INPUT_VERB.PAUSE,   "pause",       vk_escape,           gp_start);
+        //Flip A/B over on Switch
+        InputDefineVerb(INPUT_VERB.ACCEPT, "accept", undefined, gp_face2); // !!
+        InputDefineVerb(INPUT_VERB.CANCEL, "cancel", undefined, gp_face1); // !!
     }
-    else //Flip A/B over on Switch
+    else
     {
-        InputDefineVerb(INPUT_VERB.UP,      "up",      undefined, [-gp_axislv, gp_padu]);
-        InputDefineVerb(INPUT_VERB.DOWN,    "down",    undefined, [ gp_axislv, gp_padd]);
-        InputDefineVerb(INPUT_VERB.LEFT,    "left",    undefined, [-gp_axislh, gp_padl]);
-        InputDefineVerb(INPUT_VERB.RIGHT,   "right",   undefined, [ gp_axislh, gp_padr]);
-        InputDefineVerb(INPUT_VERB.ACCEPT,  "accept",  undefined,   gp_face2); // !!
-        InputDefineVerb(INPUT_VERB.CANCEL,  "cancel",  undefined,   gp_face1); // !!
-        InputDefineVerb(INPUT_VERB.ACTION,  "action",  undefined,   gp_face3);
-        InputDefineVerb(INPUT_VERB.SPECIAL, "special", undefined,   gp_face4);
-        InputDefineVerb(INPUT_VERB.PAUSE,   "pause",   undefined,   gp_start);
+        InputDefineVerb(INPUT_VERB.ACCEPT, "accept", vk_space,     gp_face1);
+        InputDefineVerb(INPUT_VERB.CANCEL, "cancel", vk_backspace, gp_face2);
     }
+    
+    if (INPUT_ON_PS5)
+    {
+        //`gp_select` is inaccessible on PS5
+        InputDefineVerb(INPUT_VERB.MAP, "map", vk_backspace, gp_touchpadbutton);
+    }
+    else
+    {
+        InputDefineVerb(INPUT_VERB.MAP, "map", vk_backspace, gp_select);
+    }
+    
     
     //Define a cluster of verbs for moving around
     InputDefineCluster(INPUT_CLUSTER.NAVIGATION, INPUT_VERB.UP, INPUT_VERB.RIGHT, INPUT_VERB.DOWN, INPUT_VERB.LEFT);

@@ -1,12 +1,12 @@
 // Feather disable all
-// Feather ignore all
+
 function __scribble_class_page() constructor
 {
-    static __scribble_state = __scribble_initialize().__state;
-    static __gc_vbuff_refs  = __scribble_initialize().__cache_state.__gc_vbuff_refs;
-    static __gc_vbuff_ids   = __scribble_initialize().__cache_state.__gc_vbuff_ids;
-    static __gc_grid_refs   = __scribble_initialize().__cache_state.__gc_grid_refs;
-    static __gc_grid_ids    = __scribble_initialize().__cache_state.__gc_grid_ids;
+    static __scribble_state = __scribble_system().__state;
+    static __gc_vbuff_refs  = __scribble_system().__cache_state.__gc_vbuff_refs;
+    static __gc_vbuff_ids   = __scribble_system().__cache_state.__gc_vbuff_ids;
+    static __gc_grid_refs   = __scribble_system().__cache_state.__gc_grid_refs;
+    static __gc_grid_ids    = __scribble_system().__cache_state.__gc_grid_ids;
     
     __text = "";
     __glyph_grid = undefined;
@@ -23,6 +23,8 @@ function __scribble_class_page() constructor
     __line_start = undefined;
     __line_end   = undefined;
     __line_count = 0;
+    
+    __line_data_array = undefined; //Only set to an array if we're allowing the line data getter
     
     __width  = 0;
     __height = 0;
@@ -131,30 +133,48 @@ function __scribble_class_page() constructor
         }
     }
     
+    static __get_line_data = function(_index)
+    {
+        return __line_data_array[clamp(_index, 0, __line_count-1)];
+    }
+    
     static __get_glyph_data = function(_index)
     {
-        if (!SCRIBBLE_ALLOW_GLYPH_DATA_GETTER) __scribble_error("Cannot get glyph data, SCRIBBLE_ALLOW_GLYPH_DATA_GETTER = <false>\nPlease set SCRIBBLE_ALLOW_GLYPH_DATA_GETTER to <true> to get glyph data");
+        //TODO - Static struct return needed here?
         
         if (_index < 0)
         {
             return {
-                unicode: 0,
-                left:    __glyph_grid[# 0, __SCRIBBLE_GLYPH_LAYOUT.__LEFT  ],
-                top:     __glyph_grid[# 0, __SCRIBBLE_GLYPH_LAYOUT.__TOP   ],
-                right:   __glyph_grid[# 0, __SCRIBBLE_GLYPH_LAYOUT.__LEFT  ],
-                bottom:  __glyph_grid[# 0, __SCRIBBLE_GLYPH_LAYOUT.__BOTTOM],
+                unicode:  0,
+                left:     __glyph_grid[# 0, __SCRIBBLE_GLYPH_LAYOUT.__LEFT    ],
+                top:      __glyph_grid[# 0, __SCRIBBLE_GLYPH_LAYOUT.__TOP     ],
+                right:    __glyph_grid[# 0, __SCRIBBLE_GLYPH_LAYOUT.__LEFT    ],
+                bottom:   __glyph_grid[# 0, __SCRIBBLE_GLYPH_LAYOUT.__BOTTOM  ],
+                y_offset: __glyph_grid[# 0, __SCRIBBLE_GLYPH_LAYOUT.__Y_OFFSET],
+            };
+        }
+        else if (_index >= __glyph_count-1)
+        {
+            _index = __glyph_count-2;
+            
+            return {
+                unicode:  0,
+                left:     __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__RIGHT   ],
+                top:      __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__TOP     ],
+                right:    __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__RIGHT   ],
+                bottom:   __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__BOTTOM  ],
+                y_offset: __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__Y_OFFSET],
             };
         }
         else
         {
-            _index = min(_index, __glyph_count-1);
-            
             return {
-                unicode: __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__UNICODE],
-                left:    __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__LEFT   ],
-                top:     __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__TOP    ],
-                right:   __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__RIGHT  ],
-                bottom:  __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__BOTTOM ],
+                unicode:  __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__UNICODE ],
+                left:     __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__LEFT    ],
+                top:      __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__TOP     ],
+                right:    __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__RIGHT   ],
+                bottom:   __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__BOTTOM  ],
+                y_offset: __glyph_grid[# _index, __SCRIBBLE_GLYPH_LAYOUT.__Y_OFFSET],
             };
         }
     }
@@ -168,7 +188,7 @@ function __scribble_class_page() constructor
             return _data.__vertex_buffer;
         }
         
-        //TODO - Move this to `__scribble_initialize()`
+        //TODO - Move this to `__scribble_system()`
         static _vertex_format = undefined;
         if (_vertex_format == undefined)
         {

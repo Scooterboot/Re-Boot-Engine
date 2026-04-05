@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "screwAttack";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "SCREW ATTACK";
 itemDesc = "Damage enemies during spin jump.";

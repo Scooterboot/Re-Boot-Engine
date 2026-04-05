@@ -1,5 +1,4 @@
 // Feather disable all
-// Feather ignore all
 
 function __scribble_font_add_all_from_bundle()
 {

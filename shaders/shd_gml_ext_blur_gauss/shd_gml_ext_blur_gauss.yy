@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"shd_gml_ext_blur_gauss",
+  "name":"shd_gml_ext_blur_gauss",
+  "parent":{
+    "name":"Shaders",
+    "path":"folders/Scripts/Libraries/GML-Extended/Functions/Experimental/Shaders.yy",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}

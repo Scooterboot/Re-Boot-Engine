@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"lib_server_tcp",
   "parent":{
-    "name":"Libraries",
-    "path":"folders/Scripts/Libraries.yy",
+    "name":"Experimental",
+    "path":"folders/Scripts/Libraries/GML-Extended/Functions/Experimental.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

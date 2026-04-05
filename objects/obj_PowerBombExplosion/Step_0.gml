@@ -19,9 +19,6 @@ image_xscale = scale;
 image_yscale = scale;
 image_alpha = pAlpha*alpha2 * 0.5;
 
-self.DamageBoxes();
-self.IncrInvFrames();
-
 var x1 = bb_left(0),
 	y1 = bb_top(0),
 	x2 = bb_right(0),
@@ -33,9 +30,3 @@ distort.bottom = y+y2*1.1;
 distort.alpha = image_alpha;
 distort.spread = 0.85;
 distort.width = 0.75;
-
-if(scaleTimer >= 75)
-{
-	instance_destroy();
-	instance_destroy(distort);
-}

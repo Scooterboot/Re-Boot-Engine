@@ -27,7 +27,14 @@
   "physicsShape":1,
   "physicsShapePoints":[],
   "physicsStartAwake":true,
-  "properties":[],
+  "properties":[
+    {"$GMObjectProperty":"v2","%Name":"doorID","filters":[],"listItems":[],"multiselect":false,"name":"doorID","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"-1","varDescription":"ID of the current door object","varType":4,},
+    {"$GMObjectProperty":"v2","%Name":"nextRoom","filters":[
+        "GMRoom",
+      ],"listItems":[],"multiselect":false,"name":"nextRoom","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"","varType":5,},
+    {"$GMObjectProperty":"v2","%Name":"nextDoorID","filters":[],"listItems":[],"multiselect":false,"name":"nextDoorID","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"-1","varDescription":"ID of the door object in the next room","varType":4,},
+    {"$GMObjectProperty":"v2","%Name":"spawnDist","filters":[],"listItems":[],"multiselect":false,"name":"spawnDist","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"34","varType":1,},
+  ],
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,

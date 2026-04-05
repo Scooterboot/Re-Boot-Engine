@@ -6,15 +6,15 @@
 //            //
 ////////////////
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_face1, sprt_UI_NSIcon_ButtonB); //"B"); //B
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_face2, sprt_UI_NSIcon_ButtonA); //"A"); //A
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_face3, sprt_UI_NSIcon_ButtonY); //"Y"); //Y
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_face4, sprt_UI_NSIcon_ButtonX); //"X"); //X
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_face1, new UISpriteIcon(sprt_UI_NSIcon_FaceButtons,1)); //"B"); //B
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_face2, new UISpriteIcon(sprt_UI_NSIcon_FaceButtons,0)); //"A"); //A
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_face3, new UISpriteIcon(sprt_UI_NSIcon_FaceButtons,3)); //"Y"); //Y
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_face4, new UISpriteIcon(sprt_UI_NSIcon_FaceButtons,2)); //"X"); //X
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_shoulderl,  sprt_UI_NSIcon_LBumper); //"L" ); //L
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_shoulderr,  sprt_UI_NSIcon_RBumper); //"R" ); //R
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_shoulderlb, sprt_UI_NSIcon_ZLTrigger); //"ZL"); //ZL
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_shoulderrb, sprt_UI_NSIcon_ZRTrigger); //"ZR"); //ZR
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_shoulderl,  new UISpriteIcon(sprt_UI_NSIcon_Shoulders,0)); //"L" ); //L
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_shoulderr,  new UISpriteIcon(sprt_UI_NSIcon_Shoulders,1)); //"R" ); //R
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_shoulderlb, new UISpriteIcon(sprt_UI_NSIcon_Shoulders,2)); //"ZL"); //ZL
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_shoulderrb, new UISpriteIcon(sprt_UI_NSIcon_Shoulders,3)); //"ZR"); //ZR
 
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_select, sprt_UI_NSIcon_Minus); //"minus"); //Minus
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_start,  sprt_UI_NSIcon_Plus); //"plus" ); //Plus
@@ -42,8 +42,8 @@ InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_extra1, sprt_UI_NSIcon_Capt
 
 //Switch 2
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_extra2,  sprt_UI_NSIcon_Chat); //"C" ); //GameChat
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_paddlel, sprt_UI_NSIcon_GripL); //"GL"); //Grip Left
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_paddler, sprt_UI_NSIcon_GripR); //"GR"); //Grip Right
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_paddlel, new UISpriteIcon(sprt_UI_NSIcon_Shoulders,4)); //"GL"); //Grip Left
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_SWITCH, gp_paddler, new UISpriteIcon(sprt_UI_NSIcon_Shoulders,5)); //"GR"); //Grip Right
 
 
 
@@ -58,8 +58,8 @@ InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_LEFT, gp_face2, sprt_UI_GPIcon_
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_LEFT, gp_face3, sprt_UI_GPIcon_DPad_Left); //"face west" ); //Face West
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_LEFT, gp_face4, sprt_UI_GPIcon_DPad_Up); //"face north"); //Face North
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_LEFT, gp_shoulderl, sprt_UI_NSIcon_SLBumper); //"SL"); //SL
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_LEFT, gp_shoulderr, sprt_UI_NSIcon_SRBumper); //"SR"); //SR
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_LEFT, gp_shoulderl, new UISpriteIcon(sprt_UI_NSIcon_Shoulders,6)); //"SL"); //SL
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_LEFT, gp_shoulderr, new UISpriteIcon(sprt_UI_NSIcon_Shoulders,7)); //"SR"); //SR
 
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_LEFT, gp_start, sprt_UI_NSIcon_Minus); //"minus"); //Minus
 
@@ -80,13 +80,13 @@ InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_LEFT, gp_select, sprt_UI_NSIcon
 //                //
 ////////////////////
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_RIGHT, gp_face1, sprt_UI_NSIcon_ButtonA); //"face south"); //Face South
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_RIGHT, gp_face2, sprt_UI_NSIcon_ButtonX); //"face east" ); //Face East
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_RIGHT, gp_face3, sprt_UI_NSIcon_ButtonB); //"face west" ); //Face West
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_RIGHT, gp_face4, sprt_UI_NSIcon_ButtonY); //"face north"); //Face North
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_RIGHT, gp_face1, new UISpriteIcon(sprt_UI_NSIcon_FaceButtons,0)); //"face south"); //Face South
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_RIGHT, gp_face2, new UISpriteIcon(sprt_UI_NSIcon_FaceButtons,2)); //"face east" ); //Face East
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_RIGHT, gp_face3, new UISpriteIcon(sprt_UI_NSIcon_FaceButtons,1)); //"face west" ); //Face West
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_RIGHT, gp_face4, new UISpriteIcon(sprt_UI_NSIcon_FaceButtons,3)); //"face north"); //Face North
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_RIGHT, gp_shoulderl, sprt_UI_NSIcon_SLBumper); //"SL"); //SL
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_RIGHT, gp_shoulderr, sprt_UI_NSIcon_SRBumper); //"SR"); //SR
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_RIGHT, gp_shoulderl, new UISpriteIcon(sprt_UI_NSIcon_Shoulders,6)); //"SL"); //SL
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_RIGHT, gp_shoulderr, new UISpriteIcon(sprt_UI_NSIcon_Shoulders,7)); //"SR"); //SR
 
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_JOYCON_RIGHT, gp_start, sprt_UI_NSIcon_Plus); //"plus"); //Plus
 

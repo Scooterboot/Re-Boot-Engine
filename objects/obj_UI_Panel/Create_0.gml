@@ -1,119 +1,72 @@
 /// @description 
-
-active = true;
-
-width = 0;
-height = 0;
+event_inherited();
 
 scrollWidth = 0;
 scrollHeight = 0;
-
-scrollPosX = 0;
-scrollPosY = 0;
 scrollStepX = 2;
 scrollStepY = 2;
 
-alpha = 1;
-scaleX = 1;
-scaleY = 1;
-
-text = "";
-
-creator = noone;
-selectedButton = noone;
-buttonList = ds_list_create();
-
-function CreateButton(_x, _y, _width, _height, _text = "")
+function PreUpdate()
 {
-	var btn = instance_create_depth(scr_floor(_x), scr_floor(_y), depth, obj_UI_Button);
-	btn.width = scr_ceil(_width);
-	btn.height = scr_ceil(_height);
-	btn.text = _text;
-	btn.panel = id;
-	btn.creator = creator;
-	
-	ds_list_add(buttonList, btn);
-	return btn;
-}
-
-function GetMouse()
-{
-	var panelL = min(x, x+width*scaleX),
-		panelR = max(x, x+width*scaleX),
-		panelT = min(y, y+height*scaleY),
-		panelB = max(y, y+height*scaleY);
-	return collision_rectangle(panelL, panelT, panelR, panelB, obj_Mouse, true, true);
-}
-
-function MoveSelectX()
-{
-	return (creator.cMenuRight && creator.rMenuRight) - (creator.cMenuLeft && creator.rMenuLeft);
-}
-function MoveSelectY()
-{
-	return (creator.cMenuDown && creator.rMenuDown) - (creator.cMenuUp && creator.rMenuUp);
-}
-
-function ScrollX()
-{
-	return 0;
-}
-function ScrollY()
-{
-	return ((creator.cScrollDown && creator.rScrollDown) - (creator.cScrollUp && creator.rScrollUp));
-}
-
-function UpdatePanel()
-{
-	for(var i = 0; i < ds_list_size(buttonList); i++)
+	if(scrollWidth == -1 || scrollHeight == -1)
 	{
-		var _btn = buttonList[| i];
-		if(instance_exists(_btn))
+		var _scrWidth = max(scrollWidth, width),
+			_scrHeight = max(scrollHeight, height);
+		
+		if(ds_exists(nestedEle, ds_type_list) && ds_list_size(nestedEle) > 0)
 		{
-			if(!instance_exists(selectedButton))
+			for(var i = ds_list_size(nestedEle)-1; i >= 0; i--)
 			{
-				selectedButton = _btn;
-			}
-			if(_btn.active)
-			{
-				_btn.UpdateButton();
+				var ele = nestedEle[| i];
+				_scrWidth = max(_scrWidth, ele.x+ele.width);
+				_scrHeight = max(_scrHeight, ele.x+ele.height);
 			}
 		}
-		if(!ds_exists(buttonList, ds_type_list))
-		{
-			break;
-		}
+		
+		scrollWidth = (scrollWidth == -1) ? _scrWidth : scrollWidth;
+		scrollHeight = (scrollHeight == -1) ? _scrHeight : scrollHeight;
 	}
 	
-	if(creator.selectedPanel == id)
+	if(scrollWidth > width || scrollHeight > height)
 	{
-		if(scrollWidth > width)
-		{
-			var moveX = self.ScrollX();
-			scrollPosX = clamp(scrollPosX + scrollStepX*moveX, 0, max(scrollWidth-width, 0));
-		}
-		if(scrollHeight > height)
-		{
-			var moveY = self.ScrollY();
-			scrollPosY = clamp(scrollPosY + scrollStepY*moveY, 0, max(scrollHeight-height, 0));
-		}
-	}
-	/*else
-	{
+		// TODO: better scrolling priority stuffs
+		
+		var selFlag = false;
 		var mouse = self.GetMouse();
-		if(instance_exists(mouse) && (mouse.velX != 0 || mouse.velY != 0))
+		/*if(instance_exists(mouse) && !mouse.hide)
 		{
-			creator.selectedPanel = id;
+			selFlag = true;
 		}
-	}*/
-}
-
-panelSurf = noone;
-function DrawPanel(_x, _y)
-{
-	for(var i = 0; i < ds_list_size(buttonList); i++)
-	{
-		var btn = buttonList[| i];
-		btn.DrawButton(btn.GetX(),btn.GetY());
+		else if(self.IsSelected())
+		{
+			selFlag = true;
+		}*/
+		/*if(!obj_Mouse.hide)
+		{
+			selFlag = instance_exists(mouse);
+		}
+		else
+		{
+			selFlag = self.IsSelected();
+		}
+		if(selFlag)*/
+		if(self.IsSelected())
+		{
+			if(scrollWidth > width)
+			{
+				var moveX = creatorUI.ScrollX();
+				scrollPosX += scrollStepX*moveX;
+			}
+			if(scrollHeight > height)
+			{
+				var moveY = creatorUI.ScrollY();
+				scrollPosY += scrollStepY*moveY;
+			}
+		}
 	}
+	
+	scrollPosX = clamp(scrollPosX, 0, max(scrollWidth-width, 0));
+	scrollPosY = clamp(scrollPosY, 0, max(scrollHeight-height, 0));
+	
+	return true;
 }

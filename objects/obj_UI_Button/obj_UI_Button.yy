@@ -3,8 +3,6 @@
   "%Name":"obj_UI_Button",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":12,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
   "name":"obj_UI_Button",
@@ -13,7 +11,10 @@
     "name":"Components",
     "path":"folders/Objects/UI/Components.yy",
   },
-  "parentObjectId":null,
+  "parentObjectId":{
+    "name":"obj_UI_Element",
+    "path":"objects/obj_UI_Element/obj_UI_Element.yy",
+  },
   "persistent":true,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,

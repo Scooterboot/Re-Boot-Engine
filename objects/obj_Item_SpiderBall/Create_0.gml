@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "spiderBall";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "SPIDER BALL";
 //itemDesc = "Press ${angleUpButton} or ${angleDownButton} during [sprt_Text_MiniMorph] to climb walls.";

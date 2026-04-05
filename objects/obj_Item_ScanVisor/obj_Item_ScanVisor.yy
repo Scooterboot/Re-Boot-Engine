@@ -8,8 +8,8 @@
   "name":"obj_Item_ScanVisor",
   "overriddenProperties":[],
   "parent":{
-    "name":"GearItems",
-    "path":"folders/Objects/Room Elements/ItemPickups/GearItems.yy",
+    "name":"VisorItems",
+    "path":"folders/Objects/Room Elements/ItemPickups/VisorItems.yy",
   },
   "parentObjectId":{
     "name":"obj_Item",

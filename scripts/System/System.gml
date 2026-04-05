@@ -80,6 +80,31 @@ function RotationToVector2(_angle)
 }
 
 #endregion
+#region Rectangle
+
+function Rectangle(_x = 0, _y = 0, _width = 0, _height = 0) constructor
+{
+	X = _x;
+	Y = _y;
+	Width = _width;
+	Height = _height;
+	
+	static Intersect = function(_rect)
+	{
+		return rectangle_in_rectangle(X,Y,X+Width,Y+Height, _rect.X,_rect.Y,_rect.X+_rect.Width,_rect.Y+_rect.Height);
+	}
+	
+	static ColRect = function(_x, _y, _width, _height)
+	{
+		return rectangle_in_rectangle(X,Y,X+Width,Y+Height, _x,_y,_width,_height);
+	}
+	static ColPoint = function(_x, _y)
+	{
+		return point_in_rectangle(_x,_y, X,Y,X+Width,Y+Height);
+	}
+}
+
+#endregion
 
 #region AnimTools
 function LerpArray(arr, amount, loop = false)

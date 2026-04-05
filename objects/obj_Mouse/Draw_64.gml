@@ -1,4 +1,4 @@
-/// @description Set pos and draw mouse
+/// @description Draw mouse
 
 if(!hide)
 {
@@ -11,8 +11,8 @@ else
 
 var sprt = sprt_UI_MouseCursor;
 
-var xx = scr_round(x),
-	yy = scr_round(y);
+var xx = scr_round(self.PosX()),//x),
+	yy = scr_round(self.PosY());//y);
 
 surface_set_target(obj_Display.surfUI);
 draw_sprite_ext(sprt,0,xx,yy,1,1,0,make_color_rgb(51,109,174),image_alpha);

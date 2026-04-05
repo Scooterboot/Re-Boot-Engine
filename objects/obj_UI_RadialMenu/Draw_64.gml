@@ -47,7 +47,7 @@ if(room != rm_MainMenu && pauseAnim > 0)
 	draw_sprite_ext(sprt_UI_Radial_BG, 2, scr_round(centX), scr_round(centY), 1, 1, 0, c_white, 0.5*alph*stateAnim[RadialState.VisorMenu]);
 	
 	var sflag = (state != RadialState.VisorMenu);
-	var lstr = obj_UI.InsertIconsIntoString(changeMenuText_L);
+	var lstr = obj_UI_Icons.InsertIconsIntoString(changeMenuText_L);
 	if(changeMenuScrib_L.get_text() != lstr)
 	{
 		changeMenuScrib_L.overwrite(lstr);
@@ -56,8 +56,7 @@ if(room != rm_MainMenu && pauseAnim > 0)
 		_hh = 16;
 	var lButtonPosX = centX - 68 - (_ww/2), lButtonPosY = centY;
 	
-	draw_sprite_stretched_ext(sprt_UI_GenericButton,1+2*sflag, lButtonPosX-(_ww/2)-3,lButtonPosY-_hh/2-3,_ww+6,_hh+6, c_white,alph);
-	draw_sprite_stretched_ext(sprt_UI_GenericButton,0+2*sflag, lButtonPosX-(_ww/2)-3,lButtonPosY-_hh/2-3,_ww+6,_hh+6, c_white,alph);
+	draw_sprite_stretched_ext(sprt_UI_Button, sflag, lButtonPosX-(_ww/2)-3,lButtonPosY-_hh/2-3,_ww+6,_hh+6, c_white,alph);
 	
 	changeMenuScrib_L.blend(c_black, alph);
 	changeMenuScrib_L.draw(lButtonPosX-1+1,lButtonPosY+1+1);
@@ -65,15 +64,14 @@ if(room != rm_MainMenu && pauseAnim > 0)
 	changeMenuScrib_L.draw(lButtonPosX-1,lButtonPosY+1);
 	
 	sflag = (state != RadialState.BeamMenu);
-	var rstr = obj_UI.InsertIconsIntoString(changeMenuText_R);
+	var rstr = obj_UI_Icons.InsertIconsIntoString(changeMenuText_R);
 	if(changeMenuScrib_R.get_text() != rstr)
 	{
 		changeMenuScrib_R.overwrite(rstr);
 	}
 	lButtonPosX = centX + 68 + (_ww/2);
 	
-	draw_sprite_stretched_ext(sprt_UI_GenericButton,1+2*sflag, lButtonPosX-(_ww/2)-3,lButtonPosY-_hh/2-3,_ww+6,_hh+6, c_white,alph);
-	draw_sprite_stretched_ext(sprt_UI_GenericButton,0+2*sflag, lButtonPosX-(_ww/2)-3,lButtonPosY-_hh/2-3,_ww+6,_hh+6, c_white,alph);
+	draw_sprite_stretched_ext(sprt_UI_Button, sflag, lButtonPosX-(_ww/2)-3,lButtonPosY-_hh/2-3,_ww+6,_hh+6, c_white,alph);
 	
 	changeMenuScrib_R.blend(c_black, alph);
 	changeMenuScrib_R.draw(lButtonPosX-1+1,lButtonPosY+1+1);
@@ -162,7 +160,7 @@ if(room != rm_MainMenu && pauseAnim > 0)
 			draw_set_alpha(1);
 		}
 		
-		var btStr = obj_UI.InsertIconsIntoString(beamToggleText);
+		var btStr = obj_UI_Icons.InsertIconsIntoString(beamToggleText);
 		if(beamToggleScrib.get_text() != btStr)
 		{
 			beamToggleScrib.overwrite(btStr);

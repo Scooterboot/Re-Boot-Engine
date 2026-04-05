@@ -6,7 +6,7 @@
   "name":"__InputVibrateClassConstant",
   "parent":{
     "name":"(System)",
-    "path":"folders/Scripts/Input Plug-Ins/Vibration/(System).yy",
+    "path":"folders/Scripts/Libraries/Input Plug-Ins/Vibration/(System).yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

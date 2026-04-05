@@ -1,148 +1,127 @@
 /// @description 
 
+enum UI_ActiveState
+{
+	Inactive,
+	Deactivating,
+	Active,
+	Activating
+}
+activeState = UI_ActiveState.Inactive;
+
+screenFade = 0;
+screenFadeRate = 0.075;
+
 #region Set Controls
-/*cRight = false;
-cLeft = false;
-cUp = false;
-cDown = false;
-cSelect = false;
-cCancel = false;
-cStart = false;*/
 controlGroups = "menu";
-InitControlVars(controlGroups)
+InitControlVars(controlGroups);
 
 cClickL = false;
 cClickR = false;
-cScrollUp = false;
-cScrollDown = false;
+
+moveCounterX = 0;
+moveCounterY = 0;
+moveCounterMax = 30;
 
 function SetControlVars_Press()
 {
-	/*cRight = obj_Control.mRight;
-	cLeft = obj_Control.mLeft;
-	cUp = obj_Control.mUp;
-	cDown = obj_Control.mDown;
-	cSelect = obj_Control.mSelect;
-	cCancel = obj_Control.mCancel;
-	cStart = obj_Control.start;*/
-	SetControlVars(controlGroups);
-	
-	cClickL = mouse_check_button(mb_left);
-	cClickR = mouse_check_button(mb_right);
-	cScrollUp = mouse_wheel_up();
-	cScrollDown = mouse_wheel_down();
+	if(activeState == UI_ActiveState.Active)
+	{
+		SetControlVars(controlGroups);
+		
+		cClickL = mouse_check_button(mb_left);
+		cClickR = mouse_check_button(mb_right);
+		
+		var select = (cMenuAccept && rMenuAccept) || (cClickL && rClickL),
+			cancel = (cMenuCancel && rMenuCancel) || (cClickR && rClickR);
+		if((cMenuLeft || cMenuRight) && !select && !cancel)
+		{
+			moveCounterX = min(moveCounterX + 1, moveCounterMax);
+		}
+		else
+		{
+			moveCounterX = 0;
+		}
+		
+		if((cMenuUp || cMenuDown) && !select && !cancel)
+		{
+			moveCounterY = min(moveCounterY + 1, moveCounterMax);
+		}
+		else
+		{
+			moveCounterY = 0;
+		}
+	}
+	else
+	{
+		InitControlVars(controlGroups);
+		
+		cClickL = false;
+		cClickR = false;
+		rClickL = true;
+		rClickR = true;
+		
+		moveCounterX = 0;
+		moveCounterY = 0;
+	}
 }
-
-/*rRight = true;
-rLeft = true;
-rUp = true;
-rDown = true;
-rSelect = true;
-rCancel = true;
-rStart = true;*/
 
 rClickL = true;
 rClickR = true;
-rScrollUp = true;
-rScrollDown = true;
 
 function SetControlVars_Release()
 {
-	/*rRight = !cRight;
-	rLeft = !cLeft;
-	rUp = !cUp;
-	rDown = !cDown;
-	rSelect = !cSelect;
-	rCancel = !cCancel;
-	rStart = !cStart;*/
-	SetReleaseVars(controlGroups);
-	
-	rClickL = !cClickL;
-	rClickR = !cClickR;
-	rScrollUp = !cScrollUp;
-	rScrollDown = !cScrollDown;
+	if(activeState == UI_ActiveState.Active)
+	{
+		SetReleaseVars(controlGroups);
+		
+		rClickL = !cClickL;
+		rClickR = !cClickR;
+		
+		if(moveCounterX >= moveCounterMax)
+		{
+			moveCounterX -= 5;
+		}
+		if(moveCounterY >= moveCounterMax)
+		{
+			moveCounterY -= 5;
+		}
+	}
 }
 #endregion
 
+function MoveSelectX(_repeatFlag = true)
+{
+	if(_repeatFlag && moveCounterX >= moveCounterMax)
+	{
+		return cMenuRight - cMenuLeft;
+	}
+	return (cMenuRight && rMenuRight) - (cMenuLeft && rMenuLeft);
+}
+function MoveSelectY(_repeatFlag = true)
+{
+	if(_repeatFlag && moveCounterY >= moveCounterMax)
+	{
+		return cMenuDown - cMenuUp;
+	}
+	return (cMenuDown && rMenuDown) - (cMenuUp && rMenuUp);
+}
+
 function ScrollX()
 {
-	return 0;
+	return ((cMenuScrollRight && rMenuScrollRight) - (cMenuScrollLeft && rMenuScrollLeft));
 }
 function ScrollY()
 {
-	return ((cScrollDown && rScrollDown) - (cScrollUp && rScrollUp));
+	return ((cMenuScrollDown && rMenuScrollDown) - (cMenuScrollUp && rMenuScrollUp));
 }
 
-selectedPanel = noone;
-panelList = ds_list_create();
-
-function CreatePanel(_x, _y, _width, _height, _scrollWidth = -1, _scrollHeight = -1, _scrollX = 0, _scrollY = 0)
+currentPage = noone;
+pageList = ds_list_create();
+function CreatePage(objInd = obj_UI_Page, _alpha = 0)
 {
-	var pnl = instance_create_depth(scr_floor(_x), scr_floor(_y), depth, obj_UI_Panel);
-	
-	var _w = scr_ceil(_width), _h = scr_ceil(_height),
-		_w2 = scr_ceil(_scrollWidth), _h2 = scr_ceil(_scrollHeight);
-	pnl.width = _w;
-	pnl.height = _h;
-	
-	pnl.scrollWidth = _w;
-	pnl.scrollHeight = _h;
-	if(_w2 > _w)
-	{
-		pnl.scrollWidth = _w2;
-	}
-	if(_h2 > _h)
-	{
-		pnl.scrollHeight = _h2;
-	}
-	
-	pnl.scrollPosX = _scrollX;
-	pnl.scrollPosY = _scrollY;
-	
-	pnl.creator = id;
-	
-	ds_list_add(panelList, pnl);
-	return pnl;
+	var pg = instance_create_depth(0, 0, depth, objInd, {creatorUI : id});
+	pg.alpha = _alpha;
+	ds_list_add(pageList, pg);
+	return pg;
 }
-
-/*
-function UpdateUI()
-{
-	var pNum = ds_list_size(panelList);
-	if(pNum > 0)
-	{
-		for(var i = 0; i < pNum; i++)
-		{
-			var _pnl = panelList[| i];
-			if(selectedPanel == noone)
-			{
-				selectedPanel = _pnl;
-			}
-			
-			if(_pnl.active)
-			{
-				_pnl.UpdatePanel();
-			}
-		}
-	}
-}
-
-function DrawUI()
-{
-	surface_set_target(obj_Display.surfUI);
-	bm_set_one();
-	
-	var pNum = ds_list_size(panelList);
-	if(pNum > 0)
-	{
-		for(var i = 0; i < pNum; i++)
-		{
-			var _pnl = panelList[| i];
-			_pnl.DrawPanel(_pnl.x,_pnl.y);
-		}
-	}
-	
-	gpu_set_blendmode(bm_normal);
-	surface_reset_target();
-}
-*/

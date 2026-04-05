@@ -1,6 +1,6 @@
 /// @description Initialize
 event_inherited();
-respawnTime = 300;
+//respawnTime = 300;
 image_speed = 0;
 image_index = 1;
 

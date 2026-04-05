@@ -26,7 +26,7 @@ function scr_LoadGame()
 			var rm = _map[? "room"];
 			room_goto(asset_get_index(rm));
 		
-			with(instance_create_layer(_map[? "x"],_map[? "y"],"Player",obj_Player))
+			with(instance_create_depth(_map[? "x"],_map[? "y"],0,obj_Player))
 			{
 				energyMax = _map[? "energyMax"];
 				energy = _map[? "energy"];
@@ -59,7 +59,7 @@ function scr_LoadGame()
 				var _vIndex = _map[? "visorIndex"];
 				visorIndex = !is_undefined(_vIndex) ? _vIndex : -1;
 			
-				instance_create_layer(x-(global.resWidth/2),y-(global.resHeight/2),"Camera",obj_Camera);
+				instance_create_depth(x-(global.resWidth/2),y-(global.resHeight/2),0,obj_Camera);
 			}
 	
 			var _map_map = _list[| 1];
@@ -113,8 +113,8 @@ function scr_LoadGame()
 		room_goto(rm_debugRedBrin_Start);
 		var sx = 80,
 			sy = 694;
-		instance_create_layer(sx,sy,"Player",obj_Player);
-		instance_create_layer(sx-(global.resWidth/2),sy-(global.resHeight/2),"Camera",obj_Camera);
+		instance_create_depth(sx,sy,0,obj_Player);
+		instance_create_depth(sx-(global.resWidth/2),sy-(global.resHeight/2),0,obj_Camera);
 		
 		for(var i = 0; i < array_length(global.mapArea); i++)
 		{

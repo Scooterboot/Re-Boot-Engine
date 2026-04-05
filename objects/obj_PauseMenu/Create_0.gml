@@ -140,6 +140,7 @@ miscName = [
 bootsName = [
 "HI-JUMP",
 "SPACE JUMP",
+"HYDRO BOOST",
 "ACCEL DASH",
 "SPEED BOOSTER",
 "CHAIN SPARK"];
@@ -177,6 +178,7 @@ Item.ScrewAttack];
 bootsIndex = [
 Item.HiJump,
 Item.SpaceJump,
+Item.HydroBoost,
 Item.AccelDash,
 Item.SpeedBooster,
 Item.ChainSpark];

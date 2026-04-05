@@ -1,15 +1,14 @@
 /// @description 
 
+event_inherited();
+
 if(!self.PauseAI())
 {
 	velX = mSpeed*dir;
 
-	var moveX = x-oldPosX[0],
-		moveY = y-oldPosY[0];
-
 	var player = obj_Player;
-	if (instance_exists(player) && (player.bb_bottom() <= self.bb_top() || player.bb_bottom() <= (self.bb_top()-moveY)) &&
-		player.grounded && (place_meeting(x,y-2,player) || place_meeting(x-moveX,y-moveY-2,player)))
+	if (grav > 0 && instance_exists(player) && (player.bb_bottom(player.y) <= self.bb_top(y) || player.bb_bottom(player.yprevious) <= self.bb_top(yprevious)) &&
+		player.grounded && (place_meeting(x,y-2,player) || place_meeting(xprevious,yprevious-2,player)))
 	{
 		gravCounter++;
 		if(gravCounter > gravCounterMax)
@@ -50,5 +49,3 @@ if(!self.PauseAI())
 
 	image_xscale = dir;
 }
-
-event_inherited();

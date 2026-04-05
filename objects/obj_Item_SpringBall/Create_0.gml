@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "springBall";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "SPRING BALL";
 itemDesc = "You can now jump during [sprt_Text_MiniMorph]";

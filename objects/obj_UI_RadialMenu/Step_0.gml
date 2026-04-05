@@ -17,7 +17,7 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 		var _device = InputPlayerGetDevice();
 		if(_device >= 0)
 		{
-			_openRadial |= (InputDistance(INPUT_CLUSTER.RadialUIMove) > 0);
+			_openRadial |= (InputDistance(INPUT_CLUSTER.RadialUIMove) > 0.25);
 		}
 	//}
 	

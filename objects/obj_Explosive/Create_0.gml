@@ -12,6 +12,10 @@ blockBreakType[BlockBreakType.Shot] = true;
 exploProj = noone;
 exploDmgMult = 0.5;
 exploSnd = -1;
+
+isExploProj = false;
+explode = 0;
+tilesHit = false;
 sourceVelX = 0;
 sourceVelY = 0;
 

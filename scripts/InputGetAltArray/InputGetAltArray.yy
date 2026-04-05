@@ -6,7 +6,7 @@
   "name":"InputGetAltArray",
   "parent":{
     "name":"_Custom",
-    "path":"folders/Scripts/Input/_Custom.yy",
+    "path":"folders/Scripts/Libraries/Input/_Custom.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

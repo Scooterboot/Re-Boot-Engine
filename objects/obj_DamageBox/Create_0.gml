@@ -28,6 +28,23 @@ function bb_bottom(yy = undefined)
 	yy = is_undefined(yy) ? y : yy;
 	return bbox_bottom-y + yy - 1;
 }
+
+function bb_width(xx = undefined)
+{
+	return self.bb_right(xx)-self.bb_left(xx);
+}
+function bb_height(yy = undefined)
+{
+	return self.bb_bottom(yy)-self.bb_top(yy);
+}
+function Center(useRealXY = false, xx = undefined, yy = undefined)
+{
+	if(useRealXY)
+	{
+		return new Vector2(self.bb_left(x) + self.bb_width(x)/2, self.bb_top(y) + self.bb_height(y)/2);
+	}
+	return new Vector2(self.bb_left(xx) + self.bb_width(xx)/2, self.bb_top(yy) + self.bb_height(yy)/2);
+}
 #endregion
 
 creator = noone;

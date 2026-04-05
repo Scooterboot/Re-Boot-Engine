@@ -10,4 +10,4 @@ frameState = 0;
 
 screeDur1 = 0;
 screeDur2 = 0;
-screeDelay = 60;
+screeDelay = irandom_range(60,120);

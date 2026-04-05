@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"scribble_glyph_set",
   "parent":{
-    "name":"Fonts",
-    "path":"folders/Scripts/Scribble/Fonts.yy",
+    "name":"Font Modification",
+    "path":"folders/Scripts/Libraries/Scribble/Font Modification.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

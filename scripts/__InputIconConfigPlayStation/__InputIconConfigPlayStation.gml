@@ -6,15 +6,15 @@
 //                 //
 /////////////////////
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_face1, sprt_UI_PSIcon_ButtonCross); //"cross"   ); //Cross
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_face2, sprt_UI_PSIcon_ButtonCircle); //"circle"  ); //Circle
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_face3, sprt_UI_PSIcon_ButtonSquare); //"square"  ); //Square
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_face4, sprt_UI_PSIcon_ButtonTriangle); //"triangle"); //Triangle
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_face1, new UISpriteIcon(sprt_UI_PSIcon_FaceButtons,0)); //"cross"   ); //Cross
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_face2, new UISpriteIcon(sprt_UI_PSIcon_FaceButtons,1)); //"circle"  ); //Circle
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_face3, new UISpriteIcon(sprt_UI_PSIcon_FaceButtons,2)); //"square"  ); //Square
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_face4, new UISpriteIcon(sprt_UI_PSIcon_FaceButtons,3)); //"triangle"); //Triangle
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_shoulderl,  sprt_UI_PSIcon_L1Bumper); //"L1"); //L1
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_shoulderr,  sprt_UI_PSIcon_R1Bumper); //"R1"); //R1
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_shoulderlb, sprt_UI_PSIcon_L2Trigger); //"L2"); //L2
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_shoulderrb, sprt_UI_PSIcon_R2Trigger); //"R2"); //R2
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_shoulderl,  new UISpriteIcon(sprt_UI_PSIcon_Shoulders,0)); //"L1"); //L1
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_shoulderr,  new UISpriteIcon(sprt_UI_PSIcon_Shoulders,1)); //"R1"); //R1
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_shoulderlb, new UISpriteIcon(sprt_UI_PSIcon_Shoulders,2)); //"L2"); //L2
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_shoulderrb, new UISpriteIcon(sprt_UI_PSIcon_Shoulders,3)); //"R2"); //R2
 
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_select, sprt_UI_PSIcon_Share); //"create" ); //Select
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_start,  sprt_UI_PSIcon_Options); //"options"); //Start
@@ -42,8 +42,8 @@ InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_touchpadbutton, sprt_UI_PSIcon
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_extra1, sprt_UI_PSIcon_Mic); //"mic");
 
 //DualSense Edge
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_paddler, sprt_UI_PSIcon_RBPaddle); //"RB");
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_paddlel, sprt_UI_PSIcon_LBPaddle); //"LB");
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_paddler, new UISpriteIcon(sprt_UI_PSIcon_Shoulders,4)); //"RB");
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_paddlel, new UISpriteIcon(sprt_UI_PSIcon_Shoulders,5)); //"LB");
 
 
 
@@ -53,15 +53,15 @@ InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS5, gp_paddlel, sprt_UI_PSIcon_LBPadd
 //                 //
 /////////////////////
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_face1, sprt_UI_PSIcon_ButtonCross); //"cross"   ); //Cross
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_face2, sprt_UI_PSIcon_ButtonCircle); //"circle"  ); //Circle
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_face3, sprt_UI_PSIcon_ButtonSquare); //"square"  ); //Square
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_face4, sprt_UI_PSIcon_ButtonTriangle); //"triangle"); //Triangle
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_face1, new UISpriteIcon(sprt_UI_PSIcon_FaceButtons,0)); //"cross"   ); //Cross
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_face2, new UISpriteIcon(sprt_UI_PSIcon_FaceButtons,1)); //"circle"  ); //Circle
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_face3, new UISpriteIcon(sprt_UI_PSIcon_FaceButtons,2)); //"square"  ); //Square
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_face4, new UISpriteIcon(sprt_UI_PSIcon_FaceButtons,3)); //"triangle"); //Triangle
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_shoulderl,  sprt_UI_PSIcon_L1Bumper); //"L1"); //L1
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_shoulderr,  sprt_UI_PSIcon_R1Bumper); //"R1"); //R1
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_shoulderlb, sprt_UI_PSIcon_L2Trigger); //"L2"); //L2
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_shoulderrb, sprt_UI_PSIcon_R2Trigger); //"R2"); //R2
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_shoulderl,  new UISpriteIcon(sprt_UI_PSIcon_Shoulders,0)); //"L1"); //L1
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_shoulderr,  new UISpriteIcon(sprt_UI_PSIcon_Shoulders,1)); //"R1"); //R1
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_shoulderlb, new UISpriteIcon(sprt_UI_PSIcon_Shoulders,2)); //"L2"); //L2
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_shoulderrb, new UISpriteIcon(sprt_UI_PSIcon_Shoulders,3)); //"R2"); //R2
 
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_select, sprt_UI_PSIcon_Share); //"share"  ); //Select
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_PS4, gp_start,  sprt_UI_PSIcon_Options); //"options"); //Start

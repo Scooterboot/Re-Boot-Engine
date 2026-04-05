@@ -1,10 +1,8 @@
-/// @description 
-
-if(ds_exists(panelList, ds_type_list))
+if(ds_exists(pageList, ds_type_list))
 {
-	for(var i = 0; i < ds_list_size(panelList); i++)
+	for(var i = ds_list_size(pageList)-1; i >= 0; i--)
 	{
-		instance_destroy(panelList[| i]);
+		instance_destroy(pageList[| i]);
 	}
-	ds_list_destroy(panelList);
+	ds_list_destroy(pageList);
 }

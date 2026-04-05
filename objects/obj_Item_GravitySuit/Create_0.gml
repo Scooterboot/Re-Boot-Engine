@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "gravitySuit";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "GRAVITY SUIT";
 itemDesc = "Grants free movement in liquid & stops lava damage." + "\n" + "Halves damage taken.";

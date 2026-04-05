@@ -8,8 +8,8 @@
   "name":"obj_Item_HiJumpBoots",
   "overriddenProperties":[],
   "parent":{
-    "name":"BootsItems",
-    "path":"folders/Objects/Room Elements/ItemPickups/BootsItems.yy",
+    "name":"MobilityItems",
+    "path":"folders/Objects/Room Elements/ItemPickups/MobilityItems.yy",
   },
   "parentObjectId":{
     "name":"obj_Item",

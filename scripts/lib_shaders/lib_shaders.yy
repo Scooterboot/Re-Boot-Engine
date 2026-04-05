@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"lib_shaders",
   "parent":{
-    "name":"Libraries",
-    "path":"folders/Scripts/Libraries.yy",
+    "name":"Shaders",
+    "path":"folders/Scripts/Libraries/GML-Extended/Functions/Experimental/Shaders.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

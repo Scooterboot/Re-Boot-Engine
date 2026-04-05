@@ -1,129 +1,126 @@
 /// @description 
+event_inherited();
 
-active = true;
-
-width = 0;
-height = 0;
-
-alpha = 1;
-
-text = "";
-
-creator = noone;
-panel = noone;
-
-button_up = noone;
-button_down = noone;
-button_left = noone;
-button_right = noone;
-
-function GetX() { return panel.x + (x + panel.scrollPosX) * panel.scaleX; }
-function GetY() { return panel.y + (y + panel.scrollPosY) * panel.scaleY; }
-
-function GetMouse()
-{
-	var _x = self.GetX(),
-		_y = self.GetY();
-	var mouse = panel.GetMouse();
-	var flag = false;
-	if(mask_index != -1)
-	{
-		flag = place_meeting(_x, _y, mouse);
-	}
-	else
-	{
-		var btnL = min(_x, _x+width*image_xscale),
-			btnR = max(_x, _x+width*image_xscale),
-			btnT = min(_y, _y+height*image_yscale),
-			btnB = max(_y, _y+height*image_yscale);
-		flag = instance_exists(collision_rectangle(btnL, btnT, btnR, btnB, mouse, false, true));
-	}
-	if(instance_exists(mouse) && flag)
-	{
-		return mouse;
-	}
-	
-	return noone;
-}
-
-function OnSelect()
-{
-	audio_play_sound(snd_MenuTick,0,false);
-}
-
-function WhileSelected()
-{
-	var mouse = self.GetMouse();
-	if((creator.cMenuAccept && creator.rMenuAccept) || (instance_exists(mouse) && creator.cClickL && creator.rClickL))
-	{
-		self.OnClick();
-	}
-}
+canNavigate = true;
+canMouseSelect = true;
 
 function OnClick()
 {
 	audio_play_sound(snd_MenuBoop,0,false);
 }
+function HotKey() { return false; }
 
-function ChangeSelection(newBtn, moveFlag)
+function OnSelect()
 {
-	if(instance_exists(newBtn) && newBtn.active && instance_exists(newBtn.panel) && newBtn.panel.active && moveFlag)
-	{
-		creator.selectedPanel = newBtn.panel;
-		newBtn.panel.selectedButton = newBtn;
-		newBtn.OnSelect();
-		newBtn.justSelected = true;
-	}
+	audio_play_sound(snd_MenuTick,0,false);
 }
-
-justSelected = false;
-function UpdateButton()
+function WhileSelected()
 {
-	if(!instance_exists(creator))
-	{
-		instance_destroy();
-		exit;
-	}
-	if(!instance_exists(panel))
-	{
-		instance_destroy();
-		exit;
-	}
-	if(justSelected)
-	{
-		justSelected = false;
-		exit;
-	}
-	
 	var mouse = self.GetMouse();
-	
-	if(creator.selectedPanel == panel)
+	if ((creatorUI.cMenuAccept && creatorUI.rMenuAccept && !mouseOnly) || 
+		(instance_exists(mouse) && creatorUI.cClickL && creatorUI.rClickL))
 	{
-		if(panel.selectedButton == id)
-		{
-			self.WhileSelected();
-			
-			if(instance_exists(panel))
-			{
-				var moveX = panel.MoveSelectX(),
-					moveY = panel.MoveSelectY();
-				self.ChangeSelection(button_left, (moveX < 0));
-				self.ChangeSelection(button_right, (moveX > 0));
-				self.ChangeSelection(button_up, (moveY < 0));
-				self.ChangeSelection(button_down, (moveY > 0));
-			}
-		}
-		else
-		{
-			if(instance_exists(mouse) && (mouse.velX != 0 || mouse.velY != 0))
-			{
-				panel.selectedButton = id;
-				self.OnSelect();
-				justSelected = true;
-			}
-		}
+		self.OnClick();
 	}
 }
 
-buttonSurf = noone;
-function DrawButton(_x, _y) {}
+function PreUpdate()
+{
+	if(self.HotKey())
+	{
+		self.OnClick();
+		return false;
+	}
+	return true;
+}
+
+bgSprt = noone;
+bgSprtInd = 0;
+bgAlpha = 0;
+bgCol = c_black;
+bgSelectSprtInd = 0;
+bgSelectAlpha = 0;
+bgSelectCol = c_white;
+
+sprt = sprt_UI_Button;
+sprtInd = 1;
+sprtAlpha = 1;
+sprtSelectInd = 0;
+sprtSelectAlpha = 1;
+
+buttonScrib = scribble("btn");
+buttonScrib.starting_format("fnt_GUI",c_white);
+buttonScrib.align(fa_center,fa_middle);
+
+function PreDraw()
+{
+	var _x = self.GetX(),
+		_y = self.GetY();
+	
+	if(sprite_exists(bgSprt))
+	{
+		var _ind = bgSprtInd,
+			_alph = bgAlpha * self.GetAlpha();
+		if(self.IsSelected())
+		{
+			_ind = bgSelectSprtInd;
+			_alph = bgSelectAlpha * self.GetAlpha();
+		}
+		
+		var _ww = max(width, sprite_get_width(bgSprt)),
+			_hh = max(height, sprite_get_height(bgSprt)),
+			_xx = _x+width/2-_ww/2,
+			_yy = _y+height/2-_hh/2;
+		draw_sprite_stretched_ext(bgSprt,_ind, _xx,_yy, _ww,_hh, c_white,_alph);
+	}
+	else if(bgAlpha > 0)
+	{
+		var _alph = bgAlpha * self.GetAlpha(),
+			_col = bgCol;
+		if(self.IsSelected())
+		{
+			_alph = bgSelectAlpha * self.GetAlpha();
+			_col = bgSelectCol;
+		}
+		if(_alph > 0)
+		{
+			draw_set_color(_col);
+			draw_set_alpha(_alph);
+			draw_rectangle(_x,_y, _x+width, _y+height, false);
+			draw_set_color(c_white);
+			draw_set_alpha(1);
+		}
+	}
+	
+	if(sprite_exists(sprt))
+	{
+		var _ind = sprtInd,
+			_alph = sprtAlpha * self.GetAlpha();
+		if(self.IsSelected())
+		{
+			_ind = sprtSelectInd;
+			_alph = sprtSelectAlpha * self.GetAlpha();
+		}
+		
+		var _ww = max(width, sprite_get_width(sprt)),
+			_hh = max(height, sprite_get_height(sprt)),
+			_xx = _x+width/2-_ww/2,
+			_yy = _y+height/2-_hh/2;
+		draw_sprite_stretched_ext(sprt,_ind, _xx,_yy, _ww,_hh, c_white,_alph);
+	}
+	
+	var _text = self.GetText();
+	var _str = obj_UI_Icons.InsertIconsIntoString(_text);
+	if(buttonScrib.get_text() != _str)
+	{
+		buttonScrib.overwrite(_str);
+	}
+	
+	var xx = _x+width/2, yy = _y+height/2+1;
+	buttonScrib.blend(c_black,self.GetAlpha());
+	buttonScrib.draw(xx+1,yy+1);
+	buttonScrib.blend(c_white,self.GetAlpha());
+	buttonScrib.draw(xx,yy);
+	
+	return true;
+}

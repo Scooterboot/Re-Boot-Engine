@@ -1,7 +1,7 @@
 {
   "$GMSprite":"v2",
   "%Name":"sprt_Item_ScanVisor",
-  "bboxMode":0,
+  "bboxMode":1,
   "bbox_bottom":15,
   "bbox_left":0,
   "bbox_right":15,
@@ -26,8 +26,8 @@
   "nineSlice":null,
   "origin":0,
   "parent":{
-    "name":"GearItems",
-    "path":"folders/Sprites/Room Elements/ItemPickups/GearItems.yy",
+    "name":"VisorItems",
+    "path":"folders/Sprites/Room Elements/ItemPickups/VisorItems.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

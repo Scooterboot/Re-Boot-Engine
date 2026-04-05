@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "magniBall";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "MAGNI BALL";
 //itemDesc = "Press ${angleUpButton} or ${angleDownButton} during [sprt_Text_MiniMorph] to climb magnetic tracks.";

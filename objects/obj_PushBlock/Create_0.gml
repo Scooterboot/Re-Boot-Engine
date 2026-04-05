@@ -28,7 +28,7 @@ sndStopped = false;
 
 function explodePush(_proj,_velX)
 {
-	if(!place_meeting(x,y-2,obj_Player) || _proj.y > bb_top())
+	if(!place_meeting(x,y-2,obj_Player) || _proj.y > self.bb_top())
 	{
 		var _dir = sign(_velX);
 		if(_velX == 0)
@@ -44,9 +44,9 @@ function explodePush(_proj,_velX)
 		{
 			_spd = 10;
 		}
-		if(_proj.x > bb_left() && _proj.x < bb_right() && (_proj.y < bb_top() || _proj.y > bb_bottom()))
+		if(_proj.x > self.bb_left() && _proj.x < self.bb_right() && (_proj.y < self.bb_top() || _proj.y > self.bb_bottom()))
 		{
-			_spd *= abs(x - _proj.x) / (bb_right(x)-x);
+			_spd *= abs(x - _proj.x) / (self.bb_right(x)-x);
 			if(_spd <= 1 || (_velX != 0 && sign(_velX) != sign(x - _proj.x)))
 			{
 				_spd = 0;
@@ -70,7 +70,7 @@ mBlocks[0].ignoredEntity = id;
 function ModifyFinalVelY(fVY)
 {
 	var fellVel = 1;
-	if((entity_place_collide(0,fVY+fellVel) || (bb_bottom()+fVY+fellVel) >= room_height) && fVY >= 0)
+	if((self.entity_place_collide(0,fVY+fellVel) || (self.bb_bottom()+fVY+fellVel) >= room_height) && fVY >= 0)
 	{
 		justFell = true;
 	}
@@ -126,12 +126,12 @@ function OnYCollision(fVY, isOOB = false)
 
 function CanMoveUpSlope_Right()
 {
-	return CanMoveUpSlope_LeftRight(-1);
+	return self.CanMoveUpSlope_LeftRight(-1);
 }
 
 function CanMoveUpSlope_Left()
 {
-	return CanMoveUpSlope_LeftRight(1);
+	return self.CanMoveUpSlope_LeftRight(1);
 }
 function CanMoveUpSlope_LeftRight(dir)
 {
@@ -139,12 +139,12 @@ function CanMoveUpSlope_LeftRight(dir)
 	{
 		var yspeed = abs(fVelY);
 		var ynum = 0;
-		while(!entity_place_collide(0,ynum) && ynum <= yspeed)
+		while(!self.entity_place_collide(0,ynum) && ynum <= yspeed)
 		{
 			ynum++;
 		}
 		
-		var steepFlag = !entity_place_collide(dir,ynum+1);
+		var steepFlag = !self.entity_place_collide(dir,ynum+1);
 		return (fVelY >= 0 && steepFlag);
 	}
 	return false;

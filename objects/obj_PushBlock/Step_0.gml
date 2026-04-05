@@ -100,7 +100,7 @@ if(!grounded)
 fVelX = velX;
 fVelY = velY;
 
-Collision_Normal(fVelX,fVelY,true);
+self.Collision_Normal(fVelX,fVelY,true);
 
 var xx = x+mBlockOffset[0].X,
 	yy = y+mBlockOffset[0].Y;
@@ -117,16 +117,16 @@ if(_ydif != 0)
 	velY = 0;
 	fVelY = 0;
 }
-Collision_Normal(-_xdif,-_ydif,false);
+self.Collision_Normal(-_xdif,-_ydif,false);
 
 var downAng = GetEdgeAngle(Edge.Bottom);
 var downSlopeFlag = (downAng >= 60 && downAng <= 300);
-if(!entity_place_collide(0,2) || downSlopeFlag)
+if(!self.entity_place_collide(0,2) || downSlopeFlag)
 {
-	grounded = ((bb_bottom()+2) >= room_height);
+	grounded = ((self.bb_bottom()+2) >= room_height);
 }
 
-EntityLiquid_Large(x-xprevious, y-yprevious);
+self.EntityLiquid_Large(x-xprevious, y-yprevious);
 
 if(pushState == PushState.Push)
 {

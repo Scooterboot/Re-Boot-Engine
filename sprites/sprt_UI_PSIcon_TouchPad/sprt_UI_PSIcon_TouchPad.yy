@@ -26,7 +26,7 @@
   "origin":9,
   "parent":{
     "name":"Gamepad_PlayStation",
-    "path":"folders/Sprites/UI/ButtonIcons/Gamepad_PlayStation.yy",
+    "path":"folders/Sprites/UI/ButtonIcons/Gamepad/Gamepad_PlayStation.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",
@@ -78,7 +78,7 @@
     "visibleRange":null,
     "volume":1.0,
     "xorigin":5,
-    "yorigin":4,
+    "yorigin":2,
   },
   "swatchColours":null,
   "swfPrecision":0.5,

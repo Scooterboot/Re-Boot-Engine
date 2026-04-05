@@ -3,9 +3,6 @@
 global.miniMapSizeX = 5;
 global.miniMapSizeY = 3;
 
-//controlGroups = "menu hud";
-//InitControlVars(controlGroups);
-
 currentMap = global.rmMapArea;
 playerMapX = -1;
 playerMapY = -1;

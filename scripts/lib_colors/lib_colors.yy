@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"lib_colors",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"lib_colors",
+  "parent":{
+    "name":"Core",
+    "path":"folders/Scripts/Libraries/GML-Extended/Functions/Core.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

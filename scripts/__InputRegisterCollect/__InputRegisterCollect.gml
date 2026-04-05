@@ -28,18 +28,22 @@ function __InputRegisterCollect()
             {
                 //Force a gamepad update otherwise we won't be aware of any connected devices
                 __InputUpdateGamepadPresence();
+
+                var _initialDevice = __InputGetFirstConnectedGamepad();
                 
-                var _i = 0;
-                repeat(gamepad_get_device_count())
+                if (INPUT_ON_PS5)
                 {
-                    if (InputDeviceIsConnected(_i))
-                    {
-                        InputPlayerSetDevice(_i);
-                        break;
-                    }
+                    //Try to set player 0's device to the initial user on PS5
+                    var _initialPS5Device = __InputGetPS5InitialUserDevice();
                     
-                    ++_i;
+                    //Fall back on the first connected gamepad
+                    if (_initialPS5Device != INPUT_NO_DEVICE)
+                    {
+                        _initialDevice = _initialPS5Device;
+                    }
                 }
+                    
+                InputPlayerSetDevice(_initialDevice);
             }
         })();
         
@@ -69,12 +73,12 @@ function __InputRegisterCollect()
                 {
                     //Meta release sticks every key pressed during hold
                     //This is "the nuclear option", but the problem is severe
-                    var _i = 8;
-                    var _len = 0x100 - _i;
+                    var _key = 0x008;
+                    var _len = 0x100 - _key;
                     repeat(_len)
                     {
-                        keyboard_key_release(_i);
-                        ++_i;
+                        keyboard_key_release(_key);
+                        ++_key;
                     }
                 }
             }
@@ -186,8 +190,9 @@ function __InputRegisterCollect()
         {
             if (__hotswap)
             {
-                //No active verb
-                if (InputPlayerGetInactive())
+                //No active verb within the last 0.5 seconds. If we're using a gamepad then this timer is only reset
+                //if a digital button is pressed.
+                if (current_time - _playerArray[0].__lastHotswapBlockedTime > 500)
                 {
                     //No active device input
                     if (not InputDeviceIsActive(InputPlayerGetDevice()))
@@ -239,7 +244,7 @@ function __InputUpdateGamepadPresence()
         {
             if (_connected)
             {
-                if (INPUT_ON_SWITCH && (_gamepad.__type != __InputGamepadIdentifySwitchType(_device)))
+                if (INPUT_ON_SWITCH && (_gamepad.__type != __InputGamepadIdentifySwitchType(_device, false)))
                 {
                     //When Switch L+R assignment is used to pair two gamepads we won't see a normal disconnection/reconnection
                     //Instead we have to check for changes via the gamepad description or Joy-Con left/right connected state

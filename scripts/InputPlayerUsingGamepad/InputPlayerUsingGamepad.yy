@@ -6,7 +6,7 @@
   "name":"InputPlayerUsingGamepad",
   "parent":{
     "name":"Player",
-    "path":"folders/Scripts/Input/Player.yy",
+    "path":"folders/Scripts/Libraries/Input/Player.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

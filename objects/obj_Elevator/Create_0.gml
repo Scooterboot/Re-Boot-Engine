@@ -10,19 +10,19 @@ frame2Counter = 0;
 
 //dir = 0;
 
-//nextroom = noone;
+//nextRoom = noone;
 //elevatorID = -1;
 //nextElevatorID = -1;
 
-upward = false;
-up_nextRoom = noone;
-up_nextElevatorID = -1;
+//upward = false;
+//up_nextRoom = noone;
+//up_nextElevatorID = -1;
 
-downward = false;
-down_nextRoom = noone;
-down_nextElevatorID = -1;
+//downward = false;
+//down_nextRoom = noone;
+//down_nextElevatorID = -1;
 
-elevatorID = -1;
+//elevatorID = -1;
 
 activeDir = 0;
 incoming = false;

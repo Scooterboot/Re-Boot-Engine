@@ -25,6 +25,8 @@ type = ProjType.Bomb;
 damageType = DmgType.ExplSplash;
 damageSubType[DmgSubType_Explosive.PowerBomb] = true;
 
+isExploProj = true;
+
 dmgBoxes[0] = self.CreateDamageBox(0,0,sprite_index,hostile);
 function DamageBoxes()
 {

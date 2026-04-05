@@ -100,13 +100,10 @@ function PauseAI()
 
 function CameraLogic()
 {
-	//var this = id;
 	with(obj_Camera)
 	{
-		camLimitMax_Left = 16;
-		camLimitMax_Right = 32;
-		//camLimitMax_Top = camLimitDefault_Top;
-		//camLimitMax_Bottom = camLimitDefault_Bottom;
+		camLimitMax[CamLimit.Left] = -16;
+		camLimitMax[CamLimit.Right] = 32;
 	}
 }
 
@@ -431,14 +428,6 @@ head.image_xscale = image_xscale;
 head.image_yscale = image_yscale;
 head.image_angle = 45;
 
-/*rHand = instance_create_layer(x,y,layer,obj_Kraid_Hand);
-rHand.realLife = id;
-rHand.image_xscale = image_xscale;
-rHand.image_yscale = image_yscale;*/
-
-function DamageBoxes() {}
-function LifeBoxes() {}
-
 enum KraidHitBoxes
 {
 	Body,
@@ -462,4 +451,31 @@ for(var i = 0; i < KraidHitBoxes._Length; i++)
 lifeBoxes[KraidHitBoxes.Hand].Life_ModifyDamageTaken = function(_dmgBox, _dmg, _dmgType, _dmgSubType)
 {
 	return 0;
+}
+
+function DamageBoxes()
+{
+	if(instance_exists(dmgBoxes[KraidHitBoxes.Body]))
+	{
+		dmgBoxes[KraidHitBoxes.Body].Damage(x,y,damage,damageType,damageSubType);
+	}
+	if(instance_exists(dmgBoxes[KraidHitBoxes.Hand]))
+	{
+		dmgBoxes[KraidHitBoxes.Hand].image_angle = RArmBone[2].rotation * dir;
+		dmgBoxes[KraidHitBoxes.Hand].image_xscale = lerp(2/3, 1, clamp(rHandFrame-3,0,5) / 5) * dir;
+		dmgBoxes[KraidHitBoxes.Hand].Damage(RArmBone[2].position.X,RArmBone[2].position.Y,damage,damageType,damageSubType);
+	}
+}
+function LifeBoxes()
+{
+	if(instance_exists(lifeBoxes[KraidHitBoxes.Body]))
+	{
+		lifeBoxes[KraidHitBoxes.Body].UpdatePos(x,y);
+	}
+	if(instance_exists(lifeBoxes[KraidHitBoxes.Hand]))
+	{
+		lifeBoxes[KraidHitBoxes.Hand].image_angle = RArmBone[2].rotation * dir;
+		lifeBoxes[KraidHitBoxes.Hand].image_xscale = lerp(2/3, 1, clamp(rHandFrame-3,0,5) / 5) * dir;
+		lifeBoxes[KraidHitBoxes.Hand].UpdatePos(RArmBone[2].position.X, RArmBone[2].position.Y);
+	}
 }

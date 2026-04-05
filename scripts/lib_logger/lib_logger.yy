@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"lib_logger",
   "parent":{
-    "name":"Libraries",
-    "path":"folders/Scripts/Libraries.yy",
+    "name":"Constructors",
+    "path":"folders/Scripts/Libraries/GML-Extended/Functions/Experimental/Constructors.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

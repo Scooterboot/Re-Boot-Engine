@@ -2,7 +2,7 @@
 
 solids = array_concat(ColType_Solid,ColType_MovingSolid);
 
-shutterID = 0;
+//shutterID = 0;
 
 image_index = 0;
 image_speed = 0;

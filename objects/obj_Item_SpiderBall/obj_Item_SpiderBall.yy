@@ -9,8 +9,8 @@
   "name":"obj_Item_SpiderBall",
   "overriddenProperties":[],
   "parent":{
-    "name":"MiscItems",
-    "path":"folders/Objects/Room Elements/ItemPickups/MiscItems.yy",
+    "name":"MorphItems",
+    "path":"folders/Objects/Room Elements/ItemPickups/MorphItems.yy",
   },
   "parentObjectId":{
     "name":"obj_Item",

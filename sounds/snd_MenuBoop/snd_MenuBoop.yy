@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.338345,
+  "duration":0.33834466,
   "exportDir":"",
   "name":"snd_MenuBoop",
   "parent":{

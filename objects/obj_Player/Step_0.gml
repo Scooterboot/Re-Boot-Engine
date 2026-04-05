@@ -237,9 +237,6 @@ if(!global.GamePaused())
 	}
 	#endregion
 	
-	liquidLevel = 0;
-	liquidState = 0;
-	
 	immune = false;
 	
 	lowEnergyThresh = self.GetLowEnergyThreshold();
@@ -286,43 +283,15 @@ if(!global.GamePaused())
 		instance_destroy(grapReticle);
 	}
 	
-	stallCamera = false;
-
-#region Liquid Movement
-	var liquidMovement = false;
-	var findLiquid = self.liquid_place();
-	if(instance_exists(findLiquid))
-	{
-		liquidLevel = max(self.bb_bottom() - findLiquid.y,0);
-
-	    var dph = 10;
-	    if(animState == AnimState.Morph)
-	    {
-	        dph = 3;
-	    }
-	    liquidMovement = (liquidLevel > dph && !item[Item.GravitySuit]);
-		
-		if(liquidMovement)
-		{
-			if(findLiquid.liquidType == LiquidType.Water)
-			{
-				liquidState = 1;
-			}
-			if(findLiquid.liquidType == LiquidType.Lava || findLiquid.liquidType == LiquidType.Acid)
-			{
-				liquidState = 2;
-			}
-		}
-	}
-#endregion
-
 	move = cPlayerRight - cPlayerLeft;
 	move2 = cPlayerRight - cPlayerLeft;
 	pMove = ((cPlayerRight && rPlayerRight) - (cPlayerLeft && rPlayerLeft));
+	prAngle = ((cAimUp && rAimUp) || (cAimDown && rAimDown) || (cAimLock && rAimLock));
+	rlAngle = ((!cAimUp && !rAimUp) || (!cAimDown && !rAimDown) || (!cAimLock && !rAimLock));
 	
-	if(move != 0 && !brake && morphFrame <= 0 && wjFrame <= 0 && (state != State.Grip || !startClimb) && 
+	if(move != 0 && !brake && morphFrame <= 0 && frame[Frame.WallJump] <= 0 && (state != State.Grip || !startClimb) && 
 	(!cMoonwalk || state == State.Somersault || state == State.Morph || state == State.Grip || (global.aimStyle == 2 && cAimUp)) && 
-	!instance_exists(grapple) && state != State.Spark && state != State.BallSpark && state != State.Hurt && animState != AnimState.DmgBoost && dmgBoost <= 0 && state != State.Dodge)
+	!instance_exists(grapple) && state != State.Spark && state != State.BallSpark && state != State.Hurt && state != State.DmgBoost && animState != AnimState.DmgBoost && dmgBoost <= 0 && state != State.Dodge)
 	{
 		dir = move;
 		if(state == State.Grip && sign(dirFrame) != dir)
@@ -343,43 +312,35 @@ if(!global.GamePaused())
 		lastDir = oldDir;
 		
 		brake = false;
-		brakeFrame = 0;
 	}
 	
 	walkState = ((cMoonwalk || instance_exists(grapple)) && velX != 0 && sign(velX) != dir && state == State.Stand);
-	
-	if(dir != 0 && cMorph && rMorph && morphFrame <= 0 && state != State.Crouch && state != State.Morph && animState != AnimState.Morph && item[Item.MorphBall] && state != State.Spark && state != State.BallSpark && state != State.Grip)
-	{
-		audio_play_sound(snd_Morph,0,false);
-		if(state == State.Stand)
-		{
-			if(_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidMovement))
-			{
-				velX = min(abs(velX),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
-				speedCounter = 0;
-				speedBoost = false;
-			}
-		}
-		var oldY = y;
-		self.ChangeState(State.Morph, AnimState.Morph, MoveState.Normal, mask_Player_Morph, grounded);
-		morphFrame = 8;
-		morphYDiff = y-oldY;
-		
-		if(self.GrappleActive() && (item[Item.MagniBall] || item[Item.SpiderBall]) && unmorphing == 0 && global.spiderBallStyle == 0)
-		{
-			self.SpiderEnable(true);
-		}
-	}
 	
 	dir2 = dir;
 	//if(animState == AnimState.Grip)
 	//{
 	//	dir2 = -dir;
 	//}
+	
+	var dRechargeMax = dodgeChargeCellSize * dodgeChargeCells,
+		dRechargeMax2 = dRechargeMax-dodgeRechargeRate;
+	if(grounded || state == State.Grip || state == State.Grapple || ((state == State.Spark || state == State.BallSpark) && shineEnd > 0))
+	{
+		dRechargeMax2 = dRechargeMax;
+	}
+	if(dodgeRecharge < dRechargeMax2 && state != State.Dodge)
+	{
+		dodgeRecharge = min(dodgeRecharge+dodgeRechargeRate, dRechargeMax2);
+	}
+	
+	if(dodgeRecharge >= dRechargeMax)
+	{
+		dodgeCharge = dRechargeMax;
+	}
+	canDodge = (dodgeCharge >= dodgeChargeCellSize);
 
 #region Aim Control, part 1
-	prAngle = ((cAimUp && rAimUp) || (cAimDown && rAimDown) || (cAimLock && rAimLock));
-	rlAngle = ((!cAimUp && !rAimUp) || (!cAimDown && !rAimDown) || (!cAimLock && !rAimLock));
+	
 	
 	if(!instance_exists(grapple))
 	{
@@ -399,17 +360,6 @@ if(!global.GamePaused())
 				aimAngle = 2;
 				_aimUp = false;
 				_aimDown = false;
-			}
-			else
-			{
-				if(item[Item.MorphBall] && morphFrame <= 0 && state == State.Jump && !grounded && aimAngle == -2 && move == 0 && cPlayerDown && rPlayerDown && !cPlayerUp && !cAimUp && !cAimDown)
-				{
-					audio_play_sound(snd_Morph,0,false);
-					var oldY = y;
-					self.ChangeState(State.Morph, AnimState.Morph, MoveState.Normal, mask_Player_Morph, false);
-					morphFrame = 8;
-					morphYDiff = y-oldY;
-				}
 			}
 			
 			if(move != 0)
@@ -462,6 +412,43 @@ if(!global.GamePaused())
 	}
 #endregion
 
+#region Liquid State
+	
+	liquidState = LiquidState.Normal;
+	liquidLevel = 0;
+	
+	var findLiquid = self.liquid_place();
+	if(instance_exists(findLiquid))
+	{
+		liquidLevel = max(self.bb_bottom() - findLiquid.y,0);
+			
+		if(!item[Item.GravitySuit])
+		{
+			var dph = 10;
+		    if(animState == AnimState.Morph)
+		    {
+		        dph = 3;
+		    }
+			if(liquidLevel > dph)
+			{
+				if(item[Item.HydroBoost] && findLiquid.liquidType == LiquidType.Water)
+				{
+					liquidState = LiquidState.HydroBoost;
+				}
+				else if(findLiquid.liquidType == LiquidType.Water)
+				{
+					liquidState = LiquidState.Liquid;
+				}
+				if(findLiquid.liquidType == LiquidType.Lava || findLiquid.liquidType == LiquidType.Acid)
+				{
+					liquidState = LiquidState.DmgLiquid;
+				}
+			}
+		}
+	}
+	
+#endregion
+
 #region Horizontal Movement
 	
 	var sprint = (cSprint || global.autoSprint);
@@ -479,7 +466,7 @@ if(!global.GamePaused())
 	{
 		if(grounded)
 		{
-			if(abs(velX) > maxSpeed[MaxSpeed.MorphBall,liquidState] && liquidState <= 0)
+			if(abs(velX) > maxSpeed[MaxSpeed.MorphBall,liquidState] && (liquidState == LiquidState.Normal || liquidState == LiquidState.HydroBoost))
 			{
 				maxSpdInd = MaxSpeed.MockBall;
 			}
@@ -500,7 +487,7 @@ if(!global.GamePaused())
 			}
 		}
 	}
-	else if(state == State.Somersault)
+	else if(state == State.Somersault || animState == AnimState.DmgBoost)
 	{
 		maxSpdInd = MaxSpeed.Somersault;
 	}
@@ -511,10 +498,6 @@ if(!global.GamePaused())
 	else if(state == State.Jump)
 	{
 		maxSpdInd = MaxSpeed.Jump;
-		if(animState == AnimState.DmgBoost)
-		{
-			maxSpdInd = MaxSpeed.Somersault;
-		}
 	}
 	else if(state == State.Stand && walkState && sign(velX) != dir)
 	{
@@ -526,9 +509,9 @@ if(!global.GamePaused())
 	}
 	else
 	{
-		if(sprint && !liquidMovement)
+		if(sprint)// && (liquidState == LiquidState.Normal || liquidState = LiquidState.HydroBoost))
 		{
-			if(item[Item.SpeedBooster])
+			if(item[Item.SpeedBooster] && liquidState == LiquidState.Normal)
 			{
 				maxSpdInd = MaxSpeed.SpeedBoost;
 			}
@@ -569,23 +552,24 @@ if(!global.GamePaused())
 		}
 	}
 	
-	var turnaroundSpd = fMoveSpeed + fFrict;
-	
 	#endregion
 	
 	#region Momentum Logic
 	
-	var _moving = 0;
+	var turnaroundSpd = fMoveSpeed + fFrict;
+	
+	var _moving = move;
 	if(moveState == MoveState.Normal)
 	{
-		var _move = 2*move;
-		if(sign(dirFrame) != dir && sign(dirFrame) != 0)
+		var _move = 0;
+		if(!brake)
 		{
-			_move = move;
-		}
-		else
-		{
-			_moving = move;
+			_move = 2*move;
+			if(sign(dirFrame) != dir && sign(dirFrame) != 0)
+			{
+				_move = move;
+				_moving = 0;
+			}
 		}
 		
 		var _frict = fFrict;
@@ -593,7 +577,7 @@ if(!global.GamePaused())
 		{
 			_frict = turnaroundSpd + sprintTurnSpeed[liquidState];
 		}
-		else if(move == 0 && sign(dirFrame) == dir && ((state != State.Morph && aimAngle <= -2 && !grounded) || (state == State.Morph && abs(velX) > maxSpeed[MaxSpeed.MorphBall,liquidState] && (morphFrame > 0 || (cJump && !grounded)))))
+		else if(move == 0 && ((state != State.Morph && aimAngle <= -2 && !grounded && sign(dirFrame) == dir) || (state == State.Morph && abs(velX) > maxSpeed[MaxSpeed.MorphBall,liquidState] && (morphFrame > 0 || (cJump && !grounded)))))
 		{
 			_frict = 0;
 			_moving = dir;
@@ -696,7 +680,7 @@ if(!global.GamePaused())
 	}
 	else if(!speedBoostWJ)
 	{
-		if(state == State.Stand && grounded && !liquidMovement && crouchFrame >= 5 && !brake && ((velX != 0 && sign(velX) == dir) || (prevVelX != 0 && sign(prevVelX) == dir)))
+		if(state == State.Stand && grounded && liquidState == LiquidState.Normal && !brake && ((velX != 0 && sign(velX) == dir) || (prevVelX != 0 && sign(prevVelX) == dir)))
 		{
 			var num = speedCounter;
 			if((sprint && speedBuffer > 0) || speedCounter > 0)
@@ -760,7 +744,7 @@ if(!global.GamePaused())
 		{
 			speedBoost = true;
 		}
-		else if(!speedBoost && (abs(velX) >= minBoostSpeed || abs(spiderSpeed) >= minBoostSpeed) && (state == State.Stand || !_RUN_RESTRICT_SB) && state != State.Dodge && state != State.Grapple && !grapBoost && !spiderJumpBoost)
+		else if(!speedBoost && (abs(velX) >= minBoostSpeed || abs(spiderSpeed) >= minBoostSpeed) && (state == State.Stand || !_RUN_RESTRICT_SB) && state != State.Dodge && state != State.Grapple && !grapBoost && !spiderJumpBoost && liquidState == LiquidState.Normal)
 		{
 			speedCounter = speedCounterMax;
 			speedBoost = true;
@@ -779,7 +763,8 @@ if(!global.GamePaused())
 			if(state == State.Stand && abs(velX) >= minBoostSpeed-fFrict && abs(velX) > 0 && !cPlayerDown && !brake)
 			{
 				brake = true;
-				brakeFrame = 10;
+				animState = AnimState.Brake;
+				frame[Frame.Brake] = 10;
 				audio_play_sound(snd_Brake,0,false);
 			}
 			var speedNum = minBoostSpeed-fFrict;
@@ -853,8 +838,6 @@ if(!global.GamePaused())
 		ledgeFall2 = true;
 	}
 	
-	canMorphBounce = true;
-	
 	if(moonFallState || moonFall)
 	{
 		bufferJump = 0;
@@ -904,7 +887,7 @@ if(!global.GamePaused())
 			detectRange += abs(prevVelX);
 		}
 		canWallJump = false;
-		if((move != 0 || (_FAST_WALLJUMP && sign(velX) != 0 && move != sign(velX))) && wjFrame <= 0 && coyoteJump <= 0)
+		if((move != 0 || (_FAST_WALLJUMP && sign(velX) != 0 && move != sign(velX))) && frame[Frame.WallJump] <= 0 && coyoteJump <= 0)
 		{
 			var _solids = array_concat(solids,ColType_Platform);
 			var num = 0;
@@ -959,15 +942,18 @@ if(!global.GamePaused())
 	#endregion
 	#region Gravity
 	
-	if(liquidState > 0)
+	if(liquidState != LiquidState.Normal)
 	{
 		fGrav = grav[liquidState];
 		liqGrav = fGrav;
-		liqGravShift = 1;
+		if(velY > 0)
+		{
+			liqGravShift = 1;
+		}
 	}
 	else
 	{
-		if(jump > 0)
+		if(jump > 0 || velY > 0 || item[Item.GravitySuit])
 		{
 			liqGravShift = 0;
 		}
@@ -1028,7 +1014,7 @@ if(!global.GamePaused())
 			(state != State.Morph || (state == State.Morph && ((item[Item.SpringBall] && morphFrame <= 0) || ((unmorphing > 0 || morphSpinJump) && self.CanChangeState(mask_Player_Somersault))))) && state != State.DmgBoost)
 			{
 				if((grounded && !moonFallState) || coyoteJump > 0 || canWallJump || (state == State.Grip && canGripJump) || 
-				(item[Item.SpaceJump] && velY >= sjThresh && state == State.Somersault && !liquidMovement && (!detectWJ || bufferJump <= 1) && rRespinJump))//&& ((!detectWJ && rRespinJump) || bufferJump <= 1)))
+				(item[Item.SpaceJump] && velY >= sjThresh && state == State.Somersault && liquidState == LiquidState.Normal && (!detectWJ || bufferJump <= 1) && rRespinJump))//&& ((!detectWJ && rRespinJump) || bufferJump <= 1)))
 				{
 					if(!grounded && !canWallJump && item[Item.SpaceJump] && velY >= sjThresh)
 					{
@@ -1131,11 +1117,9 @@ if(!global.GamePaused())
 							wallJumped = false;
 						}
 						self.ChangeState(State.Somersault, AnimState.Somersault, MoveState.Somersault, mask_Player_Somersault, false);
-						
-						wjFrame = 8;
+						frame[Frame.WallJump] = 8;
 						wjAnimDelay = 10;
 						
-						var dRechargeMax = dodgeChargeCellSize * dodgeChargeCells;
 						if(dodgeRecharge >= dRechargeMax-dodgeRechargeRate)
 						{
 							dodgeRecharge = min(dodgeRecharge+dodgeRechargeRate, dRechargeMax);
@@ -1177,7 +1161,7 @@ if(!global.GamePaused())
 					{
 						_jInd = 2+item[Item.HiJump];
 					}
-					jump += jumpHeight[_jInd, liquidState];
+					jump += jumpMax[_jInd, liquidState];
 					
 					jumping = true;
 					
@@ -1185,9 +1169,12 @@ if(!global.GamePaused())
 					{
 						if(state == State.Grip)
 						{
-							stallCamera = true;
+							with(obj_Camera)
+							{
+								stallY = true;
+							}
 						}
-						if((abs(velX) > 0 && sign(velX) == dir) || (move != 0 && move == dir) || cSprint || (!grounded && state != State.Grip) || (state == State.Crouch && !self.CanChangeState(mask_Player_Jump)))
+						if((abs(velX) > 0 && !walkState) || (move != 0 && !walkState) || cSprint || (!grounded && state != State.Grip) || (state == State.Crouch && !self.CanChangeState(mask_Player_Jump)))
 						{
 							var mask = mask_Player_Jump;
 							if(!self.CanChangeState(mask_Player_Jump))
@@ -1239,19 +1226,23 @@ if(!global.GamePaused())
 		}
 		
 		fJumpSpeed = jumpSpeed[item[Item.HiJump],liquidState];
+		var prevLiqJSpd = jumpSpeed[item[Item.HiJump],prevLiquidState];
 		if(wallJumped)
 		{
 			fJumpSpeed = jumpSpeed[2+item[Item.HiJump],liquidState];
+			prevLiqJSpd = jumpSpeed[2+item[Item.HiJump],prevLiquidState];
 		}
 	
-		if(item[Item.SpeedBooster] && abs(velX) > maxSpeed[MaxSpeed.Sprint,liquidState] && speedCounter > 0)
+		if(item[Item.SpeedBooster] && abs(velX) > maxSpeed[MaxSpeed.Sprint, LiquidState.Normal] && speedCounter > 0)
 		{
-			fJumpSpeed += max((abs(velX) - maxSpeed[MaxSpeed.Sprint,liquidState]) / 2, 0);
+			fJumpSpeed += max((abs(velX) - maxSpeed[MaxSpeed.Sprint, LiquidState.Normal]) / 2, 0);
+			prevLiqJSpd += max((abs(velX) - maxSpeed[MaxSpeed.Sprint, LiquidState.Normal]) / 2, 0);
 		}
 		
-		if(jump <= 0 && velY < 0 && !liquidMovement && !outOfLiquid)
+		if(jumping && jump <= 0 && velY < 0 && liquidState == LiquidState.Normal && prevLiquidState != liquidState && !item[Item.GravitySuit])
 		{
-			velY = max(velY*1.75,-fJumpSpeed);
+			var mult = 1 + ((grav[liquidState] / grav[prevLiquidState] - 1) / (3 + 1/3));
+			velY = max(max(velY, -prevLiqJSpd) * mult, -fJumpSpeed);
 		}
 		
 		if(jump > 0)
@@ -1366,10 +1357,10 @@ if(!global.GamePaused())
 	{
 		if(spiderBall && (spiderEdge != Edge.None || spiderJump))
 		{
-			if(liquidState == 0)
+			if(liquidState == LiquidState.Normal || liquidState == LiquidState.HydroBoost)
 			{
-				var jumpX = lengthdir_x(bombJumpSpeed[0],spiderJumpDir) + spiderJump_SpeedAddX,
-					jumpY = lengthdir_y(bombJumpSpeed[0],spiderJumpDir) + spiderJump_SpeedAddY;
+				var jumpX = lengthdir_x(bombJumpSpeed[liquidState],spiderJumpDir) + spiderJump_SpeedAddX,
+					jumpY = lengthdir_y(bombJumpSpeed[liquidState],spiderJumpDir) + spiderJump_SpeedAddY;
 				if(jumpX != 0)
 				{
 					velX = jumpX;
@@ -1396,9 +1387,9 @@ if(!global.GamePaused())
 		}
 		else
 		{
-			if(liquidState == 0)
+			if(liquidState == LiquidState.Normal || liquidState == LiquidState.HydroBoost)
 			{
-				velY = -bombJumpSpeed[0];
+				velY = -bombJumpSpeed[liquidState];
 			}
 			else
 			{
@@ -1436,7 +1427,15 @@ if(!global.GamePaused())
 		var ndist = point_distance(position.X+velX,position.Y+velY,grapple.x,grapple.y);
 		
 		var reel = 0;
-		var _lmult = 1 / (1+liquidMovement);
+		var _lmult = 1;
+		if(liquidState == LiquidState.HydroBoost)
+		{
+			_lmult = 0.75;
+		}
+		if(liquidState == LiquidState.Liquid || liquidState == LiquidState.DmgLiquid)
+		{
+			_lmult = 0.5;
+		}
 		
 		if(state == State.Grapple)
 		{
@@ -1477,8 +1476,8 @@ if(!global.GamePaused())
 					
 					velX += lengthdir_x(grapMoveSpeed * move + angleGrav,grapAngle);
 					velY += lengthdir_y(grapMoveSpeed * move + angleGrav,grapAngle);
-					velX *= (0.99 + 0.007*liquidMovement);
-					velY *= (0.99 + 0.007*liquidMovement);
+					velX *= grapDamp[liquidState];
+					velY *= grapDamp[liquidState];
 				}
 				else
 				{
@@ -1969,31 +1968,6 @@ if(!global.GamePaused())
 	}
 #endregion
 
-	if(debug)
-	{
-		#region noclip
-		if(keyboard_check(vk_numpad6) || keyboard_check(vk_numpad4))
-		{
-			position.X += (keyboard_check(vk_numpad6) - keyboard_check(vk_numpad4)) * 3;
-			velX = 0;
-			
-			//position.X = scr_round(position.X) + 0.5;
-			
-			x = scr_round(position.X);
-		}
-		if(keyboard_check(vk_numpad5) || keyboard_check(vk_numpad8))
-		{
-			position.Y += (keyboard_check(vk_numpad5) - keyboard_check(vk_numpad8)) * 3;
-			if(!grounded)
-			{
-				velY = -fGrav;
-			}
-			y = scr_round(position.Y);
-		}
-		#endregion
-	}
-
-
 #region Grip Collision
 
 	if(item[Item.PowerGrip] && (state == State.Jump || state == State.Somersault) && morphFrame <= 0 && !grounded && abs(dirFrame) >= 4 && velY >= 0 && move2 != 0)
@@ -2070,7 +2044,10 @@ if(!global.GamePaused())
 					grippedDir = dir;
 					
 					self.ChangeState(State.Grip, AnimState.Grip, MoveState.Custom, mask_Player_Jump, false);
-					stallCamera = true;
+					with(obj_Camera)
+					{
+						stallY = true;
+					}
 					
 					position.Y = scr_ceil(position.Y);
 					for(var j = 10; j > 0; j--)
@@ -2103,7 +2080,7 @@ if(!global.GamePaused())
 		{
 			heightMax = 34;
 		}
-		if(state == State.Stand || (state == State.Crouch && crouchFrame <= 0))
+		if(state == State.Stand || state == State.Crouch)
 		{
 			var _px = position.X,
 				_py = position.Y;
@@ -2321,19 +2298,27 @@ if(!global.GamePaused())
 			{
 				var cX = climbX[climbIndex] * dir,
 					cY = -climbY[climbIndex];
-				if(liquidMovement && climbIndex > 1)
+				if(liquidState != LiquidState.Normal && climbIndex > 1)
 				{
-					cX /= 2;
-					cY /= 2;
+					cX *= liquidAnimMult[liquidState];
+					cY *= liquidAnimMult[liquidState];
 				}
 				
 				if(climbIndex >= 7 && move == dir)
 				{
-					var msp = 0.5*(animState == AnimState.Morph) / (1+liquidMovement);
-					//if(cSprint || global.autoSprint)
-					//{
-					//	msp = 1 + 0.5*(animState == AnimState.Morph) / (1+liquidMovement);
-					//}
+					var msp = 0.5*(animState == AnimState.Morph);
+					if(cSprint || global.autoSprint)
+					{
+						msp += 0.75;
+					}
+					if(liquidState == LiquidState.HydroBoost)
+					{
+						msp *= 0.75;
+					}
+					else if(liquidState == LiquidState.Liquid || liquidState == LiquidState.DmgLiquid)
+					{
+						msp *= 0.5;
+					}
 					velX = max(msp,abs(velX))*move;
 				}
 				
@@ -2384,7 +2369,10 @@ if(!global.GamePaused())
 				position.Y += 1;
 				y = scr_round(position.Y);
 			}
-			stallCamera = true;
+			with(obj_Camera)
+			{
+				stallY = true;
+			}
 		}
 		justFell = false;
 	}
@@ -2484,9 +2472,14 @@ if(!global.GamePaused())
 		moonFallState = (moonFallCounter > 0 && moonFallCounter < moonFallCounterMax);
 		moonFall = false;
 		
-		if(crouchFrame >= 5)
+		if(frame[Frame.Land] > 0)
 		{
-			var velMove = (velX != 0 && sign(velX) == dir) || (prevVelX != 0 && sign(prevVelX) == dir),
+			landSlide = true;
+		}
+		
+		if(frame[Frame.Crouch] <= 0)
+		{
+			var velMove = (((velX != 0 && sign(velX) == dir) || (prevVelX != 0 && sign(prevVelX) == dir)) && !landSlide),
 				moveMove = (move != 0 && (move == dir || walkState));
 			if(brake)
 			{
@@ -2495,8 +2488,9 @@ if(!global.GamePaused())
 			else if(moonFallState)
 			{
 				animState = AnimState.Moon;
+				moveState = MoveState.Halted;
 			}
-			else if((velMove || moveMove) && landFrame <= 0)
+			else if((velMove || moveMove) && frame[Frame.Land] <= 0)
 			{
 				if((walkState && sign(velX) != dir))
 				{
@@ -2507,6 +2501,11 @@ if(!global.GamePaused())
 					animState = AnimState.Run;
 				}
 			}
+		}
+		
+		if(frame[Frame.Land] <= 0 && (velX == 0 || move != 0))
+		{
+			landSlide = false;
 		}
 		
 		if(!self.PlayerGrounded() && !self.PlayerOnPlatform())
@@ -2547,9 +2546,9 @@ if(!global.GamePaused())
 		
 		if(canCrouch && move2 == 0 && cPlayerDown && dir != 0 && grounded)
 		{
-			crouchFrame = 5;
 			aimAnimDelay = aimAnimDelayMax;
 			self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
+			frame[Frame.Crouch] = 5-frame[Frame.Crouch];
 		}
 		if(!grounded && dir != 0)
 		{
@@ -2568,19 +2567,23 @@ if(!global.GamePaused())
 			animState = AnimState.Push;
 			
 			var vX = 1;
-            if(liquidMovement)
+			if(liquidState != LiquidState.Normal)
             {
-                vX *= 0.75;
+				vX = 0.75;
+				if(liquidState == LiquidState.HydroBoost)
+				{
+					vX = 0.875;
+				}
             }
             else if(pushBlock.liquid)
             {
                 vX *= 0.875;
             }
             
-			var animRate = 0.275 / (1+liquidMovement);
+			var animRate = 0.275 * liquidAnimMult[liquidState];
 			if(cSprint || global.autoSprint)
 			{
-				animRate = 0.375 / (1+liquidMovement);
+				animRate = 0.375 * liquidAnimMult[liquidState];
 			}
             velX = pushMove[pushFrameSequence[scr_floor(frame[Frame.Push])]]*animRate * vX * move2;
             pushBlock.velX = velX;
@@ -2606,7 +2609,7 @@ if(!global.GamePaused())
 	else
 	{
 		brake = false;
-		brakeFrame = 0;
+		landSlide = false;
 		
 		moonFallState = false;
 		moonFallCounter = 0;
@@ -2682,7 +2685,6 @@ if(!global.GamePaused())
 			self.ChangeState(state, animState, moveState, mask_Player_Crouch, false);
 		}
 		
-		landFrame = 0;
 		if(uncrouch < 7)
 		{
 			speedCounter = 0;
@@ -2695,14 +2697,13 @@ if(!global.GamePaused())
 		{
 			uncrouch = 0;
 		}
-		if(((cPlayerUp && rPlayerUp) || uncrouch >= 7) && self.CanChangeState(mask_Player_Stand) && crouchFrame <= 0)
+		if(((cPlayerUp && rPlayerUp) || uncrouch >= 7) && self.CanChangeState(mask_Player_Stand))
 		{
-			//aimUpDelay = 6;//10;
 			aimAnimDelay = aimAnimDelayMax;
 			self.ChangeState(State.Stand, AnimState.Stand, MoveState.Normal, mask_Player_Stand, true);
+			frame[Frame.Crouch] = 5-frame[Frame.Crouch];
 		}
-		//if(item[Item.MorphBall] && crouchFrame <= 0 && ((cPlayerDown && (rPlayerDown || !self.CanChangeState(mask_Player_Stand)) && move2 == 0) || (cMorph && rMorph)) && animState != AnimState.Morph && morphFrame <= 0)
-		if(item[Item.MorphBall] && crouchFrame <= 0 && ((cPlayerDown && rPlayerDown && move2 == 0) || (cMorph && rMorph)) && animState != AnimState.Morph && morphFrame <= 0)
+		if(item[Item.MorphBall] && frame[Frame.Crouch] <= 3 && ((cPlayerDown && rPlayerDown && move2 == 0) || (cMorph && rMorph)) && animState != AnimState.Morph && morphFrame <= 0)
 		{
 			audio_play_sound(snd_Morph,0,false);
 			var oldY = y;
@@ -2721,15 +2722,54 @@ if(!global.GamePaused())
 	}
 #endregion
 #region Morph Ball
+	
+	if(item[Item.MorphBall])
+	{
+		if (dir != 0 && state != State.Morph && animState != AnimState.Morph && morphFrame <= 0 && state != State.Crouch && state != State.Spark && state != State.BallSpark && state != State.Grip &&
+			cMorph && rMorph)
+		{
+			audio_play_sound(snd_Morph,0,false);
+			if(state == State.Stand)
+			{
+				if(_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidState != LiquidState.Normal))
+				{
+					velX = min(abs(velX),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
+					speedCounter = 0;
+					speedBoost = false;
+				}
+			}
+			var oldY = y;
+			self.ChangeState(State.Morph, AnimState.Morph, MoveState.Normal, mask_Player_Morph, grounded);
+			morphFrame = 8;
+			morphYDiff = y-oldY;
+		}
+		
+		if (dir != 0 && state == State.Jump && animState != AnimState.Morph && morphFrame <= 0 && aimAngle == -2 && prevAimAngle == aimAngle &&
+			cPlayerDown && rPlayerDown && !cPlayerUp && !cAimUp && !cAimDown && !cAimLock && move == 0)
+		{
+			audio_play_sound(snd_Morph,0,false);
+			var oldY = y;
+			self.ChangeState(State.Morph, AnimState.Morph, MoveState.Normal, mask_Player_Morph, grounded);
+			morphFrame = 8;
+			morphYDiff = y-oldY;
+		}
+	}
+	
 	if(state == State.Morph)
 	{
-		moveState = MoveState.Normal;
+		if(!GrappleActive())
+		{
+			moveState = MoveState.Normal;
+		}
+		else
+		{
+			moveState = MoveState.Custom;
+		}
 		
 		animState = AnimState.Morph;
 		gunReady = false;
 		ledgeFall = true;
 		ledgeFall2 = true;
-		landFrame = 0;
 		
 		if(grounded && !prevGrounded)
 		{
@@ -2740,7 +2780,7 @@ if(!global.GamePaused())
 					audio_stop_sound(snd_Land);
 					audio_play_sound(snd_Land,0,false);
 					
-					if((_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidMovement)) && canMorphBounce && !justBounced)
+					if((_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidState != LiquidState.Normal)) && canMorphBounce && !justBounced)
 					{
 						velX = min(abs(velX),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 						speedCounter = 0;
@@ -2749,6 +2789,8 @@ if(!global.GamePaused())
 				}
 			}
 		}
+		
+		canMorphBounce = true;
 		
 		if(!self.GrappleActive() && ((cPlayerUp && rPlayerUp) || (cJump && rJump && (!item[Item.SpringBall] || morphSpinJump)) || (cMorph && rMorph)) && unmorphing == 0 && morphFrame <= 0 && !self.SpiderActive()) //!spiderBall)
 		{
@@ -2805,11 +2847,10 @@ if(!global.GamePaused())
 				else
 				{
 					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
-					crouchFrame = 0;
 					if(velX != 0 && grounded)
 					{
 						uncrouch = 7;
-						if(_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidMovement))
+						if(_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidState != LiquidState.Normal))
 						{
 							velX = min(abs(velX),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 							speedCounter = 0;
@@ -2850,6 +2891,8 @@ if(!global.GamePaused())
 		cFlashStartCounter = 0;
 		audio_stop_sound(snd_SpiderLoop1);
 		audio_stop_sound(snd_SpiderLoop2);
+		
+		canMorphBounce = false;
 	}
 	
 	if((state == State.Morph || state == State.BallSpark) && (item[Item.MagniBall] || item[Item.SpiderBall]) && unmorphing == 0)
@@ -2908,7 +2951,7 @@ if(!global.GamePaused())
 					audio_stop_sound(snd_SpiderLand);
 					audio_play_sound(snd_SpiderLand,0,false);
 						
-					if(!spiderGrappleSpeedKeep && (_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidMovement)))
+					if(!spiderGrappleSpeedKeep && (_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidState != LiquidState.Normal)))
 					{
 						spiderSpeed = min(abs(spiderSpeed),maxSpeed[MaxSpeed.Run,liquidState])*sign(spiderSpeed);
 						speedCounter = 0;
@@ -2971,35 +3014,154 @@ if(!global.GamePaused())
 	}
 	
 #endregion
+#region CrystalFlash
+	if(state == State.CrystalFlash)
+	{
+		moveState = MoveState.Custom;
+		velX = 0;
+		velY = 0;
+		
+		animState = AnimState.CrystalFlash;
+		mask_index = mask_Player_Crouch;
+		immune = true;
+		
+		if(cFlashStartMove < 16)
+		{
+			cFlashStartMove++;
+			
+			if(_CRYSTAL_CLIP)
+			{
+				position.Y -= 2;
+				y = scr_round(position.Y);
+			}
+			else
+			{
+				velY = -2;
+			}
+		}
+		
+		var ammo = missileStat+superMissileStat+powerBombStat;
+		if(ammo > 0 && energy < energyMax && cFlashDuration < cFlashDurationMax)
+		{
+			var energyPerAmmo = 50;
+			
+			var eMax = min(cFlashLastEnergy+energyPerAmmo, energyMax);
+			if(energy < eMax)
+			{
+				energy = min(energy+scr_round(energyPerAmmo/cFlashStep), eMax);
+			}
+			if(energy >= eMax)
+			{
+				while(ammo > 0 && ((cFlashAmmoUse == 0 && missileStat <= 0) || (cFlashAmmoUse == 1 && superMissileStat <= 0) || (cFlashAmmoUse == 2 && powerBombStat <= 0)))
+				{
+					cFlashAmmoUse = scr_wrap(cFlashAmmoUse+1,0,3);
+				}
+				switch(cFlashAmmoUse)
+				{
+					case 0:
+					{
+						missileStat -= 1;
+						break;
+					}
+					case 1:
+					{
+						superMissileStat -= 1;
+						break;
+					}
+					case 2:
+					{
+						powerBombStat -= 1;
+						break;
+					}
+				}
+				cFlashAmmoUse = scr_wrap(cFlashAmmoUse+1,0,3);
+				cFlashLastEnergy = energy;
+				cFlashDuration++;
+			}
+		}
+		else
+		{
+			if(!self.CanChangeState(mask_Player_Jump))
+			{
+				self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
+			}
+			else
+			{
+				self.ChangeState(State.Jump, AnimState.Jump, MoveState.Normal, mask_Player_Jump, false);
+			}
+		}
+		
+		if(cFlashPal >= 1)
+		{
+			if(cFlashPalDiff <= 0)
+			{
+				cFlashPal2 = clamp(cFlashPal2+0.025*cFlashPalNum,0,1);
+				if(cFlashPal2 <= 0)
+				{
+					cFlashPalNum = 1;
+				}
+				if(cFlashPal2 >= 1)
+				{
+					cFlashPalNum = -1;
+				}
+			}
+			cFlashPalDiff = max(cFlashPalDiff-0.05,0);
+		}
+		cFlashPal = min(cFlashPal+0.2,1);
+		
+		cBubbleScale = min(cBubbleScale+0.075,1);
+	}
+	else
+	{
+		cFlashStartMove = 0;
+		cFlashDuration = 0;
+		cFlashLastEnergy = energy;
+		cFlashAmmoUse = 0;
+		
+		cFlashPal = max(cFlashPal-0.075,0);
+		cFlashPal2 = 0;
+		cFlashPalDiff = 1;
+		cFlashPalNum = 1;
+		
+		cBubbleScale = max(cBubbleScale-0.075,0);
+	}
+#endregion
 #region Jump
 	if(state == State.Jump)
 	{
 		moveState = MoveState.Normal;
 		
-		if(dBoostFrame <= 0 || dBoostFrame >= 19)
+		if(frame[Frame.DmgBoost] <= 0 || frame[Frame.DmgBoost] >= 19 || breakSpinJump)
 		{
 			animState = AnimState.Jump;
+			
+			if(aimAngle == -2 || aimFrame <= -3)
+			{
+				downGrabDelay = 2;
+			}
+			if(downGrabDelay > 0)
+			{
+				self.ChangeState(state, animState, moveState, mask_Player_AimDown, false);
+				downGrabDelay--;
+			}
+			else if(self.CanChangeState(mask_Player_Jump))
+			{
+				self.ChangeState(state, animState, moveState, mask_Player_Jump, false);
+			}
 		}
-		
-		if(aimAngle == -2 || aimFrame <= -3)
+		else if(animState == AnimState.DmgBoost)
 		{
-			downGrabDelay = 2;
-		}
-		if(downGrabDelay > 0)
-		{
-			self.ChangeState(state, animState, moveState, mask_Player_AimDown, false);
-			downGrabDelay--;
-		}
-		else if(self.CanChangeState(mask_Player_Jump))
-		{
-			self.ChangeState(state, animState, moveState, mask_Player_Jump, false);
+			if(self.CanChangeState(mask_Player_Somersault))
+			{
+				self.ChangeState(state, animState, moveState, mask_Player_Somersault, false);
+			}
 		}
 		
 		if(grounded )//|| self.PlayerGrounded())
 		{
 			if(!slopeGrounded)
 			{
-				if(_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidMovement))
+				if(_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidState != LiquidState.Normal))
 				{
 					velX = min(abs(velX) * (power(abs(velX),0.25) - 1),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 					speedCounter = 0;
@@ -3013,12 +3175,11 @@ if(!global.GamePaused())
 				if(!self.CanChangeState(mask_Player_Stand))
 				{
 					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_AimDown, true);
-					crouchFrame = 0;
 				}
 				else
 				{
 					self.ChangeState(State.Stand, AnimState.Stand, MoveState.Normal, mask_Player_Stand, true);
-					landFrame = 7;
+					frame[Frame.Land] = 7;
 					smallLand = false;
 				}
 			}
@@ -3026,18 +3187,18 @@ if(!global.GamePaused())
 			{
 				if(!self.CanChangeState(mask_Player_Stand))
 				{
-					crouchFrame = 5;
 					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
+					frame[Frame.Crouch] = 5;
 				}
 				else
 				{
 					if(smallLand)
 					{
-						landFrame = 6;
+						frame[Frame.Land] = 6;
 					}
 					else
 					{
-						landFrame = 9;
+						frame[Frame.Land] = 9;
 					}
 					self.ChangeState(State.Stand, AnimState.Stand, MoveState.Normal, mask_Player_Stand, true);
 				}
@@ -3045,18 +3206,14 @@ if(!global.GamePaused())
 			
 			if(slopeGrounded && state == State.Stand)
 			{
-				landFrame = 0;
-				smallLand = false;
-				
 				brake = true;
-				brakeFrame = 10;
-				audio_play_sound(snd_Brake,0,false);
 				animState = AnimState.Brake;
+				frame[Frame.Brake] = 10;
+				audio_play_sound(snd_Brake,0,false);
 			}
 		}
 		else
 		{
-			landFrame = 0;
 			smallLand = (velY <= 3);
 		}
 	}
@@ -3072,7 +3229,7 @@ if(!global.GamePaused())
 		ledgeFall = false;
 		ledgeFall2 = false;
 		
-		if(!liquidMovement)
+		if(liquidState == LiquidState.Normal)
 		{
 			if(!audio_is_playing(snd_Charge) && !audio_is_playing(snd_Charge_Loop))
 			{
@@ -3136,7 +3293,7 @@ if(!global.GamePaused())
 				if(somerUWSndCounter < 0)
 				{
 					audio_play_sound(snd_Somersault_Loop,0,false);
-					somerUWSndCounter = 33;
+					somerUWSndCounter = 33 / (2*liquidAnimMult[liquidState]);
 				}
 			}
 		}
@@ -3145,7 +3302,7 @@ if(!global.GamePaused())
 		{
 			if(!slopeGrounded)
 			{
-				if(_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidMovement))
+				if(_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidState != LiquidState.Normal))
 				{
 					velX = min(abs(velX) * (power(abs(velX),0.25) - 1),maxSpeed[MaxSpeed.Run,liquidState])*sign(velX);
 					speedCounter = 0;
@@ -3162,42 +3319,36 @@ if(!global.GamePaused())
 					mask = mask_Player_Somersault;
 				}
 				self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask, true);
-				crouchFrame = 0;
 			}
 			else
 			{
 				self.ChangeState(State.Stand, AnimState.Stand, MoveState.Normal, mask_Player_Stand, true);
-				landFrame = 7;
+				frame[Frame.Land] = 7;
 				smallLand = false;
 			}
 			
 			if(slopeGrounded && state == State.Stand)
 			{
-				landFrame = 0;
-				smallLand = false;
-				
 				brake = true;
-				brakeFrame = 10;
-				audio_play_sound(snd_Brake,0,false);
 				animState = AnimState.Brake;
+				frame[Frame.Brake] = 10;
+				audio_play_sound(snd_Brake,0,false);
 			}
 		}
 		else
 		{
-			landFrame = 0;
-			if(prAngle || (cPlayerUp && rPlayerUp) || (cPlayerDown && rPlayerDown) || (cFire && rFire) || (!cFire && !rFire && CanCharge()) || (!cFire && rFire && statCharge >= 20))
+			if(prAngle || (cPlayerUp && rPlayerUp) || (cPlayerDown && rPlayerDown) || breakSpinJump)//(cFire && rFire) || (!cFire && !rFire && CanCharge()) || (!cFire && rFire && statCharge >= 20))
 			{
 				if(!self.CanChangeState(mask_Player_Jump))
 				{
 					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Somersault, true);
-					crouchFrame = 0;
 				}
 				else
 				{
 					var mask = mask_Player_Jump;
 					if(aimAngle == -2 || aimFrame <= -3)
 					{
-						mask = mask_Player_Somersault;
+						mask = mask_Player_AimDown;
 					}
 					self.ChangeState(State.Jump, AnimState.Jump, MoveState.Normal, mask, false);
 				}
@@ -3231,7 +3382,11 @@ if(!global.GamePaused())
 		if(startClimb)
 		{
 			dir = _dir;
-			stallCamera = true;
+			with(obj_Camera)
+			{
+				stallY = true;
+			}
+			
 			if(climbIndex > 0)
 			{
 				if(climbIndex < 7)
@@ -3260,12 +3415,11 @@ if(!global.GamePaused())
 						if(self.CanChangeState(mask_Player_Stand))
 						{
 							self.ChangeState(State.Stand, AnimState.Stand, MoveState.Normal, mask_Player_Stand, true);
-							crouchFrame = 2;
+							frame[Frame.Crouch] = 3;
 						}
 						else
 						{
 							self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
-							crouchFrame = 0;
 						}
 					}
 				}
@@ -3395,6 +3549,178 @@ if(!global.GamePaused())
 		climbFrame = 0;
 		grippedDir = 0;
 	}
+#endregion
+#region Accel Dash
+	
+	if(item[Item.AccelDash] && (liquidState == LiquidState.Normal || !item[Item.HydroBoost]) && dir != 0 && 
+	(state == State.Stand || state == State.Crouch || state == State.Jump || state == State.Somersault || (state == State.Grip && !startClimb) || state == State.Dodge))
+	{
+		if(canDodge && cDodge && rDodge)
+		{
+			if(state != State.Dodge)
+			{
+				groundedDodge = 0;
+				if(state == State.Stand)
+				{
+					groundedDodge = 1;
+				}
+				if(state == State.Crouch)
+				{
+					groundedDodge = 2;
+				}
+				self.ChangeState(State.Dodge, AnimState.Dodge, MoveState.Custom, mask_Player_Crouch, (groundedDodge == 1));
+			}
+			dodgeLength = 0;
+			if(move2 == dir)
+			{
+				dodgeDir = dir;
+			}
+			else
+			{
+				dodgeDir = -dir;
+			}
+			
+			dodgeCharge = max(dodgeCharge - dodgeChargeCellSize, 0);
+			dodgeRecharge = dodgeCharge;
+			audio_play_sound(snd_Dodge,0,false);
+			shineFrame = 0;
+			shineFrameCounter = 0;
+		}
+	}
+	
+	if(state == State.Dodge)
+	{
+		moveState = MoveState.Custom;
+		
+		animState = AnimState.Dodge;
+		mask_index = mask_Player_Crouch;
+		gunReady = true;
+		ledgeFall = true;
+		ledgeFall2 = true;
+		
+		velY = 0;
+		
+		var shoot = _DASH_SHOOT_CANCEL && ((cFire && rFire) || (!cFire && !rFire && CanCharge()));
+		if(dodgeLength >= dodgeLengthMax || shoot)
+		{
+			if(grounded)
+			{
+				if(!self.CanChangeState(mask_Player_Stand) || groundedDodge == 2)
+				{
+					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
+				}
+				else
+				{
+					self.ChangeState(State.Stand, AnimState.Stand, MoveState.Normal, mask_Player_Stand, true);
+					frame[Frame.Land] = 7;
+					smallLand = false;
+				}
+			}
+			else if(shoot)
+			{
+				if(!self.CanChangeState(mask_Player_Jump))
+				{
+					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, false);
+				}
+				else
+				{
+					self.ChangeState(State.Jump, AnimState.Jump, MoveState.Normal, mask_Player_Jump, false);
+				}
+			}
+			else
+			{
+				self.ChangeState(State.Somersault, AnimState.Somersault, MoveState.Somersault, mask_Player_Somersault, false);
+			}
+		}
+		else
+		{
+			if(dodgeLength < dodgeLengthEnd)
+			{
+				var ms_spd = moveSpeed[MoveSpeed.Dodge,liquidState],
+					max_spd_d = maxSpeed[MaxSpeed.Dodge,liquidState],
+					max_spd_s = maxSpeed[MaxSpeed.SpeedBoost,liquidState];
+				if(abs(velX) < max_spd_d)
+				{
+					if(dodgeDir == 1)
+					{
+						velX = min(velX + ms_spd, max_spd_d);
+					}
+					if(dodgeDir == -1)
+					{
+						velX = max(velX - ms_spd, -max_spd_d);
+					}
+				}
+				else if(liquidState == LiquidState.Normal && (dodgeLength <= 0 || abs(velX) > max_spd_d) && abs(velX) < max_spd_s)
+				{
+					if(dodgeDir == 1)
+					{
+						velX = min(velX + ms_spd, max_spd_s);
+					}
+					if(dodgeDir == -1)
+					{
+						velX = max(velX - ms_spd, -max_spd_s);
+					}
+				}
+			}
+			else if(!speedBoost)
+			{
+				var _frict = fFrict;
+				if((liquidState == LiquidState.Normal || liquidState == LiquidState.HydroBoost) && (move != dir || dodgeDir == -dir || abs(velX) > maxSpeed[MaxSpeed.Dodge,0]))
+				{
+					_frict = fFrict*2;
+				}
+				
+				if(velX > 0)
+				{
+					velX = max(velX - _frict, 0);
+				}
+				if(velX < 0)
+				{
+					velX = min(velX + _frict, 0);
+				}
+			}
+			
+			if(liquidState == LiquidState.Normal)
+			{
+				dodgeLength += 1;
+			}
+			if(liquidState == LiquidState.HydroBoost)
+			{
+				dodgeLength += 0.75;
+			}
+			if(liquidState == LiquidState.Liquid || liquidState == LiquidState.DmgLiquid)
+			{
+				dodgeLength += 0.5;
+			}
+			
+			immune = true;
+		}
+	}
+	else
+	{
+		dodgeLength = 0;
+	}
+	
+#endregion
+#region Hydro Boost Dash
+	
+	if(item[Item.HydroBoost] && liquidState == LiquidState.HydroBoost && dir != 0 &&
+	(state == State.Stand || state == State.Crouch || state == State.Jump || state == State.Somersault || (state == State.Grip && !startClimb) || state == State.HydroDodge))
+	{
+		if(canDodge && cDodge && rDodge)
+		{
+			if(state != State.HydroDodge)
+			{
+				
+			}
+			
+			
+			dodgeCharge = max(dodgeCharge - dodgeChargeCellSize, 0);
+			dodgeRecharge = dodgeCharge;
+			audio_play_sound(snd_Dodge,0,false);
+		}
+	}
+	
 #endregion
 #region Shine Spark
 	if(state == State.Spark || state == State.BallSpark)
@@ -3948,16 +4274,18 @@ if(!global.GamePaused())
 		hurtTime = 0;
 		hurtSpeedX = 0;
 		hurtSpeedY = 0;
-		hurtFrame = 0;
 		
 		dmgBoost = max(dmgBoost - 1, 0);
 	}
+	
+#endregion
+#region Damage Boost
 	
 	if(state == State.Hurt || state == State.Stand || (state == State.Crouch && self.CanChangeState(mask_Player_Stand)) || state == State.Jump || state == State.Somersault)
 	{
 		if(dmgBoost > 0 && animState != AnimState.Morph && cJump && move2 == -dir)
 		{
-			self.ChangeState(State.DmgBoost, AnimState.DmgBoost, MoveState.Normal, mask_Player_Jump, false);
+			self.ChangeState(State.DmgBoost, AnimState.DmgBoost, MoveState.Normal, mask_Player_Somersault, false);
 			dmgBoost = 0;
 		}
 	}
@@ -3965,18 +4293,26 @@ if(!global.GamePaused())
 	{
 		dmgBoost = 0;
 	}
-#endregion
-#region Damage Boost
+	
 	if(state == State.DmgBoost)
 	{
 		moveState = MoveState.Normal;
 		
-		animState = AnimState.DmgBoost;
-		mask_index = mask_Player_Jump;
-		gunReady = false;
-		ledgeFall = true;
-		ledgeFall2 = true;
-		//if(((cJump && move2 == -dir) || velY < 0) && !grounded)
+		if(frame[Frame.DmgBoost] >= 19 || breakSpinJump)
+		{
+			animState = AnimState.Jump;
+			if(self.CanChangeState(mask_Player_Jump))
+			{
+				self.ChangeState(state, animState, moveState, mask_Player_Jump, false);
+			}
+		}
+		
+		if(!gunReady)
+		{
+			ledgeFall = true;
+			ledgeFall2 = true;
+		}
+		
 		if(cJump && move2 == -dir && !grounded)
 		{
 			if(move2 == -dir)
@@ -3991,7 +4327,6 @@ if(!global.GamePaused())
 				dmgBoostJump = true;
 			}
 			
-			landFrame = 0;
 			smallLand = (velY <= 3);
 		}
 		else
@@ -4004,18 +4339,18 @@ if(!global.GamePaused())
 				audio_play_sound(snd_Land,0,false);
 				if(!self.CanChangeState(mask_Player_Stand))
 				{
-					crouchFrame = 3;
+					frame[Frame.Crouch] = 3;
 					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
 				}
 				else
 				{
 					if(smallLand)
 					{
-						landFrame = 6;
+						frame[Frame.Land] = 6;
 					}
 					else
 					{
-						landFrame = 9;
+						frame[Frame.Land] = 9;
 					}
 					self.ChangeState(State.Stand, AnimState.Stand, MoveState.Normal, mask_Player_Stand, true);
 				}
@@ -4042,274 +4377,6 @@ if(!global.GamePaused())
 			d.dir = dir;
 			global.pauseState = PauseState.DeathAnim;
 		}
-	}
-#endregion
-#region Dodge
-	
-	var dRechargeMax = dodgeChargeCellSize * dodgeChargeCells;
-	if(dodgeRecharge >= dRechargeMax)
-	{
-		dodgeCharge = dRechargeMax;
-	}
-	canDodge = (item[Item.AccelDash] && dodgeCharge >= dodgeChargeCellSize);
-	
-	if(item[Item.AccelDash] && dir != 0 && (state == State.Stand || state == State.Crouch || state == State.Jump || state == State.Somersault || (state == State.Grip && !startClimb) || state == State.Dodge))
-	{
-		if(canDodge && cDodge && rDodge)
-		{
-			groundedDodge = 0;
-			if(state == State.Stand)
-			{
-				groundedDodge = 1;
-			}
-			if(state == State.Crouch)
-			{
-				groundedDodge = 2;
-			}
-			self.ChangeState(State.Dodge, AnimState.Dodge, MoveState.Custom, mask_Player_Crouch, (groundedDodge == 1));
-			dodgeLength = 0;
-			dodged = false;
-			velY = 0;
-			if(move2 == dir)
-			{
-				dodgeDir = dir;
-			}
-			else
-			{
-				dodgeDir = -dir;
-			}
-		}
-	}
-	
-	if(state == State.Dodge)
-	{
-		moveState = MoveState.Custom;
-		
-		animState = AnimState.Dodge;
-		mask_index = mask_Player_Crouch;
-		gunReady = true;
-		ledgeFall = true;
-		ledgeFall2 = true;
-		
-		var shoot = _DASH_SHOOT_CANCEL && ((cFire && rFire) || (!cFire && !rFire && CanCharge()));
-		if(dodgeLength >= dodgeLengthMax || shoot)
-		{
-			if(grounded)
-			{
-				if(!self.CanChangeState(mask_Player_Stand) || groundedDodge == 2)
-				{
-					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
-					crouchFrame = 0;
-				}
-				else
-				{
-					self.ChangeState(State.Stand, AnimState.Stand, MoveState.Normal, mask_Player_Stand, true);
-					landFrame = 7;
-					smallLand = false;
-				}
-			}
-			else if(shoot)
-			{
-				if(!self.CanChangeState(mask_Player_Jump))
-				{
-					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, false);
-				}
-				else
-				{
-					self.ChangeState(State.Jump, AnimState.Jump, MoveState.Normal, mask_Player_Jump, false);
-				}
-			}
-			else
-			{
-				self.ChangeState(State.Somersault, AnimState.Somersault, MoveState.Somersault, mask_Player_Somersault, false);
-			}
-		}
-		else
-		{
-			if(dodgeLength < dodgeLengthEnd)
-			{
-				var ms_spd = moveSpeed[MoveSpeed.Dodge,liquidState],
-					max_spd_d = maxSpeed[MaxSpeed.Dodge,liquidState],
-					max_spd_s = maxSpeed[MaxSpeed.SpeedBoost,liquidState];
-				if(abs(velX) < max_spd_d)
-				{
-					if(dodgeDir == 1)
-					{
-						velX = min(velX + ms_spd, max_spd_d);
-					}
-					if(dodgeDir == -1)
-					{
-						velX = max(velX - ms_spd, -max_spd_d);
-					}
-				}
-				else if(!liquidMovement && (dodgeLength <= 0 || abs(velX) > max_spd_d) && abs(velX) < max_spd_s)
-				{
-					if(dodgeDir == 1)
-					{
-						velX = min(velX + ms_spd, max_spd_s);
-					}
-					if(dodgeDir == -1)
-					{
-						velX = max(velX - ms_spd, -max_spd_s);
-					}
-				}
-			}
-			else
-			{
-				var flag = (!liquidMovement && (move != dir || dodgeDir == -dir || abs(velX) > maxSpeed[MaxSpeed.Dodge,0]));
-				if(velX > 0)
-				{
-					velX = max(velX - fFrict*(1+flag), 0);
-				}
-				if(velX < 0)
-				{
-					velX = min(velX + fFrict*(1+flag), 0);
-				}
-			}
-			dodgeLength += (1 / (1+liquidMovement));
-			
-			if(!dodged)
-			{
-				dodgeCharge = max(dodgeCharge - dodgeChargeCellSize, 0);
-				dodgeRecharge = dodgeCharge;
-				audio_play_sound(snd_Dodge,0,false);
-				dodged = true;
-			}
-			
-			immune = true;
-		}
-	}
-	else
-	{
-		dodged = false;
-		dodgeLength = 0;
-		
-		if(dodgeRecharge < dRechargeMax-dodgeRechargeRate)
-		{
-			dodgeRecharge = min(dodgeRecharge+dodgeRechargeRate, dRechargeMax-dodgeRechargeRate);
-		}
-		else if(grounded || state == State.Grip || state == State.Grapple || ((state == State.Spark || state == State.BallSpark) && shineEnd > 0))
-		{
-			dodgeRecharge = min(dodgeRecharge+dodgeRechargeRate, dRechargeMax);
-			if(shineEnd > 0)
-			{
-				dodgeRecharge = dRechargeMax;
-			}
-		}
-	}
-	
-#endregion
-#region CrystalFlash
-	if(state == State.CrystalFlash)
-	{
-		moveState = MoveState.Custom;
-		velX = 0;
-		velY = 0;
-		
-		animState = AnimState.CrystalFlash;
-		mask_index = mask_Player_Crouch;
-		immune = true;
-		
-		if(cFlashStartMove < 16)
-		{
-			cFlashStartMove++;
-			
-			if(_CRYSTAL_CLIP)
-			{
-				position.Y -= 2;
-				y = scr_round(position.Y);
-			}
-			else
-			{
-				velY = -2;
-			}
-		}
-		
-		var ammo = missileStat+superMissileStat+powerBombStat;
-		if(ammo > 0 && energy < energyMax && cFlashDuration < cFlashDurationMax)
-		{
-			var energyPerAmmo = 50;
-			
-			var eMax = min(cFlashLastEnergy+energyPerAmmo, energyMax);
-			if(energy < eMax)
-			{
-				energy = min(energy+scr_round(energyPerAmmo/cFlashStep), eMax);
-			}
-			if(energy >= eMax)
-			{
-				while(ammo > 0 && ((cFlashAmmoUse == 0 && missileStat <= 0) || (cFlashAmmoUse == 1 && superMissileStat <= 0) || (cFlashAmmoUse == 2 && powerBombStat <= 0)))
-				{
-					cFlashAmmoUse = scr_wrap(cFlashAmmoUse+1,0,3);
-				}
-				switch(cFlashAmmoUse)
-				{
-					case 0:
-					{
-						missileStat -= 1;
-						break;
-					}
-					case 1:
-					{
-						superMissileStat -= 1;
-						break;
-					}
-					case 2:
-					{
-						powerBombStat -= 1;
-						break;
-					}
-				}
-				cFlashAmmoUse = scr_wrap(cFlashAmmoUse+1,0,3);
-				cFlashLastEnergy = energy;
-				cFlashDuration++;
-			}
-		}
-		else
-		{
-			if(!self.CanChangeState(mask_Player_Jump))
-			{
-				self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
-				crouchFrame = 0;
-			}
-			else
-			{
-				self.ChangeState(State.Jump, AnimState.Jump, MoveState.Normal, mask_Player_Jump, false);
-			}
-		}
-		
-		if(cFlashPal >= 1)
-		{
-			if(cFlashPalDiff <= 0)
-			{
-				cFlashPal2 = clamp(cFlashPal2+0.025*cFlashPalNum,0,1);
-				if(cFlashPal2 <= 0)
-				{
-					cFlashPalNum = 1;
-				}
-				if(cFlashPal2 >= 1)
-				{
-					cFlashPalNum = -1;
-				}
-			}
-			cFlashPalDiff = max(cFlashPalDiff-0.05,0);
-		}
-		cFlashPal = min(cFlashPal+0.2,1);
-		
-		cBubbleScale = min(cBubbleScale+0.075,1);
-	}
-	else
-	{
-		cFlashStartMove = 0;
-		cFlashDuration = 0;
-		cFlashLastEnergy = energy;
-		cFlashAmmoUse = 0;
-		
-		cFlashPal = max(cFlashPal-0.075,0);
-		cFlashPal2 = 0;
-		cFlashPalDiff = 1;
-		cFlashPalNum = 1;
-		
-		cBubbleScale = max(cBubbleScale-0.075,0);
 	}
 #endregion
 
@@ -4348,7 +4415,7 @@ if(!global.GamePaused())
 	x = scr_round(position.X);
 	y = scr_round(position.Y);
 	
-	if(!item[Item.ScrewAttack] || state != State.Somersault || liquidMovement)
+	if(!item[Item.ScrewAttack] || state != State.Somersault || liquidState != LiquidState.Normal)
 	{
 		audio_stop_sound(snd_ScrewAttack);
 		audio_stop_sound(snd_ScrewAttack_Loop);
@@ -4369,7 +4436,7 @@ if(!global.GamePaused())
 		fastWJCheckVel = 0;
 	}
 	
-	//aimUpDelay = max(aimUpDelay - 1, 0);
+	breakSpinJump = false;
 	
 	shineCharge = max(shineCharge - 1, 0);
 	shineStart = max(shineStart - 1, 0);
@@ -4462,9 +4529,9 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 	
 	rotation = 0;
 	
-	var liquidMovement = (liquidState > 0);
+	var _liqMult = liquidAnimMult[liquidState];
 	
-	var aimSpeed = 1 / (1 + liquidMovement);
+	var aimSpeed = 1 * _liqMult;
 	
 	if(aimSnap > 0)
 	{
@@ -4489,7 +4556,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 			aimSpeed = 0.5;
 		}
 		
-		aimSpeed /= (1 + liquidMovement);
+		aimSpeed *= _liqMult;
 	}
 	
 	if(aimAnimDelay <= 0)
@@ -4517,14 +4584,14 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 	
 	if(recoil)
 	{
-		recoilCounter = 4 + (statCharge >= maxCharge) + liquidMovement;
-		var aimClamp = 2-liquidMovement;
+		recoilCounter = 4 + (statCharge >= maxCharge) + (liquidState != LiquidState.Normal);
+		var aimClamp = 2 * _liqMult;
 		aimFrame = clamp(aimFrame, aimFrameTarget-aimClamp,aimFrameTarget+aimClamp);
 		aimSnap = 8;
 		recoil = false;
 	}
 	
-	var turnSpeed = (1/(1+liquidMovement));
+	var turnSpeed = 1 * _liqMult;
 	if(dir == 0)
 	{
 		turnSpeed /= 2;
@@ -4656,7 +4723,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 			{
 				legs = sprt_Player_TurnCrouchLeg;
 			}
-			if(animState == AnimState.Stand && crouchFrame < 5)
+			if(animState == AnimState.Stand && frame[Frame.Crouch] > 1)
 			{
 				sprtOffsetY = 11;
 				legs = sprt_Player_TurnCrouchLeg;
@@ -4679,11 +4746,12 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				torsoL = sprt_Player_StandLeft;
 				for(var i = 0; i < array_length(frame); i++)
 				{
-					if(i != Frame.Idle)
-					{
-						frame[i] = 0;
-						frameCounter[i] = 0;
-					}
+					if(i == Frame.Idle) continue;
+					if(i == Frame.Land) continue;
+					if(i == Frame.Crouch) continue;
+					
+					frame[i] = 0;
+					frameCounter[i] = 0;
 				}
 				
 				var iNum = idleNum,
@@ -4701,7 +4769,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 					frame[Frame.Idle] = scr_wrap(frame[Frame.Idle] + 1,0,array_length(iNum));
 					frameCounter[Frame.Idle] = 0;
 				}
-				if(self.VisorSelected(Visor.Scan) || self.VisorSelected(Visor.XRay) || aimFrame != 0 || landFrame > 0 || recoilCounter > 0 || runToStandFrame[0] > 0 || runToStandFrame[1] > 0 || walkToStandFrame > 0)
+				if(self.VisorSelected(Visor.Scan) || self.VisorSelected(Visor.XRay) || aimFrame != 0 || frame[Frame.Land] > 0 || recoilCounter > 0 || runToStandFrame[0] > 0 || runToStandFrame[1] > 0 || walkToStandFrame > 0)
 				{
 					frame[Frame.Idle] = 0;
 					frameCounter[Frame.Idle] = 0;
@@ -4771,19 +4839,29 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 							bodyFrame = 4-scr_round(xcone/45);
 						}
 					}
-					if(landFrame > 0)
+					if(frame[Frame.Land] > 0)
 					{
 						legs = sprt_Player_LandLeg;
+						var landFinal = 0;
 						if(smallLand)
 						{
-							landFinal = smallLandSequence[scr_round(landFrame)];
+							landFinal = smallLandSequence[scr_round(frame[Frame.Land])];
 						}
 						else
 						{
-							landFinal = landSequence[scr_round(landFrame)];
+							landFinal = landSequence[scr_round(frame[Frame.Land])];
 						}
 						legFrame = landFinal;
 						sprtOffsetY = landYOffset[landFinal];
+						
+						if(sign(velX) == dir)
+						{
+							frame[Frame.Land] = max(frame[Frame.Land] - (1 + max(1.5*(move != 0),abs(velX)*0.5)) * _liqMult, 0);
+						}
+						else
+						{
+							frame[Frame.Land] = max(frame[Frame.Land] - (1 * _liqMult), 0);
+						}
 					}
 					else
 					{
@@ -4794,25 +4872,20 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				else
 				{
 					bodyFrame = iSeq[frame[Frame.Idle]];
-					if(crouchFrame < 5)
+					if(frame[Frame.Crouch] > 0)
 					{
 						torsoR = sprt_Player_CrouchRight;
 						torsoL = sprt_Player_CrouchLeft;
 					}
 				}
-				if(crouchFrame < 5)
+				if(frame[Frame.Crouch] > 0)
 				{
-					crouchFinal = crouchSequence[scr_round(crouchFrame)];
-					if(crouchFrame > 0)
-					{
-						legFrame = crouchFinal;
-					}
-					else
-					{
-						legFrame = 0;
-					}
+					var crouchFinal = crouchSequence[5 - scr_round(frame[Frame.Crouch])];
+					legFrame = crouchFinal;
 					sprtOffsetY = 11-crouchYOffset[legFrame];
 					legs = sprt_Player_CrouchLeg;
+					
+					frame[Frame.Crouch] = max(frame[Frame.Crouch] - (1 + abs(velX)*0.5) * _liqMult, 0);
 				}
 				transFrame = max(transFrame - 1, 0);
 				frame[Frame.JAim] = 6;
@@ -4838,191 +4911,20 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				break;
 			}
 			#endregion
-			#region Walk
-			case AnimState.Walk:
-			{
-				for(var i = 0; i < array_length(frame); i++)
-				{
-					if(i != Frame.Walk)
-					{
-						frame[i] = 0;
-						frameCounter[i] = 0;
-					}
-				}
-				
-				runToStandFrame[0] = 0;
-				runToStandFrame[1] = 0;
-				
-				frameCounter[Frame.Walk]++;
-				var numCounter = 2.5 * (1+liquidMovement);
-				if(abs(velX) > maxSpeed[MaxSpeed.MoonWalk,liquidState])
-				{
-					numCounter = 1.875 * (1+liquidMovement);
-				}
-				if(roomTrans)
-				{
-					numCounter = 5;
-				}
-				if(frameCounter[Frame.Walk] >= numCounter)
-				{
-					if(frame[Frame.Walk] == 6 || frame[Frame.Walk] == 12)
-					{
-						if(!audio_is_playing(snd_SpeedBooster) && !audio_is_playing(snd_SpeedBooster_Loop) && !roomTrans)
-						{
-							audio_play_sound(snd_Step,0,false);
-						}
-					}
-					
-					if(frame[Frame.Walk] < 1)
-					{
-						frame[Frame.Walk] += 1;
-					}
-					else
-					{
-						frame[Frame.Walk] = scr_wrap(frame[Frame.Walk]+1,1,13);
-					}
-					frameCounter[Frame.Walk] -= numCounter;
-				}
-				
-				self.SetArmPosJump();
-				
-				runYOffset = -mOffset[frame[Frame.Walk]];
-				
-				if(aimFrame != 0)
-				{
-					torsoR = sprt_Player_JumpAimRight;
-					torsoL = sprt_Player_JumpAimLeft;
-					if(transFrame < 2)
-					{
-						torsoR = sprt_Player_TransAimRight;
-						torsoL = sprt_Player_TransAimLeft;
-						self.SetArmPosTrans();
-					}
-					bodyFrame = 4 + aimFrame;
-				}
-				else
-				{
-					torsoR = sprt_Player_MoonWalkRight;
-					torsoL = sprt_Player_MoonWalkLeft;
-					bodyFrame = min(floor(walkToStandFrame),1);
-					if(bodyFrame == 0)
-					{
-						self.ArmPos(18*dir,-1);
-					}
-					else if(bodyFrame == 1)
-					{
-						self.ArmPos(21*dir,-2);
-					}
-				}
-				legs = sprt_Player_MoonWalkLeg;
-				legFrame = frame[Frame.Walk];
-				drawMissileArm = true;
-				
-				walkToStandFrame = min(walkToStandFrame + 0.5, 2);
-				transFrame = min(transFrame + 1, 2);
-				frame[Frame.JAim] = 6;
-				break;
-			}
-			#endregion
-			#region Moon
-			case AnimState.Moon:
-			{
-				for(var i = 0; i < array_length(frame); i++)
-				{
-					if(i != Frame.Moon)
-					{
-						frame[i] = 0;
-						frameCounter[i] = 0;
-					}
-				}
-				frame[Frame.JAim] = 6;
-				aimFrame = 0;
-				walkToStandFrame = 0;
-				runToStandFrame[0] = 0;
-				runToStandFrame[1] = 0;
-				
-				torsoR = sprt_Player_BrakeRight;
-				torsoL = sprt_Player_BrakeLeft;
-				legs = sprt_Player_BrakeLeg;
-				
-				bodyFrame = 4 - floor(frame[Frame.Moon]);
-				legFrame = bodyFrame;
-				switch bodyFrame
-				{
-					case 4:
-					{
-						self.ArmPos(11,-5);
-						if(dir == -1)
-						{
-							self.ArmPos(-9,-4);
-						}
-						break;
-					}
-					case 3:
-					{
-						self.ArmPos(4,-7);
-						if(dir == -1)
-						{
-							self.ArmPos(-1,-6);
-						}
-						break;
-					}
-					case 2:
-					{
-						self.ArmPos(0,-8);
-						if(dir == -1)
-						{
-							self.ArmPos(1,-7);
-						}
-						break;
-					}
-					case 1:
-					{
-						self.ArmPos(-2,-8);
-						if(dir == -1)
-						{
-							self.ArmPos(4,-6);
-						}
-						break;
-					}
-					default:
-					{
-						self.ArmPos(-3,-8);
-						if(dir == -1)
-						{
-							self.ArmPos(5,-6);
-						}
-						break;
-					}
-				}
-				
-				if(moonFallCounter < moonFallCounterMax-6)
-				{
-					frame[Frame.Moon] = min(frame[Frame.Moon] + 0.75, 2);
-				}
-				else
-				{
-					frame[Frame.Moon] = max(frame[Frame.Moon] - 1/3, 0);
-				}
-				
-				break;
-			}
-			#endregion
 			#region Run
 			case AnimState.Run:
 			{
 				for(var i = 0; i < array_length(frame); i++)
 				{
-					if(i != Frame.Run)
-					{
-						frame[i] = 0;
-						frameCounter[i] = 0;
-					}
+					if(i == Frame.Run) continue;
+					
+					frame[i] = 0;
+					frameCounter[i] = 0;
 				}
 				
 				if(!roomTrans)
 				{
-					var num = clamp(4 * ((abs(velX)-maxSpeed[MaxSpeed.Run,liquidState]) / (maxSpeed[MaxSpeed.SpeedBoost,liquidState]-maxSpeed[MaxSpeed.Run,liquidState])), speedCounter, 4);
+					var num = clamp(4 * ((abs(velX)-maxSpeed[MaxSpeed.Run, LiquidState.Normal]) / (maxSpeed[MaxSpeed.SpeedBoost, LiquidState.Normal]-maxSpeed[MaxSpeed.Run, LiquidState.Normal])), speedCounter, 4);
 					var num2 = runAnimCounterMax[0];
 					if(num > 0)
 					{
@@ -5038,29 +4940,34 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 						num2 = speedBufferCounterMax[num];
 					}
 					
-					if(!item[Item.SpeedBooster])
+					if(!item[Item.SpeedBooster] || liquidState != LiquidState.Normal)
 					{
 						num2 = 3;
 						if(!_SMOOTH_RUN_ANIM)
 						{
 							num2 = 2.5;
 						}
-						if(abs(velX) > maxSpeed[MaxSpeed.Run,liquidState])
+						if(abs(velX) > maxSpeed[MaxSpeed.Run, LiquidState.Normal])
 						{
-							num2 = lerp(num2, 2, (abs(velX)-maxSpeed[MaxSpeed.Run,liquidState]) / (maxSpeed[MaxSpeed.Sprint,liquidState]-maxSpeed[MaxSpeed.Run,liquidState]));
+							num2 = lerp(num2, 2, (abs(velX)-maxSpeed[MaxSpeed.Run, LiquidState.Normal]) / (maxSpeed[MaxSpeed.Sprint, LiquidState.Normal]-maxSpeed[MaxSpeed.Run, LiquidState.Normal]));
 						}
 					}
 					
 					var numCounter = num2/2;
 					if(!_SMOOTH_RUN_ANIM)
 					{
-						var runSpdMult = 1 - abs(velX)/maxSpeed[MaxSpeed.SpeedBoost,liquidState];
+						var runSpdMult = 1 - abs(velX)/maxSpeed[MaxSpeed.SpeedBoost, LiquidState.Normal];
 						numCounter = min(num2/2, 5*runSpdMult);
 					}
 					
 					var numRun = clamp(1/numCounter, 1, 1.6);
 					
-					if(liquidMovement)
+					if(frame[Frame.Run] < 2)
+					{
+						numCounter = 1 + (frame[Frame.Run] <= 0);
+						numRun = 1;
+					}
+					if(liquidState == LiquidState.Liquid || liquidState == LiquidState.DmgLiquid)
 					{
 						if(!speedBoost)
 						{
@@ -5068,9 +4975,9 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 						}
 						numRun = 1;
 					}
-					else if(frame[Frame.Run] < 2)
+					else if(liquidState != LiquidState.Normal)
 					{
-						numCounter = 1 + (frame[Frame.Run] <= 0);
+						numCounter *= 2-_liqMult;
 						numRun = 1;
 					}
 					
@@ -5208,6 +5115,8 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 			{
 				for(var i = 0; i < array_length(frame); i++)
 				{
+					if(i == Frame.Brake) continue;
+					
 					frame[i] = 0;
 					frameCounter[i] = 0;
 				}
@@ -5217,7 +5126,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				runToStandFrame[1] = 0;
 				transFrame = 2;
 				
-				bodyFrame = clamp(5 - ceil(brakeFrame/2), 0, 4);
+				bodyFrame = clamp(5 - ceil(frame[Frame.Brake]/2), 0, 4);
 				legFrame = bodyFrame;
 				
 				torsoR = sprt_Player_BrakeRight;
@@ -5268,23 +5177,248 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				
 				if(move != 0 && move != dir)
 				{
-					brakeFrame = max(brakeFrame - 2, 0);
+					frame[Frame.Brake] = max(frame[Frame.Brake] - 2, 0);
 				}
 				else if(abs(velX) <= (maxSpeed[MaxSpeed.Sprint,liquidState]*0.75))
 				{
 					if(abs(velX) < (maxSpeed[MaxSpeed.Run,liquidState]*0.75) || move != 0)
 					{
-						brakeFrame = max(brakeFrame - ((abs(velX) < (maxSpeed[MaxSpeed.Run,liquidState]*0.75)) + (move != 0)), 0);
+						frame[Frame.Brake] = max(frame[Frame.Brake] - ((abs(velX) < (maxSpeed[MaxSpeed.Run,liquidState]*0.75)) + (move != 0)), 0);
 					}
 				}
-				if(brakeFrame >= 10 && !liquid)
+				if(frame[Frame.Brake] >= 10 && !liquid)
 				{
 					part_particles_create(obj_Particles.partSystemB, x-(8+random(4))*dir, self.bb_bottom(y)+random(4), obj_Particles.bDust[1], 1);
 				}
-				if(brakeFrame <= 0)
+				if(frame[Frame.Brake] <= 0)
 				{
 					brake = false;
 				}
+				break;
+			}
+			#endregion
+			#region Walk
+			case AnimState.Walk:
+			{
+				for(var i = 0; i < array_length(frame); i++)
+				{
+					if(i == Frame.Walk) continue;
+					
+					frame[i] = 0;
+					frameCounter[i] = 0;
+				}
+				
+				runToStandFrame[0] = 0;
+				runToStandFrame[1] = 0;
+				
+				frameCounter[Frame.Walk]++;
+				var numCounter = 2.5 / _liqMult;
+				if(abs(velX) > maxSpeed[MaxSpeed.MoonWalk,liquidState])
+				{
+					numCounter = 1.875 / _liqMult;
+				}
+				if(roomTrans)
+				{
+					numCounter = 5;
+				}
+				if(frameCounter[Frame.Walk] >= numCounter)
+				{
+					if(frame[Frame.Walk] == 6 || frame[Frame.Walk] == 12)
+					{
+						if(!audio_is_playing(snd_SpeedBooster) && !audio_is_playing(snd_SpeedBooster_Loop) && !roomTrans)
+						{
+							audio_play_sound(snd_Step,0,false);
+						}
+					}
+					
+					if(frame[Frame.Walk] < 1)
+					{
+						frame[Frame.Walk] += 1;
+					}
+					else
+					{
+						frame[Frame.Walk] = scr_wrap(frame[Frame.Walk]+1,1,13);
+					}
+					frameCounter[Frame.Walk] -= numCounter;
+				}
+				
+				self.SetArmPosJump();
+				
+				runYOffset = -mOffset[frame[Frame.Walk]];
+				
+				if(aimFrame != 0)
+				{
+					torsoR = sprt_Player_JumpAimRight;
+					torsoL = sprt_Player_JumpAimLeft;
+					if(transFrame < 2)
+					{
+						torsoR = sprt_Player_TransAimRight;
+						torsoL = sprt_Player_TransAimLeft;
+						self.SetArmPosTrans();
+					}
+					bodyFrame = 4 + aimFrame;
+				}
+				else
+				{
+					torsoR = sprt_Player_MoonWalkRight;
+					torsoL = sprt_Player_MoonWalkLeft;
+					bodyFrame = min(floor(walkToStandFrame),1);
+					if(bodyFrame == 0)
+					{
+						self.ArmPos(18*dir,-1);
+					}
+					else if(bodyFrame == 1)
+					{
+						self.ArmPos(21*dir,-2);
+					}
+				}
+				legs = sprt_Player_MoonWalkLeg;
+				legFrame = frame[Frame.Walk];
+				drawMissileArm = true;
+				
+				walkToStandFrame = min(walkToStandFrame + 0.5, 2);
+				transFrame = min(transFrame + 1, 2);
+				frame[Frame.JAim] = 6;
+				break;
+			}
+			#endregion
+			#region Moon
+			case AnimState.Moon:
+			{
+				for(var i = 0; i < array_length(frame); i++)
+				{
+					if(i == Frame.Moon) continue;
+					
+					frame[i] = 0;
+					frameCounter[i] = 0;
+				}
+				frame[Frame.JAim] = 6;
+				aimFrame = 0;
+				walkToStandFrame = 0;
+				runToStandFrame[0] = 0;
+				runToStandFrame[1] = 0;
+				
+				torsoR = sprt_Player_BrakeRight;
+				torsoL = sprt_Player_BrakeLeft;
+				legs = sprt_Player_BrakeLeg;
+				
+				bodyFrame = 4 - floor(frame[Frame.Moon]);
+				legFrame = bodyFrame;
+				switch bodyFrame
+				{
+					case 4:
+					{
+						self.ArmPos(11,-5);
+						if(dir == -1)
+						{
+							self.ArmPos(-9,-4);
+						}
+						break;
+					}
+					case 3:
+					{
+						self.ArmPos(4,-7);
+						if(dir == -1)
+						{
+							self.ArmPos(-1,-6);
+						}
+						break;
+					}
+					case 2:
+					{
+						self.ArmPos(0,-8);
+						if(dir == -1)
+						{
+							self.ArmPos(1,-7);
+						}
+						break;
+					}
+					case 1:
+					{
+						self.ArmPos(-2,-8);
+						if(dir == -1)
+						{
+							self.ArmPos(4,-6);
+						}
+						break;
+					}
+					default:
+					{
+						self.ArmPos(-3,-8);
+						if(dir == -1)
+						{
+							self.ArmPos(5,-6);
+						}
+						break;
+					}
+				}
+				
+				if(moonFallCounter < moonFallCounterMax-6)
+				{
+					frame[Frame.Moon] = min(frame[Frame.Moon] + 0.75, 2);
+				}
+				else
+				{
+					frame[Frame.Moon] = max(frame[Frame.Moon] - 1/3, 0);
+				}
+				
+				break;
+			}
+			#endregion
+			#region Push
+			case AnimState.Push:
+			{
+				for(var i = 0; i < array_length(frame); i++)
+				{
+					if(i == Frame.Push) continue;
+					
+					frame[i] = 0;
+					frameCounter[i] = 0;
+				}
+	            aimFrame = 0;
+	            transFrame = 0;
+	            walkToStandFrame = 0;
+	            runToStandFrame[0] = 0;
+	            runToStandFrame[1] = 0;
+
+	            torsoR = sprt_Player_PushRight;
+	            torsoL = sprt_Player_PushLeft;
+
+	            if(grounded && move2 != 0 && instance_exists(pushBlock) && pushBlock.grounded)
+	            {
+					var animSpStart = 0.375 * _liqMult,
+						animSp = 0.275 * _liqMult;
+					if(cSprint || global.autoSprint)
+					{
+						animSpStart = 0.5 * _liqMult;
+						animSp = 0.375 * _liqMult;
+					}
+	                if(frame[Frame.Push] < 5)
+					{
+						frame[Frame.Push] += animSpStart
+					}
+					else
+					{
+						frame[Frame.Push] = scr_wrap(frame[Frame.Push] + animSp, 5, 18);
+					}
+					if(scr_floor(frame[Frame.Push]) == 16)
+					{
+						if(stepSndPlayedAt != scr_floor(frame[Frame.Push]))
+						{
+							audio_play_sound(snd_Step,0,false);
+							stepSndPlayedAt = scr_floor(frame[Frame.Push]);
+						}
+					}
+					else
+					{
+						stepSndPlayedAt = 0;
+					}
+	            }
+	            else
+	            {
+	                frame[Frame.Push] = clamp(frame[Frame.Push] - (0.5 * _liqMult), 0, 3);
+	            }
+	            bodyFrame = pushFrameSequence[scr_floor(frame[Frame.Push])];
 				break;
 			}
 			#endregion
@@ -5296,11 +5430,11 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				legs = sprt_Player_CrouchLeg;
 				for(var i = 0; i < array_length(frame); i++)
 				{
-					if(i != Frame.Idle)
-					{
-						frame[i] = 0;
-						frameCounter[i] = 0;
-					}
+					if(i == Frame.Idle) continue;
+					if(i == Frame.Crouch) continue;
+					
+					frame[i] = 0;
+					frameCounter[i] = 0;
 				}
 				frame[Frame.JAim] = 6;
 				
@@ -5319,7 +5453,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 					frame[Frame.Idle] = scr_wrap(frame[Frame.Idle] + 1,0,array_length(iNum));
 					frameCounter[Frame.Idle] = 0;
 				}
-				if(aimFrame != 0 || crouchFrame > 0 || recoilCounter > 0 || self.VisorSelected(Visor.Scan) || self.VisorSelected(Visor.XRay))
+				if(aimFrame != 0 || frame[Frame.Crouch] > 0 || recoilCounter > 0 || self.VisorSelected(Visor.Scan) || self.VisorSelected(Visor.XRay))
 				{
 					frame[Frame.Idle] = 0;
 					frameCounter[Frame.Idle] = 0;
@@ -5376,10 +5510,12 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 							bodyFrame = 4 + aimFrame;
 						}
 					}
-					crouchFinal = crouchSequence[scr_round(crouchFrame)];
-					if(crouchFrame > 0)
+					if(frame[Frame.Crouch] > 0)
 					{
+						var crouchFinal = crouchSequence[scr_round(frame[Frame.Crouch])];
 						legFrame = crouchFinal;
+						
+						frame[Frame.Crouch] = max(frame[Frame.Crouch] - 1 * _liqMult, 0);
 					}
 					else
 					{
@@ -5401,11 +5537,10 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 			{
 				for(var i = 0; i < array_length(frame); i++)
 				{
-					if(i != Frame.Morph)
-					{
-						frame[i] = 0;
-						frameCounter[i] = 0;
-					}
+					if(i == Frame.Morph) continue;
+					
+					frame[i] = 0;
+					frameCounter[i] = 0;
 				}
 				frame[Frame.JAim] = 6 * (velY <= 0);
 				
@@ -5426,10 +5561,11 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				}
 				
 				var xNum = point_distance(x,y,x+velX,y+velY);
-				if(liquidMovement)
+				if(liquidState != LiquidState.Normal)
 				{
-					xNum *= 0.75;
+					xNum *= (_liqMult * (2-_liqMult));
 				}
+				
 				xNum = xNum > 0 ? max(xNum,1) : 0;
 				
 				if(roomTrans)
@@ -5451,13 +5587,13 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				if(unmorphing > 0 && scr_round(morphFrame) <= 5)
 				{
 					torsoR = sprt_Player_Morph;
-					bodyFrame = scr_round(morphFrame)-1;
+					bodyFrame = clamp(scr_round(morphFrame)-1, 0, 4);
 					yOffFrame = bodyFrame;
 				}
 				else if(scr_round(morphFrame) >= 4 && unmorphing == 0)
 				{
 					torsoR = sprt_Player_Morph;
-					bodyFrame = 8-scr_round(morphFrame);
+					bodyFrame = clamp(8-scr_round(morphFrame), 0, 4);
 					yOffFrame = bodyFrame;
 				}
 				else
@@ -5486,18 +5622,61 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				break;
 			}
 			#endregion
+			#region CrystalFlash
+			case AnimState.CrystalFlash:
+			{
+				aimFrame = 0;
+				for(var i = 0; i < array_length(frame); i++)
+				{
+					if(i == Frame.CFlash) continue;
+					
+					frame[i] = 0;
+					frameCounter[i] = 0;
+				}
+				
+				if(frame[Frame.CFlash] < 5)
+				{
+					torsoR = sprt_Player_Morph;
+					bodyFrame = 4-frame[Frame.CFlash];
+					sprtOffsetY = 8-morphYOffset[bodyFrame];
+					
+					frame[Frame.CFlash]++;
+				}
+				else
+				{
+					frameCounter[Frame.CFlash]++;
+					if(frameCounter[Frame.CFlash] > 8)
+					{
+						frame[Frame.CFlash] = scr_wrap(frame[Frame.CFlash]+1,5,9);
+						frameCounter[Frame.CFlash] = 0;
+					}
+					
+					torsoR = sprt_Player_CrystalFlash;
+					bodyFrame = cFlashFrameSequence[frame[Frame.CFlash]-5];
+					
+					sprtOffsetY = -bodyFrame;
+				}
+				
+				torsoL = torsoR;
+				break;
+			}
+			#endregion
 			#region Jump
 			case AnimState.Jump:
 			{
 				self.SetArmPosJump();
 				for(var i = 0; i < array_length(frame); i++)
 				{
-					if(i != Frame.JAim && i != Frame.Jump)
-					{
-						frame[i] = 0;
-						frameCounter[i] = 0;
-					}
+					if(i == Frame.Jump) continue;
+					if(i == Frame.JAim) continue;
+					if(i == Frame.DmgBoost) continue;
+					
+					frame[i] = 0;
+					frameCounter[i] = 0;
 				}
+				
+				var jLiqMult = _liqMult * (2 - _liqMult);
+				
 				if(shootFrame || cMoonwalk || aimFrame != 0 || recoilCounter > 0)
 				{
 					aimAnimTweak = 2;
@@ -5545,7 +5724,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 					{
 						if(velY <= 0)
 						{
-							frame[Frame.JAim] = max(frame[Frame.JAim] - 0.3, 0);
+							frame[Frame.JAim] = max(frame[Frame.JAim] - 0.3 * jLiqMult, 0);
 							frame[Frame.Jump] = 0;
 						}
 						else
@@ -5557,11 +5736,11 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 							}
 							if(frame[Frame.JAim] < jAimFMax)
 							{
-								frame[Frame.JAim] = min(frame[Frame.JAim] + max(1/max(frame[Frame.JAim],1),0.25), jAimFMax);
+								frame[Frame.JAim] = min(frame[Frame.JAim] + max(1/max(frame[Frame.JAim],1),0.25) * jLiqMult, jAimFMax);
 							}
 							else if(bodyFrame <= 0)
 							{
-								frame[Frame.JAim] = max(frame[Frame.JAim] - 1, jAimFMax);
+								frame[Frame.JAim] = max(frame[Frame.JAim] - 1*jLiqMult, jAimFMax);
 							}
 							
 							if(ledgeFall2)
@@ -5595,10 +5774,10 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 						{
 							if(!roomTrans)
 							{
-								frame[Frame.Jump] = min(frame[Frame.Jump] + max(0.5/max(frame[Frame.Jump],1),0.125), 4);
+								frame[Frame.Jump] = min(frame[Frame.Jump] + max(0.5/max(frame[Frame.Jump],1),0.125)*jLiqMult, 4);
 								if(frame[Frame.Jump] >= 4)
 								{
-									frameCounter[Frame.Jump]++;
+									frameCounter[Frame.Jump] += 1 * _liqMult;
 								}
 							}
 							bodyFrame = scr_round(frame[Frame.Jump]);
@@ -5608,7 +5787,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 						{
 							if(!roomTrans)
 							{
-								frame[Frame.Jump] = clamp(frame[Frame.Jump] + 0.25,4,8);
+								frame[Frame.Jump] = clamp(frame[Frame.Jump] + 0.25*jLiqMult, 4, 8);
 							}
 							bodyFrame = scr_floor(frame[Frame.Jump]);
 							legFrame = scr_ceil(12 - frame[Frame.Jump]);
@@ -5620,12 +5799,12 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 						{
 							if(velY <= 0 || frame[Frame.Jump] < 4)
 							{
-								frame[Frame.Jump] = min(frame[Frame.Jump] + (0.5/(1+liquidMovement)), 4);
+								frame[Frame.Jump] = min(frame[Frame.Jump] + (0.5 * _liqMult), 4);
 								frame[Frame.JAim] = 6;
 							}
 							else
 							{
-								frame[Frame.Jump] = clamp(frame[Frame.Jump] + (0.25/(1+liquidMovement)), 4, 9);
+								frame[Frame.Jump] = clamp(frame[Frame.Jump] + (0.25 * _liqMult), 4, 9);
 								frame[Frame.JAim] = 6;
 							}
 						}
@@ -5644,14 +5823,14 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				aimFrame = 0;
 				for(var i = 0; i < array_length(frame); i++)
 				{
-					if(i != Frame.Somersault)
-					{
-						frame[i] = 0;
-						frameCounter[i] = 0;
-					}
+					if(i == Frame.Somersault) continue;
+					if(i == Frame.WallJump) continue;
+					
+					frame[i] = 0;
+					frameCounter[i] = 0;
 				}
 				frame[Frame.JAim] = 6 * (velY <= 0);
-				if(wjFrame > 0 || (canWallJump && self.entity_place_collide(-8*move,0) && !self.entity_place_collide(0,16) && wjAnimDelay <= 0))
+				if(frame[Frame.WallJump] > 0 || (canWallJump && self.entity_place_collide(-8*move,0) && !self.entity_place_collide(0,16) && wjAnimDelay <= 0))
 				{
 					torsoR = sprt_Player_WallJumpRight;
 					torsoL = sprt_Player_WallJumpLeft;
@@ -5660,14 +5839,25 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 						torsoR = sprt_Player_GripWallJumpRight;
 						torsoL = sprt_Player_GripWallJumpLeft;
 					}
-					if(wjFrame > 0)
+					if(frame[Frame.WallJump] > 0)
 					{
-						bodyFrame = wjSequence[scr_round(wjFrame)];
+						bodyFrame = wjSequence[scr_round(frame[Frame.WallJump])];
 						frame[Frame.Somersault] = 3;
-						if(item[Item.SpaceJump] && !liquidMovement)
+						if(item[Item.SpaceJump] && liquidState == LiquidState.Normal)
 						{
 							frame[Frame.Somersault] = 2;
 						}
+						
+						var _animSpd = 1;
+						if(liquidState == LiquidState.Liquid || liquidState == LiquidState.DmgLiquid)
+						{
+							_animSpd = 0.83;
+						}
+						else if(liquidState == LiquidState.HydroBoost)
+						{
+							_animSpd = 0.915;
+						}
+						frame[Frame.WallJump] = max(frame[Frame.WallJump] - _animSpd, 0);
 					}
 					else
 					{
@@ -5702,7 +5892,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 					torsoR = sprt_Player_SomersaultRight;
 					torsoL = sprt_Player_SomersaultLeft;
 					var sFrameMax = 18;
-					if(item[Item.SpaceJump] && !liquidMovement)
+					if(item[Item.SpaceJump] && liquidState == LiquidState.Normal)
 					{
 						if(spaceJump <= 0)
 						{
@@ -5713,21 +5903,21 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 					}
 					if(oldDir == dir)
 					{
-						var num = 0;
+						var num = 1;
 						if(frame[Frame.Somersault] == 0 || frame[Frame.Somersault] == 1)
 						{
-							num = 1+(frame[Frame.Somersault] == 0);
+							num += 1+(frame[Frame.Somersault] == 0);
 						}
-						num += liquidMovement;
+						num += (1/_liqMult)-1;
 						if(roomTrans)
 						{
 							num = 4;
 						}
 						frameCounter[Frame.Somersault]++;
-						if(frameCounter[Frame.Somersault] > num)
+						if(frameCounter[Frame.Somersault] >= num)
 						{
 							frame[Frame.Somersault]++;
-							frameCounter = 0;
+							frameCounter[Frame.Somersault] = max(frameCounter[Frame.Somersault] - num, 0);
 						}
 						if(frame[Frame.Somersault] >= sFrameMax)
 						{
@@ -5744,7 +5934,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 						bodyFrame = scr_wrap(frame[Frame.Somersault]*2, 2, 18);
 					}
 					var degNum = 40;
-					if(item[Item.SpaceJump] && !liquidMovement)
+					if(item[Item.SpaceJump] && liquidState == LiquidState.Normal)
 					{
 						degNum = 90;
 					}
@@ -5943,12 +6133,111 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 					gripTurnFrame = 0;
 					torsoR = sprt_Player_ClimbRight;
 					torsoL = sprt_Player_ClimbLeft;
-					if(climbIndexCounter > liquidMovement)
+					if(climbIndexCounter >= 1/_liqMult)
 					{
 						climbFrame = climbSequence[climbIndex];
 					}
 					bodyFrame = climbFrame;
 					self.SetArmPosClimb();
+				}
+				
+				break;
+			}
+			#endregion
+			#region Dodge
+			case AnimState.Dodge:
+			{
+				aimFrame = 0;
+				for(var i = 0; i < array_length(frame); i++)
+				{
+					if(i == Frame.Dodge) continue;
+					
+					frame[i] = 0;
+					frameCounter[i] = 0;
+				}
+				
+				torsoR = sprt_Player_SparkHRight;
+				torsoL = sprt_Player_SparkHLeft;
+				if(dodgeDir != dir)
+				{
+					torsoR = sprt_Player_DodgeBack_Right;
+					torsoL = sprt_Player_DodgeBack_Left;
+				}
+				if(dodgeLength <= dodgeLengthMax-2)
+				{
+					frame[Frame.Dodge] = min(frame[Frame.Dodge] + (0.5 * _liqMult), 2);
+					if(groundedDodge == 1)
+					{
+						sprtOffsetY = -5*(2-frame[Frame.Dodge]);
+					}
+				}
+				else
+				{
+					frame[Frame.Dodge] = max(frame[Frame.Dodge] - (1 * _liqMult), 0);
+				}
+				bodyFrame = scr_floor(frame[Frame.Dodge]);
+				
+				if(dodgeDir == dir)
+				{
+					switch(bodyFrame)
+					{
+						case 2:
+						{
+							self.ArmPos(-17,-1);
+							if(dir == -1)
+							{
+								self.ArmPos(-4,-3);
+							}
+							break;
+						}
+						case 1:
+						{
+							self.ArmPos(-10,8);
+							if(dir == -1)
+							{
+								self.ArmPos(-5,-3);
+							}
+							break;
+						}
+						default:
+						{
+							self.ArmPos(-5,9);
+							if(dir == -1)
+							{
+								self.ArmPos(-9,-2);
+							}
+							break;
+						}
+					}
+				}
+				else
+				{
+					switch(bodyFrame)
+					{
+						case 2:
+						{
+							self.ArmPos(14,-12);
+							if(dir == -1)
+							{
+								self.ArmPos(-1,0);
+							}
+							break;
+						}
+						case 1:
+						{
+							self.ArmPos(8,-7);
+							if(dir == -1)
+							{
+								self.ArmPos(-6,-3);
+							}
+							break;
+						}
+						default:
+						{
+							self.ArmPos(1*dir,7);
+							break;
+						}
+					}
 				}
 				
 				break;
@@ -5960,11 +6249,12 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				aimFrame = 0;
 				for(var i = 0; i < array_length(frame); i++)
 				{
-					if(i != Frame.SparkStart && i != Frame.SparkV && i != Frame.SparkH)
-					{
-						frame[i] = 0;
-						frameCounter[i] = 0;
-					}
+					if(i == Frame.SparkStart) continue;
+					if(i == Frame.SparkV) continue;
+					if(i == Frame.SparkH) continue;
+					
+					frame[i] = 0;
+					frameCounter[i] = 0;
 				}
 				if(shineStart > 0)
 				{
@@ -6132,14 +6422,15 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 			#region Grapple
 			case AnimState.Grapple:
 			{
-	            for(var i = 0; i < array_length(frame); i += 1)
-	            {
-	                if(i != Frame.GrappleLeg && i != Frame.GrappleBody && i != Frame.JAim)
-	                {
-	                    frame[i] = 0;
-	                    frameCounter[i] = 0;
-	                }
-	            }
+				for(var i = 0; i < array_length(frame); i++)
+				{
+					if(i == Frame.GrappleLeg) continue;
+					if(i == Frame.GrappleBody) continue;
+					if(i == Frame.JAim) continue;
+					
+					frame[i] = 0;
+					frameCounter[i] = 0;
+				}
 				var _grapAngle = grapAngle;
 				if(instance_exists(grapple))
 				{
@@ -6148,7 +6439,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				
 				var _gAngle = scr_wrap(-_grapAngle*dir,0,360);
 				var _somerFrame = _gAngle / (360 / 16);
-				if(item[Item.SpaceJump] && !liquidMovement)
+				if(item[Item.SpaceJump] && liquidState == LiquidState.Normal)
 				{
 					_somerFrame = _gAngle / (360 / 8);
 				}
@@ -6200,13 +6491,22 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 	                rotation = scr_round(_grapAngle/2.8125)*2.8125;
 
 	                self.ArmPos(lengthdir_x(31, rotation + 90),lengthdir_y(31, rotation + 90));
+					var _gFrNum = 0.34;
+					if(liquidState == LiquidState.Liquid || liquidState == LiquidState.DmgLiquid)
+					{
+						_gFrNum = 0.25;
+					}
+					if(liquidState == LiquidState.HydroBoost)
+					{
+						_gFrNum = 0.3;
+					}
 	                if(grapDisVel <= -1 && grapWallBounceFrame <= 0)
 	                {
-	                    grapFrame = max(grapFrame-(0.34-(0.09*liquidMovement)),0);
+	                    grapFrame = max(grapFrame-_gFrNum,0);
 	                }
 	                else
 	                {
-	                    grapFrame = min(grapFrame+(0.34-(0.09*liquidMovement)),3);
+	                    grapFrame = min(grapFrame+_gFrNum,3);
 	                }
 	                if(grapFrame <= 2)
 	                {
@@ -6238,7 +6538,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 		                    }
 							if(frame[Frame.GrappleLeg] != gFrameDest)
 							{
-								var fnum = 3 * (1 + liquidMovement);
+								var fnum = 3 / _liqMult;
 								frameCounter[Frame.GrappleLeg]++;
 								if(frameCounter[Frame.GrappleLeg] > fnum)
 								{
@@ -6269,6 +6569,8 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 			{
 				for(var i = 0; i < array_length(frame); i++)
 				{
+					if(i == Frame.Hurt) continue;
+					
 					frame[i] = 0;
 					frameCounter[i] = 0;
 				}
@@ -6278,8 +6580,8 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				
 				torsoR = sprt_Player_HurtRight;
 				torsoL = sprt_Player_HurtLeft;
-				bodyFrame = floor(hurtFrame);
-				hurtFrame = min(hurtFrame + 0.34, 1);
+				bodyFrame = floor(frame[Frame.Hurt]);
+				frame[Frame.Hurt] = min(frame[Frame.Hurt] + 0.34, 1);
 				self.ArmPos(11,-11);
 				if(dir == -1)
 				{
@@ -6294,8 +6596,8 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				}
 				else
 				{
-					bodyFrame = floor(hurtFrame);
-					hurtFrame = min(hurtFrame + 0.34, 1);
+					bodyFrame = floor(frame[Frame.Hurt]);
+					frame[Frame.Hurt] = min(frame[Frame.Hurt] + 0.34, 1);
 				}*/
 				
 				break;
@@ -6307,349 +6609,41 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				self.SetArmPosJump();
 				for(var i = 0; i < array_length(frame); i++)
 				{
-					if(i != Frame.JAim && i != Frame.Jump || dBoostFrame < 19)
-					{
-						frame[i] = 0;
-						frameCounter[i] = 0;
-					}
+					if(i == Frame.DmgBoost) continue;
+					
+					frame[i] = 0;
+					frameCounter[i] = 0;
 				}
+				frame[Frame.JAim] = 6;
+				
 				torsoR = sprt_Player_DamageBoostRight;
 				torsoL = sprt_Player_DamageBoostLeft;
-				if(dBoostFrame < 19)
+				bodyFrame = 0;
+				
+				if(frame[Frame.DmgBoost] < 19)
 				{
-					frame[Frame.JAim] = 6;
-					bodyFrame = dBoostFrameSeq[dBoostFrame];
-					if(dBoostFrame != 0)
+					bodyFrame = dBoostFrameSeq[frame[Frame.DmgBoost]];
+					if(frame[Frame.DmgBoost] != 0)
 					{
 						torsoR = sprt_Player_SomersaultRight;
 						torsoL = sprt_Player_SomersaultLeft;
 					}
 					
 					self.SetArmPosSomersault(18, 40, bodyFrame);
-					
-					var loopPoint = 17;
-					if(velY >= 0)
-					{
-						loopPoint = 20;
-					}
-					dBoostFrameCounter++;
-					if(dBoostFrameCounter > 5)
-					{
-						dBoostFrame = scr_wrap(dBoostFrame+1,min(dBoostFrame,2),loopPoint);
-						dBoostFrameCounter = 6;
-					}
-				}
-				else
-				{
-					if(shootFrame || cMoonwalk || aimFrame != 0 || recoilCounter > 0)
-					{
-						aimAnimTweak = 2;
-					}
-					if(aimAnimTweak > 0)
-					{
-						if(recoilCounter > 0 && aimFrame == (scr_round(aimFrame/2)*2) && transFrame >= 0)
-						{
-							torsoR = sprt_Player_JumpFireRight;
-							torsoL = sprt_Player_JumpFireLeft;
-							bodyFrame = 2 + scr_round(aimFrame/2);
-						
-							if(bodyFrame <= 0)
-							{
-								sprtOffsetX = -4 * fDir;
-							}
-						}
-						else
-						{
-							if(transFrame < 2)
-							{
-								torsoR = sprt_Player_TransAimRight;
-								torsoL = sprt_Player_TransAimLeft;
-								self.SetArmPosTrans();
-							}
-							else
-							{
-								torsoR = sprt_Player_JumpAimRight;
-								torsoL = sprt_Player_JumpAimLeft;
-							}
-							bodyFrame = 4 + aimFrame;
-						
-							if(bodyFrame <= 1)
-							{
-								sprtOffsetX = -4 / (1+bodyFrame) * fDir;
-								if(transFrame < 2)
-								{
-									sprtOffsetX /= 2;
-								}
-							}
-						}
-					
-						legs = sprt_Player_JumpAimLeg;
-						if(!roomTrans)
-						{
-							if(velY <= 0)
-							{
-								frame[Frame.JAim] = max(frame[Frame.JAim] - 0.3, 0);
-								frame[Frame.Jump] = 0;
-							}
-							else
-							{
-								var jAimFMax = 9;
-								if(bodyFrame <= 0)
-								{
-									jAimFMax = 6;
-								}
-								if(frame[Frame.JAim] < jAimFMax)
-								{
-									frame[Frame.JAim] = min(frame[Frame.JAim] + max(1/max(frame[Frame.JAim],1),0.25), jAimFMax);
-								}
-								else if(bodyFrame <= 0)
-								{
-									frame[Frame.JAim] = max(frame[Frame.JAim] - 1, jAimFMax);
-								}
-							
-								if(ledgeFall2)
-								{
-									frame[Frame.Jump] = 0;
-								}
-								else
-								{
-									frame[Frame.Jump] = 5;
-								}
-							}
-						}
-						legFrame = frame[Frame.JAim];
-						drawMissileArm = true;
-					}
-					else
-					{
-						frame[Frame.JAim] = 6;
-						
-						torsoR = sprt_Player_FallRight;
-						torsoL = sprt_Player_FallLeft;
-						legs = sprt_Player_JumpAimLeg;
-						
-						if(frameCounter[Frame.Jump] < 30)
-						{
-							if(!roomTrans)
-							{
-								frame[Frame.Jump] = min(frame[Frame.Jump] + max(0.5/max(frame[Frame.Jump],1),0.125), 4);
-								if(frame[Frame.Jump] >= 4)
-								{
-									frameCounter[Frame.Jump]++;
-								}
-							}
-							bodyFrame = scr_round(frame[Frame.Jump]);
-							legFrame = floor((frame[Frame.Jump]+0.5)*2);
-						}
-						else
-						{
-							if(!roomTrans)
-							{
-								frame[Frame.Jump] = clamp(frame[Frame.Jump] + 0.25,4,8);
-							}
-							bodyFrame = scr_floor(frame[Frame.Jump]);
-							legFrame = scr_ceil(12 - frame[Frame.Jump]);
-						}
-					}
-				}
-				break;
-			}
-			#endregion
-			#region Dodge
-			case AnimState.Dodge:
-			{
-				aimFrame = 0;
-				for(var i = 0; i < array_length(frame); i++)
-				{
-					if(i != Frame.Dodge)
-					{
-						frame[i] = 0;
-						frameCounter[i] = 0;
-					}
 				}
 				
-				torsoR = sprt_Player_SparkHRight;
-				torsoL = sprt_Player_SparkHLeft;
-				if(dodgeDir != dir)
+				var loopPoint = 17;
+				if(velY >= 0)
 				{
-					torsoR = sprt_Player_DodgeBack_Right;
-					torsoL = sprt_Player_DodgeBack_Left;
+					loopPoint = 20;
 				}
-				if(dodgeLength <= dodgeLengthMax-2)
+				frameCounter[Frame.DmgBoost]++;
+				if(frameCounter[Frame.DmgBoost] > 5)
 				{
-					frame[Frame.Dodge] = min(frame[Frame.Dodge]+(0.5/(1+liquidMovement)),2);
-					if(groundedDodge == 1)
-					{
-						sprtOffsetY = -5*(2-frame[Frame.Dodge]);
-					}
-				}
-				else
-				{
-					frame[Frame.Dodge] = max(frame[Frame.Dodge]-(1/(1+liquidMovement)),0);
-				}
-				bodyFrame = scr_floor(frame[Frame.Dodge]);
-				
-				if(dodgeDir == dir)
-				{
-					switch(bodyFrame)
-					{
-						case 2:
-						{
-							self.ArmPos(-17,-1);
-							if(dir == -1)
-							{
-								self.ArmPos(-4,-3);
-							}
-							break;
-						}
-						case 1:
-						{
-							self.ArmPos(-10,8);
-							if(dir == -1)
-							{
-								self.ArmPos(-5,-3);
-							}
-							break;
-						}
-						default:
-						{
-							self.ArmPos(-5,9);
-							if(dir == -1)
-							{
-								self.ArmPos(-9,-2);
-							}
-							break;
-						}
-					}
-				}
-				else
-				{
-					switch(bodyFrame)
-					{
-						case 2:
-						{
-							self.ArmPos(14,-12);
-							if(dir == -1)
-							{
-								self.ArmPos(-1,0);
-							}
-							break;
-						}
-						case 1:
-						{
-							self.ArmPos(8,-7);
-							if(dir == -1)
-							{
-								self.ArmPos(-6,-3);
-							}
-							break;
-						}
-						default:
-						{
-							self.ArmPos(1*dir,7);
-							break;
-						}
-					}
+					frame[Frame.DmgBoost] = scr_wrap(frame[Frame.DmgBoost]+1, min(frame[Frame.DmgBoost],2), loopPoint);
+					frameCounter[Frame.DmgBoost] = 6;
 				}
 				
-				break;
-			}
-			#endregion
-			#region CrystalFlash
-			case AnimState.CrystalFlash:
-			{
-				aimFrame = 0;
-				for(var i = 0; i < array_length(frame); i++)
-				{
-					if(i != Frame.CFlash)
-					{
-						frame[i] = 0;
-						frameCounter[i] = 0;
-					}
-				}
-				
-				if(frame[Frame.CFlash] < 5)
-				{
-					torsoR = sprt_Player_Morph;
-					bodyFrame = 4-frame[Frame.CFlash];
-					sprtOffsetY = 8-morphYOffset[bodyFrame];
-					
-					frame[Frame.CFlash]++;
-				}
-				else
-				{
-					frameCounter[Frame.CFlash]++;
-					if(frameCounter[Frame.CFlash] > 8)
-					{
-						frame[Frame.CFlash] = scr_wrap(frame[Frame.CFlash]+1,5,9);
-						frameCounter[Frame.CFlash] = 0;
-					}
-					
-					torsoR = sprt_Player_CrystalFlash;
-					bodyFrame = cFlashFrameSequence[frame[Frame.CFlash]-5];
-					
-					sprtOffsetY = -bodyFrame;
-				}
-				
-				torsoL = torsoR;
-				break;
-			}
-			#endregion
-			#region Push
-			case AnimState.Push:
-			{
-				for(var i = 0; i < array_length(frame); i += 1)
-	            {
-	                if(i != Frame.Push)
-	                {
-	                    frame[i] = 0;
-	                    frameCounter[i] = 0;
-	                }
-	            }
-	            aimFrame = 0;
-	            transFrame = 0;
-	            walkToStandFrame = 0;
-	            runToStandFrame[0] = 0;
-	            runToStandFrame[1] = 0;
-
-	            torsoR = sprt_Player_PushRight;
-	            torsoL = sprt_Player_PushLeft;
-
-	            if(grounded && move2 != 0 && instance_exists(pushBlock) && pushBlock.grounded)
-	            {
-					var animSpStart = 0.375 / (1+liquidMovement),
-						animSp = 0.275 / (1+liquidMovement);
-					if(cSprint || global.autoSprint)
-					{
-						animSpStart = 0.5 / (1+liquidMovement);
-						animSp = 0.375 / (1+liquidMovement);
-					}
-	                if(frame[Frame.Push] < 5)
-					{
-						frame[Frame.Push] += animSpStart
-					}
-					else
-					{
-						frame[Frame.Push] = scr_wrap(frame[Frame.Push] + animSp, 5, 18);
-					}
-					if(scr_floor(frame[Frame.Push]) == 16)
-					{
-						if(stepSndPlayedAt != scr_floor(frame[Frame.Push]))
-						{
-							audio_play_sound(snd_Step,0,false);
-							stepSndPlayedAt = scr_floor(frame[Frame.Push]);
-						}
-					}
-					else
-					{
-						stepSndPlayedAt = 0;
-					}
-	            }
-	            else
-	            {
-	                frame[Frame.Push] = clamp(frame[Frame.Push] - (0.5 / (1+liquidMovement)), 0, 3);
-	            }
-	            bodyFrame = pushFrameSequence[scr_floor(frame[Frame.Push])];
 				break;
 			}
 			#endregion
@@ -6658,40 +6652,15 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 	
 	if(!roomTrans)
 	{
-		var animDiv = (1+liquidMovement);
-		var animSpeed = 1/animDiv;
+		var animSpeed = 1 * _liqMult;
 		
 		aimAnimTweak = max(aimAnimTweak - 1, 0);
 		aimSnap = max(aimSnap - 1, 0);
-		if(morphFrame <= 0 && (state != State.Stand || crouchFrame >= 5) && (state != State.Crouch || crouchFrame <= 0))
+		if(morphFrame <= 0 && frame[Frame.Crouch] <= 0)
 		{
 			aimAnimDelay = max(aimAnimDelay - 1, 0);
 		}
-		if(sign(velX) == dir)
-		{
-			landFrame = max(landFrame - (1 + max(1.5*(move != 0),abs(velX)*0.5))/animDiv, 0);
-		}
-		else
-		{
-			landFrame = max(landFrame - animSpeed, 0);
-		}
-		if(animState != AnimState.Crouch)
-		{
-			crouchFrame = min(crouchFrame + (1 + abs(velX)*0.5)/animDiv, 5);
-		}
-		else
-		{
-			crouchFrame = max(crouchFrame - animSpeed, 0);
-		}
-		if(liquidMovement)
-		{
-			wjFrame = max(wjFrame - 0.83, 0);
-		}
-		else
-		{
-			wjFrame = max(wjFrame - 1, 0);
-		}
-		if(wjFrame <= 0 || animState != AnimState.Somersault)
+		if(frame[Frame.WallJump] <= 0 || animState != AnimState.Somersault)
 		{
 			wjGripAnim = false;
 		}
@@ -6712,7 +6681,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 		
 			if(!walkState)
 			{
-				walkToStandFrame = max(walkToStandFrame - (1/(1+(walkToStandFrame < 2)))/animDiv, 0);
+				walkToStandFrame = max(walkToStandFrame - (1/(1+(walkToStandFrame < 2))) * animSpeed, 0);
 			}
 		}
 		else if(animState != AnimState.Run && animState != AnimState.Walk)
@@ -6726,10 +6695,6 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 			walkToStandFrame = 0;
 		}
 	
-		if(animState != AnimState.Brake)
-		{
-			brakeFrame = 0;
-		}
 		if(animState != AnimState.Spark)
 		{
 			shineDownRot = 0;
@@ -6743,26 +6708,26 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 		{
 		    grapWallBounceFrame = max(grapWallBounceFrame-1,0);
 		}
-		if(animState != AnimState.DmgBoost)
+		if(state != State.DmgBoost && animState != AnimState.DmgBoost)
 		{
-			dBoostFrame = 0;
-			dBoostFrameCounter = 0;
+			frame[Frame.DmgBoost] = 0;
+			frameCounter[Frame.DmgBoost] = 0;
 		}
 	
 		recoilCounter = max(recoilCounter - 1, 0);
 	
-		if(climbIndexCounter > liquidMovement || climbIndex <= 1)
+		if(climbIndexCounter >= 1/_liqMult || climbIndex <= 1)
 		{
 			if(state == State.Grip && startClimb)
 			{
 				var ciNum = 1;
-				if(!liquidMovement && climbIndex >= 10 && (cSprint || global.autoSprint) && move != 0)
+				if(liquidState == LiquidState.Normal && climbIndex >= 10 && (cSprint || global.autoSprint) && move != 0)
 				{
 					ciNum = 2;
 				}
 				climbIndex = min(climbIndex + ciNum, 18);
 			}
-			climbIndexCounter = 0;
+			climbIndexCounter = max(climbIndexCounter - (1/_liqMult), 0);
 		}
 	
 		if(startClimb)
@@ -6804,7 +6769,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				afterImageNum = min((point_distance(xprevious,yprevious,x,y)-3),10);
 			}
 		}
-		else if(!grounded && item[Item.SpaceJump] && state == State.Somersault && !liquidMovement)
+		else if(!grounded && item[Item.SpaceJump] && state == State.Somersault && liquidState == LiquidState.Normal)
 		{
 			drawAfterImage = true;
 			afterImageNum = 10;
@@ -7025,7 +6990,7 @@ if(global.pauseState == PauseState.None)
 			_armPosL = [[0,-25], [-1,-25], [-2,-26], [-2,-27], [-4,-28]];
 		}
 		
-		var _bFrame = clamp(5 - ceil(brakeFrame/2), 0, 4);
+		var _bFrame = clamp(bodyFrame, 0, 4);
 		var armPos = _armPosR[_bFrame];
 		if(dir == -1)
 		{
@@ -7064,8 +7029,8 @@ if(global.pauseState == PauseState.None)
 	if(self.EquipmentSelected(Equipment.GrappleBeam)) { currentWeapon = weap[Weapon.GrappleBeam]; }
 	if(self.EquipmentSelected(Equipment.GravGrapple)) { currentWeapon = weap[Weapon.GravGrapple]; }
 	
-	var canShoot = (currentWeapon.CanShoot() && dir != 0 && !startClimb && !moonFallState && !isPushing && /*state != State.Somersault &&*/ state != State.Spark && state != State.BallSpark && 
-					state != State.Hurt && (animState != AnimState.DmgBoost || dBoostFrame >= 19) && state != State.Dodge && state != State.Death);
+	var canShoot = (currentWeapon.CanShoot() && dir != 0 && !startClimb && !moonFallState && !isPushing && state != State.Spark && state != State.BallSpark && 
+					state != State.Hurt && (state != State.DmgBoost || animState != AnimState.DmgBoost) && state != State.Dodge && state != State.Death);
 	if(!canShoot)
 	{
 		enqueShot = false;
@@ -7088,7 +7053,7 @@ if(global.pauseState == PauseState.None)
 		if(!isPushing && cflag)
 		{
 			var chargeRate = 1;
-			if(state == State.DmgBoost && dBoostFrame < 19)
+			if(animState == AnimState.DmgBoost)
 			{
 				chargeRate *= 3;
 			}
@@ -7106,7 +7071,7 @@ if(global.pauseState == PauseState.None)
 				}
 				else
 				{
-					if(audio_is_playing(snd_Charge) && state == State.DmgBoost && dBoostFrame < 19 && statCharge >= maxCharge)
+					if(audio_is_playing(snd_Charge) && animState == AnimState.DmgBoost && statCharge >= maxCharge)
 					{
 						audio_stop_sound(snd_Charge);
 					}
@@ -7240,7 +7205,8 @@ if(global.pauseState == PauseState.None)
 						
 						chargeReleaseFlash = 4;
 					}
-					else if(statCharge >= 20)
+					//else if(statCharge >= 20)
+					else if(statCharge >= delay && shotDelayTime <= 0)
 					{
 						self.PlayerShoot(shotInd,damage,sSpeed,delay,shotAmt,sndInd,beamIsWave,beamWaveStyleOffset);
 						currentWeapon.OnShoot();
@@ -7434,595 +7400,6 @@ if(global.pauseState == PauseState.None)
 		#endregion
 	}
 	
-	#region old code
-	/*
-	var shotIndex = beamShot,
-		damage = beamDmg / beamAmt,
-		sSpeed = shootSpeed,
-		delay = beamDelay,
-		amount = beamAmt,
-		sound = beamSound,
-		autoFire = 1;
-	if(self.EquipmentSelected(Equipment.Missile))
-	{
-		shotIndex = obj_MissileShot;
-		damage = 100;
-		sSpeed = shootSpeed/2;
-		delay = 9;
-		amount = 1;
-		sound = snd_Missile_Shot;
-		autoFire = 0;
-	}
-	else if(self.EquipmentSelected(Equipment.SuperMissile))
-	{
-		shotIndex = obj_SuperMissileShot;
-		damage = 300;
-		sSpeed = shootSpeed/3;
-		delay = 19;
-		amount = 1;
-		sound = snd_SuperMissile_Shot;
-		autoFire = 0;
-	}
-	else if(hyperBeam)
-	{
-		shotIndex = obj_HyperBeamShot;
-		damage = 1000;
-		delay = 20;
-		amount = 1;
-		sound = snd_PlasmaBeam_ChargeShot;
-		autoFire = 2;
-	}
-		
-	var bombDmg = 5, // Scales to 2.5x -> 7.5x -> 10x as the bomb's timer tics down. Logic stored in obj_Bomb.
-		instaBombDmg = 5, // Damage of bombs if you hold down to insta explode them. Very spammable.
-		chargeBombDmg = 30, // Bomb spread damage.
-		pBombDmg = 40; // Power bomb explosions deal damage per frame (well, not really, because enemies have i-frames).
-		
-	// ----- Shoot -----
-	#region Shoot
-	if((cFire || enqueShot) && dir != 0 && state != State.Death)
-	{
-		if(state != State.Morph && animState != AnimState.Morph)
-		{
-			if(self.EquipmentSelected(Equipment.GrappleBeam) && canShoot)
-			{
-				delay = 14;
-					
-				if(!instance_exists(grapple))
-				{
-					if(shotDelayTime <= 0)
-					{
-						if(rFire || enqueShot)
-						{
-							grapple = self.PlayerShoot(obj_GrappleBeamShot,20,0,0,1,snd_GrappleBeam_Shoot);
-							grapple.shootDir = shootDir;
-							recoil = true;
-						}
-						enqueShot = false;
-					}
-					else if(rFire && shotDelayTime < delay/2)
-					{
-						enqueShot = true;
-					}
-				}
-				else
-				{
-					enqueShot = false;
-				}
-					
-					
-				if(instance_exists(grapple))
-				{
-					if(state != State.Grapple)
-					{
-						gunReady = true;
-						justShot = 90;
-					}
-					else
-					{
-						shotDelayTime = delay;
-					}
-				}
-				else
-				{
-					grappleDist = 0;
-				}
-			}
-			else
-			{
-				instance_destroy(grapple);
-				grappleDist = 0;
-					
-				if(canShoot && (equipIndex <= -1 || self.EquipmentHasAmmo(equipIndex)))
-				{
-					if(autoFire > 0)
-					{
-						gunReady = true;
-						justShot = 90;
-					}
-						
-					if(shotDelayTime <= 0)
-					{
-						if(rFire || enqueShot || (!item[Item.ChargeBeam] && autoFire > 0) || autoFire == 2)
-						{
-							if(self.EquipmentSelected(Equipment.Missile))
-							{
-								missileStat--;
-							}
-							if(self.EquipmentSelected(Equipment.SuperMissile))
-							{
-								superMissileStat--;
-							}
-									
-							if(!rFire && !enqueShot && autoFire == 1)
-							{
-								delay *= 2;
-							}
-							self.PlayerShoot(shotIndex,damage,sSpeed,delay,amount,sound,beamIsWave,beamWaveStyleOffset);
-							if(hyperBeam && shotIndex == obj_HyperBeamShot)
-							{
-								if(item[Item.Spazer])
-								{
-									self.PlayerShoot(obj_HyperBeamLesserShot,damage,sSpeed,delay,2+2*beamIsWave,noone,beamIsWave,1);
-								}
-									
-								var flareDir = shootDir;
-								if(dir2 == -1)
-								{
-									flareDir = angle_difference(shootDir,180);
-								}
-								var flare = instance_create_layer(shootPosX+lengthdir_x(5,shootDir),shootPosY+lengthdir_y(5,shootDir),layer_get_id("Projectiles_fg"),obj_ChargeFlare);
-								flare.damage = damage;
-								flare.sprite_index = sprt_HyperBeamChargeFlare;
-								flare.damageSubType[DmgSubType_Beam.Hyper] = true;
-								flare.direction = flareDir;
-								flare.image_angle = flareDir;
-								flare.image_xscale = dir2;
-								flare.creator = id;
-									
-								hyperFired = delay+2;
-							}
-								
-							gunReady = true;
-							justShot = 90;
-							recoil = true;
-						}
-						enqueShot = false;
-					}
-					else if(rFire && shotDelayTime < delay/2)
-					{
-						enqueShot = true;
-					}
-				}
-				else
-				{
-					enqueShot = false;
-				}
-			}
-		}
-		else if(canShoot)
-		{
-			if(bombDelayTime <= 0)
-			{
-				if(rFire || enqueShot)
-				{
-					var bombPosX = x,
-						bombPosY = y+3,
-						instaBomb = cPlayerDown;
-					if(self.SpiderActive())
-					{
-						bombPosX = x + lengthdir_x(-2,spiderJumpDir);
-						bombPosY = y+1 + lengthdir_y(-2,spiderJumpDir);
-						if(spiderEdge == Edge.Top)
-						{
-							instaBomb = cPlayerUp;
-						}
-						if(spiderEdge == Edge.Left)
-						{
-							instaBomb = cPlayerLeft;
-						}
-						if(spiderEdge == Edge.Right)
-						{
-							instaBomb = cPlayerRight;
-						}
-					}
-							
-					if(self.EquipmentSelected(Equipment.PowerBomb) || (item[Item.PowerBomb] && equipIndex >= 0 && equipSelected && powerBombStat > 0))
-					{
-						var pBomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_PowerBomb);
-						pBomb.damage = pBombDmg;
-						bombDelayTime = 30;
-						powerBombStat--;
-						cFlashStartCounter++;
-						//audio_play_sound(snd_PowerBombSet,0,false);
-					}
-					else if(item[Item.MBBomb] && (instance_number(obj_MBBomb) < 3 || cPlayerDown))
-					{
-						if(instaBomb)
-						{
-							var explo = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBombExplosion);
-							explo.damage = instaBombDmg;
-							explo.MovePushBlock();
-							scr_PlayExplodeSnd(0,false);
-						}
-						else
-						{
-							var mbBomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBomb);
-							mbBomb.damage = bombDmg;
-							//audio_play_sound(snd_BombSet,0,false);
-						}
-						bombDelayTime = 8;
-					}
-				}
-				enqueShot = false;
-			}
-			else if(rFire && bombDelayTime < 4)
-			{
-				enqueShot = true;
-			}
-		}
-		else
-		{
-			enqueShot = false;
-		}
-				
-		var cflag = (state != State.Morph && state != State.BallSpark);
-		if((state == State.Morph || state == State.BallSpark) && statCharge > 0)
-		{
-			cflag = true;
-		}
-				
-		if(item[Item.ChargeBeam] && self.CanCharge() && !enqueShot && !isPushing && cflag)
-		{
-			var chargeRate = 1;
-			if(state == State.DmgBoost && dBoostFrame < 19)
-			{
-				chargeRate *= 3;
-			}
-			statCharge = min(statCharge + chargeRate, maxCharge * 2);
-			if(statCharge >= 10)
-			{
-				if(!chargeSoundPlayed)
-				{
-					audio_play_sound(snd_Charge,0,false);
-					chargeSoundPlayed = true;
-				}
-				else
-				{
-					if(audio_is_playing(snd_Charge) && state == State.DmgBoost && dBoostFrame < 19 && statCharge >= maxCharge)
-					{
-						audio_stop_sound(snd_Charge);
-					}
-						
-					if(!audio_is_playing(snd_Charge) && !audio_is_playing(snd_Charge_Loop))
-					{
-						audio_play_sound(snd_Charge_Loop,0,true);
-					}
-				}
-			}
-			else
-			{
-				audio_stop_sound(snd_Charge);
-				audio_stop_sound(snd_Charge_Loop);
-				chargeSoundPlayed = false;
-			}
-		}
-		else
-		{
-			statCharge = 0;
-			audio_stop_sound(snd_Charge);
-			audio_stop_sound(snd_Charge_Loop);
-			chargeSoundPlayed = false;
-		}
-	}
-	else
-	{
-		if(instance_exists(grapple))
-		{
-			if((state != State.Grapple || grapWJCounter <= 0))
-			{
-				if(grapple.grappleState != GrappleState.None)
-				{
-					instance_destroy(grapple);
-				}
-				else
-				{
-					grapple.impacted = max(grapple.impacted,1);
-				}
-			}
-		}
-		
-		if(statCharge <= 0)
-		{
-			audio_stop_sound(snd_Charge);
-			audio_stop_sound(snd_Charge_Loop);
-			chargeSoundPlayed = false;
-		}
-		
-		if(canShoot && self.CanCharge() && dir != 0)
-		{
-			if(state != State.Morph && animState != AnimState.Morph)
-			{
-				if(statCharge >= maxCharge)
-				{
-					var flareDir = shootDir;
-					if(dir2 == -1)
-					{
-						flareDir = angle_difference(shootDir,180);
-					}
-					var flare = instance_create_layer(shootPosX+lengthdir_x(5,shootDir),shootPosY+lengthdir_y(5,shootDir),layer_get_id("Projectiles_fg"),obj_ChargeFlare);
-					flare.damage = (beamDmg*chargeMult);
-					flare.sprite_index = beamFlare;
-					flare.damageSubType[DmgSubType_Beam.Ice] = item[Item.IceBeam];
-					flare.damageSubType[DmgSubType_Beam.Wave] = item[Item.WaveBeam];
-					flare.damageSubType[DmgSubType_Beam.Spazer] = item[Item.Spazer];
-					flare.damageSubType[DmgSubType_Beam.Plasma] = item[Item.PlasmaBeam];
-					flare.direction = flareDir;
-					flare.image_angle = flareDir;
-					flare.image_xscale = dir2;
-					flare.creator = id;
-					if(item[Item.IceBeam])
-					{
-						flare.freezeType = 2;
-						flare.freezeKill = true;
-					}
-							
-					damage = (beamDmg*chargeMult) / beamChargeAmt;
-					self.PlayerShoot(beamCharge,damage,sSpeed,beamChargeDelay,beamChargeAmt,beamChargeSound,beamIsWave,beamWaveStyleOffset);
-							
-					chargeReleaseFlash = 4;
-					recoil = true;
-				}
-				else if(statCharge >= 20)
-				{
-					self.PlayerShoot(shotIndex,damage,sSpeed,delay,amount,sound,beamIsWave,beamWaveStyleOffset);
-					recoil = true;
-				}
-			}
-			else if(item[Item.MBBomb] && !self.EquipmentSelected(Equipment.PowerBomb))
-			{
-				var bombPosX = x,
-					bombPosY = y+3;
-				if(self.SpiderActive())
-				{
-					bombPosX = x + lengthdir_x(-2,spiderJumpDir);
-					bombPosY = y+1 + lengthdir_y(-2,spiderJumpDir);
-				}
-						
-				if(statCharge >= 20)
-				{
-					var bChargeScale = min(statCharge / (maxCharge*1.5), 1);
-							
-					if(!grounded && !self.SpiderActive() && cPlayerDown)
-					{
-						var bombDir = [0,90,210,330],
-							bombTime = [0,30,30,30],
-							bombSpd = 2 + 4*bChargeScale;
-						for(var i = 0; i < 4; i++)
-						{
-							var bomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBomb);
-							bomb.damage = chargeBombDmg * bChargeScale;
-							bomb.spreadType = 2;
-							if(i > 0)
-							{
-								bomb.spreadSpeed = bombSpd;
-							}
-							bomb.spreadDir = bombDir[i];
-							bomb.spreadFrict = 0.5;
-							bomb.bombTimer = bombTime[i];
-						}
-						bombDelayTime = 60;
-						audio_play_sound(snd_BombSet,0,false);
-					}
-					else if(self.SpiderActive())
-					{
-						var bombDir = [0, 45, 90, 135, 180],
-							bombTime = [30, 30, 30, 30, 30],
-							bombSpd = 2 + 4*bChargeScale;
-						for(var i = 0; i < 5; i++)
-						{
-							bombDir[i] += spiderJumpDir-90;
-									
-							var bomb = instance_create_layer(x,y,"Projectiles_fg",obj_MBBomb);
-							bomb.damage = chargeBombDmg * bChargeScale;
-							bomb.spreadType = 2;
-							bomb.spreadSpeed = bombSpd;
-							bomb.spreadDir = bombDir[i];
-							bomb.spreadFrict = 0.5;
-							bomb.bombTimer = bombTime[i];
-						}
-						bombDelayTime = 60;
-						audio_play_sound(snd_BombSet,0,false);
-					}
-					else
-					{
-						var bombDirection = [60, 120, 75, 105, 90],
-							bombDirectionR = [45, 56.25, 67.5, 78.75, 90],
-							bombDirectionL = [135, 123.75, 112.5, 101.25, 90],
-							bombSpeed = 6*bChargeScale,
-							spreadFrict = 2,
-							spreadType = 0;
-								
-						for(var i = 0; i < 5; i++)
-						{
-							var bombTime = 100 - 5*i;
-							var bDir = bombDirection[i];
-							if(move2 != 0)
-							{
-								if(move2 == 1)
-								{
-									bDir = bombDirectionR[i];
-								}
-								else
-								{
-									bDir = bombDirectionL[i];
-								}
-							}
-							else if(cPlayerDown)
-							{
-								bDir = 90;
-								bombSpeed = 3 + 4*bChargeScale;
-								spreadFrict = 2 / max(3*i,1);
-								spreadType = 1;
-								bombTime = 55 + 20*i;
-							}
-									
-							var bomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBomb);
-							bomb.damage = chargeBombDmg * bChargeScale;
-							bomb.velX = lengthdir_x(bombSpeed,bDir);
-							bomb.velY = lengthdir_y(bombSpeed,bDir);
-							bomb.spreadType = spreadType;
-							bomb.spreadFrict = spreadFrict;
-							bomb.bombTimer = bombTime;
-						}
-						bombDelayTime = 120 + (30*spreadType);
-						audio_play_sound(snd_BombSet,0,false);
-					}
-				}
-			}
-		}
-		statCharge = 0;
-		enqueShot = false;
-	}
-	#endregion
-	*/
-	#endregion
-	
-	#region Charge Somersault / Pseudo Screw Attack Dmg box
-	
-	if(self.IsChargeSomersaulting() && !self.IsSpeedBoosting() && !self.IsScrewAttacking())
-	{
-		var psDmg = currentWeapon.chargeDamage * currentWeapon.chargeShotAmount * 2;
-		var dmgST = array_create(DmgSubType_Beam._Length,false);
-		dmgST[DmgSubType_Beam.All] = true;
-		dmgST[DmgSubType_Beam.Power] = true;
-		dmgST[DmgSubType_Beam.Ice] = item[Item.IceBeam];
-		dmgST[DmgSubType_Beam.Wave] = item[Item.WaveBeam];
-		dmgST[DmgSubType_Beam.Spazer] = item[Item.Spazer];
-		dmgST[DmgSubType_Beam.Plasma] = item[Item.PlasmaBeam];
-		
-		if(!instance_exists(dmgBoxes[PlayerDmgBox.PseudoScrew]))
-		{
-			dmgBoxes[PlayerDmgBox.PseudoScrew] = self.CreateDamageBox(0,0,screwAttackMask,false);
-		}
-		if(instance_exists(dmgBoxes[PlayerDmgBox.PseudoScrew]))
-		{
-			dmgBoxes[PlayerDmgBox.PseudoScrew].Damage(x, y, psDmg, DmgType.Charge, dmgST, , , 3);
-		}
-	}
-	else if(instance_exists(dmgBoxes[PlayerDmgBox.PseudoScrew]))
-	{
-		instance_destroy(dmgBoxes[PlayerDmgBox.PseudoScrew]);
-	}
-	
-	#endregion
-	#region Boost Ball Dmg box
-	
-	if(boostBallDmgCounter > 0)
-	{
-		var dmgST = array_create(DmgSubType_Misc._Length,false);
-		dmgST[DmgSubType_Misc.All] = true;
-		dmgST[DmgSubType_Misc.BoostBall] = true;
-		
-		if(!instance_exists(dmgBoxes[PlayerDmgBox.BoostBall]))
-		{
-			dmgBoxes[PlayerDmgBox.BoostBall] = self.CreateDamageBox(0,0,mask_index,false);
-		}
-		if(instance_exists(dmgBoxes[PlayerDmgBox.BoostBall]))
-		{
-			dmgBoxes[PlayerDmgBox.BoostBall].mask_index = mask_index;
-			dmgBoxes[PlayerDmgBox.BoostBall].Damage(x, y, 300*boostBallDmgCounter, DmgType.Misc, dmgST, , , 3);
-		}
-		
-		boostBallDmgCounter = max(boostBallDmgCounter - 0.0375, 0);
-	}
-	else if(instance_exists(dmgBoxes[PlayerDmgBox.BoostBall]))
-	{
-		instance_destroy(dmgBoxes[PlayerDmgBox.BoostBall]);
-	}
-	
-	#endregion
-	#region Speed Boost / Shine Spark Dmg box(es)
-	
-	if(self.IsSpeedBoosting())
-	{
-		var dmgST = array_create(DmgSubType_Misc._Length,false);
-		dmgST[DmgSubType_Misc.All] = true;
-		dmgST[DmgSubType_Misc.SpeedBoost] = true;
-		
-		if(!instance_exists(dmgBoxes[PlayerDmgBox.SpeedBoost]))
-		{
-			dmgBoxes[PlayerDmgBox.SpeedBoost] = self.CreateDamageBox(0,0,mask_index,false);
-		}
-		if(instance_exists(dmgBoxes[PlayerDmgBox.SpeedBoost]))
-		{
-			dmgBoxes[PlayerDmgBox.SpeedBoost].mask_index = mask_index;
-			dmgBoxes[PlayerDmgBox.SpeedBoost].Damage(x, y, 2000, DmgType.Misc, dmgST, , , 3);
-		}
-		
-		if(state == State.Spark )//|| state == State.BallSpark)
-		{
-			if(!instance_exists(dmgBoxes[PlayerDmgBox.ShineSpark]))
-			{
-				dmgBoxes[PlayerDmgBox.ShineSpark] = self.CreateDamageBox(0,0,shineSparkMask,false);
-			}
-			if(instance_exists(dmgBoxes[PlayerDmgBox.ShineSpark]))
-			{
-				var shineRot = shineDir - 90;
-				var len = 6;
-				var shineX = scr_round(x + lengthdir_x(len,shineRot)),
-					shineY = scr_round(y + lengthdir_y(len,shineRot));
-				
-				var ssbox = dmgBoxes[PlayerDmgBox.ShineSpark];
-				ssbox.direction = shineRot;
-				ssbox.image_angle = shineRot;
-				ssbox.Damage(shineX, shineY, 2000, DmgType.Misc, dmgST, , , 3);
-			}
-		}
-		else if(instance_exists(dmgBoxes[PlayerDmgBox.ShineSpark]))
-		{
-			instance_destroy(dmgBoxes[PlayerDmgBox.ShineSpark]);
-		}
-	}
-	else
-	{
-		if(instance_exists(dmgBoxes[PlayerDmgBox.SpeedBoost]))
-		{
-			instance_destroy(dmgBoxes[PlayerDmgBox.SpeedBoost]);
-		}
-		if(instance_exists(dmgBoxes[PlayerDmgBox.ShineSpark]))
-		{
-			instance_destroy(dmgBoxes[PlayerDmgBox.ShineSpark]);
-		}
-	}
-	
-	#endregion
-	#region Screw Attack Dmg box
-	
-	if(self.IsScrewAttacking())
-	{
-		var dmgST = array_create(DmgSubType_Misc._Length,false);
-		dmgST[DmgSubType_Misc.All] = true;
-		dmgST[DmgSubType_Misc.ScrewAttack] = true;
-		
-		if(!instance_exists(dmgBoxes[PlayerDmgBox.ScrewAttack]))
-		{
-			dmgBoxes[PlayerDmgBox.ScrewAttack] = self.CreateDamageBox(0,0,screwAttackMask,false);
-		}
-		if(instance_exists(dmgBoxes[PlayerDmgBox.ScrewAttack]))
-		{
-			dmgBoxes[PlayerDmgBox.ScrewAttack].Damage(x, y, 2000, DmgType.Misc, dmgST, , , 3);
-		}
-	}
-	else if(instance_exists(dmgBoxes[PlayerDmgBox.ScrewAttack]))
-	{
-		instance_destroy(dmgBoxes[PlayerDmgBox.ScrewAttack]);
-	}
-	
-	#endregion
-	
-	self.IncrInvFrames();
-	
 	// ----- Environmental Damage -----
 	#region Environmental Damage
 	
@@ -8134,7 +7511,7 @@ if(global.pauseState == PauseState.None)
 	
 	oldDir = dir;
 	prevAimAngle = aimAngle;
-	outOfLiquid = (liquidState <= 0);
+	prevLiquidState = liquidState;
 	invFrames = max(invFrames - 1, 0);
 	
 	grappleOldDist = grappleDist;

@@ -17,4 +17,4 @@ prevDestY = destY;
 
 color1 = c_white;
 color2 = c_white;
-color3 = c_white;
+//color3 = c_white;

@@ -6,7 +6,7 @@
   "name":"InputDefineCluster",
   "parent":{
     "name":"Config",
-    "path":"folders/Scripts/Input/Config.yy",
+    "path":"folders/Scripts/Libraries/Input/Config.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

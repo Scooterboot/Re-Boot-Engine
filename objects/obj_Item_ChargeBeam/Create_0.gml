@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "chargeBeam";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "CHARGE BEAM";
 //itemDesc = "Hold ${shootButton} to charge your beam\n"+"and release to fire a charge shot.";

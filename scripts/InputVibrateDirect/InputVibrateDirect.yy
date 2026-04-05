@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"InputVibrateDirect",
   "parent":{
-    "name":"Vibration",
-    "path":"folders/Scripts/Input Plug-Ins/Vibration.yy",
+    "name":"Actions",
+    "path":"folders/Scripts/Libraries/Input Plug-Ins/Vibration/Actions.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -55,13 +55,6 @@ hurtSound = noone;
 
 createPlatformOnFrozen = true;
 
-setOldPoses = 0;
-for(var i = 0; i < 10; i++)
-{
-	oldPosX[i] = -1;
-	oldPosY[i] = -1;
-}
-
 function PauseAI()
 {
 	return (global.GamePaused() || !scr_WithinCamRange() || frozen > 0 || dmgFlash > 0);
@@ -96,7 +89,7 @@ function DamageBoxes()
 		dmgBoxes[0].image_yscale = image_yscale;
 		dmgBoxes[0].image_angle = self.DmgBoxRot();
 		dmgBoxes[0].direction = self.DmgBoxRot();
-		dmgBoxes[0].Damage(x+velX,y+velY,damage,damageType,damageSubType);
+		dmgBoxes[0].Damage(x,y,damage,damageType,damageSubType);
 	}
 }
 
@@ -134,7 +127,7 @@ function LifeBoxes()
 		lifeBoxes[0].image_yscale = image_yscale;
 		lifeBoxes[0].image_angle = self.LifeBoxRot();
 		lifeBoxes[0].direction = self.LifeBoxRot();
-		lifeBoxes[0].UpdatePos(x+velX,y+velY);
+		lifeBoxes[0].UpdatePos(x,y);
 	}
 }
 

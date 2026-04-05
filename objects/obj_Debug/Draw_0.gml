@@ -92,8 +92,8 @@ if(debug == 1)
 	}
 	with(obj_Reflec)
 	{
-		var p1 = GetPoint1(),
-			p2 = GetPoint2();
+		var p1 = self.GetPoint1(),
+			p2 = self.GetPoint2();
 		draw_line(p1.X,p1.Y,p2.X,p2.Y);
 		//draw_point(p1.X,p1.Y);
 		//draw_point(p2.X,p2.Y);
@@ -326,7 +326,7 @@ if(debug == 1)
 		
 		//draw_rectangle(scr_round(xx-camLimit_Right),scr_round(yy-camLimit_Bottom),scr_round(xx-camLimit_Left)-1,scr_round(yy-camLimit_Top)-1, true);
 		//draw_rectangle(scr_round(playerX),scr_round(playerY),scr_round(playerX)-1,scr_round(playerY)-1,true);
-		draw_rectangle_betterOutline(scr_round(xx-camLimit_Right),scr_round(yy-camLimit_Bottom),scr_round(xx-camLimit_Left),scr_round(yy-camLimit_Top));
+		draw_rectangle_betterOutline(scr_round(xx-camLimit[CamLimit.Right]),scr_round(yy-camLimit[CamLimit.Bottom]),scr_round(xx+camLimit[CamLimit.Left]),scr_round(yy+camLimit[CamLimit.Top]));
 		draw_rectangle_betterOutline(scr_round(playerX),scr_round(playerY),scr_round(playerX),scr_round(playerY));
 		
 		draw_set_alpha(1);

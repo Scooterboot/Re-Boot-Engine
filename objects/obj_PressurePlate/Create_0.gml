@@ -1,6 +1,6 @@
 /// @description 
 
-shutterID = 0;
+//shutterID = 0;
 
 init = false;
 

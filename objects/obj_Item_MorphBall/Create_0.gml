@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "morphBall";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "MORPH BALL";
 //itemDesc = "Press ${controlPad} down twice to morph into a ball.";

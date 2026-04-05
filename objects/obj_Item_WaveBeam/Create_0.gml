@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "waveBeam";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "WAVE BEAM";
 itemDesc = "Your beam now passes through walls.";

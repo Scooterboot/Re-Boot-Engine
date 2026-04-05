@@ -44,5 +44,10 @@ else if(global.screenScale == 0)
 	screenScale = min(max(window_get_width()/global.resWidth,1),max(window_get_height()/global.resHeight,1));
 }
 
+window_set_cursor(cr_none);
+if(obj_Debug.debug > 0)
+{
+	window_set_cursor(cr_default);
+}
 
 hyperRainbowCycle = scr_wrap(hyperRainbowCycle+0.5,0,10);

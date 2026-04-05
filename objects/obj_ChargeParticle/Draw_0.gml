@@ -1,9 +1,10 @@
 
 var angle = point_direction(x,y,destX,destY);
-alpha = abs(1 - (initDist/point_distance(x,y,destX,destY)));
-var color = merge_colour(merge_colour(color1,color2,min(alpha*2,1)),color3,abs(max(alpha-0.5,0)*2));
+alpha = clamp(abs(1 - (initDist/point_distance(x,y,destX,destY))), 0, 1);
+//var color = merge_colour(merge_colour(color1,color2,min(alpha*2,1)),color3,abs(max(alpha-0.5,0)*2));
+var color = merge_colour(color1,color2,alpha);
 gpu_set_blendmode(bm_add);
-var num = 5;//vel;
+var num = 3;//5;//vel;
 for(var i = 1; i < num; i++)
 {
     draw_sprite_ext(sprite_index,0,x-lengthdir_x(i,angle),y-lengthdir_y(i,angle),1,1,0,color,(1-(i/num))*alpha);

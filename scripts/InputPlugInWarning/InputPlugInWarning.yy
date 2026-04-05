@@ -6,7 +6,7 @@
   "name":"InputPlugInWarning",
   "parent":{
     "name":"Plug-In API",
-    "path":"folders/Scripts/Input/Plug-In API.yy",
+    "path":"folders/Scripts/Libraries/Input/Plug-In API.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

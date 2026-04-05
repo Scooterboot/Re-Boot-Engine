@@ -28,10 +28,7 @@ if (point_distance(x,y,player.x,player.y) <= 150 &&
 	}
 }
 
-self.DamageBoxes();
 self.LifeBoxes();
-
-self.IncrInvFrames();
 
 if(!dead)
 {

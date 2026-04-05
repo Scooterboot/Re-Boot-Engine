@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"lib_structs",
   "parent":{
-    "name":"Libraries",
-    "path":"folders/Scripts/Libraries.yy",
+    "name":"Core",
+    "path":"folders/Scripts/Libraries/GML-Extended/Functions/Core.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

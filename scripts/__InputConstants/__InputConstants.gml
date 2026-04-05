@@ -11,13 +11,13 @@
 //                                                                        //
 ////////////////////////////////////////////////////////////////////////////
 
-#macro INPUT_VERSION  "10.2.2"
-#macro INPUT_DATE     "2025-09-20"
+#macro INPUT_VERSION  "10.3.1"
+#macro INPUT_DATE     "2026-02-27"
 
-#macro INPUT_NO_DEVICE       -666
-#macro INPUT_KBM             -1
-#macro INPUT_TOUCH           -2
-#macro INPUT_GENERIC_DEVICE  -3
+#macro INPUT_NO_DEVICE       -1
+#macro INPUT_KBM             -100
+#macro INPUT_TOUCH           -200
+#macro INPUT_GENERIC_DEVICE  -300
 
 #macro INPUT_ALL_PLAYERS  -3
 
@@ -109,7 +109,7 @@ enum INPUT_PLUG_IN_CALLBACK
 #macro INPUT_ON_IOS      (os_type == os_ios || os_type == os_tvos)
 #macro INPUT_ON_ANDROID  (os_type == os_android)
 //#macro INPUT_ON_XBOX     ((os_type == os_xboxone) || (os_type == os_xboxseriesxs))
-#macro INPUT_ON_XBOX     ((os_type == os_gdk) || (os_type == os_xboxone) || (os_type == os_xboxseriesxs))
+#macro INPUT_ON_XBOX     ((os_type == os_gdk) || (os_type == os_xboxseriesxs))
 #macro INPUT_ON_PS4      (os_type == os_ps4)
 #macro INPUT_ON_PS5      (os_type == os_ps5)
 #macro INPUT_ON_SWITCH   (os_type == os_switch)
@@ -129,7 +129,7 @@ enum INPUT_PLUG_IN_CALLBACK
 #macro INPUT_BAN_KBM       (not INPUT_ON_DESKTOP)
 #macro INPUT_BAN_TOUCH     (not INPUT_ON_MOBILE)
 #macro INPUT_BAN_GAMEPADS  false
-#macro INPUT_BAN_HOTSWAP   false
+#macro INPUT_BAN_HOTSWAP   (INPUT_ON_PS5 && INPUT_PS5_SINGLE_USER)
 
 #macro INPUT_BLOCK_MOUSE_CHECKS  INPUT_ON_CONSOLE
 

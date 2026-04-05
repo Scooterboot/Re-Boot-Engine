@@ -6,7 +6,7 @@
   "name":"InputDeviceGetDescription",
   "parent":{
     "name":"Device",
-    "path":"folders/Scripts/Input/Device.yy",
+    "path":"folders/Scripts/Libraries/Input/Device.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "chainSpark";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "CHAIN SPARK";
 //itemDesc = "Allows Wall Jumping during Shine Spark.\n" +

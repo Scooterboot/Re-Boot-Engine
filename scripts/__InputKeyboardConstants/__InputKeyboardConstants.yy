@@ -6,7 +6,7 @@
   "name":"__InputKeyboardConstants",
   "parent":{
     "name":"Input",
-    "path":"folders/Scripts/Input.yy",
+    "path":"folders/Scripts/Libraries/Input.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

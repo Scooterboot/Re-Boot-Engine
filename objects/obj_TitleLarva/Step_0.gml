@@ -1,10 +1,15 @@
 /// @description Sound & Animation
-if(instance_exists(obj_MainMenu) && obj_MainMenu.currentScreen != MainScreen.TitleIntro && obj_MainMenu.currentScreen != MainScreen.Title)
+//if(instance_exists(obj_MainMenu) && obj_MainMenu.currentScreen != MainScreen.TitleIntro && obj_MainMenu.currentScreen != MainScreen.Title)
+if(instance_exists(obj_UI_MainMenu) && (obj_UI_MainMenu.state = UI_MMState.FileMenu || obj_UI_MainMenu.state = UI_MMState.LoadGame))
+{
+	exit;
+}
+if(instance_exists(obj_UI_SettingsMenu) && obj_UI_SettingsMenu.activeState == UI_ActiveState.Active)
 {
 	exit;
 }
 
-if(screeDelay <= 0) && false // temp disabled
+if(screeDelay <= 0)
 {
 	var snd;
 	switch(irandom(2))
@@ -30,7 +35,7 @@ if(screeDelay <= 0) && false // temp disabled
 		screeDur1 = audio_sound_length(snd)*60;
         screeDur2 = audio_sound_length(snd)*30;
 	}
-	screeDelay = irandom_range(100,200);
+	screeDelay = irandom_range(100,300);
 }
 
 if(screeDur1 > 0)

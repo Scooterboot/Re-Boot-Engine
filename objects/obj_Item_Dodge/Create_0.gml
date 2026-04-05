@@ -2,7 +2,7 @@
 event_inherited();
 
 itemName = "dodge";
-itemID = 0;
+//itemID = 0;
 
 itemHeader = "ACCEL DASH";
 //itemDesc = "Tap ${aimLockButton} to perform a dash.\n" + "Dashing grants invulnerability.";

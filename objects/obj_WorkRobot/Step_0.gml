@@ -1,5 +1,3 @@
-// Inherit the parent event
-event_inherited();
 
 if(!self.PauseAI())
 {
@@ -70,3 +68,6 @@ if(eyePalIndex >= 3)
 {
 	eyePalNum = -1;
 }
+
+// Inherit the parent event
+event_inherited();

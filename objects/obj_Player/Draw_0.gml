@@ -1,7 +1,5 @@
 /// @description Player Graphics and After Images
 
-var liquidMovement = (liquidState > 0);
-
 self.PaletteSurface();
 var palSurf = palSurface;
 if(animState == AnimState.CrystalFlash && torsoR == sprt_Player_CrystalFlash)
@@ -35,14 +33,24 @@ for(var i = 0; i < ds_list_size(afterImageList); i++)
 
 self.PreDrawPlayer(x,y,0,1);
 
-if(liquid && !liquidMovement && item[Item.GravitySuit])
+var gGlowMax = 1,//0.5,
+	gGlowCol = c_fuchsia,
+	gGlowNum = 2;
+if(item[Item.GravitySuit])
+{
+	gGlowMax = 1;
+	gGlowCol = c_fuchsia;
+	gGlowNum = 3;
+}
+
+if(liquid && (item[Item.GravitySuit] || (item[Item.HydroBoost] && liquidState == LiquidState.HydroBoost)))
 {
 	gravGlowAlpha += 0.01*gravGlowNum*(!global.GamePaused());
-	if(gravGlowAlpha <= 0.75)
+	if(gravGlowAlpha <= gGlowMax*0.75)
 	{
 		gravGlowNum = max(gravGlowNum,1);
 	}
-	if(gravGlowAlpha >= 1)
+	if(gravGlowAlpha >= gGlowMax)
 	{
 		gravGlowNum = -1;
 	}
@@ -55,13 +63,12 @@ else
 var hurtflag = (dmgFlash <= 0 && invFrames > 0 && (invFrames&1) && !global.pauseState != PauseState.RoomTrans);
 if(gravGlowAlpha > 0 && !hurtflag)
 {
-	var col = c_fuchsia,
-		alp = gravGlowAlpha;
-	gpu_set_fog(true,col,0,0);
+	var alp = gravGlowAlpha;
+	gpu_set_fog(true,gGlowCol,0,0);
 	gpu_set_blendmode(bm_add);
 	for(var i = 0; i < 360; i += 45)
 	{
-		for(var j = 1; j < 3; j++)
+		for(var j = 1; j < gGlowNum; j++)
 		{
 			var gx = x+scr_ceil(lengthdir_x(j,i)),
 				gy = y+scr_ceil(lengthdir_y(j,i));

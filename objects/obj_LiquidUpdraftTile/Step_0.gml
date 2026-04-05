@@ -8,7 +8,7 @@ if(global.GamePaused())
 var player = instance_place(x,y,obj_Player);
 if(instance_exists(player))
 {
-	if(player.liquidState > 0)
+	if(player.liquidState == LiquidState.Liquid || player.liquidState == LiquidState.DmgLiquid)
 	{
 		var moveSpeed = player.fGrav*2;
 		if(player.velY <= -player.fallSpeedMax)
@@ -20,6 +20,10 @@ if(instance_exists(player))
 	else if(!player.grounded)
 	{
 		var moveSpeed = player.fGrav*0.75;
+		if(player.velY < 0 && player.jumping)
+		{
+			moveSpeed = player.fGrav;
+		}
 		player.velY -= moveSpeed;
 	}
 }

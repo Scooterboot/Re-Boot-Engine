@@ -1,15 +1,9 @@
 /// @description 
 
-if(setOldPoses > 0)
+if(!global.GamePaused())
 {
-	for(var i = array_length(oldPosX)-1; i > 0; i--)
-	{
-		oldPosX[i] = oldPosX[i-1];
-		oldPosY[i] = oldPosY[i-1];
-	}
-	oldPosX[0] = x;
-	oldPosY[0] = y;
-	setOldPoses = 2;
+	self.DamageBoxes();
+	self.IncrInvFrames();
 }
 
 shiftX = 0;

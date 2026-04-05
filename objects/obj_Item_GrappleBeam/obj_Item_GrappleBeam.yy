@@ -8,8 +8,8 @@
   "name":"obj_Item_GrappleBeam",
   "overriddenProperties":[],
   "parent":{
-    "name":"GearItems",
-    "path":"folders/Objects/Room Elements/ItemPickups/GearItems.yy",
+    "name":"EquipItems",
+    "path":"folders/Objects/Room Elements/ItemPickups/EquipItems.yy",
   },
   "parentObjectId":{
     "name":"obj_Item",
