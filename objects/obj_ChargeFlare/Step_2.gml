@@ -19,6 +19,9 @@ if(instance_exists(creator) && creator.object_index == obj_Player)
 	}
 }
 
+self.DamageBoxes();
+self.IncrInvFrames();
+
 frameCounter++;
 frame = frameSeq[min(frameCounter,array_length(frameSeq)-1)];
 if(frameCounter >= array_length(frameSeq))

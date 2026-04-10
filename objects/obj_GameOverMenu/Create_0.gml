@@ -30,7 +30,7 @@ buttonTip = [
 buttonTipString[0] = "${MenuMove} - "+buttonTip[0]+"   ${MenuAccept} - "+buttonTip[1];
 buttonTipString[1] = "${MenuMove} - "+buttonTip[0]+"   ${MenuAccept} - "+buttonTip[1]+"   ${MenuCancel} - "+buttonTip[2];
 buttonTipScrib = scribble(buttonTipString[0]);
-buttonTipScrib.starting_format("fnt_GUI_Small2",c_white);
+buttonTipScrib.starting_format("fnt_GUI_Small",c_white);
 buttonTipScrib.align(fa_center,fa_middle);
 
 

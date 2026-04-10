@@ -345,7 +345,7 @@ if(!global.GamePaused())
 	if(!instance_exists(grapple))
 	{
 		if((aimAngle > -2 && (aimAngle < 2 || state != State.Grip || rlAngle)) || prAngle || grounded || move != 0 || 
-			state == State.Morph || state == State.Somersault || state == State.Spark || state == State.BallSpark)
+			state == State.Morph || state == State.Somersault || state == State.Spark || state == State.BallSpark || state == State.CrystalFlash)
 		{
 			aimAngle = 0;
 		}
@@ -577,7 +577,7 @@ if(!global.GamePaused())
 		{
 			_frict = turnaroundSpd + sprintTurnSpeed[liquidState];
 		}
-		else if(move == 0 && ((state != State.Morph && aimAngle <= -2 && !grounded && sign(dirFrame) == dir) || (state == State.Morph && abs(velX) > maxSpeed[MaxSpeed.MorphBall,liquidState] && (morphFrame > 0 || (cJump && !grounded)))))
+		else if(move == 0 && ((state != State.Morph && aimAngle <= -2 && !grounded && sign(dirFrame) == dir && cJump) || (state == State.Morph && abs(velX) > maxSpeed[MaxSpeed.MorphBall,liquidState] && (morphFrame > 0 || (cJump && !grounded)))))
 		{
 			_frict = 0;
 			_moving = dir;
@@ -619,17 +619,24 @@ if(!global.GamePaused())
 		
 		self.PerformMovement(_move, fMoveSpeed, turnaroundSpd, _frict, fMaxSpeed);
 	}
+	if(moveState == MoveState.Crouch)
+	{
+		var _frict = fFrict;
+		_moving = 0;
+		self.PerformMovement(0, 0, 0, _frict, 0);
+	}
 	if(moveState == MoveState.Halted)
 	{
 		var _frict = fFrict*2;
-		
+		_moving = 0;
 		self.PerformMovement(0, 0, 0, _frict, 0);
 	}
 	
 	if(moveState != MoveState.Custom)
 	{
 		var maxSpeed2 = maxSpeed[MaxSpeed.SpeedBoost,liquidState];
-		if(abs(velX) > maxSpeed2 && (speedCounter > 0 || grounded))
+		//if(abs(velX) > maxSpeed2 && (speedCounter > 0 || grounded))
+		if(abs(velX) > maxSpeed2 && grounded)
 		{
 			if(sign(velX) == 1)
 			{
@@ -723,7 +730,8 @@ if(!global.GamePaused())
 			}
 		}
 		//if(move != dir && (speedCounter > 0 || !grounded) && morphFrame <= 0 && (aimAngle > -2 || !cJump))
-		if(_moving != dir && (speedCounter > 0 || !grounded))
+		//if(_moving != dir && (speedCounter > 0 || !grounded))
+		if(_moving != dir)
 		{
 			//if((state != State.Somersault && state != State.Morph) || (state == State.Morph && abs(velX) <= maxSpeed[MaxSpeed.MorphBall,liquidState]) || grounded)
 			//{
@@ -1223,26 +1231,26 @@ if(!global.GamePaused())
 			{
 				jump = 0;
 			}
-		}
-		
-		fJumpSpeed = jumpSpeed[item[Item.HiJump],liquidState];
-		var prevLiqJSpd = jumpSpeed[item[Item.HiJump],prevLiquidState];
-		if(wallJumped)
-		{
-			fJumpSpeed = jumpSpeed[2+item[Item.HiJump],liquidState];
-			prevLiqJSpd = jumpSpeed[2+item[Item.HiJump],prevLiquidState];
-		}
-	
-		if(item[Item.SpeedBooster] && abs(velX) > maxSpeed[MaxSpeed.Sprint, LiquidState.Normal] && speedCounter > 0)
-		{
-			fJumpSpeed += max((abs(velX) - maxSpeed[MaxSpeed.Sprint, LiquidState.Normal]) / 2, 0);
-			prevLiqJSpd += max((abs(velX) - maxSpeed[MaxSpeed.Sprint, LiquidState.Normal]) / 2, 0);
-		}
-		
-		if(jumping && jump <= 0 && velY < 0 && liquidState == LiquidState.Normal && prevLiquidState != liquidState && !item[Item.GravitySuit])
-		{
-			var mult = 1 + ((grav[liquidState] / grav[prevLiquidState] - 1) / (3 + 1/3));
-			velY = max(max(velY, -prevLiqJSpd) * mult, -fJumpSpeed);
+			
+			fJumpSpeed = jumpSpeed[item[Item.HiJump],liquidState];
+			var prevLiqJSpd = jumpSpeed[item[Item.HiJump],prevLiquidState];
+			if(wallJumped)
+			{
+				fJumpSpeed = jumpSpeed[2+item[Item.HiJump],liquidState];
+				prevLiqJSpd = jumpSpeed[2+item[Item.HiJump],prevLiquidState];
+			}
+			
+			if(item[Item.SpeedBooster] && abs(velX) > maxSpeed[MaxSpeed.Sprint, LiquidState.Normal])// && speedCounter > 0)
+			{
+				fJumpSpeed += max((abs(velX) - maxSpeed[MaxSpeed.Sprint, LiquidState.Normal]) / 2, 0);
+				prevLiqJSpd += max((abs(velX) - maxSpeed[MaxSpeed.Sprint, LiquidState.Normal]) / 2, 0);
+			}
+			
+			if(jumping && jump <= 0 && velY < 0 && liquidState == LiquidState.Normal && prevLiquidState != liquidState && !item[Item.GravitySuit])
+			{
+				var mult = 1 + ((grav[liquidState] / grav[prevLiquidState] - 1) / (3 + 1/3));
+				velY = max(max(velY, -prevLiqJSpd) * mult, -fJumpSpeed);
+			}
 		}
 		
 		if(jump > 0)
@@ -1268,7 +1276,8 @@ if(!global.GamePaused())
 			}
 			else
 			{
-				velY = -fJumpSpeed;
+				//velY = -fJumpSpeed;
+				velY = min(velY, -fJumpSpeed);
 			}
 			jump -= 1;
 			
@@ -1422,7 +1431,7 @@ if(!global.GamePaused())
 
 	if(self.GrappleActive())
 	{
-		grapAngle = point_direction(position.X, position.Y, grapple.x, grapple.y) - 90;
+		grapAngle = scr_wrap(point_direction(position.X, position.Y, grapple.x, grapple.y) - 90, -180, 180);
 		var dist = point_distance(position.X,position.Y,grapple.x,grapple.y);
 		var ndist = point_distance(position.X+velX,position.Y+velY,grapple.x,grapple.y);
 		
@@ -1439,7 +1448,7 @@ if(!global.GamePaused())
 		
 		if(state == State.Grapple)
 		{
-			if(grappleDist <= grappleMinDist+2 && self.entity_place_collide(sign(grapple.x-x),0) && (grapAngle <= 45 || grapAngle >= 315))
+			if(grappleDist <= grappleMinDist+2 && self.entity_place_collide(sign(grapple.x-x),0) && abs(grapAngle) < 45)
 			{
 				if(sign(x-grapple.x) != 0)
 			    {
@@ -1649,8 +1658,6 @@ if(!global.GamePaused())
 		grappleVelX = (grapple.x + vX) - position.X;
 		grappleVelY = (grapple.y + vY) - position.Y;
 		
-		grapDisVel = reel;
-		
 		grapBoost = true;
 		
 		if(state == State.Morph)
@@ -1658,24 +1665,27 @@ if(!global.GamePaused())
 			if(point_distance(position.X+velX+grappleVelX,position.Y+velY+grappleVelY,grapple.x,grapple.y) <= 24 || !cFire || spiderGrappleUnstuck > 10)
 			{
 				instance_destroy(grapple);
-				velX += grappleVelX;
-				velY += grappleVelY;
-				grappleVelX = 0;
-				grappleVelY = 0;
 			}
 		}
 	}
-	else
+	if(!self.GrappleActive())
 	{
+		grappleVelX = 0;
+		grappleVelY = 0;
+		if(grappleReelVel != 0)
+		{
+			velX += lengthdir_x(grappleReelVel,grapAngle-90);
+			velY += lengthdir_y(grappleReelVel,grapAngle-90);
+			
+			grappleReelVel = 0;
+		}
+		
 		if(!instance_exists(grapple))
 		{
 			grappleDist = 0;
 			grapAngle = 0;
 		}
-		grappleVelX = 0;
-		grappleVelY = 0;
-		grapDisVel = 0;
-		grappleReelVel = 0;
+		
 		spiderGrappleUnstuck = 0;
 	}
 
@@ -2267,8 +2277,8 @@ if(!global.GamePaused())
 		fVelX = velX;
 		fVelY = velY;
 	
-		fVelY += grappleVelY;
 		fVelX += grappleVelX;
+		fVelY += grappleVelY;
 		
 		if(_ARM_PUMP && prAngle && fVelX != 0 && move == dir && grounded && state == State.Stand)
 		{
@@ -2547,7 +2557,7 @@ if(!global.GamePaused())
 		if(canCrouch && move2 == 0 && cPlayerDown && dir != 0 && grounded)
 		{
 			aimAnimDelay = aimAnimDelayMax;
-			self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
+			self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Crouch, mask_Player_Crouch, true);
 			frame[Frame.Crouch] = 5-frame[Frame.Crouch];
 		}
 		if(!grounded && dir != 0)
@@ -2677,7 +2687,7 @@ if(!global.GamePaused())
 #region Crouch
 	if(state == State.Crouch)
 	{
-		moveState = MoveState.Halted;
+		moveState = MoveState.Crouch;
 		
 		animState = AnimState.Crouch;
 		if(self.CanChangeState(mask_Player_Crouch))
@@ -2685,10 +2695,11 @@ if(!global.GamePaused())
 			self.ChangeState(state, animState, moveState, mask_Player_Crouch, false);
 		}
 		
-		if(uncrouch < 7)
+		/*if(uncrouch < 7)
 		{
 			speedCounter = 0;
-		}
+			speedBoost = false;
+		}*/
 		if(move2 != 0 && !self.entity_place_collide(0,-11))
 		{
 			uncrouch += 1;
@@ -2846,7 +2857,7 @@ if(!global.GamePaused())
 				}
 				else
 				{
-					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
+					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Crouch, mask_Player_Crouch, true);
 					if(velX != 0 && grounded)
 					{
 						uncrouch = 7;
@@ -3025,6 +3036,10 @@ if(!global.GamePaused())
 		mask_index = mask_Player_Crouch;
 		immune = true;
 		
+		gunReady = false;
+		ledgeFall = true;
+		ledgeFall2 = true;
+		
 		if(cFlashStartMove < 16)
 		{
 			cFlashStartMove++;
@@ -3083,7 +3098,7 @@ if(!global.GamePaused())
 		{
 			if(!self.CanChangeState(mask_Player_Jump))
 			{
-				self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
+				self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Crouch, mask_Player_Crouch, true);
 			}
 			else
 			{
@@ -3174,7 +3189,7 @@ if(!global.GamePaused())
 			{
 				if(!self.CanChangeState(mask_Player_Stand))
 				{
-					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_AimDown, true);
+					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Crouch, mask_Player_AimDown, true);
 				}
 				else
 				{
@@ -3187,7 +3202,7 @@ if(!global.GamePaused())
 			{
 				if(!self.CanChangeState(mask_Player_Stand))
 				{
-					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
+					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Crouch, mask_Player_Crouch, true);
 					frame[Frame.Crouch] = 5;
 				}
 				else
@@ -3318,7 +3333,7 @@ if(!global.GamePaused())
 				{
 					mask = mask_Player_Somersault;
 				}
-				self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask, true);
+				self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Crouch, mask, true);
 			}
 			else
 			{
@@ -3341,7 +3356,7 @@ if(!global.GamePaused())
 			{
 				if(!self.CanChangeState(mask_Player_Jump))
 				{
-					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Somersault, true);
+					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Crouch, mask_Player_Somersault, true);
 				}
 				else
 				{
@@ -3419,7 +3434,7 @@ if(!global.GamePaused())
 						}
 						else
 						{
-							self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
+							self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Crouch, mask_Player_Crouch, true);
 						}
 					}
 				}
@@ -3607,7 +3622,7 @@ if(!global.GamePaused())
 			{
 				if(!self.CanChangeState(mask_Player_Stand) || groundedDodge == 2)
 				{
-					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
+					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Crouch, mask_Player_Crouch, true);
 				}
 				else
 				{
@@ -3620,7 +3635,7 @@ if(!global.GamePaused())
 			{
 				if(!self.CanChangeState(mask_Player_Jump))
 				{
-					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, false);
+					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Crouch, mask_Player_Crouch, false);
 				}
 				else
 				{
@@ -4340,7 +4355,7 @@ if(!global.GamePaused())
 				if(!self.CanChangeState(mask_Player_Stand))
 				{
 					frame[Frame.Crouch] = 3;
-					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Halted, mask_Player_Crouch, true);
+					self.ChangeState(State.Crouch, AnimState.Crouch, MoveState.Crouch, mask_Player_Crouch, true);
 				}
 				else
 				{
@@ -5560,7 +5575,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 					}
 				}
 				
-				var xNum = point_distance(x,y,x+velX,y+velY);
+				var xNum = point_distance(x,y,x+velX+grappleVelX,y+velY+grappleVelY);
 				if(liquidState != LiquidState.Normal)
 				{
 					xNum *= (_liqMult * (2-_liqMult));
@@ -6500,7 +6515,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 					{
 						_gFrNum = 0.3;
 					}
-	                if(grapDisVel <= -1 && grapWallBounceFrame <= 0)
+	                if(grappleReelVel <= -1 && grapWallBounceFrame <= 0)
 	                {
 	                    grapFrame = max(grapFrame-_gFrNum,0);
 	                }
@@ -6520,7 +6535,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 							var grapAngVel = angle_difference(point_direction(x+velX,y+velY,grapple.x,grapple.y),point_direction(x,y,grapple.x,grapple.y));
 						
 							var gFrameDest = 0;
-		                    if(grapDisVel >= 1)
+		                    if(grappleReelVel >= 1)
 		                    {
 		                        gFrameDest = 2*dir;
 		                    }

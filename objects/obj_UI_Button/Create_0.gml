@@ -49,7 +49,7 @@ sprtSelectInd = 0;
 sprtSelectAlpha = 1;
 
 buttonScrib = scribble("btn");
-buttonScrib.starting_format("fnt_GUI",c_white);
+buttonScrib.starting_format(font_get_name(fnt_GUI),c_white);
 buttonScrib.align(fa_center,fa_middle);
 
 function PreDraw()

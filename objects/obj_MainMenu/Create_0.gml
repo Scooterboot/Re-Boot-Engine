@@ -90,7 +90,7 @@ buttonTip = [
 
 buttonTipString = "${controlPad} - "+buttonTip[0]+"   ${menuSelectButton} - "+buttonTip[1]+"   ${menuCancelButton} - "+buttonTip[2];
 buttonTipScrib = scribble(buttonTipString);
-buttonTipScrib.starting_format("fnt_GUI_Small2",c_white);
+buttonTipScrib.starting_format("fnt_GUI_Small",c_white);
 buttonTipScrib.align(fa_center,fa_middle);
 
 cRight = false;

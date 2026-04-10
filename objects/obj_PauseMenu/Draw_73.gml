@@ -210,9 +210,9 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					draw_set_alpha(1);
 					draw_set_halign(fa_left);
 					draw_set_valign(fa_top);
-					draw_set_font(fnt_GUI_Small2);
+					draw_set_font(fnt_GUI_Small);
 					var subTxt = string_copy(text,1,scr_floor(textAnim));
-					var xoffset = 8;
+					var xoffset = 9;
 					if(isEquip)
 					{
 						xoffset = 15;
@@ -288,7 +288,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 					draw_set_alpha(1);
 					draw_set_halign(fa_left);
 					draw_set_valign(fa_top);
-					draw_set_font(fnt_GUI_Small2);
+					draw_set_font(fnt_GUI_Small);
 					var subTxt = string_copy(text,1,scr_floor(textAnim));
 					
 					TextOutlineSurface(subTxt);
@@ -299,8 +299,8 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 						draw_set_color(c_gray);
 						textBGColor = make_color_rgb(53,101,107);
 					}
-					draw_surface_ext(textSurface,iBoxX-66,iBoxY,1,1,0,textBGColor,0.5);
-					draw_text(iBoxX-65,iBoxY+1,subTxt);
+					draw_surface_ext(textSurface,iBoxX-65,iBoxY,1,1,0,textBGColor,0.5);
+					draw_text(iBoxX-64,iBoxY+1,subTxt);
 				}
 			}
 			else
@@ -453,13 +453,13 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				{
 					headText = mapAreaText[global.rmMapIndex];
 				}
-				draw_text(global.resWidth/2,36,headText);
+				draw_text(global.resWidth/2,35,headText);
 			}
 			
 			draw_sprite_ext(sprt_Sub_Clock,0,global.resWidth/2-117,31,1,1,0,c_white,1);
 			draw_set_halign(fa_left);
 			draw_set_valign(fa_top);
-			draw_set_font(fnt_GUI_Small2);
+			draw_set_font(fnt_GUI_Small);
 			var second = floor(global.currentPlayTime);
 			var minute = floor(second / 60);
 			var hour = floor(minute / 60);

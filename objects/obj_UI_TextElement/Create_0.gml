@@ -4,7 +4,7 @@ sprt = sprt_UI_OptPanel;
 sprtAlpha = 0.65;
 
 textScrib = scribble(text);
-textScrib.starting_format("fnt_GUI",c_white);
+textScrib.starting_format(font_get_name(fnt_GUI),c_white);
 textScrib.align(fa_center,fa_middle);
 
 function PreDraw(_x, _y)

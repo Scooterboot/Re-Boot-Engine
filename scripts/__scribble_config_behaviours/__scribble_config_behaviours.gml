@@ -73,7 +73,7 @@
 // 0 = Legacy. Align centre of sprites to the centre of the line height
 // 1 = Recommended. Align centre of sprites to the centre of the ascender
 // 2 = Align bottom of sprites to the baseline
-#macro SCRIBBLE_SPRITE_ALIGN_MODE  1
+#macro SCRIBBLE_SPRITE_ALIGN_MODE  1//0
 
 //Whether to adjust the horizontal distance between glyphs depending on special per-font rules. Set
 //to `false` for legacy pre-8.2 behaviour.

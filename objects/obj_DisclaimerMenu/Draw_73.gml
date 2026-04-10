@@ -38,7 +38,7 @@ if(room == rm_Disclaimer)
 		
 		var space = 14;
 				
-		draw_set_font(fnt_Menu2);
+		draw_set_font(fnt_Menu);
 		draw_set_halign(fa_left);
 		draw_set_valign(fa_top);
 

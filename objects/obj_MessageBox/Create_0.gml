@@ -34,7 +34,11 @@ kill = false;
 
 InitControlVars("menu");
 
-descScrib = scribble(description);
-descScrib.starting_format("fnt_GUI_Small2",c_white);
+headScrib = scribble("messagebox_head");
+headScrib.starting_format(font_get_name(fnt_Menu),c_yellow);
+headScrib.align(fa_center,fa_top);
+
+descScrib = scribble("messagebox_desc");
+descScrib.starting_format(font_get_name(fnt_GUI_Small),c_white);
 descScrib.align(fa_center,fa_top);
 //descScrib.align(fa_center,fa_bottom);

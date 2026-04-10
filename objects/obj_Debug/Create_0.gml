@@ -28,6 +28,7 @@ stateText[State.CrystalFlash] =	"CrystalFlash";
 
 moveStateText[MoveState.Normal] =		"Normal";
 moveStateText[MoveState.Somersault] =	"Somersault";
+moveStateText[MoveState.Crouch] =		"Crouch";
 moveStateText[MoveState.Halted] =		"Halted";
 moveStateText[MoveState.Custom] =		"Custom";
 

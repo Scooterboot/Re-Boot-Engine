@@ -232,7 +232,7 @@ footerText[4] = "${MenuMove} - Choose Menu";
 
 footerScrib = scribble(footerText[0]);
 footerScrib.align(fa_center,fa_middle);
-footerScrib.starting_format("fnt_GUI_Small2",c_white);
+footerScrib.starting_format("fnt_GUI_Small",c_white);
 
 #region TextOutlineSurface
 
@@ -266,7 +266,7 @@ function TextOutlineSurface(text)
 #region DrawItemHeader
 function DrawItemHeader(_x,_y,_name,_height,_facing)
 {
-	draw_set_font(fnt_GUI_Small2);
+	draw_set_font(fnt_GUI_Small);
 	
 	var h = 10/17;
 	var yscale = 1+h*(_height-1);

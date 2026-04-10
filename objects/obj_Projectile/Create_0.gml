@@ -177,10 +177,10 @@ function DamageBoxes()
 	}
 }
 
-function Entity_CanDealDamage(_selfDmgBox, _lifeBox, _damage, _dmgType, _dmgSubType)
+/*function Entity_CanDealDamage(_selfDmgBox, _lifeBox, _damage, _dmgType, _dmgSubType)
 {
 	return (!dmgImpacted);
-}
+}*/
 
 function DmgPartEmitRegion(partSys, partEmit, _selfDmgBox, _lifeBox)
 {

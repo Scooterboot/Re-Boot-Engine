@@ -14,7 +14,12 @@ switch (messageType)
 			draw_set_halign(fa_center);
 			draw_set_valign(fa_top);
 			
-			var str = header;
+			//var str = header;
+			var str = obj_UI_Icons.InsertIconsIntoString(header);
+			if(headScrib.get_text() != str)
+			{
+				headScrib.overwrite(str);
+			}
 			var str2 = obj_UI_Icons.InsertIconsIntoString(description);
 			if(descScrib.get_text() != str2)
 			{
@@ -37,8 +42,14 @@ switch (messageType)
 			
 			draw_sprite_stretched_ext(sprt_UI_MessageBox,0,xx+(ww/2)-offX,yy+(hh/2)-offY,fWidth,fHeight,c_white,messageAlpha)
 			
-			draw_set_font(fnt_Menu2);
-			scr_DrawOptionText(xx+(ww/2),yy+(hh/2)-fHeight2+4,str,c_yellow,messageAlpha,0,c_black,0);
+			//draw_set_font(fnt_Menu);
+			//scr_DrawOptionText(xx+(ww/2),yy+(hh/2)-fHeight2+4,str,c_yellow,messageAlpha,0,c_black,0);
+			var headX = xx+(ww/2),
+				headY = yy+(hh/2)-fHeight2+4;
+			headScrib.blend(c_black,messageAlpha);
+			headScrib.draw(headX+1,headY+1);
+			headScrib.blend(c_white,messageAlpha);
+			headScrib.draw(headX,headY);
 			
 			var descX = xx+(ww/2),
 				descY = yy+(hh/2)+fHeight2-4-str2H;
@@ -64,7 +75,7 @@ switch (messageType)
 			draw_set_font(fnt_GUI);
 			scr_DrawOptionText(xx+(ww/2),yy+(hh/3)+orderYDiff-string_height(str),str,c_white,messageAlpha,0,c_black,0);
 			
-			draw_set_font(fnt_GUI_Small2);
+			draw_set_font(fnt_GUI_Small);
 			scr_DrawOptionText(xx+(ww/2),yy+(hh/3)+orderYDiff,str2,c_white,messageAlpha,0,c_black,0);
 		}
 		break;

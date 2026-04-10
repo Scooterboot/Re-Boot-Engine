@@ -338,7 +338,6 @@ grappleMaxDist = 200;//160;//143;
 grappleMinDist = 31;
 
 grapAngle = 0;
-grapDisVel = 0;
 
 grapBoost = false;
 
@@ -710,6 +709,7 @@ enum MoveState
 {
 	Normal,
 	Somersault,
+	Crouch,
 	Halted,
 	Custom
 }
@@ -3992,7 +3992,7 @@ lifeBoxes[0] = self.CreateLifeBox(0,0,mask_index,false);
 
 function Entity_CanTakeDamage(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType)
 {
-	return (!global.GamePaused() && !godmode && invFrames <= 0 && (!immune || _dmgBox.creator.ignorePlayerImmunity));
+	return (!global.GamePaused() && !godmode && invFrames <= 0 && (!immune || _dmgBox.creator.ignorePlayerImmunity) && state != State.CrystalFlash);
 }
 function Entity_ModifyDamageTaken(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType)
 {
@@ -4016,7 +4016,7 @@ function IsKnockBackImmune()
 }
 function StrikePlayer(_dmg, _knockTime, _knockSpeedX, _knockSpeedY, _iframes, _ignoreImmunity = false)
 {
-	if(!global.GamePaused() && !godmode && invFrames <= 0 && (!immune || _ignoreImmunity))
+	if(!global.GamePaused() && !godmode && invFrames <= 0 && (!immune || _ignoreImmunity) && state != State.CrystalFlash)
 	{
 		energy = max(energy - _dmg,0);
 		if(energy <= 0)

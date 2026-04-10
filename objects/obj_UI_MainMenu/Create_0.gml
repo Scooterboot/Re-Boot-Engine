@@ -348,7 +348,7 @@ function CreateConfirmCopyPage(srcFile, destFile)
 	var ww = global.resWidth,
 		hh = global.resHeight;
 	
-	draw_set_font(fnt_Menu2);
+	draw_set_font(fnt_Menu);
 	var str = confirmCopyText[0] + "[c_yellow][["+copyFileText[srcFile]+"][/c]" + confirmCopyText[1] + "[c_yellow][["+copyFileText[destFile]+"][/c]" + "\n\n" + confirmCopyText[2];
 	var pnlW = 248,
 		pnlH = string_height(str) + 24;
@@ -424,7 +424,7 @@ function CreateConfirmDeletePage()
 	var ww = global.resWidth,
 		hh = global.resHeight;
 	
-	draw_set_font(fnt_Menu2);
+	draw_set_font(fnt_Menu);
 	var str = confirmDeleteText[0] + "[c_yellow][["+fileMenuText[selectedFile]+"][/c]" + "\n\n" + confirmDeleteText[1];
 	var pnlW = 248,
 		pnlH = string_height(str) + 24;
@@ -507,9 +507,9 @@ function DrawSaveFileButton()
 		
 		draw_set_font(fnt_Menu);
 		draw_set_align(fa_left,fa_middle);
-		scr_DrawOptionText(_x+3, _y + height/2, text, c_white, alpha, 0, c_black, 0);
+		scr_DrawOptionText(scr_round(_x+3), scr_round(_y+height/2), text, c_white, alpha, 0, c_black, 0);
 		
-		draw_sprite_ext(sprt_UI_FileIcon, icoFrame, _x+string_width(text)+7, _y+height/2, 1, 1, 0, c_white, alpha);
+		draw_sprite_ext(sprt_UI_FileIcon, icoFrame, scr_round(_x+string_width(text)+7), scr_round(_y+height/2), 1, 1, 0, c_white, alpha);
 		
 		if(creatorUI.selectedFile != fileIndex || creatorUI.subState == UI_MMSubState.FileCopy || creatorUI.subState == UI_MMSubState.ConfirmCopy || creatorUI.subState == UI_MMSubState.ConfirmDelete)
 		{
@@ -521,15 +521,15 @@ function DrawSaveFileButton()
 			{
 				draw_set_font(fnt_GUI);
 				draw_set_align(fa_center,fa_middle);
-				scr_DrawOptionText(_x+width/2, _y+height/2, creatorUI.noDataText, c_white,1,0,c_black,0);
+				scr_DrawOptionText(scr_round(_x+width/2), scr_round(_y+height/2), creatorUI.noDataText, c_white,1,0,c_black,0);
 			}
 			else
 			{
 				draw_set_align(fa_center,fa_top);
-				draw_set_font(fnt_GUI_Small2);
+				draw_set_font(fnt_GUI_Small);
 				var str = creatorUI.timeText,
 					strW = string_width(str);
-				scr_DrawOptionText(_x+width-strW/2-22, _y+height/2-8, str, c_white,1,0,c_black,0);
+				scr_DrawOptionText(scr_round(_x+width-strW/2-22), scr_round(_y+height/2-9), str, c_white,1,0,c_black,0);
 				
 				var minute = scr_floor(fileTime / 60);
 				var hour = scr_floor(minute / 60);
@@ -539,40 +539,40 @@ function DrawSaveFileButton()
 				}
 				var tStr = string_format(hour,2,0)+":"+string_format(minute,2,0);
 				tStr = string_replace_all(tStr," ","0");
-				draw_set_font(fnt_Menu2);
-				scr_DrawOptionText(_x+width-strW/2-21, _y+height/2+1, tStr, c_white,1,0,c_black,0);
+				draw_set_font(fnt_Menu);
+				scr_DrawOptionText(scr_round(_x+width-strW/2-21), scr_round(_y+height/2-1), tStr, c_white,1,0,c_black,0);
 			}
 			if(filePercent >= 0)
 			{
 				draw_set_align(fa_center,fa_top);
-				draw_set_font(fnt_GUI_Small2);
-				var px = _x+width/2+52,
+				draw_set_font(fnt_GUI_Small);
+				var px = scr_round(_x+width/2+52),
 					str = creatorUI.itemsText,
 					strW = string_width(creatorUI.itemsText),
 					strH = string_height(creatorUI.itemsText);
-				scr_DrawOptionText(px, _y+height/2-8, str, c_white,1,0,c_black,0);
+				scr_DrawOptionText(px, scr_round(_y+height/2-9), str, c_white,1,0,c_black,0);
 				
 				var percent = scr_floor(filePercent);
 				var pStr = string_format(percent,2,0)+"%";
 				pStr = string_replace_all(pStr," ","0");
-				draw_set_font(fnt_Menu2);
-				scr_DrawOptionText(px, _y+height/2+1, pStr, c_white,1,0,c_black,0);
+				draw_set_font(fnt_Menu);
+				scr_DrawOptionText(px, scr_round(_y+height/2-1), pStr, c_white,1,0,c_black,0);
 			}
 			if(fileEnergyMax >= 0)
 			{
 				draw_set_align(fa_center,fa_top);
-				draw_set_font(fnt_GUI_Small2);
-				var tx = _x+width/2-16,
+				draw_set_font(fnt_GUI_Small);
+				var tx = _x+width/2-17,
 					ty = _y+height/2-7,
 					str = creatorUI.energyText,
 					strW = string_width(str),
 					strH = string_height(str);
-				scr_DrawOptionText(tx-(strW/2)-2, ty-1, str, c_white, 1, 0, c_black, 0);
+				scr_DrawOptionText(scr_round(tx-(strW/2)-2), scr_round(ty-1), str, c_white, 1, 0, c_black, 0);
 			
 				draw_set_font(fnt_Menu);
 				str = string(fileEnergy);
 				str = string_char_at(str,string_length(str)-1)+string_char_at(str,string_length(str));
-				scr_DrawOptionText(tx-(strW/2)-2, ty+strH-3, str, c_white,1,0,c_black,0);
+				scr_DrawOptionText(scr_round(tx-(strW/2)-2), scr_round(ty+strH-4), str, c_white,1,0,c_black,0);
 			
 				var energyTanks = floor(fileEnergyMax / 100),
 					statEnergyTanks = floor(fileEnergy / 100);
@@ -619,7 +619,7 @@ function DrawConfirmPanel()
 		draw_sprite_stretched_ext(sprt_UI_Button,0, _x,_y+height-1, width,1, c_white,ol_alph*_alpha);
 		
 		var _sx = _x+width/2, _sy = _y+4;
-		draw_set_font(fnt_Menu2);
+		draw_set_font(fnt_Menu);
 		draw_set_align(fa_center,fa_top);
 		draw_set_alpha(_alpha);
 		draw_set_color(c_black);
@@ -645,4 +645,4 @@ footerText = [
 footerString[0] = "${MenuMove} - "+footerText[0]+"   ${MenuAccept_0} - "+footerText[1];
 footerString[1] = "${MenuMove} - "+footerText[0]+"   ${MenuAccept_0} - "+footerText[1]+"   ${MenuCancel_0} - "+footerText[2];
 footerString[2] = "${MenuMove} - "+footerText[0]+"   ${MenuAccept_0} - "+footerText[1]+"   ${MenuCancel_0} - "+footerText[3];
-footerScrib = scribble(footerString[0]).starting_format("fnt_GUI_Small2",c_white).align(fa_center,fa_middle);
+footerScrib = scribble(footerString[0]).starting_format(font_get_name(fnt_GUI_Small),c_white).align(fa_center,fa_middle);

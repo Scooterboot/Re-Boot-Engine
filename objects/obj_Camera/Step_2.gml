@@ -371,7 +371,7 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 					}
 					if(instance_exists(col) && col.active && col.facing == CamTileFacing.Right)
 					{
-						fVelX = min(col.x+16 - x+wDiff, 1+abs(playerX-prevPlayerX));
+						fVelX = min(col.x+16 - x+wDiff, max(playerX-prevPlayerX, 1));
 						if(camSnap)
 						{
 							fVelX = col.x+16 - x+wDiff;
@@ -380,7 +380,7 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 					}
 					else if(instance_exists(col) && col.active && col.facing == CamTileFacing.Left)
 					{
-						fVelX = max(col.x-16 - (x+wDiff+resWidth), -(1+abs(playerX-prevPlayerX)));
+						fVelX = max(col.x-16 - (x+wDiff+resWidth), min(playerX-prevPlayerX, -1));
 						if(camSnap)
 						{
 							fVelX = col.x-16 - (x+wDiff+resWidth);
@@ -388,44 +388,96 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 						break;
 					}
 				}
+				ds_list_clear(colList);
 			}
-			ds_list_clear(colList);
 	
 			_num = camera_collide(max(abs(fVelX),1)*sign(fVelX),0,colList);
-			for(var i = 0; i < _num; i++)
+			if(_num > 0)
 			{
-				var colX = colList[| i];
-				if(instance_exists(colX))
+				for(var i = 0; i < _num; i++)
 				{
-					var wDiff = 0;
-					var resWidth = camWidth();
-					if(colX.object_index == obj_CamTile_NonWScreen || object_is_ancestor(colX.object_index,obj_CamTile_NonWScreen))
+					var colX = colList[| i];
+					if(instance_exists(colX))
 					{
-						wDiff = abs(camWidth() - camWidth_NonWide())/2;
-						resWidth = camWidth_NonWide();
-					}
-					if ((fVelX < 0 && colX.active && colX.facing == CamTileFacing.Right) ||
-						(fVelX > 0 && colX.active && colX.facing == CamTileFacing.Left))
-					{
-						if(fVelX > 0)
+						var wDiff = 0;
+						var resWidth = camWidth();
+						if(colX.object_index == obj_CamTile_NonWScreen || object_is_ancestor(colX.object_index,obj_CamTile_NonWScreen))
 						{
-							x = scr_floor(x);
+							wDiff = abs(camWidth() - camWidth_NonWide())/2;
+							resWidth = camWidth_NonWide();
 						}
-						if(fVelX < 0)
+						if ((fVelX < 0 && colX.active && colX.facing == CamTileFacing.Right) ||
+							(fVelX > 0 && colX.active && colX.facing == CamTileFacing.Left))
 						{
-							x = scr_ceil(x);
+							if(fVelX > 0)
+							{
+								x = scr_floor(x);
+							}
+							if(fVelX < 0)
+							{
+								x = scr_ceil(x);
+							}
+							var xnum = abs(fVelX)+2;
+							while(!collision_rectangle(x+wDiff+sign(fVelX),y,x+wDiff+sign(fVelX)+resWidth,y+camHeight(),colX,false,true) && xnum > 0)
+							{
+								x += sign(fVelX);
+								xnum--;
+							}
+							fVelX = 0;
 						}
-						var xnum = abs(fVelX)+2;
-						while(!collision_rectangle(x+wDiff+sign(fVelX),y,x+wDiff+sign(fVelX)+resWidth,y+camHeight(),colX,false,true) && xnum > 0)
-						{
-							x += sign(fVelX);
-							xnum--;
-						}
-						fVelX = 0;
 					}
 				}
+				ds_list_clear(colList);
 			}
-			ds_list_clear(colList);
+			
+			_num = camera_collide(0,0,colList,1);
+			if(_num > 0)
+			{
+				var colX = x+camWidth();
+				var colR = noone;
+				for(var i = 0; i < _num; i++)
+				{
+					var col = colList[| i];
+					if(instance_exists(col) && col.active && col.facing == CamTileFacing.Left)
+					{
+						if(colR == noone || col.x < colX)
+						{
+							colR = col;
+							colX = col.x;
+						}
+					}
+				}
+				colX = x;
+				var colL = noone;
+				for(var i = 0; i < _num; i++)
+				{
+					var col = colList[| i];
+					if(instance_exists(col) && col.active && col.facing == CamTileFacing.Right)
+					{
+						if(colL == noone || col.x > colX)
+						{
+							colL = col;
+							colX = col.x;
+						}
+					}
+				}
+				
+				if(instance_exists(colR) && instance_exists(colL))
+				{
+					var lX = colL.x+16,
+						rX = colR.x-16,
+						midX = lX + (rX-lX)/2,
+						cenX = x+(camWidth()/2);
+					
+					fVelX = clamp(midX - cenX, min(playerX-prevPlayerX, -1), max(playerX-prevPlayerX, 1));
+					if(camSnap)
+					{
+						fVelX = midX - cenX;
+					}
+				}
+				
+				ds_list_clear(colList);
+			}
 	
 			if(x >= 0 && x <= room_width-camWidth())
 			{
@@ -475,7 +527,7 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 					var col = colList[| i];
 					if(instance_exists(col) && col.active && col.facing == CamTileFacing.Down)
 					{
-						fVelY = min(col.y+16 - y, 1+abs(playerY-prevPlayerY));
+						fVelY = min(col.y+16 - y, max(playerY-prevPlayerY, 1));
 						if(camSnap)
 						{
 							fVelY = col.y+16 - y;
@@ -484,7 +536,7 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 					}
 					else if(instance_exists(col) && col.active && col.facing == CamTileFacing.Up)
 					{
-						fVelY = max(col.y-16 - (y+camHeight()), -(1+abs(playerY-prevPlayerY)));
+						fVelY = max(col.y-16 - (y+camHeight()), min(playerY-prevPlayerY, -1));
 						if(camSnap)
 						{
 							fVelY = col.y-16 - (y+camHeight());
@@ -492,44 +544,96 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 						break;
 					}
 				}
+				ds_list_clear(colList);
 			}
-			ds_list_clear(colList);
 	
 			_num = camera_collide(0,max(abs(fVelY),1)*sign(fVelY),colList);
-			for(var i = 0; i < _num; i++)
+			if(_num > 0)
 			{
-				var colY = colList[| i];
-				if(instance_exists(colY))
+				for(var i = 0; i < _num; i++)
 				{
-					var wDiff = 0;
-					var resWidth = camWidth();
-					if(colY.object_index == obj_CamTile_NonWScreen || object_is_ancestor(colY.object_index,obj_CamTile_NonWScreen))
+					var colY = colList[| i];
+					if(instance_exists(colY))
 					{
-						wDiff = abs(camWidth() - camWidth_NonWide())/2;
-						resWidth = camWidth_NonWide();
-					}
-					if ((fVelY < 0 && colY.active && colY.facing == CamTileFacing.Down) ||
-						(fVelY > 0 && colY.active && colY.facing == CamTileFacing.Up))
-					{
-						if(fVelY > 0)
+						var wDiff = 0;
+						var resWidth = camWidth();
+						if(colY.object_index == obj_CamTile_NonWScreen || object_is_ancestor(colY.object_index,obj_CamTile_NonWScreen))
 						{
-							y = scr_floor(y);
+							wDiff = abs(camWidth() - camWidth_NonWide())/2;
+							resWidth = camWidth_NonWide();
 						}
-						if(fVelY < 0)
+						if ((fVelY < 0 && colY.active && colY.facing == CamTileFacing.Down) ||
+							(fVelY > 0 && colY.active && colY.facing == CamTileFacing.Up))
 						{
-							y = scr_ceil(y);
+							if(fVelY > 0)
+							{
+								y = scr_floor(y);
+							}
+							if(fVelY < 0)
+							{
+								y = scr_ceil(y);
+							}
+							var ynum = abs(fVelY)+2;
+							while(!collision_rectangle(x+wDiff,y+sign(fVelY),x+wDiff+resWidth,y+sign(fVelY)+camHeight(),colY,false,true) && ynum > 0)
+							{
+								y += sign(fVelY);
+								ynum--;
+							}
+							fVelY = 0;
 						}
-						var ynum = abs(fVelY)+2;
-						while(!collision_rectangle(x+wDiff,y+sign(fVelY),x+wDiff+resWidth,y+sign(fVelY)+camHeight(),colY,false,true) && ynum > 0)
-						{
-							y += sign(fVelY);
-							ynum--;
-						}
-						fVelY = 0;
 					}
 				}
+				ds_list_clear(colList);
 			}
-			ds_list_clear(colList);
+			
+			_num = camera_collide(0,0,colList,,1);
+			if(_num > 0)
+			{
+				var colY = y+camHeight();
+				var colB = noone;
+				for(var i = 0; i < _num; i++)
+				{
+					var col = colList[| i];
+					if(instance_exists(col) && col.active && col.facing == CamTileFacing.Up)
+					{
+						if(colB == noone || col.y < colY)
+						{
+							colB = col;
+							colY = col.y;
+						}
+					}
+				}
+				colY = y;
+				var colT = noone;
+				for(var i = 0; i < _num; i++)
+				{
+					var col = colList[| i];
+					if(instance_exists(col) && col.active && col.facing == CamTileFacing.Down)
+					{
+						if(colT == noone || col.y > colY)
+						{
+							colT = col;
+							colY = col.y;
+						}
+					}
+				}
+				
+				if(instance_exists(colB) && instance_exists(colT))
+				{
+					var tY = colT.y+16,
+						bY = colB.y-16,
+						midY = tY + (bY-tY)/2,
+						cenY = y+(camHeight()/2);
+					
+					fVelY = clamp(midY - cenY, min(playerY-prevPlayerY, -1), max(playerY-prevPlayerY, 1));
+					if(camSnap)
+					{
+						fVelY = midY - cenY;
+					}
+				}
+				
+				ds_list_clear(colList);
+			}
 	
 			if(y >= 0 && y <= room_height-camHeight())
 			{

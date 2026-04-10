@@ -188,7 +188,7 @@ if(currentScreen == MainScreen.FileSelect || currentScreen == MainScreen.FileCop
 		
 		if(fileTime[i] >= 0)
 		{
-			draw_set_font(fnt_GUI_Small2);
+			draw_set_font(fnt_GUI_Small);
 			scr_DrawOptionText(ww-oX-string_width(timeText)-12,oY2-string_height(timeText)+4,timeText,c_white,1,0,c_black,0);
 			var minute = scr_floor(fileTime[i] / 60);
 			var hour = scr_floor(minute / 60);
@@ -199,20 +199,20 @@ if(currentScreen == MainScreen.FileSelect || currentScreen == MainScreen.FileCop
 			var tStr = string_format(hour,2,0)+":"+string_format(minute,2,0);
 			tStr = string_replace_all(tStr," ","0");
 			
-			draw_set_font(fnt_Menu2);
+			draw_set_font(fnt_Menu);
 			scr_DrawOptionText(scr_round(ww-oX-(string_width(tStr)/2)-22),scr_round(oY2+(string_height(tStr)/2)),tStr,c_white,1,0,c_black,0);
 		}
 		if(filePercent[i] >= 0)
 		{
 			var px = ww/2+66;
 				
-			draw_set_font(fnt_GUI_Small2);
+			draw_set_font(fnt_GUI_Small);
 			scr_DrawOptionText(px-string_width(itemsText)/2-2,oY2-string_height(itemsText)+4,itemsText,c_white,1,0,c_black,0);
 			var percent = scr_floor(filePercent[i]);
 			var pStr = string_format(percent,2,0)+"%";
 			pStr = string_replace_all(pStr," ","0");
 			
-			draw_set_font(fnt_Menu2);
+			draw_set_font(fnt_Menu);
 			scr_DrawOptionText(scr_round(px-(string_width(pStr)/2)-2),scr_round(oY2+(string_height(pStr)/2)),pStr,c_white,1,0,c_black,0);
 		}
 		
@@ -227,7 +227,7 @@ if(currentScreen == MainScreen.FileSelect || currentScreen == MainScreen.FileCop
 			{
 				var tx = ww/2-10,
 					ty = oY2-4;
-				draw_set_font(fnt_GUI_Small2);
+				draw_set_font(fnt_GUI_Small);
 				scr_DrawOptionText(tx-string_width(energyText)-2,oY2-string_height(timeText)+4,energyText,c_white,1,0,c_black,0);
 				
 				draw_set_font(fnt_Menu);

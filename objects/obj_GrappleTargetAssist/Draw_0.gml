@@ -6,8 +6,10 @@ if(!instance_exists(obj_Player))
 	exit;
 }
 var player = obj_Player;
-var pos = self.GetPlayerPos();
-var pX = pos.X, pY = pos.Y;
+//var pos = self.GetPlayerPos();
+//var pX = pos.X, pY = pos.Y;
+var pX = player.x+player.sprtOffsetX+player.shotOffsetX,
+	pY = player.y+player.sprtOffsetY+player.shotOffsetY;
 
 if(is_struct(targetPoint))
 {
@@ -30,11 +32,13 @@ if(is_struct(targetPoint))
 	
 	var targetDir = point_direction(targetPoint.x,targetPoint.y, pX,pY);
 	var targetDist = point_distance(targetPoint.x,targetPoint.y, player.x,player.y);
-	var _dist = 64 * (targetDist / player.grappleMaxDist);
+	//var _dist = 64 * (targetDist / player.grappleMaxDist);
+	var _dist = 96 * (max(targetDist-64,0) / max(player.grappleMaxDist-64,1));
 	
 	for(var i = 0; i < _dist; i++)
 	{
-		var dif = 1 - (i / _dist);
+		var dif = clamp(1 - (i / _dist), 0, 1);
+		dif = (1 - power(1-dif, 2));
 		if(i < 3)
 		{
 			dif *= (i+1)/3;

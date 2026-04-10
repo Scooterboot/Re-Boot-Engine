@@ -115,8 +115,8 @@ if(room == rm_MainMenu)
 			_fH = sprite_get_height(_fSprt);
 		draw_sprite_ext(_fSprt,0, ww/2, hh-footerY, global.wideResWidth/_fW,footerY/_fH,0, c_white,1);
 	
-		var tipx = ww/2,
-			tipy = hh-footerY+7;
+		var tipx = scr_round(ww/2),
+			tipy = scr_round(hh-footerY+7);
 	
 		footerScrib.blend(c_black,1);
 		footerScrib.draw(tipx+1,tipy+1);

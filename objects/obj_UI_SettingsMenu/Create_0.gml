@@ -52,7 +52,7 @@ function CreateHeaderPage()
 		}
 		
 		headerBtn[i].sprite_index = sprt_UI_TabButton;
-		headerBtn[i].buttonScrib.starting_format("fnt_Menu",c_white);
+		headerBtn[i].buttonScrib.starting_format(font_get_name(fnt_Menu),c_white);
 		headerBtn[i].PreDraw = DrawTabButton;
 		tabX += tabWidths[i];
 	}

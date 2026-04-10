@@ -146,7 +146,7 @@ function StrikeNPC(damage, lifeEnd = 0, _deathType = -1)
 		
 		realLife.dmgFlash = 8;
 		
-		if(realLife.life <= 0)
+		if(realLife.life < 1)
 		{
 		    if(_deathType >= 0)
 		    {
@@ -165,7 +165,7 @@ function StrikeNPC(damage, lifeEnd = 0, _deathType = -1)
 	{
 		life = max(life - damage, lifeEnd);
 		
-		if(life <= 0)
+		if(life < 1)
 		{
 		    if(_deathType >= 0)
 		    {

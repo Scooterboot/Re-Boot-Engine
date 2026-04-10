@@ -129,7 +129,7 @@
   "regenerateBitmap":false,
   "resourceType":"GMFont",
   "resourceVersion":"2.0",
-  "sampleText":"abcdef ABCDEF\r\n0123456789 .,<>\"'&!?\r\nthe quick brown fox jumps over the lazy dog\r\nTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG\r\n\r\nDefault Character(9647) ▯ &\r\n\r\n1234",
+  "sampleText":"abcdef ABCDEF\r\n0123456789 .,<>\"'&!?@#$%+-/\\|:;=[]^{}\r\nthe quick brown fox jumps over the lazy dog\r\nTHE QUICK BROWN FOX JUMPS OVER THE LAZY DOG\r\n\r\nDefault Character(9647) ▯ &*\r\n\r\n1234",
   "sdfSpread":8,
   "size":6.0,
   "styleName":"Regular",
@@ -137,6 +137,6 @@
     "name":"UserInterface",
     "path":"texturegroups/UserInterface",
   },
-  "TTFName":"${project_dir}\\fonts\\GUIFont\\GUIFont.png",
+  "TTFName":"${project_dir}\\fonts\\fnt_GUI\\FontsFree-Net-04B_09__.ttf",
   "usesSDF":false,
 }

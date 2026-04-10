@@ -59,17 +59,17 @@ beamIndex = -1;
 
 changeMenuText_L = "${MenuL1} / ${MenuL2}\nVISORS";
 changeMenuScrib_L = scribble(changeMenuText_L);
-changeMenuScrib_L.starting_format("fnt_GUI",c_white);
+changeMenuScrib_L.starting_format(font_get_name(fnt_GUI),c_white);
 changeMenuScrib_L.align(fa_center,fa_middle);
 
 changeMenuText_R = "${MenuR1} / ${MenuR2}\nBEAMS";
 changeMenuScrib_R = scribble(changeMenuText_R);
-changeMenuScrib_R.starting_format("fnt_GUI",c_white);
+changeMenuScrib_R.starting_format(font_get_name(fnt_GUI),c_white);
 changeMenuScrib_R.align(fa_center,fa_middle);
 
 beamToggleText = "Toggle ${MenuAccept} / ${MenuTertiary}";
 beamToggleScrib = scribble(beamToggleText);
-beamToggleScrib.starting_format("fnt_GUI_Small2",c_white);
+beamToggleScrib.starting_format(font_get_name(fnt_GUI_Small),c_white);
 beamToggleScrib.align(fa_center,fa_middle);
 
 equipName[Equipment.Missile] = "MISSILE";
