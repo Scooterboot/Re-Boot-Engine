@@ -63,7 +63,7 @@ godmode = false;
 
 // Low-level Shine Spark flight control / Shine Spark steering
 //press directions or angle buttons to slightly change flight direction
-#macro _SPARK_STEERING false
+#macro _SPARK_STEERING true
 
 // High-level Shine Spark flight control when Accel Dash is enabled
 //activated by holding a direction and pressing Run during flight (consumes Dash charge)
@@ -333,7 +333,6 @@ activeStation = noone;
 
 grapple = noone;
 grappleDist = 0;
-grappleOldDist = 0;
 grappleMaxDist = 200;//160;//143;
 grappleMinDist = 31;
 
@@ -353,14 +352,28 @@ spiderGrappleReelMax = 8;
 grapWJCounter = 0;
 
 grapWallBounceCounter = 0;
-prevGrapVelocity = 0;
 
 grapReticle = noone;
 
 gravGrapple = noone;
 gravGrapDist = 0;
+gravGrapMaxDist = 200;
+gravGrapMaxDist2 = 175;
+gravGrapMinDist = 75;
+
 gravGrapAngle = 0;
-gravGrapRotAnim = 0;
+gravGrapAngleVel = 0;
+gravGrapAngleSpd = 0.5;
+gravGrapAngleFrict = 0.75;
+gravGrapAngleMax = 8.75;
+
+gravGrapReelVel = 0;
+gravGrapReelSpd = 1;
+gravGrapReelFrict = 1;
+gravGrapReelMax = 3;
+
+gravGrapSpeedCap = 32;
+gravGrapVelDecay = 0.96;
 
 cFlashStartCounter = 0;
 cFlashStartMove = 0;
@@ -889,6 +902,7 @@ grapWallBounceFrame = 0;
 
 grapPartFrame = 0;
 grapPartCounter = 0;
+gravGrapRotAnim = 0;
 
 pushFrameSequence = [0,1,2,3,4,5,5,6,7,8,9,9,10,11,12,13,14,15];
 
@@ -2064,6 +2078,7 @@ function OnLeftCollision(fVX)
 }
 function OnXCollision(fVX, isOOB = false)
 {
+	var dashPushFlag = false;
 	var pBlock = instance_place(position.X+2*sign(fVX),position.Y,obj_PushBlock);
 	if(instance_exists(pBlock) && (state == State.Dodge || state == State.Spark || state == State.BallSpark))
 	{
@@ -2077,6 +2092,11 @@ function OnXCollision(fVX, isOOB = false)
 			vx = min(velX,pBlock.velX);
 		}
 		pBlock.velX = vx;
+		
+		if(state == State.Dodge)
+		{
+			dashPushFlag = true;
+		}
 	}
 	/*if(state == State.Stand)
 	{
@@ -2095,7 +2115,7 @@ function OnXCollision(fVX, isOOB = false)
 			speedCounter = 0;
 			speedBoost = false;
 		}
-		if(!fwjGrace)
+		if(!fwjGrace && !dashPushFlag)
 		{
 			velX = 0;
 		}
@@ -2104,7 +2124,7 @@ function OnXCollision(fVX, isOOB = false)
 	move = 0;
 	bombJumpX = 0;
 	
-	var diagSparkSlide = (_SPARK_DAIG_SLIDE && (self.SparkDir_DiagUp() || self.SparkDir_DiagDown()) && (cPlayerRight - cPlayerLeft) != dir);
+	var diagSparkSlide = (_SPARK_DAIG_SLIDE && (((self.SparkDir_DiagUp() || self.SparkDir_DiagDown()) && (cPlayerRight - cPlayerLeft) != dir)) || self.SparkDir_VertUp() || self.SparkDir_VertDown());
 	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0)
 	{
 		if(!diagSparkSlide)
@@ -2130,7 +2150,8 @@ function OnXCollision(fVX, isOOB = false)
 
 function CanMoveUpSlope_Bottom()
 {
-	if((state == State.Spark || state == State.BallSpark) && abs(self.GetSparkDir()) < 90)
+	//if((state == State.Spark || state == State.BallSpark) && abs(self.GetSparkDir()) < 90)
+	if((state == State.Spark || state == State.BallSpark) && (self.SparkDir_DiagDown() || self.SparkDir_VertDown()))
 	{
 		return false;
 	}
@@ -2147,7 +2168,8 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		onPlatform = true;
 	}
 	
-	if((state == State.Spark || state == State.BallSpark) && abs(self.GetSparkDir()) >= 90 && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0 && move == dir && yShift < 0)
+	//if((state == State.Spark || state == State.BallSpark) && abs(self.GetSparkDir()) >= 90 && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0 && move == dir && yShift < 0)
+	if((state == State.Spark || state == State.BallSpark) && (self.SparkDir_Hori() || self.SparkDir_DiagUp() || self.SparkDir_VertUp()) && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0 && move == dir && yShift < 0)
 	{
 		shineEnd = 0;
 		shineDir = 0;
@@ -2201,7 +2223,8 @@ function CanMoveDownSlope_Bottom()
 
 function CanMoveUpSlope_Top()
 {
-	return (((state == State.Spark || state == State.BallSpark) && abs(self.GetSparkDir()) <= 90) || state == State.Dodge || state == State.Grapple);
+	//return (((state == State.Spark || state == State.BallSpark) && abs(self.GetSparkDir()) <= 90) || state == State.Dodge || state == State.Grapple);
+	return (((state == State.Spark || state == State.BallSpark) && (self.SparkDir_Hori() || self.SparkDir_DiagDown() || self.SparkDir_VertDown())) || state == State.Dodge || state == State.Grapple);
 }
 function OnSlopeXCollision_Top(fVX, yShift)
 {
@@ -2227,7 +2250,9 @@ function OnYCollision(fVY, isOOB = false)
 {
 	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0)
 	{
-		if(abs(self.GetSparkDir()) <= 90 && !self.SparkDir_VertDown() && !self.entity_place_collide(3*sign(velX),0) && (_SPARK_DOWN_BOOST || (!self.entity_place_collide(3*sign(velX),1) && self.entity_place_collide(1*sign(velX),2))))
+		//if(abs(self.GetSparkDir()) <= 90 && !self.SparkDir_VertDown() && !self.entity_place_collide(3*sign(velX),0) && (_SPARK_DOWN_BOOST || (!self.entity_place_collide(3*sign(velX),1) && self.entity_place_collide(1*sign(velX),2))))
+		var _bEdgAng = self.GetEdgeAngle(Edge.Bottom);
+		if(self.SparkDir_DiagDown() && ((abs(_bEdgAng) > 0 && abs(_bEdgAng) <= 45 && sign(self.GetSparkDir()) == -sign(_bEdgAng)) || (_SPARK_DOWN_BOOST && abs(_bEdgAng) == 0)))
 		{
 			shineEnd = 0;
 			shineDir = 0;
@@ -2245,7 +2270,7 @@ function OnYCollision(fVY, isOOB = false)
 			speedCatchCounter = 6;
 			audio_stop_sound(snd_ShineSpark);
 		}
-		else
+		else if(!self.SparkDir_Hori())
 		{
 			if(shineEnd <= 0)
 			{
@@ -2458,7 +2483,7 @@ function Crawler_CanStickRight()
 	{
 		return true;
 	}
-	if(self.Crawler_CanStickTo(1,0, Edge.Right) && !self.GrappleActive())
+	if(self.Crawler_CanStickTo(1,0, Edge.Right) && !self.GrappleSwinging())
 	{
 		return true;
 	}
@@ -2470,7 +2495,7 @@ function Crawler_CanStickLeft()
 	{
 		return true;
 	}
-	if(self.Crawler_CanStickTo(-1,0, Edge.Left) && !self.GrappleActive())
+	if(self.Crawler_CanStickTo(-1,0, Edge.Left) && !self.GrappleSwinging())
 	{
 		return true;
 	}
@@ -2478,7 +2503,7 @@ function Crawler_CanStickLeft()
 }
 function Crawler_CanStickBottom()
 {
-	if(self.Crawler_CanStickTo(0,1, Edge.Bottom) && !self.GrappleActive())
+	if(self.Crawler_CanStickTo(0,1, Edge.Bottom) && !self.GrappleSwinging())
 	{
 		return true;
 	}
@@ -2486,7 +2511,7 @@ function Crawler_CanStickBottom()
 }
 function Crawler_CanStickTop()
 {
-	if(self.Crawler_CanStickTo(0,-1, Edge.Top) && !self.GrappleActive())
+	if(self.Crawler_CanStickTo(0,-1, Edge.Top) && !self.GrappleSwinging())
 	{
 		return true;
 	}
@@ -2602,7 +2627,7 @@ function Crawler_CanStickOuter(fVX, fVY, edge)
 }
 function Crawler_CanStickOuterLeft()
 {
-	if(self.Crawler_CanStickOuter(1, 0, Edge.Left) && !self.GrappleActive() && state != State.BallSpark)
+	if(self.Crawler_CanStickOuter(1, 0, Edge.Left) && !self.GrappleSwinging() && state != State.BallSpark)
 	{
 		return true;
 	}
@@ -2610,7 +2635,7 @@ function Crawler_CanStickOuterLeft()
 }
 function Crawler_CanStickOuterRight()
 {
-	if(self.Crawler_CanStickOuter(-1, 0, Edge.Right) && !self.GrappleActive() && state != State.BallSpark)
+	if(self.Crawler_CanStickOuter(-1, 0, Edge.Right) && !self.GrappleSwinging() && state != State.BallSpark)
 	{
 		return true;
 	}
@@ -2618,7 +2643,7 @@ function Crawler_CanStickOuterRight()
 }
 function Crawler_CanStickOuterTop()
 {
-	if(self.Crawler_CanStickOuter(0, 1, Edge.Top) && !self.GrappleActive() && state != State.BallSpark)
+	if(self.Crawler_CanStickOuter(0, 1, Edge.Top) && !self.GrappleSwinging() && state != State.BallSpark)
 	{
 		return true;
 	}
@@ -2630,7 +2655,7 @@ function Crawler_CanStickOuterBottom()
 	{
 		return true;
 	}
-	if(self.Crawler_CanStickOuter(0, -1, Edge.Bottom) && !self.GrappleActive() && state != State.BallSpark)
+	if(self.Crawler_CanStickOuter(0, -1, Edge.Bottom) && !self.GrappleSwinging() && state != State.BallSpark)
 	{
 		return true;
 	}
@@ -3564,10 +3589,23 @@ function SpiderActive(edge = undefined)
 }
 #endregion
 
-#region GrappleActive
-function GrappleActive()
+#region GrappleSwinging
+function GrappleSwinging()
 {
-	return (instance_exists(grapple) && grapple.grappled && grapple.grappleState == GrappleState.Swing);
+	return (instance_exists(grapple) && grapple.grappleState == GrappleState.Swing);
+}
+#endregion
+#region GrapplePulling
+function GrapplePulling()
+{
+	return (instance_exists(grapple) && grapple.grappleState == GrappleState.PushBlock);
+}
+#endregion
+
+#region GravGrapSwinging
+function GravGrapSwinging()
+{
+	return (instance_exists(gravGrapple) && gravGrapple.gravState = GravGrapState.Ground);
 }
 #endregion
 
@@ -5366,38 +5404,74 @@ function PostDrawPlayer(posX, posY, rot, alph)
 	
 	if(instance_exists(grapple))
 	{
-	    var sprt = sprt_GrappleBeamChain,
-	        startX = scr_round(xx+sprtOffsetX+armOffsetX),
-	        startY = scr_round(yy+sprtOffsetY+runYOffset+armOffsetY),
-	        endX = scr_round(xx + (grapple.x - x)),
-	        endY = scr_round(yy + (grapple.y - y));
-    
-	    var linklength = sprite_get_width(sprt),
-	        chainX = endX - startX,
-	        chainY = endY - startY;
-    
-	    var length = point_distance(startX, startY, endX, endY);
-	    if(length >= linklength)
-	    {
-	        var numlinks = ceil(length/linklength);
-	        var rotation2 = point_direction(startX, startY, endX, endY);
-			rotation2 = scr_round(rotation2/2.8125)*2.8125;
-    
-	        for(var i = 1; i < numlinks+1; i++)
-	        {
-	            var linkX = startX + chainX/numlinks * i,
-					linkY = startY + chainY/numlinks * i;
-                
-	            draw_sprite_ext(sprt,random_range(0,3),linkX,linkY,1,1,rotation2,c_white,1);
-	        }
-	    }
+		var sprt = sprt_GrappleBeamChain,
+			linklength = sprite_get_width(sprt);
+		
+		var startX = scr_round(xx+sprtOffsetX+armOffsetX),
+			startY = scr_round(yy+sprtOffsetY+runYOffset+armOffsetY),
+			endX = scr_round(xx + (grapple.x - x)),
+			endY = scr_round(yy + (grapple.y - y));
+		var length = point_distance(startX, startY, endX, endY),
+			chainX = endX - startX,
+			chainY = endY - startY;
+		var pointerX = lengthdir_x(length, shootDir),
+			pointerY = lengthdir_y(length, shootDir);
+		
+		var bendyGrap = true;//false;
+		if(!bendyGrap)
+		{
+			if(length >= linklength)
+		    {
+		        var numlinks = ceil(length/linklength);
+		        var rotation2 = point_direction(startX, startY, endX, endY);
+				rotation2 = scr_round(rotation2/2.8125)*2.8125;
+				
+		        for(var i = 1; i < numlinks+1; i++)
+		        {
+		            var linkX = startX + chainX/numlinks * i,
+						linkY = startY + chainY/numlinks * i;
+					
+		            draw_sprite_ext(sprt,random_range(0,3),linkX,linkY,1,1,rotation2,c_white,1);
+		        }
+		    }
+		}
+		else
+		{
+			var linkX = array_create(length+1),
+				linkY = array_create(length+1),
+				j = 0;
+			for(var i = 0; i <= length; i++)
+			{
+				var perc = i/length;
+				var perc2 = clamp(power(perc,0.5),0,1);
+				if(grapple.grappleState != GrappleState.None)
+				{
+					perc2 = 1;
+				}
+				
+				linkX[i] = startX + lerp(pointerX*perc, chainX*perc, perc2);
+				linkY[i] = startY + lerp(pointerY*perc, chainY*perc, perc2);
+				
+				if(i > 0)
+				{
+					var linkDist = point_distance(linkX[i], linkY[i], linkX[j], linkY[j]);
+					if(linkDist >= linklength || i >= length-1)
+					{
+						var rotation3 = point_direction(linkX[j], linkY[j], linkX[i], linkY[i]);
+						rotation3 = scr_round(rotation3/2.8125)*2.8125;
+						draw_sprite_ext(sprt,random_range(0,3),scr_round(linkX[i]),scr_round(linkY[i]),(linkDist+1)/linklength,1,rotation3,c_white,1);
+						j = i;
+					}
+				}
+			}
+		}
 
-	    var _gPartSeq = [0,1,2,1];
+		var _gPartSeq = [0,1,2,1];
 		grapPartCounter += 1;
 		if(grapPartCounter >= 1)
 		{
-			grapPartFrame = scr_wrap(grapPartFrame+1, 0, array_length(_gPartSeq));
-			grapPartCounter = 0;
+		grapPartFrame = scr_wrap(grapPartFrame+1, 0, array_length(_gPartSeq));
+		grapPartCounter = 0;
 		}
 		draw_sprite_ext(sprt_GrappleBeamStart,_gPartSeq[grapPartFrame],startX,startY,1,1,0,c_white,1);
 	}
@@ -5415,8 +5489,13 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		var length = point_distance(startX, startY, endX, endY),
 			chainX = endX - startX,
 	        chainY = endY - startY;
-		var pointerX = lengthdir_x(length, shootDir),
-			pointerY = lengthdir_y(length, shootDir);
+		var _ang = shootDir;
+		if(self.GravGrapSwinging())
+		{
+			_ang = gravGrapAngle + 90;
+		}
+		var pointerX = lengthdir_x(length, _ang),
+			pointerY = lengthdir_y(length, _ang);
 		
 		var linkX = array_create(length+1),
 			linkY = array_create(length+1);
@@ -5469,16 +5548,16 @@ function PostDrawPlayer(posX, posY, rot, alph)
 			draw_primitive_end();
 		}
 		
-		var lastLinkDrawn = 0;
+		var j = 0;
 		for(var i = 1; i <= length; i++)
 		{
-			var j = lastLinkDrawn,
-				linkDist = point_distance(linkX[i], linkY[i], linkX[j], linkY[j]);
+			var linkDist = point_distance(linkX[i], linkY[i], linkX[j], linkY[j]);
 			if(linkDist >= linklength || i >= length-1)
 			{
-				var rotation3 = point_direction(linkX[i], linkY[i], linkX[j], linkY[j]);
+				var rotation3 = point_direction(linkX[j], linkY[j], linkX[i], linkY[i]);
+				rotation3 = scr_round(rotation3/2.8125)*2.8125;
 				draw_sprite_ext(sprt,random_range(0,3),scr_round(linkX[i]),scr_round(linkY[i]),(linkDist+1)/linklength,1,rotation3,c_white,1);
-				lastLinkDrawn = i;
+				j = i;
 			}
 		}
 		

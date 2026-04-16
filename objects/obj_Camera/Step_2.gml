@@ -119,7 +119,7 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 		camLimitMax[i] = camLimitDef[i];
 	}
 	
-	if(!player.GrappleActive())
+	if(!player.GrappleSwinging())
 	{
 		var _spX = abs(player.velX),
 			_spXMin = max(player.maxSpeed[MaxSpeed.Sprint,0], player.maxSpeed[MaxSpeed.MockBall,0]),
@@ -165,13 +165,13 @@ if((global.pauseState == PauseState.None || global.pauseState == PauseState.Room
 		}
 	}
 	
-	if(player.GrappleActive() || (player.state == State.Morph && player.SpiderActive()))
+	if(player.GrappleSwinging() || (player.state == State.Morph && player.SpiderActive()))
 	{
 		xDir = 0;
 		yDir = 0;
 		targetX = playerX;
 		targetY = playerY;
-		if(player.state == State.Morph && player.SpiderActive() && !player.GrappleActive())
+		if(player.state == State.Morph && player.SpiderActive() && !player.GrappleSwinging())
 		{
 			cLimDecrVelX = min(cLimDecrVelX, 0.5);
 			cLimDecrVelY = min(cLimDecrVelY, 0.5);

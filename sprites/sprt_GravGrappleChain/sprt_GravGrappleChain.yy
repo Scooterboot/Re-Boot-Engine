@@ -45,7 +45,7 @@
     ],
     "top":0,
   },
-  "origin":3,
+  "origin":5,
   "parent":{
     "name":"GravGrapple",
     "path":"folders/Sprites/Projectiles/GravGrapple.yy",
@@ -106,7 +106,7 @@
     ],
     "visibleRange":null,
     "volume":1.0,
-    "xorigin":0,
+    "xorigin":8,
     "yorigin":3,
   },
   "swatchColours":null,

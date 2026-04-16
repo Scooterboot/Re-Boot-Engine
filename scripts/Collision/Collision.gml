@@ -65,7 +65,7 @@ function rectangle_intersect_line(rx1,ry1,rx2,ry2, x1,y1,x2,y2)
 }
 
 #region experimental (inefficient and laggy)
-
+/*
 function instance_place_array(_x, _y, obj)
 {
 	if(place_meeting(_x,_y,obj))
@@ -180,5 +180,5 @@ function collision_rectangle_array(x1, y1, x2, y2, obj, prec, notme)
 	}
 	return result;
 }
-
+*/
 #endregion

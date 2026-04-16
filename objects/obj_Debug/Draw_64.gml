@@ -12,56 +12,88 @@ if(debug == 1)
 		draw_set_valign(fa_top);
 		draw_set_font(fnt_GUI_Small);
 		
-		var xx = 0,//camera_get_view_x(view_camera[0]),
-			yy = 32,//camera_get_view_y(view_camera[0]),
+		var xx = 0,
+			yy = 32,
 			marginX = 8,
 			marginY = 8;
-        draw_text(xx+marginX,yy+marginY,"state: "+obj_Debug.stateText[state]);
-        draw_text(xx+marginX,yy+marginY*2,"animState: "+obj_Debug.animStateText[animState]);
-        draw_text(xx+marginX,yy+marginY*3,"moveState: "+obj_Debug.moveStateText[moveState]);
-        draw_text(xx+marginX,yy+marginY*4,"vel (x.y): "+string(velX)+" x "+string(velY));
-        draw_text(xx+marginX,yy+marginY*5,"fVel (x.y): "+string(fVelX)+" x "+string(fVelY));
-        draw_text(xx+marginX,yy+marginY*6,"pos diff (x.y): "+string(position.X-oldPosition.X)+" x "+string(position.Y-oldPosition.Y));
-        draw_text(xx+marginX,yy+marginY*7,"real pos (x.y): "+string(x) + " x "+string(y));
-        draw_text(xx+marginX,yy+marginY*8,"position (x.y): "+string(position.X) + " x "+string(position.Y));
-        draw_text(xx+marginX,yy+marginY*9,"jump: "+string(jump));
-        draw_text(xx+marginX,yy+marginY*10,"climbIndex: "+string(climbIndex));
+		xx += marginX;
+		yy += marginY;
+        draw_text(xx,yy,"state: "+obj_Debug.stateText[state]);
+		yy += marginY;
+        draw_text(xx,yy,"animState: "+obj_Debug.animStateText[animState]);
+		yy += marginY;
+        draw_text(xx,yy,"moveState: "+obj_Debug.moveStateText[moveState]);
+		yy += marginY;
+        draw_text(xx,yy,"vel (x.y): "+string(velX)+" x "+string(velY));
+		yy += marginY;
+        draw_text(xx,yy,"fVel (x.y): "+string(fVelX)+" x "+string(fVelY));
+		yy += marginY;
+        draw_text(xx,yy,"pos diff (x.y): "+string(position.X-oldPosition.X)+" x "+string(position.Y-oldPosition.Y));
+		yy += marginY;
+        draw_text(xx,yy,"real pos (x.y): "+string(x) + " x "+string(y));
+		yy += marginY;
+        draw_text(xx,yy,"position (x.y): "+string(position.X) + " x "+string(position.Y));
+		yy += marginY;
+        draw_text(xx,yy,"jump: "+string(jump));
+		yy += marginY;
+        draw_text(xx,yy,"climbIndex: "+string(climbIndex));
+		yy += marginY;
 		
-		
-		draw_text(xx+marginX,yy+marginY*11,"speedCounter: "+string(speedCounter));
-		
-		var num = speedCounter;
-		if(((cSprint || global.autoSprint) && speedBuffer > 0) || speedCounter > 0)
+		if(item[Item.SpeedBooster])
 		{
-			num += 1;
-		}
-		var sbStr = string(speedBuffer);
-		/*if(speedBuffer == speedBufferMax-2 && speedBufferCounter >= speedBufferCounterMax[num]-3 && speedBufferCounter < speedBufferCounterMax[num]-1)
-		{
-			sbStr = "-"+sbStr+"-";
-			if(speedBufferCounter >= speedBufferCounterMax[num]-2)
+			draw_text(xx,yy,"speedCounter: "+string(speedCounter));
+			yy += marginY;
+			
+			var num = speedCounter;
+			if(((cSprint || global.autoSprint) && speedBuffer > 0) || speedCounter > 0)
 			{
-				sbStr = "-"+sbStr+"-";
+				num += 1;
 			}
-		}*/
-		if(speedBuffer == speedBufferMax-1)
-		{
-			sbStr = "-"+sbStr+"-";
+			var sbStr = " "+string(speedBuffer)+" ";
+			if(speedBuffer == speedBufferMax-1)
+			{
+				sbStr = "-"+string(speedBuffer)+"-";
+			}
+	        draw_text(xx,yy,"speedBuffer: "+sbStr+ " : " +string(speedBufferCounter) + "/" + string(speedBufferCounterMax[num]));
+			yy += marginY;
+			draw_text(xx,yy,"speedBoostWJCounter: "+string(speedBoostWJCounter));
+			yy += marginY;
 		}
-        draw_text(xx+marginX,yy+marginY*12,"speedBuffer: "+sbStr+ " : " +string(speedBufferCounter) + "/" + string(speedBufferCounterMax[num]));
+		yy += marginY;
 		
-        //draw_text(xx+marginX,yy+marginY*10,"cam centerX: "+string(obj_Camera.x+global.resWidth/2));
-        //draw_text(xx+marginX,yy+marginY*11,"cam centerY: "+string(obj_Camera.y+global.resHeight/2));
-        //draw_text(xx+marginX,yy+marginY*13,"torsoR: "+sprite_get_name(torsoR)+" | torsoL: "+sprite_get_name(torsoL));
-        //draw_text(xx+marginX,yy+marginY*13,"bodyFrame: "+string(bodyFrame));
+        draw_text(xx,yy,"colEdge: "+obj_Debug.edgeText[colEdge]);
+		yy += marginY;
+		if(spiderBall)
+		{
+	        draw_text(xx,yy,"spiderEdge: "+string(obj_Debug.edgeText[spiderEdge]));
+			yy += marginY;
+	        draw_text(xx,yy,"prevSpiderEdge: "+string(obj_Debug.edgeText[prevSpiderEdge]));
+			yy += marginY;
+	        draw_text(xx,yy,"spiderSpeed: "+string(spiderSpeed));
+			yy += marginY;
+		}
+		yy += marginY;
 		
-        draw_text(xx+marginX,yy+marginY*14,"colEdge: "+obj_Debug.edgeText[colEdge]);
-        draw_text(xx+marginX,yy+marginY*15,"spiderEdge: "+string(obj_Debug.edgeText[spiderEdge]));
-        draw_text(xx+marginX,yy+marginY*16,"prevSpiderEdge: "+string(obj_Debug.edgeText[prevSpiderEdge]));
-        draw_text(xx+marginX,yy+marginY*17,"spiderSpeed: "+string(spiderSpeed));
-		
-		draw_text(xx+marginX,yy+marginY*19,"speedBoostWJCounter: "+string(speedBoostWJCounter));
-		draw_text(xx+marginX,yy+marginY*20,"grapAngle: "+string(grapAngle));
+		if(state == State.Grapple)
+		{
+			draw_text(xx,yy,"grapAngle: "+string(grapAngle));
+			yy += marginY;
+			draw_text(xx,yy,"grappleDist: "+string(grappleDist));
+			yy += marginY;
+			draw_text(xx,yy,"grappleReelVel: "+string(grappleReelVel));
+			yy += marginY;
+		}
+		if(state == State.GravGrapple)
+		{
+			draw_text(xx,yy,"gravGrapAngle: "+string(gravGrapAngle));
+			yy += marginY;
+			draw_text(xx,yy,"gravGrapAngleVel: "+string(gravGrapAngleVel));
+			yy += marginY;
+			draw_text(xx,yy,"gravGrapDist: "+string(gravGrapDist));
+			yy += marginY;
+			draw_text(xx,yy,"gravGrapReelVel: "+string(gravGrapReelVel));
+			yy += marginY;
+		}
 		
 		/*for(var i = 0; i < ds_list_size(global.openHatchList); i++)
 		{

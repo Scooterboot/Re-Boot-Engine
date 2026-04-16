@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.673063,
+  "duration":0.6730839,
   "exportDir":"",
   "name":"snd_MorphLauncher",
   "parent":{

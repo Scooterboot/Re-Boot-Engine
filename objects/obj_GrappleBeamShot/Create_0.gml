@@ -11,8 +11,6 @@ particleType = 1;
 
 shootDir = 0;
 grappleDist = 0;
-grappled = false;
-//grappled2 = false;
 
 enum GrappleState
 {
@@ -24,10 +22,9 @@ grappleState = GrappleState.None;
 stateChanged = false;
 
 grapBlock = noone;
-grapBlockPosX = -1;//0;
-grapBlockPosY = -1;//0;
-grapSpeed = 0;
-grapSpeedMax = 28;//16;
+grapBlockPosX = -1;
+grapBlockPosY = -1;
+grapReel = false;
 
 drawGrapEffect = false;
 grapFrame = 0;
@@ -36,37 +33,46 @@ direction = 0;
 speed = 0;
 image_speed = 0.5;
 
-//timeLeft = 8;
-
-//isGrapple = true;
-
-gp_list = ds_list_create();
-
-function entity_collision_line(x1,y1,x2,y2, prec = true, notme = true)
+function GetPlayerPos()
 {
-	var num = collision_line_list(x1,y1,x2,y2,solids,prec,notme,gp_list,true);
-	if(num > 0)
+	var player = creator;
+	var playerShootPosX = player.x+player.sprtOffsetX+player.shotOffsetX,
+		playerShootPosY = player.y+player.sprtOffsetY+player.shotOffsetY;
+	var _sdist = point_distance(player.x,player.y, playerShootPosX,playerShootPosY);
+	var pX = playerShootPosX - lengthdir_x(_sdist, player.shootDir),
+		pY = playerShootPosY - lengthdir_y(_sdist, player.shootDir);
+	
+	return new Vector2(pX, pY);
+}
+
+function entity_collision(listNum)
+{
+	if(listNum > 0)
 	{
-		for(var i = 0; i < num; i++)
+		for(var i = 0; i < listNum; i++)
 		{
-			if(instance_exists(gp_list[| i]))
+			if(instance_exists(blockList[| i]))
 			{
-				var col = gp_list[| i];
-			
-				var flag = true;
-				if(col.object_index == obj_MovingTile || object_is_ancestor(col.object_index,obj_MovingTile))
+				var block = blockList[| i];
+				var isSolid = true;
+				if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
 				{
-					flag = col.grappleCollision;
+					isSolid = block.isSolid && block.grappleCollision;
 				}
-				if(flag)
+				if(object_is_in_array(block.object_index, ColType_GrapplePoint))
 				{
-					ds_list_clear(gp_list);
+					isSolid = false;
+				}
+				
+				if(isSolid)
+				{
+					ds_list_clear(blockList);
 					return true;
 				}
 			}
 		}
+		ds_list_clear(blockList);
 	}
-	ds_list_clear(gp_list);
 	return false;
 }
 
@@ -133,6 +139,30 @@ function DamageBoxes()
 			instance_destroy(dmgBoxes[i]);
 		}
 	}
+}
+
+function Entity_OnDmgBoxCollision(_selfDmgBox, _lifeBox, _finalDmg, _dmg, _dmgType, _dmgSubType)
+{
+	var partSys = obj_Particles.partSystemA,
+		partEmit = obj_Particles.partEmitA;
+	self.DmgPartEmitRegion(partSys, partEmit, _selfDmgBox, _lifeBox);
+	
+	var ent = _lifeBox.creator;
+	if(_finalDmg > 0)
+	{
+		if(particleType != -1 && multiHit)
+		{
+			part_emitter_burst(partSys,partEmit,obj_Particles.bTrails[particleType],(1+isCharge));
+		}
+	}
+	
+	if(impacted <= 0)
+	{
+		x = _selfDmgBox.x;
+		y = _selfDmgBox.y;
+	}
+	impacted = max(impacted,1);
+	dmgImpacted = true;
 }
 
 function OnImpact(posX, posY, silentImpact = false)

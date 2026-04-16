@@ -51,7 +51,7 @@ function OnYCollision(fVY, isOOB = false)
 }
 function ImpactBreak()
 {
-	var arr = [obj_ShotBlock,obj_BombBlock];
+	var arr = [obj_ShotBlock,obj_BombBlock,obj_ChainBlock];
 	if(impacted <= 0 && collision_rectangle(bb_left()-2,bb_top()-2,bb_right()+2,bb_bottom()+2,arr,false,true))
 	{
 		impacted = 1;

@@ -114,30 +114,36 @@ function xray_redraw_alpha()
 	
 	with (obj_Tile)
 	{
-		if (!object_is_ancestor(object_index,obj_DoorHatch) && 
-			!object_is_ancestor(object_index,obj_InteractStation) &&
-			(!object_is_ancestor(object_index,obj_Breakable) || object_index == obj_NPCBreakable))
+		//if (!object_is_ancestor(object_index,obj_DoorHatch) && 
+		//	!object_is_ancestor(object_index,obj_InteractStation) &&
+		//	(!object_is_ancestor(object_index,obj_Breakable) || object_index == obj_NPCBreakable))
+		if(!object_is_ancestor(object_index,obj_Breakable) || object_index == obj_NPCBreakable)
 		{
-			draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
+			var _sprt = sprite_index;
+			if(sprite_exists(mask_index))
+			{
+				_sprt = mask_index;
+			}
+			draw_sprite_ext(_sprt,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
 		}
 		if(object_index == obj_Spikes)
 		{
 			draw_sprite_ext(sprt_Tile,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
 		}
 	}
-	with (obj_DoorHatch)
+	/*with (obj_DoorHatch)
 	{
 		//draw_sprite_ext(sprite_index,4,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
 		draw_sprite_ext(mask_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
-	}
+	}*/
 	with (obj_Door)
 	{
 	    draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
 	}
-	with(obj_InteractStation)
+	/*with(obj_InteractStation)
 	{
 		draw_sprite_ext(mask_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_white,1);
-	}
+	}*/
 
 	surface_reset_target();
 }
@@ -181,11 +187,16 @@ function xray_redraw_outline()
 	with (obj_Tile)
 	{
 		if (!object_is_ancestor(object_index,obj_DoorHatch) && 
-			!object_is_ancestor(object_index,obj_InteractStation) &&
+			//!object_is_ancestor(object_index,obj_InteractStation) &&
 			(!object_is_ancestor(object_index,obj_Breakable) || object_index == obj_NPCBreakable) &&
 			object_index != obj_Elevator)
 		{
-			draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
+			var _sprt = sprite_index;
+			if(sprite_exists(mask_index))
+			{
+				_sprt = mask_index;
+			}
+			draw_sprite_ext(_sprt,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
 		}
 	}
 	with(obj_Platform)
@@ -204,7 +215,12 @@ function xray_redraw_outline()
 	}
 	with (obj_MovingTile)
 	{
-		draw_sprite_ext(sprite_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
+		var _sprt = sprite_index;
+		if(sprite_exists(mask_index))
+		{
+			_sprt = mask_index;
+		}
+		draw_sprite_ext(_sprt,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
 	}
 	with (obj_DoorHatch)
 	{
@@ -228,10 +244,10 @@ function xray_redraw_outline()
 	{
 		draw_sprite_ext(sprt_Spikes,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_red,1);
 	}
-	with(obj_InteractStation)
+	/*with(obj_InteractStation)
 	{
 		draw_sprite_ext(mask_index,1,x-camx,y-camy,image_xscale,image_yscale,image_angle,c_black,1);
-	}
+	}*/
 	
 	// draw black at room edges to fix tiny visual bug
 	draw_set_alpha(1);

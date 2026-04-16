@@ -5,7 +5,7 @@ if(global.GamePaused())
 	exit;
 }
 
-var player = instance_place(x,y,obj_Player);
+var player = collision_circle(x,y,8,obj_Player,false,true);
 if(state == 0)
 {
 	if(frameFinal > 2)
@@ -23,15 +23,15 @@ if(state == 0)
 		}
 		frameFinal = frameSeq[frame];
 	}
-	lFrameFinal = frameFinal;
 	
 	if(instance_exists(player) && player.state == State.Morph && player.grounded && player.velY >= 0 && !player.SpiderActive())
 	{
-		if(place_meeting(x,y,obj_MBBombExplosion))
+		var _bomb = collision_circle(x,y,8,obj_MBBombExplosion,false,true);
+		if(instance_exists(_bomb) && point_distance(x,y, _bomb.x,_bomb.y) <= 12)
 		{
-			//player.shineStart = 30;
-			player.shineLauncherStart = 45;//30;
+			player.shineLauncherStart = 45;
 			player.shineRestart = false;
+			player.shineDir = scr_wrap(180 + image_angle + shineRotOffset, -180, 180);
 			player.ChangeState(State.BallSpark, AnimState.Morph, MoveState.Custom, mask_Player_Morph, false);
 			player.bombJump = 0;
 			player.velX = 0;
@@ -50,12 +50,11 @@ if(state == 1)
 {
 	frame = scr_wrap(frame+1,0,8);
 	frameFinal = frameSeq2[frame];
-	lFrameFinal = lFrameSeq[frame];
 	
 	if(instance_exists(player) && player.state == State.BallSpark && player.shineLauncherStart > 0)
 	{
 		var xx = x,
-			yy = y+1;
+			yy = y;
 		if(player.position.X < xx)
 		{
 			player.shiftX = min(xx-player.position.X,1);
