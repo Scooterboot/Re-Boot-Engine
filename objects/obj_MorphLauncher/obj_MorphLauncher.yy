@@ -13,10 +13,7 @@
     "name":"SpecialTiles",
     "path":"folders/Objects/Room Elements/SpecialTiles.yy",
   },
-  "parentObjectId":{
-    "name":"obj_Tile",
-    "path":"objects/obj_Tile/obj_Tile.yy",
-  },
+  "parentObjectId":null,
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,
@@ -38,9 +35,6 @@
     "name":"sprt_MorphLauncher",
     "path":"sprites/sprt_MorphLauncher/sprt_MorphLauncher.yy",
   },
-  "spriteMaskId":{
-    "name":"sprt_MorphLauncher_Mask",
-    "path":"sprites/sprt_MorphLauncher_Mask/sprt_MorphLauncher_Mask.yy",
-  },
+  "spriteMaskId":null,
   "visible":true,
 }

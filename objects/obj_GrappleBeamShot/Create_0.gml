@@ -1,7 +1,5 @@
 event_inherited();
 
-InitControlVars("player");
-
 damageType = DmgType.Misc;
 damageSubType = array_create(DmgSubType_Misc._Length,false);
 damageSubType[DmgSubType_Misc.All] = true;
@@ -22,8 +20,8 @@ grappleState = GrappleState.None;
 stateChanged = false;
 
 grapBlock = noone;
-grapBlockPosX = -1;
-grapBlockPosY = -1;
+grapBlockOffX = undefined;
+grapBlockOffY = undefined;
 grapReel = false;
 
 drawGrapEffect = false;
@@ -36,11 +34,9 @@ image_speed = 0.5;
 function GetPlayerPos()
 {
 	var player = creator;
-	var playerShootPosX = player.x+player.sprtOffsetX+player.shotOffsetX,
-		playerShootPosY = player.y+player.sprtOffsetY+player.shotOffsetY;
-	var _sdist = point_distance(player.x,player.y, playerShootPosX,playerShootPosY);
-	var pX = playerShootPosX - lengthdir_x(_sdist, player.shootDir),
-		pY = playerShootPosY - lengthdir_y(_sdist, player.shootDir);
+	var _sdist = point_distance(player.x,player.y, player.shootPosX,player.shootPosY);
+	var pX = player.shootPosX - lengthdir_x(_sdist, player.shootDir),
+		pY = player.shootPosY - lengthdir_y(_sdist, player.shootDir);
 	
 	return new Vector2(pX, pY);
 }
@@ -58,10 +54,6 @@ function entity_collision(listNum)
 				if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
 				{
 					isSolid = block.isSolid && block.grappleCollision;
-				}
-				if(object_is_in_array(block.object_index, ColType_GrapplePoint))
-				{
-					isSolid = false;
 				}
 				
 				if(isSolid)

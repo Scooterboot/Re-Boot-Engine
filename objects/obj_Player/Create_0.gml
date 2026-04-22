@@ -118,6 +118,7 @@ enum State
 	Stand,
 	Elevator,
 	Recharge,
+	Slide,
 	Crouch,
 	Morph,
 	CrystalFlash,
@@ -125,7 +126,6 @@ enum State
 	Somersault,
 	Grip,
 	Dodge,
-	HydroDodge,
 	Spark,
 	BallSpark,
 	Grapple,
@@ -151,7 +151,9 @@ fastWJGraceMax = 2;
 fastWJGraceVel = 0;
 
 uncrouch = 0;
-//uncrouched = true;
+
+slideMax = 10;
+slide = slideMax;
 
 canMorphBounce = true;
 justBounced = false;
@@ -309,18 +311,40 @@ dmgFlash = 0;
 dmgBoost = 0;
 dmgBoostJump = false;
 
-groundedDodge = 0;
-dodgeDir = 0;
-dodgeLength = 0;
-dodgeLengthEnd = 17;//15;
-dodgeLengthMax = 20;//25;
-canDodge = true;
 
 dodgeCharge = 0;
 dodgeChargeCells = 2;
 dodgeChargeCellSize = 20;
 dodgeRechargeRate = 1;
 dodgeRecharge = dodgeChargeCellSize * dodgeChargeCells;
+canDodge = true;
+
+dodgeType = 0; // 0 = (none), 1 = (Accel Dash), 2 = (Hydro Boost), 3 = (Accel Dash + Hydro Boost)
+groundedDodge = 0;
+dodgeDir = 0;
+function GetDodgeDir() { return scr_wrap(dodgeDir,-180,180); }
+function DodgeDir_VertUp() { return abs(self.GetDodgeDir()) > 157.5; }
+function DodgeDir_DiagUp() { return abs(self.GetDodgeDir()) >= 112.5 && abs(self.GetDodgeDir()) <= 157.5; }
+function DodgeDir_Hori() { return abs(self.GetDodgeDir()) > 67.5 && abs(self.GetDodgeDir()) < 112.5; }
+function DodgeDir_DiagDown() { return abs(self.GetDodgeDir()) >= 22.5 && abs(self.GetDodgeDir()) <= 67.5; }
+function DodgeDir_VertDown() { return abs(self.GetDodgeDir()) < 22.5; }
+
+// none
+dodgeLenEnd[0] = 0;
+dodgeLenMax[0] = 0;
+// Accel Dash
+dodgeLenEnd[1] = 17;
+dodgeLenMax[1] = 20;
+// Hydro Boost
+dodgeLenEnd[2] = 13;
+dodgeLenMax[2] = 15;
+// Accel Dash + Hydro Boost
+dodgeLenEnd[3] = 17;
+dodgeLenMax[3] = 20;
+
+dodgeLengthEnd = dodgeLenEnd[0];
+dodgeLengthMax = dodgeLenMax[0];
+dodgeLength = 0;
 
 
 isPushing = false;
@@ -365,7 +389,7 @@ gravGrapAngle = 0;
 gravGrapAngleVel = 0;
 gravGrapAngleSpd = 0.5;
 gravGrapAngleFrict = 0.75;
-gravGrapAngleMax = 8.75;
+gravGrapAngleMax = 5;
 
 gravGrapReelVel = 0;
 gravGrapReelSpd = 1;
@@ -391,16 +415,16 @@ lastReflec = noone;
 
 enum LiquidState
 {
-	Normal,		// Out of water / Gravity Suit
+	None,		// Out of water / Gravity Suit
 	HydroBoost,	// In any liquid, with Gravity Boost, but no Gravity Suit
 	Liquid,		// In water (no Gravity Suit)
 	DmgLiquid	// In lava or acid (no Gravity Suit)
 }
-liquidState = LiquidState.Normal;
+liquidState = LiquidState.None;
 prevLiquidState = liquidState;
 liquidLevel = 0;
 
-liquidAnimMult[LiquidState.Normal] = 1;
+liquidAnimMult[LiquidState.None] = 1;
 liquidAnimMult[LiquidState.HydroBoost] = 0.75;
 liquidAnimMult[LiquidState.Liquid] = 0.5;
 liquidAnimMult[LiquidState.DmgLiquid] = 0.5;
@@ -422,19 +446,19 @@ enum MaxSpeed
 	MoonSprint,
 	MoonFall
 }
-maxSpeed[MaxSpeed.Run,			LiquidState.Normal]		= 2.75;
-maxSpeed[MaxSpeed.Sprint,		LiquidState.Normal]		= 4.75;
-maxSpeed[MaxSpeed.SpeedBoost,	LiquidState.Normal]		= 9.75;
-maxSpeed[MaxSpeed.Jump,			LiquidState.Normal]		= 1.25;
-maxSpeed[MaxSpeed.Somersault,	LiquidState.Normal]		= 1.875; // - (SM: 1.375)
-maxSpeed[MaxSpeed.Dodge,		LiquidState.Normal]		= 6.75;//7.25;
-maxSpeed[MaxSpeed.MorphBall,	LiquidState.Normal]		= 3.25;
-maxSpeed[MaxSpeed.MockBall,		LiquidState.Normal]		= 5.25;
-maxSpeed[MaxSpeed.AirMorph,		LiquidState.Normal]		= 1;
-maxSpeed[MaxSpeed.AirSpring,	LiquidState.Normal]		= 1.25;
-maxSpeed[MaxSpeed.MoonWalk,		LiquidState.Normal]		= 1.25;
-maxSpeed[MaxSpeed.MoonSprint,	LiquidState.Normal]		= 2.125;
-maxSpeed[MaxSpeed.MoonFall,		LiquidState.Normal]		= 1.75;
+maxSpeed[MaxSpeed.Run,			LiquidState.None]		= 2.75;
+maxSpeed[MaxSpeed.Sprint,		LiquidState.None]		= 4.75;
+maxSpeed[MaxSpeed.SpeedBoost,	LiquidState.None]		= 9.75;
+maxSpeed[MaxSpeed.Jump,			LiquidState.None]		= 1.25;
+maxSpeed[MaxSpeed.Somersault,	LiquidState.None]		= 1.875; // - (SM: 1.375)
+maxSpeed[MaxSpeed.Dodge,		LiquidState.None]		= 6.75;//7.25;
+maxSpeed[MaxSpeed.MorphBall,	LiquidState.None]		= 3.25;
+maxSpeed[MaxSpeed.MockBall,		LiquidState.None]		= 5.25;
+maxSpeed[MaxSpeed.AirMorph,		LiquidState.None]		= 1;
+maxSpeed[MaxSpeed.AirSpring,	LiquidState.None]		= 1.25;
+maxSpeed[MaxSpeed.MoonWalk,		LiquidState.None]		= 1.25;
+maxSpeed[MaxSpeed.MoonSprint,	LiquidState.None]		= 2.125;
+maxSpeed[MaxSpeed.MoonFall,		LiquidState.None]		= 1.75;
 
 maxSpeed[MaxSpeed.Run,			LiquidState.HydroBoost]	= 2.25;
 maxSpeed[MaxSpeed.Sprint,		LiquidState.HydroBoost]	= 3.75;
@@ -480,7 +504,7 @@ maxSpeed[MaxSpeed.MoonFall,		LiquidState.DmgLiquid]	= 1.5;
 
 enum MoveSpeed
 {
-	Normal,
+	Default,
 	Sprint,
 	WallJump,
 	ClingWallJump,
@@ -492,19 +516,19 @@ enum MoveSpeed
 	Grapple,
 	GrappleKick
 }
-moveSpeed[MoveSpeed.Normal,			LiquidState.Normal]		= 0.1875;
-moveSpeed[MoveSpeed.Sprint,			LiquidState.Normal]		= 0.0625;
-moveSpeed[MoveSpeed.WallJump,		LiquidState.Normal]		= 0.5625;//1.375;
-moveSpeed[MoveSpeed.ClingWallJump,	LiquidState.Normal]		= 2.25;
-moveSpeed[MoveSpeed.Spark,			LiquidState.Normal]		= 0.109375;
-moveSpeed[MoveSpeed.Dodge,			LiquidState.Normal]		= 2.25;
-moveSpeed[MoveSpeed.DmgBoost,		LiquidState.Normal]		= 5.375;
-moveSpeed[MoveSpeed.MorphBall,		LiquidState.Normal]		= 0.1;
-moveSpeed[MoveSpeed.BoostBall,		LiquidState.Normal]		= 4.75;
-moveSpeed[MoveSpeed.Grapple,		LiquidState.Normal]		= 0.125;
-moveSpeed[MoveSpeed.GrappleKick,	LiquidState.Normal]		= 2.75;
+moveSpeed[MoveSpeed.Default,		LiquidState.None]		= 0.1875;
+moveSpeed[MoveSpeed.Sprint,			LiquidState.None]		= 0.0625;
+moveSpeed[MoveSpeed.WallJump,		LiquidState.None]		= 0.5625;//1.375;
+moveSpeed[MoveSpeed.ClingWallJump,	LiquidState.None]		= 2.25;
+moveSpeed[MoveSpeed.Spark,			LiquidState.None]		= 0.109375;
+moveSpeed[MoveSpeed.Dodge,			LiquidState.None]		= 2.25;
+moveSpeed[MoveSpeed.DmgBoost,		LiquidState.None]		= 5.375;
+moveSpeed[MoveSpeed.MorphBall,		LiquidState.None]		= 0.1;
+moveSpeed[MoveSpeed.BoostBall,		LiquidState.None]		= 4.75;
+moveSpeed[MoveSpeed.Grapple,		LiquidState.None]		= 0.125;
+moveSpeed[MoveSpeed.GrappleKick,	LiquidState.None]		= 2.75;
 
-moveSpeed[MoveSpeed.Normal,			LiquidState.HydroBoost]	= 0.09375;
+moveSpeed[MoveSpeed.Default,		LiquidState.HydroBoost]	= 0.09375;
 moveSpeed[MoveSpeed.Sprint,			LiquidState.HydroBoost]	= 0.03125;
 moveSpeed[MoveSpeed.WallJump,		LiquidState.HydroBoost]	= 0.75;
 moveSpeed[MoveSpeed.ClingWallJump,	LiquidState.HydroBoost]	= 1.875;
@@ -516,7 +540,7 @@ moveSpeed[MoveSpeed.BoostBall,		LiquidState.HydroBoost]	= 4.25;
 moveSpeed[MoveSpeed.Grapple,		LiquidState.HydroBoost]	= 0.0725;
 moveSpeed[MoveSpeed.GrappleKick,	LiquidState.HydroBoost]	= 2.25;
 
-moveSpeed[MoveSpeed.Normal,			LiquidState.Liquid]		= 0.015625;
+moveSpeed[MoveSpeed.Default,		LiquidState.Liquid]		= 0.015625;
 moveSpeed[MoveSpeed.Sprint,			LiquidState.Liquid]		= 0.005215;
 moveSpeed[MoveSpeed.WallJump,		LiquidState.Liquid]		= 0.75;
 moveSpeed[MoveSpeed.ClingWallJump,	LiquidState.Liquid]		= 1.375;
@@ -528,7 +552,7 @@ moveSpeed[MoveSpeed.BoostBall,		LiquidState.Liquid]		= 3.75;
 moveSpeed[MoveSpeed.Grapple,		LiquidState.Liquid]		= 0.0225;
 moveSpeed[MoveSpeed.GrappleKick,	LiquidState.Liquid]		= 2.0;
 
-moveSpeed[MoveSpeed.Normal,			LiquidState.DmgLiquid]	= 0.015625;
+moveSpeed[MoveSpeed.Default,		LiquidState.DmgLiquid]	= 0.015625;
 moveSpeed[MoveSpeed.Sprint,			LiquidState.DmgLiquid]	= 0.005215;
 moveSpeed[MoveSpeed.WallJump,		LiquidState.DmgLiquid]	= 0.75;
 moveSpeed[MoveSpeed.ClingWallJump,	LiquidState.DmgLiquid]	= 1.375;
@@ -540,22 +564,58 @@ moveSpeed[MoveSpeed.BoostBall,		LiquidState.DmgLiquid]	= 3.75;
 moveSpeed[MoveSpeed.Grapple,		LiquidState.DmgLiquid]	= 0.0225;
 moveSpeed[MoveSpeed.GrappleKick,	LiquidState.DmgLiquid]	= 2.0;
 
-// Friction
-frict[0, LiquidState.Normal]	= 0.5;		// Grounded
-frict[1, LiquidState.Normal]	= 0.5;		// In Air
+enum Friction
+{
+	Default,
+	Air,
+	
+	Slide,
+	Crouch,
+	MoonPrep,
+	
+	DodgeSlow,
+	DodgeFast,
+	SpdCap
+}
+frict[Friction.Default,		LiquidState.None]		= 0.5;
+frict[Friction.Air,			LiquidState.None]		= 0.5;
+frict[Friction.Slide,		LiquidState.None]		= 0.25;
+frict[Friction.Crouch,		LiquidState.None]		= 1.0;
+frict[Friction.MoonPrep,	LiquidState.None]		= 1.5;
+frict[Friction.DodgeSlow,	LiquidState.None]		= 1.25;
+frict[Friction.DodgeFast,	LiquidState.None]		= 0.5;
+frict[Friction.SpdCap,		LiquidState.None]		= 0.125;
 
-frict[0, LiquidState.HydroBoost]	= 0.25;//0.375;	// Grounded
-frict[1, LiquidState.HydroBoost]	= 0.25;//0.375;	// In Air
+frict[Friction.Default,		LiquidState.HydroBoost]	= 0.25;
+frict[Friction.Air,			LiquidState.HydroBoost]	= 0.25;
+frict[Friction.Slide,		LiquidState.HydroBoost]	= 0.125;
+frict[Friction.Crouch,		LiquidState.HydroBoost]	= 0.5;
+frict[Friction.MoonPrep,	LiquidState.HydroBoost]	= 0.75;
+frict[Friction.DodgeSlow,	LiquidState.HydroBoost]	= 0.625;
+frict[Friction.DodgeFast,	LiquidState.HydroBoost]	= 0.25;
+frict[Friction.SpdCap,		LiquidState.HydroBoost]	= 0.0625;
 
-frict[0, LiquidState.Liquid]	= 0.0625;	// Grounded
-frict[1, LiquidState.Liquid]	= 0.03125;	// In Air
+frict[Friction.Default,		LiquidState.Liquid]		= 0.0625;
+frict[Friction.Air,			LiquidState.Liquid]		= 0.03125;
+frict[Friction.Slide,		LiquidState.Liquid]		= 0.0625;
+frict[Friction.Crouch,		LiquidState.Liquid]		= 0.125;
+frict[Friction.MoonPrep,	LiquidState.Liquid]		= 0.1875;
+frict[Friction.DodgeSlow,	LiquidState.Liquid]		= 0.5;
+frict[Friction.DodgeFast,	LiquidState.Liquid]		= 0.5;
+frict[Friction.SpdCap,		LiquidState.Liquid]		= 0.0625;
 
-frict[0, LiquidState.DmgLiquid]	= 0.25;		// Grounded
-frict[1, LiquidState.DmgLiquid]	= 0.25;		// In Air
+frict[Friction.Default,		LiquidState.DmgLiquid]	= 0.25;
+frict[Friction.Air,			LiquidState.DmgLiquid]	= 0.25;
+frict[Friction.Slide,		LiquidState.DmgLiquid]	= 0.0625;
+frict[Friction.Crouch,		LiquidState.DmgLiquid]	= 0.5;
+frict[Friction.MoonPrep,	LiquidState.DmgLiquid]	= 0.75;
+frict[Friction.DodgeSlow,	LiquidState.DmgLiquid]	= 0.5;
+frict[Friction.DodgeFast,	LiquidState.DmgLiquid]	= 0.5;
+frict[Friction.SpdCap,		LiquidState.DmgLiquid]	= 0.625;
 
 // turn around speed is equal to moveSpeed + frict
 // this value gets added on top when holding run
-sprintTurnSpeed[LiquidState.Normal] = 1.575;
+sprintTurnSpeed[LiquidState.None] = 1.575;
 sprintTurnSpeed[LiquidState.HydroBoost] = 1.125;
 sprintTurnSpeed[LiquidState.Liquid] = 1.07125;
 sprintTurnSpeed[LiquidState.DmgLiquid] = 0.57125;
@@ -568,18 +628,18 @@ sprintTurnSpeed[LiquidState.DmgLiquid] = 0.57125;
 //bombXSpeed[1] = 0.0625;		// Underwater
 //bombXSpeed[2] = 0.0625;		// In lava/acid
 
-bombXSpeed[LiquidState.Normal] = 2.75;
+bombXSpeed[LiquidState.None] = 2.75;
 bombXSpeed[LiquidState.HydroBoost] = 2.125;
 bombXSpeed[LiquidState.Liquid] = 1.5;
 bombXSpeed[LiquidState.DmgLiquid] = 1.5;
 
 
 // -- Vertical speed values --
-jumpSpeed[0, LiquidState.Normal] = 4.875;	// Normal Jump
-jumpSpeed[1, LiquidState.Normal] = 6;		// Hi Jump
-jumpSpeed[2, LiquidState.Normal] = 4.625;	// Wall Jump
-jumpSpeed[3, LiquidState.Normal] = 5.5;		// Hi Wall Jump
-jumpSpeed[4, LiquidState.Normal] = 4;		// Damage Boost	 - (SM: 5)
+jumpSpeed[0, LiquidState.None] = 4.875;	// Normal Jump
+jumpSpeed[1, LiquidState.None] = 6;		// Hi Jump
+jumpSpeed[2, LiquidState.None] = 4.625;	// Wall Jump
+jumpSpeed[3, LiquidState.None] = 5.5;		// Hi Wall Jump
+jumpSpeed[4, LiquidState.None] = 4;		// Damage Boost	 - (SM: 5)
 
 jumpSpeed[0, LiquidState.HydroBoost] = 3.51;//3;		// Normal Jump
 jumpSpeed[1, LiquidState.HydroBoost] = 4.32;//3.675;	// Hi Jump
@@ -600,12 +660,12 @@ jumpSpeed[3, LiquidState.DmgLiquid] = 1.5;		// Hi Wall Jump	 - (SM: 3.5)
 jumpSpeed[4, LiquidState.DmgLiquid] = 2;		// Damage Boost
 
 // These values are what the "jump" counter variable is set to when jumping is initiated, which can affect the overall height
-jumpMax[0, LiquidState.Normal] = 1; // Normal
-jumpMax[1, LiquidState.Normal] = 1; // Hi Jump
-jumpMax[2, LiquidState.Normal] = 1; // Wall Jump (Normal)
-jumpMax[3, LiquidState.Normal] = 1; // Wall Jump (Hi Jump)
-jumpMax[4, LiquidState.Normal] = 4; // Crouch Jump (Normal)
-jumpMax[5, LiquidState.Normal] = 4; // Crouch Jump (Hi Jump)
+jumpMax[0, LiquidState.None] = 1; // Normal
+jumpMax[1, LiquidState.None] = 1; // Hi Jump
+jumpMax[2, LiquidState.None] = 1; // Wall Jump (Normal)
+jumpMax[3, LiquidState.None] = 1; // Wall Jump (Hi Jump)
+jumpMax[4, LiquidState.None] = 4; // Crouch Jump (Normal)
+jumpMax[5, LiquidState.None] = 4; // Crouch Jump (Hi Jump)
 
 jumpMax[0, LiquidState.HydroBoost] = 1; // Normal
 jumpMax[1, LiquidState.HydroBoost] = 1; // Hi Jump
@@ -629,19 +689,19 @@ jumpMax[4, LiquidState.DmgLiquid] = 4; // Crouch Jump (Normal)
 jumpMax[5, LiquidState.DmgLiquid] = 4; // Crouch Jump (Hi Jump)
 
 // Gravity
-grav[LiquidState.Normal]		= 0.109375;
+grav[LiquidState.None]			= 0.109375;
 grav[LiquidState.HydroBoost]	= 0.068359375;//0.0546875;
 grav[LiquidState.Liquid]		= 0.03125;
 grav[LiquidState.DmgLiquid]		= 0.03515625;
 
 // Grapple gravity
-grapGrav[LiquidState.Normal]		= 0.21875;
+grapGrav[LiquidState.None]			= 0.21875;
 grapGrav[LiquidState.HydroBoost]	= 0.109375;
 grapGrav[LiquidState.Liquid]		= 0.0546;
 grapGrav[LiquidState.DmgLiquid]		= 0.0615;
 
 // Grapple dampen / friction (multiplier)
-grapDamp[LiquidState.Normal]		= 0.99;
+grapDamp[LiquidState.None]			= 0.99;
 grapDamp[LiquidState.HydroBoost]	= 0.9935;
 grapDamp[LiquidState.Liquid]		= 0.997;
 grapDamp[LiquidState.DmgLiquid]		= 0.997;
@@ -653,12 +713,12 @@ moonFallMax = 32; // Moonfall speed, hard cap
 spaceJumpFallThresh[0] = 2; // In Air
 spaceJumpFallThresh[1] = 2; // Underwater (with Grav) - SM: 1
 
-bombJumpMax[LiquidState.Normal]		= 12;
+bombJumpMax[LiquidState.None]		= 12;
 bombJumpMax[LiquidState.HydroBoost]	= 12;//6;
 bombJumpMax[LiquidState.Liquid]		= 1;
 bombJumpMax[LiquidState.DmgLiquid]	= 1;//3;
 
-bombJumpSpeed[LiquidState.Normal]		= 1.890625;
+bombJumpSpeed[LiquidState.None]			= 1.890625;
 bombJumpSpeed[LiquidState.HydroBoost]	= 1.5125;//1.4453125;
 bombJumpSpeed[LiquidState.Liquid]		= 1;
 bombJumpSpeed[LiquidState.DmgLiquid]	= 1;
@@ -678,7 +738,7 @@ bombJumpSpeed[LiquidState.DmgLiquid]	= 1;
 // -- (f)inalized variables --
 fMaxSpeed = maxSpeed[0,0];
 fMoveSpeed = moveSpeed[0,0];
-fFrict = frict[0];
+fFrict = frict[0,0];
 fGrav = grav[0];
 fJumpSpeed = jumpSpeed[0,0];
 
@@ -720,13 +780,14 @@ function MinimumBoostSpeed() { return lerp(maxSpeed[MaxSpeed.Sprint, 0], maxSpee
 
 enum MoveState
 {
-	Normal,
+	Default,
 	Somersault,
+	Slide,
 	Crouch,
-	Halted,
+	MoonPrep,
 	Custom
 }
-moveState = MoveState.Normal;
+moveState = MoveState.Default;
 
 function PerformMovement(_move, _moveSpd, _turnSpd, _frict, _maxSpd)
 {
@@ -790,8 +851,9 @@ enum AnimState
 	Run,
 	Brake,
 	Walk,
-	Moon,
+	MoonPrep,
 	Push,
+	Slide,
 	Crouch,
 	Morph,
 	CrystalFlash,
@@ -799,7 +861,6 @@ enum AnimState
 	Somersault,
 	Grip,
 	Dodge,
-	HydroDodge,
 	Spark,
 	Grapple,
 	GravGrapple,
@@ -837,13 +898,13 @@ enum Frame
 	Moon,
 	Push,
 	Morph,
+	Slide,
 	CFlash,
 	JAim,
 	Jump,
 	Somersault,
 	WallJump,
 	Dodge,
-	HydroDodge,
 	SparkStart,
 	SparkV,
 	SparkH,
@@ -1931,16 +1992,6 @@ weap[Weapon.GravGrapple].OnShoot = function()
 
 function CanCharge()
 {
-	/*if(!item[Item.ChargeBeam]) { return false; }
-	if(hyperBeam) { return false; }
-	if(self.EquipmentSelected(Equipment.Missile)) { return false; }
-	if(self.EquipmentSelected(Equipment.SuperMissile)) { return false; }
-	if(self.EquipmentSelected(Equipment.GrappleBeam)) { return false; }
-	if(self.VisorSelected(Visor.Scan)) { return false; }
-	if(self.VisorSelected(Visor.XRay)) { return false; }
-	
-	return true;*/
-	
 	if(is_undefined(currentWeapon)) { return false; }
 	if(!currentWeapon.CanShoot()) { return false; }
 	if(self.VisorSelected(Visor.Scan)) { return false; }
@@ -1966,7 +2017,7 @@ function IsSpeedBoosting()
 #region IsScrewAttacking
 function IsScrewAttacking()
 {
-	return (item[Item.ScrewAttack] && liquidState == LiquidState.Normal && state == State.Somersault && animState == AnimState.Somersault);
+	return (item[Item.ScrewAttack] && liquidState == LiquidState.None && state == State.Somersault && animState == AnimState.Somersault);
 }
 #endregion
 
@@ -1993,6 +2044,9 @@ function entity_collision(listNum)
 	}
 	return false;
 }
+tempDisableBoostCheck = false;
+tempDisableSpeedCheck = false;
+tempDisableScrewCheck = false;
 function isValidSolid(block)
 {
 	var isSolid = true;
@@ -2004,9 +2058,9 @@ function isValidSolid(block)
 			isSolid = false;
 		}
 	}
-	var bb = (object_is_in_array(block.object_index, ColType_BoostBallBlock) && boostBallDmgCounter > 0),
-		sp = (object_is_in_array(block.object_index, ColType_SpeedBlock) && self.IsSpeedBoosting() && shineStart <= 0 && shineLauncherStart <= 0),
-		sc = (object_is_in_array(block.object_index, ColType_ScrewBlock) && self.IsScrewAttacking());
+	var bb = (!tempDisableBoostCheck && object_is_in_array(block.object_index, ColType_BoostBallBlock) && boostBallDmgCounter > 0),
+		sp = (!tempDisableSpeedCheck && object_is_in_array(block.object_index, ColType_SpeedBlock) && self.IsSpeedBoosting() && shineStart <= 0 && shineLauncherStart <= 0),
+		sc = (!tempDisableScrewCheck && object_is_in_array(block.object_index, ColType_ScrewBlock) && self.IsScrewAttacking());
 	if(bb || sp || sc)
 	{
 		isSolid = false;
@@ -2098,10 +2152,6 @@ function OnXCollision(fVX, isOOB = false)
 			dashPushFlag = true;
 		}
 	}
-	/*if(state == State.Stand)
-	{
-		pushBlock = instance_place(position.X+2*move2,position.Y,obj_PushBlock);
-	}*/
 	
 	fastWJGrace = (_FAST_WALLJUMP && state == State.Somersault && abs(velX) >= maxSpeed[MaxSpeed.Run,liquidState]);
 	var fwjGrace = (fastWJGrace && fastWJGraceCounter < fastWJGraceMax);
@@ -2129,7 +2179,7 @@ function OnXCollision(fVX, isOOB = false)
 	{
 		if(!diagSparkSlide)
 		{
-			if(item[Item.ChainSpark] && !instance_exists(pBlock) && (abs(self.GetSparkDir()) == 90 || (!self.entity_place_collide(0,3) && abs(self.GetSparkDir()) < 90) || (!self.entity_place_collide(0,-3) && abs(self.GetSparkDir()) > 90)))
+			if(item[Item.ChainSpark] && !instance_exists(pBlock) && (self.SparkDir_Hori() || (self.SparkDir_DiagDown() && !self.entity_place_collide(0,2)) || (self.SparkDir_DiagUp() && !self.entity_place_collide(0,-2))))
 			{
 				shineRestart = true;
 				audio_stop_sound(snd_ShineSpark_Charge);
@@ -2150,7 +2200,6 @@ function OnXCollision(fVX, isOOB = false)
 
 function CanMoveUpSlope_Bottom()
 {
-	//if((state == State.Spark || state == State.BallSpark) && abs(self.GetSparkDir()) < 90)
 	if((state == State.Spark || state == State.BallSpark) && (self.SparkDir_DiagDown() || self.SparkDir_VertDown()))
 	{
 		return false;
@@ -2168,18 +2217,19 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		onPlatform = true;
 	}
 	
-	//if((state == State.Spark || state == State.BallSpark) && abs(self.GetSparkDir()) >= 90 && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0 && move == dir && yShift < 0)
-	if((state == State.Spark || state == State.BallSpark) && (self.SparkDir_Hori() || self.SparkDir_DiagUp() || self.SparkDir_VertUp()) && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0 && move == dir && yShift < 0)
+	if ((state == State.Spark || state == State.BallSpark) && 
+		(self.SparkDir_Hori() || self.SparkDir_DiagUp() || self.SparkDir_VertUp()) && 
+		shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0 && yShift < 0 && (move == dir || (cPlayerDown && self.SparkDir_Hori())))
 	{
 		shineEnd = 0;
 		shineDir = 0;
 		if(state == State.BallSpark)
 		{
-			self.ChangeState(State.Morph, AnimState.Morph, MoveState.Normal, mask_Player_Morph, true);
+			self.ChangeState(State.Morph, AnimState.Morph, MoveState.Default, mask_Player_Morph, true);
 		}
 		else
 		{
-			self.ChangeState(State.Stand, AnimState.Stand, MoveState.Normal, mask_Player_Stand, true);
+			self.ChangeState(State.Stand, AnimState.Stand, MoveState.Default, mask_Player_Stand, true);
 		}
 		speedBoost = true;
 		speedCounter = speedCounterMax;
@@ -2223,7 +2273,6 @@ function CanMoveDownSlope_Bottom()
 
 function CanMoveUpSlope_Top()
 {
-	//return (((state == State.Spark || state == State.BallSpark) && abs(self.GetSparkDir()) <= 90) || state == State.Dodge || state == State.Grapple);
 	return (((state == State.Spark || state == State.BallSpark) && (self.SparkDir_Hori() || self.SparkDir_DiagDown() || self.SparkDir_VertDown())) || state == State.Dodge || state == State.Grapple);
 }
 function OnSlopeXCollision_Top(fVX, yShift)
@@ -2250,7 +2299,6 @@ function OnYCollision(fVY, isOOB = false)
 {
 	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0)
 	{
-		//if(abs(self.GetSparkDir()) <= 90 && !self.SparkDir_VertDown() && !self.entity_place_collide(3*sign(velX),0) && (_SPARK_DOWN_BOOST || (!self.entity_place_collide(3*sign(velX),1) && self.entity_place_collide(1*sign(velX),2))))
 		var _bEdgAng = self.GetEdgeAngle(Edge.Bottom);
 		if(self.SparkDir_DiagDown() && ((abs(_bEdgAng) > 0 && abs(_bEdgAng) <= 45 && sign(self.GetSparkDir()) == -sign(_bEdgAng)) || (_SPARK_DOWN_BOOST && abs(_bEdgAng) == 0)))
 		{
@@ -2258,11 +2306,11 @@ function OnYCollision(fVY, isOOB = false)
 			shineDir = 0;
 			if(state == State.BallSpark)
 			{
-				self.ChangeState(State.Morph, AnimState.Morph, MoveState.Normal, mask_Player_Morph, true);
+				self.ChangeState(State.Morph, AnimState.Morph, MoveState.Default, mask_Player_Morph, true);
 			}
 			else
 			{
-				self.ChangeState(State.Stand, AnimState.Stand, MoveState.Normal, mask_Player_Stand, true);
+				self.ChangeState(State.Stand, AnimState.Stand, MoveState.Default, mask_Player_Stand, true);
 			}
 			speedBoost = true;
 			speedCounter = speedCounterMax;
@@ -3221,8 +3269,8 @@ function MovingSolid_OnYCollision(fVY)
 
 #endregion
 
-#region CanChangeState
-function CanChangeState(newMask)
+#region CanChangeMask
+function CanChangeMask(newMask)
 {
 	if(mask_index != newMask)
 	{
@@ -3273,7 +3321,7 @@ function CanChangeState(newMask)
 }
 #endregion
 #region ChangeState
-function ChangeState(newState, newAnimState, newMoveState = MoveState.Normal, newMask, isGrounded, stallCam = true)
+function ChangeState(newState, newAnimState, newMoveState = MoveState.Default, newMask, isGrounded, stallCam = true)
 {
 	moveState = newMoveState;
 	animState = newAnimState;
@@ -3775,255 +3823,6 @@ function EntityLiquid_Large(_velX, _velY)
 
 #endregion
 
-#region Set Beams
-/*
-function Set_Beams()
-{
-	beamShot = obj_PowerBeamShot;
-	beamCharge = obj_PowerBeamChargeShot;
-	beamChargeAnim = sprt_PowerBeamChargeAnim;
-	beamSound = snd_PowerBeam_Shot;
-	beamChargeSound = snd_PowerBeam_ChargeShot;
-	beamAmt = 1;
-	beamChargeAmt = 1;
-	beamIconIndex = 0;
-	beamFlare = sprt_PowerBeamChargeFlare;
-	
-	beamIsWave = false;
-	beamWaveStyleOffset = 1;
-	
-	if(item[Item.WaveBeam])
-	{
-		beamIsWave = true;
-	}
-	if(item[Item.Spazer])
-	{
-		beamWaveStyleOffset = 0;
-	}
-	
-	#region Shot Type & FX
-	
-	if(item[Item.IceBeam]) // Ice
-	{
-		beamShot = obj_IceBeamShot;
-		beamCharge = obj_IceBeamChargeShot;
-		beamChargeAnim = sprt_IceBeamChargeAnim;
-		beamSound = snd_IceBeam_Shot;
-		beamChargeSound = snd_IceBeam_ChargeShot;
-		beamIconIndex = 1;
-		beamFlare = sprt_IceBeamChargeFlare;
-		
-		if(item[Item.PlasmaBeam]) // Ice Plasma
-		{
-			beamShot = obj_IcePlasmaBeamShot;
-			beamCharge = obj_IcePlasmaBeamChargeShot;
-			beamSound = snd_IceComboShot;
-			beamIconIndex = 9;
-			
-			if(item[Item.WaveBeam]) // Ice Wave Plasma
-			{
-				beamShot = obj_IceWavePlasmaBeamShot;
-				beamCharge = obj_IceWavePlasmaBeamChargeShot;
-				beamIconIndex = 11;
-				
-				if(item[Item.Spazer]) // Ice Wave Spazer Plasma
-				{
-					beamShot = obj_IceWaveSpazerPlasmaBeamShot;
-					beamCharge = obj_IceWaveSpazerPlasmaBeamChargeShot;
-					beamIconIndex = 15;
-				}
-			}
-			else if(item[Item.Spazer]) // Ice Spazer Plasma
-			{
-				beamShot = obj_IceSpazerPlasmaBeamShot;
-				beamCharge = obj_IceSpazerPlasmaBeamChargeShot;
-				beamIconIndex = 13;
-			}
-		}
-		else if(item[Item.Spazer]) // Ice Spazer
-		{
-			beamShot = obj_IceSpazerBeamShot;
-			beamCharge = obj_IceSpazerBeamChargeShot;
-			beamSound = snd_IceComboShot;
-			beamIconIndex = 5;
-			
-			if(item[Item.WaveBeam]) // Ice Wave Spazer
-			{
-				beamShot = obj_IceWaveSpazerBeamShot;
-				beamCharge = obj_IceWaveSpazerBeamChargeShot;
-				beamIconIndex = 7;
-			}
-		}
-		else if(item[Item.WaveBeam]) // Ice Wave
-		{
-			beamShot = obj_IceWaveBeamShot;
-			beamCharge = obj_IceWaveBeamChargeShot;
-			beamIconIndex = 3;
-		}
-	}
-	else if(item[Item.PlasmaBeam]) // Plasma
-	{
-		beamShot = obj_PlasmaBeamShot;
-		beamCharge = obj_PlasmaBeamChargeShot;
-		beamChargeAnim = sprt_PlasmaBeamChargeAnim;
-		beamSound = snd_PlasmaBeam_Shot;
-		beamChargeSound = snd_PlasmaBeam_ChargeShot;
-		beamIconIndex = 8;
-		beamFlare = sprt_PlasmaBeamChargeFlare;
-		
-		if(item[Item.WaveBeam]) // Wave Plasma
-		{
-			beamShot = obj_WavePlasmaBeamShot;
-			beamCharge = obj_WavePlasmaBeamChargeShot;
-			beamIconIndex = 10;
-			
-			if(item[Item.Spazer]) // Wave Spazer Plasma
-			{
-				beamShot = obj_WaveSpazerPlasmaBeamShot;
-				beamCharge = obj_WaveSpazerPlasmaBeamChargeShot;
-				beamIconIndex = 14;
-			}
-		}
-		else if(item[Item.Spazer]) // Spazer Plasma
-		{
-			beamShot = obj_SpazerPlasmaBeamShot;
-			beamCharge = obj_SpazerPlasmaBeamChargeShot;
-			beamIconIndex = 12;
-		}
-	}
-	else if(item[Item.WaveBeam]) // Wave
-	{
-		beamShot = obj_WaveBeamShot;
-		beamCharge = obj_WaveBeamChargeShot;
-		beamChargeAnim = sprt_WaveBeamChargeAnim;
-		beamSound = snd_WaveBeam_Shot;
-		beamChargeSound = snd_WaveBeam_ChargeShot;
-		beamIconIndex = 2;
-		beamFlare = sprt_WaveBeamChargeFlare;
-		
-		if(item[Item.Spazer]) // Wave Spazer
-		{
-			beamShot = obj_WaveSpazerBeamShot;
-			beamCharge = obj_WaveSpazerBeamChargeShot;
-			beamSound = snd_Spazer_Shot;
-			beamChargeSound = snd_Spazer_ChargeShot;
-			beamIconIndex = 6;
-		}
-	}
-	else if(item[Item.Spazer]) // Spazer
-	{
-		beamShot = obj_SpazerBeamShot;
-		beamCharge = obj_SpazerBeamChargeShot;
-		beamChargeAnim = sprt_SpazerChargeAnim;
-		beamSound = snd_Spazer_Shot;
-		beamChargeSound = snd_Spazer_ChargeShot;
-		beamIconIndex = 4;
-		beamFlare = sprt_SpazerChargeFlare;
-	}
-	
-	#endregion
-	#region Shot Amount
-	
-	if(item[Item.Spazer])
-	{
-		beamAmt = 3;
-		beamChargeAmt = 3;
-	}
-	else if(item[Item.WaveBeam])
-	{
-		beamChargeAmt = 2;
-		if(item[Item.PlasmaBeam])
-		{
-			//beamAmt = 2; // <- uncomment to make wave plasma shoot dual shots
-		}
-	}
-	
-	#endregion
-	#region Damage & Firerate
-	
-	var baseDmg = 20,
-		iceDmg = 10,
-		waveDmg = 30,
-		spazerDmg = 20,
-		plasmaDmg = 130,
-		plasDmgMult = 5;
-	
-	var dmgMult = 1;
-	if(item[Item.PlasmaBeam])
-	{
-		dmgMult = plasDmgMult;
-	}
-	
-	var iceDelay = 4,
-		waveDelay = 0,//2,
-		spazerDelay = 0,//-2,
-		plasmaDelay = 3;
-	
-	beamDmg = baseDmg;
-	beamDelay = 8;
-	beamChargeDelay = 20;
-	if(item[Item.IceBeam])
-	{
-		beamDmg += iceDmg * dmgMult;
-		beamDelay += iceDelay;
-		beamChargeDelay += iceDelay;
-	}
-	if(item[Item.WaveBeam])
-	{
-		beamDmg += waveDmg * dmgMult;
-		beamDelay += waveDelay;
-		beamChargeDelay += waveDelay;
-	}
-	if(item[Item.Spazer])
-	{
-		beamDmg += spazerDmg * dmgMult;
-		beamDelay += spazerDelay;
-		beamChargeDelay += spazerDelay;
-	}
-	if(item[Item.PlasmaBeam])
-	{
-		beamDmg += plasmaDmg;
-		beamDelay += plasmaDelay;
-		beamChargeDelay += plasmaDelay;
-	}
-	
-	/*
-	-- OG Super Metroid damage reference
-	
-	-Beam							-raw dmg value	|-Difference from base power beam
-	Power Beam:						20				|	
-	Ice Beam:						30				|	+10
-	Wave Beam:						50				|	+30
-	Spazer:							40				|	+20
-	Plasma Beam:					150				|	+130
-													|
-													|			|-Calculated combo damage
-	Ice + Wave:						60				|	+40		|	10(I) + 30(W) =				40	<- checks out
-													|			|
-	Spazer + Ice:					60				|	+40		|	20(S) + 10(I) =				30	<- 10 under
-	Spazer + Wave:					70				|	+50		|	20(S) + 30(W) =				50	<- checks out
-	Spazer + Ice + Wave:			100				|	+80		|	20(S) + 10(I) + 30(W) =		60	<- 20 under
-													|			|
-	Plasma + Ice:					200				|	+180	|	130(P) + 10(I) =			140	<- 40 under		if multiplied:	130+(10*5) =		130+50 =		180	<- checks out
-	Plasma + Wave:					250				|	+230	|	130(P) + 30(W) =			160	<- 70 under						130+(30*5) =		130+150 =		280	<- 50 over
-	Plasma + Ice + Wave:			300				|	+280	|	130(P) + 10(I) + 30(W) =	170	<- 110 under					130+(10*5)+(30*5) = 130+50+150 =	330	<- 50 over
-													|			|
-													|			|
-	-- Spazer+Plasma numbers ref					|			|
-	-(These are made up, SM has no Spazer+Plasma)	|			|
-	Spazer + Plasma:				200				|	+180	|	20(S) + 130(P) =				150		if multiplied:	(20*5)+130 =				100+130 =			230		+20=250
-	Spazer + Plasma + Ice:			250				|	+230	|	20(S) + 130(P) + 10(I) =		160						(20*5)+130+(10*5) =			100+130+50 =		270		+20=290
-	Spazer + Plasma + Wave:			300				|	+280	|	20(S) + 130(P) + 30(W) =		180						(20*5)+130+(30*5) =			100+130+150 =		380		+20=400
-	Spazer + Plasma + Ice + Wave:	350				|	+330	|	20(S) + 130(P) + 10(I)+30(W) =	190						(20*5)+130+(10*5)+(30*5) =	100+130+50+150 =	430		+20=450
-	
-	Hyper Beam: 1000
-	//
-	
-	#endregion
-}
-*/
-#endregion
-
 #region Damage
 
 lifeBoxes[0] = self.CreateLifeBox(0,0,mask_index,false);
@@ -4443,9 +4242,11 @@ function SetArmPosSpark(_rotation)
 {
 	armOffsetX = -9 * dsin(22.5 * max(bodyFrame-1,0));
 	armOffsetY = 3;
+	var _len = point_distance(0,0,armOffsetX,armOffsetY),
+		_dir = point_direction(0,0,armOffsetX,armOffsetY);
 	
-	armOffsetX = lengthdir_x(armOffsetX,_rotation);
-	armOffsetY = lengthdir_y(armOffsetY,_rotation);
+	armOffsetX = lengthdir_x(_len,_rotation+_dir);
+	armOffsetY = lengthdir_y(_len,_rotation+_dir);
 }
 #endregion
 #region SetArmPosSomersault
@@ -4689,7 +4490,7 @@ function PaletteSurface()
 			beamPalInd = PlayerPal2.Beam_Spazer;
 		}
 		
-		if(statCharge >= maxCharge || (state == State.Dodge && statCharge < maxCharge) || (shineCharge > 0 && state != State.Spark))
+		if(statCharge >= maxCharge || (state == State.Dodge && item[Item.AccelDash] && statCharge < maxCharge) || (shineCharge > 0 && state != State.Spark))
 		{
 			if(shaderFlash > (shaderFlashMax/2))
 			{
@@ -4704,7 +4505,7 @@ function PaletteSurface()
 						DrawPalSprite(palSprite2,PlayerPal2.White,0.125);
 					}
 				}
-				else if(state == State.Dodge)
+				else if(state == State.Dodge && item[Item.AccelDash])
 				{
 					DrawPalSprite(palSprite,PlayerPal.Screw,0.375);
 				}
@@ -5292,17 +5093,26 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		shader_reset();
 	}
 	
-	if(state == State.Dodge)
+	if(animState == AnimState.Dodge && item[Item.AccelDash])
 	{
 		if(shineFrame < 4)
 		{
-			var offset = 6*dodgeDir;
-			if(dodgeDir == -dir)
+			var sFrame = shineFrame;
+			var shineRot = dodgeDir - 90;
+			var len = 6;
+			var shineX = scr_round(xx + lengthdir_x(len,shineRot)),
+				shineY = scr_round(yy + lengthdir_y(len,shineRot));
+			if(self.DodgeDir_DiagUp() || self.DodgeDir_DiagDown())
 			{
-				offset = 0;
+				sFrame += 4;
+				shineRot -= 45*dir;
+			}
+			if(dir == -1)
+			{
+				shineRot -= 180;
 			}
 			gpu_set_blendmode(bm_add);
-			draw_sprite_ext(sprt_Player_ShineSparkFX,shineFrame,xx+offset+sprtOffsetX,yy+sprtOffsetY,dodgeDir,1,0,c_lime,alph*0.75);
+			draw_sprite_ext(sprt_Player_ShineSparkFX,sFrame,shineX+sprtOffsetX,shineY+sprtOffsetY,dir,1,shineRot,c_lime,alph*0.75);
 			gpu_set_blendmode(bm_normal);
 			shineFrameCounter += 1*(!global.GamePaused());
 			if(shineFrameCounter >= 2)
@@ -5360,7 +5170,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		var len = 6;
 		var shineX = scr_round(xx + lengthdir_x(len,shineRot)),
 			shineY = scr_round(yy + lengthdir_y(len,shineRot));
-		if(SparkDir_DiagUp() || SparkDir_DiagDown())
+		if(self.SparkDir_DiagUp() || self.SparkDir_DiagDown())
 		{
 			sFrame += 4;
 			shineRot -= 45*dir;

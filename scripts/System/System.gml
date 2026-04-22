@@ -187,3 +187,39 @@ function LerpArrayVector2(arr, amount, loop = false)
 }
 #endregion
 
+function object_is_in_array(_obj, _arr)
+{
+	for(var i = 0; i < array_length(_arr); i++)
+	{
+		if(_obj == _arr[i] || object_is_ancestor(_obj,_arr[i]))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+function FindArrayIndexInList(_list, _array, _skipInd = -1)
+{
+	for(var i = 0; i < ds_list_size(_list); i++)
+	{
+		if(is_array(_list[| i]))
+		{
+			var _listArray = _list[| i];
+			var _flag = false;
+			for(var j = 0; j < array_length(_listArray); j++)
+			{
+				if(_listArray[j] != _array[j] && j != _skipInd)
+				{
+					_flag = true;
+					break;
+				}
+			}
+			if(!_flag)
+			{
+				return i;
+			}
+		}
+	}
+	return -1;
+}

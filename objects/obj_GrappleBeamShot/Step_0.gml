@@ -6,8 +6,6 @@ if(global.GamePaused())
     exit;
 }
 
-SetControlVars("player");
-
 var player = creator;
 if(!instance_exists(player))
 {
@@ -24,7 +22,7 @@ if(grappleState == GrappleState.None)
 	if(!grapReel)
 	{
 		grappleDist = min(grappleDist+grapSpeed, distMax);
-		if(grappleDist >= distMax || !cFire)
+		if(grappleDist >= distMax || !global.control[INPUT_VERB.Fire])
 		{
 			grapReel = true;
 		}
@@ -51,66 +49,7 @@ if(grappleState == GrappleState.None)
 	fVelX = velX + speed_x;
 	fVelY = velY + speed_y;
 	
-	for(var i = 0; i < point_distance(pPos.X,pPos.Y, x+fVelX,y+fVelY); i++)
-	{
-		var ang = point_direction(pPos.X,pPos.Y, x+fVelX,y+fVelY);
-		var xx = pPos.X+lengthdir_x(i,ang),
-			yy = pPos.Y+lengthdir_y(i,ang);
-		var xoff = lengthdir_x(4,ang), yoff = lengthdir_y(4,ang);
-		var gNum = 0;
-		if(global.grappleAimAssist) // if targeting reticle is enabled, use more precise grapple point detection
-		{
-			gNum = collision_line_list(xx,yy, xx-xoff,yy-yoff, ColType_GrapplePoint, true,true,blockList,true);
-		}
-		else // otherwise, use a generous hitbox as an alternative to aim assist
-		{
-			var x1 = min(xx, xx-4*sign(xoff)),
-				y1 = min(yy, yy-4*sign(yoff)),
-				x2 = max(xx, xx-4*sign(xoff)),
-				y2 = max(yy, yy-4*sign(yoff));
-			gNum = collision_rectangle_list(x1,y1,x2,y2, ColType_GrapplePoint, true,true,blockList,true);
-		}
-		
-		if(gNum > 0)
-		{
-			for(var j = 0; j < gNum; j++)
-			{
-				var block = blockList[| j];
-				if(instance_exists(block))
-				{
-					grapBlock = block;
-					x = xx;
-					y = yy;
-					break;
-				}
-			}
-			ds_list_clear(blockList);
-		}
-		
-		if(instance_exists(grapBlock))
-		{
-			break;
-		}
-	}
-	
-	if(instance_exists(grapBlock))
-	{
-		audio_play_sound(snd_GrappleBeam_Latch,0,false);
-		if(grapBlock.object_index == obj_PushBlock || object_is_ancestor(grapBlock.object_index,obj_PushBlock))
-		{
-			grappleState = GrappleState.PushBlock;
-		}
-		else
-		{
-			if(object_is_ancestor(grapBlock.object_index,obj_Tile))
-			{
-				grapBlockPosX = scr_floor(clamp(x+sign(fVelX)*4,grapBlock.bbox_left,grapBlock.bbox_right-1)/16)*16 + 8;
-				grapBlockPosY = scr_floor(clamp(y+sign(fVelY)*4,grapBlock.bbox_top,grapBlock.bbox_bottom-1)/16)*16 + 8;
-			}
-		    grappleState = GrappleState.Swing;
-		}
-	}
-	else if(impacted <= 0)
+	if(!instance_exists(grapBlock) && impacted <= 0)
 	{
 		if(self.entity_collision_line(x,y, x+fVelX,y+fVelY))
 		{
@@ -159,6 +98,94 @@ if(grappleState == GrappleState.None)
 			impacted = 1;
 		}
 	}
+	
+	if(impacted == 1)
+	{
+		var _dir = point_direction(0,0,fVelX,fVelY);
+		var _signX = lengthdir_x(1,_dir),
+			_signY = lengthdir_y(1,_dir);
+		var num = collision_line_list(xprevious-_signX,yprevious-_signY, x+_signX,y+_signY, solids,true,true,blockList,true);
+		if(num > 0)
+		{
+			for(var i = 0; i < num; i++)
+			{
+				if(instance_exists(blockList[| i]))
+				{
+					var block = blockList[| i];
+					if(object_is_in_array(block.object_index, ColType_GrapplePoint))
+					{
+						grapBlock = block;
+						break;
+					}
+				}
+			}
+			ds_list_clear(blockList);
+		}
+	}
+	
+	if(!instance_exists(grapBlock))
+	{
+		for(var i = 0; i < point_distance(pPos.X,pPos.Y, x,y); i++)
+		{
+			var ang = point_direction(pPos.X,pPos.Y, x,y);
+			var xx = pPos.X+lengthdir_x(i,ang),
+				yy = pPos.Y+lengthdir_y(i,ang);
+			var xoff = lengthdir_x(4,ang), yoff = lengthdir_y(4,ang);
+			var gNum = 0;
+			if(global.grappleAimAssist) // if targeting reticle is enabled, use more precise grapple point detection
+			{
+				gNum = collision_line_list(xx,yy, xx-xoff,yy-yoff, ColType_GrapplePoint, true,true,blockList,true);
+			}
+			else // otherwise, use a generous hitbox as an alternative to aim assist
+			{
+				var x1 = min(xx, xx-4*sign(xoff)),
+					y1 = min(yy, yy-4*sign(yoff)),
+					x2 = max(xx, xx-4*sign(xoff)),
+					y2 = max(yy, yy-4*sign(yoff));
+				gNum = collision_rectangle_list(x1,y1,x2,y2, ColType_GrapplePoint, true,true,blockList,true);
+			}
+			
+			if(gNum > 0)
+			{
+				for(var j = 0; j < gNum; j++)
+				{
+					var block = blockList[| j];
+					if(instance_exists(block))
+					{
+						grapBlock = block;
+						x = xx;
+						y = yy;
+						break;
+					}
+				}
+				ds_list_clear(blockList);
+			}
+			
+			if(instance_exists(grapBlock))
+			{
+				break;
+			}
+		}
+	}
+	
+	if(instance_exists(grapBlock))
+	{
+		impacted = 0;
+		audio_play_sound(snd_GrappleBeam_Latch,0,false);
+		if(grapBlock.object_index == obj_PushBlock || object_is_ancestor(grapBlock.object_index,obj_PushBlock))
+		{
+			grappleState = GrappleState.PushBlock;
+		}
+		else
+		{
+			if(object_is_ancestor(grapBlock.object_index,obj_Tile) || object_is_ancestor(grapBlock.object_index,obj_MovingTile))
+			{
+				grapBlockOffX = scr_floor(clamp(x+sign(fVelX)*4,grapBlock.bbox_left,grapBlock.bbox_right-1)/16)*16 + 8 - grapBlock.x;
+				grapBlockOffY = scr_floor(clamp(y+sign(fVelY)*4,grapBlock.bbox_top,grapBlock.bbox_bottom-1)/16)*16 + 8 - grapBlock.y;
+			}
+		    grappleState = GrappleState.Swing;
+		}
+	}
 }
 if(grappleState != GrappleState.None)
 {
@@ -169,18 +196,18 @@ if(grappleState != GrappleState.None)
 	
 	if(instance_exists(grapBlock))
 	{
-		if(grapBlockPosX > -1)
+		if(!is_undefined(grapBlockOffX))
 		{
-			x = grapBlockPosX;
+			x = grapBlock.x + grapBlockOffX;
 		}
 		else
 		{
 			x = scr_round(grapBlock.bbox_left + (grapBlock.bbox_right-1-grapBlock.bbox_left)/2);
 		}
 		
-		if(grapBlockPosY > -1)
+		if(!is_undefined(grapBlockOffY))
 		{
-			y = grapBlockPosY;
+			y = grapBlock.y + grapBlockOffY;
 		}
 		else
 		{
@@ -192,11 +219,6 @@ if(grappleState != GrappleState.None)
 		{
 		    if(!stateChanged && player.state != State.Grapple)
 		    {
-		        if(player.animState == AnimState.Grip)
-		        {
-		            player.dir *= -1;
-		            player.dirFrame = 4*dir;
-		        }
 		        player.grappleDist = point_distance(player.position.X, player.position.Y, x, y);
 		        player.grapAngle = point_direction(player.position.X, player.position.Y, x, y) - 90;
 				player.ChangeState(State.Grapple, AnimState.Grapple, MoveState.Custom, mask_Player_Somersault, false, true);
@@ -213,12 +235,7 @@ if(grappleState != GrappleState.None)
 			{
 				if(!stateChanged)
 				{
-					if(player.animState == AnimState.Grip)
-			        {
-			            player.dir *= -1;
-			            player.dirFrame = 4*dir;
-			        }
-			        player.grappleDist = point_distance(player.position.X, player.position.Y, x, y);
+					player.grappleDist = point_distance(player.position.X, player.position.Y, x, y);
 			        player.grapAngle = point_direction(player.position.X, player.position.Y, x, y) - 90;
 					if(player.state != State.Morph)
 					{
@@ -248,7 +265,7 @@ if(grappleState != GrappleState.None)
 		
 		layer = layer_get_id("Projectiles_fg");
 		
-		if(!cFire && (player.state != State.Grapple || player.grapWJCounter <= 0))
+		if(!global.control[INPUT_VERB.Fire] && (player.state != State.Grapple || player.grapWJCounter <= 0))
 		{
 			if(player.state == State.Grapple)
 			{
@@ -265,5 +282,3 @@ if(grappleState != GrappleState.None)
 
 position.X = x;
 position.Y = y;
-
-SetReleaseVars("player");

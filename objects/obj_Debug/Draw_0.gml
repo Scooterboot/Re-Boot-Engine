@@ -350,7 +350,7 @@ if(debug > 0)
 		if(is_struct(targetPoint))
 		{
 			draw_set_color(c_lime);
-			draw_line(pX,pY, targetPoint.x,targetPoint.y);
+			draw_line(player.shootPosX,player.shootPosY, targetPoint.x,targetPoint.y);
 		}
 	
 		if(obj_Debug.debug == 1)

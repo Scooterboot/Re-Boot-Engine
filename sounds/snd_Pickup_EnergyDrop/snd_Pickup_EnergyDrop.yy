@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.540408,
+  "duration":0.54040813,
   "exportDir":"",
   "name":"snd_Pickup_EnergyDrop",
   "parent":{

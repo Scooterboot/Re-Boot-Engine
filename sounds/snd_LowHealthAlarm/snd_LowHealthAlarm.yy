@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.279458,
+  "duration":0.27947846,
   "exportDir":"",
   "name":"snd_LowHealthAlarm",
   "parent":{

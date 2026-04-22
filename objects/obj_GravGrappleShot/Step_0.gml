@@ -6,8 +6,6 @@ if(global.GamePaused())
     exit;
 }
 
-SetControlVars("player");
-
 var player = creator;
 if(!instance_exists(player))
 {
@@ -24,7 +22,7 @@ if(gravState == GravGrapState.None)
 	if(!grapReel)
 	{
 		grappleDist = min(grappleDist+grapSpeed, distMax);
-		if(grappleDist >= distMax || !cFire)
+		if(grappleDist >= distMax || !global.control[INPUT_VERB.Fire])
 		{
 			grapReel = true;
 		}
@@ -144,11 +142,6 @@ if(gravState != GravGrapState.None)
 	{
 		if(!stateChanged && player.state != State.GravGrapple)
 		{
-			if(player.animState == AnimState.Grip)
-			{
-				player.dir *= -1;
-				player.dirFrame = 4*dir;
-			}
 			player.gravGrapDist = point_distance(player.position.X, player.position.Y, x, y);
 			player.gravGrapAngle = player.shootDir - 90;
 			player.ChangeState(State.GravGrapple, AnimState.GravGrapple, MoveState.Custom, mask_Player_Somersault, false, true);
@@ -171,7 +164,7 @@ if(gravState != GravGrapState.None)
 	    audio_play_sound(snd_GrappleBeam_Loop,0,true);
 	}
 	
-	if(!cFire)
+	if(!global.control[INPUT_VERB.Fire])
 	{
 		impacted = 2;
 	}
@@ -179,5 +172,3 @@ if(gravState != GravGrapState.None)
 
 position.X = x;
 position.Y = y;
-
-SetReleaseVars("player");

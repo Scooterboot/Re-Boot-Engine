@@ -14,7 +14,8 @@ if(collected && itemID != -1)
 		{
 			var itemX = obj_Map.GetMapPosX(item.x),
 				itemY = obj_Map.GetMapPosX(item.y);
-			if(item.mapIcon[2] == mapIcon[2] && item.mapIcon[3] == mapIcon[3] && !item.mapIconHidden)
+			if (item.mapIcon[MapIconInd.XPos] == mapIcon[MapIconInd.XPos] && 
+				item.mapIcon[MapIconInd.YPos] == mapIcon[MapIconInd.YPos] && !item.mapIconHidden)
 			{
 				if(isMajorItem)
 				{
@@ -39,12 +40,12 @@ if(collected && itemID != -1)
 	
 	if(flag == 0)
 	{
-		mapIcon[1] = 2;
+		mapIcon[MapIconInd.ImageIndex] = 2;
 		UpdateMapIcon();
 	}
 	if(flag == 2)
 	{
-		mapIcon[1] = 1;
+		mapIcon[MapIconInd.ImageIndex] = 1;
 		UpdateMapIcon();
 	}
 }

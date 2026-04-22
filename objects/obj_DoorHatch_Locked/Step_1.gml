@@ -52,7 +52,7 @@ if(unlocked && !prevUnlocked)
 	}
 	
 	mapIconIndex = 0;
-	mapIcon[1] = mapIconIndex;
+	mapIcon[MapIconInd.ImageIndex] = mapIconIndex;
 	UpdateMapIcon();
 	
 	prevUnlocked = unlocked;

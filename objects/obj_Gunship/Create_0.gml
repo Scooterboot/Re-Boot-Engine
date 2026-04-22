@@ -40,15 +40,9 @@ block = instance_create_layer(x,y,layer,obj_Gunship_Mask);
 
 var msSizeW = global.mapSquareSizeW,
 	msSizeH = global.mapSquareSizeH;
-mapIcon = array_create(7);
-mapIcon[0] = sprite_get_name(sprt_MapIcon_Save);
-mapIcon[1] = 0;
-mapIcon[2] = obj_Map.GetMapPosX(x) * msSizeW + msSizeW/2;
-mapIcon[3] = obj_Map.GetMapPosY(y) * msSizeH + msSizeH/2;
-mapIcon[4] = 1;
-mapIcon[5] = 1;
-mapIcon[6] = 0;
-mapIcon[7] = false;
+var miX = obj_Map.GetMapPosX(x) * msSizeW + msSizeW/2,
+	miY = obj_Map.GetMapPosY(y) * msSizeH + msSizeH/2;
+mapIcon = obj_Map.CreateMapIcon(sprite_get_name(sprt_MapIcon_Save), 0, miX, miY,,,,false);
 
 function UpdateMapIcon()
 {
@@ -57,7 +51,7 @@ function UpdateMapIcon()
 		for(var j = 0; j < ds_list_size(global.mapArea[i].icons); j++)
 		{
 			var _icon = global.mapArea[i].icons[| j];
-			if(is_array(_icon) && _icon[0] == mapIcon[0])
+			if(is_array(_icon) && _icon[MapIconInd.SpriteIndex] == mapIcon[MapIconInd.SpriteIndex])
 			{
 				ds_list_delete(global.mapArea[i].icons,j);
 			}
@@ -66,38 +60,15 @@ function UpdateMapIcon()
 	
 	var msSizeW = global.mapSquareSizeW,
 		msSizeH = global.mapSquareSizeH;
-	mapIcon[2] = obj_Map.GetMapPosX(x) * msSizeW + msSizeW/2;
-	mapIcon[3] = obj_Map.GetMapPosY(y) * msSizeH + msSizeH/2;
+	mapIcon[MapIconInd.XPos] = obj_Map.GetMapPosX(x) * msSizeW + msSizeW/2;
+	mapIcon[MapIconInd.YPos] = obj_Map.GetMapPosY(y) * msSizeH + msSizeH/2;
 	
 	ds_list_add(global.rmMapArea.icons, mapIcon);
 }
 
-shipIcon = array_create(7);
-shipIcon[0] = sprite_get_name(sprt_MapIcon_Ship);
-shipIcon[1] = 0;
-shipIcon[2] = obj_Map.GetMapPosX(x) * msSizeW + msSizeW/2;
-shipIcon[3] = obj_Map.GetMapPosY(y) * msSizeH + msSizeH/2;
-shipIcon[4] = 1;
-shipIcon[5] = 1;
-shipIcon[6] = 0;
-shipIcon[7] = false;
+shipIcon = obj_Map.CreateMapIcon(sprite_get_name(sprt_MapIcon_Ship), 0, miX, miY,,,,false);
 
 mapListIndex = -1;
-
-function FindArrayIndexInList(_list,_array)
-{
-	for(var i = 0; i < ds_list_size(_list); i++)
-	{
-		if(is_array(_list[| i]))
-		{
-			if(_list[| i][0] == _array[0])
-			{
-				return i;
-			}
-		}
-	}
-	return -1;
-}
 function UpdateShipIcon()
 {
 	if(global.rmMapArea != noone && ds_exists(global.rmMapArea.icons,ds_type_list))
@@ -112,7 +83,5 @@ function UpdateShipIcon()
 		{
 			global.rmMapArea.icons[| mapListIndex] = shipIcon;
 		}
-		
-		//show_debug_message(string(ds_list_size(global.rmMapArea.icons)));
 	}
 }

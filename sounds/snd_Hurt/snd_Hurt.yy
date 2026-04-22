@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.337052,
+  "duration":0.33705217,
   "exportDir":"",
   "name":"snd_Hurt",
   "parent":{

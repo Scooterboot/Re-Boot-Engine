@@ -8,18 +8,18 @@ if(itemID != -1 && !collected && ds_list_find_index(global.collectedItemList,roo
 
 var msSizeW = global.mapSquareSizeW,
 	msSizeH = global.mapSquareSizeH;
-mapIcon[2] = obj_Map.GetMapPosX(x) * msSizeW + msSizeW/2;
-mapIcon[3] = obj_Map.GetMapPosY(y) * msSizeH + msSizeH/2;
+mapIcon[MapIconInd.XPos] = obj_Map.GetMapPosX(x) * msSizeW + msSizeW/2;
+mapIcon[MapIconInd.YPos] = obj_Map.GetMapPosY(y) * msSizeH + msSizeH/2;
 
 if(isMajorItem)
 {
-	mapIcon[1] = 0;
+	mapIcon[MapIconInd.ImageIndex] = 0;
 }
 
-var m = FindArrayIndexInList(global.rmMapArea.icons, mapIcon);
+var m = FindArrayIndexInList(global.rmMapArea.icons, mapIcon, MapIconInd.ImageIndex);
 if(m != -1)
 {
-	mapIcon[1] = min(mapIcon[1], global.rmMapArea.icons[| m][1]);
+	mapIcon[MapIconInd.ImageIndex] = min(mapIcon[MapIconInd.ImageIndex], global.rmMapArea.icons[| m][MapIconInd.ImageIndex]);
 }
 
 UpdateMapIcon();

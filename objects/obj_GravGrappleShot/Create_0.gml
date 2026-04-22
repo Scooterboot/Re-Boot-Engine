@@ -1,7 +1,5 @@
 event_inherited();
 
-InitControlVars("player");
-
 damageType = DmgType.Misc;
 damageSubType = array_create(DmgSubType_Misc._Length,false);
 damageSubType[DmgSubType_Misc.All] = true;
@@ -37,11 +35,9 @@ grapFrame = 0;
 function GetPlayerPos()
 {
 	var player = creator;
-	var playerShootPosX = player.x+player.sprtOffsetX+player.shotOffsetX,
-		playerShootPosY = player.y+player.sprtOffsetY+player.shotOffsetY;
-	var _sdist = point_distance(player.x,player.y, playerShootPosX,playerShootPosY);
-	var pX = playerShootPosX - lengthdir_x(_sdist, player.shootDir),
-		pY = playerShootPosY - lengthdir_y(_sdist, player.shootDir);
+	var _sdist = point_distance(player.x,player.y, player.shootPosX,player.shootPosY);
+	var pX = player.shootPosX - lengthdir_x(_sdist, player.shootDir),
+		pY = player.shootPosY - lengthdir_y(_sdist, player.shootDir);
 	
 	return new Vector2(pX, pY);
 }

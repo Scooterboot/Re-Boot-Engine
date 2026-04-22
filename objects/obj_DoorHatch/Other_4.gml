@@ -18,17 +18,17 @@ else if(hatchID != -1)
 var msSizeW = global.mapSquareSizeW,
 	msSizeH = global.mapSquareSizeH;
 
-mapIcon[1] = mapIconIndex;
-mapIcon[2] = obj_Map.GetMapPosX(x) * msSizeW + msSizeW/2;
-mapIcon[3] = obj_Map.GetMapPosY(y) * msSizeH + msSizeH/2;
-mapIcon[4] = image_xscale;
-mapIcon[5] = image_yscale;
-mapIcon[6] = image_angle;
+mapIcon[MapIconInd.ImageIndex] = mapIconIndex;
+mapIcon[MapIconInd.XPos] = obj_Map.GetMapPosX(x) * msSizeW + msSizeW/2;
+mapIcon[MapIconInd.YPos] = obj_Map.GetMapPosY(y) * msSizeH + msSizeH/2;
+mapIcon[MapIconInd.XScale] = image_xscale;
+mapIcon[MapIconInd.YScale] = image_yscale;
+mapIcon[MapIconInd.Rotation] = image_angle;
 
 if(flag)
 {
 	mapIconIndex = 0;
-	mapIcon[1] = mapIconIndex;
+	mapIcon[MapIconInd.ImageIndex] = mapIconIndex;
 	
 	htc = instance_create_layer(x,y,layer,obj_DoorHatch_Blue);
 	htc.image_index = image_index;

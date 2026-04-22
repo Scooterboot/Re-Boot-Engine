@@ -1,6 +1,6 @@
 {
   "$GMSound":"v2",
-  "%Name":"snd_WallJump",
+  "%Name":"snd_Slide",
   "audioGroupId":{
     "name":"audio_sound",
     "path":"audiogroups/audio_sound",
@@ -10,17 +10,17 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.1729932,
+  "duration":0.33884352,
   "exportDir":"",
-  "name":"snd_WallJump",
+  "name":"snd_Slide",
   "parent":{
     "name":"Player",
     "path":"folders/Sounds/Player.yy",
   },
-  "preload":true,
+  "preload":false,
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"snd_WallJump",
+  "soundFile":"snd_Slide.wav",
   "volume":1.0,
 }

@@ -192,6 +192,9 @@ if(projStyle == ProjStyle.Wave || projStyle == ProjStyle.Spazer)
 if(tileCollide && impacted == 0)
 {
 	var velocity = point_distance(0,0,fVelX,fVelY);
+	var _dir = point_direction(0,0,fVelX,fVelY);
+	var _signX = lengthdir_x(1,_dir),
+		_signY = lengthdir_y(1,_dir);
 	
 	var _len = max(10,velocity);
 	if(instance_exists(creator) && lastReflec == noone)
@@ -201,19 +204,19 @@ if(tileCollide && impacted == 0)
 	var _tailX = lengthdir_x(_len,direction),
 		_tailY = lengthdir_y(_len,direction);
 	
-	var _dir = point_direction(0,0,fVelX,fVelY);
-	var _signX = lengthdir_x(1,_dir),
-		_signY = lengthdir_y(1,_dir);
-	
-	if(self.entity_position_collide(fVelX,fVelY,x,y) || self.entity_collision_line(x-_tailX,y-_tailY,x+fVelX,y+fVelY,true,true))
+	if(self.entity_collision_line(x,y, x+fVelX,y+fVelY))
 	{
-		while(!self.entity_position_collide(_signX,_signY,x,y) && !self.entity_collision_line(x-_tailX,y-_tailY,x+_signX,y+_signY,true,true) && velocity >= 0)
+		while(!self.entity_collision_line(x,y, x+_signX,y+_signY) && velocity >= 0)
 		{
 			x += _signX;
 			y += _signY;
 			velocity--;
 		}
 		
+		impacted = 1;
+	}
+	else if(self.entity_collision_line(x-_tailX,y-_tailY, x,y))
+	{
 		impacted = 1;
 	}
 	else

@@ -340,7 +340,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		
 		with(obj_Player)
 		{
-			if(item[Item.AccelDash])
+			if(item[Item.AccelDash] || item[Item.HydroBoost])
 			{
 				var _meterY = yy+yDiff+8;
 				var sprInd = sprt_HUD_DodgeMeter,

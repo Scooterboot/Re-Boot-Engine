@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.213016,
+  "duration":0.21301587,
   "exportDir":"",
   "name":"snd_Pickup_MissileDrop",
   "parent":{
