@@ -202,9 +202,7 @@ shineDirDiff = 0;
 shineStart = 0;
 shineEnd = 0;
 shineEndMax = 40;//30;
-shineSparkStartSpeed = 10;
-shineSparkSpeed = shineSparkStartSpeed;
-shineSparkSpeedMax = 15;//13;
+shineSparkSpeed = 0;
 shineFXCounter = 0;
 shineRampFix = false;
 
@@ -336,7 +334,7 @@ dodgeLenMax[0] = 0;
 dodgeLenEnd[1] = 17;
 dodgeLenMax[1] = 20;
 // Hydro Boost
-dodgeLenEnd[2] = 13;
+dodgeLenEnd[2] = 12;
 dodgeLenMax[2] = 15;
 // Accel Dash + Hydro Boost
 dodgeLenEnd[3] = 17;
@@ -437,7 +435,9 @@ enum MaxSpeed
 	SpeedBoost,
 	Jump,
 	Somersault,
+	ShineSpark,
 	Dodge,
+	DodgeMax,
 	MorphBall,
 	MockBall,
 	AirMorph,
@@ -451,7 +451,9 @@ maxSpeed[MaxSpeed.Sprint,		LiquidState.None]		= 4.75;
 maxSpeed[MaxSpeed.SpeedBoost,	LiquidState.None]		= 9.75;
 maxSpeed[MaxSpeed.Jump,			LiquidState.None]		= 1.25;
 maxSpeed[MaxSpeed.Somersault,	LiquidState.None]		= 1.875; // - (SM: 1.375)
-maxSpeed[MaxSpeed.Dodge,		LiquidState.None]		= 6.75;//7.25;
+maxSpeed[MaxSpeed.ShineSpark,	LiquidState.None]		= 15;
+maxSpeed[MaxSpeed.Dodge,		LiquidState.None]		= 6.75;
+maxSpeed[MaxSpeed.DodgeMax,		LiquidState.None]		= 9.75;
 maxSpeed[MaxSpeed.MorphBall,	LiquidState.None]		= 3.25;
 maxSpeed[MaxSpeed.MockBall,		LiquidState.None]		= 5.25;
 maxSpeed[MaxSpeed.AirMorph,		LiquidState.None]		= 1;
@@ -462,10 +464,12 @@ maxSpeed[MaxSpeed.MoonFall,		LiquidState.None]		= 1.75;
 
 maxSpeed[MaxSpeed.Run,			LiquidState.HydroBoost]	= 2.25;
 maxSpeed[MaxSpeed.Sprint,		LiquidState.HydroBoost]	= 3.75;
-maxSpeed[MaxSpeed.SpeedBoost,	LiquidState.HydroBoost]	= 9.75;
+maxSpeed[MaxSpeed.SpeedBoost,	LiquidState.HydroBoost]	= 8.75;
 maxSpeed[MaxSpeed.Jump,			LiquidState.HydroBoost]	= 1.25;
 maxSpeed[MaxSpeed.Somersault,	LiquidState.HydroBoost]	= 1.375;
+maxSpeed[MaxSpeed.ShineSpark,	LiquidState.HydroBoost]	= 14;
 maxSpeed[MaxSpeed.Dodge,		LiquidState.HydroBoost]	= 4.75;
+maxSpeed[MaxSpeed.DodgeMax,		LiquidState.HydroBoost]	= 7.25;
 maxSpeed[MaxSpeed.MorphBall,	LiquidState.HydroBoost]	= 3.25;
 maxSpeed[MaxSpeed.MockBall,		LiquidState.HydroBoost]	= 4.25;
 maxSpeed[MaxSpeed.AirMorph,		LiquidState.HydroBoost]	= 1;
@@ -476,10 +480,12 @@ maxSpeed[MaxSpeed.MoonFall,		LiquidState.HydroBoost]	= 1.75;
 
 maxSpeed[MaxSpeed.Run,			LiquidState.Liquid]		= 1.75;//2.75;
 maxSpeed[MaxSpeed.Sprint,		LiquidState.Liquid]		= 2.75;//3.75;
-maxSpeed[MaxSpeed.SpeedBoost,	LiquidState.Liquid]		= 9.75;
+maxSpeed[MaxSpeed.SpeedBoost,	LiquidState.Liquid]		= 6.75;
 maxSpeed[MaxSpeed.Jump,			LiquidState.Liquid]		= 1.25;
 maxSpeed[MaxSpeed.Somersault,	LiquidState.Liquid]		= 1.375;
+maxSpeed[MaxSpeed.ShineSpark,	LiquidState.Liquid]		= 12;
 maxSpeed[MaxSpeed.Dodge,		LiquidState.Liquid]		= 3.25;
+maxSpeed[MaxSpeed.DodgeMax,		LiquidState.Liquid]		= 6.5;
 maxSpeed[MaxSpeed.MorphBall,	LiquidState.Liquid]		= 2.75;
 maxSpeed[MaxSpeed.MockBall,		LiquidState.Liquid]		= 3.75;
 maxSpeed[MaxSpeed.AirMorph,		LiquidState.Liquid]		= 1;
@@ -490,10 +496,12 @@ maxSpeed[MaxSpeed.MoonFall,		LiquidState.Liquid]		= 1.5;
 
 maxSpeed[MaxSpeed.Run,			LiquidState.DmgLiquid]	= 1.75;
 maxSpeed[MaxSpeed.Sprint,		LiquidState.DmgLiquid]	= 2.75;
-maxSpeed[MaxSpeed.SpeedBoost,	LiquidState.DmgLiquid]	= 9.75;
+maxSpeed[MaxSpeed.SpeedBoost,	LiquidState.DmgLiquid]	= 6.75;
 maxSpeed[MaxSpeed.Jump,			LiquidState.DmgLiquid]	= 1.25;
 maxSpeed[MaxSpeed.Somersault,	LiquidState.DmgLiquid]	= 1.375;
+maxSpeed[MaxSpeed.ShineSpark,	LiquidState.DmgLiquid]	= 12;
 maxSpeed[MaxSpeed.Dodge,		LiquidState.DmgLiquid]	= 3.25;
+maxSpeed[MaxSpeed.DodgeMax,		LiquidState.DmgLiquid]	= 6.5;
 maxSpeed[MaxSpeed.MorphBall,	LiquidState.DmgLiquid]	= 2.75;
 maxSpeed[MaxSpeed.MockBall,		LiquidState.DmgLiquid]	= 3.75;
 maxSpeed[MaxSpeed.AirMorph,		LiquidState.DmgLiquid]	= 1;
@@ -508,7 +516,8 @@ enum MoveSpeed
 	Sprint,
 	WallJump,
 	ClingWallJump,
-	Spark,
+	SparkStart,
+	SparkAcc,
 	Dodge,
 	DmgBoost,
 	MorphBall,
@@ -520,7 +529,8 @@ moveSpeed[MoveSpeed.Default,		LiquidState.None]		= 0.1875;
 moveSpeed[MoveSpeed.Sprint,			LiquidState.None]		= 0.0625;
 moveSpeed[MoveSpeed.WallJump,		LiquidState.None]		= 0.5625;//1.375;
 moveSpeed[MoveSpeed.ClingWallJump,	LiquidState.None]		= 2.25;
-moveSpeed[MoveSpeed.Spark,			LiquidState.None]		= 0.109375;
+moveSpeed[MoveSpeed.SparkStart,		LiquidState.None]		= 10;
+moveSpeed[MoveSpeed.SparkAcc,		LiquidState.None]		= 0.109375;
 moveSpeed[MoveSpeed.Dodge,			LiquidState.None]		= 2.25;
 moveSpeed[MoveSpeed.DmgBoost,		LiquidState.None]		= 5.375;
 moveSpeed[MoveSpeed.MorphBall,		LiquidState.None]		= 0.1;
@@ -532,7 +542,8 @@ moveSpeed[MoveSpeed.Default,		LiquidState.HydroBoost]	= 0.09375;
 moveSpeed[MoveSpeed.Sprint,			LiquidState.HydroBoost]	= 0.03125;
 moveSpeed[MoveSpeed.WallJump,		LiquidState.HydroBoost]	= 0.75;
 moveSpeed[MoveSpeed.ClingWallJump,	LiquidState.HydroBoost]	= 1.875;
-moveSpeed[MoveSpeed.Spark,			LiquidState.HydroBoost]	= 0.0625;
+moveSpeed[MoveSpeed.SparkStart,		LiquidState.HydroBoost]	= 9;
+moveSpeed[MoveSpeed.SparkAcc,		LiquidState.HydroBoost]	= 0.0625;
 moveSpeed[MoveSpeed.Dodge,			LiquidState.HydroBoost]	= 1.625;
 moveSpeed[MoveSpeed.DmgBoost,		LiquidState.HydroBoost]	= 4.375;
 moveSpeed[MoveSpeed.MorphBall,		LiquidState.HydroBoost]	= 0.05;
@@ -544,7 +555,8 @@ moveSpeed[MoveSpeed.Default,		LiquidState.Liquid]		= 0.015625;
 moveSpeed[MoveSpeed.Sprint,			LiquidState.Liquid]		= 0.005215;
 moveSpeed[MoveSpeed.WallJump,		LiquidState.Liquid]		= 0.75;
 moveSpeed[MoveSpeed.ClingWallJump,	LiquidState.Liquid]		= 1.375;
-moveSpeed[MoveSpeed.Spark,			LiquidState.Liquid]		= 0.03125;
+moveSpeed[MoveSpeed.SparkStart,		LiquidState.Liquid]		= 7;
+moveSpeed[MoveSpeed.SparkAcc,		LiquidState.Liquid]		= 0.03125;
 moveSpeed[MoveSpeed.Dodge,			LiquidState.Liquid]		= 1.125;
 moveSpeed[MoveSpeed.DmgBoost,		LiquidState.Liquid]		= 3.3;
 moveSpeed[MoveSpeed.MorphBall,		LiquidState.Liquid]		= 0.02;
@@ -556,7 +568,8 @@ moveSpeed[MoveSpeed.Default,		LiquidState.DmgLiquid]	= 0.015625;
 moveSpeed[MoveSpeed.Sprint,			LiquidState.DmgLiquid]	= 0.005215;
 moveSpeed[MoveSpeed.WallJump,		LiquidState.DmgLiquid]	= 0.75;
 moveSpeed[MoveSpeed.ClingWallJump,	LiquidState.DmgLiquid]	= 1.375;
-moveSpeed[MoveSpeed.Spark,			LiquidState.DmgLiquid]	= 0.03125;
+moveSpeed[MoveSpeed.SparkStart,		LiquidState.DmgLiquid]	= 7;
+moveSpeed[MoveSpeed.SparkAcc,		LiquidState.DmgLiquid]	= 0.03125;
 moveSpeed[MoveSpeed.Dodge,			LiquidState.DmgLiquid]	= 1.125;
 moveSpeed[MoveSpeed.DmgBoost,		LiquidState.DmgLiquid]	= 3.3;
 moveSpeed[MoveSpeed.MorphBall,		LiquidState.DmgLiquid]	= 0.02;
@@ -773,7 +786,14 @@ fVelY = 0;
 shiftX = 0;
 shiftY = 0;
 
-function MinimumBoostSpeed() { return lerp(maxSpeed[MaxSpeed.Sprint, 0], maxSpeed[MaxSpeed.SpeedBoost, 0], 0.75); }
+function MinimumBoostSpeed(_liqState = undefined)
+{
+	if(is_undefined(_liqState))
+	{
+		_liqState = liquidState;
+	}
+	return lerp(maxSpeed[MaxSpeed.Sprint, _liqState], maxSpeed[MaxSpeed.SpeedBoost, _liqState], 0.75);
+}
 
 #endregion
 #region MoveState
@@ -791,17 +811,13 @@ moveState = MoveState.Default;
 
 function PerformMovement(_move, _moveSpd, _turnSpd, _frict, _maxSpd)
 {
-	if(_move >= 1)
+	if(_move > 0)
 	{
 		if(velX <= _maxSpd)
 		{
 			if(velX < 0)
 			{
-				velX = min(velX + _turnSpd, 0);
-			}
-			else if(_move == 1)
-			{
-				velX = 0;
+				velX = min(velX + (_moveSpd+_frict+_turnSpd), 0);
 			}
 			else
 			{
@@ -809,17 +825,13 @@ function PerformMovement(_move, _moveSpd, _turnSpd, _frict, _maxSpd)
 			}
 		}
 	}
-	if(_move <= -1)
+	if(_move < 0)
 	{
 		if(velX >= -_maxSpd)
 		{
 			if(velX > 0)
 			{
-				velX = max(velX - _turnSpd, 0);
-			}
-			else if(_move == -1)
-			{
-				velX = 0;
+				velX = max(velX - (_moveSpd+_frict+_turnSpd), 0);
 			}
 			else
 			{
@@ -3172,14 +3184,12 @@ function MoveStick_CheckPGrip(_dir, movingTile)
 {
 	if(state == State.Grip && grippedDir == _dir)
 	{
-		var _px = position.X,
-			_py = position.Y;
-		var rcheck = _px+7,
-			lcheck = _px;
+		var lCheck = x,
+			rCheck = self.bb_right(x)+2 + 1;
 		if(_dir == -1)
 		{
-			rcheck = _px;
-			lcheck = _px-7;
+			lCheck = self.bb_left(x)-2;
+			rCheck = x;
 		}
 		if(startClimb)
 		{
@@ -3189,11 +3199,11 @@ function MoveStick_CheckPGrip(_dir, movingTile)
 				cX -= climbX[floor(i)] * _dir;
 				cY += climbY[floor(i)];
 			}
-			return collision_rectangle(lcheck+cX, _py-17+cY, rcheck+cX, _py-15+cY, ColType_MovingSolid, true, true);
+			return collision_rectangle(lCheck+cX, self.bb_top(y)+cY, rCheck+cX, self.bb_top(y)+2+cY, ColType_MovingSolid, true, true);
 		}
 		else
 		{
-			return collision_rectangle(lcheck, _py-17, rcheck, _py-15, ColType_MovingSolid, true, true);
+			return collision_rectangle(lCheck, self.bb_top(y), rCheck, self.bb_top(y)+2, ColType_MovingSolid, true, true);
 		}
 	}
 	return false;
@@ -3661,7 +3671,7 @@ function GravGrapSwinging()
 
 function EntityLiquid_Large(_velX, _velY)
 {
-	EntityLiquid(2,_velX,_velY, true, false, false);
+	self.EntityLiquid(2,_velX,_velY, true, false, false);
 	
 	canSplash++;
 	if(canSplash > 10)
@@ -4257,20 +4267,24 @@ function SetArmPosSomersault(sFrameMax, degNum, frame6)
 	{
 		case 0:
 		{
-			ArmPos(2*dir,7);
+			self.ArmPos(2*dir,7);
 			break;
 		}
 		case 1:
 		{
-			ArmPos(6*dir,10);
+			self.ArmPos(6*dir,10);
 			break;
 		}
 		default:
 		{
-			ArmPos(lengthdir_x(10*dir,rotPos),lengthdir_y(10,rotPos));
+			self.ArmPos(lengthdir_x(10*dir,rotPos),lengthdir_y(10,rotPos));
 			break;
 		}
 	}
+	var _len = point_distance(0,0,armOffsetX,armOffsetY),
+		_dir = point_direction(0,0,armOffsetX,armOffsetY);
+	armOffsetX = lengthdir_x(_len,_dir+rotation);
+	armOffsetY = lengthdir_y(_len,_dir+rotation);
 }
 #endregion
 

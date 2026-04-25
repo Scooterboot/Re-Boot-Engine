@@ -218,15 +218,10 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		
 		with(obj_Player)
 		{
-			//if(item[Item.SpeedBooster] || (animState == AnimState.Morph && item[Item.BoostBall]))
-			//{
+			if(item[Item.SpeedBooster] || shineCharge > 0 || item[Item.BoostBall])
+			{
 				var _sprt = sprt_HUD_Speedometer;
-				var spdMax = maxSpeed[MaxSpeed.Sprint, 0];
-				//if(item[Item.SpeedBooster] || (animState == AnimState.Morph && item[Item.BoostBall]))
-				//{
-					_sprt = sprt_HUD_Speedometer_SB;
-					spdMax = self.MinimumBoostSpeed();
-				//}
+				var spdMax = self.MinimumBoostSpeed(LiquidState.None);
 				
 				var _meterY = yy+yDiff+8;
 				var width = sprite_get_width(_sprt);
@@ -333,7 +328,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				}
 				
 				yDiff += 5;
-			//}
+			}
 		}
 		#endregion
 		#region Dash Charges

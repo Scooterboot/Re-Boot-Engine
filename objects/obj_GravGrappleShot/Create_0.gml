@@ -42,16 +42,15 @@ function GetPlayerPos()
 	return new Vector2(pX, pY);
 }
 
-gBlockList = ds_list_create();
 function GetGrapBlock(listNum)
 {
 	if(listNum > 0)
 	{
 		for(var i = 0; i < listNum; i++)
 		{
-			if(instance_exists(gBlockList[| i]))
+			if(instance_exists(blockList[| i]))
 			{
-				var block = gBlockList[| i];
+				var block = blockList[| i];
 				var isSolid = true;
 				if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
 				{
@@ -60,12 +59,12 @@ function GetGrapBlock(listNum)
 				
 				if(isSolid)
 				{
-					ds_list_clear(gBlockList);
+					ds_list_clear(blockList);
 					return block;
 				}
 			}
 		}
-		ds_list_clear(gBlockList);
+		ds_list_clear(blockList);
 	}
 	return noone;
 }

@@ -77,7 +77,7 @@ if(gravState == GravGrapState.None)
 			audio_play_sound(snd_GrappleBeam_Latch,0,false);
 			gravState = GravGrapState.Ground;
 			
-			grapBlock = self.GetGrapBlock(collision_line_list(x,y, x+_signX,y+_signY, solids, true,true,gBlockList,true));
+			grapBlock = self.GetGrapBlock(collision_line_list(x,y, x+_signX,y+_signY, solids, true,true,blockList,true));
 			if(instance_exists(grapBlock))
 			{
 				grapBlockOffX = x - grapBlock.x;
@@ -103,7 +103,7 @@ if(gravState == GravGrapState.None)
 			audio_play_sound(snd_GrappleBeam_Latch,0,false);
 			gravState = GravGrapState.Ground;
 			
-			grapBlock = self.GetGrapBlock(collision_line_list(x,y, x+_signX,y+_signY, solids, true,true,gBlockList,true));
+			grapBlock = self.GetGrapBlock(collision_line_list(x,y, x+_signX,y+_signY, solids, true,true,blockList,true));
 			if(instance_exists(grapBlock))
 			{
 				grapBlockOffX = x - grapBlock.x;

@@ -55,14 +55,25 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 			}
 			else if(grounded)
 			{
-				var block_bl = instance_position(bb_left(),bb_bottom()+1,solids),
-					block_br = instance_position(bb_right(),bb_bottom()+1,solids),
-					platform = collision_line(bb_left(), bb_bottom()+1, bb_right(), bb_bottom()+1, obj_Platform,true,true);
-				if ((!instance_exists(block_bl) xor (instance_exists(block_bl) && block_bl.object_index == obj_CrumbleBlock)) && 
-					(!instance_exists(block_br) xor (instance_exists(block_br) && block_br.object_index == obj_CrumbleBlock)) && 
-					!instance_exists(platform))
+				canXRay = false;
+				
+				var _solids = array_concat(solids,ColType_Platform);
+				var num = instance_place_list(position.X,position.Y+1,_solids,blockList,true);
+				if(num > 0)
 				{
-					canXRay = false;
+					for(var i = 0; i < num; i++)
+					{
+						if(instance_exists(blockList[| i]))
+						{
+							var block = blockList[| i];
+							if(self.isValidSolid(block) && block.object_index != obj_CrumbleBlock && (!object_is_in_array(block.object_index,ColType_Platform) || self.bb_bottom() < block.bbox_top))
+							{
+								canXRay = true;
+								break;
+							}
+						}
+					}
+					ds_list_clear(blockList);
 				}
 			}
 			
