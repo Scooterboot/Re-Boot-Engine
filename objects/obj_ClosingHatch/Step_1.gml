@@ -16,7 +16,7 @@ for(var i = 0; i < (room_width+room_height)/2; i+= 16)
 }
 if(!instance_exists(player) && doorRespawnObj != noone)
 {
-    htc = instance_create_layer(x,y,layer,doorRespawnObj);
+    var htc = instance_create_layer(x,y,layer,doorRespawnObj);
     htc.image_index = image_index;
     htc.direction = direction;
     htc.image_angle = image_angle;

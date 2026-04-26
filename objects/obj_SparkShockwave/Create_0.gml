@@ -21,3 +21,6 @@ rotFrame = 4;
 
 array_fill(doorOpenType,false);
 array_fill(blockBreakType,false);
+
+blockReveal_Bomb = false;
+canBeReflected = false;

@@ -10,118 +10,121 @@ fVelY = velY + speed_y;
 
 #region Reflection
 
-var _x = x,
-	_y = y;
-if(projStyle == ProjStyle.Wave)
+if(canBeReflected)
 {
-	_x = xx;
-	_y = yy;
-}
-
-var reflec = noone;
-var rnum = collision_line_list(_x,_y,_x+fVelX,_y+fVelY,obj_Reflec,true,true,reflecList,true);
-if(tileCollide && array_contains(doorOpenType, true))
-{
-	rnum += collision_line_list(x,y,x+fVelX,y+fVelY,obj_DoorHatch,true,true,reflecList,true);
-}
-if(rnum > 0)
-{
-	for(var i = 0; i < rnum; i++)
-	{
-		var _ref = reflecList[| i];
-		if(instance_exists(_ref))
-		{
-			if(_ref.object_index == obj_Reflec)
-			{
-				var p1 = _ref.GetPoint1(),
-					p2 = _ref.GetPoint2();
-				if(lines_intersect(p1.X,p1.Y,p2.X,p2.Y,_x,_y,_x+fVelX,_y+fVelY,true) > 0 && lastReflec != _ref)
-				{
-					reflec = _ref;
-					break;
-				}
-			}
-			else if(object_is_ancestor(_ref.object_index,obj_DoorHatch))
-			{
-				if(!_ref.unlocked ||
-				(!doorOpenType[DoorOpenType.Beam] && _ref.object_index == obj_DoorHatch_Blue) ||
-				(!doorOpenType[DoorOpenType.Missile] && _ref.object_index == obj_DoorHatch_Missile) ||
-				(!doorOpenType[DoorOpenType.SMissile] && _ref.object_index == obj_DoorHatch_Super) ||
-				(!doorOpenType[DoorOpenType.PBomb] && _ref.object_index == obj_DoorHatch_Power))
-				{
-					reflec = _ref;
-					break;
-				}
-			}
-		}
-	}
-}
-ds_list_clear(reflecList);
-
-if(instance_exists(reflec) && lastReflec != reflec)
-{
-	var _ang = direction;
-	var _spd = point_distance(0,0,velX,velY);
-	
-	var vX = 0,
-		vY = 0,
-		_c = 0;
-	if(reflec.object_index == obj_Reflec)
-	{
-		_ang = ReflectAngle(_ang, reflec.image_angle+90);
-		
-		var p1 = reflec.GetPoint1(),
-			p2 = reflec.GetPoint2();
-		while(lines_intersect(p1.X,p1.Y,p2.X,p2.Y,_x,_y,_x+vX,_y+vY,true) <= 0 && _c < _spd)
-		{
-			vX += sign(velX) * min(1,abs(velX)-abs(vX));
-			vY += sign(velY) * min(1,abs(velY)-abs(vY));
-			_c++;
-		}
-	}
-	else if(object_is_ancestor(reflec.object_index,obj_DoorHatch))
-	{
-		_ang = ReflectAngle(_ang, reflec.image_angle+(180 * (reflec.image_xscale < 0)));
-		
-		while(!collision_line(_x,_y,_x+vX,_y+vY,reflec,true,true) && _c < _spd)
-		{
-			vX += sign(velX) * min(1,abs(velX)-abs(vX));
-			vY += sign(velY) * min(1,abs(velY)-abs(vY));
-			_c++;
-		}
-		vX -= sign(velX);
-		vY -= sign(velY);
-		_c--;
-	}
-	
-	xstart = _x+vX;
-	ystart = _y+vY;
-	
-	velX = lengthdir_x(_spd,_ang);
-	velY = lengthdir_y(_spd,_ang);
-	
-	while(_c < _spd)
-	{
-		vX += sign(velX) * min(1,abs(velX)-abs(vX));
-		vY += sign(velY) * min(1,abs(velY)-abs(vY));
-		_c++;
-	}
-	
-	fVelX = vX;
-	fVelY = vY;
-	
-	direction = _ang;
-	waveDir *= -1;
+	var _x = x,
+		_y = y;
 	if(projStyle == ProjStyle.Wave)
 	{
-		t = 0;
-		t2 = 0;
+		_x = xx;
+		_y = yy;
 	}
 	
-	speed_x = 0;
-	speed_y = 0;
+	var reflec = noone;
+	var rnum = collision_line_list(_x,_y,_x+fVelX,_y+fVelY,obj_Reflec,true,true,reflecList,true);
+	if(tileCollide && array_contains(doorOpenType, true))
+	{
+		rnum += collision_line_list(x,y,x+fVelX,y+fVelY,obj_DoorHatch,true,true,reflecList,true);
+	}
+	if(rnum > 0)
+	{
+		for(var i = 0; i < rnum; i++)
+		{
+			var _ref = reflecList[| i];
+			if(instance_exists(_ref))
+			{
+				if(_ref.object_index == obj_Reflec)
+				{
+					var p1 = _ref.GetPoint1(),
+						p2 = _ref.GetPoint2();
+					if(lines_intersect(p1.X,p1.Y,p2.X,p2.Y,_x,_y,_x+fVelX,_y+fVelY,true) > 0 && lastReflec != _ref)
+					{
+						reflec = _ref;
+						break;
+					}
+				}
+				else if(object_is_ancestor(_ref.object_index,obj_DoorHatch))
+				{
+					if(!_ref.unlocked ||
+					(!doorOpenType[DoorOpenType.Beam] && _ref.object_index == obj_DoorHatch_Blue) ||
+					(!doorOpenType[DoorOpenType.Missile] && _ref.object_index == obj_DoorHatch_Missile) ||
+					(!doorOpenType[DoorOpenType.SMissile] && _ref.object_index == obj_DoorHatch_Super) ||
+					(!doorOpenType[DoorOpenType.PBomb] && _ref.object_index == obj_DoorHatch_Power))
+					{
+						reflec = _ref;
+						break;
+					}
+				}
+			}
+		}
+	}
+	ds_list_clear(reflecList);
 	
-	lastReflec = reflec;
+	if(instance_exists(reflec) && lastReflec != reflec)
+	{
+		var _ang = direction;
+		var _spd = point_distance(0,0,velX,velY);
+		
+		var vX = 0,
+			vY = 0,
+			_c = 0;
+		if(reflec.object_index == obj_Reflec)
+		{
+			_ang = ReflectAngle(_ang, reflec.image_angle+90);
+			
+			var p1 = reflec.GetPoint1(),
+				p2 = reflec.GetPoint2();
+			while(lines_intersect(p1.X,p1.Y,p2.X,p2.Y,_x,_y,_x+vX,_y+vY,true) <= 0 && _c < _spd)
+			{
+				vX += sign(velX) * min(1,abs(velX)-abs(vX));
+				vY += sign(velY) * min(1,abs(velY)-abs(vY));
+				_c++;
+			}
+		}
+		else if(object_is_ancestor(reflec.object_index,obj_DoorHatch))
+		{
+			_ang = ReflectAngle(_ang, reflec.image_angle+(180 * (reflec.image_xscale < 0)));
+			
+			while(!collision_line(_x,_y,_x+vX,_y+vY,reflec,true,true) && _c < _spd)
+			{
+				vX += sign(velX) * min(1,abs(velX)-abs(vX));
+				vY += sign(velY) * min(1,abs(velY)-abs(vY));
+				_c++;
+			}
+			vX -= sign(velX);
+			vY -= sign(velY);
+			_c--;
+		}
+		
+		xstart = _x+vX;
+		ystart = _y+vY;
+		
+		velX = lengthdir_x(_spd,_ang);
+		velY = lengthdir_y(_spd,_ang);
+		
+		while(_c < _spd)
+		{
+			vX += sign(velX) * min(1,abs(velX)-abs(vX));
+			vY += sign(velY) * min(1,abs(velY)-abs(vY));
+			_c++;
+		}
+		
+		fVelX = vX;
+		fVelY = vY;
+		
+		direction = _ang;
+		waveDir *= -1;
+		if(projStyle == ProjStyle.Wave)
+		{
+			t = 0;
+			t2 = 0;
+		}
+		
+		speed_x = 0;
+		speed_y = 0;
+		
+		lastReflec = reflec;
+	}
 }
 
 #endregion

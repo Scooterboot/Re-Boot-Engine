@@ -1,5 +1,4 @@
 /// @description Crumble Logic
-event_inherited();
 
 if(crumble)
 {

@@ -11,6 +11,7 @@ spreadType = -1;
 spreadSpeed = 0;
 spreadDir = 0;
 spreadFrict = 4;
+canBeReflected = false;
 
 type = ProjType.Bomb;
 

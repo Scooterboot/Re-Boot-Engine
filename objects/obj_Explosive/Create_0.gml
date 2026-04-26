@@ -9,6 +9,8 @@ damageSubType[DmgSubType_Explosive.All] = true;
 doorOpenType[DoorOpenType.Beam] = true;
 blockBreakType[BlockBreakType.Shot] = true;
 
+blockReveal_Any = true;
+
 exploProj = noone;
 exploDmgMult = 0.5;
 exploSnd = -1;

@@ -84,6 +84,7 @@ amplitude = 0;
 wavesPerSecond = 0;
 delay = 0;
 
+canBeReflected = true;
 lastReflec = noone;
 reflecList = ds_list_create();
 
@@ -287,7 +288,7 @@ function entity_collision(listNum)
 			{
 				var block = blockList[| i];
 				var isSolid = true;
-				if(tileCollide && type != ProjType.Bomb && array_contains(doorOpenType, true))
+				if(canBeReflected && tileCollide && type != ProjType.Bomb && array_contains(doorOpenType, true))
 				{
 					if(object_is_ancestor(block.object_index,obj_DoorHatch))
 					{
@@ -342,6 +343,9 @@ function OnImpact(posX, posY, silentImpact = false)
 		}
 	}
 }
+
+blockReveal_Bomb = false;
+blockReveal_Any = false;
 
 function TileInteract(_x,_y)
 {

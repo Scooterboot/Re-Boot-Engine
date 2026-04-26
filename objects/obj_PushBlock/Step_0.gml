@@ -119,7 +119,7 @@ if(_ydif != 0)
 }
 self.Collision_Normal(-_xdif,-_ydif,false);
 
-var downAng = GetEdgeAngle(Edge.Bottom);
+var downAng = edgeAngle[Edge.Bottom];
 var downSlopeFlag = (downAng >= 60 && downAng <= 300);
 if(!self.entity_place_collide(0,2) || downSlopeFlag)
 {

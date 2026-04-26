@@ -50,6 +50,8 @@ doorOpenType[DoorOpenType.Wave] = isWave;
 doorOpenType[DoorOpenType.Spazer] = isSpazer;
 doorOpenType[DoorOpenType.Plasma] = isPlasma;
 
+blockReveal_Bomb = true;
+
 if(isIce)
 {
     freezeType = 1 + isCharge;

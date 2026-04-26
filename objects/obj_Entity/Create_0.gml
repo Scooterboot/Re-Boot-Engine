@@ -449,6 +449,11 @@ function GetEdgeAngle(edge, offsetX = 0, offsetY = 0)
 	return angle_difference(ang,0);
 }
 #endregion
+edgeAngle[Edge.None] = 0;
+edgeAngle[Edge.Bottom] = 0;
+edgeAngle[Edge.Top] = 180;
+edgeAngle[Edge.Right] = 90;
+edgeAngle[Edge.Left] = -90;
 
 #region Collision Hooks
 
@@ -533,17 +538,23 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 {
 	oldPosition.Equals(position);
 	
+	edgeAngle[Edge.Bottom] = 0;
+	edgeAngle[Edge.Top] = 180;
+	edgeAngle[Edge.Right] = 90;
+	edgeAngle[Edge.Left] = 270;
 	if(slopeSpeedAdjust)
 	{
 		var sAngle = 0;
 		var _btm = self.entity_place_collide(0,2), _top = self.entity_place_collide(0,-2);
 		if(_btm && !_top)
 		{
-			sAngle = self.GetEdgeAngle(Edge.Bottom);
+			edgeAngle[Edge.Bottom] = self.GetEdgeAngle(Edge.Bottom);
+			sAngle = edgeAngle[Edge.Bottom];
 		}
 		if(_top && !_btm)
 		{
-			sAngle = angle_difference(self.GetEdgeAngle(Edge.Top),180);
+			edgeAngle[Edge.Top] = self.GetEdgeAngle(Edge.Top);
+			sAngle = angle_difference(edgeAngle[Edge.Top],180);
 		}
 		vX = lengthdir_x(vX,sAngle);
 		
@@ -551,11 +562,13 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 		var _rgt = self.entity_place_collide(2,0), _lft = self.entity_place_collide(-2,0);
 		if(_rgt && !_lft)
 		{
-			sAngle = angle_difference(self.GetEdgeAngle(Edge.Right),90);
+			edgeAngle[Edge.Right] = self.GetEdgeAngle(Edge.Right);
+			sAngle = angle_difference(edgeAngle[Edge.Right],90);
 		}
 		if(_lft && !_rgt)
 		{
-			sAngle = angle_difference(self.GetEdgeAngle(Edge.Left),270);
+			edgeAngle[Edge.Left] = self.GetEdgeAngle(Edge.Left);
+			sAngle = angle_difference(edgeAngle[Edge.Left],270);
 		}
 		vY = lengthdir_x(vY,sAngle);
 	}
@@ -1051,6 +1064,10 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 {
 	oldPosition.Equals(position);
 	
+	edgeAngle[Edge.Bottom] = 0;
+	edgeAngle[Edge.Top] = 180;
+	edgeAngle[Edge.Right] = 90;
+	edgeAngle[Edge.Left] = 270;
 	if(slopeSpeedAdjust)
 	{
 		if(colEdge != Edge.None)
@@ -1060,22 +1077,26 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 			{
 				case Edge.Bottom:
 				{
-					sAngle = self.GetEdgeAngle(colEdge);
+					edgeAngle[Edge.Bottom] = self.GetEdgeAngle(Edge.Bottom);
+					sAngle = edgeAngle[Edge.Bottom];
 					break;
 				}
 				case Edge.Right:
 				{
-					sAngle = angle_difference(self.GetEdgeAngle(colEdge),90);
+					edgeAngle[Edge.Right] = self.GetEdgeAngle(Edge.Right);
+					sAngle = angle_difference(edgeAngle[Edge.Right],90);
 					break;
 				}
 				case Edge.Top:
 				{
-					sAngle = angle_difference(self.GetEdgeAngle(colEdge),180);
+					edgeAngle[Edge.Top] = self.GetEdgeAngle(Edge.Top);
+					sAngle = angle_difference(edgeAngle[Edge.Top],180);
 					break;
 				}
 				case Edge.Left:
 				{
-					sAngle = angle_difference(self.GetEdgeAngle(colEdge),270);
+					edgeAngle[Edge.Left] = self.GetEdgeAngle(Edge.Left);
+					sAngle = angle_difference(edgeAngle[Edge.Left],270);
 					break;
 				}
 			}
@@ -1088,11 +1109,13 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 			var _btm = self.entity_place_collide(0,2), _top = self.entity_place_collide(0,-2);
 			if(_btm && !_top)
 			{
-				sAngle = self.GetEdgeAngle(Edge.Bottom);
+				edgeAngle[Edge.Bottom] = self.GetEdgeAngle(Edge.Bottom);
+				sAngle = edgeAngle[Edge.Bottom];
 			}
 			if(_top && !_btm)
 			{
-				sAngle = angle_difference(self.GetEdgeAngle(Edge.Top),180);
+				edgeAngle[Edge.Top] = self.GetEdgeAngle(Edge.Top);
+				sAngle = angle_difference(edgeAngle[Edge.Top],180);
 			}
 			vX = lengthdir_x(vX,sAngle);
 			
@@ -1100,11 +1123,13 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 			var _rgt = self.entity_place_collide(2,0), _lft = self.entity_place_collide(-2,0);
 			if(_rgt && !_lft)
 			{
-				sAngle = angle_difference(self.GetEdgeAngle(Edge.Right),90);
+				edgeAngle[Edge.Right] = self.GetEdgeAngle(Edge.Right);
+				sAngle = angle_difference(edgeAngle[Edge.Right],90);
 			}
 			if(_lft && !_rgt)
 			{
-				sAngle = angle_difference(self.GetEdgeAngle(Edge.Left),270);
+				edgeAngle[Edge.Left] = self.GetEdgeAngle(Edge.Left);
+				sAngle = angle_difference(edgeAngle[Edge.Left],270);
 			}
 			vY = lengthdir_x(vY,sAngle);
 		}

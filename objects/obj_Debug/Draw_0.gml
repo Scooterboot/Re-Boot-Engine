@@ -287,7 +287,7 @@ if(debug == 1)
 		draw_set_alpha(0.5);
 		draw_set_halign(fa_center);
 		draw_set_valign(fa_top);
-		var edgeAng = GetEdgeAngle(Edge.Bottom);
+		var edgeAng = edgeAngle[Edge.Bottom];
 		if(entity_place_collide(0,2))
 		{
 			draw_text(x,y+10,string(edgeAng));
@@ -296,21 +296,21 @@ if(debug == 1)
 		{
 			draw_set_halign(fa_center);
 			draw_set_valign(fa_bottom);
-			edgeAng = GetEdgeAngle(Edge.Top);
+			edgeAng = edgeAngle[Edge.Top];
 			draw_text(x,y-10,string(edgeAng));
 		}
 		if(entity_place_collide(2,0))
 		{
 			draw_set_halign(fa_left);
 			draw_set_valign(fa_middle);
-			edgeAng = GetEdgeAngle(Edge.Right);
+			edgeAng = edgeAngle[Edge.Right];
 			draw_text(bb_right(),y,string(edgeAng));
 		}
 		if(entity_place_collide(-2,0))
 		{
 			draw_set_halign(fa_right);
 			draw_set_valign(fa_middle);
-			edgeAng = GetEdgeAngle(Edge.Left);
+			edgeAng = edgeAngle[Edge.Left];
 			draw_text(bb_left(),y,string(edgeAng));
 		}
 		draw_set_alpha(1);

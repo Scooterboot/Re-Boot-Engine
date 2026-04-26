@@ -122,15 +122,15 @@ if(!self.PauseAI())
 				break;
 			}
 		}
-	
-		if(colEdge != Edge.None)
-		{
-			rotation2 = self.GetEdgeAngle(colEdge);
-		}
-	
+		
 		fVelX = velX;
 		fVelY = velY;
 		self.Collision_Crawler(fVelX,fVelY,true);
+		
+		if(colEdge != Edge.None)
+		{
+			rotation2 = edgeAngle[colEdge];
+		}
 	}
 
 	var rot2 = scr_wrap(scr_round(rotation2),0,360);

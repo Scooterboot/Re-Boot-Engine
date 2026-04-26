@@ -2,3 +2,4 @@
 event_inherited();
 
 hostile = true;
+canBeReflected = false;

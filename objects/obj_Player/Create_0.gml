@@ -62,8 +62,9 @@ godmode = false;
 #macro _SPARK_REFLEC_MAX 30 // Default: 30
 
 // Low-level Shine Spark flight control / Shine Spark steering
-//press directions or angle buttons to slightly change flight direction
-#macro _SPARK_STEERING true
+//press directions to slightly change flight direction
+//value is the amount in degrees of angle change (set to 0 to disable)
+#macro _SPARK_STEERING 11.5
 
 // High-level Shine Spark flight control when Accel Dash is enabled
 //activated by holding a direction and pressing Run during flight (consumes Dash charge)
@@ -206,8 +207,7 @@ shineSparkSpeed = 0;
 shineFXCounter = 0;
 shineRampFix = false;
 
-shineDiagSpeedFlag = false;
-shineDiagAngleTweak = 0;
+shineAngleTweak = 0;
 
 shineDownRot = 0;
 shineRestart = false;
@@ -2203,10 +2203,6 @@ function OnXCollision(fVX, isOOB = false)
 			}
 			shineEnd = shineEndMax;
 		}
-		else
-		{
-			shineDiagSpeedFlag = true;
-		}
 	}
 }
 
@@ -2269,7 +2265,7 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		
 		if(flag && velY >= 0)
 		{
-			var sAngle = self.GetEdgeAngle(Edge.Bottom);
+			var sAngle = edgeAngle[Edge.Bottom];
 			var vx = velX;
 			//velX = lengthdir_x(vx,sAngle);
 			velY = lengthdir_y(vx,sAngle);
@@ -3568,7 +3564,7 @@ function PlayerGrounded(ydiff = 1)
 		return true;
 	}
 	
-	var downSlopeFlag = (abs(GetEdgeAngle(Edge.Bottom,0,0)) >= 60);
+	var downSlopeFlag = (abs(self.GetEdgeAngle(Edge.Bottom,0,0)) >= 60);
 	var bottomCollision = false;
 	var colB = entity_collision_line(bb_left(),bb_bottom()+ydiff,bb_right(),bb_bottom()+ydiff);
 	if(entity_place_collide(0,ydiff) && (!entity_place_collide(0,0) || colB))

@@ -1,5 +1,4 @@
 /// @description Chain Logic
-event_inherited();
 
 if(destroy)
 {
