@@ -10,8 +10,8 @@ else
 
 	var camX = global.cameraX,
 		camY = global.cameraY,
-		camW = global.resWidth,
-		camH = global.resHeight;
+		camW = global.cameraWidth,
+		camH = global.cameraHeight;
 
 	if(!surface_exists(fadeTileSurface))
 	{

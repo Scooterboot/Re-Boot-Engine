@@ -705,14 +705,14 @@ function _SurfWidth()
 {
 	var pos = SurfPos();
 	var camX = global.cameraX,
-		camW = global.resWidth;
+		camW = global.cameraWidth;
 	return scr_round(min(camW-(pos.X-camX),bb_right()-pos.X + 1));
 }
 function _SurfHeight()
 {
 	var pos = SurfPos();
 	var camY = global.cameraY,
-		camH = global.resHeight;
+		camH = global.cameraHeight;
 	return scr_round(min(camH-(pos.Y-camY),bb_bottom()-pos.Y + 1));
 }
 

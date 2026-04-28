@@ -7,8 +7,8 @@ if(!instance_exists(obj_Camera))
 
 var camx = global.cameraX,
 	camy = global.cameraY,
-	camw = global.resWidth,
-	camh = global.resHeight;
+	camw = global.cameraWidth,
+	camh = global.cameraHeight;
 
 posX += layer_get_hspeed(layerID) * (!global.GamePaused());
 posY += layer_get_vspeed(layerID) * (!global.GamePaused());

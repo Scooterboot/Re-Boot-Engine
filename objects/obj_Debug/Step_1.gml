@@ -105,8 +105,8 @@ game_set_speed(gameSpeed, gamespeed_fps);
 
 if(extraView)
 {
-	var _eViewW = global.resWidth/2,
-		_eViewH = global.resHeight/2;
+	var _eViewW = global.zoomResWidth/2,
+		_eViewH = global.zoomResHeight/2;
 	if(view_camera[1] == -1)
 	{
 		view_camera[1] = camera_create_view(0,0,_eViewW,_eViewH);
@@ -114,8 +114,8 @@ if(extraView)
 	
 	view_visible[1] = true;
 	
-	view_set_xport(1,global.resWidth-_eViewW);
-	view_set_yport(1,global.resHeight-_eViewH);
+	view_set_xport(1,global.zoomResWidth-_eViewW);
+	view_set_yport(1,global.zoomResHeight-_eViewH);
 	view_set_wport(1,_eViewW);
 	view_set_hport(1,_eViewH);
 	camera_set_view_size(view_camera[1],room_width,room_height);

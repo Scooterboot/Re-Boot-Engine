@@ -54,3 +54,11 @@ else if(window_get_cursor() != cr_none)
 }
 
 hyperRainbowCycle = scr_wrap(hyperRainbowCycle+0.5,0,10);
+
+if(!instance_exists(obj_Camera))
+{
+	global.cameraX = camera_get_view_x(view_camera[0]);
+	global.cameraY = camera_get_view_y(view_camera[0]);
+	global.cameraWidth = camera_get_view_width(view_camera[0]);
+	global.cameraHeight = camera_get_view_height(view_camera[0]);
+}

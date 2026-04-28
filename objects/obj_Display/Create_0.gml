@@ -63,6 +63,8 @@ global.screenY = (window_get_height() - (global.resHeight*screenScale)) / 2;
 
 global.cameraX = camera_get_view_x(view_camera[0]);
 global.cameraY = camera_get_view_y(view_camera[0]);
+global.cameraWidth = camera_get_view_width(view_camera[0]);
+global.cameraHeight = camera_get_view_height(view_camera[0]);
 
 hyperRainbowCycle = 0;
 

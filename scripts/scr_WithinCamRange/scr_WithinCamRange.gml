@@ -20,8 +20,8 @@ function scr_RectangleWithinCam(x1,y1,x2,y2)
 {
 	var camX = global.cameraX,
 		camY = global.cameraY,
-		camW = global.resWidth,
-		camH = global.resHeight;
+		camW = global.cameraWidth,
+		camH = global.cameraHeight;
 	
 	return rectangle_in_rectangle(x1,y1,x2,y2,camX-1,camY-1,camX+camW+1,camY+camH+1) > 0;
 }

@@ -18,8 +18,8 @@ function redraw_fade_layer()
 {
 	var camx = global.cameraX,
 		camy = global.cameraY,
-		camW = global.resWidth,
-		camH = global.resHeight;
+		camW = global.cameraWidth,
+		camH = global.cameraHeight;
 	surface_resize(fadeTileSurface,camW,camH);
 	
 	surface_set_target(fadeTileSurface);
@@ -42,8 +42,8 @@ function redraw_alpha()
 {
 	var camx = global.cameraX,
 		camy = global.cameraY,
-		camW = global.resWidth,
-		camH = global.resHeight;
+		camW = global.cameraWidth,
+		camH = global.cameraHeight;
 	surface_resize(alphaMask,camW,camH);
 	
 	surface_set_target(alphaMask);

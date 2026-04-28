@@ -15,9 +15,3 @@ if(global.pauseState != PauseState.None)
 		global.pauseState = PauseState.None;
 	}
 }
-
-if(!instance_exists(obj_Camera))
-{
-	global.cameraX = camera_get_view_x(view_camera[0]);
-	global.cameraY = camera_get_view_y(view_camera[0]);
-}

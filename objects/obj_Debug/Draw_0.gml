@@ -48,7 +48,7 @@ if(debug == 1)
 	{
 		//if(!visible)
 		//{
-			if(object_is_ancestor(object_index,obj_Breakable))
+			if(object_is_ancestor(object_index,obj_Breakable) || object_index == obj_GrappleBlock)
 			{
 				//DrawBreakable(x,y,0);
 				draw_sprite_ext(sprite_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,1);

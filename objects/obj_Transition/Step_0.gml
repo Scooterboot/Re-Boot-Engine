@@ -14,8 +14,8 @@ if(room != goal)
     {
         angle = door.image_angle;
 
-        playerX = obj_Player.position.X - camera_get_view_x(view_camera[0]);
-        playerY = obj_Player.position.Y - camera_get_view_y(view_camera[0]);
+        playerX = obj_Player.position.X - global.cameraX;
+        playerY = obj_Player.position.Y - global.cameraY;
 		if(obj_Player.state == State.Stand && obj_Player.animState == AnimState.Stand)
 		{
 			obj_Player.animState = AnimState.Run;
@@ -120,8 +120,8 @@ else
         {
             nextDoor.hatch.frame = 4;
         }
-        var nPlayerX = obj_Player.position.X - camera_get_view_x(view_camera[0]),
-			nPlayerY = obj_Player.position.Y - camera_get_view_y(view_camera[0]);
+        var nPlayerX = obj_Player.position.X - global.cameraX,
+			nPlayerY = obj_Player.position.Y - global.cameraY;
         angle = nextDoor.image_angle;
 		if(transitionComplete)
 		{

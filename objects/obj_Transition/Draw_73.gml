@@ -5,11 +5,11 @@ if(surface_exists(transSurf))
     draw_clear_alpha(c_black,1);
     if(transSprtDraw)
     {
+		var sx = scr_round(playerX),
+			sy = scr_round(playerY);
+		
         with(obj_Player)
         {
-			var sx = scr_round(obj_Transition.playerX),
-				sy = scr_round(obj_Transition.playerY);
-			
 			var col = c_lime;
 			gpu_set_fog(true,col,0,0);
 			gpu_set_blendmode(bm_add);
@@ -35,7 +35,7 @@ if(surface_exists(transSurf))
     surface_reset_target();
 
 	gpu_set_blendenable(false);
-    draw_surface_ext(transSurf,camera_get_view_x(view_camera[0]),camera_get_view_y(view_camera[0]),1,1,0,c_white,1);
+    draw_surface_ext(transSurf,global.cameraX,global.cameraY,1,1,0,c_white,1);
 	gpu_set_blendenable(true);
 }
 else

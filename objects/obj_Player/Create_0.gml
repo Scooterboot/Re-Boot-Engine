@@ -3560,14 +3560,14 @@ function PlayerGrounded(ydiff = 1)
 	
 	if(velY >= 0 && velY <= fGrav && jump <= 0)
 	{
-		if(speedBoost)
-		{
-			return true;
-		}
-		
 		var colB = self.entity_collision_line(self.bb_left(), self.bb_bottom()+ydiff, self.bb_right(), self.bb_bottom()+ydiff);
 		if((self.entity_place_collide(0,ydiff) && (!self.entity_place_collide(0,0) || colB)) || position.Y+ydiff > room_height)
 		{
+			if(speedBoost)
+			{
+				return true;
+			}
+			
 			var downSlopeFlag = (abs(self.GetEdgeAngle(Edge.Bottom,0,0)) >= 60);
 			if(self.entity_place_collide(1,-1) && !self.entity_place_collide(-1,2))
 			{
@@ -4726,8 +4726,8 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 	{
 		var camX = global.cameraX,
 			camY = global.cameraY,
-			camW = global.resWidth,
-			camH = global.resHeight;
+			camW = global.cameraWidth,
+			camH = global.cameraHeight;
 		
 		if(animState == AnimState.Morph || mbTrailAlpha > 0)
 		{
