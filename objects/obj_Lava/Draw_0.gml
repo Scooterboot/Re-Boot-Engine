@@ -1,8 +1,8 @@
 /// @description Graphics
 event_inherited();
 
-var camX = camera_get_view_x(view_camera[0]),
-	camY = camera_get_view_y(view_camera[0]);
+var camX = global.cameraX,
+	camY = global.cameraY;
 var pos = SurfPos();
 
 draw_set_alpha(gradAlpha);

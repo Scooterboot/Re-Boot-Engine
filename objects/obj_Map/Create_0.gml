@@ -20,13 +20,13 @@ playerMapY = 0;
 
 function GetMapPosX(_x)
 {
-	var roomSizeW = scr_floor(room_width / global.rmMapSizeW)-1;
-	return clamp(scr_floor((_x-global.rmMapPixX)/global.rmMapSizeW),0,roomSizeW) + global.rmMapX;
+	var roomSizeW = floor(room_width / global.rmMapSizeW)-1;
+	return clamp(floor((_x-global.rmMapPixX)/global.rmMapSizeW),0,roomSizeW) + global.rmMapX;
 }
 function GetMapPosY(_y)
 {
-	var roomSizeH = scr_floor(room_height / global.rmMapSizeH)-1;
-	return clamp(scr_floor((_y-global.rmMapPixY)/global.rmMapSizeH),0,roomSizeH) + global.rmMapY;
+	var roomSizeH = floor(room_height / global.rmMapSizeH)-1;
+	return clamp(floor((_y-global.rmMapPixY)/global.rmMapSizeH),0,roomSizeH) + global.rmMapY;
 }
 
 #region Map Icon
@@ -71,8 +71,8 @@ function AreaMap(_mapSprite, _name) constructor
 	sprt = _mapSprite;
 	name = _name;
 	
-	var gridWidth = scr_floor(sprite_get_width(sprt)/global.mapSquareSizeW),
-		gridHeight = scr_floor(sprite_get_height(sprt)/global.mapSquareSizeH);
+	var gridWidth = floor(sprite_get_width(sprt)/global.mapSquareSizeW),
+		gridHeight = floor(sprite_get_height(sprt)/global.mapSquareSizeH);
 	grid = ds_grid_create(gridWidth,gridHeight);
 	ds_grid_clear(grid,false);
 	
@@ -99,9 +99,8 @@ global.mapArea[MapArea.Norfair] = new AreaMap(sprt_Map_DebugNorfair, "Norfair");
 global.mapArea[MapArea.Maridia] = new AreaMap(sprt_Map_DebugMaridia, "Maridia");
 global.mapArea[MapArea.Tourian] = new AreaMap(sprt_Map_DebugTourian, "Tourian");
 
-#region DrawMap
-
-function DrawMapTile(mapGrid, mapSprt, sprtInd, offX, offY, gridX, gridY, stationUsed)
+#region DrawMapTile
+function DrawMapTile(mapGrid, mapSprt, sprtInd, offX, offY, gridX, gridY, gridW, gridH, stationUsed)
 {
 	var i = gridX, j = gridY;
 	
@@ -135,7 +134,7 @@ function DrawMapTile(mapGrid, mapSprt, sprtInd, offX, offY, gridX, gridY, statio
 	}
 	
 	// right square revealed
-	var _maxX = ds_grid_width(mapGrid)-1;
+	var _maxX = gridW-1;
 	if(i >= _maxX || (i < _maxX && mapGrid[# i+1,j]))
 	{
 		w2 += 1;
@@ -158,7 +157,7 @@ function DrawMapTile(mapGrid, mapSprt, sprtInd, offX, offY, gridX, gridY, statio
 	}
 	
 	// bottom square revealed
-	var _maxY = ds_grid_height(mapGrid)-1;
+	var _maxY = gridH-1;
 	if(j >= _maxY || (j < _maxY && mapGrid[# i,j+1]))
 	{
 		h2 += 1;
@@ -170,8 +169,9 @@ function DrawMapTile(mapGrid, mapSprt, sprtInd, offX, offY, gridX, gridY, statio
 	
 	draw_sprite_part_ext(mapSprt,sprtInd, l2,t2,w2,h2, x2,y2, 1,1,c_white,1);
 }
-
-function PrepareMapSurf(mapArea,mapX,mapY,mapWidth,mapHeight,isMinimap = false,baseAlpha = 0)
+#endregion
+#region DrawMap
+function DrawMap(mapArea, posX,posY, mapX,mapY, mapWidth,mapHeight, isMinimap = false, baseAlpha = 0)
 {
 	if(mapArea != noone)
 	{
@@ -179,6 +179,18 @@ function PrepareMapSurf(mapArea,mapX,mapY,mapWidth,mapHeight,isMinimap = false,b
 		var mapGrid = mapArea.grid;
 		var mapIcons = mapArea.icons;
 		var stationUsed = mapArea.stationUsed;
+		
+		var gridWidth = floor(sprite_get_width(mapSprt)/global.mapSquareSizeW),
+			gridHeight = floor(sprite_get_height(mapSprt)/global.mapSquareSizeH);
+		
+		if(mapX < 0)
+		{
+			posX -= mapX;
+		}
+		if(mapY < 0)
+		{
+			posY -= mapY;
+		}
 		
 		var diffX = mapX,
 			diffY = mapY;
@@ -215,9 +227,9 @@ function PrepareMapSurf(mapArea,mapX,mapY,mapWidth,mapHeight,isMinimap = false,b
 			if(ds_exists(mapGrid,ds_type_grid))
 			{
 				var startX = max(floor(mapX/msSizeW),0), 
-					endX = min(startX+ceil(mapWidth/msSizeW)+1,ds_grid_width(mapGrid)),
+					endX = min(startX + ceil(mapWidth/msSizeW)+1, gridWidth),
 					startY = max(floor(mapY/msSizeH),0), 
-					endY = min(startY+ceil(mapHeight/msSizeH)+1,ds_grid_height(mapGrid));
+					endY = min(startY + ceil(mapHeight/msSizeH)+1, gridHeight);
 				
 				if(stationUsed)
 				{
@@ -238,7 +250,7 @@ function PrepareMapSurf(mapArea,mapX,mapY,mapWidth,mapHeight,isMinimap = false,b
 					{
 						if(mapGrid[# i,j])
 						{
-							DrawMapTile(mapGrid,mapSprt,0,offX,offY,i,j,stationUsed);
+							DrawMapTile(mapGrid, mapSprt,0, offX,offY, i,j, gridWidth,gridHeight, stationUsed);
 						}
 					}
 				}
@@ -269,8 +281,8 @@ function PrepareMapSurf(mapArea,mapX,mapY,mapWidth,mapHeight,isMinimap = false,b
 							_showOnMini = icon[MapIconInd.ShowOnMini],
 							_alwaysShow = icon[MapIconInd.AlwaysShow];
 						
-						var iconMapX = clamp(scr_floor(_x / msSizeW), 0, ds_grid_width(mapGrid)),
-							iconMapY = clamp(scr_floor(_y / msSizeH), 0, ds_grid_height(mapGrid));
+						var iconMapX = clamp(floor(_x / msSizeW), 0, gridWidth),
+							iconMapY = clamp(floor(_y / msSizeH), 0, gridHeight);
 						
 						if((!isMinimap || _showOnMini) && (mapGrid[# iconMapX,iconMapY] || _alwaysShow))
 						{
@@ -281,6 +293,8 @@ function PrepareMapSurf(mapArea,mapX,mapY,mapWidth,mapHeight,isMinimap = false,b
 			}
 		
 			surface_reset_target();
+			
+			draw_surface_ext(mapSurf,posX,posY,1,1,0,c_white,1);
 		}
 		else
 		{
@@ -289,22 +303,6 @@ function PrepareMapSurf(mapArea,mapX,mapY,mapWidth,mapHeight,isMinimap = false,b
 			draw_clear_alpha(c_black,0);
 			surface_reset_target();
 		}
-	}
-}
-function DrawMap(posX,posY,mapX,mapY)
-{
-	if(mapX < 0)
-	{
-		posX -= mapX;
-	}
-	if(mapY < 0)
-	{
-		posY -= mapY;
-	}
-	
-	if(surface_exists(mapSurf))
-	{
-		draw_surface_ext(mapSurf,posX,posY,1,1,0,c_white,1);
 	}
 }
 #endregion

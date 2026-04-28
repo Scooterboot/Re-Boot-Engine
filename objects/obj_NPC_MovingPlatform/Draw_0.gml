@@ -1,4 +1,8 @@
 /// @description 
+if(!self.CanDraw())
+{
+	exit;
+}
 
 if(dmgFlash > 4)
 {

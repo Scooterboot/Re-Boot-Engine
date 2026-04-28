@@ -59,3 +59,5 @@ edgeText[Edge.Bottom] = "Bottom";
 edgeText[Edge.Top] =	"Top";
 edgeText[Edge.Right] =	"Right";
 edgeText[Edge.Left] =	"Left";
+
+extraView = false;

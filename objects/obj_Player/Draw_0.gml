@@ -20,7 +20,7 @@ for(var i = ds_list_size(afterImageList)-1; i >= 0; i--)
 		ds_list_delete(afterImageList,i);
 	}
 }
-for(var i = 0; i < ds_list_size(afterImageList); i++)
+for(var i = 0, len = ds_list_size(afterImageList); i < len; i++)
 {
 	var aftImg = afterImageList[| i];
 	aftImg.Update();

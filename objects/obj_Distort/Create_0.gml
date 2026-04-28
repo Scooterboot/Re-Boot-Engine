@@ -115,8 +115,8 @@ function Draw()
 	{
 		exit;
 	}
-	var camX = camera_get_view_x(view_camera[0]),
-		camY = camera_get_view_y(view_camera[0]);
+	var camX = global.cameraX,
+		camY = global.cameraY;
 	var surfX = (right < left) ? right : left,
 		surfY = (bottom < top) ? bottom : top;
 	

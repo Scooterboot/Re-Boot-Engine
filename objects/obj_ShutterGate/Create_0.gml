@@ -34,19 +34,22 @@ block_list = ds_list_create();
 function shutter_place_meeting(_x,_y)
 {
 	var num = instance_place_list(_x,_y,solids,block_list,true);
-	for(var i = 0; i < num; i++)
+	if(num > 0)
 	{
-		if(instance_exists(block_list[| i]))
+		for(var i = 0; i < num; i++)
 		{
-			if ((!instance_exists(tileObj) || block_list[| i] != tileObj) &&
-				(!instance_exists(mBlock) || block_list[| i] != mBlock))
+			if(instance_exists(block_list[| i]))
 			{
-				ds_list_clear(block_list);
-				return true;
+				if ((!instance_exists(tileObj) || block_list[| i] != tileObj) &&
+					(!instance_exists(mBlock) || block_list[| i] != mBlock))
+				{
+					ds_list_clear(block_list);
+					return true;
+				}
 			}
 		}
+		ds_list_clear(block_list);
 	}
-	ds_list_clear(block_list);
 	return false;
 }
 

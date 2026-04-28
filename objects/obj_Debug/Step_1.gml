@@ -87,11 +87,42 @@ if(debug > 0)
 			stallY = true;
 		}
 	}
+	
+	if(keyboard_check_pressed(vk_multiply))
+	{
+		extraView = !extraView;
+	}
 }
 else
 {
 	fastforwardtoggle = false;
 	global.zoomScale = 1;
+	
+	extraView = false;
 }
 
 game_set_speed(gameSpeed, gamespeed_fps);
+
+if(extraView)
+{
+	var _eViewW = global.resWidth/2,
+		_eViewH = global.resHeight/2;
+	if(view_camera[1] == -1)
+	{
+		view_camera[1] = camera_create_view(0,0,_eViewW,_eViewH);
+	}
+	
+	view_visible[1] = true;
+	
+	view_set_xport(1,global.resWidth-_eViewW);
+	view_set_yport(1,global.resHeight-_eViewH);
+	view_set_wport(1,_eViewW);
+	view_set_hport(1,_eViewH);
+	camera_set_view_size(view_camera[1],room_width,room_height);
+	camera_set_view_pos(view_camera[1], 0, 0);
+}
+else
+{
+	view_visible[1] = false;
+	camera_destroy(view_visible[1]);
+}

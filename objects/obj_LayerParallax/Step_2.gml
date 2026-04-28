@@ -5,8 +5,8 @@ if(!instance_exists(obj_Camera))
 	exit;
 }
 
-var camx = camera_get_view_x(view_camera[0]),
-	camy = camera_get_view_y(view_camera[0]),
+var camx = global.cameraX,
+	camy = global.cameraY,
 	camw = global.resWidth,
 	camh = global.resHeight;
 

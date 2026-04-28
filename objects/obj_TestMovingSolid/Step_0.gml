@@ -13,6 +13,8 @@ rot += 1;
 
 x = xstart + lengthdir_y(128,rot);
 y = ystart - lengthdir_y(64,rot*1.5);
+position.X = x;
+position.Y = y;
 
 for(var i = 0; i < array_length(blocks); i++)
 {

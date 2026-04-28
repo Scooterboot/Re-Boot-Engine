@@ -16,10 +16,10 @@ alphaMask = surface_create(appWidth,appHeight);
 #region redraw_fade_layer()
 function redraw_fade_layer()
 {
-	var camx = camera_get_view_x(view_camera[0]),
-		camy = camera_get_view_y(view_camera[0]),
-		camW = camera_get_view_width(view_camera[0]),
-		camH = camera_get_view_height(view_camera[0]);
+	var camx = global.cameraX,
+		camy = global.cameraY,
+		camW = global.resWidth,
+		camH = global.resHeight;
 	surface_resize(fadeTileSurface,camW,camH);
 	
 	surface_set_target(fadeTileSurface);
@@ -40,10 +40,10 @@ function redraw_fade_layer()
 #region redraw_alpha()
 function redraw_alpha()
 {
-	var camx = camera_get_view_x(view_camera[0]),
-		camy = camera_get_view_y(view_camera[0]),
-		camW = camera_get_view_width(view_camera[0]),
-		camH = camera_get_view_height(view_camera[0]);
+	var camx = global.cameraX,
+		camy = global.cameraY,
+		camW = global.resWidth,
+		camH = global.resHeight;
 	surface_resize(alphaMask,camW,camH);
 	
 	surface_set_target(alphaMask);

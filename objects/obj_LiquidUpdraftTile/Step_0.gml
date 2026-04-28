@@ -1,6 +1,6 @@
 /// @description 
 
-if(global.GamePaused())
+if(global.GamePaused() || !scr_WithinCamRange())
 {
 	exit;
 }
@@ -31,13 +31,13 @@ if(instance_exists(player))
 var liquid = instance_place(x,y,obj_Liquid);
 if(instance_exists(liquid))
 {
-	for(var i = bbox_left; i < bbox_right; i += 2)
+	for(var i = bbox_left; i < bbox_right; i += 16)
 	{
-		for(var j = bbox_top; j < bbox_bottom; j += 2)
+		for(var j = bbox_top; j < bbox_bottom; j += 16)
 		{
-			if(irandom(1500) == 0)
+			if(irandom(30) == 0)
 			{
-				var bub = liquid.CreateBubble(i,j, 0,-10);
+				var bub = liquid.CreateBubble(i+2*irandom(7),j+2*irandom(7), 0,-10);
 				bub.kill = true;
 				bub.canSpread = false;
 			}

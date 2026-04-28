@@ -61,6 +61,9 @@ window_center();
 global.screenX = (window_get_width() - (global.resWidth*screenScale)) / 2;
 global.screenY = (window_get_height() - (global.resHeight*screenScale)) / 2;
 
+global.cameraX = camera_get_view_x(view_camera[0]);
+global.cameraY = camera_get_view_y(view_camera[0]);
+
 hyperRainbowCycle = 0;
 
 surfUI = surface_create(global.resWidth,global.resHeight);

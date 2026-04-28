@@ -1,19 +1,22 @@
 
 if(debug == 1)
 {
-	for(var i = 0; i < room_width; i += global.rmMapSizeW)
+	if(!extraView)
 	{
-		for(var j = 0; j < room_height; j += global.rmMapSizeH)
+		for(var i = 0; i < room_width; i += global.rmMapSizeW)
 		{
-			if(i+global.rmMapPixX+global.rmMapSizeW <= room_width && j+global.rmMapPixY+global.rmMapSizeH <= room_height)
+			for(var j = 0; j < room_height; j += global.rmMapSizeH)
 			{
-				draw_set_color(c_white);
-				draw_set_alpha(0.33);
+				if(i+global.rmMapPixX+global.rmMapSizeW <= room_width && j+global.rmMapPixY+global.rmMapSizeH <= room_height)
+				{
+					draw_set_color(c_white);
+					draw_set_alpha(0.33);
 				
-				//draw_rectangle(i+global.rmMapPixX, j+global.rmMapPixY, i+global.rmMapPixX+global.rmMapSizeW-1, j+global.rmMapPixY+global.rmMapSizeH-1, true);
-				draw_rectangle_betterOutline(i+global.rmMapPixX, j+global.rmMapPixY, i+global.rmMapPixX+global.rmMapSizeW, j+global.rmMapPixY+global.rmMapSizeH);
+					//draw_rectangle(i+global.rmMapPixX, j+global.rmMapPixY, i+global.rmMapPixX+global.rmMapSizeW-1, j+global.rmMapPixY+global.rmMapSizeH-1, true);
+					draw_rectangle_betterOutline(i+global.rmMapPixX, j+global.rmMapPixY, i+global.rmMapPixX+global.rmMapSizeW, j+global.rmMapPixY+global.rmMapSizeH);
 				
-				draw_set_alpha(1);
+					draw_set_alpha(1);
+				}
 			}
 		}
 	}

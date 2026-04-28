@@ -4,8 +4,8 @@ event_inherited();
 var refSprt = sprt_WaterRefract;
 refractX = scr_wrap(refractX+refractXSpeed,-sprite_get_width(refSprt)/2,sprite_get_width(refSprt)/2);
 
-var camX = camera_get_view_x(view_camera[0]),
-	camY = camera_get_view_y(view_camera[0]);
+var camX = global.cameraX,
+	camY = global.cameraY;
 var pos = SurfPos();
 var fAlpha = alpha*image_alpha;
 

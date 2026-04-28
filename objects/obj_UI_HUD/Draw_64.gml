@@ -2,6 +2,9 @@
 
 if(room != rm_MainMenu && instance_exists(obj_Player))
 {
+	surface_set_target(obj_Display.surfUI);
+	bm_set_one();
+	
 	if(global.hudMap)
 	{
 		#region Minimap
@@ -21,9 +24,6 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			mapX = global.resWidth-2-mapWidth,
 			mapY = 2;
 		
-		bm_set_one();
-		surface_set_target(obj_Display.surfUI);
-		
 		draw_set_color(c_black);
 		draw_set_alpha(0.6);
 		var xx = mapX-1,
@@ -33,7 +33,6 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		draw_rectangle(xx,yy,ww+xx,hh+yy,false);
 		draw_set_color(c_white);
 		draw_set_alpha(1);
-		surface_reset_target();
 		
 		if(room != rm_MainMenu && global.rmMapArea != noone && (!instance_exists(obj_Transition) || obj_Transition.transitionComplete))
 		{
@@ -71,11 +70,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		
 		if(currentMap != noone)
 		{
-			obj_Map.PrepareMapSurf(currentMap, playerMapX-mapDifX+pMapOffsetX,playerMapY-mapDifY+pMapOffsetY, mapWidth,mapHeight, true,0.75);
-			
-			surface_set_target(obj_Display.surfUI);
-			obj_Map.DrawMap(mapX,mapY, playerMapX-mapDifX+pMapOffsetX,playerMapY-mapDifY+pMapOffsetY);
-			surface_reset_target();
+			obj_Map.DrawMap(currentMap, mapX,mapY, playerMapX-mapDifX+pMapOffsetX,playerMapY-mapDifY+pMapOffsetY, mapWidth,mapHeight, true,0.75);
 			
 			if(pMapOffsetX > 0)
 			{
@@ -100,12 +95,8 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			pMapOffsetY = 0;
 			prevArea = noone;
 			
-			surface_set_target(obj_Display.surfUI);
 			draw_sprite_ext(sprt_HUD_MapBase,0,mapX,mapY,1,1,0,c_white,0.75);
-			surface_reset_target();
 		}
-		
-		surface_set_target(obj_Display.surfUI);
 		
 		draw_set_color(c_white);
 		draw_set_alpha(hudMapFlashAlpha);
@@ -113,8 +104,6 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			rectY = mapY+mapDifY;//-pMapOffsetY;
 		draw_rectangle(rectX,rectY,rectX+msSizeW,rectY+msSizeH,false);
 		draw_set_alpha(1);
-		
-		surface_reset_target();
 		
 		if(hudMapFlashAlpha <= 0)
 		{
@@ -139,9 +128,6 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		
 		var bgCol = c_black,
 			bgAlph = 0.6;
-		
-		surface_set_target(obj_Display.surfUI);
-		bm_set_one();
 		
 		#region Energy
 		
@@ -316,7 +302,11 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				{
 					draw_sprite_ext(_sprt,3,xx,_meterY,1,1,0,c_white,1);
 					
-					width = sprite_get_width(_sprt) * _spdScale;
+					width = sprite_get_width(_sprt);
+					if(state != State.Spark && state != State.BallSpark)
+					{
+						width *= _spdScale;
+					}
 					for(var j = 0; j < height; j++)
 					{
 						var rw = min(width-j+1,width);
@@ -499,8 +489,8 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			
 			#endregion
 		}
-		
-		gpu_set_blendmode(bm_normal);
-		surface_reset_target();
 	}
+	
+	gpu_set_blendmode(bm_normal);
+	surface_reset_target();
 }

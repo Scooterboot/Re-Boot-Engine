@@ -34,21 +34,21 @@ function bb_bottom(yy = undefined)
 	return bbox_bottom-y + yy - 1;
 }
 
-function bb_width(xx = undefined)
+function bb_width()
 {
-	return self.bb_right(xx)-self.bb_left(xx);
+	return bbox_right-bbox_left;
 }
-function bb_height(yy = undefined)
+function bb_height()
 {
-	return self.bb_bottom(yy)-self.bb_top(yy);
+	return bbox_bottom-bbox_top;
 }
 function Center(useRealXY = false, xx = undefined, yy = undefined)
 {
 	if(useRealXY)
 	{
-		return new Vector2(self.bb_left(x) + self.bb_width(x)/2, self.bb_top(y) + self.bb_height(y)/2);
+		return new Vector2(self.bb_left(x) + self.bb_width()/2, self.bb_top(y) + self.bb_height()/2);
 	}
-	return new Vector2(self.bb_left(xx) + self.bb_width(xx)/2, self.bb_top(yy) + self.bb_height(yy)/2);
+	return new Vector2(self.bb_left(xx) + self.bb_width()/2, self.bb_top(yy) + self.bb_height()/2);
 }
 
 #endregion
@@ -1698,7 +1698,7 @@ function UpdateMovingTiles(xx = undefined, yy = undefined, avoidClipping = false
 	
 	if(array_length(mBlocks) > 0)
 	{
-		for(var i = 0; i < array_length(mBlocks); i++)
+		for(var i = 0, len = array_length(mBlocks); i < len; i++)
 		{
 			if(!instance_exists(mBlocks[i])) continue;
 			
@@ -2530,7 +2530,7 @@ function CalcDamageResist(_dmg, _dmgType, _dmgSubType)
 	}
 	
 	var _dmgMult = 0;
-	for(var i = 1; i < array_length(dmgResist[_dmgType]); i++)
+	for(var i = 1, len = array_length(dmgResist[_dmgType]); i < len; i++)
 	{
 		if(array_length(_dmgSubType) > i && _dmgSubType[i])
 		{
@@ -2635,7 +2635,7 @@ function GetInvFrames(_instance)
 {
 	if(ds_exists(iFrameCounters,ds_type_list))
 	{
-		for(var i = 0; i < ds_list_size(iFrameCounters); i++)
+		for(var i = 0, len = ds_list_size(iFrameCounters); i < len; i++)
 		{
 			if(is_struct(iFrameCounters[| i]) && instance_exists(_instance) && iFrameCounters[| i].instanceID == _instance)
 			{
@@ -2649,7 +2649,7 @@ function IncrInvFrames()
 {
 	if(ds_exists(iFrameCounters,ds_type_list))
 	{
-		for(var i = 0; i < ds_list_size(iFrameCounters); i++)
+		for(var i = 0, len = ds_list_size(iFrameCounters); i < len; i++)
 		{
 			if(is_struct(iFrameCounters[| i]))
 			{

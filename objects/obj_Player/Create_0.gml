@@ -2216,15 +2216,6 @@ function CanMoveUpSlope_Bottom()
 }
 function OnSlopeXCollision_Bottom(fVX, yShift)
 {
-	if(!grounded && velY == 0 && self.PlayerGrounded())
-	{
-		grounded = true;
-	}
-	if(!onPlatform && velY == 0 && self.PlayerOnPlatform())
-	{
-		onPlatform = true;
-	}
-	
 	if ((state == State.Spark || state == State.BallSpark) && 
 		(self.SparkDir_Hori() || self.SparkDir_DiagUp() || self.SparkDir_VertUp()) && 
 		shineStart <= 0 && shineLauncherStart <= 0 && shineEnd <= 0 && yShift < 0 && (move == dir || (cPlayerDown && self.SparkDir_Hori())))
@@ -2292,11 +2283,14 @@ function CanMoveDownSlope_Top() { return false; }
 
 function OnBottomCollision(fVY)
 {
-	grounded = true;
-	
-	if(self.entityPlatformCheck(0,fVY))
+	if(!grounded)
 	{
-		onPlatform = true;
+		grounded = true;
+		
+		if(!onPlatform && self.entityPlatformCheck(0,fVY))
+		{
+			onPlatform = true;
+		}
 	}
 }
 function OnTopCollision(fVY)
@@ -3559,38 +3553,32 @@ function PlayerShoot(_shotIndex, _damage, _speed, _coolDown, _shotAmount, _sound
 #region PlayerGrounded
 function PlayerGrounded(ydiff = 1)
 {
-	if(SpiderActive() && jump <= 0)
+	if(self.SpiderActive() && jump <= 0)
 	{
 		return true;
 	}
 	
-	var downSlopeFlag = (abs(self.GetEdgeAngle(Edge.Bottom,0,0)) >= 60);
-	var bottomCollision = false;
-	var colB = entity_collision_line(bb_left(),bb_bottom()+ydiff,bb_right(),bb_bottom()+ydiff);
-	if(entity_place_collide(0,ydiff) && (!entity_place_collide(0,0) || colB))
-	{
-		bottomCollision = true;
-	}
-	if(position.Y+ydiff > room_height)
-	{
-		bottomCollision = true;
-	}
-	
-	if(bottomCollision)
-	{
-		if(entity_place_collide(1,-1) && !entity_place_collide(-1,2))
-		{
-			downSlopeFlag = true;
-		}
-		if(entity_place_collide(-1,-1) && !entity_place_collide(1,2))
-		{
-			downSlopeFlag = true;
-		}
-	}
-	
 	if(velY >= 0 && velY <= fGrav && jump <= 0)
 	{
-		return (bottomCollision && (!downSlopeFlag || speedBoost));
+		if(speedBoost)
+		{
+			return true;
+		}
+		
+		var colB = self.entity_collision_line(self.bb_left(), self.bb_bottom()+ydiff, self.bb_right(), self.bb_bottom()+ydiff);
+		if((self.entity_place_collide(0,ydiff) && (!self.entity_place_collide(0,0) || colB)) || position.Y+ydiff > room_height)
+		{
+			var downSlopeFlag = (abs(self.GetEdgeAngle(Edge.Bottom,0,0)) >= 60);
+			if(self.entity_place_collide(1,-1) && !self.entity_place_collide(-1,2))
+			{
+				downSlopeFlag = true;
+			}
+			if(self.entity_place_collide(-1,-1) && !self.entity_place_collide(1,2))
+			{
+				downSlopeFlag = true;
+			}
+			return (!downSlopeFlag);
+		}
 	}
 	return false;
 }
@@ -3598,7 +3586,7 @@ function PlayerGrounded(ydiff = 1)
 #region PlayerOnPlatform
 function PlayerOnPlatform(ydiff = 1)
 {
-	return (entityPlatformCheck(0,ydiff) && fVelY >= 0 && state != State.Spark && state != State.BallSpark);
+	return (self.entityPlatformCheck(0,ydiff) && fVelY >= 0 && state != State.Spark && state != State.BallSpark);
 }
 #endregion
 
@@ -3610,7 +3598,7 @@ function SpiderEnable(flag)
 		spiderBall = flag;
 		if(flag)
 		{
-			if(grounded && Crawler_CanStickBottom())
+			if(grounded && self.Crawler_CanStickBottom())
 			{
 				spiderEdge = Edge.Bottom;
 				spiderSpeed = velX;
@@ -4736,10 +4724,10 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 {
 	if(_MORPH_TRAIL)
 	{
-		var camX = camera_get_view_x(view_camera[0]),
-			camY = camera_get_view_y(view_camera[0]),
-			camW = camera_get_view_width(view_camera[0]),
-			camH = camera_get_view_height(view_camera[0]);
+		var camX = global.cameraX,
+			camY = global.cameraY,
+			camW = global.resWidth,
+			camH = global.resHeight;
 		
 		if(animState == AnimState.Morph || mbTrailAlpha > 0)
 		{

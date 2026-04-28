@@ -373,6 +373,7 @@
     {"id":{"name":"obj_ControlOptions","path":"objects/obj_ControlOptions/obj_ControlOptions.yy",},},
     {"id":{"name":"obj_ConveyerTile","path":"objects/obj_ConveyerTile/obj_ConveyerTile.yy",},},
     {"id":{"name":"obj_CrumbleBlock","path":"objects/obj_CrumbleBlock/obj_CrumbleBlock.yy",},},
+    {"id":{"name":"obj_Culler","path":"objects/obj_Culler/obj_Culler.yy",},},
     {"id":{"name":"obj_DamageBox","path":"objects/obj_DamageBox/obj_DamageBox.yy",},},
     {"id":{"name":"obj_DeathAnim","path":"objects/obj_DeathAnim/obj_DeathAnim.yy",},},
     {"id":{"name":"obj_Debug","path":"objects/obj_Debug/obj_Debug.yy",},},

@@ -27,6 +27,7 @@ function scr_MainInitialize()
 	instance_create_depth(0,0,0,obj_Particles);
 	instance_create_depth(0,0,0,obj_TileFadeHandler);
 	instance_create_depth(0,0,0,obj_ScreenShaker);
+	instance_create_depth(0,0,0,obj_Culler);
 	instance_create_depth(0,0,0,obj_UI_Icons);
 	
 	instance_create_depth(0,0,-9,obj_Mouse);

@@ -688,3 +688,6 @@ if(instance_exists(obj_ScreenShaker) && obj_ScreenShaker.active)
 var camX = scr_round(playerX+shakeX) + scr_round(x-playerX),
 	camY = scr_round(playerY+shakeY) + scr_round(y-playerY);
 camera_set_view_pos(view_camera[0], camX, camY);
+
+global.cameraX = camera_get_view_x(view_camera[0]);
+global.cameraY = camera_get_view_y(view_camera[0]);

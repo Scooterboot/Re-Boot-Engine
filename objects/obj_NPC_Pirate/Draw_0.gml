@@ -1,4 +1,8 @@
 /// @description 
+if(!self.CanDraw())
+{
+	exit;
+}
 
 var pal = 0;
 if(dmgFlash > 4)

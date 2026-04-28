@@ -46,6 +46,7 @@ if(state == ShutterState.Closing)
 		state = ShutterState.Closed;
 	}
 }
+//image_yscale = scr_round(shutterH+16)/16;
 
 stuck = false;
 if(instance_exists(mBlock))

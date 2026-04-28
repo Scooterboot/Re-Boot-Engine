@@ -59,6 +59,13 @@ function PauseAI()
 {
 	return (global.GamePaused() || !scr_WithinCamRange() || frozen > 0 || dmgFlash > 0);
 }
+function CanDraw()
+{
+	var sprX = x-sprite_xoffset, sprY = y-sprite_yoffset,
+		sprW = sprite_width, sprH = sprite_height;
+	return scr_RectangleWithinCam(sprX-16,sprY-16,sprX+sprW+16,sprY+sprH+16);
+}
+canBeCulled = false;
 
 dmgBoxMask = noone;
 dmgBoxOffsetX = 0;

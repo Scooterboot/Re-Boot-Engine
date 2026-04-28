@@ -10,9 +10,9 @@ darkSurf = noone;
 
 function GetRoomX()
 {
-	return x + camera_get_view_x(view_camera[0]);
+	return x + global.cameraX;
 }
 function GetRoomY()
 {
-	return y + camera_get_view_y(view_camera[0]);
+	return y + global.cameraY;
 }

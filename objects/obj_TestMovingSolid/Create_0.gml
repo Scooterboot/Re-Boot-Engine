@@ -1,5 +1,7 @@
 /// @description 
-//event_inherited();
+event_inherited();
+passthroughMovingSolids = true;
+solids = [];
 
 rot = 0;
 
@@ -98,6 +100,7 @@ for(var i = 0; i < 12; i++)
 	}
 	
 	blocks[i] = instance_create_layer(x+offx,y+offy,layer_get_id("Collision"),type);
+	blocks[i].ignoredEntity = id;
 	blocks[i].image_xscale = xscale;
 	blocks[i].image_yscale = yscale;
 	blockOffX[i] = offx;

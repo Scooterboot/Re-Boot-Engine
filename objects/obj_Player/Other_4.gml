@@ -1,6 +1,6 @@
 layer = layer_get_id("Player");
 
-for(var i = 0; i < ds_list_size(afterImageList); i++)
+for(var i = 0, len = ds_list_size(afterImageList); i < len; i++)
 {
 	afterImageList[| i].Clear();
 }

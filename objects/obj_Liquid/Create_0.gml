@@ -698,21 +698,21 @@ function scaledH() { return spriteH * image_yscale; }
 
 function SurfPos()
 {
-	return new Vector2(scr_round(max(x,camera_get_view_x(view_camera[0]))),scr_round(max(y,camera_get_view_y(view_camera[0]))));
+	return new Vector2(scr_round(max(x, global.cameraX)), scr_round(max(y, global.cameraY)));
 }
 
 function _SurfWidth()
 {
 	var pos = SurfPos();
-	var camX = camera_get_view_x(view_camera[0]),
-		camW = camera_get_view_width(view_camera[0]);
+	var camX = global.cameraX,
+		camW = global.resWidth;
 	return scr_round(min(camW-(pos.X-camX),bb_right()-pos.X + 1));
 }
 function _SurfHeight()
 {
 	var pos = SurfPos();
-	var camY = camera_get_view_y(view_camera[0]),
-		camH = camera_get_view_height(view_camera[0]);
+	var camY = global.cameraY,
+		camH = global.resHeight;
 	return scr_round(min(camH-(pos.Y-camY),bb_bottom()-pos.Y + 1));
 }
 

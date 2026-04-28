@@ -15,3 +15,5 @@ if(dead)
 {
     self.NPCDeath(x+deathOffsetX,y+deathOffsetY);
 }
+
+canBeCulled = (frozen <= 0 && !global.GamePaused() && self.PauseAI());

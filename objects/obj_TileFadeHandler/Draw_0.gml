@@ -8,10 +8,10 @@ if(!instance_exists(obj_TileFadeBlock))
 else
 {
 
-	var camX = camera_get_view_x(view_camera[0]),
-		camY = camera_get_view_y(view_camera[0]),
-		camW = camera_get_view_width(view_camera[0]),
-		camH = camera_get_view_height(view_camera[0]);
+	var camX = global.cameraX,
+		camY = global.cameraY,
+		camW = global.resWidth,
+		camH = global.resHeight;
 
 	if(!surface_exists(fadeTileSurface))
 	{
