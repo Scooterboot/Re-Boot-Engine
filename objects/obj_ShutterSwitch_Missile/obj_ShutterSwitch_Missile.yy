@@ -34,6 +34,9 @@
     "name":"sprt_ShutterSwitch_Missile",
     "path":"sprites/sprt_ShutterSwitch_Missile/sprt_ShutterSwitch_Missile.yy",
   },
-  "spriteMaskId":null,
+  "spriteMaskId":{
+    "name":"mask_ShutterSwitch",
+    "path":"sprites/mask_ShutterSwitch/mask_ShutterSwitch.yy",
+  },
   "visible":true,
 }

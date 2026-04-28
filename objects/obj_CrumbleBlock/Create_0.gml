@@ -7,3 +7,8 @@ time = 0;
 
 respawnSprt = sprt_CrumbleBlockBreak;
 extSprt = sprt_CrumbleBlockExt;
+
+function SetExtraRespawnVars(_respBlock)
+{
+	_respBlock.timeLeft = timeLeft;
+}

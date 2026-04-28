@@ -48,7 +48,7 @@ if(debug == 1)
 	{
 		//if(!visible)
 		//{
-			if(object_is_ancestor(object_index,obj_Breakable) || object_index == obj_GrappleBlock)
+			/*if(object_is_ancestor(object_index,obj_Breakable) || object_index == obj_GrappleBlock)
 			{
 				//DrawBreakable(x,y,0);
 				draw_sprite_ext(sprite_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,1);
@@ -62,8 +62,16 @@ if(debug == 1)
 			else if(!visible)
 			{
 				draw_self();
-			}
+			}*/
 		//}
+		if(mask_index != sprite_index && sprite_exists(mask_index))
+		{
+			draw_sprite_ext(mask_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,0.75);
+		}
+		else
+		{
+			draw_sprite_ext(sprite_index,0,x,y,image_xscale,image_yscale,image_angle,c_white,1);
+		}
 	}
 	with(obj_NPCTile)
 	{
@@ -153,7 +161,7 @@ if(debug == 1)
 		draw_set_color(c_white);
         draw_set_alpha(0.5);
 		
-		if(mask_index != sprite_index && sprite_exists(mask_index))
+		if(sprite_exists(mask_index))
 		{
 			var _sAdd = 6;
 			var msk = mask_index,

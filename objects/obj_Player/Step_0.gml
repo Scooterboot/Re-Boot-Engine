@@ -3969,12 +3969,11 @@ if(!global.GamePaused())
 		}
 		else
 		{
+			var ms_spd = moveSpeed[MoveSpeed.Dodge,liquidState],
+				max_spd_d = maxSpeed[MaxSpeed.Dodge,liquidState],
+				max_spd_s = maxSpeed[MaxSpeed.DodgeMax,liquidState];
 			if(dodgeLength < dodgeLengthEnd)
 			{
-				var ms_spd = moveSpeed[MoveSpeed.Dodge,liquidState],
-					max_spd_d = maxSpeed[MaxSpeed.Dodge,liquidState],
-					max_spd_s = maxSpeed[MaxSpeed.DodgeMax,liquidState];
-				
 				var velocity = point_distance(0,0,velX,velY),
 					_dir = point_direction(0,0,velX,velY);
 				var velCheck = lengthdir_x(velocity, dodgeDir-90-_dir);
@@ -3991,12 +3990,10 @@ if(!global.GamePaused())
 				var velSpdX = lengthdir_x(ms_spd, dodgeDir-90),
 					velSpdY = lengthdir_y(ms_spd, dodgeDir-90);
 				var _frict = frict[Friction.Default,liquidState];
+				var _frictX = lengthdir_x(_frict, dodgeDir),
+					_frictY = lengthdir_y(_frict, dodgeDir);
 				
-				var spdX = abs(velSpdX);
-				if(sign(velX) != sign(velMaxX))
-				{
-					spdX += abs(_frict);
-				}
+				var spdX = abs(velSpdX) + abs(_frictX);
 				if(velX < velMaxX)
 				{
 					velX = min(velX + spdX, velMaxX);
@@ -4006,11 +4003,7 @@ if(!global.GamePaused())
 					velX = max(velX - spdX, velMaxX);
 				}
 				
-				var spdY = abs(velSpdY);
-				if(sign(velY) != sign(velMaxY))
-				{
-					spdY += abs(_frict);
-				}
+				var spdY = abs(velSpdY) + abs(_frictY);
 				if(velY < velMaxY)
 				{
 					velY = min(velY + spdY, velMaxY);
@@ -4022,23 +4015,18 @@ if(!global.GamePaused())
 			}
 			else if(!speedBoost)
 			{
+				var velocity = point_distance(0,0,velX,velY);
 				var _frict = frict[Friction.DodgeFast,liquidState];
-				if(dodgeType == 1 && sign(dodgeDir) == -dir)
+				if((dodgeType == 1 && sign(dodgeDir) == -dir) || velocity >= max_spd_s-ms_spd)
 				{
 					_frict = frict[Friction.DodgeSlow,liquidState];
 				}
-				var _frictX = lengthdir_x(_frict, dodgeDir-90),
-					_frictY = lengthdir_y(_frict, dodgeDir-90);
 				
-				velX -= _frictX;
-				if(sign(velX) != sign(_frictX))
+				var velFrict = max(velocity-_frict,0);
+				if(velocity > velFrict)
 				{
-					velX = 0;
-				}
-				velY -= _frictY;
-				if(sign(velY) != sign(_frictY))
-				{
-					velY = 0;
+					velX = (velX/velocity) * velFrict;
+					velY = (velY/velocity) * velFrict;
 				}
 			}
 			

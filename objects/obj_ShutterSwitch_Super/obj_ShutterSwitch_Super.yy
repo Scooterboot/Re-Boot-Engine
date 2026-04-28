@@ -34,6 +34,9 @@
     "name":"sprt_ShutterSwitch_Super",
     "path":"sprites/sprt_ShutterSwitch_Super/sprt_ShutterSwitch_Super.yy",
   },
-  "spriteMaskId":null,
+  "spriteMaskId":{
+    "name":"mask_ShutterSwitch",
+    "path":"sprites/mask_ShutterSwitch/mask_ShutterSwitch.yy",
+  },
   "visible":true,
 }

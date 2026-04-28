@@ -38,8 +38,8 @@
     "path":"sprites/sprt_ShutterSwitch_Bomb/sprt_ShutterSwitch_Bomb.yy",
   },
   "spriteMaskId":{
-    "name":"sprt_ShutterSwitch_Bomb_mask",
-    "path":"sprites/sprt_ShutterSwitch_Bomb_mask/sprt_ShutterSwitch_Bomb_mask.yy",
+    "name":"mask_ShutterSwitch_Bomb",
+    "path":"sprites/mask_ShutterSwitch_Bomb/mask_ShutterSwitch_Bomb.yy",
   },
   "visible":true,
 }

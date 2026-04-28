@@ -7,10 +7,10 @@ if(global.GamePaused())
 
 var _timeLeft = timeLeft;
 var player = instance_place(x,y-2,obj_Player);
-if(timeLeft <= 3 && instance_exists(player) && player.fVelY >= 0 )//&& !player.spiderBall)
+if(instance_exists(player) && player.fVelY >= 0 )//&& !player.spiderBall)
 {
 	crumble = true;
-	if(abs(player.velX) > player.maxSpeed[MaxSpeed.MorphBall,player.liquidState])
+	if(timeLeft <= 3 && abs(player.velX) > player.maxSpeed[MaxSpeed.MorphBall,player.liquidState])
 	{
 		_timeLeft += 1;
 	}
@@ -34,6 +34,11 @@ if(instance_exists(pushBlock) && pushBlock.grounded && pushBlock.fVelY >= 0)
 
 if(crumble)
 {
+	if(!visible)
+	{
+		self.RevealTile();
+		visible = true;
+	}
     if(time >= _timeLeft)
     {
         instance_destroy();

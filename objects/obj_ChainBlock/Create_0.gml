@@ -6,14 +6,16 @@ extSprt = sprt_BombBlockExt;
 
 destroy = false;
 time = 0;
-//timeLeft = 3;
 
-//right = false;
-//left = false;
-//up = false;
-//down = false;
-
-//upright = false;
-//upleft = false;
-//downright = false;
-//downleft = false;
+function SetExtraRespawnVars(_respBlock)
+{
+	_respBlock.timeLeft = timeLeft;
+	_respBlock.right = right;
+	_respBlock.left = left;
+	_respBlock.up = up;
+	_respBlock.down = down;
+	_respBlock.upright = upright;
+	_respBlock.upleft = upleft;
+	_respBlock.downright = downright;
+	_respBlock.downleft = downleft;
+}

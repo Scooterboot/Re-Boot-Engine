@@ -8,12 +8,4 @@ image_speed = 0;
 image_index = 0;
 frameCounter = -1;
 
-right = false;
-left = false;
-up = false;
-down = false;
-
-upright = false;
-upleft = false;
-downright = false;
-downleft = false;
+function SetExtraRespawnVars(_respBlock) {}

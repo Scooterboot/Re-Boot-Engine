@@ -39,6 +39,9 @@
     "name":"sprt_TestMovingSolid",
     "path":"sprites/sprt_TestMovingSolid/sprt_TestMovingSolid.yy",
   },
-  "spriteMaskId":null,
+  "spriteMaskId":{
+    "name":"sprt_TestMovingSolid",
+    "path":"sprites/sprt_TestMovingSolid/sprt_TestMovingSolid.yy",
+  },
   "visible":true,
 }

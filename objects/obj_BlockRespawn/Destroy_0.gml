@@ -11,14 +11,8 @@ if(initialTime > 0)
 		re.initialTime = initialTime;
 		re.image_xscale = image_xscale;
 		re.image_yscale = image_yscale;
-		re.right = right;
-		re.left = left;
-		re.up = up;
-		re.down = down;
-		re.upright = upright;
-		re.upleft = upleft;
-		re.downright = downright;
-		re.downleft = downleft;
+		self.SetExtraRespawnVars(re);
+		re.SetExtraRespawnVars = self.SetExtraRespawnVars;
 	}
 	else if(blockIndex != noone)
 	{
@@ -27,13 +21,6 @@ if(initialTime > 0)
 		bl.respawnTime = initialTime;
 		bl.image_xscale = image_xscale;
 		bl.image_yscale = image_yscale;
-		bl.right = right;
-		bl.left = left;
-		bl.up = up;
-		bl.down = down;
-		bl.upright = upright;
-		bl.upleft = upleft;
-		bl.downright = downright;
-		bl.downleft = downleft;
+		self.SetExtraRespawnVars(bl);
 	}
 }

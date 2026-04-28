@@ -7,3 +7,8 @@ time = 0;
 
 respawnSprt = sprt_GrappleBlockBreak;
 extSprt = sprt_GrappleBlockCrackedExt;
+
+function SetExtraRespawnVars(_respBlock)
+{
+	_respBlock.timeLeft = timeLeft;
+}

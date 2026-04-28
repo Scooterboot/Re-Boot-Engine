@@ -12,7 +12,7 @@ if(!hiddenDestroy)
 
 if(!visible)
 {
-	RevealTile();
+	self.RevealTile();
 }
 
 if(respawnTime > 0 || !hiddenDestroy)
@@ -24,15 +24,6 @@ if(respawnTime > 0 || !hiddenDestroy)
     re.initialTime = respawnTime;
     re.image_xscale = image_xscale;
     re.image_yscale = image_yscale;
-    if(object_index == obj_ChainBlock)
-    {
-        re.right = right;
-        re.left = left;
-        re.up = up;
-        re.down = down;
-        re.upright = upright;
-        re.upleft = upleft;
-        re.downright = downright;
-        re.downleft = downleft;
-    }
+	self.SetExtraRespawnVars(re);
+	re.SetExtraRespawnVars = self.SetExtraRespawnVars;
 }

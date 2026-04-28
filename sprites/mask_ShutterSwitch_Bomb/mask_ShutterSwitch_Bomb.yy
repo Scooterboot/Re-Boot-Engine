@@ -1,6 +1,6 @@
 {
   "$GMSprite":"v2",
-  "%Name":"sprt_ShutterSwitch_Bomb_mask",
+  "%Name":"mask_ShutterSwitch_Bomb",
   "bboxMode":1,
   "bbox_bottom":15,
   "bbox_left":0,
@@ -21,7 +21,7 @@
   "layers":[
     {"$GMImageLayer":"","%Name":"41d175d8-a628-4278-8f44-342c86571c8f","blendMode":0,"displayName":"default","isLocked":false,"name":"41d175d8-a628-4278-8f44-342c86571c8f","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
-  "name":"sprt_ShutterSwitch_Bomb_mask",
+  "name":"mask_ShutterSwitch_Bomb",
   "nineSlice":null,
   "origin":4,
   "parent":{
@@ -33,7 +33,7 @@
   "resourceVersion":"2.0",
   "sequence":{
     "$GMSequence":"v1",
-    "%Name":"sprt_ShutterSwitch_Bomb_mask",
+    "%Name":"mask_ShutterSwitch_Bomb",
     "autoRecord":true,
     "backdropHeight":768,
     "backdropImageOpacity":0.5,
@@ -57,7 +57,7 @@
       "resourceType":"KeyframeStore<MomentsEventKeyframe>",
       "resourceVersion":"2.0",
     },
-    "name":"sprt_ShutterSwitch_Bomb_mask",
+    "name":"mask_ShutterSwitch_Bomb",
     "playback":1,
     "playbackSpeed":30.0,
     "playbackSpeedType":0,
@@ -68,7 +68,9 @@
     "timeUnits":1,
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"16898426-ce33-40a7-9a77-626f1ea6f9f6","path":"sprites/sprt_ShutterSwitch_Bomb_mask/sprt_ShutterSwitch_Bomb_mask.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"845b48c5-c198-42d3-888c-65a89f3a1c31","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"16898426-ce33-40a7-9a77-626f1ea6f9f6","path":"sprites/mask_ShutterSwitch_Bomb/mask_ShutterSwitch_Bomb.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"845b48c5-c198-42d3-888c-65a89f3a1c31","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,

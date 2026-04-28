@@ -80,3 +80,5 @@ function DrawBreakable(_x,_y,_index, _extIndex = 0)
 		}
 	}
 }
+
+function SetExtraRespawnVars(_respBlock) {}

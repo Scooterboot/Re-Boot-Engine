@@ -3174,26 +3174,31 @@ function MoveStick_CheckPGrip(_dir, movingTile)
 {
 	if(state == State.Grip && grippedDir == _dir)
 	{
-		var lCheck = x,
-			rCheck = self.bb_right(x)+2 + 1;
+		var _top = self.bb_top(),//position.Y-sprite_get_yoffset(mask_Player_Grip),
+			_left = self.bb_left(),
+			_right = self.bb_right()+1;
+		
+		var lCheck = position.X,
+			rCheck = _right + 2;
 		if(_dir == -1)
 		{
-			lCheck = self.bb_left(x)-2;
-			rCheck = x;
+			lCheck = _left - 2;
+			rCheck = position.X;
 		}
 		if(startClimb)
 		{
-			var cX = 0, cY = 0;
+			/*var cX = 0, cY = 0;
 			for(var i = 0; i < climbIndex; i++)
 			{
 				cX -= climbX[floor(i)] * _dir;
 				cY += climbY[floor(i)];
 			}
-			return collision_rectangle(lCheck+cX, self.bb_top(y)+cY, rCheck+cX, self.bb_top(y)+2+cY, ColType_MovingSolid, true, true);
+			return instance_exists(collision_rectangle(lCheck+cX-1, _top+cY, rCheck+cX+1, _top+2+cY, ColType_MovingSolid, true, true));*/
+			return true;
 		}
 		else
 		{
-			return collision_rectangle(lCheck, self.bb_top(y), rCheck, self.bb_top(y)+2, ColType_MovingSolid, true, true);
+			return instance_exists(collision_rectangle(lCheck, _top, rCheck, _top+2, ColType_MovingSolid, true, true));
 		}
 	}
 	return false;
