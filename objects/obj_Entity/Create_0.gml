@@ -757,6 +757,8 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 			}
 			self.OnXCollision(fVX, true);
 			position.X = clamp(position.X,0,room_width);
+			fVX = 0;
+			maxSpeedX = 0;
 		}
 		x = scr_round(position.X);
 		
@@ -938,6 +940,8 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 			}
 			self.OnYCollision(fVX, true);
 			position.Y = clamp(position.Y,0,room_height);
+			fVY = 0;
+			maxSpeedY = 0;
 		}
 		y = scr_round(position.Y);
 		
@@ -1436,6 +1440,8 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 			}
 			self.Crawler_OnXCollision(fVX, true);
 			position.X = clamp(position.X,0,room_width);
+			fVX = 0;
+			maxSpeedX = 0;
 		}
 		x = scr_round(position.X);
 		
@@ -1711,6 +1717,8 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 			}
 			self.Crawler_OnYCollision(fVX, true);
 			position.Y = clamp(position.Y,0,room_height);
+			fVY = 0;
+			maxSpeedY = 0;
 		}
 		y = scr_round(position.Y);
 		

@@ -2114,8 +2114,8 @@ if(!global.GamePaused())
 		if(spiderEdge != Edge.None && spiderSpeed != 0 && !spiderJump)
 		{
 			velY = 0;
-			var _grounded = self.PlayerGrounded(),
-				_onPlatform = self.PlayerOnPlatform();
+			var _grounded = (!grounded && jump <= 0 && self.PlayerGrounded()),
+				_onPlatform = (!onPlatform && jump <= 0 && self.PlayerOnPlatform());
 			if(_grounded || _onPlatform)
 			{
 				velX = spiderSpeed*sign(lengthdir_x(1, edgeAngle[spiderEdge]));
@@ -2535,21 +2535,26 @@ if(!global.GamePaused())
 		self.Collision_Normal(fVelX,fVelY, (state != State.Grip), (state == State.Elevator));
 	}
 	
-	var _grounded = self.PlayerGrounded(),
-		_onPlatform = self.PlayerOnPlatform();
-	if(grounded && !_grounded && !_onPlatform)
+	if(grounded)
 	{
-		grounded = false;
+		if(!self.PlayerOnPlatform() && !self.PlayerGrounded())
+		{
+			grounded = false;
+		}
 	}
-	else if(velY == 0 && _grounded)
+	else if(velY == 0 && jump <= 0 && self.PlayerGrounded())
 	{
 		grounded = true;
 	}
-	if(onPlatform && !_onPlatform)
+	
+	if(onPlatform)
 	{
-		onPlatform = false;
+		if(!self.PlayerOnPlatform())
+		{
+			onPlatform = false;
+		}
 	}
-	else if(velY == 0 && _onPlatform)
+	else if(velY == 0 && jump <= 0 && self.PlayerOnPlatform())
 	{
 		onPlatform = true;
 	}

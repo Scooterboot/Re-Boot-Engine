@@ -30,6 +30,7 @@ Interact = function()
 		if(activeTime == activeTimeMax-1)
 		{
 			map.stationUsed = true;
+			map.updateSurf = true;
 			obj_PauseMenu.isPaused = true;
 		}
 	}
