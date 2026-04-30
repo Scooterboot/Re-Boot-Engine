@@ -80,7 +80,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 						bgy = -msSizeH + scr_wrap(scr_round(my),0,msSizeH);
 					draw_sprite_stretched_ext(sprt_HUD_MapBase,0,bgx,bgy,ww+(msSizeW*2),hh+(msSizeH*2),c_white,0.25);
 					
-					obj_Map.DrawMap(global.rmMapArea, 0,0, -scr_round(mx),-scr_round(my), global.resWidth,global.resHeight);
+					obj_Map.DrawMap(global.rmMapArea, 0,0,global.resWidth,global.resHeight, -scr_round(mx),-scr_round(my));
 					
 					var pX = mx + obj_Map.playerMapX * msSizeW + (msSizeW/2),
 						pY = my + obj_Map.playerMapY * msSizeH + (msSizeH/2);

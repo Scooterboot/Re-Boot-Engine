@@ -52,21 +52,23 @@ else
 		    obj_Player.position.Y = nextEle.y - obj_Player.bb_bottom(0);
 			with(obj_Player)
 	        {
-	            array_fill(mbTrailPosX, noone);
-				array_fill(mbTrailPosY, noone);
-				array_fill(mbTrailDir, noone);
+	            array_fill(mbTrailPosX, undefined);
+				array_fill(mbTrailPosY, undefined);
+				array_fill(mbTrailDir, undefined);
 			
 				x = scr_round(position.X);
 				y = scr_round(position.Y);
 			
-				liquid = liquid_place();
+				liquid = self.liquid_place();
 				liquidPrev = liquid;
-				liquidTop = liquid_top();
+				liquidTop = self.liquid_top();
 				liquidTopPrev = liquidTop;
 			
-				prevTop = bb_top();
-				prevBottom = bb_bottom();
+				prevTop = self.bb_top();
+				prevBottom = self.bb_bottom();
 	        }
+			
+			obj_Culler.alarm[0] = 10;
 			
 		    transTimer++;
 			if(transTimer > 2)

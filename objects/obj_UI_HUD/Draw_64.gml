@@ -70,7 +70,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		
 		if(currentMap != noone)
 		{
-			obj_Map.DrawMap(currentMap, mapX,mapY, playerMapX-mapDifX+pMapOffsetX,playerMapY-mapDifY+pMapOffsetY, mapWidth,mapHeight, true,0.75);
+			obj_Map.DrawMap(currentMap, mapX,mapY,mapWidth,mapHeight, playerMapX-mapDifX+pMapOffsetX,playerMapY-mapDifY+pMapOffsetY, true,0.75);
 			
 			if(pMapOffsetX > 0)
 			{

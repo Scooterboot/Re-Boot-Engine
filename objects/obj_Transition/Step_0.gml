@@ -70,44 +70,42 @@ else
 				var trailX = [0], trailY = [0];
 				for(var i = 0; i < mbTrailLength; i++)
 				{
-					trailX[i] = mbTrailPosX[i] - (position.X+sprtOffsetX);
-					trailY[i] = mbTrailPosY[i] - (position.Y+sprtOffsetY);
+					trailX[i] = (is_undefined(mbTrailPosX[i])) ? 0 : mbTrailPosX[i] - (position.X+sprtOffsetX);
+					trailY[i] = (is_undefined(mbTrailPosY[i])) ? 0 : mbTrailPosY[i] - (position.Y+sprtOffsetY);
 				}
 				
-				position.X = this.nextDoor.x + this.difX + lengthdir_x(this.spawnDist, this.nextDoor.image_angle) + lengthdir_x(bb_right() - bb_left(), this.nextDoor.image_angle);
-				position.Y = this.nextDoor.y + this.difY + lengthdir_y(this.spawnDist, this.nextDoor.image_angle) + lengthdir_y(bb_bottom() - bb_top(), this.nextDoor.image_angle);
+				position.X = this.nextDoor.x + this.difX + lengthdir_x(this.spawnDist, this.nextDoor.image_angle) + lengthdir_x(self.bb_right() - self.bb_left(), this.nextDoor.image_angle);
+				position.Y = this.nextDoor.y + this.difY + lengthdir_y(this.spawnDist, this.nextDoor.image_angle) + lengthdir_y(self.bb_bottom() - self.bb_top(), this.nextDoor.image_angle);
 				
 				oldPosition.X = position.X + oldDiffX;
 				oldPosition.Y = position.Y + oldDiffY;
 				for(var i = 0; i < mbTrailLength; i++)
 				{
-					mbTrailPosX[i] = (position.X+sprtOffsetX) + trailX[i];
-					mbTrailPosY[i] = (position.Y+sprtOffsetY) + trailY[i];
+					mbTrailPosX[i] = (is_undefined(mbTrailPosX[i])) ? undefined : (position.X+sprtOffsetX) + trailX[i];
+					mbTrailPosY[i] = (is_undefined(mbTrailPosX[i])) ? undefined : (position.Y+sprtOffsetY) + trailY[i];
 				}
 				
 				var gNum = 16;
-				while(grounded && !entity_place_collide(0,1) && entity_place_collide(0,3+max(ceil(abs(velX)),1)) && gNum > 0)
+				while(grounded && !self.entity_place_collide(0,1) && self.entity_place_collide(0,3+max(ceil(abs(velX)),1)) && gNum > 0)
 				{
 					//y += 1;
 					position.Y += 1;
 					gNum -= 1;
 				}
 				
-				//array_fill(mbTrailPosX, noone);
-				//array_fill(mbTrailPosY, noone);
-				//array_fill(mbTrailDir, noone);
-				
 				x = scr_round(position.X);
 				y = scr_round(position.Y);
 				
-				liquid = liquid_place();
+				liquid = self.liquid_place();
 				liquidPrev = liquid;
-				liquidTop = liquid_top();
+				liquidTop = self.liquid_top();
 				liquidTopPrev = liquidTop;
 				
-				prevTop = bb_top();
-				prevBottom = bb_bottom();
+				prevTop = self.bb_top();
+				prevBottom = self.bb_bottom();
 			}
+			
+			obj_Culler.alarm[0] = 10;
 			
 			transTimer++;
 			if(transTimer > 2)//10)

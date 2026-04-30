@@ -17,14 +17,26 @@ phase2Blocks = ds_list_create();
 collision_rectangle_list(65,289,142,302,obj_NPCBreakable,false,true,phase2Blocks,false);
 collision_rectangle_list(193,289,254,302,obj_NPCBreakable,false,true,phase2Blocks,false);
 collision_rectangle_list(305,289,510,302,obj_NPCBreakable,false,true,phase2Blocks,false);
+for(var i = 0, len = ds_list_size(phase2Blocks); i < len; i++)
+{
+	phase2Blocks[| i].canBeCulled = false;
+}
 
 remainingBlocks[0] = collision_rectangle(160,288,160+16,288+16,obj_NPCBreakable,false,true);
 remainingBlocks[1] = collision_rectangle(272,288,272+16,288+16,obj_NPCBreakable,false,true);
+for(var i = 0, len = array_length(remainingBlocks); i < len; i++)
+{
+	remainingBlocks[i].canBeCulled = false;
+}
 
 spikes = ds_list_create();
 for(var i = 112; i < 464; i += 32)
 {
 	ds_list_add(spikes, collision_rectangle(i,432,i+16,448,obj_Spikes,false,true));
+}
+for(var i = 0, len = ds_list_size(spikes); i < len; i++)
+{
+	spikes[| i].canBeCulled = false;
 }
 
 bgAlpha = 0;

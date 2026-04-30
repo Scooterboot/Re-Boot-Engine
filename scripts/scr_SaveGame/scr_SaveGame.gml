@@ -67,7 +67,10 @@ function scr_SaveGame()
 	for(var i = 0; i < array_length(global.mapArea); i++)
 	{
 		ds_map_add(_map_map,"mapReveal_"+global.mapArea[i].name, ds_grid_write(global.mapArea[i].grid));
+		
+		global.mapArea[i].IconsConvertSpritesToStrings();
 		ds_map_add(_map_map,"mapIcons_"+global.mapArea[i].name, ds_list_write(global.mapArea[i].icons));
+		global.mapArea[i].IconsConvertStringsToSprites();
 		
 		ds_map_add(_map_map,"mapVisited_"+global.mapArea[i].name, global.mapArea[i].visited);
 		ds_map_add(_map_map,"mapStationUsed_"+global.mapArea[i].name, global.mapArea[i].stationUsed);

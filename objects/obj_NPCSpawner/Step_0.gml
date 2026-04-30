@@ -21,7 +21,7 @@ if(coolDown <= 0)
 }
 
 var _flag = false;
-for(var i = 0; i < array_length(spawnedNPC); i++)
+for(var i = 0, len = array_length(spawnedNPC); i < len; i++)
 {
 	if(instance_exists(spawnedNPC[i]))
 	{
@@ -32,7 +32,6 @@ for(var i = 0; i < array_length(spawnedNPC); i++)
 
 if(!_flag)
 {
-	array_clear(spawnedNPC);
-	array_resize(spawnedNPC,0);
+	spawnedNPC = [];
 	coolDown = max(coolDown-1,0);
 }

@@ -26,7 +26,11 @@ if(instance_exists(obj_Player) && room != rm_MainMenu && global.rmMapArea != noo
 		var my = clamp(playerMapY,0,ds_grid_height(grid));
 		if(playerMapX == mx && playerMapY == my)
 		{
-			grid[# playerMapX,playerMapY] = true;
+			if(!grid[# playerMapX,playerMapY])
+			{
+				grid[# playerMapX,playerMapY] = true;
+				global.rmMapArea.updateSurf = true;
+			}
 		}
 		global.rmMapArea.visited = true;
 	}

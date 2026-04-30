@@ -74,15 +74,15 @@ stallY = false;
 
 function camWidth()
 {
-	return global.resWidth*global.zoomScale;
+	return ceil(global.zoomResWidth);
 }
 function camWidth_NonWide()
 {
-	return global.ogResWidth*global.zoomScale;
+	return ceil(global.ogResWidth*global.zoomScale);
 }
 function camHeight()
 {
-	return global.resHeight*global.zoomScale;
+	return ceil(global.zoomResHeight);
 }
 
 colList = ds_list_create();

@@ -267,7 +267,7 @@ boostBallDmgCounter = 0;
 boostBallFX = 0;
 boostBallFXFlash = false;
 boostBallSnd = noone;
-
+boostBallTrailFX = 0;
 
 stepSndPlayedAt = 0;
 
@@ -1141,21 +1141,22 @@ screwSoundPlayed = false;
 heatDmgSnd = noone;
 
 #endregion
-#region MB Trail
+#region Morph Trail
 
 mbTrailColor_Start = c_lime;
 mbTrailColor_End = c_green;
 
 mbTrailLength = 18;
-mbTrailPosX = array_create(mbTrailLength, noone);
-mbTrailPosY = array_create(mbTrailLength, noone);
-mbTrailDir = array_create(mbTrailLength, noone);
+mbTrailPosX = array_create(mbTrailLength, undefined);
+mbTrailPosY = array_create(mbTrailLength, undefined);
+mbTrailDir = array_create(mbTrailLength, undefined);
 mbTrailCol1 = array_create(mbTrailLength, mbTrailColor_Start);
 mbTrailCol2 = array_create(mbTrailLength, mbTrailColor_End);
 
 mbTrailNum = 0;
 mbTrailNumRate = 1;
 
+mbTrailSprtSurf = surface_create(sprite_get_width(sprt_MorphTrail),sprite_get_height(sprt_MorphTrail));
 mbTrailSurface = surface_create(global.resWidth,global.resHeight);
 mbTrailAlpha = 0;
 
@@ -2046,7 +2047,8 @@ function entity_collision(listNum)
 	{
 		for(var i = 0; i < listNum; i++)
 		{
-			if(instance_exists(blockList[| i]) && self.isValidSolid(blockList[| i]))
+			var block = blockList[| i];
+			if(instance_exists(block) && self.isValidSolid(block))
 			{
 				ds_list_clear(blockList);
 				return true;
@@ -4736,13 +4738,37 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 		
 		if(animState == AnimState.Morph || mbTrailAlpha > 0)
 		{
-			if(surface_exists(mbTrailSurface) && mbTrailSurface != -1)
+			if(!surface_exists(mbTrailSprtSurf))
+			{
+				mbTrailSprtSurf = surface_create(sprite_get_width(sprt_MorphTrail),sprite_get_height(sprt_MorphTrail));
+			}
+			if(surface_exists(mbTrailSprtSurf))
+			{
+				surface_set_target(mbTrailSprtSurf);
+				draw_clear_alpha(c_black,1);
+				
+				draw_sprite_ext(sprt_MorphTrail,0, 0,0, 1,1, 0, c_white,1);
+				if(boostBallTrailFX > 0 || shineFXCounter > 0)
+				{
+					gpu_set_colourwriteenable(1,1,1,0);
+					draw_sprite_ext(sprt_MorphTrail,1, 0,0, 1,1, 0, c_white,max(boostBallTrailFX,shineFXCounter));
+					gpu_set_colourwriteenable(1,1,1,1);
+				}
+				
+				surface_reset_target();
+			}
+			
+			if(!surface_exists(mbTrailSurface))
+			{
+				mbTrailSurface = surface_create(camW,camH);
+			}
+			if(surface_exists(mbTrailSurface) && surface_exists(mbTrailSprtSurf))
 			{
 				surface_resize(mbTrailSurface,camW,camH);
 				surface_set_target(mbTrailSurface);
 				draw_clear_alpha(c_black,1);
 				
-				var tex = sprite_get_texture(sprt_MorphTrail,0);
+				var tex = surface_get_texture(mbTrailSprtSurf);
 				draw_primitive_begin_texture(pr_trianglestrip,tex);
 				
 				for(var i = 0; i < mbTrailLength; i++)
@@ -4750,7 +4776,7 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 					var tRatio = i/mbTrailLength;
 					var tAlpha = tRatio,
 						tColor = mbTrailCol1[i];
-    
+					
 					if(tRatio < 0.5)
 					{
 						tColor = merge_colour(c_black,mbTrailCol2[i],tRatio*2);
@@ -4764,20 +4790,29 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 					{
 						tColor = c_black;
 					}
-
-					var dist = min(i+2,8);
-					if(mbTrailDir[i] == noone || (i >= mbTrailLength-1 && animState != AnimState.Morph))
+					if(i >= mbTrailLength-2 && animState != AnimState.Morph)
 					{
-						dist = 0;
 						tColor = c_black;
 					}
-						
-					if(mbTrailPosX[i] != noone && mbTrailPosY[i] != noone)
+					
+					if(!is_undefined(mbTrailPosX[i]) && !is_undefined(mbTrailPosY[i]))
 					{
-						var trailX1 = mbTrailPosX[i]-camX + lengthdir_x(dist,mbTrailDir[i]-90),
-							trailY1 = mbTrailPosY[i]-camY + lengthdir_y(dist,mbTrailDir[i]-90),
-							trailX2 = mbTrailPosX[i]-camX + lengthdir_x(dist,mbTrailDir[i]+90),
-							trailY2 = mbTrailPosY[i]-camY + lengthdir_y(dist,mbTrailDir[i]+90);
+						var trailX1 = mbTrailPosX[i]-camX,
+							trailY1 = mbTrailPosY[i]-camY,
+							trailX2 = mbTrailPosX[i]-camX,
+							trailY2 = mbTrailPosY[i]-camY;
+						if(!is_undefined(mbTrailDir[i]))
+						{
+							var dist = min(i+2,8);
+							trailX1 += lengthdir_x(dist,mbTrailDir[i]-90);
+							trailY1 += lengthdir_y(dist,mbTrailDir[i]-90);
+							trailX2 += lengthdir_x(dist,mbTrailDir[i]+90);
+							trailY2 += lengthdir_y(dist,mbTrailDir[i]+90);
+						}
+						else
+						{
+							tColor = c_black;
+						}
 						
 						var ytex = scr_wrap(mbTrailNum + i*mbTrailNumRate, 0, mbTrailLength) / mbTrailLength;
 						
@@ -4795,7 +4830,7 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 				draw_primitive_end();
 				
 				surface_reset_target();
-   
+				
 				gpu_set_blendmode(bm_add);
 				for(var i = 1; i <= 2; i++)
 				{
@@ -4803,16 +4838,12 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 				}
 				gpu_set_blendmode(bm_normal);
 			}
-			else
-			{
-				mbTrailSurface = surface_create(camW,camH);
-			}
 		}
 		else
 		{
-			array_fill(mbTrailPosX, noone);
-			array_fill(mbTrailPosY, noone);
-			array_fill(mbTrailDir, noone);
+			array_fill(mbTrailPosX, undefined);
+			array_fill(mbTrailPosY, undefined);
+			array_fill(mbTrailDir, undefined);
 		}
 	}
 	
@@ -4856,16 +4887,18 @@ function UpdatePlayerSurface(_palSurface)
 		{
 			torso = torsoL;
 		}
+		var _x = scr_round(surfW/2),
+			_y = scr_round(surfH/2);
 		
 		if(legs != -1)
 		{
-			draw_sprite_ext(legs,legFrame,scr_round(surfW/2),scr_round(surfH/2),fDir,1,0,c_white,1);
+			draw_sprite_ext(legs, legFrame, _x, _y, fDir, 1, 0, c_white, 1);
 		}
-		draw_sprite_ext(torso,bodyFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),fDir,1,0,c_white,1);
+		draw_sprite_ext(torso, bodyFrame, _x, _y+runYOffset, fDir, 1, 0, c_white, 1);
 		
 		if((item[Item.MagniBall] || item[Item.SpiderBall]) && animState == AnimState.Morph && morphFrame == 0 && unmorphing == 0)
 		{
-			draw_sprite_ext(sprt_Player_MorphBallAlt_Shine,0,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),1,1,0,c_white,1);
+			draw_sprite_ext(sprt_Player_MorphBallAlt_Shine, 0, _x, _y+runYOffset, 1, 1, 0, c_white, 1);
 		}
 	
 		//if(self.EquipmentSelected(Equipment.Missile) || self.EquipmentSelected(Equipment.SuperMissile) || self.EquipmentSelected(Equipment.GrappleBeam))
@@ -4880,7 +4913,7 @@ function UpdatePlayerSurface(_palSurface)
 		
 		if(drawMissileArm && missileArmFrame > 0)
 		{
-			draw_sprite_ext(sprt_Player_MissileArm,finalArmFrame+(9*(missileArmFrame-1)),scr_round((surfW/2)+scr_round(armOffsetX)),scr_round((surfH/2 + runYOffset)+scr_round(armOffsetY)),armDir,1,0,c_white,1);
+			draw_sprite_ext(sprt_Player_MissileArm, finalArmFrame+(9*(missileArmFrame-1)), _x+armOffsetX, _y+runYOffset+armOffsetY, armDir, 1, 0, c_white, 1);
 		}
 		if(!drawMissileArm)
 		{
@@ -4889,7 +4922,7 @@ function UpdatePlayerSurface(_palSurface)
 	
 		if(gripOverlay != -1)
 		{
-			draw_sprite_ext(gripOverlay,gripOverlayFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),fDir,1,0,c_white,1);
+			draw_sprite_ext(gripOverlay, gripOverlayFrame, _x, _y+runYOffset, fDir, 1, 0, c_white, 1);
 		}
 		
 		shader_reset();
@@ -4897,7 +4930,7 @@ function UpdatePlayerSurface(_palSurface)
 		if((item[Item.MagniBall] || item[Item.SpiderBall]) && animState == AnimState.Morph)
 		{
 			chameleon_set_surface(ballGlowSurf);
-			draw_sprite_ext(sprt_Player_MorphBallAlt_Glow,bodyFrame,scr_round(surfW/2),scr_round(surfH/2 + runYOffset),1,1,0,c_white,1);
+			draw_sprite_ext(sprt_Player_MorphBallAlt_Glow, bodyFrame, _x, _y+runYOffset, 1, 1, 0, c_white, 1);
 			shader_reset();
 		}
 	

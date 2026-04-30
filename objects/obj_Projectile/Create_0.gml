@@ -284,9 +284,9 @@ function entity_collision(listNum)
 	{
 		for(var i = 0; i < listNum; i++)
 		{
-			if(instance_exists(blockList[| i]))
+			var block = blockList[| i];
+			if(instance_exists(block))
 			{
-				var block = blockList[| i];
 				var isSolid = true;
 				if(canBeReflected && tileCollide && type != ProjType.Bomb && array_contains(doorOpenType, true))
 				{

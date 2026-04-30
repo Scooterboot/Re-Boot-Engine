@@ -73,9 +73,12 @@ function scr_LoadGame()
 				
 				ds_list_clear(global.mapArea[i].icons);
 				ds_list_read(global.mapArea[i].icons, _map_map[? "mapIcons_"+global.mapArea[i].name]);
+				global.mapArea[i].IconsConvertStringsToSprites();
 				
 				global.mapArea[i].visited = _map_map[? "mapVisited_"+global.mapArea[i].name];
 				global.mapArea[i].stationUsed = _map_map[? "mapStationUsed_"+global.mapArea[i].name];
+				
+				global.mapArea[i].updateSurf = true;
 			}
 	
 			var _worldFlags_map = _list[| 2];
@@ -123,6 +126,8 @@ function scr_LoadGame()
 			
 			global.mapArea[i].visited = false;
 			global.mapArea[i].stationUsed = false;
+			
+			global.mapArea[i].updateSurf = true;
 		}
 		
 		global.currentPlayTime = 0;

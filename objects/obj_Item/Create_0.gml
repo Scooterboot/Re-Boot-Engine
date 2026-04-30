@@ -20,7 +20,7 @@ var msSizeW = global.mapSquareSizeW,
 	msSizeH = global.mapSquareSizeH;
 var miX = obj_Map.GetMapPosX(x) * msSizeW + msSizeW/2,
 	miY = obj_Map.GetMapPosY(y) * msSizeH + msSizeH/2;
-mapIcon = obj_Map.CreateMapIcon(sprite_get_name(sprt_MapIcon_Item), 1, miX, miY);
+mapIcon = obj_Map.CreateMapIcon(sprt_MapIcon_Item, 1, miX, miY);
 
 mapListIndex = -1;
 mapIconHidden = false;

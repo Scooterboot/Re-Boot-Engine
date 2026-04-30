@@ -24,12 +24,10 @@ if(surface_exists(cFlashPalSurf))
     surface_free(cFlashPalSurf);
 }
 
-array_fill(mbTrailPosX, noone);
-array_fill(mbTrailPosY, noone);
-array_fill(mbTrailDir, noone);
-array_fill(mbTrailCol1, mbTrailColor_Start);
-array_fill(mbTrailCol2, mbTrailColor_End);
-
+if(surface_exists(mbTrailSprtSurf))
+{
+    surface_free(mbTrailSprtSurf);
+}
 if(surface_exists(mbTrailSurface))
 {
     surface_free(mbTrailSurface);

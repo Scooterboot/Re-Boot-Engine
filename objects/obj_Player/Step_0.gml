@@ -1908,6 +1908,7 @@ if(!global.GamePaused())
 				audio_play_sound(snd_BoostBall,0,false);
 				boostBallDmgCounter = bbMult;
 				boostBallFXFlash = true;
+				boostBallTrailFX = 1;
 				
 				grapBoost = false;
 			}
@@ -1925,6 +1926,8 @@ if(!global.GamePaused())
 		boostBallFXFlash = false;
 		audio_stop_sound(boostBallSnd);
 	}
+	
+	boostBallTrailFX = max(boostBallTrailFX - 0.01, 0);
 #endregion
 #region Spider Ball Movement
 	if(spiderBall)
@@ -7436,7 +7439,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 		if(animState == AnimState.Morph)
 		{
 			drawAfterImage = false;
-		
+			
 			mbTrailColor_Start = c_lime;
 			mbTrailColor_End = c_green;
 			if(spiderBall)
@@ -7486,15 +7489,17 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				posY = mbTrailPosY[mbTrailLength-1];
 			var oldPosX = mbTrailPosX[mbTrailLength-2],
 				oldPosY = mbTrailPosY[mbTrailLength-2];
-			var trailDir = point_direction(posX,posY,oldPosX,oldPosY);
-			
-			if(point_distance(posX,posY,oldPosX,oldPosY) > 0)
+			if(!is_undefined(posX) && !is_undefined(posY) && !is_undefined(oldPosX) && !is_undefined(oldPosY))
 			{
-				mbTrailDir[mbTrailLength-1] = trailDir;
-			}
-			else
-			{
-				mbTrailDir[mbTrailLength-1] = noone;
+				var trailDir = point_direction(posX,posY,oldPosX,oldPosY);
+				if(point_distance(posX,posY,oldPosX,oldPosY) > 0)
+				{
+					mbTrailDir[mbTrailLength-1] = trailDir;
+				}
+				else
+				{
+					mbTrailDir[mbTrailLength-1] = undefined;
+				}
 			}
 			
 			mbTrailNum = scr_wrap(mbTrailNum + mbTrailNumRate, 0, mbTrailLength);

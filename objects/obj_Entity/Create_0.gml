@@ -136,9 +136,9 @@ function entity_collision(listNum)
 	{
 		for(var i = 0; i < listNum; i++)
 		{
-			if(instance_exists(blockList[| i]))
+			var block = blockList[| i];
+			if(instance_exists(block))
 			{
-				var block = blockList[| i];
 				var isSolid = true;
 				if(block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
 				{
@@ -587,10 +587,21 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 		
 			self.DestroyBlock(position.X+fVX,position.Y);
 			
-			var colClip = self.entity_place_collide(0,0);
-			var colR = self.entity_collision_line(self.bb_right()+fVX,self.bb_top(),self.bb_right()+fVX,self.bb_bottom()),
-				colL = self.entity_collision_line(self.bb_left()+fVX,self.bb_top(),self.bb_left()+fVX,self.bb_bottom());
-			if(self.entity_place_collide(sign(fVX),0) && (!colClip || (fVX > 0 && colR) || (fVX < 0 && colL)))
+			var xCol = self.entity_place_collide(sign(fVX),0),
+				colClip = self.entity_place_collide(0,0);
+			if(xCol && colClip)
+			{
+				if(fVX > 0 && !self.entity_collision_line(self.bb_right()+fVX,self.bb_top(),self.bb_right()+fVX,self.bb_bottom()))
+				{
+					xCol = false;
+				}
+				if(fVX < 0 && !self.entity_collision_line(self.bb_left()+fVX,self.bb_top(),self.bb_left()+fVX,self.bb_bottom()))
+				{
+					xCol = false;
+				}
+			}
+			
+			if(xCol)
 			{
 				var steepness = self.ModifySlopeXSteepness_Up();
 				var xnum = sign(fVX);
@@ -756,10 +767,21 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 		
 			self.DestroyBlock(position.X,position.Y+fVY);
 		
-			var colClip = self.entity_place_collide(0,0);
-			var colB = self.entity_collision_line(self.bb_left(),self.bb_bottom()+fVY,self.bb_right(),self.bb_bottom()+fVY),
-				colT = self.entity_collision_line(self.bb_left(),self.bb_top()+fVY,self.bb_right(),self.bb_top()+fVY);
-			if(self.entity_place_collide(0,sign(fVY)) && (!colClip || (fVY > 0 && colB) || (fVY < 0 && colT)))
+			var yCol = self.entity_place_collide(0,sign(fVY)),
+				colClip = self.entity_place_collide(0,0);
+			if(yCol && colClip)
+			{
+				if(fVY > 0 && !self.entity_collision_line(self.bb_left(),self.bb_bottom()+fVY,self.bb_right(),self.bb_bottom()+fVY))
+				{
+					yCol = false;
+				}
+				if(fVY < 0 && !self.entity_collision_line(self.bb_left(),self.bb_top()+fVY,self.bb_right(),self.bb_top()+fVY))
+				{
+					yCol = false;
+				}
+			}
+			
+			if(yCol)
 			{
 				var steepness = self.ModifySlopeYSteepness_Up();
 				var ynum = sign(fVY);
@@ -1149,10 +1171,21 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 		
 			self.DestroyBlock(position.X+fVX,position.Y);
 		
-			var colClip = self.entity_place_collide(0,0);
-			var colR = self.entity_collision_line(self.bb_right()+fVX,self.bb_top(),self.bb_right()+fVX,self.bb_bottom()),
-				colL = self.entity_collision_line(self.bb_left()+fVX,self.bb_top(),self.bb_left()+fVX,self.bb_bottom());
-			if(self.entity_place_collide(sign(fVX),0) && (!colClip || (fVX > 0 && colR) || (fVX < 0 && colL)))
+			var xCol = self.entity_place_collide(sign(fVX),0),
+				colClip = self.entity_place_collide(0,0);
+			if(xCol && colClip)
+			{
+				if(fVX > 0 && !self.entity_collision_line(self.bb_right()+fVX,self.bb_top(),self.bb_right()+fVX,self.bb_bottom()))
+				{
+					xCol = false;
+				}
+				if(fVX < 0 && !self.entity_collision_line(self.bb_left()+fVX,self.bb_top(),self.bb_left()+fVX,self.bb_bottom()))
+				{
+					xCol = false;
+				}
+			}
+			
+			if(xCol)
 			{
 				var steepness = self.ModifySlopeXSteepness_Up();
 				var xnum = sign(fVX);
@@ -1413,10 +1446,21 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 		
 			self.DestroyBlock(position.X,position.Y+fVY);
 		
-			var colClip = self.entity_place_collide(0,0);
-			var colB = self.entity_collision_line(self.bb_left(),self.bb_bottom()+fVY,self.bb_right(),self.bb_bottom()+fVY),
-				colT = self.entity_collision_line(self.bb_left(),self.bb_top()+fVY,self.bb_right(),self.bb_top()+fVY);
-			if(self.entity_place_collide(0,sign(fVY)) && (!colClip || (fVY > 0 && colB) || (fVY < 0 && colT)))
+			var yCol = self.entity_place_collide(0,sign(fVY)),
+				colClip = self.entity_place_collide(0,0);
+			if(yCol && colClip)
+			{
+				if(fVY > 0 && !self.entity_collision_line(self.bb_left(),self.bb_bottom()+fVY,self.bb_right(),self.bb_bottom()+fVY))
+				{
+					yCol = false;
+				}
+				if(fVY < 0 && !self.entity_collision_line(self.bb_left(),self.bb_top()+fVY,self.bb_right(),self.bb_top()+fVY))
+				{
+					yCol = false;
+				}
+			}
+			
+			if(yCol)
 			{
 				var steepness = self.ModifySlopeYSteepness_Up();
 				var ynum = sign(fVY);
@@ -1696,13 +1740,15 @@ function UpdateMovingTiles(xx = undefined, yy = undefined, avoidClipping = false
 	xx = is_undefined(xx) ? position.X : xx;
 	yy = is_undefined(yy) ? position.Y : yy;
 	
-	if(array_length(mBlocks) > 0)
+	var len = array_length(mBlocks);
+	if(len > 0)
 	{
-		for(var i = 0, len = array_length(mBlocks); i < len; i++)
+		for(var i = 0; i < len; i++)
 		{
-			if(!instance_exists(mBlocks[i])) continue;
+			var mBlock = mBlocks[i];
+			if(!instance_exists(mBlock)) continue;
 			
-			mBlocks[i].tempIgnoredEnt = _controlEntity;
+			mBlock.tempIgnoredEnt = _controlEntity;
 			var _posX = xx,
 				_posY = yy;
 			if(array_length(mBlockOffset) > i && is_struct(mBlockOffset[i]))
@@ -1710,9 +1756,9 @@ function UpdateMovingTiles(xx = undefined, yy = undefined, avoidClipping = false
 				_posX += mBlockOffset[i].X;
 				_posY += mBlockOffset[i].Y;
 			}
-			mBlocks[i].isSolid = false;
-			mBlocks[i].UpdatePosition(_posX, _posY, avoidClipping, id);
-			mBlocks[i].isSolid = true;
+			mBlock.isSolid = false;
+			mBlock.UpdatePosition(_posX, _posY, avoidClipping, id);
+			mBlock.isSolid = true;
 		}
 	}
 }
@@ -1758,10 +1804,21 @@ function Collision_MovingSolid(vX, vY, _controlEntity = noone)
 		
 			self.DestroyBlock(position.X+fVX,position.Y);
 		
-			var colClip = self.entity_place_collide(0,0);
-			var colR = self.entity_collision_line(self.bb_right()+fVX,self.bb_top(),self.bb_right()+fVX,self.bb_bottom()),
-				colL = self.entity_collision_line(self.bb_left()+fVX,self.bb_top(),self.bb_left()+fVX,self.bb_bottom());
-			if(self.entity_place_collide(sign(fVX),0) && (!colClip || (fVX > 0 && colR) || (fVX < 0 && colL)))
+			var xCol = self.entity_place_collide(sign(fVX),0),
+				colClip = self.entity_place_collide(0,0);
+			if(xCol && colClip)
+			{
+				if(fVX > 0 && !self.entity_collision_line(self.bb_right()+fVX,self.bb_top(),self.bb_right()+fVX,self.bb_bottom()))
+				{
+					xCol = false;
+				}
+				if(fVX < 0 && !self.entity_collision_line(self.bb_left()+fVX,self.bb_top(),self.bb_left()+fVX,self.bb_bottom()))
+				{
+					xCol = false;
+				}
+			}
+			
+			if(xCol)
 			{
 				var steepness = upSlopeSteepness_X;
 				var xnum = sign(fVX);
@@ -1912,10 +1969,21 @@ function Collision_MovingSolid(vX, vY, _controlEntity = noone)
 		
 			self.DestroyBlock(position.X,position.Y+fVY);
 		
-			var colClip = self.entity_place_collide(0,0);
-			var colB = self.entity_collision_line(self.bb_left(),self.bb_bottom()+fVY,self.bb_right(),self.bb_bottom()+fVY),
-				colT = self.entity_collision_line(self.bb_left(),self.bb_top()+fVY,self.bb_right(),self.bb_top()+fVY);
-			if(self.entity_place_collide(0,sign(fVY)) && (!colClip || (fVY > 0 && colB) || (fVY < 0 && colT)))
+			var yCol = self.entity_place_collide(0,sign(fVY)),
+				colClip = self.entity_place_collide(0,0);
+			if(yCol && colClip)
+			{
+				if(fVY > 0 && !self.entity_collision_line(self.bb_left(),self.bb_bottom()+fVY,self.bb_right(),self.bb_bottom()+fVY))
+				{
+					yCol = false;
+				}
+				if(fVY < 0 && !self.entity_collision_line(self.bb_left(),self.bb_top()+fVY,self.bb_right(),self.bb_top()+fVY))
+				{
+					yCol = false;
+				}
+			}
+			
+			if(yCol)
 			{
 				var steepness = upSlopeSteepness_Y;
 				var ynum = sign(fVY);
