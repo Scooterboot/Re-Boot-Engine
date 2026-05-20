@@ -1,20 +1,9 @@
 /// @description Lava Movement
+event_inherited();
 
 if(global.GamePaused())
 {
 	exit;
-}
-
-if(moveY)
-{
-	if(abs(bobSpeed) >= bobBtm)
-	{
-		bobAcc *= -1;
-	}
-	bobSpeed += bobAcc;
-	y += bobSpeed;
-	
-	image_yscale = scr_round(bottom-y + 1) / sprite_get_height(sprite_index);
 }
 
 if(velX != 0)

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"UI_GetInputIconString",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"UI_GetInputIconString",
+  "parent":{
+    "name":"Functions",
+    "path":"folders/Scripts/UI/Functions.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

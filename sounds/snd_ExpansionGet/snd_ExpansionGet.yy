@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":1.090295,
+  "duration":1.0902948,
   "exportDir":"",
   "name":"snd_ExpansionGet",
   "parent":{

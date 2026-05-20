@@ -94,6 +94,13 @@ if(debug == 1)
 			draw_self();
 		}
 	}
+	with(obj_LiquidPlatform)
+	{
+		if(!visible)
+		{
+			draw_self();
+		}
+	}
 	with(obj_Door)
 	{
 		if(!visible)

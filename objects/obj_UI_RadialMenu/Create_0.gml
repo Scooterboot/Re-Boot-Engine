@@ -33,8 +33,10 @@ ds_list_add(global.visorRadial, -1);
 
 InitControlVars("menu radial");
 
+radialMax = 100;//48;
+radialMin = 75;//32;
+
 radialSize = 48;
-radialMin = 32;
 
 paused = false;
 pauseAnim = 0;
@@ -54,8 +56,8 @@ stateAnim[RadialState.VisorMenu] = 0;
 slotAnim = 0;
 cursorAnim = 0;
 
-beamIndex = -1;
 
+updateText = true;
 
 changeMenuText_L = "${MenuL1} / ${MenuL2}\nVISORS";
 changeMenuScrib_L = scribble(changeMenuText_L);

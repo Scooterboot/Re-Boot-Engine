@@ -1,40 +1,40 @@
 /// 
 event_inherited();
 
+if(self._SurfWidth() < 1 || self._SurfHeight() < 1)
+{
+	exit;
+}
+
 var refSprt = sprt_WaterRefract;
 refractX = scr_wrap(refractX+refractXSpeed,-sprite_get_width(refSprt)/2,sprite_get_width(refSprt)/2);
 
 var camX = global.cameraX,
 	camY = global.cameraY;
-var pos = SurfPos();
+var pos = self.SurfPos();
 var fAlpha = alpha*image_alpha;
 
 if(!global.GamePaused())
 {
-	imgIndex = scr_wrap(imgIndex + 0.075, 0, 6);
-}
-
-if(_SurfWidth() < 1 || _SurfHeight() < 1)
-{
-	exit;
+	imgIndex = scr_wrap(imgIndex + 0.075, 0, image_number-1);
 }
 
 gpu_set_blendmode(bm_add);
 draw_set_alpha(fAlpha*waterColorAlpha);
 draw_set_color(waterColor);
-draw_rectangle(pos.X,pos.Y,pos.X+SurfWidth(),pos.Y+SurfHeight(),0);
+draw_rectangle(pos.X,pos.Y,pos.X+self.SurfWidth(),pos.Y+self.SurfHeight(),0);
 draw_set_color(c_white);
 draw_set_alpha(1);
 gpu_set_blendmode(bm_normal);
 
-WaterSurface();
-GlowSurface();
-MaskSurface();
-RefractSurface();
+self.WaterSurface();
+self.GlowSurface();
+self.MaskSurface();
+self.RefractSurface();
 
 if(surface_exists(finalSurface))
 {
-	surface_resize(finalSurface, SurfWidth(),SurfHeight());
+	surface_resize(finalSurface, self.SurfWidth(),self.SurfHeight());
 	surface_set_target(finalSurface);
 	
 	gpu_set_blendenable(false);
@@ -83,8 +83,8 @@ if(surface_exists(finalSurface))
 	}
 	
 	gpu_set_blendmode(bm_add);
-	DrawDistortSurf(waterSurface,-spriteW/2,0,fAlpha);
-	DrawDistortSurf(waterSurfaceRefract,-spriteW/2,0,1);
+	self.DrawDistortSurf(waterSurface,-spriteW/2,0,fAlpha);
+	self.DrawDistortSurf(waterSurfaceRefract,-spriteW/2,0,1);
 	gpu_set_blendmode(bm_normal);
 	
 	surface_reset_target();

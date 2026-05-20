@@ -1,6 +1,11 @@
 /// @description Graphics
 event_inherited();
 
+if(self._SurfWidth() < 1 || self._SurfHeight() < 1)
+{
+	exit;
+}
+
 var camX = global.cameraX,
 	camY = global.cameraY;
 var pos = SurfPos();
@@ -9,15 +14,10 @@ var fAlpha = alpha*image_alpha;
 
 if(!global.GamePaused())
 {
-	imgIndex = scr_wrap(imgIndex + 0.2, 0, 8);
+	imgIndex = scr_wrap(imgIndex + 0.2, 0, image_number-1);
 }
 
-if(_SurfWidth() < 1 || _SurfHeight() < 1)
-{
-	exit;
-}
-
-AcidSurface();
+self.AcidSurface();
 
 if(surface_exists(finalSurface))
 {
@@ -70,7 +70,8 @@ if(surface_exists(finalSurface))
 	}
 	
 	gpu_set_blendmode(bm_add);
-	draw_surface_ext(acidSurface,-spriteW/2,0,1,1,0,c_white,fAlpha);
+	//draw_surface_ext(acidSurface,-spriteW/2,0,1,1,0,c_white,fAlpha);
+	self.DrawDistortSurf(acidSurface,-spriteW/2,0,fAlpha);
 	gpu_set_blendmode(bm_normal);
 	
 	surface_reset_target();

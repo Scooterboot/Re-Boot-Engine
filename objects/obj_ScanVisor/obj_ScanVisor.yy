@@ -12,7 +12,7 @@
   "overriddenProperties":[],
   "parent":{
     "name":"Visor",
-    "path":"folders/Objects/Visor.yy",
+    "path":"folders/Objects/Player/Visor.yy",
   },
   "parentObjectId":null,
   "persistent":false,

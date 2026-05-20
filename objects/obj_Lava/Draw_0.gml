@@ -1,50 +1,54 @@
 /// @description Graphics
 event_inherited();
 
+if(self._SurfWidth() < 1 || self._SurfHeight() + extraDistH < 1)
+{
+	exit;
+}
+
 var camX = global.cameraX,
 	camY = global.cameraY;
-var pos = SurfPos();
+var pos = self.SurfPos();
+var fAlpha = alpha*image_alpha;
 
 draw_set_alpha(gradAlpha);
 gpu_set_blendmode(bm_add);
 
 var ltop = 32,
-	lbot = clamp(bb_bottom()-bb_top(), 32, 64);
+	lbot = clamp(self.bb_bottom()-self.bb_top(), 32, 64);
 
-draw_rectangle_color(bb_left(),bb_top()-ltop,bb_right(),bb_top(),0,0,gradCol,gradCol,false);
-draw_rectangle_color(bb_left(),bb_top()+lbot,bb_right(),bb_top(),gradCol,gradCol,0,0,false);
+draw_rectangle_color(self.bb_left(),self.bb_top()-ltop,self.bb_right(),self.bb_top(),0,0,gradCol,gradCol,false);
+draw_rectangle_color(self.bb_left(),self.bb_top()+lbot,self.bb_right(),self.bb_top(),gradCol,gradCol,0,0,false);
 
 for(var i = 1; i < 16; i++)
 {
 	draw_set_alpha(gradAlpha*((17-i)/16));
 	
-	draw_line_color(bb_left()+1-i,bb_top()-ltop,bb_left()+1-i,bb_top(),0,gradCol);
-	draw_line_color(bb_left()+1-i,bb_top()+lbot,bb_left()+1-i,bb_top(),0,gradCol);
+	draw_line_color(self.bb_left()+1-i,self.bb_top()-ltop,self.bb_left()+1-i,self.bb_top(),0,gradCol);
+	draw_line_color(self.bb_left()+1-i,self.bb_top()+lbot,self.bb_left()+1-i,self.bb_top(),0,gradCol);
 	
-	draw_line_color(bb_right()+i,bb_top()-ltop,bb_right()+i,bb_top(),0,gradCol);
-	draw_line_color(bb_right()+i,bb_top()+lbot,bb_right()+i,bb_top(),0,gradCol);
+	draw_line_color(self.bb_right()+i,self.bb_top()-ltop,self.bb_right()+i,self.bb_top(),0,gradCol);
+	draw_line_color(self.bb_right()+i,self.bb_top()+lbot,self.bb_right()+i,self.bb_top(),0,gradCol);
 }
+
+draw_set_alpha(fAlpha*lavaColorAlpha);
+draw_set_color(lavaColor);
+draw_rectangle(self.bb_left(),self.bb_top(),self.bb_right()+1,self.bb_bottom()+1,0);
+draw_set_color(c_white);
 
 gpu_set_blendmode(bm_normal);
 draw_set_alpha(1);
 
-var fAlpha = alpha*image_alpha;
-
 if(!global.GamePaused())
 {
-	imgIndex = scr_wrap(imgIndex + 0.2, 0, 8);
+	imgIndex = scr_wrap(imgIndex + 0.2, 0, image_number-1);
 }
 
-if(_SurfWidth() < 1 || _SurfHeight() + extraDistH < 1)
-{
-	exit;
-}
-
-LavaSurface();
+self.LavaSurface();
 
 if(surface_exists(finalSurface))
 {
-	surface_resize(finalSurface, SurfWidth(), SurfHeight() + extraDistH);
+	surface_resize(finalSurface, self.SurfWidth(), self.SurfHeight() + extraDistH);
 	surface_set_target(finalSurface);
 	
 	gpu_set_blendenable(false);
@@ -99,7 +103,8 @@ if(surface_exists(finalSurface))
 	}
 	
 	gpu_set_blendmode(bm_add);
-	draw_surface_ext(lavaSurface,-spriteW/2,extraDistH,1,1,0,c_white,fAlpha);
+	//draw_surface_ext(lavaSurface,-spriteW/2,extraDistH,1,1,0,c_white,fAlpha);
+	self.DrawDistortSurf(lavaSurface,-spriteW/2,extraDistH,fAlpha);
 	gpu_set_blendmode(bm_normal);
 	
 	surface_reset_target();

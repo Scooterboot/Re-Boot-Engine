@@ -16,8 +16,8 @@ if(room == rm_MainMenu)
 
 if(instance_exists(obj_Player) && room != rm_MainMenu && global.rmMapArea != noone && (!instance_exists(obj_Transition) || obj_Transition.transitionComplete))
 {
-	playerMapX = GetMapPosX(obj_Player.x);
-	playerMapY = GetMapPosY(obj_Player.y);
+	playerMapX = self.GetMapPosX(obj_Player.x);
+	playerMapY = self.GetMapPosY(obj_Player.y);
 	
 	var grid = global.rmMapArea.grid;
 	if(ds_exists(grid,ds_type_grid))

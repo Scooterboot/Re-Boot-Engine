@@ -39,7 +39,7 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 			canUseVisor = false;
 			
 			var canXRay = true;
-			if(state == State.Grip)
+			/*if(state == State.Grip)
 			{
 				var rcheck = x+6,// - 1,
 					lcheck = x;// - 1;
@@ -75,7 +75,7 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 					}
 					ds_list_clear(blockList);
 				}
-			}
+			}*/
 			
 			if(canXRay && dir != 0 && fVelX == 0 && fVelY == 0 && !cPlayerRight && !cPlayerLeft && 
 				(((animState == AnimState.Stand || animState == AnimState.Crouch) && grounded) || animState == AnimState.Grip))
@@ -158,8 +158,8 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 				}
 				else
 				{
-					var moveX = InputX(INPUT_CLUSTER.VisorMove),
-						moveY = InputY(INPUT_CLUSTER.VisorMove);
+					var moveX = global.controlClustX[INPUT_CLUSTER.VisorMove],
+						moveY = global.controlClustY[INPUT_CLUSTER.VisorMove];
 					var mspd = 5;
 					scanVisor.x += moveX*mspd;
 					scanVisor.y += moveY*mspd;
@@ -204,10 +204,10 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 			
 			if(global.pauseState == PauseState.XRay)
 			{
-				var _moveX = clamp(InputX(INPUT_CLUSTER.VisorMove) + InputX(INPUT_CLUSTER.PlayerMove), -1,1),
-					_moveY = clamp(InputY(INPUT_CLUSTER.VisorMove) + InputY(INPUT_CLUSTER.PlayerMove), -1,1);
-				var moveDir = point_direction(0,0, _moveX,_moveY),//InputDirection(0,INPUT_CLUSTER.VisorMove),
-					moveDist = point_distance(0,0, _moveX,_moveY);//InputDistance(INPUT_CLUSTER.VisorMove);
+				var _moveX = clamp(global.controlClustX[INPUT_CLUSTER.VisorMove] + global.controlClustX[INPUT_CLUSTER.PlayerMove], -1,1),
+					_moveY = clamp(global.controlClustY[INPUT_CLUSTER.VisorMove] + global.controlClustY[INPUT_CLUSTER.PlayerMove], -1,1);
+				var moveDir = point_direction(0,0, _moveX,_moveY),
+					moveDist = point_distance(0,0, _moveX,_moveY);
 				if(InputPlayerGetDevice() == INPUT_KBM && instance_exists(obj_Mouse)) // && visor uses mouse for control == true
 				{
 					moveDir = point_direction(x,y, obj_Mouse.PosX_Room(),obj_Mouse.PosY_Room());

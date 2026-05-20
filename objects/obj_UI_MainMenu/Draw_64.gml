@@ -84,7 +84,7 @@ if(room == rm_MainMenu)
 		}
 	}
 	
-	var footerSprt = sprt_UI_Footer;
+	var footerSprt = sprt_UI_Footer2;
 	if(state != UI_MMState.TitleIntro && state != UI_MMState.Title)
 	{
 		footerY = min(footerY+1, 12);
@@ -104,13 +104,20 @@ if(room == rm_MainMenu)
 		{
 			_tipStr = footerString[2];
 		}
-		var str = obj_UI_Icons.InsertIconsIntoString(_tipStr);
-		if(footerScrib.get_text() != str)
+		
+		if(footerStringFinal != _tipStr)
 		{
-			footerScrib.overwrite(str);
+			footerStringFinal = _tipStr;
+			updateFooterText = true;
+		}
+		
+		if(updateFooterText || obj_UI_Controller.updateText)
+		{
+			footerScrib.overwrite(UI_InsertIconsIntoString(footerStringFinal));
+			updateFooterText = false;
 		}
 	
-		var _fSprt = sprt_UI_MainMenu_Footer,
+		var _fSprt = sprt_UI_Footer,
 			_fW = sprite_get_width(_fSprt),
 			_fH = sprite_get_height(_fSprt);
 		draw_sprite_ext(_fSprt,0, ww/2, hh-footerY, global.wideResWidth/_fW,footerY/_fH,0, c_white,1);
@@ -123,6 +130,10 @@ if(room == rm_MainMenu)
 		footerScrib.blend(c_white,1);
 		footerScrib.draw(tipx,tipy);
 	}
+}
+else
+{
+	updateFooterText = true;
 }
 
 draw_set_color(c_black);

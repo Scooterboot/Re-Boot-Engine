@@ -1,0 +1,26 @@
+{
+  "$GMSound":"v2",
+  "%Name":"amb_LavaAmbiance_2",
+  "audioGroupId":{
+    "name":"audio_ambiance",
+    "path":"audiogroups/audio_ambiance",
+  },
+  "bitDepth":1,
+  "channelFormat":1,
+  "compression":0,
+  "compressionQuality":4,
+  "conversionMode":0,
+  "duration":1.9352834,
+  "exportDir":"",
+  "name":"amb_LavaAmbiance_2",
+  "parent":{
+    "name":"Ambience",
+    "path":"folders/Sounds/Ambience.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"amb_LavaAmbiance_2.wav",
+  "volume":1.0,
+}

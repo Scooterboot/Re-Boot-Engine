@@ -47,11 +47,6 @@ if(room != rm_MainMenu && pauseAnim > 0)
 	draw_sprite_ext(sprt_UI_Radial_BG, 2, scr_round(centX), scr_round(centY), 1, 1, 0, c_white, 0.5*alph*stateAnim[RadialState.VisorMenu]);
 	
 	var sflag = (state != RadialState.VisorMenu);
-	var lstr = obj_UI_Icons.InsertIconsIntoString(changeMenuText_L);
-	if(changeMenuScrib_L.get_text() != lstr)
-	{
-		changeMenuScrib_L.overwrite(lstr);
-	}
 	var _ww = 38,
 		_hh = 16;
 	var lButtonPosX = centX - 68 - (_ww/2), lButtonPosY = centY;
@@ -64,11 +59,6 @@ if(room != rm_MainMenu && pauseAnim > 0)
 	changeMenuScrib_L.draw(lButtonPosX-1,lButtonPosY+1);
 	
 	sflag = (state != RadialState.BeamMenu);
-	var rstr = obj_UI_Icons.InsertIconsIntoString(changeMenuText_R);
-	if(changeMenuScrib_R.get_text() != rstr)
-	{
-		changeMenuScrib_R.overwrite(rstr);
-	}
 	lButtonPosX = centX + 68 + (_ww/2);
 	
 	draw_sprite_stretched_ext(sprt_UI_Button, sflag, lButtonPosX-(_ww/2)-3,lButtonPosY-_hh/2-3,_ww+6,_hh+6, c_white,alph);
@@ -82,9 +72,7 @@ if(room != rm_MainMenu && pauseAnim > 0)
 	
 	slotAnim = scr_wrap(slotAnim+0.5, 0, 2);
 	
-	var dist = radialSize * scale;
-	var hMoveDir = InputDirection(0, INPUT_CLUSTER.RadialUIMove),
-		hMoveDist = InputDistance(INPUT_CLUSTER.RadialUIMove) * radialSize,
+	var dist = radialSize * scale,
 		cursorAnimFlag = false;
 	
 	draw_set_font(fnt_Menu);
@@ -121,7 +109,7 @@ if(room != rm_MainMenu && pauseAnim > 0)
 					itemY = centY + lengthdir_y(dist*anim,dir);
 				
 				var subImg = 0;
-				if(player.HasEquipment(wepInd) && hMoveDist >= radialMin && abs(angle_difference(dir,hMoveDir)) < (_rad/2))
+				if(player.HasEquipment(wepInd) && curEquip == wepInd)
 				{
 					subImg = 1 + floor(slotAnim);
 					cursorAnimFlag = true;
@@ -160,11 +148,6 @@ if(room != rm_MainMenu && pauseAnim > 0)
 			draw_set_alpha(1);
 		}
 		
-		var btStr = obj_UI_Icons.InsertIconsIntoString(beamToggleText);
-		if(beamToggleScrib.get_text() != btStr)
-		{
-			beamToggleScrib.overwrite(btStr);
-		}
 		beamToggleScrib.blend(c_black, anim*alph);
 		beamToggleScrib.draw(centX+1,centY+1 + 14);
 		beamToggleScrib.blend(c_white, anim*alph);
@@ -183,7 +166,7 @@ if(room != rm_MainMenu && pauseAnim > 0)
 					itemY = centY + lengthdir_y(dist*anim,dir);
 				
 				var subImg = 0;
-				if(player.HasBeam(beamInd) && hMoveDist >= radialMin && abs(angle_difference(dir,hMoveDir)) < (_rad/2))
+				if(player.HasBeam(beamInd) && curBeam == beamInd)
 				{
 					subImg = 1 + floor(slotAnim);
 					cursorAnimFlag = true;
@@ -231,7 +214,7 @@ if(room != rm_MainMenu && pauseAnim > 0)
 					itemY = centY + lengthdir_y(dist*anim,dir);
 				
 				var subImg = 0;
-				if(player.HasVisor(visInd) && hMoveDist >= radialMin && abs(angle_difference(dir,hMoveDir)) < (_rad/2))
+				if(player.HasVisor(visInd) && curVisor == visInd)
 				{
 					subImg = 1 + floor(slotAnim);
 					cursorAnimFlag = true;
@@ -265,6 +248,8 @@ if(room != rm_MainMenu && pauseAnim > 0)
 		cursorAnim = max(cursorAnim-0.25,0);
 	}
 	
+	var hMoveDir = global.controlDirection[INPUT_CLUSTER.RadialUIMove],
+		hMoveDist = global.controlDistance[INPUT_CLUSTER.RadialUIMove] * radialSize;
 	var cx = centX + lengthdir_x(hMoveDist,hMoveDir),
 		cy = centY + lengthdir_y(hMoveDist,hMoveDir);
 	

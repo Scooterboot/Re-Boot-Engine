@@ -149,7 +149,7 @@ function PreDraw()
 	}
 	
 	var _text = self.GetText();
-	var _str = obj_UI_Icons.InsertIconsIntoString(_text);
+	var _str = UI_InsertIconsIntoString(_text);
 	if(buttonScrib.get_text() != _str)
 	{
 		buttonScrib.overwrite(_str);

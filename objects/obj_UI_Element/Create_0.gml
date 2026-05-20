@@ -249,7 +249,17 @@ containDraw = true;
 #region Draw functions
 
 text = "";
-function GetText() { return text; }
+fText = UI_InsertIconsIntoString(text);
+updateText = true;
+function GetText()
+{
+	if(updateText || obj_UI_Controller.updateText)
+	{
+		fText = UI_InsertIconsIntoString(text);
+		updateText = false;
+	}
+	return fText;
+}
 
 alpha = 1;
 function GetAlpha()

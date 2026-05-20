@@ -10,7 +10,7 @@
   "compression":1,
   "compressionQuality":6,
   "conversionMode":0,
-  "duration":74.00199,
+  "duration":74.002,
   "exportDir":"",
   "name":"mus_BossAwakening",
   "parent":{

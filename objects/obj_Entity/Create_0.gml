@@ -75,6 +75,7 @@ colEdge = Edge.Bottom;
 grounded = false;
 
 solids = array_concat(ColType_Solid, ColType_MovingSolid);
+platforms = ColType_Platform;
 
 function CanPlatformCollide()
 {
@@ -96,7 +97,7 @@ function entity_place_collide(offsetX, offsetY, xx = undefined, yy = undefined)
 	xx = is_undefined(xx) ? position.X : xx;
 	yy = is_undefined(yy) ? position.Y : yy;
 	
-	if(self.CanPlatformCollide() && place_meeting(xx+offsetX,yy+offsetY,ColType_Platform))
+	if(self.CanPlatformCollide() && place_meeting(xx+offsetX,yy+offsetY,platforms))
 	{
 		if(self.entityPlatformCheck(offsetX,offsetY,xx,yy))
 		{
@@ -171,9 +172,9 @@ function entityPlatformCheck(offsetX, offsetY, xx = undefined, yy = undefined)
 	xx = is_undefined(xx) ? position.X : xx;
 	yy = is_undefined(yy) ? position.Y : yy;
 	
-	if(place_meeting(xx+offsetX,yy+offsetY,ColType_Platform))
+	if(place_meeting(xx+offsetX,yy+offsetY,platforms))
 	{
-		var pl = instance_place_list(xx+offsetX,yy+offsetY,ColType_Platform,blockList,true);
+		var pl = instance_place_list(xx+offsetX,yy+offsetY,platforms,blockList,true);
 		for(var i = 0; i < pl; i++)
 		{
 			if(instance_exists(blockList[| i]))

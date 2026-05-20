@@ -164,11 +164,10 @@ function DrawTabButton()
 		draw_sprite_stretched_ext(sprite_index,_ind, _xx,_yy, _ww,_hh, c_white,alpha);
 	}
 	
-	var _text = text,
-		_str = obj_UI_Icons.InsertIconsIntoString(_text);
-	if(buttonScrib.get_text() != _str)
+	var _text = self.GetText();
+	if(buttonScrib.get_text() != _text)
 	{
-		buttonScrib.overwrite(_str);
+		buttonScrib.overwrite(_text);
 	}
 	var col = c_grey;
 	if(creatorUI.state == stateDest || instance_exists(self.GetMouse()))

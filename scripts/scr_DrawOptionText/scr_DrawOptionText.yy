@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"scr_DrawOptionText",
   "parent":{
-    "name":"Text",
-    "path":"folders/Scripts/UI/Text.yy",
+    "name":"Text_old",
+    "path":"folders/Scripts/UI/Text_old.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

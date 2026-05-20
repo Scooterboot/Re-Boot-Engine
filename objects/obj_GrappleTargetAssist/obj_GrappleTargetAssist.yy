@@ -11,8 +11,8 @@
   "name":"obj_GrappleTargetAssist",
   "overriddenProperties":[],
   "parent":{
-    "name":"Misc",
-    "path":"folders/Objects/Misc.yy",
+    "name":"AimAssist",
+    "path":"folders/Objects/Player/AimAssist.yy",
   },
   "parentObjectId":null,
   "persistent":false,

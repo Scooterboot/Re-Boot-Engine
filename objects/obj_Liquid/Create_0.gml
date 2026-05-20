@@ -45,10 +45,12 @@ posX = 0;
 velX = 0;
 
 moveY = false;
-bottom = bb_bottom();
+bottom = self.bb_bottom();
 bobAcc = -(1 / 256);//-0.0125/4;
 bobSpeed = 0;//-0.05;
 bobBtm = 0.25;
+
+platform = noone;
 
 liquidShuffleCount = 0;
 liquidShuffleSnd[0] = snd_WaterShuffle1;
@@ -703,20 +705,20 @@ function SurfPos()
 
 function _SurfWidth()
 {
-	var pos = SurfPos();
+	var pos = self.SurfPos();
 	var camX = global.cameraX,
 		camW = global.cameraWidth;
-	return scr_round(min(camW-(pos.X-camX),bb_right()-pos.X + 1));
+	return scr_round(min(camW-(pos.X-camX),self.bb_right()-pos.X + 1));
 }
 function _SurfHeight()
 {
-	var pos = SurfPos();
+	var pos = self.SurfPos();
 	var camY = global.cameraY,
 		camH = global.cameraHeight;
-	return scr_round(min(camH-(pos.Y-camY),bb_bottom()-pos.Y + 1));
+	return scr_round(min(camH-(pos.Y-camY),self.bb_bottom()-pos.Y + 1));
 }
 
-function SurfWidth() { return max(_SurfWidth(),1); }
-function SurfHeight() { return max(_SurfHeight(),1); }
-function SurfWidth2() { return SurfWidth() + spriteW; }
-function SurfHeight2() { return SurfHeight() + spriteH; }
+function SurfWidth() { return max(self._SurfWidth(),1); }
+function SurfHeight() { return max(self._SurfHeight(),1); }
+function SurfWidth2() { return self.SurfWidth() + spriteW; }
+function SurfHeight2() { return self.SurfHeight() + spriteH; }

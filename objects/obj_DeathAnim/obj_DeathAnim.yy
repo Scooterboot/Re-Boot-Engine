@@ -10,8 +10,8 @@
   "name":"obj_DeathAnim",
   "overriddenProperties":[],
   "parent":{
-    "name":"Misc",
-    "path":"folders/Objects/Misc.yy",
+    "name":"Player",
+    "path":"folders/Objects/Player.yy",
   },
   "parentObjectId":null,
   "persistent":false,

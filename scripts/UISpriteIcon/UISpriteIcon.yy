@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"UISpriteIcon",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"UISpriteIcon",
+  "parent":{
+    "name":"MiscStructs",
+    "path":"folders/Scripts/UI/MiscStructs.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -22,22 +22,22 @@ function scr_MainInitialize()
 	instance_create_depth(0,0,-10,obj_Display);
 	instance_create_depth(0,0,0,obj_Audio);
 	instance_create_depth(0,0,0,obj_Control);
-	instance_create_depth(0,0,0,obj_Progression);
+	instance_create_depth(0,0,0,obj_Gameplay);
+	instance_create_depth(0,0,0,obj_Culler);
 	instance_create_depth(0,0,0,obj_Map);
 	instance_create_depth(0,0,0,obj_Particles);
 	instance_create_depth(0,0,0,obj_TileFadeHandler);
 	instance_create_depth(0,0,0,obj_ScreenShaker);
-	instance_create_depth(0,0,0,obj_Culler);
-	instance_create_depth(0,0,0,obj_UI_Icons);
 	
 	instance_create_depth(0,0,-9,obj_Mouse);
-	instance_create_depth(0,0,-7,obj_UI_SettingsMenu);
-	instance_create_depth(0,0,-6,obj_UI_MainMenu);
-	instance_create_depth(0,0,-6,obj_PauseMenu);//obj_UI_PauseMenu);
-	instance_create_depth(0,0,-5,obj_UI_RadialMenu);
-	instance_create_depth(0,0,-4,obj_UI_HUD);
+	instance_create_depth(0,0,-8,obj_UI_Controller);
+	instance_create_depth(0,0,-5,obj_UI_SettingsMenu);
+	instance_create_depth(0,0,-4,obj_UI_MainMenu);
+	instance_create_depth(0,0,-4,obj_PauseMenu);//obj_UI_PauseMenu);
+	instance_create_depth(0,0,-3,obj_UI_RadialMenu);
+	instance_create_depth(0,0,-2,obj_UI_HUD);
 	
-	instance_create_depth(0,0,-8,obj_Debug);
+	instance_create_depth(0,0,-6,obj_Debug);
 
 	room_goto(rm_MainMenu); //go to the main menu
 	//instance_create_depth(0,0,-7,obj_MainMenu);
@@ -45,11 +45,8 @@ function scr_MainInitialize()
 	
 	#macro ColType_Player [obj_Player]
 	#macro ColType_Solid [obj_Tile, obj_Gadora]
-	//#macro ColType_SolidSlope [obj_Slope, obj_Slope_4th]
 	#macro ColType_NPCSolid [obj_NPCTile, obj_SaveStation]
-	//#macro ColType_NPCSolidSlope [obj_NPCSlope, obj_NPCSlope_4th]
 	#macro ColType_MovingSolid [obj_MovingTile]
-	//#macro ColType_MovingSolidSlope [obj_MovingSlope, obj_MovingSlope_4th]
 	#macro ColType_Platform [obj_Platform]
 	#macro ColType_GrapplePoint [obj_GrappleBlock, obj_GrappleBlockCracked, obj_MagnetGrappleBlock, obj_PushBlock_Grapple, obj_PushBall_Grapple, obj_GrappleRipper]
 	#macro ColType_MagnetTrack [obj_MagnetTrackBlock]

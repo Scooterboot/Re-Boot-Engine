@@ -15,12 +15,12 @@ if(velInit > 0)
 	velInit--;
 }
 
-if(velX != 0 || velY != 0 || mouse_check_button(mb_any) || mouse_wheel_up() || mouse_wheel_down())
+if(velX != 0 || velY != 0 || InputMouseCheck(mb_any) || mouse_wheel_up() || mouse_wheel_down())
 {
 	hide = false;
 	idleTime = 0;
 }
-if(InputPressedMany(-1))
+if(InputPressedMany(-1) && !InputMouseCheck(mb_any))
 {
 	hide = true;
 }

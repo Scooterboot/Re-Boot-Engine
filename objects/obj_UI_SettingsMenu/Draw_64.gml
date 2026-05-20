@@ -38,15 +38,15 @@ if(activeState == UI_ActiveState.Active || activeState == UI_ActiveState.Deactiv
 		}
 		
 		var cw = 24;
-		var hh2 = sprite_get_height(sprt_UI_Header);
-		draw_sprite_stretched_ext(sprt_UI_Header,0, (ww-global.ogResWidth)/2-cw,0, global.ogResWidth+cw*2, hh2, c_white,1);
+		var hh2 = sprite_get_height(sprt_UI_Header2);
+		draw_sprite_stretched_ext(sprt_UI_Header2,0, (ww-global.ogResWidth)/2-cw,0, global.ogResWidth+cw*2, hh2, c_white,1);
 		if(instance_exists(headerPage))
 		{
 			headerPage.DrawPage();
 		}
 		
-		hh2 = sprite_get_height(sprt_UI_Footer);
-		draw_sprite_stretched_ext(sprt_UI_Footer,0, (ww-global.ogResWidth)/2-cw,hh-hh2, global.ogResWidth+cw*2, hh2, c_white,1);
+		hh2 = sprite_get_height(sprt_UI_Footer2);
+		draw_sprite_stretched_ext(sprt_UI_Footer2,0, (ww-global.ogResWidth)/2-cw,hh-hh2, global.ogResWidth+cw*2, hh2, c_white,1);
 		//
 		
 		surface_reset_target();

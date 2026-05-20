@@ -15,9 +15,16 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 	// if global open radial with any stick movement
 	//{
 		var _device = InputPlayerGetDevice();
-		if(_device >= 0)
+		if(InputDeviceIsGamepad(_device))
 		{
-			_openRadial |= (InputDistance(INPUT_CLUSTER.RadialUIMove) > 0.25);
+			if(state == -1)
+			{
+				_openRadial |= (global.controlDistance[INPUT_CLUSTER.RadialUIMove] > 0.25);
+			}
+			else
+			{
+				_openRadial |= (global.controlDistance[INPUT_CLUSTER.RadialUIMove] > 0);
+			}
 		}
 	//}
 	
@@ -75,58 +82,90 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 		global.pauseState = prevPauseState;
 	}
 	
-	curEquip = -1;
-	curBeam = -1;
-	curVisor = -1;
-	
 	if(paused)
 	{
-		var hMoveDir = InputDirection(0, INPUT_CLUSTER.RadialUIMove),
-			hMoveDist = InputDistance(INPUT_CLUSTER.RadialUIMove) * radialSize;
+		var hMoveDir = global.controlDirection[INPUT_CLUSTER.RadialUIMove],
+			hMoveDist = global.controlDistance[INPUT_CLUSTER.RadialUIMove] * radialMax;
+		var _rMin = radialMin;
 		
 		#region Equipment Menu
 		if(state == RadialState.EquipMenu)
 		{
-			if(hMoveDist >= radialMin)
+			if(curEquip != -1)
+			{
+				_rMin *= 0.9;
+			}
+			if(hMoveDist > _rMin)
 			{
 				var _len = ds_list_size(global.equipRadial),
-					_rad = 360/_len;
+					_rad = 360/_len,
+					_flag = false;
 				for(var i = 0; i < _len; i++)
 				{
 					var wepInd = global.equipRadial[| i];
-					if(!is_undefined(wepInd) && player.HasEquipment(wepInd))
+					var _rad2 = 180/max(_len,4);
+					if(curEquip != wepInd)
 					{
-						var _dir = 90 - _rad*i;
-						if(abs(angle_difference(_dir,hMoveDir)) < (_rad/2))
+						_rad2 *= 0.9;
+					}
+					
+					var _dir = 90 - _rad*i;
+					if(abs(angle_difference(_dir,hMoveDir)) < _rad2)
+					{
+						if(!is_undefined(wepInd) && player.HasEquipment(wepInd))
 						{
-							if(player.equipIndex != wepInd || !player.equipSelected)
+							if(player.equipIndex != wepInd || curEquip != wepInd)
 							{
 								audio_stop_sound(snd_MenuTick);
 								audio_play_sound(snd_MenuTick,0,false);
+								player.equipSelected = player.EquipmentHasAmmo(wepInd);
 							}
 							player.equipIndex = wepInd;
-							player.equipSelected = player.EquipmentHasAmmo(wepInd);
-							curEquip = !is_undefined(wepInd) ? wepInd : -1;
+							curEquip = wepInd;
+							_flag = true;
 						}
 					}
 				}
+				if(!_flag)
+				{
+					curEquip = -1;
+				}
 			}
+			else
+			{
+				curEquip = -1;
+			}
+		}
+		else
+		{
+			curEquip = -1;
 		}
 		#endregion
 		#region Beam Menu
 		if(state == RadialState.BeamMenu)
 		{
-			if(hMoveDist >= radialMin)
+			if(curBeam != -1)
+			{
+				_rMin *= 0.9;
+			}
+			if(hMoveDist > _rMin)
 			{
 				var _len = ds_list_size(global.beamRadial),
-					_rad = 360/_len;
+					_rad = 360/_len,
+					_flag = false;
 				for(var i = 0; i < _len; i++)
 				{
 					var beamInd = global.beamRadial[| i];
-					if(!is_undefined(beamInd) && player.HasBeam(beamInd))
+					var _rad2 = 180/max(_len,4);
+					if(curBeam != beamInd)
 					{
-						var _dir = 90 - _rad*i;
-						if(abs(angle_difference(_dir,hMoveDir)) < (_rad/2))
+						_rad2 *= 0.9;
+					}
+					
+					var _dir = 90 - _rad*i;
+					if(abs(angle_difference(_dir,hMoveDir)) < _rad2)
+					{
+						if(!is_undefined(beamInd) && player.HasBeam(beamInd))
 						{
 							if((cMenuAccept && rMenuAccept) || (cMenuTertiary && rMenuTertiary))
 							{
@@ -134,53 +173,100 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 								audio_play_sound(snd_MenuShwsh,0,false);
 							}
 							
-							if(beamIndex != i)
+							if(curBeam != beamInd)
 							{
+								audio_stop_sound(snd_MenuTick);
 								audio_play_sound(snd_MenuTick,0,false);
-								beamIndex = i;
 							}
-							curBeam = !is_undefined(beamInd) ? beamInd : -1;
+							curBeam = beamInd;
+							_flag = true;
 						}
 					}
+				}
+				if(!_flag)
+				{
+					curBeam = -1;
 				}
 			}
 			else
 			{
-				beamIndex = -1;
+				curBeam = -1;
 			}
 		}
 		else
 		{
-			beamIndex = -1;
+			curBeam = -1;
 		}
 		#endregion
 		#region Visor Menu
 		if(state == RadialState.VisorMenu)
 		{
-			if(hMoveDist >= radialMin)
+			if(curVisor != -1)
+			{
+				_rMin *= 0.9;
+			}
+			if(hMoveDist > _rMin)
 			{
 				var _len = ds_list_size(global.visorRadial),
-					_rad = 360/_len;
+					_rad = 360/_len,
+					_flag = false;
 				for(var i = 0; i < _len; i++)
 				{
 					var visorInd = global.visorRadial[| i];
-					if(!is_undefined(visorInd) && player.HasVisor(visorInd))
+					var _rad2 = 180/max(_len,4);
+					if(curVisor != visorInd)
 					{
-						var _dir = 90 - _rad*i;
-						if(abs(angle_difference(_dir,hMoveDir)) < (_rad/2))
+						_rad2 *= 0.9;
+					}
+					
+					var _dir = 90 - _rad*i;
+					if(abs(angle_difference(_dir,hMoveDir)) < _rad2)
+					{
+						if(!is_undefined(visorInd) && player.HasVisor(visorInd))
 						{
-							if(player.visorIndex != visorInd)
+							if(player.visorIndex != visorInd || curVisor != visorInd)
 							{
+								audio_stop_sound(snd_MenuTick);
 								audio_play_sound(snd_MenuTick,0,false);
 							}
 							player.visorIndex = visorInd;
-							curVisor = !is_undefined(visorInd) ? visorInd : -1;
+							curVisor = visorInd;
+							_flag = true;
 						}
 					}
 				}
+				if(!_flag)
+				{
+					curVisor = -1;
+				}
+			}
+			else
+			{
+				curVisor = -1;
 			}
 		}
+		else
+		{
+			curVisor = -1;
+		}
 		#endregion
+		
+		if(updateText || obj_UI_Controller.updateText)
+		{
+			changeMenuScrib_L.overwrite(UI_InsertIconsIntoString(changeMenuText_L));
+			changeMenuScrib_R.overwrite(UI_InsertIconsIntoString(changeMenuText_R));
+			beamToggleScrib.overwrite(UI_InsertIconsIntoString(beamToggleText));
+			
+			updateText = false;
+		}
+	}
+	else
+	{
+		curEquip = -1;
+		curBeam = -1;
+		curVisor = -1;
+		
+		updateText = true;
 	}
 	
 	SetReleaseVars("menu radial");

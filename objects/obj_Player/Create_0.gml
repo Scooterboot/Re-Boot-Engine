@@ -855,7 +855,7 @@ function PerformMovement(_move, _moveSpd, _turnSpd, _frict, _maxSpd)
 
 #endregion
 
-#region Animation
+#region Animation Vars
 
 enum AnimState
 {
@@ -1156,7 +1156,7 @@ mbTrailCol2 = array_create(mbTrailLength, mbTrailColor_End);
 mbTrailNum = 0;
 mbTrailNumRate = 1;
 
-mbTrailSprtSurf = surface_create(sprite_get_width(sprt_MorphTrail),sprite_get_height(sprt_MorphTrail));
+mbTrailSprtSurf = surface_create(sprite_get_width(sprt_Player_MorphTrail),sprite_get_height(sprt_Player_MorphTrail));
 mbTrailSurface = surface_create(global.resWidth,global.resHeight);
 mbTrailAlpha = 0;
 
@@ -2247,11 +2247,11 @@ function OnSlopeXCollision_Bottom(fVX, yShift)
 		var bbottom = self.bb_bottom(),
 			bright = self.bb_right(),
 			bleft = self.bb_left();
-		if(fVelX > 0 && !self.entity_collision_line(bright+fVX+fVelX, position.Y+yShift, bright+fVX+fVelX, bbottom+yShift+1) && !collision_line(bright+fVX+fVelX, position.Y+yShift, bright+fVX+fVelX, bbottom+yShift+1, ColType_Platform, true, true))
+		if(fVelX > 0 && !self.entity_collision_line(bright+fVX+fVelX, position.Y+yShift, bright+fVX+fVelX, bbottom+yShift+1) && !collision_line(bright+fVX+fVelX, position.Y+yShift, bright+fVX+fVelX, bbottom+yShift+1, platforms, true, true))
 		{
 			flag = true;
 		}
-		if(fVelX < 0 && !self.entity_collision_line(bleft+fVX+fVelX, position.Y+yShift, bleft+fVX+fVelX, bbottom+yShift+1) && !collision_line(bleft+fVX+fVelX, position.Y+yShift, bleft+fVX+fVelX, bbottom+yShift+1, ColType_Platform, true, true))
+		if(fVelX < 0 && !self.entity_collision_line(bleft+fVX+fVelX, position.Y+yShift, bleft+fVX+fVelX, bbottom+yShift+1) && !collision_line(bleft+fVX+fVelX, position.Y+yShift, bleft+fVX+fVelX, bbottom+yShift+1, platforms, true, true))
 		{
 			flag = true;
 		}
@@ -3296,7 +3296,7 @@ function CanChangeMask(newMask)
 			checkYBottom = 0;
 		for(var i = 0; i < newBottom-curBottom; i++)
 		{
-			if((self.entity_place_collide(0,checkYBottom) || (onPlatform && place_meeting(position.X,position.Y+checkYBottom,ColType_Platform))) && !self.entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
+			if((self.entity_place_collide(0,checkYBottom) || (onPlatform && place_meeting(position.X,position.Y+checkYBottom,platforms))) && !self.entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
 			{
 				checkYBottom--;
 			}
@@ -3314,7 +3314,7 @@ function CanChangeMask(newMask)
 		{
 			flag = true;
 		}
-		if(!self.entity_place_collide(0,checkYTop) && (!onPlatform || !place_meeting(position.X,position.Y+checkYTop,ColType_Platform)))
+		if(!self.entity_place_collide(0,checkYTop) && (!onPlatform || !place_meeting(position.X,position.Y+checkYTop,platforms)))
 		{
 			flag = true;
 		}
@@ -3353,7 +3353,7 @@ function ChangeState(newState, newAnimState, newMoveState = MoveState.Default, n
 		{
 			if(newBottom-curBottom > 0)
 			{
-				if((self.entity_place_collide(0,checkYBottom) || (onPlatform && place_meeting(position.X,position.Y+checkYBottom,ColType_Platform))) && !self.entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
+				if((self.entity_place_collide(0,checkYBottom) || (onPlatform && place_meeting(position.X,position.Y+checkYBottom,platforms))) && !self.entity_collision_line(bleft,newTop+checkYBottom,bright,newTop+checkYBottom))
 				{
 					checkYBottom--;
 				}
@@ -4749,18 +4749,18 @@ function PreDrawPlayer(xx, yy, rot, alpha)
 		{
 			if(!surface_exists(mbTrailSprtSurf))
 			{
-				mbTrailSprtSurf = surface_create(sprite_get_width(sprt_MorphTrail),sprite_get_height(sprt_MorphTrail));
+				mbTrailSprtSurf = surface_create(sprite_get_width(sprt_Player_MorphTrail),sprite_get_height(sprt_Player_MorphTrail));
 			}
 			if(surface_exists(mbTrailSprtSurf))
 			{
 				surface_set_target(mbTrailSprtSurf);
 				draw_clear_alpha(c_black,1);
 				
-				draw_sprite_ext(sprt_MorphTrail,0, 0,0, 1,1, 0, c_white,1);
+				draw_sprite_ext(sprt_Player_MorphTrail,0, 0,0, 1,1, 0, c_white,1);
 				if(boostBallTrailFX > 0 || shineFXCounter > 0)
 				{
 					gpu_set_colourwriteenable(1,1,1,0);
-					draw_sprite_ext(sprt_MorphTrail,1, 0,0, 1,1, 0, c_white,max(boostBallTrailFX,shineFXCounter));
+					draw_sprite_ext(sprt_Player_MorphTrail,1, 0,0, 1,1, 0, c_white,max(boostBallTrailFX,shineFXCounter));
 					gpu_set_colourwriteenable(1,1,1,1);
 				}
 				
@@ -5325,8 +5325,8 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		grapPartCounter += 1;
 		if(grapPartCounter >= 1)
 		{
-		grapPartFrame = scr_wrap(grapPartFrame+1, 0, array_length(_gPartSeq));
-		grapPartCounter = 0;
+			grapPartFrame = scr_wrap(grapPartFrame+1, 0, array_length(_gPartSeq));
+			grapPartCounter = 0;
 		}
 		draw_sprite_ext(sprt_GrappleBeamStart,_gPartSeq[grapPartFrame],startX,startY,1,1,0,c_white,1);
 	}

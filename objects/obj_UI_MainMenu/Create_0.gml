@@ -85,7 +85,7 @@ function CreateMainMenuPage()
 	btn[2].SetNavElements(btn[1],btn[0]);
 	btn[2].OnClick = function()
 	{
-		instance_deactivate_object(all);
+		instance_deactivate_all(false);
 		game_end();
 	}
 }
@@ -645,4 +645,8 @@ footerText = [
 footerString[0] = "${MenuMove} - "+footerText[0]+"   ${MenuAccept_0} - "+footerText[1];
 footerString[1] = "${MenuMove} - "+footerText[0]+"   ${MenuAccept_0} - "+footerText[1]+"   ${MenuCancel_0} - "+footerText[2];
 footerString[2] = "${MenuMove} - "+footerText[0]+"   ${MenuAccept_0} - "+footerText[1]+"   ${MenuCancel_0} - "+footerText[3];
-footerScrib = scribble(footerString[0]).starting_format(font_get_name(fnt_GUI_Small),c_white).align(fa_center,fa_middle);
+
+footerStringFinal = footerString[0];
+updateFooterText = true;
+
+footerScrib = scribble(footerStringFinal).starting_format(font_get_name(fnt_GUI_Small),c_white).align(fa_center,fa_middle);

@@ -7,25 +7,23 @@ if(global.GamePaused())
 
 if(instance_exists(player))
 {
-	player.state = State.Elevator;
-	if(player.position.X < x)
+	player.velX = 0;
+	player.velY = 0;
+	if(player.CanChangeMask(mask_Player_Stand))
 	{
-		player.position.X = min(player.position.X+1,x);
+		player.ChangeState(State.Elevator,AnimState.Stand,,mask_Player_Stand,false,true);
 	}
-	else
+	if(player.position.X != x)
 	{
-		player.position.X = max(player.position.X-1,x);
+		var _shX = x-player.position.X;
+		player.shiftX = min(abs(_shX),1) * sign(_shX);
 	}
-	if(player.position.Y < y)
+	if(player.position.Y != y)
 	{
-		player.position.Y = min(player.position.Y+1,y);
+		var _shY = y-player.position.Y;
+		player.shiftY = min(abs(_shY),1) * sign(_shY);
 	}
-	else
-	{
-		player.position.Y = max(player.position.Y-1,y);
-	}
-	player.x = scr_round(player.position.X);
-	player.y = scr_round(player.position.Y);
+	
 	if(animCounter == animCounterMax)
 	{
 		player.hasItem[animType] = true;

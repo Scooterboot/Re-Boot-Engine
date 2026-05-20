@@ -15,6 +15,7 @@ else
 	{
 	    global.pauseState = PauseState.None;
 	    instance_destroy();
+		exit;
 	}
 	if(nextEle == noone)
 	{
@@ -25,7 +26,7 @@ else
 	            nextEle = instance_find(obj_Elevator,i);
 	            nextEle.activeDir = activeDir;
 				nextEle.incoming = true;
-	            var playerHeight = (obj_Player.bb_bottom()-obj_Player.bb_top());
+	            var playerHeight = obj_Player.bb_height();//(obj_Player.bb_bottom()-obj_Player.bb_top());
 	            if(activeDir == 1)
 	            {
 	                nextEle.y = -(playerHeight + 8);

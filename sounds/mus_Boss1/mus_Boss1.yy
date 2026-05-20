@@ -10,7 +10,7 @@
   "compression":1,
   "compressionQuality":6,
   "conversionMode":0,
-  "duration":75.00046,
+  "duration":74.990295,
   "exportDir":"",
   "name":"mus_Boss1",
   "parent":{

@@ -15,12 +15,12 @@ switch (messageType)
 			draw_set_valign(fa_top);
 			
 			//var str = header;
-			var str = obj_UI_Icons.InsertIconsIntoString(header);
+			var str = UI_InsertIconsIntoString(header);
 			if(headScrib.get_text() != str)
 			{
 				headScrib.overwrite(str);
 			}
-			var str2 = obj_UI_Icons.InsertIconsIntoString(description);
+			var str2 = UI_InsertIconsIntoString(description);
 			if(descScrib.get_text() != str2)
 			{
 				descScrib.overwrite(str2);

@@ -1,3 +1,3 @@
 /// @description 
 
-ds_list_destroy(entityList);
+event_perform_object(obj_MovingTile, ev_cleanup, 0);

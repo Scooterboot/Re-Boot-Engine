@@ -189,7 +189,7 @@ if(!global.GamePaused())
 	#endregion
 	
 	SetControlVars("player");
-	if(state == State.Elevator || state == State.Recharge || state == State.CrystalFlash || introAnimState != -1)
+	if(state == State.Elevator || state == State.Recharge || state == State.CrystalFlash || introAnimState != -1 || instance_exists(obj_Item_SuitPickupAnim))
 	{
 		InitControlVars("player");
 	}
@@ -405,7 +405,7 @@ if(!global.GamePaused())
 	var _liqType = -1;
 	if(instance_exists(findLiquid))
 	{
-		liquidLevel = max(self.bb_bottom() - findLiquid.y,0);
+		liquidLevel = max(self.bb_bottom() - findLiquid.bb_top(),0);
 			
 		var dph = 10;
 		if(animState == AnimState.Morph)
@@ -953,7 +953,7 @@ if(!global.GamePaused())
 		canWallJump = false;
 		if((move != 0 || (_FAST_WALLJUMP && sign(velX) != 0 && move != sign(velX))) && frame[Frame.WallJump] <= 0 && coyoteJump <= 0)
 		{
-			var _solids = array_concat(solids,ColType_Platform);
+			var _solids = array_concat(solids,platforms);
 			var num = 0;
 			if(move != 0)
 			{
@@ -2114,8 +2114,8 @@ if(!global.GamePaused())
 		if(spiderEdge != Edge.None && spiderSpeed != 0 && !spiderJump)
 		{
 			velY = 0;
-			var _grounded = (!grounded && jump <= 0 && self.PlayerGrounded()),
-				_onPlatform = (!onPlatform && jump <= 0 && self.PlayerOnPlatform());
+			var _grounded = (jump <= 0 && self.PlayerGrounded()),
+				_onPlatform = (jump <= 0 && self.PlayerOnPlatform());
 			if(_grounded || _onPlatform)
 			{
 				velX = spiderSpeed*sign(lengthdir_x(1, edgeAngle[spiderEdge]));
@@ -2440,6 +2440,12 @@ if(!global.GamePaused())
 		{
 			colEdge = Edge.None;
 		}
+	}
+	
+	platforms = ColType_Platform;
+	if(speedBoost && grounded && (!cPlayerDown || onPlatform))
+	{
+		platforms[array_length(platforms)] = obj_LiquidPlatform;
 	}
 	
 	if(state != State.Elevator && state != State.Recharge)
@@ -3139,14 +3145,15 @@ if(!global.GamePaused())
 	
 	if((state == State.Morph || state == State.BallSpark) && (item[Item.MagniBall] || item[Item.SpiderBall]) && unmorphing == 0)
 	{
-		if(global.controlInput[INPUT_VERB.SpiderBall].pressType == PressType.Press)
+		var _pressType = global.controlInput[INPUT_VERB.SpiderBall].pressType;
+		if(_pressType == PressType.Press || _pressType == PressType.LongPress)
 		{
 			if(cSpiderBall && rSpiderBall)
 			{
 				self.SpiderEnable(!spiderBall);
 			}
 		}
-		if(global.controlInput[INPUT_VERB.SpiderBall].pressType == PressType.Hold)
+		if(_pressType == PressType.Hold || _pressType == PressType.LongHold)
 		{
 			self.SpiderEnable(cSpiderBall);
 		}
@@ -4139,7 +4146,7 @@ if(!global.GamePaused())
 					shineDir = 180;
 				}
 			}
-			if((self.entity_place_collide(0,4) || (onPlatform && place_meeting(x,y+4,ColType_Platform))) && (!self.entity_place_collide(0,-1) || self.entity_place_collide(0,0)))
+			if((self.entity_place_collide(0,4) || (onPlatform && place_meeting(x,y+4,platforms))) && (!self.entity_place_collide(0,-1) || self.entity_place_collide(0,0)))
 			{
 				position.Y -= 1;
 				y = scr_round(position.Y);
@@ -4931,8 +4938,6 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 		aimAngle = 0;
 	}
 	
-	#region Update Anims
-	
 	var roomTrans = (global.pauseState == PauseState.RoomTrans);
 	
 	drawMissileArm = false;
@@ -4954,6 +4959,8 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 	rotation = 0;
 	
 	var _liqMult = liquidAnimMult[liquidState];
+	
+	#region Aim anim counters
 	
 	var aimSpeed = 1 * _liqMult;
 	
@@ -5005,6 +5012,8 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 	}
 	
 	finalArmFrame = aimFrame + 4;
+	
+	#endregion
 	
 	if(recoil)
 	{
@@ -5069,6 +5078,8 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 	}
 	else if(abs(dirFrameF) < 4 && animState != AnimState.Somersault && animState != AnimState.Morph && animState != AnimState.Grip && (animState != AnimState.Spark || shineRestart) && animState != AnimState.Grapple && animState != AnimState.GravGrapple && animState != AnimState.Dodge)
 	{
+		#region Turn anim
+		
 		fDir = 1;
 		var shootflag = (shootFrame || cMoonwalk || aimFrame != 0 || recoilCounter > 0);
 		for(var i = 0, len = array_length(frame); i < len; i++)
@@ -5091,7 +5102,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 			aimFrame = 0;
 		}
 		
-		if((lastDir == 0 || dir == 0) && aimFrame == 0 && (state == State.Stand || state == State.Elevator))
+		if((lastDir == 0 || dir == 0) /*&& aimFrame == 0*/ && (state == State.Stand || state == State.Elevator))
 		{
 			torsoR = sprt_Player_TurnCenter;
 			bodyFrame = 3 + dirFrameF;
@@ -5155,9 +5166,13 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 			bodyFrame = 3 + dirFrameF;
 			legFrame = 3 + dirFrameF;
 		}
+		
+		#endregion
 	}
 	else
 	{
+		#region Anim States
+		
 		self.SetArmPosStand();
 		
 		switch animState
@@ -7316,8 +7331,11 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 			}
 			#endregion
 		}
+		
+		#endregion
 	}
 	
+	#region Misc anim counters
 	if(!roomTrans)
 	{
 		var animSpeed = 1 * _liqMult;
@@ -7385,7 +7403,11 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 		recoilCounter = max(recoilCounter - 1, 0);
 	}
 	#endregion
-	
+}
+
+// --- SHOOT, ENVIRO DMG, & FINALIZE VARS ---
+if(global.pauseState == PauseState.None)
+{
 	#region After Image Logic
 	
 	drawAfterImage = false;
@@ -7436,7 +7458,6 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 	}
 	
 	#endregion
-	
 	#region MB Trail
 	
 	if(_MORPH_TRAIL)
@@ -7517,11 +7538,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 	}
 	
 	#endregion
-}
-
-// --- SHOOT, ENVIRO DMG, & FINALIZE VARS ---
-if(global.pauseState == PauseState.None)
-{
+	
 	#region Shoot direction
 	
 	shootDir = self.GetShootDirection(aimAngle,dir2);
@@ -8090,7 +8107,7 @@ if(global.pauseState == PauseState.None)
 	
 	var sndFlag2 = false;
 	var sndFlag3 = false;
-	if(liquid && liquid.liquidType == LiquidType.Lava && !item[Item.GravitySuit])
+	if(liquid && liquid.liquidType == LiquidType.Lava && !item[Item.GravitySuit] && (self.bb_bottom() > liquid.bb_top()+1 || !speedBoost))
 	{
 		self.ConstantDamage(1, 2 + (2 * (item[Item.VariaSuit])));
 		
@@ -8101,7 +8118,7 @@ if(global.pauseState == PauseState.None)
 			sndFlag3 = true;
 		}
 	}
-	if(liquid && liquid.liquidType == LiquidType.Acid)
+	if(liquid && liquid.liquidType == LiquidType.Acid && (self.bb_bottom() > liquid.bb_top()+1 || !speedBoost))
 	{
 		self.ConstantDamage(3, 2 + (2 * (item[Item.VariaSuit] + item[Item.GravitySuit])));
 		

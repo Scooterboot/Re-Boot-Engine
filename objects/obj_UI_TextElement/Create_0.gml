@@ -17,11 +17,10 @@ function PreDraw(_x, _y)
 		_alph = self.GetAlpha() * sprtAlpha;
 	draw_sprite_stretched_ext(_sprt,1, _xx,_yy, _ww,_hh, c_white,_alph);
 	
-	var _text = text,
-		_str = obj_UI_Icons.InsertIconsIntoString(_text);
-	if(textScrib.get_text() != _str)
+	var _text = self.GetText();
+	if(textScrib.get_text() != _text)
 	{
-		textScrib.overwrite(_str);
+		textScrib.overwrite(_text);
 	}
 	
 	var xx = _x+width/2, yy = _y+height/2+1;

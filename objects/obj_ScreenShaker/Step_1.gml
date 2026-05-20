@@ -10,16 +10,16 @@ if(active && timeLeft < duration)
 	shakeCounter++;
 	if(shakeCounter >= shakeCounterMax)
 	{
-		if(!useCustomDir)
+		if(!is_undefined(customShakeDir))
+		{
+			shakeDirection = customShakeDir;
+		}
+		else
 		{
 			shakeDirection = irandom(36)*10;
 		}
 		
 		shakeStep += shakeRate*shakeStepDir;
-		if(shakeStep == 0)
-		{
-			//shakeStep += shakeRate*shakeStepDir;
-		}
 		if(abs(shakeStep) >= shakeIntensity)
 		{
 			shakeStepDir *= -1;
