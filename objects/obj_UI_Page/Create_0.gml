@@ -10,12 +10,27 @@ elements = ds_list_create();
 selectedEle = noone;
 #region Element create functions
 
-function CreateUIElement(_objInd, _x, _y, _width, _height)
+function CreateUIElement(_objInd, _x, _y, _width, _height, _rawText = [])
 {
+	///@param objIndex
+	///@param x
+	///@param y
+	///@param width
+	///@param height
+	///@param rawText=StringOrArray
+	
 	var ele = instance_create_depth(scr_floor(_x), scr_floor(_y), depth, _objInd, {creatorUI : creatorUI});
 	ele.page = id;
 	ele.width = scr_ceil(_width);
 	ele.height = scr_ceil(_height);
+	if(is_string(_rawText))
+	{
+		ele.rawText = [_rawText];
+	}
+	else if(is_array(_rawText))
+	{
+		ele.rawText = _rawText;
+	}
 	
 	if(selectedEle == noone)
 	{
@@ -24,31 +39,60 @@ function CreateUIElement(_objInd, _x, _y, _width, _height)
 	ds_list_add(elements, ele);
 	return ele;
 }
-function CreateUIPanel(_objInd = obj_UI_Panel, _x, _y, _width, _height, _scrollWidth = 0, _scrollHeight = 0, _scrollX = 0, _scrollY = 0)
+function CreateUIPanel(_objInd = obj_UI_Panel, _x, _y, _width, _height, _text = [], _scrollWidth = 0, _scrollHeight = 0, _scrollX = 0, _scrollY = 0)
 {
-	var pnl = self.CreateUIElement(_objInd, _x, _y, _width, _height);
+	///@param objIndex=obj_UI_Panel
+	///@param x
+	///@param y
+	///@param width
+	///@param height
+	///@param rawText=StringOrArray
+	///@param scrollWidth=0
+	///@param scrollHeight=0
+	///@param scrollX=0
+	///@param scrollY=0
+	
+	var pnl = self.CreateUIElement(_objInd, _x, _y, _width, _height, _text);
 	pnl.scrollWidth = _scrollWidth;
 	pnl.scrollHeight = _scrollHeight;
 	pnl.scrollPosX = _scrollX;
 	pnl.scrollPosY = _scrollY;
 	return pnl;
 }
-function CreateUIButton(_objInd = obj_UI_Button, _x, _y, _width, _height, _text = "")
+function CreateUIButton(_objInd = obj_UI_Button, _x, _y, _width, _height, _text = [])
 {
-	var btn = self.CreateUIElement(_objInd, _x, _y, _width, _height);
-	btn.text = _text;
+	///@param objIndex=obj_UI_Button
+	///@param x
+	///@param y
+	///@param width
+	///@param height
+	///@param rawText=StringOrArray
+	
+	var btn = self.CreateUIElement(_objInd, _x, _y, _width, _height, _text);
 	return btn;
 }
-function CreateUICycleButton(_objInd = obj_UI_CycleButton, _x, _y, _width, _height, _text = [""])
+function CreateUICycleButton(_objInd = obj_UI_CycleButton, _x, _y, _width, _height, _text = [])
 {
-	var btn = self.CreateUIElement(_objInd, _x, _y, _width, _height);
-	btn.cycleText = _text;
+	///@param objIndex=obj_UI_CycleButton
+	///@param x
+	///@param y
+	///@param width
+	///@param height
+	///@param rawText=StringOrArray
+	
+	var btn = self.CreateUIElement(_objInd, _x, _y, _width, _height, _text);
 	return btn;
 }
-function CreateUITextElement(_objInd = obj_UI_TextElement, _x, _y, _width, _height, _text = "")
+function CreateUITextElement(_objInd = obj_UI_TextElement, _x, _y, _width, _height, _text = [])
 {
-	var txt = self.CreateUIElement(_objInd, _x, _y, _width, _height);
-	txt.text = _text;
+	///@param objIndex=obj_UI_TextElement
+	///@param x
+	///@param y
+	///@param width
+	///@param height
+	///@param rawText=StringOrArray
+	
+	var txt = self.CreateUIElement(_objInd, _x, _y, _width, _height, _text);
 	return txt;
 }
 

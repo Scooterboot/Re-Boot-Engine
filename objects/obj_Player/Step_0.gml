@@ -465,7 +465,110 @@ if(!global.GamePaused())
 		}
 	}
 #endregion
-#region Power Grip Climb activation/counter
+
+#region Power Grip Logic
+
+	#region Grip Collision
+
+	if(item[Item.PowerGrip] && (state == State.Jump || state == State.Somersault) && !grounded && velY >= 0 && move2 == dir && dir != 0 && self.entity_place_meeting(move2,0))
+	{
+		if(!self.entity_place_collide(0,-4) && ((state == State.Jump && !self.entity_place_collide(0,3)) || (state == State.Somersault && !self.entity_place_collide(0,12))) && self.CanChangeMask(mask_Player_Grip))
+		{
+			var canGrip = false;
+			var num = instance_place_list(x+move2,y,solids,blockList,true);
+			if(num > 0)
+			{
+				for(var i = 0; i < num; i++)
+				{
+					if (instance_exists(blockList[| i]))
+					{
+						canGrip = true;
+						var block = blockList[| i];
+						if (block.object_index == obj_Tile || object_is_ancestor(block.object_index,obj_Tile) ||
+							block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
+						{
+							canGrip = block.canGrip;
+						}
+						if(canGrip)
+						{
+							break;
+						}
+					}
+				}
+				ds_list_clear(blockList);
+			}
+			var lCheck = x,
+				rCheck = self.bb_right(x)+1 + 1;
+			if(move2 == -1)
+			{
+				lCheck = self.bb_left(x)-1;
+				rCheck = x;
+			}
+			var bTopNew = y - sprite_get_yoffset(mask_Player_Grip);
+			var bTopDiff = abs(self.bb_top(y) - bTopNew);
+			
+			if(canGrip && 
+				self.entity_collision_rectangle(lCheck, bTopNew, rCheck, self.bb_top(y)+1+ceil(velY)) &&
+				!self.entity_collision_rectangle(lCheck, bTopNew-3, rCheck, bTopNew-1))
+			{
+				var slopeLX = self.bb_right(x) + 1,
+					slopeLY = self.bb_top(y),
+					slopeRX = self.bb_right(x)+8 + 1,
+					slopeRY = self.bb_top(y)-8;
+				if(move2 == -1)
+				{
+					slopeLX = self.bb_left(x)-8;
+					slopeLY = self.bb_top(y)-8;
+					slopeRX = self.bb_left(x);
+					slopeRY = self.bb_top(y);
+				}
+				var slopeOffset = 0;
+				while(self.entity_collision_rectangle(lCheck, self.bb_top(y)-1+slopeOffset, rCheck, self.bb_top(y)+slopeOffset) && slopeOffset >= -bTopDiff)
+				{
+					slopeOffset -= 1;
+				}
+				if(self.entity_collision_line(slopeLX, slopeLY-2+slopeOffset, slopeRX, slopeRY-2+slopeOffset))
+				{
+					canGrip = false;
+				}
+				
+				if(canGrip)
+				{
+					audio_play_sound(snd_Grip,0,false);
+					jump = 0;
+					fVelY = 0;
+					velY = 0;
+					dir = move2;
+					grippedDir = dir;
+					
+					self.ChangeState(State.Grip, AnimState.Grip, MoveState.Custom, mask_Player_Grip, false);
+					with(obj_Camera)
+					{
+						stallY = true;
+					}
+					
+					shiftY += (scr_ceil(position.Y) - position.Y);
+					for(var i = 0; i < 4+bTopDiff; i++)
+					{
+						if(self.entity_collision_rectangle(lCheck, self.bb_top()-2+shiftY, rCheck, self.bb_top()-1+shiftY))
+						{
+							shiftY -= 1;
+						}
+						if(!self.entity_collision_rectangle(lCheck, self.bb_top()+shiftY, rCheck, self.bb_top()+1+shiftY))
+						{
+							shiftY += 1;
+						}
+					}
+					
+					instance_destroy(grapple);
+					instance_destroy(gravGrapple);
+				}
+			}
+		}
+	}
+
+	#endregion
+	#region Climb activation/counter
 	
 	var canGripJump = false;
 	if(state == State.Grip)
@@ -473,14 +576,14 @@ if(!global.GamePaused())
 		canGripJump = true;
 		if(climbTarget > 0 && !startClimb)
 		{
-			var climbUp = (move2 == grippedDir && cJump && rJump);
+			var climbUp = (move2 == grippedDir && cJump );//&& rJump);
 			if(global.gripStyle == 0)
 			{
 				climbUp |= (upClimbCounter >= 25 && cPlayerUp && move != -grippedDir);
 			}
 			if(global.gripStyle == 2)
 			{
-				climbUp = (move2 != -grippedDir && cJump && rJump) || (upClimbCounter >= 25 && cPlayerUp && move != -grippedDir);
+				climbUp = (move2 != -grippedDir && cJump /*&& rJump*/) || (upClimbCounter >= 25 && cPlayerUp && move != -grippedDir);
 			}
 			if(cPlayerDown)
 			{
@@ -510,13 +613,186 @@ if(!global.GamePaused())
 			}
 			climbIndexCounter = max(climbIndexCounter - (1/_liqMult), 0);
 		}
-	
+		
 		if(startClimb)
 		{
 			climbIndexCounter += 1;
 		}
 	}
 	
+	#endregion
+	#region Quick Climb
+	
+	var qc_flag_1 = false,
+		qc_flag_2 = false;
+	if(global.quickClimb && item[Item.PowerGrip] && dir != 0 && self.entity_place_collide(2*dir,0) && !self.entity_place_collide(0,0))
+	{
+		qc_flag_1 = ((state == State.Stand || state == State.Crouch) && grounded && move2 == dir);
+		//qc_flag_2 = (state == State.Dodge && sign(velX) == dir); // EXPERIMENTAL
+	}
+	if(qc_flag_1 || qc_flag_2)
+	{
+		var canGrip = false;
+		var num = instance_place_list(x+2*move2,y,solids,blockList,true);
+		if(num > 0)
+		{
+			for(var j = 0; j < num; j++)
+			{
+				if (instance_exists(blockList[| j]))
+				{
+					canGrip = true;
+					var block = blockList[| j];
+					if (block.object_index == obj_Tile || object_is_ancestor(block.object_index,obj_Tile) ||
+						block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
+					{
+						canGrip = block.canGrip;
+					}
+					if(canGrip)
+					{
+						break;
+					}
+				}
+			}
+			ds_list_clear(blockList);
+		}
+		
+		if(canGrip)
+		{
+			var qcHeight = 0;
+			var bbottom = self.bb_bottom(y);
+			var heightMax = self.bb_height()+10;
+			
+			for(var i = 0; i < 2; i++)
+			{
+				var lCheck = x,
+					rCheck = self.bb_right(x)+2 + 1;
+				if(dir == -1)
+				{
+					lCheck = self.bb_left(x)-2;
+					rCheck = x;
+				}
+				
+				if(i == 0 && self.entity_collision_rectangle(lCheck,bbottom-8,rCheck,bbottom-5))
+				{
+					while(qcHeight > -heightMax && self.entity_collision_rectangle(lCheck,bbottom+qcHeight,rCheck,bbottom+qcHeight+1))
+					{
+						qcHeight--;
+					}
+				}
+				else if(i == 1)
+				{
+					qcHeight = -heightMax;
+					while(qcHeight < -5 && self.entity_collision_rectangle(lCheck,bbottom+qcHeight,rCheck,bbottom+qcHeight+1))
+					{
+						qcHeight++;
+					}
+					while(qcHeight < -5 && !self.entity_collision_rectangle(lCheck,bbottom+qcHeight,rCheck,bbottom+qcHeight+1))
+					{
+						qcHeight++;
+					}
+					qcHeight -= 1;
+				}
+				
+				quickClimbTarget = 0;
+				if(qcHeight <= -7)
+				{
+					var yHeight = bbottom+qcHeight;
+					
+					lCheck = x;
+					rCheck = self.bb_right(x)+4 + 1;
+					
+					var slopeLX = self.bb_right(x) + 1,
+						slopeLY = yHeight,
+						slopeRX = self.bb_right(x)+8 + 1,
+						slopeRY = yHeight-8;
+					if(move2 == -1)
+					{
+						lCheck = self.bb_left(x)-4;
+						rCheck = x;
+						
+						slopeLX = self.bb_left(x)-8;
+						slopeLY = yHeight-8;
+						slopeRX = self.bb_left(x);
+						slopeRY = yHeight;
+					}
+					
+					if(self.entity_collision_rectangle(lCheck,yHeight,rCheck,yHeight+1) && !self.entity_collision_line(slopeLX,slopeLY,slopeRX,slopeRY))
+					{
+						var slopeOffset = 0;
+						while(slopeOffset > -16 && self.entity_collision_rectangle(lCheck,yHeight+slopeOffset,rCheck,yHeight+slopeOffset+1))
+						{
+							slopeOffset -= 1;
+						}
+					
+						yHeight += slopeOffset;
+					}
+					
+					if(!self.entity_collision_rectangle(lCheck,yHeight-15,rCheck,yHeight-2))
+					{
+						if(!self.entity_collision_rectangle(lCheck,yHeight-31,rCheck,yHeight-2))
+						{
+							quickClimbTarget = 2;
+						}
+						else if(item[Item.MorphBall])
+						{
+							quickClimbTarget = 1;
+						}
+					}
+				}
+				if(quickClimbTarget > 0)
+				{
+					break;
+				}
+			}
+			
+			if(qcHeight <= -7 && quickClimbTarget > 0 && ((qc_flag_1 && cJump && rJump) || qc_flag_2))
+			{
+				jump = 0;
+				fVelY = 0;
+				velY = 0;
+				ledgeFall = false;
+				justFell = false;
+				
+				audio_play_sound(snd_Climb,0,false);
+				startClimb = true;
+				
+				/*var _h = 0;
+				if(state == State.Stand)
+				{
+					_h = -11;
+				}*/
+				var _h = 15 - self.bb_bottom(0);
+				for(var i = 8; i >= 0; i--)
+				{
+					_h -= climbY[i];
+					if(_h <= qcHeight)
+					{
+						climbIndex = i;
+						break;
+					}
+				}
+				shiftY -= (abs(qcHeight) - abs(_h));
+				
+				climbTarget = quickClimbTarget;
+				climbIndexCounter = 1;
+				
+				self.ChangeState(State.Grip, AnimState.Grip, , mask_Player_Crouch, false);
+				climbFrame = climbSequence[climbIndex];
+				dir = move2;
+				grippedDir = dir;
+				
+				instance_destroy(grapple);
+				instance_destroy(gravGrapple);
+			}
+		}
+	}
+	else
+	{
+		quickClimbTarget = 0;
+	}
+	
+	#endregion
+
 #endregion
 
 #region Horizontal Movement
@@ -2159,272 +2435,6 @@ if(!global.GamePaused())
 	}
 #endregion
 
-#region Quick Climb
-	if(global.quickClimb && (state == State.Stand || state == State.Crouch) && grounded && move2 == dir && dir != 0 && self.entity_place_collide(2*move2,0) && !self.entity_place_collide(0,0))
-	{
-		var canGrip = false;
-		var num = instance_place_list(x+2*move2,y,solids,blockList,true);
-		if(num > 0)
-		{
-			for(var j = 0; j < num; j++)
-			{
-				if (instance_exists(blockList[| j]))
-				{
-					canGrip = true;
-					var block = blockList[| j];
-					if (block.object_index == obj_Tile || object_is_ancestor(block.object_index,obj_Tile) ||
-						block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
-					{
-						canGrip = block.canGrip;
-					}
-					if(canGrip)
-					{
-						break;
-					}
-				}
-			}
-			ds_list_clear(blockList);
-		}
-		
-		if(canGrip)
-		{
-			var qcHeight = 0;
-			var bbottom = self.bb_bottom(y);
-			var heightMax = 50;
-			if(state == State.Crouch)
-			{
-				heightMax = 34;
-			}
-			
-			for(var i = 0; i < 2; i++)
-			{
-				var lCheck = x,
-					rCheck = self.bb_right(x)+2 + 1;
-				if(dir == -1)
-				{
-					lCheck = self.bb_left(x)-2;
-					rCheck = x;
-				}
-				
-				if(i == 0 && self.entity_collision_rectangle(lCheck,bbottom-8,rCheck,bbottom-5))
-				{
-					while(qcHeight > -heightMax && self.entity_collision_rectangle(lCheck,bbottom+qcHeight,rCheck,bbottom+qcHeight+1))
-					{
-						qcHeight--;
-					}
-				}
-				else if(i == 1)
-				{
-					qcHeight = -heightMax;
-					while(qcHeight < -5 && self.entity_collision_rectangle(lCheck,bbottom+qcHeight,rCheck,bbottom+qcHeight+1))
-					{
-						qcHeight++;
-					}
-					while(qcHeight < -5 && !self.entity_collision_rectangle(lCheck,bbottom+qcHeight,rCheck,bbottom+qcHeight+1))
-					{
-						qcHeight++;
-					}
-					qcHeight -= 1;
-				}
-				
-				quickClimbTarget = 0;
-				if(qcHeight <= -7)
-				{
-					var yHeight = bbottom+qcHeight;
-					
-					lCheck = x;
-					rCheck = self.bb_right(x)+4 + 1;
-					
-					var slopeLX = self.bb_right(x) + 1,
-						slopeLY = yHeight,
-						slopeRX = self.bb_right(x)+8 + 1,
-						slopeRY = yHeight-8;
-					if(move2 == -1)
-					{
-						lCheck = self.bb_left(x)-4;
-						rCheck = x;
-						
-						slopeLX = self.bb_left(x)-8;
-						slopeLY = yHeight-8;
-						slopeRX = self.bb_left(x);
-						slopeRY = yHeight;
-					}
-					
-					if(self.entity_collision_rectangle(lCheck,yHeight,rCheck,yHeight+1) && !self.entity_collision_line(slopeLX,slopeLY,slopeRX,slopeRY))
-					{
-						var slopeOffset = 0;
-						while(slopeOffset > -16 && self.entity_collision_rectangle(lCheck,yHeight+slopeOffset,rCheck,yHeight+slopeOffset+1))
-						{
-							slopeOffset -= 1;
-						}
-					
-						yHeight += slopeOffset;
-					}
-					
-					if(!self.entity_collision_rectangle(lCheck,yHeight-15,rCheck,yHeight-2))
-					{
-						if(!self.entity_collision_rectangle(lCheck,yHeight-31,rCheck,yHeight-2))
-						{
-							quickClimbTarget = 2;
-						}
-						else if(item[Item.MorphBall])
-						{
-							quickClimbTarget = 1;
-						}
-					}
-				}
-				if(quickClimbTarget > 0)
-				{
-					break;
-				}
-			}
-			
-			if(qcHeight <= -7 && quickClimbTarget > 0 && cJump && rJump)
-			{
-				jump = 0;
-				fVelY = 0;
-				velY = 0;
-				ledgeFall = false;
-				justFell = false;
-				
-				audio_play_sound(snd_Climb,0,false);
-				startClimb = true;
-				
-				var _h = 0;
-				if(state == State.Stand)
-				{
-					_h = -11;
-				}
-				for(var i = 8; i >= 0; i--)
-				{
-					_h -= climbY[i];
-					if(_h <= qcHeight)
-					{
-						climbIndex = i;
-						break;
-					}
-				}
-				shiftY -= (abs(qcHeight) - abs(_h));
-				
-				climbTarget = quickClimbTarget;
-				climbIndexCounter = 1;
-				
-				self.ChangeState(State.Grip, AnimState.Grip, MoveState.Custom, mask_Player_Crouch, false);
-				climbFrame = climbSequence[climbIndex];
-				dir = move2;
-				grippedDir = dir;
-				
-				instance_destroy(grapple);
-				instance_destroy(gravGrapple);
-			}
-		}
-	}
-	else
-	{
-		quickClimbTarget = 0;
-	}
-#endregion
-#region Grip Collision
-
-	if(item[Item.PowerGrip] && (state == State.Jump || state == State.Somersault) && !grounded && velY >= 0 && move2 == dir && dir != 0 && self.entity_place_meeting(move2,0))
-	{
-		if(!self.entity_place_collide(0,-4) && ((state == State.Jump && !self.entity_place_collide(0,3)) || (state == State.Somersault && !self.entity_place_collide(0,12))) && self.CanChangeMask(mask_Player_Grip))
-		{
-			var canGrip = false;
-			var num = instance_place_list(x+move2,y,solids,blockList,true);
-			if(num > 0)
-			{
-				for(var i = 0; i < num; i++)
-				{
-					if (instance_exists(blockList[| i]))
-					{
-						canGrip = true;
-						var block = blockList[| i];
-						if (block.object_index == obj_Tile || object_is_ancestor(block.object_index,obj_Tile) ||
-							block.object_index == obj_MovingTile || object_is_ancestor(block.object_index,obj_MovingTile))
-						{
-							canGrip = block.canGrip;
-						}
-						if(canGrip)
-						{
-							break;
-						}
-					}
-				}
-				ds_list_clear(blockList);
-			}
-			var lCheck = x,
-				rCheck = self.bb_right(x)+1 + 1;
-			if(move2 == -1)
-			{
-				lCheck = self.bb_left(x)-1;
-				rCheck = x;
-			}
-			var bTopNew = y - sprite_get_yoffset(mask_Player_Grip);
-			var bTopDiff = abs(self.bb_top(y) - bTopNew);
-			
-			if(canGrip && 
-				self.entity_collision_rectangle(lCheck, bTopNew, rCheck, self.bb_top(y)+1+ceil(velY)) &&
-				!self.entity_collision_rectangle(lCheck, bTopNew-3, rCheck, bTopNew-1))
-			{
-				var slopeLX = self.bb_right(x) + 1,
-					slopeLY = self.bb_top(y),
-					slopeRX = self.bb_right(x)+8 + 1,
-					slopeRY = self.bb_top(y)-8;
-				if(move2 == -1)
-				{
-					slopeLX = self.bb_left(x)-8;
-					slopeLY = self.bb_top(y)-8;
-					slopeRX = self.bb_left(x);
-					slopeRY = self.bb_top(y);
-				}
-				var slopeOffset = 0;
-				while(self.entity_collision_rectangle(lCheck, self.bb_top(y)-1+slopeOffset, rCheck, self.bb_top(y)+slopeOffset) && slopeOffset >= -bTopDiff)
-				{
-					slopeOffset -= 1;
-				}
-				if(self.entity_collision_line(slopeLX, slopeLY-2+slopeOffset, slopeRX, slopeRY-2+slopeOffset))
-				{
-					canGrip = false;
-				}
-				
-				if(canGrip)
-				{
-					audio_play_sound(snd_Grip,0,false);
-					jump = 0;
-					fVelY = 0;
-					velY = 0;
-					dir = move2;
-					grippedDir = dir;
-					
-					self.ChangeState(State.Grip, AnimState.Grip, MoveState.Custom, mask_Player_Grip, false);
-					with(obj_Camera)
-					{
-						stallY = true;
-					}
-					
-					shiftY += (scr_ceil(position.Y) - position.Y);
-					for(var i = 0; i < 4+bTopDiff; i++)
-					{
-						if(self.entity_collision_rectangle(lCheck, self.bb_top()-2+shiftY, rCheck, self.bb_top()-1+shiftY))
-						{
-							shiftY -= 1;
-						}
-						if(!self.entity_collision_rectangle(lCheck, self.bb_top()+shiftY, rCheck, self.bb_top()+1+shiftY))
-						{
-							shiftY += 1;
-						}
-					}
-					
-					instance_destroy(grapple);
-					instance_destroy(gravGrapple);
-				}
-			}
-		}
-	}
-
-#endregion
-
 #region Collision
 	
 	pushBlock = noone;
@@ -2490,25 +2500,19 @@ if(!global.GamePaused())
 					cY *= liquidAnimMult[liquidState];
 				}
 				
-				if(climbIndex >= 7 && move == dir)
+				if(sign(velX) == sign(cX))
 				{
-					var msp = 0.5*(animState == AnimState.Morph);
-					if(cSprint || global.autoSprint)
+					if(animState == AnimState.Morph && climbIndex > 7 && move == sign(cX))
 					{
-						msp += 0.75;
+						velX = max(abs(cX),abs(velX))*sign(velX);
 					}
-					if(liquidState == LiquidState.HydroBoost)
-					{
-						msp *= 0.75;
-					}
-					else if(liquidState == LiquidState.Liquid || liquidState == LiquidState.DmgLiquid)
-					{
-						msp *= 0.5;
-					}
-					velX = max(msp,abs(velX))*move;
+					fVelX = max(abs(cX),abs(velX))*sign(velX);
+				}
+				else
+				{
+					fVelX = cX + velX;
 				}
 				
-				fVelX = cX + velX;
 				fVelY = cY + velY;
 				
 				if(cX != 0 && cY == 0)
@@ -2548,7 +2552,7 @@ if(!global.GamePaused())
 			grounded = false;
 		}
 	}
-	else if(velY == 0 && jump <= 0 && self.PlayerGrounded())
+	else if(velY >= 0 && jump <= 0 && self.PlayerGrounded())
 	{
 		grounded = true;
 	}
@@ -2560,7 +2564,7 @@ if(!global.GamePaused())
 			onPlatform = false;
 		}
 	}
-	else if(velY == 0 && jump <= 0 && self.PlayerOnPlatform())
+	else if(velY >= 0 && jump <= 0 && self.PlayerOnPlatform())
 	{
 		onPlatform = true;
 	}
@@ -3033,11 +3037,6 @@ if(!global.GamePaused())
 					}
 				}
 			}
-		}
-		else if(justBounced)
-		{
-			audio_stop_sound(snd_Land);
-			audio_play_sound(snd_Land,0,false);
 		}
 		
 		canMorphBounce = true;
@@ -3648,13 +3647,11 @@ if(!global.GamePaused())
 			
 			if(climbIndex > 0)
 			{
+				moveState = MoveState.Default;
+				
 				if(climbIndex < 7)
 				{
 					velY = 0;
-				}
-				else
-				{
-					moveState = MoveState.Default;
 				}
 				
 				if(animState != AnimState.Morph)
@@ -4847,14 +4844,14 @@ if(!global.GamePaused())
 	justBounced = false;
 	prevSpiderEdge = spiderEdge;
 	
+	if(grounded || abs(prevVelX) <= maxSpeed[MaxSpeed.Somersault,liquidState] || sign(prevVelX) != sign(fastWJCheckVel))
+	{
+		fastWJCheckVel = 0;
+	}
 	prevVelX = velX;
 	if(abs(fastWJCheckVel) < abs(prevVelX))
 	{
 		fastWJCheckVel = prevVelX;
-	}
-	if(grounded || abs(prevVelX) <= maxSpeed[MaxSpeed.Somersault,liquidState] || sign(prevVelX) != sign(fastWJCheckVel))
-	{
-		fastWJCheckVel = 0;
 	}
 	
 	if(state != State.Grapple && state != State.GravGrapple)
@@ -7975,38 +7972,43 @@ if(global.pauseState == PauseState.None)
 						
 						if(!grounded && !self.SpiderActive() && cPlayerDown)
 						{
-							/*var bombDir = [0,90,210,330],
-								bombTime = [0,30,30,30],
-								bombSpd = 2 + 4*bChargeScale;
-							for(var i = 0; i < 4; i++)
+							if(_NERF_BOMBSPREAD_DOWN_AIR)
 							{
-								var bomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBomb);
-								bomb.damage = chargeBombDmg * bChargeScale;
-								bomb.spreadType = 2;
-								if(i > 0)
+								var bombDir = [306, 18, 90, 162, 234],
+									bombTime = [28, 36, 44, 40, 32],
+									bombSpd = 4 + 2*bChargeScale;
+								for(var i = 0; i < 5; i++)
 								{
+									var bomb = instance_create_layer(x,y,"Projectiles_fg",obj_MBBomb);
+									bomb.damage = chargeBombDmg * bChargeScale;
+									bomb.spreadType = 2;
 									bomb.spreadSpeed = bombSpd;
+									bomb.spreadDir = bombDir[i];
+									bomb.spreadFrict = 0.5;
+									bomb.bombTimer = bombTime[i];
 								}
-								bomb.spreadDir = bombDir[i];
-								bomb.spreadFrict = 0.5;
-								bomb.bombTimer = bombTime[i];
-							}*/
-							
-							var bombDir = [306, 18, 90, 162, 234],
-								bombTime = [28, 36, 44, 40, 32],
-								bombSpd = 4 + 2*bChargeScale;
-							for(var i = 0; i < 5; i++)
+							}
+							else
 							{
-								var bomb = instance_create_layer(x,y,"Projectiles_fg",obj_MBBomb);
-								bomb.damage = chargeBombDmg * bChargeScale;
-								bomb.spreadType = 2;
-								bomb.spreadSpeed = bombSpd;
-								bomb.spreadDir = bombDir[i];
-								bomb.spreadFrict = 0.5;
-								bomb.bombTimer = bombTime[i];
+								var bombDir = [0,90,210,330],
+									bombTime = [0,30,30,30],
+									bombSpd = 2 + 4*bChargeScale;
+								for(var i = 0; i < 4; i++)
+								{
+									var bomb = instance_create_layer(bombPosX,bombPosY,"Projectiles_fg",obj_MBBomb);
+									bomb.damage = chargeBombDmg * bChargeScale;
+									bomb.spreadType = 2;
+									if(i > 0)
+									{
+										bomb.spreadSpeed = bombSpd;
+									}
+									bomb.spreadDir = bombDir[i];
+									bomb.spreadFrict = 0.5;
+									bomb.bombTimer = bombTime[i];
+								}
 							}
 							
-							bombDelayTime = 60;
+							bombDelayTime = 52;//60;
 							audio_play_sound(snd_BombSet,0,false);
 						}
 						else if(self.SpiderActive())

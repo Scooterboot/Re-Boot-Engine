@@ -2,12 +2,17 @@
 
 if(initialTime > 0)
 {
-	if(place_meeting(x,y,obj_Player))
+	var placeCheck = place_meeting(x,y,[obj_Player,obj_PushBlock]);
+	if(blockIndex == obj_CrumbleBlock)
+	{
+		placeCheck |= place_meeting(x,y-2,[obj_Player,obj_PushBlock]);
+	}
+	if(placeCheck)
 	{
 		var re = instance_create_layer(x,y,layer,obj_BlockRespawn);
 		re.sprite_index = sprite_index;
 		re.blockIndex = blockIndex;
-		re.respawnTime = initialTime;
+		re.respawnTime = 30;
 		re.initialTime = initialTime;
 		re.image_xscale = image_xscale;
 		re.image_yscale = image_yscale;

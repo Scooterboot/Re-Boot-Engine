@@ -29,8 +29,8 @@ function SetControlVars_Press()
 	{
 		SetControlVars(controlGroups);
 		
-		cClickL = mouse_check_button(mb_left);
-		cClickR = mouse_check_button(mb_right);
+		cClickL = InputMouseCheck(mb_left);//mouse_check_button(mb_left);
+		cClickR = InputMouseCheck(mb_right);//mouse_check_button(mb_right);
 		
 		var select = (cMenuAccept && rMenuAccept) || (cClickL && rClickL),
 			cancel = (cMenuCancel && rMenuCancel) || (cClickR && rClickR);
@@ -109,17 +109,22 @@ function MoveSelectY(_repeatFlag = true)
 
 function ScrollX()
 {
-	return ((cMenuScrollRight && rMenuScrollRight) - (cMenuScrollLeft && rMenuScrollLeft));
+	//return ((cMenuScrollRight && rMenuScrollRight) - (cMenuScrollLeft && rMenuScrollLeft));
+	return global.controlClustX[INPUT_CLUSTER.MenuScroll];
 }
 function ScrollY()
 {
-	return ((cMenuScrollDown && rMenuScrollDown) - (cMenuScrollUp && rMenuScrollUp));
+	//return ((cMenuScrollDown && rMenuScrollDown) - (cMenuScrollUp && rMenuScrollUp));
+	return global.controlClustY[INPUT_CLUSTER.MenuScroll];
 }
 
 currentPage = noone;
 pageList = ds_list_create();
-function CreatePage(objInd = obj_UI_Page, _alpha = 0)
+function CreatePage(objInd = obj_UI_Page, _alpha = 1)
 {
+	///@param objIndex=obj_UI_Page
+	///@param alpha=1
+	
 	var pg = instance_create_depth(0, 0, depth, objInd, {creatorUI : id});
 	pg.alpha = _alpha;
 	ds_list_add(pageList, pg);

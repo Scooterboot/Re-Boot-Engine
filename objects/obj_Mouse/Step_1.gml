@@ -20,7 +20,7 @@ if(velX != 0 || velY != 0 || InputMouseCheck(mb_any) || mouse_wheel_up() || mous
 	hide = false;
 	idleTime = 0;
 }
-if(InputPressedMany(-1) && !InputMouseCheck(mb_any))
+if(InputPressedMany(-1) && !InputMouseCheck(mb_any) && !mouse_wheel_up() && !mouse_wheel_down())
 {
 	hide = true;
 }
@@ -41,7 +41,7 @@ else
 	idleTime = 0;
 }
 
-if(room != rm_MainMenu) //if(is in ui state)
+if(room != rm_MainMenu && global.pauseState != PauseState.PauseMenu && global.pauseState != PauseState.RadialMenu && global.pauseState != PauseState.MessageBox)
 {
 	hide = true;
 }

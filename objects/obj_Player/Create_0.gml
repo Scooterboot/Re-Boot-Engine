@@ -92,6 +92,10 @@ godmode = false;
 // Can be utilized for easy super short charging
 #macro _DASH_SHOOT_CANCEL false
 
+// Changes mid-air down bomb spread to a different pattern that doesn't allow instant bomb jumping
+// Default should probably be true, but disabling it can be fun
+#macro _NERF_BOMBSPREAD_DOWN_AIR false
+
 // Prime-like trail effect for Morph Ball
 // Disables normal after images for Morph while set to true
 #macro _MORPH_TRAIL true
@@ -2170,7 +2174,7 @@ function OnXCollision(fVX, isOOB = false)
 	fastWJGrace = (_FAST_WALLJUMP && state == State.Somersault && abs(velX) >= maxSpeed[MaxSpeed.Run,liquidState]);
 	var fwjGrace = (fastWJGrace && fastWJGraceCounter < fastWJGraceMax);
 	
-	if(sign(velX) == sign(fVelX))
+	if(sign(velX) == sign(fVX))
 	{
 		if(!speedBoostWJ && (!fwjGrace || abs(velX) < maxSpeed[MaxSpeed.Sprint,liquidState]))
 		{
@@ -2179,14 +2183,14 @@ function OnXCollision(fVX, isOOB = false)
 			speedCounter = 0;
 			speedBoost = false;
 		}
-		if(!fwjGrace && !dashPushFlag)
+		if(!fwjGrace && !dashPushFlag && (!startClimb || state != State.Grip))
 		{
 			velX = 0;
+			move = 0;
+			bombJumpX = 0;
 		}
 	}
 	fVelX = 0;
-	move = 0;
-	bombJumpX = 0;
 	
 	var diagSparkSlide = (_SPARK_DAIG_SLIDE && (((self.SparkDir_DiagUp() || self.SparkDir_DiagDown()) && (cPlayerRight - cPlayerLeft) != dir)) || self.SparkDir_VertUp() || self.SparkDir_VertDown());
 	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0)
@@ -2289,7 +2293,7 @@ function OnBottomCollision(fVY)
 	{
 		grounded = true;
 		
-		if(!onPlatform && self.entityPlatformCheck(0,fVY))
+		if(!onPlatform && self.PlayerOnPlatform())
 		{
 			onPlatform = true;
 		}
@@ -2362,9 +2366,6 @@ function OnYCollision(fVY, isOOB = false)
 	// Ball Bounce
 	if(canMorphBounce && !justBounced && bFlag && velY > (2.5 + fGrav) && state == State.Morph && morphFrame <= 0 && !shineRampFix)
 	{
-		//audio_stop_sound(snd_Land);
-		//audio_play_sound(snd_Land,0,false);
-		
 		var bounceVelY = -abs(velY)*0.25;
 		if(abs(bounceVelY) < fGrav*4)
 		{
@@ -2375,7 +2376,7 @@ function OnYCollision(fVY, isOOB = false)
 		justFell = false;
 		justBounced = true;
 	}
-	else if(sign(velY) == sign(fVelY))
+	else if(sign(velY) == sign(fVY))
 	{
 		velY = 0;
 	}
@@ -2783,10 +2784,13 @@ function Crawler_OnXCollision(fVX, isOOB = false)
 				shineEnd = shineEndMax;
 			}
 		}
-		velX = 0;
+		if(sign(velX) == sign(fVX) && (!startClimb || state != State.Grip))
+		{
+			velX = 0;
+			move = 0;
+			bombJumpX = 0;
+		}
 		fVelX = 0;
-		move = 0;
-		bombJumpX = 0;
 		
 		if(isOOB)
 		{
@@ -2988,8 +2992,10 @@ function Crawler_OnYCollision(fVY, isOOB = false)
 				shineEnd = shineEndMax;
 			}
 		}
-		
-		velY = 0;
+		if(sign(velY) == sign(fVY))
+		{
+			velY = 0;
+		}
 		fVelY = 0;
 		
 		if(isOOB)

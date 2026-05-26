@@ -25,18 +25,21 @@ if(initialTime > 0)
 		}
 	}
 	
-	
-	if(respawnTime <= 0)
+	var placeCheck = place_meeting(x,y,[obj_Player,obj_PushBlock]);
+	if(blockIndex == obj_CrumbleBlock)
 	{
-	    instance_destroy();
+		placeCheck |= place_meeting(x,y-2,[obj_Player,obj_PushBlock]);
 	}
-	
-	if((place_meeting(x,y,obj_Player) || place_meeting(x,y,obj_PushBlock)) && respawnTime <= 30)
+	if(placeCheck && respawnTime <= 30)
 	{
 	    respawnTime = min(respawnTime + 1, 30);
 	}
 	else
 	{
+		if(respawnTime <= 0)
+		{
+		    instance_destroy();
+		}
 	    respawnTime = max(respawnTime - 1, 0);
 	}
 }

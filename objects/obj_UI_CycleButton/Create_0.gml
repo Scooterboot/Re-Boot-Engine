@@ -4,24 +4,25 @@ canNavigate = true;
 canMouseSelect = true;
 
 cycleMode = false;
-cycleText = [];
 cycleClickRegionOffset = 0;
 cycleClickRegionAxis = 0;
 
-function GetCycleValue() { return 0; }
+//function GetCycleValue() { return 0; }
 function OnCycle(_dir)
 {
 	audio_play_sound(snd_MenuTick,0,false);
 }
 
-function GetText()
+/*function GetText()
 {
+	var cycleText = self._GetText();
+	
 	if(cycleMode)
 	{
 		return "< "+cycleText[self.GetCycleValue()]+" >";
 	}
 	return cycleText[self.GetCycleValue()];
-}
+}*/
 
 function CycleInput()
 {
@@ -117,49 +118,47 @@ sprtSelectAlpha = 1;
 sprtSelectInd2 = 3;
 sprtSelectAlpha2 = 1;
 
-buttonScrib = scribble("cycleBtn");
-buttonScrib.starting_format(font_get_name(fnt_GUI),c_white);
-buttonScrib.align(fa_center,fa_middle);
-
 function PreDraw()
 {
 	var _x = self.GetX(),
-		_y = self.GetY();
+		_y = self.GetY(),
+		_alph = self.GetAlpha();
 	
 	if(sprite_exists(sprt))
 	{
 		var _ind = sprtInd,
-			_alph = sprtAlpha * self.GetAlpha();
+			_alph2 = sprtAlpha * _alph;
 		if(self.IsSelected())
 		{
 			_ind = sprtSelectInd;
-			_alph = sprtSelectAlpha * self.GetAlpha();
+			_alph2 = sprtSelectAlpha * _alph;
 		}
 		if(cycleMode)
 		{
 			_ind = sprtSelectInd2;
-			_alph = sprtSelectAlpha2 * self.GetAlpha();
+			_alph2 = sprtSelectAlpha2 * _alph;
 		}
 		
 		var _ww = max(width, sprite_get_width(sprt)),
 			_hh = max(height, sprite_get_height(sprt)),
 			_xx = _x+width/2-_ww/2,
 			_yy = _y+height/2-_hh/2;
-		draw_sprite_stretched_ext(sprt,_ind, _xx,_yy, _ww,_hh, c_white,_alph);
+		draw_sprite_stretched_ext(sprt,_ind, _xx,_yy, _ww,_hh, c_white,_alph2);
 	}
 	
 	var _text = self.GetText();
-	var _str = UI_InsertIconsIntoString(_text);
-	if(buttonScrib.get_text() != _str)
-	{
-		buttonScrib.overwrite(_str);
-	}
+	var _scrib = scribble(_text)
+		.starting_format(font_get_name(textFont),textColor)
+		.align(textAlignX,textAlignY);
 	
-	var xx = _x+width/2, yy = _y+height/2+1;
-	buttonScrib.blend(c_black,self.GetAlpha());
-	buttonScrib.draw(xx+1,yy+1);
-	buttonScrib.blend(c_white,self.GetAlpha());
-	buttonScrib.draw(xx,yy);
+	var _alignOffX = width/2;
+	if(textAlignX == fa_left) { _alignOffX = 4; }
+	if(textAlignX == fa_right) { _alignOffX = -4; }
+	var _alignOffY = height/2;
+	if(textAlignY == fa_top) { _alignOffY = 2; }
+	if(textAlignY == fa_bottom) { _alignOffY = -2; }
+	
+	draw_scribble_shadow(_scrib, _x+_alignOffX, _y+_alignOffY+1,textColor,_alph,,_alph);
 	
 	return true;
 }

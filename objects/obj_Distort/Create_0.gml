@@ -37,8 +37,8 @@ colorMult = 1;
 spread = 1;
 width = 1;
 
-surf = surface_create(1,1);
-surf2 = surface_create(1,1);
+surf = surface_create(1,1, surface_rg8unorm);
+surf2 = surface_create(1,1, surface_rg8unorm);
 appSurf = surface_create(1,1);
 finalSurf = surface_create(1,1);
 

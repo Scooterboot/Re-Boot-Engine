@@ -1,8 +1,4 @@
 /// @description 
-if(!scr_RectangleWithinCam(bbox_left,bbox_top,bbox_right,bbox_bottom))
-{
-	exit;
-}
 
 var _index = 0,
 	_xscale = image_xscale,

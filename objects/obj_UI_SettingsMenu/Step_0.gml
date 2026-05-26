@@ -1,8 +1,46 @@
-SetControlVars_Press();
+self.SetControlVars_Press();
 
 if(activeState == UI_ActiveState.Active)
 {
 	currentPage = noone;
+	if(state == UI_SMState.Default)
+	{
+		if(!instance_exists(defaultPage))
+		{
+			self.CreateDefaultPage();
+		}
+		currentPage = defaultPage;
+	}
+	
+	if(state == UI_SMState.Display)
+	{
+		
+	}
+	if(state == UI_SMState.Audio)
+	{
+		
+	}
+	if(state == UI_SMState.Gameplay)
+	{
+		
+	}
+	if(state == UI_SMState.Keyboard)
+	{
+		
+	}
+	if(state == UI_SMState.Controller)
+	{
+		
+	}
+	
+	if(instance_exists(currentPage))
+	{
+		currentPage.UpdatePage();
+	}
+	
+	
+	
+	/*currentPage = noone;
 	
 	if(state == UI_SMState.Display)
 	{
@@ -60,7 +98,7 @@ if(activeState == UI_ActiveState.Active)
 		{
 			canTabSwitch = false;
 		}
-	}
+	}*/
 }
 else
 {
@@ -77,6 +115,27 @@ else
 	}
 }
 
+if(activeState != UI_ActiveState.Inactive)
+{
+	
+	if(updateText || obj_UI_Controller.updateText)
+	{
+		for(var i = 0; i < array_length(headerTextRaw); i++)
+		{
+			headerText[i] = UI_InsertIconsIntoString(headerTextRaw[i]);
+		}
+		for(var i = 0; i < array_length(footerTextRaw); i++)
+		{
+			footerText[i] = UI_InsertIconsIntoString(footerTextRaw[i]);
+		}
+		updateText = false;
+	}
+}
+else
+{
+	updateText = true;
+}
+
 if(activeState == UI_ActiveState.Active || activeState == UI_ActiveState.Inactive)
 {
 	screenFade = max(screenFade-screenFadeRate,0);
@@ -90,4 +149,4 @@ else if(activeState == UI_ActiveState.Activating || activeState == UI_ActiveStat
 	}
 }
 
-SetControlVars_Release();
+self.SetControlVars_Release();

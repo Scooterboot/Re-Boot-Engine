@@ -1,8 +1,4 @@
 /// @description 
-if(!self.CanDraw())
-{
-	exit;
-}
 
 if(dmgFlash > 4 || (deathTimer > 0 && floor(deathTimer/4) % 2 == 0))
 {

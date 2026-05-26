@@ -542,7 +542,7 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 	edgeAngle[Edge.Bottom] = 0;
 	edgeAngle[Edge.Top] = 180;
 	edgeAngle[Edge.Right] = 90;
-	edgeAngle[Edge.Left] = 270;
+	edgeAngle[Edge.Left] = -90;
 	if(slopeSpeedAdjust)
 	{
 		var sAngle = 0;
@@ -569,7 +569,7 @@ function Collision_Normal(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 		if(_lft && !_rgt)
 		{
 			edgeAngle[Edge.Left] = self.GetEdgeAngle(Edge.Left);
-			sAngle = angle_difference(edgeAngle[Edge.Left],270);
+			sAngle = angle_difference(edgeAngle[Edge.Left],-90);
 		}
 		vY = lengthdir_x(vY,sAngle);
 	}
@@ -1094,7 +1094,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 	edgeAngle[Edge.Bottom] = 0;
 	edgeAngle[Edge.Top] = 180;
 	edgeAngle[Edge.Right] = 90;
-	edgeAngle[Edge.Left] = 270;
+	edgeAngle[Edge.Left] = -90;
 	if(slopeSpeedAdjust)
 	{
 		if(colEdge != Edge.None)
@@ -1123,7 +1123,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 				case Edge.Left:
 				{
 					edgeAngle[Edge.Left] = self.GetEdgeAngle(Edge.Left);
-					sAngle = angle_difference(edgeAngle[Edge.Left],270);
+					sAngle = angle_difference(edgeAngle[Edge.Left],-90);
 					break;
 				}
 			}
@@ -1156,7 +1156,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 			if(_lft && !_rgt)
 			{
 				edgeAngle[Edge.Left] = self.GetEdgeAngle(Edge.Left);
-				sAngle = angle_difference(edgeAngle[Edge.Left],270);
+				sAngle = angle_difference(edgeAngle[Edge.Left],-90);
 			}
 			vY = lengthdir_x(vY,sAngle);
 		}

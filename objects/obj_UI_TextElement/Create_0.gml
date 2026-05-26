@@ -3,10 +3,6 @@ event_inherited();
 sprt = sprt_UI_OptPanel;
 sprtAlpha = 0.65;
 
-textScrib = scribble(text);
-textScrib.starting_format(font_get_name(fnt_GUI),c_white);
-textScrib.align(fa_center,fa_middle);
-
 function PreDraw(_x, _y)
 {
 	var _sprt = sprt,
@@ -14,18 +10,21 @@ function PreDraw(_x, _y)
 		_hh = max(height, sprite_get_height(_sprt)),
 		_xx = _x+width/2-_ww/2,
 		_yy = _y+height/2-_hh/2,
-		_alph = self.GetAlpha() * sprtAlpha;
-	draw_sprite_stretched_ext(_sprt,1, _xx,_yy, _ww,_hh, c_white,_alph);
+		_alph = self.GetAlpha(),
+		_alph2 = _alph * sprtAlpha;
+	draw_sprite_stretched_ext(_sprt,1, _xx,_yy, _ww,_hh, c_white,_alph2);
 	
 	var _text = self.GetText();
-	if(textScrib.get_text() != _text)
-	{
-		textScrib.overwrite(_text);
-	}
+	var _scrib = scribble(_text)
+		.starting_format(font_get_name(textFont),textColor)
+		.align(textAlignX,textAlignY);
 	
-	var xx = _x+width/2, yy = _y+height/2+1;
-	textScrib.blend(c_black,1);
-	textScrib.draw(xx+1,yy+1);
-	textScrib.blend(c_white,1);
-	textScrib.draw(xx,yy);
+	var _alignOffX = width/2;
+	if(textAlignX == fa_left) { _alignOffX = 4; }
+	if(textAlignX == fa_right) { _alignOffX = -4; }
+	var _alignOffY = height/2;
+	if(textAlignY == fa_top) { _alignOffY = 2; }
+	if(textAlignY == fa_bottom) { _alignOffY = -2; }
+	
+	draw_scribble_shadow(_scrib, _x+_alignOffX, _y+_alignOffY+1,textColor,_alph,,_alph);
 }

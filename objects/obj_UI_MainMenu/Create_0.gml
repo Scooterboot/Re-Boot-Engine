@@ -51,7 +51,7 @@ function CreateMainMenuPage()
 		hh = global.resHeight;
 	draw_set_font(fnt_GUI);
 	
-	mainMenuPage = self.CreatePage();
+	mainMenuPage = self.CreatePage(,0);
 	
 	var btn = [],
 		btnW = 104,
@@ -106,7 +106,7 @@ function CreateFileMenuPage()
 {
 	var ww = global.resWidth,
 		hh = global.resHeight;
-	fileMenuPage = self.CreatePage(,1);
+	fileMenuPage = self.CreatePage();
 	
 	var fBtnSprt = sprt_UI_SaveFileBtn,
 		fBtnW = 248,
@@ -186,7 +186,7 @@ function CreateSelectedFilePage(_yoffset, _fileIndex)
 	var fBtnW = 248,
 		fBtnH = 32;
 	
-	selectedFilePage = self.CreatePage(,1);
+	selectedFilePage = self.CreatePage();
 	var sfPanel = selectedFilePage.CreateUIPanel(, ww/2-fBtnW/2, _yoffset, fBtnW, fBtnH)
 	sfPanel.fileIndex = _fileIndex;
 	
@@ -265,7 +265,7 @@ function CreateCopyFilePage()
 {
 	var ww = global.resWidth,
 		hh = global.resHeight;
-	copyFilePage = self.CreatePage(,1);
+	copyFilePage = self.CreatePage();
 	
 	var cBtnW = 248,
 		cBtnH = 32,
@@ -349,12 +349,11 @@ function CreateConfirmCopyPage(srcFile, destFile)
 		hh = global.resHeight;
 	
 	draw_set_font(fnt_Menu);
-	var str = confirmCopyText[0] + "[c_yellow][["+copyFileText[srcFile]+"][/c]" + confirmCopyText[1] + "[c_yellow][["+copyFileText[destFile]+"][/c]" + "\n\n" + confirmCopyText[2];
+	var str = confirmCopyText[0] + "[c_yellow]("+copyFileText[srcFile]+")[/c]" + confirmCopyText[1] + "[c_yellow]("+copyFileText[destFile]+")[/c]" + "\n\n" + confirmCopyText[2];
 	var pnlW = 248,
 		pnlH = string_height(str) + 24;
-	confirmCopyPage = self.CreatePage();
-	var ccPanel = confirmCopyPage.CreateUIPanel(, ww/2 - pnlW/2, hh/2 - pnlH/2, pnlW, pnlH);
-	ccPanel.text = str;
+	confirmCopyPage = self.CreatePage(,0);
+	var ccPanel = confirmCopyPage.CreateUIPanel(, ww/2 - pnlW/2, hh/2 - pnlH/2, pnlW, pnlH, str);
 	ccPanel.PreDraw = DrawConfirmPanel;
 	
 	var btnW = 31,
@@ -425,12 +424,11 @@ function CreateConfirmDeletePage()
 		hh = global.resHeight;
 	
 	draw_set_font(fnt_Menu);
-	var str = confirmDeleteText[0] + "[c_yellow][["+fileMenuText[selectedFile]+"][/c]" + "\n\n" + confirmDeleteText[1];
+	var str = confirmDeleteText[0] + "[c_yellow]("+fileMenuText[selectedFile]+")[/c]" + "\n\n" + confirmDeleteText[1];
 	var pnlW = 248,
 		pnlH = string_height(str) + 24;
-	confirmDeletePage = self.CreatePage();
-	var cdPanel = confirmDeletePage.CreateUIPanel(, ww/2 - pnlW/2, hh/2 - pnlH/2, pnlW, pnlH);
-	cdPanel.text = str;
+	confirmDeletePage = self.CreatePage(,0);
+	var cdPanel = confirmDeletePage.CreateUIPanel(, ww/2 - pnlW/2, hh/2 - pnlH/2, pnlW, pnlH, str);
 	cdPanel.PreDraw = DrawConfirmPanel;
 	
 	var btnW = 31,
@@ -487,7 +485,8 @@ function DrawSaveFileButton()
 	//with(other)
 	//{
 		var _x = self.GetX(),
-			_y = self.GetY();
+			_y = self.GetY(),
+			_text = self.GetText();
 		
 		var alph = 0.75,
 			btnFrame = 0,
@@ -507,9 +506,9 @@ function DrawSaveFileButton()
 		
 		draw_set_font(fnt_Menu);
 		draw_set_align(fa_left,fa_middle);
-		scr_DrawOptionText(scr_round(_x+3), scr_round(_y+height/2), text, c_white, alpha, 0, c_black, 0);
+		draw_text_shadow(scr_round(_x+3), scr_round(_y+height/2), _text);
 		
-		draw_sprite_ext(sprt_UI_FileIcon, icoFrame, scr_round(_x+string_width(text)+7), scr_round(_y+height/2), 1, 1, 0, c_white, alpha);
+		draw_sprite_ext(sprt_UI_FileIcon, icoFrame, scr_round(_x+string_width(_text)+7), scr_round(_y+height/2), 1, 1, 0, c_white, alpha);
 		
 		if(creatorUI.selectedFile != fileIndex || creatorUI.subState == UI_MMSubState.FileCopy || creatorUI.subState == UI_MMSubState.ConfirmCopy || creatorUI.subState == UI_MMSubState.ConfirmDelete)
 		{
@@ -521,7 +520,7 @@ function DrawSaveFileButton()
 			{
 				draw_set_font(fnt_GUI);
 				draw_set_align(fa_center,fa_middle);
-				scr_DrawOptionText(scr_round(_x+width/2), scr_round(_y+height/2), creatorUI.noDataText, c_white,1,0,c_black,0);
+				draw_text_shadow(scr_round(_x+width/2), scr_round(_y+height/2), creatorUI.noDataText);
 			}
 			else
 			{
@@ -529,7 +528,7 @@ function DrawSaveFileButton()
 				draw_set_font(fnt_GUI_Small);
 				var str = creatorUI.timeText,
 					strW = string_width(str);
-				scr_DrawOptionText(scr_round(_x+width-strW/2-22), scr_round(_y+height/2-9), str, c_white,1,0,c_black,0);
+				draw_text_shadow(scr_round(_x+width-strW/2-22), scr_round(_y+height/2-9), str);
 				
 				var minute = scr_floor(fileTime / 60);
 				var hour = scr_floor(minute / 60);
@@ -540,7 +539,7 @@ function DrawSaveFileButton()
 				var tStr = string_format(hour,2,0)+":"+string_format(minute,2,0);
 				tStr = string_replace_all(tStr," ","0");
 				draw_set_font(fnt_Menu);
-				scr_DrawOptionText(scr_round(_x+width-strW/2-21), scr_round(_y+height/2-1), tStr, c_white,1,0,c_black,0);
+				draw_text_shadow(scr_round(_x+width-strW/2-21), scr_round(_y+height/2-1), tStr);
 			}
 			if(filePercent >= 0)
 			{
@@ -550,13 +549,13 @@ function DrawSaveFileButton()
 					str = creatorUI.itemsText,
 					strW = string_width(creatorUI.itemsText),
 					strH = string_height(creatorUI.itemsText);
-				scr_DrawOptionText(px, scr_round(_y+height/2-9), str, c_white,1,0,c_black,0);
+				draw_text_shadow(px, scr_round(_y+height/2-9), str);
 				
 				var percent = scr_floor(filePercent);
 				var pStr = string_format(percent,2,0)+"%";
 				pStr = string_replace_all(pStr," ","0");
 				draw_set_font(fnt_Menu);
-				scr_DrawOptionText(px, scr_round(_y+height/2-1), pStr, c_white,1,0,c_black,0);
+				draw_text_shadow(px, scr_round(_y+height/2-1), pStr);
 			}
 			if(fileEnergyMax >= 0)
 			{
@@ -567,12 +566,12 @@ function DrawSaveFileButton()
 					str = creatorUI.energyText,
 					strW = string_width(str),
 					strH = string_height(str);
-				scr_DrawOptionText(scr_round(tx-(strW/2)-2), scr_round(ty-1), str, c_white, 1, 0, c_black, 0);
+				draw_text_shadow(scr_round(tx-(strW/2)-2), scr_round(ty-1), str);
 			
 				draw_set_font(fnt_Menu);
 				str = string(fileEnergy);
 				str = string_char_at(str,string_length(str)-1)+string_char_at(str,string_length(str));
-				scr_DrawOptionText(scr_round(tx-(strW/2)-2), scr_round(ty+strH-4), str, c_white,1,0,c_black,0);
+				draw_text_shadow(scr_round(tx-(strW/2)-2), scr_round(ty+strH-4), str);
 			
 				var energyTanks = floor(fileEnergyMax / 100),
 					statEnergyTanks = floor(fileEnergy / 100);
@@ -618,35 +617,27 @@ function DrawConfirmPanel()
 		draw_sprite_stretched_ext(sprt_UI_Button,0, _x,_y, width,1, c_white,ol_alph*_alpha);
 		draw_sprite_stretched_ext(sprt_UI_Button,0, _x,_y+height-1, width,1, c_white,ol_alph*_alpha);
 		
-		var _sx = _x+width/2, _sy = _y+4;
-		draw_set_font(fnt_Menu);
-		draw_set_align(fa_center,fa_top);
-		draw_set_alpha(_alpha);
-		draw_set_color(c_black);
-		//draw_text(_sx+1,_sy+1,text);
-		draw_text_scribble(_sx+1,_sy+1,text);
-		draw_set_color(c_white);
-		//draw_text(_sx,_sy,text);
-		draw_text_scribble(_sx,_sy,text);
-		draw_set_alpha(1);
+		var _text = self.GetText();
+		var _scrib = scribble(_text)
+			.starting_format(font_get_name(fnt_Menu),c_white)
+			.align(fa_center,fa_top);
+		
+		draw_scribble_shadow(_scrib, _x+width/2, _y+4,textColor,_alpha,,_alpha);
 		
 		return true;
 	//}
 }
 #endregion
 
-footerY = 0;
-footerText = [
-"Move",
-"Select",
-"Back",
-"Cancel"];
+updateText = true;
 
-footerString[0] = "${MenuMove} - "+footerText[0]+"   ${MenuAccept_0} - "+footerText[1];
-footerString[1] = "${MenuMove} - "+footerText[0]+"   ${MenuAccept_0} - "+footerText[1]+"   ${MenuCancel_0} - "+footerText[2];
-footerString[2] = "${MenuMove} - "+footerText[0]+"   ${MenuAccept_0} - "+footerText[1]+"   ${MenuCancel_0} - "+footerText[3];
+headerTextRaw = [
+"SELECT FILE DATA",
+"DATA COPY MODE"];
+headerText = [];
 
-footerStringFinal = footerString[0];
-updateFooterText = true;
-
-footerScrib = scribble(footerStringFinal).starting_format(font_get_name(fnt_GUI_Small),c_white).align(fa_center,fa_middle);
+footerTextRaw = [
+"${MenuMove} - Move   ${MenuAccept_0} - Select",
+"${MenuMove} - Move   ${MenuAccept_0} - Select   ${MenuCancel_0} - Back",
+"${MenuMove} - Move   ${MenuAccept_0} - Select   ${MenuCancel_0} - Cancel"];
+footerText = [];

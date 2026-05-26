@@ -116,8 +116,8 @@
 // Whether various noisy, error-prone inputs will report a device as active and trigger a hotswap.
 // Because these inputs are unreliable, it is recommended that they are set to `false`. However, if
 // you feel that damages your game's UX then set them to `true`.
-#macro INPUT_MOUSE_BUTTON_REPORTS_ACTIVE    false
-#macro INPUT_MOUSE_MOVEMENT_REPORTS_ACTIVE  false
+#macro INPUT_MOUSE_BUTTON_REPORTS_ACTIVE    true//false
+#macro INPUT_MOUSE_MOVEMENT_REPORTS_ACTIVE  true//false
 
 // Controls how the library collects player input. If `INPUT_UPDATE_AFTER_COLLECT` is set to
 // `true` (which it is by default) then this macro also controls how the library updates itself
@@ -138,7 +138,7 @@
 // 2 = The library will not automatically collect player input. Instead, you must call
 //     `InputManualCollect()` yourself. This gives you maximum flexibility in how player input
 //     is collected at the cost of having to manage that yourself.
-#macro INPUT_COLLECT_MODE  0
+#macro INPUT_COLLECT_MODE  2//0
 
 // Whether to update library state immediately after collecting player input. This is set to `true`
 // by default. If this macro is set to `false` then you should call `InputManualUpdate()` at

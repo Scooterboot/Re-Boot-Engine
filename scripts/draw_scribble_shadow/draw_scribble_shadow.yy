@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"draw_scribble_shadow",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"draw_scribble_shadow",
+  "parent":{
+    "name":"Text",
+    "path":"folders/Scripts/UI/Text.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

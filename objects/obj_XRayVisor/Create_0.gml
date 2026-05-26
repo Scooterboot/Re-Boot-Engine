@@ -19,7 +19,7 @@ kill = false;
 alpha = 0;
 darkAlpha = 0;
 
-refresh = 0;
+refresh = false;
 
 tileLayers = scr_GetLayersFromString("Tiles_fg");
 for(var i = 0; i < array_length(tileLayers); i++)
@@ -52,15 +52,6 @@ outlineSurf2 = surface_create(width,height);
 outlineSurfTemp = surface_create(width,height);
 outlineFlash = 0;
 
-#region xray_refresh()
-function xray_refresh()
-{
-	with (obj_XRay)
-	{
-		refresh = 1;
-	}
-}
-#endregion
 #region xray_redraw_front()
 function xray_redraw_front()
 {

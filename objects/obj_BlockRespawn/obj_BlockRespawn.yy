@@ -5,7 +5,6 @@
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":1,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":2,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
   "name":"obj_BlockRespawn",
@@ -36,6 +35,9 @@
     "name":"sprt_BlockBreak",
     "path":"sprites/sprt_BlockBreak/sprt_BlockBreak.yy",
   },
-  "spriteMaskId":null,
+  "spriteMaskId":{
+    "name":"sprt_Tile",
+    "path":"sprites/sprt_Tile/sprt_Tile.yy",
+  },
   "visible":true,
 }

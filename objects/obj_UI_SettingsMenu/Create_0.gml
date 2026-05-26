@@ -1,5 +1,162 @@
 event_inherited();
 
+enum UI_SMState
+{
+	Default,
+	Display,
+	Audio,
+	Gameplay,
+	Keyboard,
+	Controller
+}
+state = UI_SMState.Default;
+
+#region Default Page
+
+defMenuText = [
+"DISPLAY SETTINGS",
+"AUDIO SETTINGS",
+"GAMEPLAY SETTINGS",
+"KEYBOARD BINDINGS",
+"CONTROLLER BINDINGS",
+"BACK"];
+
+defaultPage = noone;
+function CreateDefaultPage()
+{
+	var ww = global.resWidth,
+		hh = global.resHeight;
+	draw_set_font(fnt_GUI);
+	
+	defaultPage = self.CreatePage();
+	var _panelW = global.ogResWidth,
+		_panelH = hh-26,
+		_panel = defaultPage.CreateUIPanel(, (ww-global.ogResWidth)/2, 13, _panelW,_panelH);//,,,400);
+	
+	var btn = [],
+		btnW = 152,//104,
+		btnH = 11;
+	for(var i = 0; i < array_length(defMenuText); i++)
+	{
+		var str = defMenuText[i];
+		var btnX = _panelW/2 - btnW/2,
+			btnY = _panelH/2 - 35 + 14*i,
+			strAlignX = fa_left;
+		if(i == 5) // back button
+		{
+			btnW = 56;
+			btnY += 28;
+			strAlignX = fa_center;
+		}
+		
+		btn[i] = _panel.CreateUIButton(, btnX, btnY, btnW, btnH, str);
+		btn[i].sprtAlpha = 0.75;
+		btn[i].sprtSelectAlpha = 0.85;
+		btn[i].textAlignX = strAlignX;
+	}
+	
+	btn[0].SetNavElements(btn[5],btn[1]);
+	btn[0].OnClick = function()
+	{
+		
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	btn[1].SetNavElements(btn[0],btn[2]);
+	btn[1].OnClick = function()
+	{
+		
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	btn[2].SetNavElements(btn[1],btn[3]);
+	btn[2].OnClick = function()
+	{
+		
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	btn[3].SetNavElements(btn[2],btn[4]);
+	btn[3].OnClick = function()
+	{
+		
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	btn[4].SetNavElements(btn[3],btn[5]);
+	btn[4].OnClick = function()
+	{
+		
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	
+	btn[5].SetNavElements(btn[4],btn[0]);
+	btn[5].OnClick = function()
+	{
+		activeState = UI_ActiveState.Deactivating;
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	btn[5].HotKey = function()
+	{
+		return (cMenuCancel && rMenuCancel) || (cClickR && rClickR);
+	}
+}
+
+#endregion
+#region Display Page
+
+displayText = [
+"WINDOW MODE",
+"DISPLAY SCALE",
+"WIDESCREEN",
+"V-SYNC",
+"UPSCALING MODE",
+"HUD DISPLAY",
+"HUD MINIMAP",
+"WATER DISTORTION",
+"BACK"];
+
+displayCycleText = [
+["WINDOWED", "FULLSCREEN"],
+["STRETCH", "x"],
+["DISABLED", "ENABLED"],
+["DISABLED", "ENABLED"],
+["DISABLED"],
+["DISABLED", "ENABLED"],
+["DISABLED", "ENABLED"],
+["DISABLED", "ENABLED"]];
+
+displayPage = noone;
+function CreateDisplayPage()
+{
+	var ww = global.resWidth,
+		hh = global.resHeight;
+	draw_set_font(fnt_GUI);
+	
+	displayPage = self.CreatePage();
+	
+	var _displayPanel = displayPage.CreateUIPanel(, (ww-global.ogResWidth)/2, 13, global.ogResWidth,hh-26);
+	
+	
+}
+
+#endregion
+
+updateText = true;
+
+headerTextRaw = [
+"SETTINGS",
+"DISPLAY",
+"AUDIO",
+"GAMEPLAY",
+"KEYBOARD",
+"CONTROLLER"];
+headerText = [];
+
+footerTextRaw = [
+"${MenuMove} - Move   ${MenuAccept_0} - Select   ${MenuCancel_0} - Back",
+"${MenuMove} - Move   ${MenuAccept_0} - Select   ${MenuCancel_0} - Cancel"];
+footerText = [];
+
+surf = noone;
+
+/*
 enum UI_SMState // Settings Menu state/page
 {
 	Display,
@@ -248,7 +405,7 @@ function CreateDisplayPage()
 		}
 		return creatorUI.displayOptText[0]+" "+cycleText[self.GetCycleValue()];
 	}}
-	*/
+	//
 }
 
 #endregion
@@ -282,4 +439,4 @@ controlSubState = UI_SM_CMSubState.None;
 
 
 surf = noone;
-
+*/

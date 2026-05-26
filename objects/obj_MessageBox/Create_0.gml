@@ -3,12 +3,12 @@ event_inherited();
 header = "";
 description = "";
 messageType = 0;
-enum Message
+/*enum Message
 {
 	Item,
 	Expansion,
 	Simple
-}
+}*/
 var order2 = -1;
 order = 0;
 for(var i = 0; i < instance_number(obj_MessageBox); i++)

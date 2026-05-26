@@ -115,8 +115,6 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		}
 		hudMapFlashAlpha = clamp(hudMapFlashAlpha + (0.1*hudMapFlashNum),0,1);
 		
-		gpu_set_blendmode(bm_normal);
-		
 		#endregion
 	}
 	if(global.hudDisplay)
@@ -141,9 +139,10 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 			var etW = sprite_get_width(sprt_HUD_ETank)+1,
 				etH = sprite_get_height(sprt_HUD_ETank)+1;
 			
+			yDiff += 2;
 			if(energyTanks > 0)
 			{
-				yDiff += etH;
+				yDiff += etH-2;
 				if(energyTanks > etDiv)
 				{
 					yDiff += etH;
@@ -372,7 +371,7 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 		with(obj_Player)
 		{
 			var iX = 57 + xDiff,
-				iY = 4;
+				iY = 2;//4;
 			
 			var _equipIndex = equipIndex;
 			if(state == State.Morph && item[Item.PowerBomb])

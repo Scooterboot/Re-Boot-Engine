@@ -7,7 +7,7 @@ if(global.pauseState != PauseState.None)
 		global.pauseState = PauseState.None;
 	}
 	
-	if ((global.pauseState == PauseState.MessageBox && !instance_exists(obj_MessageBox)) || 
+	if ((global.pauseState == PauseState.MessageBox && !instance_exists(obj_UI_MessageBox)) || 
 		(global.pauseState == PauseState.RoomTrans && !instance_exists(obj_Transition)) || 
 		(global.pauseState == PauseState.DeathAnim && !instance_exists(obj_DeathAnim)) || 
 		(global.pauseState == PauseState.XRay && !instance_exists(obj_XRayVisor)))

@@ -246,6 +246,19 @@ if(room == rm_MainMenu)
 	{
 		activeState = UI_ActiveState.Inactive;
 	}
+	
+	if(updateText || obj_UI_Controller.updateText)
+	{
+		for(var i = 0; i < array_length(headerTextRaw); i++)
+		{
+			headerText[i] = UI_InsertIconsIntoString(headerTextRaw[i]);
+		}
+		for(var i = 0; i < array_length(footerTextRaw); i++)
+		{
+			footerText[i] = UI_InsertIconsIntoString(footerTextRaw[i]);
+		}
+		updateText = false;
+	}
 }
 else
 {
@@ -268,6 +281,8 @@ else
 	{
 		ds_list_clear(pageList);
 	}
+	
+	updateText = true;
 }
 
 self.SetControlVars_Release();

@@ -39,7 +39,9 @@ if(room == rm_MainMenu)
 			}
 			else
 			{
-				scr_DrawOptionText(stX,stY,startString,c_yellow,titleAlpha,0,c_black,0);
+				draw_set_alpha(titleAlpha);
+				draw_text_shadow(stX,stY,startString,,,c_yellow);
+				draw_set_alpha(1);
 			}
 		}
 	}
@@ -82,12 +84,23 @@ if(room == rm_MainMenu)
 		{
 			confirmDeletePage.DrawPage();
 		}
+		
+		var _tipStr = headerText[0];
+		if(subState == UI_MMSubState.FileCopy || subState == UI_MMSubState.ConfirmCopy)
+		{
+			_tipStr = headerText[1];
+		}
+		
+		var _scrib = scribble(_tipStr)
+			.starting_format(font_get_name(fnt_Menu),c_white)
+			.align(fa_center,fa_top);
+		
+		draw_scribble_shadow(_scrib, scr_round(ww/2), 1);
 	}
 	
-	var footerSprt = sprt_UI_Footer2;
 	if(state != UI_MMState.TitleIntro && state != UI_MMState.Title)
 	{
-		footerY = min(footerY+1, 12);
+		footerY = min(footerY+1, 13);
 	}
 	else
 	{
@@ -95,45 +108,27 @@ if(room == rm_MainMenu)
 	}
 	if(footerY > 0)
 	{
-		var _tipStr = footerString[0];
-		if(state == UI_MMState.FileMenu)
-		{
-			_tipStr = footerString[1];
-		}
-		if(subState != UI_MMSubState.None)
-		{
-			_tipStr = footerString[2];
-		}
-		
-		if(footerStringFinal != _tipStr)
-		{
-			footerStringFinal = _tipStr;
-			updateFooterText = true;
-		}
-		
-		if(updateFooterText || obj_UI_Controller.updateText)
-		{
-			footerScrib.overwrite(UI_InsertIconsIntoString(footerStringFinal));
-			updateFooterText = false;
-		}
-	
 		var _fSprt = sprt_UI_Footer,
 			_fW = sprite_get_width(_fSprt),
 			_fH = sprite_get_height(_fSprt);
 		draw_sprite_ext(_fSprt,0, ww/2, hh-footerY, global.wideResWidth/_fW,footerY/_fH,0, c_white,1);
-	
-		var tipx = scr_round(ww/2),
-			tipy = scr_round(hh-footerY+7);
-	
-		footerScrib.blend(c_black,1);
-		footerScrib.draw(tipx+1,tipy+1);
-		footerScrib.blend(c_white,1);
-		footerScrib.draw(tipx,tipy);
+		
+		var _tipStr = footerText[0];
+		if(state == UI_MMState.FileMenu)
+		{
+			_tipStr = footerText[1];
+		}
+		if(subState != UI_MMSubState.None)
+		{
+			_tipStr = footerText[2];
+		}
+		
+		var _scrib = scribble(_tipStr)
+			.starting_format(font_get_name(fnt_GUI_Small),c_white)
+			.align(fa_center,fa_top);
+		
+		draw_scribble_shadow(_scrib, scr_round(ww/2), scr_round(hh-footerY+4));
 	}
-}
-else
-{
-	updateFooterText = true;
 }
 
 draw_set_color(c_black);

@@ -232,8 +232,8 @@ if(debug == 1)
 			//draw_rectangle(bb_left(),bb_top(),bb_right(),bb_bottom(),0);
 			draw_rectangle_betterOutline(bbox_left, bbox_top, bbox_right, bbox_bottom);
 		}
-		draw_line(scr_round(bb_left()), scr_round(position.Y), scr_round(bb_right()), scr_round(position.Y));
-		draw_line(scr_round(position.X), scr_round(bb_top()), scr_round(position.X), scr_round(bb_bottom()));
+		draw_line(scr_round(position.X)-4, scr_round(position.Y), scr_round(position.X)+4, scr_round(position.Y));
+		draw_line(scr_round(position.X), scr_round(position.Y)-4, scr_round(position.X), scr_round(position.Y)+4);
 		
 		draw_set_color(c_white);
         draw_set_alpha(1);
@@ -303,33 +303,62 @@ if(debug == 1)
 		draw_set_font(fnt_GUI);
 		draw_set_color(c_white);
 		draw_set_alpha(0.5);
-		draw_set_halign(fa_center);
-		draw_set_valign(fa_top);
-		var edgeAng = edgeAngle[Edge.Bottom];
-		if(entity_place_collide(0,2))
-		{
-			draw_text(x,y+10,string(edgeAng));
-		}
-		if(entity_place_collide(0,-2))
+		if(!self.SpiderActive())
 		{
 			draw_set_halign(fa_center);
-			draw_set_valign(fa_bottom);
-			edgeAng = edgeAngle[Edge.Top];
-			draw_text(x,y-10,string(edgeAng));
+			draw_set_valign(fa_top);
+			var edgeAng = edgeAngle[Edge.Bottom];
+			if(entity_place_collide(0,2))
+			{
+				draw_text(x,y+10,string(edgeAng));
+			}
+			if(entity_place_collide(0,-2))
+			{
+				draw_set_halign(fa_center);
+				draw_set_valign(fa_bottom);
+				edgeAng = edgeAngle[Edge.Top];
+				draw_text(x,y-10,string(edgeAng));
+			}
+			if(entity_place_collide(2,0))
+			{
+				draw_set_halign(fa_left);
+				draw_set_valign(fa_middle);
+				edgeAng = edgeAngle[Edge.Right];
+				draw_text(bb_right(),y,string(edgeAng));
+			}
+			if(entity_place_collide(-2,0))
+			{
+				draw_set_halign(fa_right);
+				draw_set_valign(fa_middle);
+				edgeAng = edgeAngle[Edge.Left];
+				draw_text(bb_left(),y,string(edgeAng));
+			}
 		}
-		if(entity_place_collide(2,0))
+		else
 		{
-			draw_set_halign(fa_left);
-			draw_set_valign(fa_middle);
-			edgeAng = edgeAngle[Edge.Right];
-			draw_text(bb_right(),y,string(edgeAng));
-		}
-		if(entity_place_collide(-2,0))
-		{
-			draw_set_halign(fa_right);
-			draw_set_valign(fa_middle);
-			edgeAng = edgeAngle[Edge.Left];
-			draw_text(bb_left(),y,string(edgeAng));
+			var _dx = x, _dy = y+10;
+			draw_set_halign(fa_center);
+			draw_set_valign(fa_top);
+			if(spiderEdge == Edge.Top)
+			{
+				_dy = y-10;
+				draw_set_valign(fa_bottom);
+			}
+			if(spiderEdge == Edge.Right)
+			{
+				_dx = self.bb_right();
+				_dy = y;
+				draw_set_halign(fa_left);
+				draw_set_valign(fa_middle);
+			}
+			if(spiderEdge == Edge.Left)
+			{
+				_dx = self.bb_left();
+				_dy = y;
+				draw_set_halign(fa_right);
+				draw_set_valign(fa_middle);
+			}
+			draw_text(_dx,_dy,string(edgeAngle[spiderEdge]));
 		}
 		draw_set_alpha(1);
     }

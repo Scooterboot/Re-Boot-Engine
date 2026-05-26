@@ -4,38 +4,97 @@ active = true;
 width = 0;
 height = 0;
 
+#region Text
+rawText = [];
+text = [""];
+updateText = true;
+function _GetText()
+{
+	if(updateText || obj_UI_Controller.updateText)
+	{
+		for(var i = 0; i < array_length(rawText); i++)
+		{
+			text[i] = UI_InsertIconsIntoString(rawText[i]);
+		}
+		updateText = false;
+	}
+	return text;
+}
+function GetText()
+{
+	return self._GetText()[0];
+}
+
+textFont = fnt_GUI;
+textColor = c_white;
+textAlignX = fa_center;
+textAlignY = fa_middle;
+#endregion
+
 page = noone;
 containerEle = noone;
 nestedEle = ds_list_create();
 selectedEle = noone;
 #region Element create functions
 
-function CreateUIPanel(_objInd = obj_UI_Panel, _x, _y, _width, _height, _scrollWidth = 0, _scrollHeight = 0, _scrollX = 0, _scrollY = 0)
+function CreateUIPanel(_objInd = obj_UI_Panel, _x, _y, _width, _height, _text = [], _scrollWidth = 0, _scrollHeight = 0, _scrollX = 0, _scrollY = 0)
 {
-	var pnl = page.CreateUIPanel(_objInd, _x, _y, _width, _height, _scrollWidth, _scrollHeight, _scrollX, _scrollY);
+	///@param objIndex=obj_UI_Panel
+	///@param x
+	///@param y
+	///@param width
+	///@param height
+	///@param rawText=StringOrArray
+	///@param scrollWidth=0
+	///@param scrollHeight=0
+	///@param scrollX=0
+	///@param scrollY=0
+	
+	var pnl = page.CreateUIPanel(_objInd, _x, _y, _width, _height, _text, _scrollWidth, _scrollHeight, _scrollX, _scrollY);
 	pnl.containerEle = id;
 	selectedEle = (selectedEle == noone) ? pnl : selectedEle;
 	ds_list_add(nestedEle, pnl);
 	return pnl;
 }
-function CreateUIButton(_objInd = obj_UI_Button, _x, _y, _width, _height, _text = "")
+function CreateUIButton(_objInd = obj_UI_Button, _x, _y, _width, _height, _text = [])
 {
+	///@param objIndex=obj_UI_Button
+	///@param x
+	///@param y
+	///@param width
+	///@param height
+	///@param rawText=StringOrArray
+	
 	var btn = page.CreateUIButton(_objInd, _x, _y, _width, _height, _text);
 	btn.containerEle = id;
 	selectedEle = (selectedEle == noone) ? btn : selectedEle;
 	ds_list_add(nestedEle, btn);
 	return btn;
 }
-function CreateUICycleButton(_objInd = obj_UI_CycleButton, _x, _y, _width, _height, _text = [""])
+function CreateUICycleButton(_objInd = obj_UI_CycleButton, _x, _y, _width, _height, _text = [])
 {
+	///@param objIndex=obj_UI_CycleButton
+	///@param x
+	///@param y
+	///@param width
+	///@param height
+	///@param rawText=StringOrArray
+	
 	var btn = page.CreateUICycleButton(_objInd, _x, _y, _width, _height, _text);
 	btn.containerEle = id;
 	selectedEle = (selectedEle == noone) ? btn : selectedEle;
 	ds_list_add(nestedEle, btn);
 	return btn;
 }
-function CreateUITextElement(_objInd = obj_UI_TextElement, _x, _y, _width, _height, _text = "")
+function CreateUITextElement(_objInd = obj_UI_TextElement, _x, _y, _width, _height, _text = [])
 {
+	///@param objIndex=obj_UI_TextElement
+	///@param x
+	///@param y
+	///@param width
+	///@param height
+	///@param rawText=StringOrArray
+	
 	var txt = page.CreateUITextElement(_objInd, _x, _y, _width, _height, _text);
 	txt.containerEle = id;
 	selectedEle = (selectedEle == noone) ? txt : selectedEle;
@@ -85,11 +144,11 @@ function GetX()
 {
 	if(containerEle != noone && instance_exists(containerEle))
 	{
-		return containerEle.GetX() + x + containerEle.scrollPosX;
+		return scr_round(containerEle.GetX() + x - containerEle.scrollPosX);
 	}
 	if(instance_exists(page))
 	{
-		return page.x + x;
+		return scr_round(page.x + x);
 	}
 	return -1000;
 }
@@ -99,11 +158,11 @@ function GetY()
 {
 	if(containerEle != noone && instance_exists(containerEle))
 	{
-		return containerEle.GetY() + y + containerEle.scrollPosY;
+		return scr_round(containerEle.GetY() + y - containerEle.scrollPosY);
 	}
 	if(instance_exists(page))
 	{
-		return page.y + y;
+		return scr_round(page.y + y);
 	}
 	return -1000;
 }
@@ -247,19 +306,6 @@ function PostUpdate() {}
 
 containDraw = true;
 #region Draw functions
-
-text = "";
-fText = UI_InsertIconsIntoString(text);
-updateText = true;
-function GetText()
-{
-	if(updateText || obj_UI_Controller.updateText)
-	{
-		fText = UI_InsertIconsIntoString(text);
-		updateText = false;
-	}
-	return fText;
-}
 
 alpha = 1;
 function GetAlpha()

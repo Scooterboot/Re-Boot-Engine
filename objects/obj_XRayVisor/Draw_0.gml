@@ -65,7 +65,7 @@ else if (refresh)
     xray_redraw_outline2();
 }
 
-refresh = 0;
+refresh = false;
 
 if !(surface_exists(alphaMaskTemp))
 {

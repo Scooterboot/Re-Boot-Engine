@@ -29,7 +29,7 @@ function PerformCull(_obj)
 }
 
 cullableObjects = [
-obj_NPC,
+//obj_NPC,
 obj_Tile,
 obj_NPCTile,
 obj_MovingTile,

@@ -3,8 +3,16 @@ event_inherited();
 
 scrollWidth = 0;
 scrollHeight = 0;
-scrollStepX = 2;
-scrollStepY = 2;
+scrollStepX = 16;
+scrollStepY = 16;
+
+function UIPanelScrollBar(_creator, _thickness = 7) constructor
+{
+	creator = _creator;
+	thickness = _thickness;
+}
+vertScrollbar = noone;
+horiScrollbar = noone;
 
 function PreUpdate()
 {
@@ -31,8 +39,8 @@ function PreUpdate()
 	{
 		// TODO: better scrolling priority stuffs
 		
-		var selFlag = false;
-		var mouse = self.GetMouse();
+		//var selFlag = false;
+		//var mouse = self.GetMouse();
 		/*if(instance_exists(mouse) && !mouse.hide)
 		{
 			selFlag = true;
