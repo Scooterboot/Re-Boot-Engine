@@ -119,7 +119,7 @@ function ScrollY()
 }
 
 currentPage = noone;
-pageList = ds_list_create();
+pageArr = [];
 function CreatePage(objInd = obj_UI_Page, _alpha = 1)
 {
 	///@param objIndex=obj_UI_Page
@@ -127,6 +127,6 @@ function CreatePage(objInd = obj_UI_Page, _alpha = 1)
 	
 	var pg = instance_create_depth(0, 0, depth, objInd, {creatorUI : id});
 	pg.alpha = _alpha;
-	ds_list_add(pageList, pg);
+	array_push(pageArr, pg);
 	return pg;
 }

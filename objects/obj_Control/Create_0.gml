@@ -134,7 +134,7 @@ for(var i = 0; i < INPUT_VERB._Length; i++)
 		_comboTypeKB = ComboType.And;
 	}
 	
-	if(i == INPUT_VERB.Sprint || INPUT_VERB.SpiderBall)
+	if(i == INPUT_VERB.Sprint || i == INPUT_VERB.SpiderBall)
 	{
 		_pressTypeKB = PressType.Hold;
 		_pressTypeGP = PressType.Hold;

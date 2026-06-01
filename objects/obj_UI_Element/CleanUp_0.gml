@@ -1,27 +1,28 @@
+
 if(instance_exists(page))
 {
-	if(ds_exists(page.modalElements, ds_type_list))
+	var pos = array_find_index_by_value(page.modalElements, id);
+	if(pos >= 0)
 	{
-		var pos = ds_list_find_index(page.modalElements,id);
-		ds_list_delete(page.modalElements,pos);
+		array_delete(page.modalElements, pos, 1);
 	}
-	if(ds_exists(page.elements, ds_type_list))
+	
+	pos = array_find_index_by_value(page.elements, id);
+	if(pos >= 0)
 	{
-		var pos = ds_list_find_index(page.elements,id);
-		ds_list_delete(page.elements,pos);
+		array_delete(page.elements, pos, 1);
 	}
 }
 
-if(instance_exists(containerEle) && ds_exists(containerEle.nestedEle, ds_type_list))
+if(instance_exists(containerEle))
 {
-	var pos = ds_list_find_index(containerEle.nestedEle,id);
-	ds_list_delete(containerEle.nestedEle,pos);
-}
-if(ds_exists(nestedEle, ds_type_list))
-{
-	for(var i = ds_list_size(nestedEle)-1; i >= 0; i--)
+	var pos = array_find_index_by_value(containerEle.nestedEle, id);
+	if(pos >= 0)
 	{
-		instance_destroy(nestedEle[| i]);
+		array_delete(containerEle.nestedEle, pos, 1);
 	}
-	ds_list_destroy(nestedEle);
+}
+for(var i = array_length(nestedEle)-1; i >= 0; i--)
+{
+	instance_destroy(nestedEle[i]);
 }

@@ -9,16 +9,19 @@ function OnClick()
 	audio_play_sound(snd_MenuBoop,0,false);
 }
 function HotKey() { return false; }
+function HotKey_Cancel()
+{
+	return (creatorUI.cMenuCancel && creatorUI.rMenuCancel) || (creatorUI.cClickR && creatorUI.rClickR);
+}
 
-function OnSelect()
+/*function OnSelect()
 {
 	audio_play_sound(snd_MenuTick,0,false);
-}
+}*/
 function WhileSelected()
 {
-	var mouse = self.GetMouse();
 	if ((creatorUI.cMenuAccept && creatorUI.rMenuAccept && !mouseOnly) || 
-		(instance_exists(mouse) && creatorUI.cClickL && creatorUI.rClickL))
+		(isMouseHovering && creatorUI.cClickL && creatorUI.rClickL))
 	{
 		self.OnClick();
 	}
@@ -50,15 +53,16 @@ sprtSelectAlpha = 1;
 
 function PreDraw()
 {
-	var _x = self.GetX(),
-		_y = self.GetY(),
-		_alph = self.GetAlpha();
+	var _x = posX,
+		_y = posY,
+		_alph = alpha,
+		_selected = self.IsSelected();
 	
 	if(sprite_exists(bgSprt))
 	{
 		var _ind = bgSprtInd,
 			_alph2 = bgAlpha * _alph;
-		if(self.IsSelected())
+		if(_selected)
 		{
 			_ind = bgSelectSprtInd;
 			_alph2 = bgSelectAlpha * _alph;
@@ -74,7 +78,7 @@ function PreDraw()
 	{
 		var _alph2 = bgAlpha * _alph,
 			_col = bgCol;
-		if(self.IsSelected())
+		if(_selected)
 		{
 			_alph2 = bgSelectAlpha * _alph;
 			_col = bgSelectCol;
@@ -93,7 +97,7 @@ function PreDraw()
 	{
 		var _ind = sprtInd,
 			_alph2 = sprtAlpha * _alph;
-		if(self.IsSelected())
+		if(_selected)
 		{
 			_ind = sprtSelectInd;
 			_alph2 = sprtSelectAlpha * _alph;
@@ -106,19 +110,7 @@ function PreDraw()
 		draw_sprite_stretched_ext(sprt,_ind, _xx,_yy, _ww,_hh, c_white,_alph2);
 	}
 	
-	var _text = self.GetText();
-	var _scrib = scribble(_text)
-		.starting_format(font_get_name(textFont),textColor)
-		.align(textAlignX,textAlignY);
-	
-	var _alignOffX = width/2;
-	if(textAlignX == fa_left) { _alignOffX = 4; }
-	if(textAlignX == fa_right) { _alignOffX = -4; }
-	var _alignOffY = height/2;
-	if(textAlignY == fa_top) { _alignOffY = 2; }
-	if(textAlignY == fa_bottom) { _alignOffY = -2; }
-	
-	draw_scribble_shadow(_scrib, _x+_alignOffX, _y+_alignOffY+1,textColor,_alph,,_alph);
+	self.DrawText(textColor);
 	
 	return true;
 }

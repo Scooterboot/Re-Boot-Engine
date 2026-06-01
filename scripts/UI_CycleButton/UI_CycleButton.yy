@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"UI_CycleButton",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"UI_CycleButton",
+  "parent":{
+    "name":"ComponentStructs",
+    "path":"folders/Scripts/UI/ComponentStructs.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

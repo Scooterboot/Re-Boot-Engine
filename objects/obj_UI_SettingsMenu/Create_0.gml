@@ -31,7 +31,7 @@ function CreateDefaultPage()
 	defaultPage = self.CreatePage();
 	var _panelW = global.ogResWidth,
 		_panelH = hh-26,
-		_panel = defaultPage.CreateUIPanel(, (ww-global.ogResWidth)/2, 13, _panelW,_panelH);//,,,400);
+		_panel = defaultPage.CreateUIPanel(, (ww-global.ogResWidth)/2, 13, _panelW,_panelH);
 	
 	var btn = [],
 		btnW = 152,//104,
@@ -58,7 +58,7 @@ function CreateDefaultPage()
 	btn[0].SetNavElements(btn[5],btn[1]);
 	btn[0].OnClick = function()
 	{
-		
+		state = UI_SMState.Display;
 		audio_play_sound(snd_MenuBoop,0,false);
 	}
 	btn[1].SetNavElements(btn[0],btn[2]);
@@ -76,7 +76,7 @@ function CreateDefaultPage()
 	btn[3].SetNavElements(btn[2],btn[4]);
 	btn[3].OnClick = function()
 	{
-		
+		state = UI_SMState.Keyboard;
 		audio_play_sound(snd_MenuBoop,0,false);
 	}
 	btn[4].SetNavElements(btn[3],btn[5]);
@@ -130,12 +130,248 @@ function CreateDisplayPage()
 	draw_set_font(fnt_GUI);
 	
 	displayPage = self.CreatePage();
+	var _panelW = global.ogResWidth,
+		_panelH = hh-26,
+		_displayPanel = displayPage.CreateUIPanel(, (ww-global.ogResWidth)/2, 13, _panelW, _panelH,,,-1);
 	
-	var _displayPanel = displayPage.CreateUIPanel(, (ww-global.ogResWidth)/2, 13, global.ogResWidth,hh-26);
+	var pnl = [],
+		pnlX = 9,
+		pnlY = 3,
+		pnlW = 302,
+		pnlH = 11,
+		btn = [],
+		btnX = pnlW/2,
+		btnW = pnlW/2,
+		btnH = 11;
+	/*for(var i = 0; i < INPUT_VERB._Length; i++)
+	{
+		var str = "test_"+string(i);
+		pnl[i] = _displayPanel.CreateUIPanel(, pnlX,pnlY,pnlW,pnlH,[str]);
+		pnl[i].PreDraw = DrawSettingsOptPanel;
+		pnlY += 13;
+		
+		var str2 = obj_UI_Controller.buttonIconKey[i]+"_0}";//"test2_"+string(i);
+		btn[i] = pnl[i].CreateUIButton(, btnX,0,btnW,btnH,[str2]);
+		btn[i].sprtAlpha = 0.75;
+		btn[i].sprtSelectAlpha = 0.85;
+	}*/
 	
-	
+	var backBtn = _displayPanel.CreateUIButton(, pnlX,pnlY+13,56,btnH,["BACK"]);
+	backBtn.OnClick = function()
+	{
+		state = UI_SMState.Default;
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	backBtn.HotKey = function()
+	{
+		return (cMenuCancel && rMenuCancel) || (cClickR && rClickR);
+	}
 }
 
+#endregion
+
+#region Binding names
+
+bindingText = [
+
+"MenuUp",
+"MenuDown",
+"MenuLeft",
+"MenuRight",
+"MenuScrollUp",
+"MenuScrollDown",
+"MenuScrollLeft",
+"MenuScrollRight",
+
+"Start",
+"MenuAccept",
+"MenuCancel",
+"MenuSecondary",
+"MenuTertiary",
+"MenuR1",
+"MenuR2",
+"MenuL1",
+"MenuL2",
+
+"PlayerUp",
+"PlayerDown",
+"PlayerLeft",
+"PlayerRight",
+
+"Jump",
+"Fire",
+"Sprint",
+"Dodge",
+"InstaShield",
+"Morph",
+"BoostBall",
+"SpiderBall",
+
+"AimUp",
+"AimDown",
+"AimLock",
+"ReverseAim",
+"Moonwalk",
+
+"EquipToggle",
+
+"VisorToggle",
+"VisorCycle",
+
+"RadialUIOpen",
+"RadialUIUp",
+"RadialUIDown",
+"RadialUILeft",
+"RadialUIRight",
+
+"VisorUse",
+"VisorUp",
+"VisorDown",
+"VisorLeft",
+"VisorRight"
+
+];
+
+#endregion
+
+comboText = [
+"OR",
+"&",
+"& !",
+"XOR"
+];
+
+pressText = [
+"Tap",
+"Double Tap",
+"Press",
+"Long Press",
+"Hold",
+"Long Hold",
+"Release"
+];
+
+#region Keyboard bindings page
+
+
+
+kbBindPage = noone;
+function CreateKBBindPage()
+{
+	var ww = global.resWidth,
+		hh = global.resHeight;
+	draw_set_font(fnt_GUI);
+	
+	kbBindPage = self.CreatePage();
+	var _mPanelW = global.ogResWidth,
+		_mPanelH = hh-26,
+		_mPanel = kbBindPage.CreateUIPanel(, (ww-global.ogResWidth)/2, 13, _mPanelW, _mPanelH,,,-1);
+	
+	var pnl = [],
+		pnlW = 302,
+		pnlH = 11,
+		pnlX = (_mPanelW/2) - (pnlW/2),
+		pnlY = 4,
+		btnX = 139,//pnlW/2,
+		btnW = pnlW/2,
+		btnH = 11;
+	for(var i = 0; i < INPUT_VERB._Length; i++)
+	{
+		//var str = "test_"+string(i);
+		var str = bindingText[i];
+		pnl[i] = _mPanel.CreateUIPanel(, pnlX,pnlY,pnlW,pnlH,[str]);
+		pnl[i].PreDraw = method(pnl[i], DrawSettingsOptPanel);
+		pnl[i].canNavigate = true;
+		pnl[i].canMouseSelect = true;
+		pnlY += 13;
+		
+		var preBtn = pnl[i].CreateUIButton(, btnX,0, 79, btnH, pressText);
+		preBtn.sprtAlpha = 0.75;
+		preBtn.sprtSelectAlpha = 0.85;
+		preBtn.inputVerb = i;
+		preBtn.GetText = method(preBtn, function()
+		{
+			return self._GetText()[global.controlInput[inputVerb].pressType_KB];
+		});
+		
+		var getBindText = function()
+		{
+			var _binding = InputBindingGet(false, inputVerb, inputAlt),
+				_icon = InputIconGetDirect(_binding, false, INPUT_GAMEPAD_TYPE_NO_GAMEPAD),
+				_str = UI_GetInputIconString(_icon);
+			if(is_undefined(_str))
+			{
+				return "";
+			}
+			return _str;
+		}
+		
+		var b1Btn = pnl[i].CreateUIButton(, btnX+80,0, 31,btnH);
+		b1Btn.textFont = fnt_GUI_Small;
+		b1Btn.useScribDeluxe = true;
+		b1Btn.sprt = sprt_UI_Button2;
+		b1Btn.sprtAlpha = 0.75;
+		b1Btn.sprtSelectAlpha = 0.85;
+		b1Btn.inputVerb = i;
+		b1Btn.inputAlt = 0;
+		b1Btn.GetText = method(b1Btn, getBindText);
+		
+		var comBtn = pnl[i].CreateUIButton(, btnX+80+32,0, 21,btnH, comboText);
+		comBtn.sprt = sprt_UI_Button2;
+		comBtn.sprtAlpha = 0.75;
+		comBtn.sprtSelectAlpha = 0.85;
+		comBtn.inputVerb = i;
+		comBtn.GetText = method(comBtn, function()
+		{
+			return self._GetText()[global.controlInput[inputVerb].comboType_KB];
+		});
+		
+		var b2Btn = pnl[i].CreateUIButton(, btnX+80+32+22,0, 31,btnH);
+		b2Btn.textFont = fnt_GUI_Small;
+		b2Btn.useScribDeluxe = true;
+		b2Btn.sprt = sprt_UI_Button2;
+		b2Btn.sprtAlpha = 0.75;
+		b2Btn.sprtSelectAlpha = 0.85;
+		b2Btn.inputVerb = i;
+		b2Btn.inputAlt = 1;
+		b2Btn.GetText = method(b2Btn, getBindText);
+	}
+	
+	var backBtn = _mPanel.CreateUIButton(, pnlX,pnlY+13,56,btnH,["BACK"]);
+	backBtn.OnClick = function()
+	{
+		state = UI_SMState.Default;
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	backBtn.HotKey = function()
+	{
+		return (cMenuCancel && rMenuCancel) || (cClickR && rClickR);
+	}
+}
+
+#endregion
+
+#region DrawSettingsOptPanel
+function DrawSettingsOptPanel()
+{
+	var _x = posX,
+		_y = posY,
+		_alph = alpha,
+		_alph2 = _alph * 0.75,
+		_ind = 1;
+	if(self.IsSelected())
+	{
+		_alph2 = _alph * 0.85;
+		_ind = 0;
+	}
+	
+	draw_sprite_stretched_ext(sprt_UI_OptPanel, _ind, _x, _y, width, height, c_white, _alph2);
+	
+	textAlignX = fa_left;
+	self.DrawText(textColor);
+	
+	return true;
+}
 #endregion
 
 updateText = true;

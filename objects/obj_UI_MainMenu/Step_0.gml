@@ -273,13 +273,10 @@ else
 	subState = UI_MMSubState.None;
 	selectedFile = -1;
 	
-	for(var i = 0; i < ds_list_size(pageList); i++)
+	for(var i = array_length(pageArr)-1; i >= 0; i--)
 	{
-		instance_destroy(pageList[| i]);
-	}
-	if(ds_list_size(pageList) > 0)
-	{
-		ds_list_clear(pageList);
+		instance_destroy(pageArr[i]);
+		array_delete(pageArr, i, 1);
 	}
 	
 	updateText = true;

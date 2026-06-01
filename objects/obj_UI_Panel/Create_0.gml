@@ -6,13 +6,16 @@ scrollHeight = 0;
 scrollStepX = 16;
 scrollStepY = 16;
 
-function UIPanelScrollBar(_creator, _thickness = 7) constructor
-{
-	creator = _creator;
-	thickness = _thickness;
-}
-vertScrollbar = noone;
-horiScrollbar = noone;
+scrollBarThickness = 7;
+scrollBarEndPad = 1;
+scrollBarSidePad = 1;
+
+horiScrollBarHeld = false;
+horiScrollBarHover = false;
+horiScrollBarMouseXOffset = 0;
+vertScrollBarHeld = false;
+vertScrollBarHover = false;
+vertScrollBarMouseYOffset = 0;
 
 function PreUpdate()
 {
@@ -21,13 +24,14 @@ function PreUpdate()
 		var _scrWidth = max(scrollWidth, width),
 			_scrHeight = max(scrollHeight, height);
 		
-		if(ds_exists(nestedEle, ds_type_list) && ds_list_size(nestedEle) > 0)
+		var _size = array_length(nestedEle);
+		if(_size > 0)
 		{
-			for(var i = ds_list_size(nestedEle)-1; i >= 0; i--)
+			for(var i = 0; i < _size; i++)
 			{
-				var ele = nestedEle[| i];
-				_scrWidth = max(_scrWidth, ele.x+ele.width);
-				_scrHeight = max(_scrHeight, ele.x+ele.height);
+				var ele = nestedEle[i];
+				_scrWidth = max(_scrWidth, ele.x+ele.width+16);
+				_scrHeight = max(_scrHeight, ele.y+ele.height+16);
 			}
 		}
 		
@@ -37,36 +41,72 @@ function PreUpdate()
 	
 	if(scrollWidth > width || scrollHeight > height)
 	{
-		// TODO: better scrolling priority stuffs
-		
-		//var selFlag = false;
-		//var mouse = self.GetMouse();
-		/*if(instance_exists(mouse) && !mouse.hide)
-		{
-			selFlag = true;
-		}
-		else if(self.IsSelected())
-		{
-			selFlag = true;
-		}*/
-		/*if(!obj_Mouse.hide)
-		{
-			selFlag = instance_exists(mouse);
-		}
-		else
-		{
-			selFlag = self.IsSelected();
-		}
-		if(selFlag)*/
 		if(self.IsSelected())
 		{
+			var _mouse = obj_Mouse;
 			if(scrollWidth > width)
 			{
+				var _scrollScale = width / scrollWidth,
+					_barWidth = width * _scrollScale,
+					_barXOffset = scrollPosX * _scrollScale,
+					_thick = scrollBarThickness,
+					_pad = scrollBarEndPad,
+					_sPad = scrollBarSidePad;
+				if(instance_exists(_mouse))
+				{
+					horiScrollBarHover = instance_exists(collision_rectangle(x+_pad, y+height-_thick-_sPad, x+width-_pad, y+height-_sPad, _mouse, false, true));
+					if(creatorUI.cClickL && creatorUI.rClickL && horiScrollBarHover)
+					{
+						horiScrollBarHeld = true;
+					}
+					else if(!creatorUI.cClickL && creatorUI.rClickL)
+					{
+						horiScrollBarHeld = false;
+					}
+					
+					if(horiScrollBarHeld)
+					{
+						scrollPosX = ((_mouse.x-(x+_pad)) / _scrollScale) - horiScrollBarMouseXOffset;
+					}
+					else
+					{
+						horiScrollBarMouseXOffset = ((_mouse.x-(x+_pad)) / _scrollScale) - scrollPosX;
+					}
+				}
+				
 				var moveX = creatorUI.ScrollX();
 				scrollPosX += scrollStepX*moveX;
 			}
 			if(scrollHeight > height)
 			{
+				var _scrollScale = height / scrollHeight,
+					_barHeight = height * _scrollScale,
+					_barYOffset = scrollPosY * _scrollScale,
+					_thick = scrollBarThickness,
+					_pad = scrollBarEndPad,
+					_sPad = scrollBarSidePad;
+				if(instance_exists(_mouse))
+				{
+					vertScrollBarHover = instance_exists(collision_rectangle(x+width-_thick-_sPad, y+_pad, x+width-_sPad, y+height-_pad, _mouse, false, true));
+					if(creatorUI.cClickL && creatorUI.rClickL && vertScrollBarHover)
+					{
+						vertScrollBarHeld = true;
+					}
+					else if(!creatorUI.cClickL && creatorUI.rClickL)
+					{
+						vertScrollBarHeld = false;
+					}
+					
+					if(vertScrollBarHeld)
+					{
+						scrollPosY = ((_mouse.y-(y+_pad)) / _scrollScale) - vertScrollBarMouseYOffset;
+					}
+					else
+					{
+						vertScrollBarMouseYOffset = ((_mouse.y-(y+_pad)) / _scrollScale) - scrollPosY;
+					}
+				}
+				
 				var moveY = creatorUI.ScrollY();
 				scrollPosY += scrollStepY*moveY;
 			}
@@ -75,6 +115,57 @@ function PreUpdate()
 	
 	scrollPosX = clamp(scrollPosX, 0, max(scrollWidth-width, 0));
 	scrollPosY = clamp(scrollPosY, 0, max(scrollHeight-height, 0));
+	
+	return true;
+}
+
+function DrawScrollBars()
+{
+	if(scrollWidth > width || scrollHeight > height)
+	{
+		var _x = posX,
+			_y = posY,
+			_alph = alpha;
+		
+		if(scrollWidth > width)
+		{
+			var _scrollScale = width / scrollWidth,
+				_barWidth = width * _scrollScale,
+				_barXOffset = scrollPosX * _scrollScale,
+				_thick = scrollBarThickness,
+				_pad = scrollBarEndPad,
+				_sPad = scrollBarSidePad;
+			
+			draw_sprite_stretched_ext(sprt_UI_Scrollbar, 0, x+_pad, y+height-_thick-_sPad, width-_pad*2,_thick, c_white, _alph);
+			var imgInd = 1;
+			if(horiScrollBarHover || horiScrollBarHeld)
+			{
+				imgInd = 2;
+			}
+			draw_sprite_stretched_ext(sprt_UI_Scrollbar, imgInd, x+_pad+_barXOffset, y+height-_thick-_sPad, _barWidth-_pad*2, _thick, c_white, _alph);
+		}
+		if(scrollHeight > height)
+		{
+			var _scrollScale = height / scrollHeight,
+				_barHeight = height * _scrollScale,
+				_barYOffset = scrollPosY * _scrollScale,
+				_thick = scrollBarThickness,
+				_pad = scrollBarEndPad,
+				_sPad = scrollBarSidePad;
+			
+			draw_sprite_stretched_ext(sprt_UI_Scrollbar, 0, x+width-_thick-_sPad, y+_pad, _thick, height-_pad*2, c_white, _alph);
+			var imgInd = 1;
+			if(vertScrollBarHover || vertScrollBarHeld)
+			{
+				imgInd = 2;
+			}
+			draw_sprite_stretched_ext(sprt_UI_Scrollbar, imgInd, x+width-_thick-_sPad, y+_pad+_barYOffset, _thick, _barHeight-_pad*2, c_white, _alph);
+		}
+	}
+}
+function PreDraw()
+{
+	self.DrawScrollBars();
 	
 	return true;
 }

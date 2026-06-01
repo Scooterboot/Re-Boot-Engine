@@ -25,6 +25,32 @@ if(activeState == UI_ActiveState.Active || activeState == UI_ActiveState.Deactiv
 				defaultPage.DrawPage();
 			}
 		}
+		if(state == UI_SMState.Display)
+		{
+			if(instance_exists(displayPage))
+			{
+				displayPage.DrawPage();
+			}
+		}
+		if(state == UI_SMState.Audio)
+		{
+			
+		}
+		if(state == UI_SMState.Gameplay)
+		{
+			
+		}
+		if(state == UI_SMState.Keyboard)
+		{
+			if(instance_exists(kbBindPage))
+			{
+				kbBindPage.DrawPage();
+			}
+		}
+		if(state == UI_SMState.Controller)
+		{
+			
+		}
 		
 		var _headStr = headerText[state],
 			_footStr = footerText[0];

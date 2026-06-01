@@ -576,14 +576,14 @@ if(!global.GamePaused())
 		canGripJump = true;
 		if(climbTarget > 0 && !startClimb)
 		{
-			var climbUp = (move2 == grippedDir && cJump );//&& rJump);
+			var climbUp = (move2 == grippedDir && cJump && rJump);
 			if(global.gripStyle == 0)
 			{
 				climbUp |= (upClimbCounter >= 25 && cPlayerUp && move != -grippedDir);
 			}
 			if(global.gripStyle == 2)
 			{
-				climbUp = (move2 != -grippedDir && cJump /*&& rJump*/) || (upClimbCounter >= 25 && cPlayerUp && move != -grippedDir);
+				climbUp = (move2 != -grippedDir && cJump && rJump) || (upClimbCounter >= 25 && cPlayerUp && move != -grippedDir);
 			}
 			if(cPlayerDown)
 			{

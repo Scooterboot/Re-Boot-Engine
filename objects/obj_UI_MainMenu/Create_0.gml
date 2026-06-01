@@ -65,14 +65,14 @@ function CreateMainMenuPage()
 	}
 	
 	btn[0].SetNavElements(btn[2],btn[1]);
-	btn[0].OnClick = function()
+	btn[0].OnClick = method(btn[0], function()
 	{
-		targetState = UI_MMState.FileMenu;
+		creatorUI.targetState = UI_MMState.FileMenu;
 		audio_play_sound(snd_MenuBoop,0,false);
-	}
+	});
 	
 	btn[1].SetNavElements(btn[0],btn[2]);
-	btn[1].OnClick = function()
+	btn[1].OnClick = method(btn[1], function()
 	{
 		if(obj_UI_SettingsMenu.activeState == UI_ActiveState.Inactive)
 		{
@@ -80,14 +80,14 @@ function CreateMainMenuPage()
 		}
 		
 		audio_play_sound(snd_MenuBoop,0,false);
-	}
+	});
 	
 	btn[2].SetNavElements(btn[1],btn[0]);
-	btn[2].OnClick = function()
+	btn[2].OnClick = method(btn[2], function()
 	{
 		instance_deactivate_all(false);
 		game_end();
-	}
+	});
 }
 
 #endregion
@@ -118,18 +118,15 @@ function CreateFileMenuPage()
 	{
 		fileBtn[i] = fileMenuPage.CreateUIButton(, ww/2 - fBtnW/2, 24 + fBtnSpace*i, fBtnW, fBtnH, fileMenuText[i]);
 		fileBtn[i].fileIndex = i;
-		fileBtn[i].OnClick = function()
+		fileBtn[i].OnClick = method(fileBtn[i], function()
 		{
-			with(other)
-			{
-				creatorUI.subState = UI_MMSubState.FileSelected;
-				creatorUI.selectedFile = fileIndex;
-				creatorUI.CreateSelectedFilePage(self.GetY(), fileIndex);
-			}
+			creatorUI.subState = UI_MMSubState.FileSelected;
+			creatorUI.selectedFile = fileIndex;
+			creatorUI.CreateSelectedFilePage(posY, fileIndex);
 			
 			audio_play_sound(snd_MenuTick,0,false);
-		}
-		fileBtn[i].PreDraw = DrawSaveFileButton;
+		});
+		fileBtn[i].PreDraw = method(fileBtn[i], DrawSaveFileButton);
 	}
 	
 	draw_set_font(fnt_GUI);
@@ -140,15 +137,12 @@ function CreateFileMenuPage()
 	var backBtn = fileMenuPage.CreateUIButton(, ww/2 - 96, hh - 32, bBtnW, bBtnH, str);
 	backBtn.sprtAlpha = 0.75;
 	backBtn.sprtSelectAlpha = 0.85;
-	backBtn.OnClick = function()
+	backBtn.OnClick = method(backBtn, function()
 	{
-		targetState = UI_MMState.MainMenu;
+		creatorUI.targetState = UI_MMState.MainMenu;
 		audio_play_sound(snd_MenuTick,0,false);
-	}
-	backBtn.HotKey = function()
-	{
-		return (cMenuCancel && rMenuCancel) || (cClickR && rClickR);
-	}
+	});
+	backBtn.HotKey = backBtn.HotKey_Cancel;
 	backBtn.fileIndex = -1;
 	
 	for(var i = 0; i < array_length(fileMenuText)-1; i++)
@@ -196,25 +190,22 @@ function CreateSelectedFilePage(_yoffset, _fileIndex)
 	
 	var str = fileOptionText[0];
 	var startGameBtn = sfPanel.CreateUIButton(, fBtnW/2 - btnW/2, fBtnH/2 - 12, btnW, btnH, str);
-	startGameBtn.OnClick = function()
+	startGameBtn.OnClick = method(startGameBtn, function()
 	{
-		targetState = UI_MMState.LoadGame;
+		creatorUI.targetState = UI_MMState.LoadGame;
 		audio_play_sound(snd_MenuShwsh,0,false);
-	}
+	});
 	
 	str = fileOptionText[1];
 	var cancelBtn = sfPanel.CreateUIButton(, fBtnW/2 - btnW/2, fBtnH/2 + 1, btnW, btnH, str);
-	cancelBtn.OnClick = function()
+	cancelBtn.OnClick = method(cancelBtn, function()
 	{
-		subState = UI_MMSubState.None;
-		selectedFile = -1;
-		instance_destroy(selectedFilePage);
+		creatorUI.subState = UI_MMSubState.None;
+		creatorUI.selectedFile = -1;
+		instance_destroy(creatorUI.selectedFilePage);
 		audio_play_sound(snd_MenuTick,0,false);
-	}
-	cancelBtn.HotKey = function()
-	{
-		return (cMenuCancel && rMenuCancel) || (cClickR && rClickR);
-	}
+	});
+	cancelBtn.HotKey = cancelBtn.HotKey_Cancel;
 	
 	startGameBtn.SetNavElements(cancelBtn,cancelBtn);
 	cancelBtn.SetNavElements(startGameBtn,startGameBtn);
@@ -226,21 +217,22 @@ function CreateSelectedFilePage(_yoffset, _fileIndex)
 		
 		str = fileOptionText[2];
 		var copyBtn = sfPanel.CreateUIButton(, fBtnW/2 + 28, fBtnH/2 - 12, btnW, btnH, str);
-		copyBtn.OnClick = function()
+		copyBtn.OnClick = method(copyBtn, function()
 		{
-			subState = UI_MMSubState.FileCopy;
-			self.CreateCopyFilePage();
+			creatorUI.subState = UI_MMSubState.FileCopy;
+			creatorUI.CreateCopyFilePage();
+			creatorUI.copyFilePage.UpdatePage();
 			audio_play_sound(snd_MenuTick,0,false);
-		}
+		});
 		
 		str = fileOptionText[3];
 		var deleteBtn = sfPanel.CreateUIButton(, fBtnW/2 + 28, fBtnH/2 + 1, btnW, btnH, str);
-		deleteBtn.OnClick = function()
+		deleteBtn.OnClick = method(deleteBtn, function()
 		{
-			subState = UI_MMSubState.ConfirmDelete;
-			self.CreateConfirmDeletePage();
+			creatorUI.subState = UI_MMSubState.ConfirmDelete;
+			creatorUI.CreateConfirmDeletePage();
 			audio_play_sound(snd_MenuBoop,0,false);
-		}
+		});
 	
 		startGameBtn.SetNavElements(,,copyBtn,copyBtn);
 		cancelBtn.SetNavElements(,,deleteBtn,deleteBtn);
@@ -276,13 +268,13 @@ function CreateCopyFilePage()
 	{
 		copyBtn[i] = copyFilePage.CreateUIButton(, ww/2 - cBtnW/2, 24 + cBtnSpace*i, cBtnW, cBtnH, copyFileText[i]);
 		copyBtn[i].fileIndex = i;
-		copyBtn[i].OnClick = function()
+		copyBtn[i].OnClick = method(copyBtn[i], function()
 		{
-			subState = UI_MMSubState.ConfirmCopy;
-			self.CreateConfirmCopyPage(selectedFile, other.fileIndex);
+			creatorUI.subState = UI_MMSubState.ConfirmCopy;
+			creatorUI.CreateConfirmCopyPage(creatorUI.selectedFile, fileIndex);
 			audio_play_sound(snd_MenuBoop,0,false);
-		}
-		copyBtn[i].PreDraw = DrawSaveFileButton;
+		});
+		copyBtn[i].PreDraw = method(copyBtn[i], DrawSaveFileButton);
 		
 		if(copyBtn[i].fileIndex == selectedFile)
 		{
@@ -303,16 +295,13 @@ function CreateCopyFilePage()
 	copyBtn[cbtn] = copyFilePage.CreateUIButton(, ww/2 - 96, hh - 32, bBtnW, bBtnH, str);
 	copyBtn[cbtn].sprtAlpha = 0.75;
 	copyBtn[cbtn].sprtSelectAlpha = 0.85;
-	copyBtn[cbtn].OnClick = function()
+	copyBtn[cbtn].OnClick = method(copyBtn[cbtn], function()
 	{
-		subState = UI_MMSubState.FileSelected;
-		instance_destroy(copyFilePage);
+		creatorUI.subState = UI_MMSubState.FileSelected;
+		instance_destroy(creatorUI.copyFilePage);
 		audio_play_sound(snd_MenuTick,0,false);
-	}
-	copyBtn[cbtn].HotKey = function()
-	{
-		return (cMenuCancel && rMenuCancel) || (cClickR && rClickR);
-	}
+	});
+	copyBtn[cbtn].HotKey = copyBtn[cbtn].HotKey_Cancel;
 	
 	var len = array_length(copyFileText);
 	for(var i = 0; i < len; i++)
@@ -350,11 +339,11 @@ function CreateConfirmCopyPage(srcFile, destFile)
 	
 	draw_set_font(fnt_Menu);
 	var str = confirmCopyText[0] + "[c_yellow]("+copyFileText[srcFile]+")[/c]" + confirmCopyText[1] + "[c_yellow]("+copyFileText[destFile]+")[/c]" + "\n\n" + confirmCopyText[2];
-	var pnlW = 248,
+	var pnlW = 256,//248,
 		pnlH = string_height(str) + 24;
 	confirmCopyPage = self.CreatePage(,0);
 	var ccPanel = confirmCopyPage.CreateUIPanel(, ww/2 - pnlW/2, hh/2 - pnlH/2, pnlW, pnlH, str);
-	ccPanel.PreDraw = DrawConfirmPanel;
+	ccPanel.PreDraw = method(ccPanel, DrawConfirmPanel);
 	
 	var btnW = 31,
 		btnH = 11;
@@ -364,43 +353,40 @@ function CreateConfirmCopyPage(srcFile, destFile)
 	yesBtn.sprt = sprt_UI_Button2;
 	yesBtn.srcFile = srcFile;
 	yesBtn.destFile = destFile;
-	yesBtn.OnClick = function()
+	yesBtn.OnClick = method(yesBtn, function()
 	{
-		scr_DeleteGame(other.destFile);
-		file_copy(scr_GetFileName(other.srcFile),scr_GetFileName(other.destFile));
-		fileTime[other.destFile] = -1;
+		scr_DeleteGame(destFile);
+		file_copy(scr_GetFileName(srcFile),scr_GetFileName(destFile));
+		creatorUI.fileTime[destFile] = -1;
 		
-		selectedFile = -1;
-		subState = UI_MMSubState.None;
-		instance_destroy(copyFilePage);
-		instance_destroy(selectedFilePage);
-		confirmCopyPage.active = false;
+		creatorUI.selectedFile = -1;
+		creatorUI.subState = UI_MMSubState.None;
+		instance_destroy(creatorUI.copyFilePage);
+		instance_destroy(creatorUI.selectedFilePage);
+		creatorUI.confirmCopyPage.active = false;
 		
-		for(var j = 0; j < ds_list_size(fileMenuPage.elements); j++)
+		for(var j = 0; j < array_length(creatorUI.fileMenuPage.elements); j++)
 		{
-			var fmpBtn = fileMenuPage.elements[| j];
-			if(fmpBtn.fileIndex == other.destFile)
+			var fmpBtn = creatorUI.fileMenuPage.elements[j];
+			if(fmpBtn.fileIndex == destFile)
 			{
-				fileMenuPage.SelectElement(fmpBtn,false);
+				creatorUI.fileMenuPage.SelectElement(fmpBtn,false);
 			}
 		}
 		
 		audio_play_sound(snd_MenuBoop,0,false);
-	}
+	});
 	
 	str = confirmCopyText[4];
 	var noBtn = ccPanel.CreateUIButton(, pnlW/2 + 16, pnlH - btnH - 4, btnW, btnH, str);
 	noBtn.sprt = sprt_UI_Button2;
-	noBtn.OnClick = function()
+	noBtn.OnClick = method(noBtn, function()
 	{
-		subState = UI_MMSubState.FileCopy;
-		confirmCopyPage.active = false;
+		creatorUI.subState = UI_MMSubState.FileCopy;
+		creatorUI.confirmCopyPage.active = false;
 		audio_play_sound(snd_MenuTick,0,false);
-	}
-	noBtn.HotKey = function()
-	{
-		return (cMenuCancel && rMenuCancel) || (cClickR && rClickR);
-	}
+	});
+	noBtn.HotKey = noBtn.HotKey_Cancel;
 	
 	yesBtn.SetNavElements(,,noBtn,noBtn);
 	noBtn.SetNavElements(,,yesBtn,yesBtn);
@@ -425,11 +411,11 @@ function CreateConfirmDeletePage()
 	
 	draw_set_font(fnt_Menu);
 	var str = confirmDeleteText[0] + "[c_yellow]("+fileMenuText[selectedFile]+")[/c]" + "\n\n" + confirmDeleteText[1];
-	var pnlW = 248,
+	var pnlW = 256,//248,
 		pnlH = string_height(str) + 24;
 	confirmDeletePage = self.CreatePage(,0);
 	var cdPanel = confirmDeletePage.CreateUIPanel(, ww/2 - pnlW/2, hh/2 - pnlH/2, pnlW, pnlH, str);
-	cdPanel.PreDraw = DrawConfirmPanel;
+	cdPanel.PreDraw = method(cdPanel, DrawConfirmPanel);
 	
 	var btnW = 31,
 		btnH = 11;
@@ -437,30 +423,27 @@ function CreateConfirmDeletePage()
 	str = confirmDeleteText[2];
 	var yesBtn = cdPanel.CreateUIButton(, pnlW/2 - 16 - btnW, pnlH - btnH - 4, btnW, btnH, str);
 	yesBtn.sprt = sprt_UI_Button2;
-	yesBtn.OnClick = function()
+	yesBtn.OnClick = method(yesBtn, function()
 	{
-		scr_DeleteGame(selectedFile);
-		fileTime[selectedFile] = -1;
-		selectedFile = -1;
-		subState = UI_MMSubState.None;
-		instance_destroy(selectedFilePage);
-		confirmDeletePage.active = false;
+		scr_DeleteGame(creatorUI.selectedFile);
+		creatorUI.fileTime[creatorUI.selectedFile] = -1;
+		creatorUI.selectedFile = -1;
+		creatorUI.subState = UI_MMSubState.None;
+		instance_destroy(creatorUI.selectedFilePage);
+		creatorUI.confirmDeletePage.active = false;
 		audio_play_sound(snd_MenuBoop,0,false);
-	}
+	});
 	
 	str = confirmDeleteText[3];
 	var noBtn = cdPanel.CreateUIButton(, pnlW/2 + 16, pnlH - btnH - 4, btnW, btnH, str);
 	noBtn.sprt = sprt_UI_Button2;
-	noBtn.OnClick = function()
+	noBtn.OnClick = method(noBtn, function()
 	{
-		subState = UI_MMSubState.FileSelected;
-		confirmDeletePage.active = false;
+		creatorUI.subState = UI_MMSubState.FileSelected;
+		creatorUI.confirmDeletePage.active = false;
 		audio_play_sound(snd_MenuTick,0,false);
-	}
-	noBtn.HotKey = function()
-	{
-		return (cMenuCancel && rMenuCancel) || (cClickR && rClickR);
-	}
+	});
+	noBtn.HotKey = noBtn.HotKey_Cancel;
 	
 	yesBtn.SetNavElements(,,noBtn,noBtn);
 	noBtn.SetNavElements(,,yesBtn,yesBtn);
@@ -484,8 +467,8 @@ function DrawSaveFileButton()
 {
 	//with(other)
 	//{
-		var _x = self.GetX(),
-			_y = self.GetY(),
+		var _x = posX,
+			_y = posY,
 			_text = self.GetText();
 		
 		var alph = 0.75,
@@ -597,35 +580,28 @@ function DrawSaveFileButton()
 #region DrawConfirmPanel
 function DrawConfirmPanel()
 {
-	//with(other)
-	//{
-		var _x = self.GetX(),
-			_y = self.GetY();
-		
-		var _alpha = self.GetAlpha();
-		
-		var ww = global.resWidth,
-			hh = global.resHeight;
-		
-		draw_set_color(c_black);
-		draw_set_alpha(0.5 * _alpha);
-		draw_rectangle(-1,-1,ww+1,hh+1,false);
-		draw_set_alpha(0.75 * _alpha);
-		draw_rectangle(_x, _y, _x+width, _y+height, false);
-		
-		var ol_alph = 0.75;
-		draw_sprite_stretched_ext(sprt_UI_Button,0, _x,_y, width,1, c_white,ol_alph*_alpha);
-		draw_sprite_stretched_ext(sprt_UI_Button,0, _x,_y+height-1, width,1, c_white,ol_alph*_alpha);
-		
-		var _text = self.GetText();
-		var _scrib = scribble(_text)
-			.starting_format(font_get_name(fnt_Menu),c_white)
-			.align(fa_center,fa_top);
-		
-		draw_scribble_shadow(_scrib, _x+width/2, _y+4,textColor,_alpha,,_alpha);
-		
-		return true;
-	//}
+	var _x = posX,
+		_y = posY;
+	
+	var _alpha = alpha;
+	
+	var ww = global.resWidth,
+		hh = global.resHeight;
+	
+	draw_set_color(c_black);
+	draw_set_alpha(0.5 * _alpha);
+	draw_rectangle(-1,-1,ww+1,hh+1,false);
+	draw_set_alpha(1);
+	draw_set_color(c_white);
+	
+	draw_sprite_stretched_ext(sprt_UI_MessageBox,0, _x,_y, width,height, c_white,_alpha);
+	
+	textAlignY = fa_top;
+	textFont = fnt_Menu;
+	useScribDeluxe = true;
+	self.DrawText(textColor);
+	
+	return true;
 }
 #endregion
 

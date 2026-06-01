@@ -5431,37 +5431,6 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		}
 		draw_sprite_ext(sprt_GravGrappleStart,_gPartSeq[grapPartFrame],startX,startY,1,1,0,c_white,1);
 	}
-	/*else if(hyperBeam && hyperFired > 0)
-	{
-		var hyperFFrame = (hyperFired-11) / 11;
-		var hyperFiredFrame = 5 - (5 * hyperFFrame*hyperFFrame);
-		
-		if(hyperFiredFrame >= 0)
-		{
-			pal_swap_set(sprt_HyperBeamPalette,1+obj_Display.hyperRainbowCycle,0,0,false);
-			draw_sprite_ext(sprt_HyperBeamStartParticle,hyperFiredFrame,scr_round(xx+sprtOffsetX+armOffsetX),scr_round(yy+sprtOffsetY+runYOffset+armOffsetY),image_xscale,image_yscale,0,c_white,alph);
-			shader_reset();
-		}*/
-		/*hyperFiredFrameCounter++;
-		if(hyperFiredFrameCounter > 1)
-		{
-			hyperFiredFrame++;
-			hyperFiredFrameCounter = 0;
-		}
-		
-		if(hyperFiredFrame <= 5)
-		{
-			pal_swap_set(sprt_HyperBeamPalette,1+obj_Display.hyperRainbowCycle,0,0,false);
-			draw_sprite_ext(sprt_HyperBeamStartParticle,hyperFiredFrame,scr_round(xx+sprtOffsetX+armOffsetX),scr_round(yy+sprtOffsetY+runYOffset+armOffsetY),image_xscale,image_yscale,0,c_white,alph);
-			shader_reset();
-		}
-		
-		if(hyperFired >= 21)
-		{
-			hyperFiredFrame = 0;
-			hyperFiredFrameCounter = 0;
-		}
-	}*/
 	else if(statCharge >= 10)
 	{
 		var isIce = (beamChargeAnim == sprt_IceBeamChargeAnim),
@@ -5506,7 +5475,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 					color2 = c_lime;
 					partType = 4;
 				}
-		
+				
 				var partRange = 24;
 				var pX = xx+sprtOffsetX+armOffsetX, pY = yy+sprtOffsetY+runYOffset+armOffsetY;
 				var part = instance_create_layer(pX+random_range(-partRange,partRange),pY+random_range(-partRange,partRange),"Player",obj_ChargeParticle);
@@ -5520,38 +5489,39 @@ function PostDrawPlayer(posX, posY, rot, alph)
 				
 				part_emitter_region(obj_Particles.partSystemA,obj_Particles.partEmitA,x1,x2,y1,y2,ps_shape_ellipse,ps_distr_gaussian);
 				part_emitter_burst(obj_Particles.partSystemA,obj_Particles.partEmitA,obj_Particles.bTrails[partType],2+(statCharge >= maxCharge));
-		
+				
 				chargePartFrame = 0;
 			}
-			
-			var _chFrameSeq = [0,1,2,1],
-				_chFrameDelay = [2,2,1,1];
-			chargeFrameCounter += 1;
-			if(chargeFrameCounter >= _chFrameDelay[chargeFrame])
-			{
-				chargeFrame = scr_wrap(chargeFrame+1, 0, array_length(_chFrameSeq));
-				chargeFrameCounter = 0;
-			}
-			
-			var _chFrameStart = 1;
-			if(statCharge >= maxCharge)
-			{
-				_chFrameStart = 5;
-			}
-			else if(statCharge >= maxCharge*0.75)
-			{
-				_chFrameStart = 4;
-			}
-			else if(statCharge >= maxCharge*0.5)
-			{
-				_chFrameStart = 3;
-			}
-			else if(statCharge >= maxCharge*0.25)
-			{
-				_chFrameStart = 2;
-			}
-			chargeSetFrame = clamp(_chFrameStart - _chFrameSeq[chargeFrame], 0, sprite_get_number(beamChargeAnim)-1);
 		}
+		
+		var _chFrameSeq = [0,1,2,1],
+			_chFrameDelay = [2,2,1,1];
+		chargeFrameCounter += 1;
+		if(chargeFrameCounter >= _chFrameDelay[chargeFrame])
+		{
+			chargeFrame = scr_wrap(chargeFrame+1, 0, array_length(_chFrameSeq));
+			chargeFrameCounter = 0;
+		}
+		
+		var _chFrameStart = 1;
+		if(statCharge >= maxCharge)
+		{
+			_chFrameStart = 5;
+		}
+		else if(statCharge >= maxCharge*0.75)
+		{
+			_chFrameStart = 4;
+		}
+		else if(statCharge >= maxCharge*0.5)
+		{
+			_chFrameStart = 3;
+		}
+		else if(statCharge >= maxCharge*0.25)
+		{
+			_chFrameStart = 2;
+		}
+		chargeSetFrame = clamp(_chFrameStart - _chFrameSeq[chargeFrame], 0, sprite_get_number(beamChargeAnim)-1);
+		
 		if(animState != AnimState.Morph)
 		{
 			draw_sprite_ext(beamChargeAnim,chargeSetFrame,xx+sprtOffsetX+armOffsetX,yy+sprtOffsetY+runYOffset+armOffsetY,image_xscale,image_yscale,0,c_white,alph);

@@ -34,17 +34,16 @@ function CycleInput()
 	return _dir;
 }
 
-function OnSelect()
+/*function OnSelect()
 {
 	audio_play_sound(snd_MenuTick,0,false);
-}
+}*/
 function WhileSelected()
 {
 	if(!cycleMode)
 	{
-		var mouse = self.GetMouse();
 		if ((creatorUI.cMenuAccept && creatorUI.rMenuAccept && !mouseOnly) || 
-			(instance_exists(mouse) && creatorUI.cClickL && creatorUI.rClickL))
+			(isMouseHovering && creatorUI.cClickL && creatorUI.rClickL))
 		{
 			cycleMode = true;
 			justSelected = true;
@@ -56,32 +55,31 @@ function WhileSelected()
 
 function PreUpdate()
 {
-	var mouse = self.GetMouse();
 	if(cycleMode)
 	{
 		var cancel = ((creatorUI.cMenuCancel && creatorUI.rMenuCancel) || (creatorUI.cClickR && creatorUI.rClickR));
 		
 		var move = self.CycleInput();
-		if(instance_exists(mouse) && creatorUI.cClickL && creatorUI.rClickL)
+		if(isMouseHovering && creatorUI.cClickL && creatorUI.rClickL)
 		{
 			if(cycleClickRegionAxis == 0)
 			{
-				if(mouse.x < self.GetX() + floor(width/2) - cycleClickRegionOffset)
+				if(obj_Mouse.x < self.posX + floor(width/2) - cycleClickRegionOffset)
 				{
 					move = -1;
 				}
-				else if(mouse.x > self.GetX() + ceil(width/2) + cycleClickRegionOffset)
+				else if(obj_Mouse.x > self.posX + ceil(width/2) + cycleClickRegionOffset)
 				{
 					move = 1;
 				}
 			}
 			else
 			{
-				if(mouse.y < self.GetY() + floor(height/2) - cycleClickRegionOffset)
+				if(obj_Mouse.y < self.posY + floor(height/2) - cycleClickRegionOffset)
 				{
 					move = -1;
 				}
-				else if(mouse.y > self.GetY() + ceil(height/2) + cycleClickRegionOffset)
+				else if(obj_Mouse.y > self.posY + ceil(height/2) + cycleClickRegionOffset)
 				{
 					move = 1;
 				}
@@ -120,9 +118,9 @@ sprtSelectAlpha2 = 1;
 
 function PreDraw()
 {
-	var _x = self.GetX(),
-		_y = self.GetY(),
-		_alph = self.GetAlpha();
+	var _x = posX,
+		_y = posY,
+		_alph = alpha;
 	
 	if(sprite_exists(sprt))
 	{
@@ -146,19 +144,7 @@ function PreDraw()
 		draw_sprite_stretched_ext(sprt,_ind, _xx,_yy, _ww,_hh, c_white,_alph2);
 	}
 	
-	var _text = self.GetText();
-	var _scrib = scribble(_text)
-		.starting_format(font_get_name(textFont),textColor)
-		.align(textAlignX,textAlignY);
-	
-	var _alignOffX = width/2;
-	if(textAlignX == fa_left) { _alignOffX = 4; }
-	if(textAlignX == fa_right) { _alignOffX = -4; }
-	var _alignOffY = height/2;
-	if(textAlignY == fa_top) { _alignOffY = 2; }
-	if(textAlignY == fa_bottom) { _alignOffY = -2; }
-	
-	draw_scribble_shadow(_scrib, _x+_alignOffX, _y+_alignOffY+1,textColor,_alph,,_alph);
+	self.DrawText(textColor);
 	
 	return true;
 }

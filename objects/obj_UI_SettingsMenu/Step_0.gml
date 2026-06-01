@@ -14,24 +14,57 @@ if(activeState == UI_ActiveState.Active)
 	
 	if(state == UI_SMState.Display)
 	{
-		
+		if(!instance_exists(displayPage))
+		{
+			self.CreateDisplayPage();
+		}
+		currentPage = displayPage;
 	}
+	else
+	{
+		instance_destroy(displayPage);
+	}
+	
 	if(state == UI_SMState.Audio)
 	{
 		
 	}
+	else
+	{
+		
+	}
+	
 	if(state == UI_SMState.Gameplay)
 	{
 		
 	}
-	if(state == UI_SMState.Keyboard)
+	else
 	{
 		
 	}
+	
+	if(state == UI_SMState.Keyboard)
+	{
+		if(!instance_exists(kbBindPage))
+		{
+			self.CreateKBBindPage();
+		}
+		currentPage = kbBindPage;
+	}
+	else
+	{
+		instance_destroy(kbBindPage);
+	}
+	
 	if(state == UI_SMState.Controller)
 	{
 		
 	}
+	else
+	{
+		
+	}
+	
 	
 	if(instance_exists(currentPage))
 	{
@@ -104,13 +137,10 @@ else
 {
 	if(activeState == UI_ActiveState.Inactive)
 	{
-		for(var i = 0; i < ds_list_size(pageList); i++)
+		for(var i = array_length(pageArr)-1; i >= 0; i--)
 		{
-			instance_destroy(pageList[| i]);
-		}
-		if(ds_list_size(pageList) > 0)
-		{
-			ds_list_clear(pageList);
+			instance_destroy(pageArr[i]);
+			array_delete(pageArr, i, 1);
 		}
 	}
 }

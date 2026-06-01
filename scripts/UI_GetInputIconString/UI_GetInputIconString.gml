@@ -12,5 +12,9 @@ function UI_GetInputIconString(icon)
 	{
 		return "[["+icon+"]";
 	}
+	else if(is_undefined(icon))
+	{
+		return undefined;
+	}
 	return string(icon);
 }

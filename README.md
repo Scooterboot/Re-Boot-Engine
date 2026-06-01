@@ -5,4 +5,5 @@ Extensions:
 - https://github.com/DAndrewBox/GML-Extended
 - https://github.com/Lojemiru/Chameleon
 - https://github.com/JujuAdams/Scribble
+- https://github.com/JujuAdams/ScribbleJunior
 - https://codeberg.org/offalynne/Input

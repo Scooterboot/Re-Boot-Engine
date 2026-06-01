@@ -6,7 +6,7 @@ alphaRate = 0.15;
 xOffset = -global.resWidth/2;
 yOffset = -global.resHeight/2;
 
-elements = ds_list_create();
+elements = [];
 selectedEle = noone;
 #region Element create functions
 
@@ -20,6 +20,7 @@ function CreateUIElement(_objInd, _x, _y, _width, _height, _rawText = [])
 	///@param rawText=StringOrArray
 	
 	var ele = instance_create_depth(scr_floor(_x), scr_floor(_y), depth, _objInd, {creatorUI : creatorUI});
+	ele.UpdatePosVars();
 	ele.page = id;
 	ele.width = scr_ceil(_width);
 	ele.height = scr_ceil(_height);
@@ -36,7 +37,8 @@ function CreateUIElement(_objInd, _x, _y, _width, _height, _rawText = [])
 	{
 		selectedEle = ele;
 	}
-	ds_list_add(elements, ele);
+	array_push(elements, ele);
+	
 	return ele;
 }
 function CreateUIPanel(_objInd = obj_UI_Panel, _x, _y, _width, _height, _text = [], _scrollWidth = 0, _scrollHeight = 0, _scrollX = 0, _scrollY = 0)
@@ -100,26 +102,26 @@ function CreateUITextElement(_objInd = obj_UI_TextElement, _x, _y, _width, _heig
 #region Modal functions
 
 hasModalEle = false;
-modalElements = ds_list_create();
+modalElements = [];
 
 function SetElementModal(_element)
 {
-	if(instance_exists(_element) && ds_exists(modalElements,ds_type_list) && ds_list_find_index(modalElements,_element) == -1)
+	if(instance_exists(_element) && array_find_index_by_value(modalElements, _element) == -1)
 	{
-		ds_list_add(modalElements,_element);
+		array_push(modalElements, _element);
 	}
 }
 function UnsetElementModal(_element)
 {
-	if(instance_exists(_element) && ds_exists(modalElements,ds_type_list))
+	var _ind = array_find_index_by_value(modalElements, _element);
+	if(instance_exists(_element) && _ind != -1)
 	{
-		var pos = ds_list_find_index(modalElements,_element);
-		ds_list_delete(modalElements,pos);
+		array_delete(modalElements, _ind, 1);
 	}
 }
 function IsElementModal(_element)
 {
-	return (instance_exists(_element) && ds_exists(modalElements,ds_type_list) && ds_list_find_index(modalElements,_element) != -1);
+	return (instance_exists(_element) && array_find_index_by_value(modalElements, _element) != -1);
 }
 
 #endregion
@@ -153,12 +155,23 @@ function UpdatePage()
 	{
 		if(self.PreUpdate())
 		{
-			hasModalEle = false;
-			if(ds_list_size(modalElements) > 0)
+			for(var i = 0, _size = array_length(elements); i < _size; i++)
 			{
-				for(var i = ds_list_size(modalElements)-1; i >= 0; i--)
+				var ele = elements[i];
+				if(instance_exists(ele) && ele.containerEle == noone)
 				{
-					var ele = modalElements[| i];
+					ele.UpdatePosVars();
+				}
+			}
+			
+			hasModalEle = false;
+			if(array_length(modalElements) > 0)
+			{
+				for(var i = array_length(modalElements)-1; i >= 0; i--)
+				{
+					if(i >= array_length(modalElements)) continue;
+					
+					var ele = modalElements[i];
 					if(instance_exists(ele) && ele.active)
 					{
 						ele.UpdateElement();
@@ -170,9 +183,11 @@ function UpdatePage()
 			
 			if(!hasModalEle)
 			{
-				for(var i = ds_list_size(elements)-1; i >= 0; i--)
+				for(var i = array_length(elements)-1; i >= 0; i--)
 				{
-					var ele = elements[| i];
+					if(i >= array_length(elements)) continue;
+					
+					var ele = elements[i];
 					if(instance_exists(ele) && ele.active && ele.containerEle == noone)
 					{
 						ele.UpdateElement();
@@ -181,10 +196,6 @@ function UpdatePage()
 						{
 							break;
 						}
-					}
-					if(!ds_exists(elements, ds_type_list))
-					{
-						break;
 					}
 				}
 			}
@@ -203,9 +214,9 @@ function DrawPage()
 {
 	if(self.PreDraw())
 	{
-		for(var i = 0; i < ds_list_size(elements); i++)
+		for(var i = 0, _size = array_length(elements); i < _size; i++)
 		{
-			var ele = elements[| i];
+			var ele = elements[i];
 			if(instance_exists(ele) && ele.containerEle == noone)
 			{
 				ele.DrawElement();

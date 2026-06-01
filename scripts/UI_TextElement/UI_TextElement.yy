@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"UI_TextElement",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"UI_TextElement",
+  "parent":{
+    "name":"ComponentStructs",
+    "path":"folders/Scripts/UI/ComponentStructs.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

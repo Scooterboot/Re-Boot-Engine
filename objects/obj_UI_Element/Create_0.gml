@@ -4,7 +4,303 @@ active = true;
 width = 0;
 height = 0;
 
+page = noone;
+containerEle = noone;
+nestedEle = [];
+selectedEle = noone;
+#region Element create functions
+
+function CreateUIPanel(_objInd = obj_UI_Panel, _x, _y, _width, _height, _text = [], _scrollWidth = 0, _scrollHeight = 0, _scrollX = 0, _scrollY = 0)
+{
+	///@param objIndex=obj_UI_Panel
+	///@param x
+	///@param y
+	///@param width
+	///@param height
+	///@param rawText=StringOrArray
+	///@param scrollWidth=0
+	///@param scrollHeight=0
+	///@param scrollX=0
+	///@param scrollY=0
+	
+	var pnl = page.CreateUIPanel(_objInd, _x, _y, _width, _height, _text, _scrollWidth, _scrollHeight, _scrollX, _scrollY);
+	pnl.containerEle = id;
+	selectedEle = (selectedEle == noone) ? pnl : selectedEle;
+	
+	array_push(nestedEle, pnl);
+	
+	return pnl;
+}
+function CreateUIButton(_objInd = obj_UI_Button, _x, _y, _width, _height, _text = [])
+{
+	///@param objIndex=obj_UI_Button
+	///@param x
+	///@param y
+	///@param width
+	///@param height
+	///@param rawText=StringOrArray
+	
+	var btn = page.CreateUIButton(_objInd, _x, _y, _width, _height, _text);
+	btn.containerEle = id;
+	selectedEle = (selectedEle == noone) ? btn : selectedEle;
+	
+	array_push(nestedEle, btn);
+	
+	return btn;
+}
+function CreateUICycleButton(_objInd = obj_UI_CycleButton, _x, _y, _width, _height, _text = [])
+{
+	///@param objIndex=obj_UI_CycleButton
+	///@param x
+	///@param y
+	///@param width
+	///@param height
+	///@param rawText=StringOrArray
+	
+	var btn = page.CreateUICycleButton(_objInd, _x, _y, _width, _height, _text);
+	btn.containerEle = id;
+	selectedEle = (selectedEle == noone) ? btn : selectedEle;
+	
+	array_push(nestedEle, btn);
+	
+	return btn;
+}
+function CreateUITextElement(_objInd = obj_UI_TextElement, _x, _y, _width, _height, _text = [])
+{
+	///@param objIndex=obj_UI_TextElement
+	///@param x
+	///@param y
+	///@param width
+	///@param height
+	///@param rawText=StringOrArray
+	
+	var txt = page.CreateUITextElement(_objInd, _x, _y, _width, _height, _text);
+	txt.containerEle = id;
+	selectedEle = (selectedEle == noone) ? txt : selectedEle;
+	
+	array_push(nestedEle, txt);
+	
+	return txt;
+}
+
+#endregion
+#region Modal functions
+
+function SetModal()
+{
+	if(instance_exists(page) && array_find_index_by_value(page.modalElements, id) == -1)
+	{
+		array_push(page.modalElements, id);
+	}
+}
+function UnsetModal()
+{
+	var _ind = array_find_index_by_value(page.modalElements, id);
+	if(instance_exists(page) && _ind != -1)
+	{
+		array_delete(page.modalElements, _ind, 1);
+	}
+}
+function IsModal()
+{
+	return (instance_exists(page) && array_find_index_by_value(page.modalElements, id) != -1);
+}
+
+#endregion
+#region IsSelected
+function IsSelected()
+{
+	if(instance_exists(containerEle))
+	{
+		return (containerEle.selectedEle == id && containerEle.IsSelected());
+	}
+	return (instance_exists(page) && page.selectedEle == id);
+}
+#endregion
+
+posX = 0;
+posY = 0;
+scrollPosX = 0;
+scrollPosY = 0;
+#region GetX
+function GetX()
+{
+	if(containerEle != noone && instance_exists(containerEle))
+	{
+		return scr_round(containerEle.posX + x - containerEle.scrollPosX);
+	}
+	if(instance_exists(page))
+	{
+		return scr_round(page.x + x);
+	}
+	return -1000;
+}
+#endregion
+#region GetY
+function GetY()
+{
+	if(containerEle != noone && instance_exists(containerEle))
+	{
+		return scr_round(containerEle.posY + y - containerEle.scrollPosY);
+	}
+	if(instance_exists(page))
+	{
+		return scr_round(page.y + y);
+	}
+	return -1000;
+}
+#endregion
+function UpdatePosVars()
+{
+	posX = self.GetX();
+	posY = self.GetY();
+}
+
+isMouseHovering = false;
+containMouseCol = true;
+#region IsMouseHovering
+function IsMouseHovering()
+{
+	if(instance_exists(obj_Mouse))
+	{
+		var _x = posX,
+			_y = posY;
+		
+		var _flag = true;
+		if(containMouseCol && containerEle != noone && instance_exists(containerEle))
+		{
+			_flag = containerEle.isMouseHovering;
+		}
+		
+		if(_flag)
+		{
+			if(mask_index != -1)
+			{
+				return place_meeting(_x, _y, obj_Mouse);
+			}
+			
+			var eleL = min(_x, _x+width),
+				eleR = max(_x, _x+width),
+				eleT = min(_y, _y+height),
+				eleB = max(_y, _y+height);
+			with(obj_Mouse)
+			{
+				return (bbox_left >= eleL && bbox_right <= eleR && bbox_top >= eleT && bbox_bottom <= eleB);
+			}
+		}
+	}
+	return false;
+}
+#endregion
+
+element_up = noone;
+element_down = noone;
+element_left = noone;
+element_right = noone;
+#region SetNavElements
+function SetNavElements(_up = undefined, _down = undefined, _left = undefined, _right = undefined)
+{
+	element_up = is_undefined(_up) ? element_up : _up;
+	element_down = is_undefined(_down) ? element_down : _down;
+	element_left = is_undefined(_left) ? element_left : _left;
+	element_right = is_undefined(_right) ? element_right : _right;
+}
+#endregion
+
+function OnSelect()
+{
+	if(instance_exists(containerEle) && (containerEle.object_index == obj_UI_Panel || object_is_ancestor(containerEle.object_index,obj_UI_Panel)))
+	{
+		
+	}
+	
+	audio_stop_sound(snd_MenuTick);
+	audio_play_sound(snd_MenuTick,0,false);
+}
+function WhileSelected() {}
+
+canNavigate = false;
+canMouseSelect = false;
+mouseOnly = false;
+#region Update functions
+
+justSelected = false;
+function PreUpdate() { return true; }
+function UpdateElement()
+{
+	if(!instance_exists(creatorUI)) exit;
+	if(!instance_exists(page)) exit;
+	if(containerEle != noone && !instance_exists(containerEle)) exit;
+	
+	//if(canMouseSelect || mouseOnly)
+	//{
+		isMouseHovering = self.IsMouseHovering();
+	//}
+	
+	if(justSelected)
+	{
+		justSelected = false;
+		exit;
+	}
+	
+	if(self.PreUpdate())
+	{
+		if(mouseOnly)
+		{
+			if(isMouseHovering)
+			{
+				self.WhileSelected();
+			}
+		}
+		else if(self.IsSelected())
+		{
+			if(canNavigate)
+			{
+				var moveX = creatorUI.MoveSelectX(),
+					moveY = creatorUI.MoveSelectY();
+				if(moveX < 0) { page.SelectElement(element_left); }
+				if(moveX > 0) { page.SelectElement(element_right); }
+				if(moveY < 0) { page.SelectElement(element_up); }
+				if(moveY > 0) { page.SelectElement(element_down); }
+			}
+			
+			self.WhileSelected();
+		}
+		else if(canMouseSelect)
+		{
+			if(isMouseHovering && (obj_Mouse.velX != 0 || obj_Mouse.velY != 0))
+			{
+				page.SelectElement(id);
+			}
+		}
+		
+		if(array_length(nestedEle) > 0)
+		{
+			for(var i = array_length(nestedEle)-1; i >= 0; i--)
+			{
+				if(i >= array_length(nestedEle)) continue;
+				
+				var ele = nestedEle[i];
+				if(instance_exists(ele))
+				{
+					ele.UpdatePosVars();
+					if(ele.active)
+					{
+						ele.UpdateElement();
+					}
+				}
+			}
+		}
+	}
+	
+	self.PostUpdate();
+}
+function PostUpdate() {}
+
+#endregion
+
 #region Text
+
 rawText = [];
 text = [""];
 updateText = true;
@@ -29,278 +325,40 @@ textFont = fnt_GUI;
 textColor = c_white;
 textAlignX = fa_center;
 textAlignY = fa_middle;
-#endregion
+useScribDeluxe = false;
 
-page = noone;
-containerEle = noone;
-nestedEle = ds_list_create();
-selectedEle = noone;
-#region Element create functions
-
-function CreateUIPanel(_objInd = obj_UI_Panel, _x, _y, _width, _height, _text = [], _scrollWidth = 0, _scrollHeight = 0, _scrollX = 0, _scrollY = 0)
+function DrawText(_color, _alignOffX = 4, _alignOffY = 2)
 {
-	///@param objIndex=obj_UI_Panel
-	///@param x
-	///@param y
-	///@param width
-	///@param height
-	///@param rawText=StringOrArray
-	///@param scrollWidth=0
-	///@param scrollHeight=0
-	///@param scrollX=0
-	///@param scrollY=0
+	var _x = posX,
+		_y = posY,
+		_alph = alpha,
+		_text = self.GetText();
 	
-	var pnl = page.CreateUIPanel(_objInd, _x, _y, _width, _height, _text, _scrollWidth, _scrollHeight, _scrollX, _scrollY);
-	pnl.containerEle = id;
-	selectedEle = (selectedEle == noone) ? pnl : selectedEle;
-	ds_list_add(nestedEle, pnl);
-	return pnl;
-}
-function CreateUIButton(_objInd = obj_UI_Button, _x, _y, _width, _height, _text = [])
-{
-	///@param objIndex=obj_UI_Button
-	///@param x
-	///@param y
-	///@param width
-	///@param height
-	///@param rawText=StringOrArray
-	
-	var btn = page.CreateUIButton(_objInd, _x, _y, _width, _height, _text);
-	btn.containerEle = id;
-	selectedEle = (selectedEle == noone) ? btn : selectedEle;
-	ds_list_add(nestedEle, btn);
-	return btn;
-}
-function CreateUICycleButton(_objInd = obj_UI_CycleButton, _x, _y, _width, _height, _text = [])
-{
-	///@param objIndex=obj_UI_CycleButton
-	///@param x
-	///@param y
-	///@param width
-	///@param height
-	///@param rawText=StringOrArray
-	
-	var btn = page.CreateUICycleButton(_objInd, _x, _y, _width, _height, _text);
-	btn.containerEle = id;
-	selectedEle = (selectedEle == noone) ? btn : selectedEle;
-	ds_list_add(nestedEle, btn);
-	return btn;
-}
-function CreateUITextElement(_objInd = obj_UI_TextElement, _x, _y, _width, _height, _text = [])
-{
-	///@param objIndex=obj_UI_TextElement
-	///@param x
-	///@param y
-	///@param width
-	///@param height
-	///@param rawText=StringOrArray
-	
-	var txt = page.CreateUITextElement(_objInd, _x, _y, _width, _height, _text);
-	txt.containerEle = id;
-	selectedEle = (selectedEle == noone) ? txt : selectedEle;
-	ds_list_add(nestedEle, txt);
-	return txt;
-}
-
-#endregion
-#region Modal functions
-
-function SetModal()
-{
-	if(instance_exists(page) && ds_exists(page.modalElements,ds_type_list) && ds_list_find_index(page.modalElements,id) == -1)
+	if(is_string(_text) && _text != "")
 	{
-		ds_list_add(page.modalElements,id);
-	}
-}
-function UnsetModal()
-{
-	if(instance_exists(page) && ds_exists(page.modalElements,ds_type_list))
-	{
-		var pos = ds_list_find_index(page.modalElements,id);
-		ds_list_delete(page.modalElements,pos);
-	}
-}
-function IsModal()
-{
-	return (instance_exists(page) && ds_exists(page.modalElements,ds_type_list) && ds_list_find_index(page.modalElements,id) != -1);
-}
-
-#endregion
-#region IsSelected
-function IsSelected()
-{
-	if(instance_exists(containerEle))
-	{
-		return (containerEle.selectedEle == id && containerEle.IsSelected());
-	}
-	return (instance_exists(page) && page.selectedEle == id);
-}
-#endregion
-
-scrollPosX = 0;
-scrollPosY = 0;
-#region GetX
-function GetX()
-{
-	if(containerEle != noone && instance_exists(containerEle))
-	{
-		return scr_round(containerEle.GetX() + x - containerEle.scrollPosX);
-	}
-	if(instance_exists(page))
-	{
-		return scr_round(page.x + x);
-	}
-	return -1000;
-}
-#endregion
-#region GetY
-function GetY()
-{
-	if(containerEle != noone && instance_exists(containerEle))
-	{
-		return scr_round(containerEle.GetY() + y - containerEle.scrollPosY);
-	}
-	if(instance_exists(page))
-	{
-		return scr_round(page.y + y);
-	}
-	return -1000;
-}
-#endregion
-
-containMouseCol = true;
-#region GetMouse
-function GetMouse()
-{
-	var _x = self.GetX(),
-		_y = self.GetY();
-	
-	if(containMouseCol && containerEle != noone && instance_exists(containerEle))
-	{
-		var mouse = containerEle.GetMouse();
-		var flag = false;
-		if(mask_index != -1)
+		var _aOffX = width/2;
+		if(textAlignX == fa_left) { _aOffX = _alignOffX; }
+		if(textAlignX == fa_right) { _aOffX = -_alignOffX; }
+		var _aOffY = height/2;
+		if(textAlignY == fa_top) { _aOffY = _alignOffY; }
+		if(textAlignY == fa_bottom) { _aOffY = -_alignOffY; }
+		
+		if(useScribDeluxe)
 		{
-			flag = place_meeting(_x, _y, mouse);
+			var _scrib = scribble(_text)
+				.starting_format(font_get_name(textFont), _color)
+				.align(textAlignX,textAlignY);
+			
+			draw_scribble_shadow(_scrib, floor(_x+_aOffX), floor(_y+_aOffY+1), _color, _alph, , _alph);
 		}
 		else
 		{
-			var eleL = min(_x, _x+width),
-				eleR = max(_x, _x+width),
-				eleT = min(_y, _y+height),
-				eleB = max(_y, _y+height);
-			flag = instance_exists(collision_rectangle(eleL, eleT, eleR-1, eleB-1, mouse, false, true));
-		}
-		if(instance_exists(mouse) && flag)
-		{
-			return mouse;
-		}
-	}
-	
-	if(mask_index != -1)
-	{
-		return instance_place(_x, _y, obj_Mouse);
-	}
-	
-	var eleL = min(_x, _x+width),
-		eleR = max(_x, _x+width),
-		eleT = min(_y, _y+height),
-		eleB = max(_y, _y+height);
-	return collision_rectangle(eleL, eleT, eleR-1, eleB-1, obj_Mouse, true, true);
-}
-#endregion
-
-element_up = noone;
-element_down = noone;
-element_left = noone;
-element_right = noone;
-#region SetNavElements
-function SetNavElements(_up = undefined, _down = undefined, _left = undefined, _right = undefined)
-{
-	element_up = is_undefined(_up) ? element_up : _up;
-	element_down = is_undefined(_down) ? element_down : _down;
-	element_left = is_undefined(_left) ? element_left : _left;
-	element_right = is_undefined(_right) ? element_right : _right;
-}
-#endregion
-
-function OnSelect()
-{
-	audio_play_sound(snd_MenuTick,0,false);
-}
-function WhileSelected() {}
-
-canNavigate = false;
-canMouseSelect = false;
-mouseOnly = false;
-#region Update functions
-
-justSelected = false;
-function PreUpdate() { return true; }
-function UpdateElement()
-{
-	if(!instance_exists(creatorUI)) exit;
-	if(!instance_exists(page)) exit;
-	if(containerEle != noone && !instance_exists(containerEle)) exit;
-	
-	if(justSelected)
-	{
-		justSelected = false;
-		exit;
-	}
-	
-	if(self.PreUpdate())
-	{
-		if(mouseOnly)
-		{
-			if(instance_exists(self.GetMouse()))
-			{
-				self.WhileSelected();
-			}
-		}
-		else if(self.IsSelected())
-		{
-			if(canNavigate)
-			{
-				var moveX = creatorUI.MoveSelectX(),
-					moveY = creatorUI.MoveSelectY();
-				if(moveX < 0) { page.SelectElement(element_left); }
-				if(moveX > 0) { page.SelectElement(element_right); }
-				if(moveY < 0) { page.SelectElement(element_up); }
-				if(moveY > 0) { page.SelectElement(element_down); }
-			}
+			var _scribJr = ScribbleJr(_text, textAlignX, textAlignY, textFont);
 			
-			self.WhileSelected();
-		}
-		else if(canMouseSelect)
-		{
-			var mouse = self.GetMouse();
-			if(instance_exists(mouse) && (mouse.velX != 0 || mouse.velY != 0))
-			{
-				page.SelectElement(id);
-			}
-		}
-		
-		if(ds_exists(nestedEle, ds_type_list) && ds_list_size(nestedEle) > 0)
-		{
-			for(var i = ds_list_size(nestedEle)-1; i >= 0; i--)
-			{
-				var ele = nestedEle[| i];
-				if(instance_exists(ele) && ele.active)
-				{
-					ele.UpdateElement();
-				}
-				if(!ds_exists(nestedEle, ds_type_list))
-				{
-					break;
-				}
-			}
+			draw_ScribbleJr_shadow(_scribJr, floor(_x+_aOffX), floor(_y+_aOffY+1), _color, _alph, , _alph);
 		}
 	}
-	
-	self.PostUpdate();
 }
-function PostUpdate() {}
 
 #endregion
 
@@ -312,9 +370,9 @@ function GetAlpha()
 {
 	if(containerEle != noone && instance_exists(containerEle))
 	{
-		return alpha * containerEle.GetAlpha();
+		return image_alpha * containerEle.alpha;
 	}
-	return alpha * page.alpha;
+	return image_alpha * page.alpha;
 }
 
 function PreDraw() { return true; }
@@ -324,12 +382,12 @@ function DrawElement()
 	if(!instance_exists(page)) exit;
 	if(containerEle != noone && !instance_exists(containerEle)) exit;
 	
-	var _x = self.GetX(),
-		_y = self.GetY(),
-		_scis = gpu_get_scissor();
-	if(containDraw && containerEle != noone && instance_exists(containerEle))
+	alpha = self.GetAlpha();
+	
+	var _scis = gpu_get_scissor();
+	if(containDraw && containerEle != noone)
 	{
-		gpu_set_scissor(containerEle.GetX(),containerEle.GetY(),containerEle.width,containerEle.height);
+		gpu_set_scissor(containerEle.posX, containerEle.posY, containerEle.width, containerEle.height);
 	}
 	else if(!containDraw)
 	{
@@ -338,11 +396,12 @@ function DrawElement()
 	
 	if(self.PreDraw())
 	{
-		if(ds_list_size(nestedEle) > 0)
+		var _size = array_length(nestedEle);
+		if(_size > 0)
 		{
-			for(var i = 0; i < ds_list_size(nestedEle); i++)
+			for(var i = 0; i < _size; i++)
 			{
-				var _ele = nestedEle[| i];
+				var _ele = nestedEle[i];
 				if(instance_exists(_ele))
 				{
 					_ele.DrawElement();
@@ -353,38 +412,6 @@ function DrawElement()
 	self.PostDraw();
 	
 	gpu_set_scissor(_scis);
-	
-	/*var _x = self.GetX(),
-		_y = self.GetY();
-	if(self.PreDraw())
-	{
-		if(ds_list_size(nestedEle) > 0)
-		{
-			var _scis = gpu_get_scissor();
-			gpu_set_scissor(_x,_y,width,height);
-			
-			for(var i = 0; i < ds_list_size(nestedEle); i++)
-			{
-				var _ele = nestedEle[| i];
-				if(instance_exists(_ele))
-				{
-					if(_ele.containDraw)
-					{
-						_ele.DrawElement();
-					}
-					else
-					{
-						gpu_set_scissor(0,0,global.resWidth,global.resHeight);
-						_ele.DrawElement();
-						gpu_set_scissor(_x,_y,width,height);
-					}
-				}
-			}
-			
-			gpu_set_scissor(_scis);
-		}
-	}
-	self.PostDraw();*/
 }
 function PostDraw() {}
 
