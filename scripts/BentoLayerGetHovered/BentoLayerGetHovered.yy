@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"BentoLayerGetHovered",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"BentoLayerGetHovered",
+  "parent":{
+    "name":"Layers",
+    "path":"folders/Scripts/Libraries/Bento/Functions/Layers.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

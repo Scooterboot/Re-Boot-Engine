@@ -1,5 +1,5 @@
 event_inherited();
-
+/*
 enum UI_SMState
 {
 	Default,
@@ -31,7 +31,7 @@ function CreateDefaultPage()
 	defaultPage = self.CreatePage();
 	var _panelW = global.ogResWidth,
 		_panelH = hh-26,
-		_panel = defaultPage.CreateUIPanel(, (ww-global.ogResWidth)/2, 13, _panelW,_panelH);
+		_panel = defaultPage.CreateUIPanel((ww-global.ogResWidth)/2, 13, _panelW,_panelH);
 	
 	var btn = [],
 		btnW = 152,//104,
@@ -49,7 +49,7 @@ function CreateDefaultPage()
 			strAlignX = fa_center;
 		}
 		
-		btn[i] = _panel.CreateUIButton(, btnX, btnY, btnW, btnH, str);
+		btn[i] = _panel.CreateUIButton(btnX, btnY, btnW, btnH, str);
 		btn[i].sprtAlpha = 0.75;
 		btn[i].sprtSelectAlpha = 0.85;
 		btn[i].textAlignX = strAlignX;
@@ -132,7 +132,7 @@ function CreateDisplayPage()
 	displayPage = self.CreatePage();
 	var _panelW = global.ogResWidth,
 		_panelH = hh-26,
-		_displayPanel = displayPage.CreateUIPanel(, (ww-global.ogResWidth)/2, 13, _panelW, _panelH,,,-1);
+		_displayPanel = displayPage.CreateUIPanel((ww-global.ogResWidth)/2, 13, _panelW, _panelH,,,-1);
 	
 	var pnl = [],
 		pnlX = 9,
@@ -154,9 +154,9 @@ function CreateDisplayPage()
 		btn[i] = pnl[i].CreateUIButton(, btnX,0,btnW,btnH,[str2]);
 		btn[i].sprtAlpha = 0.75;
 		btn[i].sprtSelectAlpha = 0.85;
-	}*/
+	}//
 	
-	var backBtn = _displayPanel.CreateUIButton(, pnlX,pnlY+13,56,btnH,["BACK"]);
+	var backBtn = _displayPanel.CreateUIButton(pnlX,pnlY+13,56,btnH,["BACK"]);
 	backBtn.OnClick = function()
 	{
 		state = UI_SMState.Default;
@@ -180,8 +180,8 @@ bindingText = [
 "MenuRight",
 "MenuScrollUp",
 "MenuScrollDown",
-"MenuScrollLeft",
-"MenuScrollRight",
+//"MenuScrollLeft",
+//"MenuScrollRight",
 
 "Start",
 "MenuAccept",
@@ -265,7 +265,7 @@ function CreateKBBindPage()
 	kbBindPage = self.CreatePage();
 	var _mPanelW = global.ogResWidth,
 		_mPanelH = hh-26,
-		_mPanel = kbBindPage.CreateUIPanel(, (ww-global.ogResWidth)/2, 13, _mPanelW, _mPanelH,,,-1);
+		_mPanel = kbBindPage.CreateUIPanel((ww-global.ogResWidth)/2, 13, _mPanelW, _mPanelH,,,-1);
 	
 	var pnl = [],
 		pnlW = 302,
@@ -279,13 +279,13 @@ function CreateKBBindPage()
 	{
 		//var str = "test_"+string(i);
 		var str = bindingText[i];
-		pnl[i] = _mPanel.CreateUIPanel(, pnlX,pnlY,pnlW,pnlH,[str]);
+		pnl[i] = _mPanel.CreateUIPanel(pnlX,pnlY,pnlW,pnlH,[str]);
 		pnl[i].PreDraw = method(pnl[i], DrawSettingsOptPanel);
 		pnl[i].canNavigate = true;
 		pnl[i].canMouseSelect = true;
 		pnlY += 13;
 		
-		var preBtn = pnl[i].CreateUIButton(, btnX,0, 79, btnH, pressText);
+		var preBtn = pnl[i].CreateUIButton(btnX,0, 79, btnH, pressText);
 		preBtn.sprtAlpha = 0.75;
 		preBtn.sprtSelectAlpha = 0.85;
 		preBtn.inputVerb = i;
@@ -306,7 +306,7 @@ function CreateKBBindPage()
 			return _str;
 		}
 		
-		var b1Btn = pnl[i].CreateUIButton(, btnX+80,0, 31,btnH);
+		var b1Btn = pnl[i].CreateUIButton(btnX+80,0, 31,btnH);
 		b1Btn.textFont = fnt_GUI_Small;
 		b1Btn.useScribDeluxe = true;
 		b1Btn.sprt = sprt_UI_Button2;
@@ -316,7 +316,7 @@ function CreateKBBindPage()
 		b1Btn.inputAlt = 0;
 		b1Btn.GetText = method(b1Btn, getBindText);
 		
-		var comBtn = pnl[i].CreateUIButton(, btnX+80+32,0, 21,btnH, comboText);
+		var comBtn = pnl[i].CreateUIButton(btnX+80+32,0, 21,btnH, comboText);
 		comBtn.sprt = sprt_UI_Button2;
 		comBtn.sprtAlpha = 0.75;
 		comBtn.sprtSelectAlpha = 0.85;
@@ -326,7 +326,7 @@ function CreateKBBindPage()
 			return self._GetText()[global.controlInput[inputVerb].comboType_KB];
 		});
 		
-		var b2Btn = pnl[i].CreateUIButton(, btnX+80+32+22,0, 31,btnH);
+		var b2Btn = pnl[i].CreateUIButton(btnX+80+32+22,0, 31,btnH);
 		b2Btn.textFont = fnt_GUI_Small;
 		b2Btn.useScribDeluxe = true;
 		b2Btn.sprt = sprt_UI_Button2;
@@ -337,7 +337,7 @@ function CreateKBBindPage()
 		b2Btn.GetText = method(b2Btn, getBindText);
 	}
 	
-	var backBtn = _mPanel.CreateUIButton(, pnlX,pnlY+13,56,btnH,["BACK"]);
+	var backBtn = _mPanel.CreateUIButton(pnlX,pnlY+13,56,btnH,["BACK"]);
 	backBtn.OnClick = function()
 	{
 		state = UI_SMState.Default;

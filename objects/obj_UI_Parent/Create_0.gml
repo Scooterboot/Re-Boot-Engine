@@ -11,7 +11,7 @@ activeState = UI_ActiveState.Inactive;
 
 screenFade = 0;
 screenFadeRate = 0.075;
-
+/*
 #region Set Controls
 controlGroups = "menu";
 InitControlVars(controlGroups);
@@ -110,12 +110,14 @@ function MoveSelectY(_repeatFlag = true)
 function ScrollX()
 {
 	//return ((cMenuScrollRight && rMenuScrollRight) - (cMenuScrollLeft && rMenuScrollLeft));
-	return global.controlClustX[INPUT_CLUSTER.MenuScroll];
+	//return global.controlClustX[INPUT_CLUSTER.MenuScroll];
+	return ((cMenuScrollDown && rMenuScrollDown) - (cMenuScrollUp && rMenuScrollUp));
 }
 function ScrollY()
 {
 	//return ((cMenuScrollDown && rMenuScrollDown) - (cMenuScrollUp && rMenuScrollUp));
-	return global.controlClustY[INPUT_CLUSTER.MenuScroll];
+	//return global.controlClustY[INPUT_CLUSTER.MenuScroll];
+	return ((cMenuScrollDown && rMenuScrollDown) - (cMenuScrollUp && rMenuScrollUp));
 }
 
 currentPage = noone;
@@ -130,3 +132,4 @@ function CreatePage(objInd = obj_UI_Page, _alpha = 1)
 	array_push(pageArr, pg);
 	return pg;
 }
+*/

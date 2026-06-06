@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__BentoTextClassSteam",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__BentoTextClassSteam",
+  "parent":{
+    "name":"Text",
+    "path":"folders/Scripts/Libraries/Bento/(Internal)/Text.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

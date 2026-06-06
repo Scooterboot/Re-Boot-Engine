@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"BentoFocusGetEnclose",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"BentoFocusGetEnclose",
+  "parent":{
+    "name":"Focus",
+    "path":"folders/Scripts/Libraries/Bento/Functions/Focus.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

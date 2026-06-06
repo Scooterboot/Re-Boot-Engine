@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"BentoTransformSetScale",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"BentoTransformSetScale",
+  "parent":{
+    "name":"Transform",
+    "path":"folders/Scripts/Libraries/Bento/Functions/Transform.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

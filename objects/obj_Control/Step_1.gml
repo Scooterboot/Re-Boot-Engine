@@ -4,6 +4,14 @@ __InputCollect();
 for(var i = 0; i < INPUT_VERB._Length; i++)
 {
 	global.control[i] = global.controlInput[i].GetInput();
+	
+	global.controlPressed[i] = false;
+	global.controlValue[i] = 0;
+	if(global.control[i])
+	{
+		global.controlPressed[i] = InputPressed(i);
+		global.controlValue[i] = InputValue(i);
+	}
 }
 for(var i = 0; i < INPUT_CLUSTER._Length; i++)
 {

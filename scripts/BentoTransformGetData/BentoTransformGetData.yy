@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"BentoTransformGetData",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"BentoTransformGetData",
+  "parent":{
+    "name":"Transform",
+    "path":"folders/Scripts/Libraries/Bento/Functions/Transform.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

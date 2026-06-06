@@ -1,5 +1,5 @@
 /// @description 
-event_inherited();
+/*event_inherited();
 
 canNavigate = true;
 canMouseSelect = true;
@@ -17,7 +17,7 @@ function HotKey_Cancel()
 /*function OnSelect()
 {
 	audio_play_sound(snd_MenuTick,0,false);
-}*/
+}//
 function WhileSelected()
 {
 	if ((creatorUI.cMenuAccept && creatorUI.rMenuAccept && !mouseOnly) || 
@@ -114,3 +114,4 @@ function PreDraw()
 	
 	return true;
 }
+*/

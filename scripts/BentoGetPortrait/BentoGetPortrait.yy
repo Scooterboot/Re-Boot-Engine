@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"BentoGetPortrait",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"BentoGetPortrait",
+  "parent":{
+    "name":"Miscellaneous",
+    "path":"folders/Scripts/Libraries/Bento/Functions/Miscellaneous.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

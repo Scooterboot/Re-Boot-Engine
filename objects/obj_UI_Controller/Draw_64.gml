@@ -1,19 +1,11 @@
-/* // Not using Bento yet, but will in the future
-surface_set_target(obj_Display.surfUI);
-bm_set_one();
 
-BentoSystemDraw();
-
-if(screenFade > 0)
+if(room == rm_MainMenu || room == rm_GameOver || room == rm_Disclaimer || global.GamePaused())
 {
-	draw_set_color(c_black);
-	draw_set_alpha(clamp(screenFade,0,1));
-	draw_rectangle(-1,-1,global.resWidth+1,global.resHeight+1,false);
-	draw_set_alpha(1);
-	
-	screenFade = 0;
-}
+	surface_set_target(obj_Display.surfUI);
+	bm_set_one();
 
-bm_reset();
-surface_reset_target();
-*/
+	BentoSystemDraw();
+
+	bm_reset();
+	surface_reset_target();
+}

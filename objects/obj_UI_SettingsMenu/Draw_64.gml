@@ -1,4 +1,4 @@
-var ww = global.resWidth,
+/*var ww = global.resWidth,
 	hh = global.resHeight;
 
 if(activeState == UI_ActiveState.Active || activeState == UI_ActiveState.Deactivating)
@@ -106,7 +106,7 @@ if(activeState == UI_ActiveState.Active || activeState == UI_ActiveState.Deactiv
 		hh2 = sprite_get_height(sprt_UI_Footer2);
 		draw_sprite_stretched_ext(sprt_UI_Footer2,0, (ww-global.ogResWidth)/2-cw,hh-hh2, global.ogResWidth+cw*2, hh2, c_white,1);
 		//
-		*/
+		* /
 		surface_reset_target();
 	}
 }
@@ -130,3 +130,4 @@ draw_set_alpha(1);
 
 bm_reset();
 surface_reset_target();
+*/

@@ -1,9 +1,6 @@
 /// @description 
 
-//cGroup = "menu";
-//InitControlVars(cGroup);
-
-//usingMouse = false;
+usingMouse = false;
 
 buttonIconKey = array_create(INPUT_VERB._Length);
 
@@ -13,8 +10,6 @@ buttonIconKey[INPUT_VERB.MenuLeft] =		"${MenuLeft";//}";
 buttonIconKey[INPUT_VERB.MenuRight] =		"${MenuRight";//}";
 buttonIconKey[INPUT_VERB.MenuScrollUp] =	"${MenuScrollUp";//}";
 buttonIconKey[INPUT_VERB.MenuScrollDown] =	"${MenuScrollDown";//}";
-buttonIconKey[INPUT_VERB.MenuScrollLeft] =	"${MenuScrollLeft";//}";
-buttonIconKey[INPUT_VERB.MenuScrollRight] = "${MenuScrollRight";//}";
 
 buttonIconKey[INPUT_VERB.Start] =			"${Start";//}";
 buttonIconKey[INPUT_VERB.MenuAccept] =		"${MenuAccept";//}";
@@ -65,7 +60,6 @@ buttonIconKey[INPUT_VERB.VisorRight] =	"${VisorRight";//}";
 
 buttonClusterIconKey = array_create(INPUT_CLUSTER._Length);
 buttonClusterIconKey[INPUT_CLUSTER.MenuMove] =		"${MenuMove";//}";
-buttonClusterIconKey[INPUT_CLUSTER.MenuScroll] =	"${MenuScroll";//}";
 buttonClusterIconKey[INPUT_CLUSTER.PlayerMove] =	"${PlayerMove";//}";
 buttonClusterIconKey[INPUT_CLUSTER.RadialUIMove] =	"${RadialUIMove";//}";
 buttonClusterIconKey[INPUT_CLUSTER.VisorMove] =		"${VisorMove";//}";
@@ -127,7 +121,6 @@ function GetButtonIcons()
 
 clusterVerbs = array_create(INPUT_CLUSTER._Length);
 clusterVerbs[INPUT_CLUSTER.MenuMove] =		[INPUT_VERB.MenuUp,			INPUT_VERB.MenuDown,		INPUT_VERB.MenuLeft,		INPUT_VERB.MenuRight];
-clusterVerbs[INPUT_CLUSTER.MenuScroll] =	[INPUT_VERB.MenuScrollUp,	INPUT_VERB.MenuScrollDown,	INPUT_VERB.MenuScrollLeft,	INPUT_VERB.MenuScrollRight];
 clusterVerbs[INPUT_CLUSTER.PlayerMove] =	[INPUT_VERB.PlayerUp,		INPUT_VERB.PlayerDown,		INPUT_VERB.PlayerLeft,		INPUT_VERB.PlayerRight];
 clusterVerbs[INPUT_CLUSTER.RadialUIMove] =	[INPUT_VERB.RadialUIUp,		INPUT_VERB.RadialUIDown,	INPUT_VERB.RadialUILeft,	INPUT_VERB.RadialUIRight];
 clusterVerbs[INPUT_CLUSTER.VisorMove] =		[INPUT_VERB.VisorUp,		INPUT_VERB.VisorDown,		INPUT_VERB.VisorLeft,		INPUT_VERB.VisorRight];
@@ -316,5 +309,3 @@ self.GetButtonIcons();
 
 updateText = true;
 prevDevice = InputPlayerGetDevice();
-
-//screenFade = 0;

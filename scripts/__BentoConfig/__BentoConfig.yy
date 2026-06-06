@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"__BentoConfig",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__BentoConfig",
+  "parent":{
+    "name":"Bento",
+    "path":"folders/Scripts/Libraries/Bento.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

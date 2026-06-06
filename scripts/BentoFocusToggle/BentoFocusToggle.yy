@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"BentoFocusToggle",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"BentoFocusToggle",
+  "parent":{
+    "name":"Focus",
+    "path":"folders/Scripts/Libraries/Bento/Functions/Focus.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

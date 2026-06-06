@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"BentoLayoutSetAnchor",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"BentoLayoutSetAnchor",
+  "parent":{
+    "name":"Properites",
+    "path":"folders/Scripts/Libraries/Bento/Functions/Layout/Properites.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

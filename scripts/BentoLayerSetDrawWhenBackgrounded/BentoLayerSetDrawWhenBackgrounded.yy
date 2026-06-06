@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"BentoLayerSetDrawWhenBackgrounded",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"BentoLayerSetDrawWhenBackgrounded",
+  "parent":{
+    "name":"Layers",
+    "path":"folders/Scripts/Libraries/Bento/Functions/Layers.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

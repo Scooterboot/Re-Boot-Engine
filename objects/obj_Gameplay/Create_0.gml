@@ -1,5 +1,7 @@
 /// @description Initialize
 
+global.rmHeated = false;
+
 global.openHatchList = ds_list_create();
 
 global.collectedItemList = ds_list_create();

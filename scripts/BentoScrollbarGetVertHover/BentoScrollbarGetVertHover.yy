@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"BentoScrollbarGetVertHover",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"BentoScrollbarGetVertHover",
+  "parent":{
+    "name":"Scrollbar",
+    "path":"folders/Scripts/Libraries/Bento/Functions/Scrollbar.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

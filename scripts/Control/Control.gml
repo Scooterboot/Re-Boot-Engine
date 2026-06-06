@@ -17,12 +17,12 @@ function InitControlVars(varGroups = undefined)
 		
 		cMenuScrollUp = false;
 		cMenuScrollDown = false;
-		cMenuScrollLeft = false;
-		cMenuScrollRight = false;
+		//cMenuScrollLeft = false;
+		//cMenuScrollRight = false;
 		rMenuScrollUp = !cMenuScrollUp;
 		rMenuScrollDown = !cMenuScrollDown;
-		rMenuScrollLeft = !cMenuScrollLeft;
-		rMenuScrollRight = !cMenuScrollRight;
+		//rMenuScrollLeft = !cMenuScrollLeft;
+		//rMenuScrollRight = !cMenuScrollRight;
 		
 		cMenuAccept = false;
 		cMenuCancel = false;
@@ -131,8 +131,8 @@ function SetControlVars(varGroups = undefined)
 		
 		cMenuScrollUp = global.control[INPUT_VERB.MenuScrollUp];
 		cMenuScrollDown = global.control[INPUT_VERB.MenuScrollDown];
-		cMenuScrollLeft = global.control[INPUT_VERB.MenuScrollLeft];
-		cMenuScrollRight = global.control[INPUT_VERB.MenuScrollRight];
+		//cMenuScrollLeft = global.control[INPUT_VERB.MenuScrollLeft];
+		//cMenuScrollRight = global.control[INPUT_VERB.MenuScrollRight];
 		
 		cMenuAccept = global.control[INPUT_VERB.MenuAccept];
 		cMenuCancel = global.control[INPUT_VERB.MenuCancel];
@@ -203,8 +203,8 @@ function SetReleaseVars(varGroups = undefined)
 		
 		rMenuScrollUp = !cMenuScrollUp;
 		rMenuScrollDown = !cMenuScrollDown;
-		rMenuScrollLeft = !cMenuScrollLeft;
-		rMenuScrollRight = !cMenuScrollRight;
+		//rMenuScrollLeft = !cMenuScrollLeft;
+		//rMenuScrollRight = !cMenuScrollRight;
 		
 		rMenuAccept = !cMenuAccept;
 		rMenuCancel = !cMenuCancel;

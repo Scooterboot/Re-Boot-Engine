@@ -6,4 +6,5 @@ Extensions:
 - https://github.com/Lojemiru/Chameleon
 - https://github.com/JujuAdams/Scribble
 - https://github.com/JujuAdams/ScribbleJunior
+- https://github.com/JujuAdams/Bento
 - https://codeberg.org/offalynne/Input

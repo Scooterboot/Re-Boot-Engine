@@ -59,10 +59,10 @@ function CreateMessageBox(header,description,messageType)
 	mbox.messageType = messageType;
 }
 
-function UI_Button(_x,_y,_width,_height) constructor
+/*function UI_Button(_x,_y,_width,_height) constructor
 {
 	x = _x;
 	y = _y;
 	width = _width;
 	height = _height;
-}
+}*/

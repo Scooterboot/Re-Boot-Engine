@@ -1,5 +1,5 @@
 /// @description 
-event_inherited();
+/*event_inherited();
 
 scrollWidth = 0;
 scrollHeight = 0;
@@ -168,4 +168,4 @@ function PreDraw()
 	self.DrawScrollBars();
 	
 	return true;
-}
+}*/

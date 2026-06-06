@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"BentoUI_Background",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"BentoUI_Background",
+  "parent":{
+    "name":"BentoStructs",
+    "path":"folders/Scripts/UI/BentoStructs.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

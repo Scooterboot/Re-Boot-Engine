@@ -7,5 +7,10 @@ if(instance_exists(creatorUI))
 
 for(var i = array_length(elements)-1; i >= 0; i--)
 {
-	instance_destroy(elements[i]);
+	//instance_destroy(elements[i]);
+	if(is_struct(elements[i]))
+	{
+		elements[i].CleanUp();
+		delete elements[i];
+	}
 }

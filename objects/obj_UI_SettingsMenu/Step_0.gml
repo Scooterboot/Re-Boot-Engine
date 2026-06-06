@@ -1,4 +1,4 @@
-self.SetControlVars_Press();
+/*self.SetControlVars_Press();
 
 if(activeState == UI_ActiveState.Active)
 {
@@ -131,7 +131,7 @@ if(activeState == UI_ActiveState.Active)
 		{
 			canTabSwitch = false;
 		}
-	}*/
+	}//
 }
 else
 {
@@ -180,3 +180,4 @@ else if(activeState == UI_ActiveState.Activating || activeState == UI_ActiveStat
 }
 
 self.SetControlVars_Release();
+*/

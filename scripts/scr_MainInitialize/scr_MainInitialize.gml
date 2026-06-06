@@ -12,13 +12,11 @@ function scr_MainInitialize()
 	}
 	global.pauseState = PauseState.None;
 	global.GamePaused = function() { return global.pauseState != PauseState.None; }
-
-	global.currentPlayFile = 0; //file that is selected and will be saved over during gameplay
-
-	global.rmHeated = false;
-
+	
+	global.currentPlayFile = 0;
+	
 	randomize();
-
+	
 	instance_create_depth(0,0,-10,obj_Display);
 	instance_create_depth(0,0,0,obj_Audio);
 	instance_create_depth(0,0,0,obj_Control);
@@ -30,17 +28,19 @@ function scr_MainInitialize()
 	instance_create_depth(0,0,0,obj_ScreenShaker);
 	
 	instance_create_depth(0,0,-9,obj_Mouse);
-	instance_create_depth(0,0,-8,obj_UI_Controller);
-	instance_create_depth(0,0,-5,obj_UI_SettingsMenu);
-	instance_create_depth(0,0,-4,obj_UI_MainMenu);
-	instance_create_depth(0,0,-4,obj_PauseMenu);//obj_UI_PauseMenu);
-	instance_create_depth(0,0,-3,obj_UI_RadialMenu);
-	instance_create_depth(0,0,-2,obj_UI_HUD);
 	
-	instance_create_depth(0,0,-6,obj_Debug);
-
-	room_goto(rm_MainMenu); //go to the main menu
-	//instance_create_depth(0,0,-7,obj_MainMenu);
+	instance_create_depth(0,0,-4,obj_UI_Controller);
+	
+	instance_create_depth(0,0,-7,obj_UI_SettingsMenu);
+	instance_create_depth(0,0,-6,obj_UI_MainMenu);
+	instance_create_depth(0,0,-6,obj_PauseMenu);//obj_UI_PauseMenu);
+	
+	instance_create_depth(0,0,-2,obj_UI_RadialMenu);
+	instance_create_depth(0,0,-1,obj_UI_HUD);
+	
+	instance_create_depth(0,0,-8,obj_Debug);
+	
+	room_goto(rm_MainMenu);
 	//room_goto(rm_Disclaimer);
 	
 	#macro ColType_Player [obj_Player]

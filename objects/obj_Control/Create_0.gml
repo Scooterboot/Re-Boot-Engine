@@ -37,7 +37,7 @@ function ControlInput(_verbIndex, _keyboardPressType, _keyboardComboType, _gamep
 	inputCounter = 0;
 	inputCounterMax = 15;
 	
-	function GetInput()
+	static GetInput = function()
 	{
 		var _isGamepad = InputPlayerUsingGamepad();
 		
@@ -125,15 +125,6 @@ for(var i = 0; i < INPUT_VERB._Length; i++)
 		_pressTypeGP = PressType.Press,
 		_comboTypeGP = ComboType.Or;
 	
-	if(i == INPUT_VERB.MenuScrollUp || i == INPUT_VERB.MenuScrollDown)
-	{
-		_comboTypeKB = ComboType.AndNot;
-	}
-	if(i == INPUT_VERB.MenuScrollLeft || i == INPUT_VERB.MenuScrollRight)
-	{
-		_comboTypeKB = ComboType.And;
-	}
-	
 	if(i == INPUT_VERB.Sprint || i == INPUT_VERB.SpiderBall)
 	{
 		_pressTypeKB = PressType.Hold;
@@ -147,6 +138,8 @@ for(var i = 0; i < INPUT_VERB._Length; i++)
 	
 	global.controlInput[i] = new ControlInput(i, _pressTypeKB, _comboTypeKB, _pressTypeGP, _comboTypeGP);
 	global.control[i] = false;
+	global.controlPressed[i] = false;
+	global.controlValue[i] = 0;
 }
 
 for(var i = 0; i < INPUT_CLUSTER._Length; i++)
