@@ -19,7 +19,7 @@ function scr_MainInitialize()
 	
 	instance_create_depth(0,0,-10,obj_Display);
 	instance_create_depth(0,0,0,obj_Audio);
-	instance_create_depth(0,0,0,obj_Control);
+	instance_create_depth(0,0,0,obj_InputController);
 	instance_create_depth(0,0,0,obj_Gameplay);
 	instance_create_depth(0,0,0,obj_Culler);
 	instance_create_depth(0,0,0,obj_Map);

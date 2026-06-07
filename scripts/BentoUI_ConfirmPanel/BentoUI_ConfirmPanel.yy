@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"BentoUI_Background",
+  "%Name":"BentoUI_ConfirmPanel",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"BentoUI_Background",
+  "name":"BentoUI_ConfirmPanel",
   "parent":{
     "name":"BentoStructs",
     "path":"folders/Scripts/UI/BentoStructs.yy",
