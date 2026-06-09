@@ -1,10 +1,24 @@
 // Feather disable all
 
-////////////////
-//            //
-//  Keyboard  //
-//            //
-////////////////
+/// This script defines return values for `InputIconGet()` and `InputIconGetDirect()` in situations
+/// where a player's current device is `INPUT_KBM` (KeyBoard and Mouse).
+/// 
+/// N.B. Icon return values need not be merely strings. You may define return values to be whatever
+///      datatype you like: strings, sprites, structs etc.
+
+///////////////////////
+//                   //
+//  Keyboard & Mouse //
+//                   //
+///////////////////////
+
+InputIconDefineKeyboard(mb_left,       sprt_UI_MBIcon_LeftClick);//"mouse left");
+InputIconDefineKeyboard(mb_middle,     sprt_UI_MBIcon_MiddleClick);//"mouse middle");
+InputIconDefineKeyboard(mb_right,      sprt_UI_MBIcon_RightClick);//"mouse right");
+InputIconDefineKeyboard(mb_side1,      sprt_UI_MBIcon_SideClickForward);//"mouse 4");
+InputIconDefineKeyboard(mb_side2,      sprt_UI_MBIcon_SideClickBack);//"mouse 5");
+InputIconDefineKeyboard(mb_wheel_down, sprt_UI_MBIcon_ScrollUp);//"mouse wheel down");
+InputIconDefineKeyboard(mb_wheel_up,   sprt_UI_MBIcon_ScrollDown);//"mouse wheel up");
 
 InputIconDefineKeyboard("A", new UISpriteIcon(sprt_UI_KBIcon_Alphabet,0));//"A");
 InputIconDefineKeyboard("B", new UISpriteIcon(sprt_UI_KBIcon_Alphabet,1));//"B");

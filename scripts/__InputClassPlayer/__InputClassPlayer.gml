@@ -29,7 +29,7 @@ function __InputClassPlayer(_playerIndex) constructor
     {
         __lastConnectedGamepadType = INPUT_GAMEPAD_TYPE_NO_GAMEPAD;
     }
-    else if (INPUT_ON_SWITCH)
+    else if (INPUT_ON_SWITCH_X)
     {
         __lastConnectedGamepadType = INPUT_GAMEPAD_TYPE_SWITCH;
     }
@@ -275,31 +275,11 @@ function __InputClassPlayer(_playerIndex) constructor
             }
             else
             {
-                //Scale down the x/y values so we can clamp output values between 0 and 1
+                //Scale down the x/y values so we clamp output values between 0 and 1. This should
+                //only matter if the player is combining boolean inputs (keyboard, dpad)
                 _dx /= max(1, _d);
                 _dy /= max(1, _d);
                 _d = min(1, _d);
-                
-                //If we're using a gamepad, apply thumbstick thresholds to the cluster. This ignores whether the
-                //player has actually used a thumbstick for input so is potentially problematic in unanticipated
-                //use cases.
-                if (__device >= 0)
-                {
-                    var _thresholdType = __clusterThresholdTypeArray[_i];
-                    
-                    var _a = __thresholdMinArray[_thresholdType];
-                    var _b = __thresholdMaxArray[_thresholdType];
-                    
-                    var _min = clamp(min(_a, _b), 0, 1);
-                    var _max = clamp(max(_a, _b), 0, 1);
-                    
-                    var _delta = _max - _min;
-                    if (_delta == 0) _delta = 0.001;
-                    
-                    var _coeff = clamp((_d - _min) / _delta, 0.0, 1.0);
-                    _dx = (_dx/_d)*_coeff;
-                    _dy = (_dy/_d)*_coeff;
-                }
                 
                 var _bias = _clusterDefinition.__axisBiasFactor;
                 if (_bias > 0)

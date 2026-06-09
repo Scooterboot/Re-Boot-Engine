@@ -37,7 +37,15 @@ function InputDefineVerb(_verbIndex, _exportName, _kbmBinding, _gamepadBinding, 
     {
         var _definition = new __InputClassVerbDefinition(_verbIndex, _exportName, _kbmBinding, _gamepadBinding, _metadata);
         
-        __verbDefinitionArray[@ _verbIndex]   = _definition;
+        if (INPUT_RUNNING_FROM_IDE)
+        {
+            if (__verbExportNameDict[$ _exportName] != undefined)
+            {
+                __InputError("Duplicate verb export name: \"", _exportName, "\"");
+            }
+        }
+
+        __verbDefinitionArray[@ _verbIndex] = _definition;
         __verbExportNameDict[$ _exportName] = _definition;
         
         if (array_get_index(__verbDefIndexArray, _verbIndex) < 0)

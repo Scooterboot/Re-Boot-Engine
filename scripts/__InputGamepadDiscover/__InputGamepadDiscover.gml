@@ -17,7 +17,7 @@ function __InputGamepadDiscover(_gamepadStruct)
         __description  = gamepad_get_description(_device);
         __type         = INPUT_GAMEPAD_TYPE_UNKNOWN;
         
-        if (INPUT_ON_SWITCH)
+        if (INPUT_ON_SWITCH_X)
         {
             __type = __InputGamepadIdentifySwitchType(_device, __description, true);
             
@@ -62,31 +62,14 @@ function __InputGamepadDiscover(_gamepadStruct)
                 if (__INPUT_SWITCH_JOYCON_HORIZONTAL_HOLDTYPE)
                 {
                     //Single Joy-Cons in horizontal report L/R/ZL/ZR as shoulder buttons even though they rest in the player's palm. No idea why, but we disallow that
-                    //Also it seems like GameMaker implements SL and SR weirdly so we circumvent that
-                    if (__type == INPUT_GAMEPAD_TYPE_JOYCON_LEFT)
-                    {
-                        InputPlugInGamepadSetMapping(_device, gp_shoulderl, function(_device) { return gamepad_button_value(_device, 16); });
-                        InputPlugInGamepadSetMapping(_device, gp_shoulderr, function(_device) { return gamepad_button_value(_device, 17); });
-                    }
-                    else
-                    {
-                        InputPlugInGamepadSetMapping(_device, gp_shoulderl, function(_device) { return gamepad_button_value(_device, 18); });
-                        InputPlugInGamepadSetMapping(_device, gp_shoulderr, function(_device) { return gamepad_button_value(_device, 19); });
-                    }
+                    InputPlugInGamepadResetMapping(_device, gp_shoulderl);
+                    InputPlugInGamepadResetMapping(_device, gp_shoulderr);
                 }
                 else
                 {
                     //SL/SR are still technically active in vertical mode too but that's silly so we ignore them
-                    if (__type == INPUT_GAMEPAD_TYPE_JOYCON_LEFT)
-                    {
-                        InputPlugInGamepadSetMapping(_device, gp_shoulderl, function(_device) { return gamepad_button_value(_device, 6); });
-                        InputPlugInGamepadSetMapping(_device, gp_shoulderr, function(_device) { return gamepad_button_value(_device, 8); });
-                    }
-                    else
-                    {
-                        InputPlugInGamepadSetMapping(_device, gp_shoulderl, function(_device) { return gamepad_button_value(_device, 7); });
-                        InputPlugInGamepadSetMapping(_device, gp_shoulderr, function(_device) { return gamepad_button_value(_device, 9); });
-                    }
+                    InputPlugInGamepadResetMapping(_device, gp_shoulderlb);
+                    InputPlugInGamepadResetMapping(_device, gp_shoulderrb);
                 }
             }
         }

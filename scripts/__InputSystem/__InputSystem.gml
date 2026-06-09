@@ -9,6 +9,14 @@
 
 #macro __INPUT_CONTROLLER_OBJECT_DEPTH  16001
 
+// Vary from `0` to `1` to increase the amount of overlap between adjacent thumbstick cardinal
+// directions when collecting input from analogue thumbsticks. A value of `1` will provide no
+// overlap which means each cardinal direction will exist in 90 degree slices. A value of `0` will
+// cause segments to overlap entirely which is definitely not what anyone wants. Choosing a value
+// for this macro is currently trial-and-error because I haven't gotten round to figuring out the
+// trigonometry. `0.56` feels about right though.
+#macro __INPUT_THUMBSTICK_OVERLAP_FACTOR  0.56
+
 // Whether the game uses the horizontal holdtype for single Joy-Cons. Set this to `false` for
 // vertical holdtype when running on Switch. The library treats these two modes as mutually
 // exclusive (come talk to us if you need to be able to swap at runtime).
@@ -218,6 +226,12 @@ function __InputSystem()
         if (INPUT_ON_PS5)
         {
             ps5_touchpad_mouse_enable(false);
+        }
+        
+        //Set known-good configuration on Switch
+        if (INPUT_ON_SWITCH_X && INPUT_SWITCH_X_KNOWN_GOOD)
+        {
+            __InputSwitchXKnownGood();
         }
         
         

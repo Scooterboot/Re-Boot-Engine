@@ -10,7 +10,7 @@
 /// no axis bias whatsoever.
 ///
 /// `axisBiasDiagonals` controls whether the axis bias should also allow diagonal inputs. It
-/// defaults to `false`: biasing will not select diagonal directioons. Setting this parameter to
+/// defaults to `false`: biasing will not select diagonal directions. Setting this parameter to
 /// `true` will allow diagonal directions.
 /// 
 /// @param {Enum.INPUT_CLUSTER,Real} clusterIndex

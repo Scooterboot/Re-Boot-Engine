@@ -54,6 +54,14 @@ function InputPlayerSetDevice(_device, _playerIndex = 0)
             __InputTrace("Warning! Player ", _playerIndex, " cannot have a device due to `INPUT_XBOX_SIMPLIFIED_USER_MODEL`");
         }
     }
+
+    if (INPUT_KBM_FIRST_PLAYER_ONLY)
+    {
+        if ((_device == INPUT_KBM) && (_playerIndex != 0))
+        {
+            __InputError("Cannot set player ", _playerIndex, " device to ", _device, " due to `INPUT_KBM_FIRST_PLAYER_ONLY`");        
+        }
+    }
     
     var _oldDevice = _playerArray[_playerIndex].__device;
     

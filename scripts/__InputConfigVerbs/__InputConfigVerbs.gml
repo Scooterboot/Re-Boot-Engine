@@ -72,7 +72,7 @@ function __InputConfigVerbs()
 	
 	var _gp_face1 = gp_face1,
 		_gp_face2 = gp_face2;
-	if(INPUT_ON_SWITCH)
+	if(INPUT_ON_SWITCH_X)
 	{
 		_gp_face1 = gp_face2;
 		_gp_face2 = gp_face1;
@@ -200,7 +200,7 @@ function __InputConfigVerbs()
     InputDefineVerb(INPUT_VERB.ACTION,  "action",      vk_enter,            gp_face3);
     InputDefineVerb(INPUT_VERB.SPECIAL, "special",     vk_shift,            gp_face4);
     
-    if (INPUT_ON_SWITCH)
+    if (INPUT_ON_SWITCH_X)
     {
         //Flip A/B over on Switch
         InputDefineVerb(INPUT_VERB.ACCEPT, "accept", undefined, gp_face2); // !!

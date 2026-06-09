@@ -30,6 +30,23 @@ function InputBindingsImport(_forGamepad, _data, _playerIndex = 0)
         {
             var _alternates = _data[$ _exportName];
             _alternates = is_array(_alternates)? variable_clone(_alternates) : [];
+            
+            var _j = 0;
+            repeat(array_length(_alternates))
+            {
+                var _binding = _alternates[_j];
+                if (_binding != undefined)
+                {
+                    var _isGamepadBinding = (abs(_binding) >= INPUT_GAMEPAD_BINDING_MIN) && (abs(_binding) <= INPUT_GAMEPAD_BINDING_MAX);
+                    if (_forGamepad != _isGamepadBinding)
+                    {
+                        __InputError("Invalid ", _forGamepad? "gamepad" : "non-gamepad", " binding for verb \"", _exportName, "\": alternate \"", _j, "\", binding value \"", _binding, "\"");
+                    }
+                }
+
+                ++_j;
+            }
+
             _bindingArray[@ _i] = _alternates;
         }
         

@@ -1,5 +1,12 @@
 // Feather disable all
 
+/// This script defines return values for `InputIconGet()` and `InputIconGetDirect()` in situations
+/// where a player's current device is a gamepad whose type is some variant of a supported Nintendo
+/// gamepad.
+/// 
+/// N.B. Icon return values need not be merely strings. You may define return values to be whatever
+///      datatype you like: strings, sprites, structs etc.
+
 ////////////////
 //            //
 //  Nintendo  //

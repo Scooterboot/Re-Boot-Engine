@@ -10,6 +10,8 @@ function __InputRegisterCollect()
         
         static _once = (function()
         {
+            var _system = __InputSystem();
+            
             //Set a default device for player 0 on boot. This should only happen once
             //Juju: Because setting the player's device triggers a plug-in callback, it's possible for plug-ins
             //      to accidentally create a loop of static initializations that results in a crash on boot.
@@ -20,11 +22,11 @@ function __InputRegisterCollect()
             {
                 InputPlayerSetDevice(INPUT_TOUCH);
             }
-            else if (INPUT_ON_DESKTOP)
+            else if (INPUT_ON_DESKTOP && (not _system.__onSteamDeck) && (not _system.__usingBigPicture))
             {
                 InputPlayerSetDevice(INPUT_KBM);
             }
-            else if (INPUT_ON_CONSOLE)
+            else if (INPUT_ON_CONSOLE || (INPUT_ON_DESKTOP && (_system.__onSteamDeck || _system.__usingBigPicture)))
             {
                 //Force a gamepad update otherwise we won't be aware of any connected devices
                 __InputUpdateGamepadPresence();
@@ -244,7 +246,7 @@ function __InputUpdateGamepadPresence()
         {
             if (_connected)
             {
-                if (INPUT_ON_SWITCH && (_gamepad.__type != __InputGamepadIdentifySwitchType(_device, false)))
+                if (INPUT_ON_SWITCH_X && (_gamepad.__type != __InputGamepadIdentifySwitchType(_device, undefined, false)))
                 {
                     //When Switch L+R assignment is used to pair two gamepads we won't see a normal disconnection/reconnection
                     //Instead we have to check for changes via the gamepad description or Joy-Con left/right connected state
