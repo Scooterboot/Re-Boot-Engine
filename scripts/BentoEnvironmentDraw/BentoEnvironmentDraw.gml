@@ -5,7 +5,7 @@
 /// 
 /// N.B. If you're calling `BentoSystemDraw()` then you don't need to call this function.
 /// 
-/// @param environmentOrName
+/// @param name
 
 function BentoEnvironmentDraw(_name)
 {

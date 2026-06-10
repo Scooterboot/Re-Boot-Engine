@@ -3,11 +3,10 @@
 /// Returns the root element for the layer.
 /// 
 /// @param [layerOrName=current]
-/// @param environmentOrName
 
-function BentoLayerGetRoot(_layerOrName = undefined, _environmentOrName = undefined)
+function BentoLayerGetRoot(_layerOrName = undefined)
 {
-    with(__BentoLayerEnsure(_layerOrName, _environmentOrName))
+    with(__BentoLayerEnsure(_layerOrName))
     {
         if (not BentoExists(__rootElement))
         {

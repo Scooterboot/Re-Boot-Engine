@@ -1,6 +1,6 @@
 // Feather disable all
 
-/// @param environmentOrName
+/// @param name
 /// @param rootX
 /// @param rootY
 /// @param rootWidth

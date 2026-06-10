@@ -2,7 +2,7 @@
 
 /// Destroys an environment. This will trigger destroy code for all elements in the environment.
 /// 
-/// @param environmentOrName
+/// @param environment
 
 function BentoEnvironmentDestroy(_environment)
 {

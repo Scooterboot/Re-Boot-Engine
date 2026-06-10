@@ -8,10 +8,10 @@ function BentoFocusCloseAll(_layerOrName = undefined)
 {
     with(__BentoLayerEnsure(_layerOrName))
     {
-        var _focusStack = __focusStack;
+        var _focusStack = __layer.__focusStack;
         if (array_length(_focusStack) > 0)
         {
-            __dirtyFlags |= __BENTO_DIRTY_STEP | __BENTO_DIRTY_HOVERABLE;
+            __layer.__dirtyFlags |= __BENTO_DIRTY_STEP | __BENTO_DIRTY_HOVERABLE;
             
             var _i = 0;
             repeat(array_length(_focusStack))
@@ -26,7 +26,7 @@ function BentoFocusCloseAll(_layerOrName = undefined)
             }
             
             array_resize(_focusStack, 0);
-            __focusTop = undefined;
+            __layer.__focusTop = undefined;
         }
     }
 }
