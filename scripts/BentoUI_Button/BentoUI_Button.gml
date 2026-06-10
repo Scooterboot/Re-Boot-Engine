@@ -29,11 +29,13 @@ function BentoUI_Button(_clickFunc = undefined, _width, _height, _rawText = [], 
 		audio_play_sound(snd_MenuTick,0,false);
 	}
 	
+	ignoreAnim = false;
+	
 	eventStep = function()
 	{
 		if (BentoPrimaryGetClick() || hotKey())
 		{
-			if (is_callable(func))
+			if (is_callable(func) && (!BentoAnimGetPlaying() || ignoreAnim))
 			{
 				func();
 			}

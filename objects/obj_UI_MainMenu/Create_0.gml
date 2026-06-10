@@ -2,8 +2,6 @@
 event_inherited();
 screenFade = 1;
 
-cleanUp = true;
-
 enum UI_MMState
 {
 	TitleIntro,
@@ -39,7 +37,7 @@ fileEnergy = array_create(5, -1);
 
 itemList = ds_list_create();
 
-inputBlockLayer = "input block";
+inputBlockLayer = "input block (main menu)";
 
 #region Main Menu
 
@@ -80,10 +78,10 @@ function CreateMainMenu()
 	}
 	btnFunc[1] = function()
 	{
-		//if(obj_UI_SettingsMenu.activeState == UI_ActiveState.Inactive)
-		//{
-		//	obj_UI_SettingsMenu.activeState = UI_ActiveState.Activating;
-		//}
+		if(obj_UI_SettingsMenu.activeState == UI_ActiveState.Inactive)
+		{
+			obj_UI_SettingsMenu.activeState = UI_ActiveState.Activating;
+		}
 		
 		audio_play_sound(snd_MenuBoop,0,false);
 	}
@@ -702,8 +700,6 @@ function DrawSaveFileButton()
 	draw_set_alpha(1);
 }
 #endregion
-
-updateText = true;
 
 headerTextRaw = [
 "SELECT FILE DATA",

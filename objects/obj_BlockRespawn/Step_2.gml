@@ -25,7 +25,7 @@ if(initialTime > 0)
 		}
 	}
 	
-	var placeCheck = place_meeting(x,y,[obj_Player,obj_PushBlock]);
+	var placeCheck = self.checkEntity(x,y);
 	if(blockIndex == obj_CrumbleBlock)
 	{
 		placeCheck |= place_meeting(x,y-2,[obj_Player,obj_PushBlock]);

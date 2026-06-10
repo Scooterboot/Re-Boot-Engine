@@ -1,5 +1,5 @@
 event_inherited();
-/*
+
 enum UI_SMState
 {
 	Default,
@@ -11,8 +11,136 @@ enum UI_SMState
 }
 state = UI_SMState.Default;
 
+inputBlockLayer = "input block (settings menu)";
+
 #region Default Page
 
+defMenuText = [
+"DISPLAY SETTINGS",
+"AUDIO SETTINGS",
+"GAMEPLAY SETTINGS",
+"KEYBOARD BINDINGS",
+"CONTROLLER BINDINGS",
+"BACK"];
+
+defaultMenuLayer = "default menu";
+function CreateDefaultMenu()
+{
+	var ww = global.resWidth,
+		hh = global.resHeight,
+		this = id;
+	
+	var _layer = BentoLayerCreate(defaultMenuLayer),
+		_root = BentoLayerGetRoot(_layer);
+	
+	var _mainElement = new BentoUI_Spacer(_root);
+	with(_mainElement)
+	{
+		BentoLayoutSetGutter(0, 3);
+		BentoLayoutSetResize(BENTO_RESIZE_INFLATE, BENTO_RESIZE_INFLATE);
+		BentoLayoutList(BENTO_AXIS_Y, 0, 0.5);
+		BentoSetOffset(ww/2-76);
+	}
+	
+	var btn = [],
+		btnFunc = [],
+		btnW = 152,
+		btnH = 11;
+	
+	btnFunc[0] = function()
+	{
+		
+		
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	btnFunc[1] = function()
+	{
+		
+		
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	btnFunc[2] = function()
+	{
+		
+		
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	btnFunc[3] = function()
+	{
+		
+		
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	btnFunc[4] = function()
+	{
+		
+		
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	btnFunc[5] = function()
+	{
+		creatorUI.activeState = UI_ActiveState.Deactivating;
+		
+		audio_play_sound(snd_MenuTick,0,false);
+	}
+	
+	for(var i = 0; i < array_length(defMenuText); i++)
+	{
+		var _bw = btnW;
+		if(i == 5)
+		{
+			_bw = 56;
+		}
+		
+		btn[i] = new BentoUI_Button(btnFunc[i], _bw, btnH, defMenuText[i], this, _mainElement);
+		btn[i].sprtAlpha = 0.75;
+		btn[i].sprtSelectAlpha = 0.85;
+		if(i < 5)
+		{
+			btn[i].textAlignX = fa_left;
+		}
+		else
+		{
+			BentoSetOffset(,16,btn[i]);
+			btn[i].hotKey = btn[i].hotKey_cancel;
+		}
+		
+		if(i == 0 || i == 5)
+		{
+			BentoSetNavigationWrap(false, true, btn[i]);
+		}
+	}
+}
+#endregion
+
+headerTextRaw = [
+"SETTINGS",
+"DISPLAY SETTINGS",
+"AUDIO SETTINGS",
+"GAMEPLAY SETTINGS",
+"KEYBOARD BINDINGS",
+"CONTROLLER BINDINGS"];
+headerText = [];
+
+footerTextRaw = [
+"${MenuMove} - Move   ${MenuAccept_0} - Select   ${MenuCancel_0} - Back",
+"${MenuMove} - Move   ${MenuAccept_0} - Select   ${MenuCancel_0} - Cancel"];
+footerText = [];
+
+/*
+enum UI_SMState
+{
+	Default,
+	Display,
+	Audio,
+	Gameplay,
+	Keyboard,
+	Controller
+}
+state = UI_SMState.Default;
+*/
+#region Default Page
+/*
 defMenuText = [
 "DISPLAY SETTINGS",
 "AUDIO SETTINGS",
@@ -97,10 +225,10 @@ function CreateDefaultPage()
 		return (cMenuCancel && rMenuCancel) || (cClickR && rClickR);
 	}
 }
-
+*/
 #endregion
 #region Display Page
-
+/*
 displayText = [
 "WINDOW MODE",
 "DISPLAY SCALE",
@@ -167,11 +295,11 @@ function CreateDisplayPage()
 		return (cMenuCancel && rMenuCancel) || (cClickR && rClickR);
 	}
 }
-
+*/
 #endregion
 
 #region Binding names
-
+/*
 bindingText = [
 
 "MenuUp",
@@ -231,9 +359,9 @@ bindingText = [
 "VisorRight"
 
 ];
-
+*/
 #endregion
-
+/*
 comboText = [
 "OR",
 "&",
@@ -250,9 +378,9 @@ pressText = [
 "Long Hold",
 "Release"
 ];
-
+*/
 #region Keyboard bindings page
-
+/*
 
 
 kbBindPage = noone;
@@ -348,11 +476,11 @@ function CreateKBBindPage()
 		return (cMenuCancel && rMenuCancel) || (cClickR && rClickR);
 	}
 }
-
+*/
 #endregion
 
 #region DrawSettingsOptPanel
-function DrawSettingsOptPanel()
+/*function DrawSettingsOptPanel()
 {
 	var _x = posX,
 		_y = posY,
@@ -371,9 +499,9 @@ function DrawSettingsOptPanel()
 	self.DrawText(textColor);
 	
 	return true;
-}
+}*/
 #endregion
-
+/*
 updateText = true;
 
 headerTextRaw = [

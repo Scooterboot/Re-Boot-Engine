@@ -1,6 +1,8 @@
 /// @description 
 
-if(room == rm_MainMenu)
+if(room == rm_MainMenu && 
+	obj_UI_SettingsMenu.activeState != UI_ActiveState.Active && 
+	obj_UI_SettingsMenu.activeState != UI_ActiveState.Deactivating)
 {
 	var ww = global.resWidth,
 		hh = global.resHeight;

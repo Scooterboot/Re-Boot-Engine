@@ -11,6 +11,10 @@ activeState = UI_ActiveState.Inactive;
 
 screenFade = 0;
 screenFadeRate = 0.075;
+
+cleanUp = true;
+updateText = true;
+
 /*
 #region Set Controls
 controlGroups = "menu";

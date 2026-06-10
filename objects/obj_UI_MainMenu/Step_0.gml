@@ -218,6 +218,11 @@ if(room == rm_MainMenu)
 	else
 	{
 		activeState = UI_ActiveState.Inactive;
+		
+		if(obj_UI_SettingsMenu.activeState == UI_ActiveState.Active || obj_UI_SettingsMenu.activeState == UI_ActiveState.Deactivating)
+		{
+			BentoLayerSetDrawWhenBackgrounded(false, mainMenuLayer);
+		}
 	}
 	
 	if(updateText || obj_UI_Controller.updateText)

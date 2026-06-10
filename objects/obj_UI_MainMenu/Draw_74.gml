@@ -1,5 +1,7 @@
 
-if(room == rm_MainMenu)
+if(room == rm_MainMenu && 
+	obj_UI_SettingsMenu.activeState != UI_ActiveState.Active && 
+	obj_UI_SettingsMenu.activeState != UI_ActiveState.Deactivating)
 {
 	var ww = global.resWidth,
 		hh = global.resHeight;
@@ -9,9 +11,7 @@ if(room == rm_MainMenu)
 	
 	if(state == UI_MMState.FileMenu)
 	{
-		draw_set_color(c_black);
-		draw_set_alpha(1);
-		draw_rectangle(-1,-1,ww+1,hh+1,false);
+		BentoDrawClear(, 1);
 		draw_sprite_ext(bg_Zebes, 0, ww/2, hh/2, 1, 1, 0,c_white,1);
 	}
 	
