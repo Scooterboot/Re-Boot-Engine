@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.270667,
+  "duration":0.27068028,
   "exportDir":"",
   "name":"snd_Door_Damaged",
   "parent":{

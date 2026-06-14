@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.363094,
+  "duration":0.36310658,
   "exportDir":"",
   "name":"snd_Door_Close",
   "parent":{

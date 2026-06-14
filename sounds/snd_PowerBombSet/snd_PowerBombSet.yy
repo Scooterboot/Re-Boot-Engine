@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.932834,
+  "duration":0.93283445,
   "exportDir":"",
   "name":"snd_PowerBombSet",
   "parent":{

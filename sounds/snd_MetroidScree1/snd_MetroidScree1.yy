@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.94966,
+  "duration":0.9496599,
   "exportDir":"",
   "name":"snd_MetroidScree1",
   "parent":{

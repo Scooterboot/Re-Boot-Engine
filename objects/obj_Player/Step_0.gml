@@ -1929,24 +1929,22 @@ if(!global.GamePaused())
 			}
 			
 			reel = grappleReelVel;
-			if(dist >= grappleMaxDist+1)
+			if(grappleDist >= grappleMaxDist+1)
 			{
-				var reelSpd = max(-3*_lmult, grappleMaxDist-dist);
+				var reelSpd = clamp(grappleMaxDist-grappleDist, -3*_lmult, 3*_lmult);
 				if(reelSpd < 0)
 				{
 					reel = reelSpd;
 				}
-				grappleDist = dist;
 				grappleReelVel = min(grappleReelVel,0);
 			}
-			if(dist <= grappleMinDist-1)
+			if(grappleDist <= grappleMinDist-1)
 			{
-				var reelSpd = min(3*_lmult, grappleMinDist-dist);
+				var reelSpd = clamp(grappleMinDist-grappleDist, -3*_lmult, 3*_lmult);
 				if(reelSpd > 0)
 				{
 					reel = reelSpd;
 				}
-				grappleDist = min(dist,grappleMaxDist);
 				grappleReelVel = max(grappleReelVel,0);
 			}
 		}

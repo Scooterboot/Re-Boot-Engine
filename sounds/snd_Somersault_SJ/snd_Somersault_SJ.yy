@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":1.322993,
+  "duration":1.3229932,
   "exportDir":"",
   "name":"snd_Somersault_SJ",
   "parent":{

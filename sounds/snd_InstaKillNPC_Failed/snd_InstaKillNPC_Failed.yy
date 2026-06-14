@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.22161,
+  "duration":0.22160998,
   "exportDir":"",
   "name":"snd_InstaKillNPC_Failed",
   "parent":{

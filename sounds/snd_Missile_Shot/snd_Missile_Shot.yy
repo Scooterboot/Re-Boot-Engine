@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.915396,
+  "duration":0.9153968,
   "exportDir":"",
   "name":"snd_Missile_Shot",
   "parent":{

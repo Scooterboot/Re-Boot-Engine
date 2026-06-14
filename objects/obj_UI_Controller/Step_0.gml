@@ -10,7 +10,7 @@ if(room == rm_MainMenu || room == rm_GameOver || room == rm_Disclaimer || global
 		{
 			usingMouse = true;
 		}
-		else if(InputPressedMany(-1) && !InputMouseCheck(mb_any))
+		else if(InputPressedMany(-1) && !InputMouseCheck(mb_any) && !mouse_wheel_up() && !mouse_wheel_down())
 		{
 			usingMouse = false;
 		}

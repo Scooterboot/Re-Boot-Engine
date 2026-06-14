@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.994146,
+  "duration":0.9941497,
   "exportDir":"",
   "name":"snd_Boss_Quake",
   "parent":{

@@ -13,7 +13,7 @@ state = UI_SMState.Default;
 
 inputBlockLayer = "input block (settings menu)";
 
-#region Default Page
+#region Default Menu
 
 defMenuText = [
 "DISPLAY SETTINGS",
@@ -109,6 +109,8 @@ function CreateDefaultMenu()
 		{
 			BentoSetNavigationWrap(false, true, btn[i]);
 		}
+		
+		BentoAnimPlayBuildIn(7,2*i, 0,0,0,1, 0,animCur_UI_Basic,false,btn[i]);
 	}
 }
 #endregion

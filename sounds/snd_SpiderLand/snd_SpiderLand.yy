@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.062698,
+  "duration":0.06269842,
   "exportDir":"",
   "name":"snd_SpiderLand",
   "parent":{

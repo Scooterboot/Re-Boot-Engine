@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.740208,
+  "duration":0.74022675,
   "exportDir":"",
   "name":"snd_SuperMissile_Shot",
   "parent":{

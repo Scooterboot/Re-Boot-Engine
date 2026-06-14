@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.179708,
+  "duration":0.1797279,
   "exportDir":"",
   "name":"snd_Bubble_1",
   "parent":{

@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.360907,
+  "duration":0.36090702,
   "exportDir":"",
   "name":"snd_Skree_V",
   "parent":{

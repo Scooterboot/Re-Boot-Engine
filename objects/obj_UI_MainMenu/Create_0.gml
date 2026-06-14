@@ -161,7 +161,7 @@ function CreateFileMenu()
 				BentoSetNavigationWrap(false, true, fileBtn[i]);
 			}
 			
-			BentoAnimPlayBuildIn(20, i*4, fBtnW, 0, 1, 1, 0,animCur_UI_FileBtn,false,fileBtn[i]);
+			BentoAnimPlayBuildIn(12, i*3, fBtnW*0.75, 0, 1, 1, 0,animCur_UI_Basic,false,fileBtn[i]);
 		}
 		else
 		{
@@ -180,7 +180,7 @@ function CreateFileMenu()
 			
 			BentoSetNavigationWrap(false, true, fileBtn[i]);
 			
-			BentoAnimPlayBuildIn(7,4*i, 0,4,1,1, 0,,false,fileBtn[i]);
+			BentoAnimPlayBuildIn(7, i*3, 0,4,1,1, 0,,false,fileBtn[i]);
 		}
 		
 		BentoSetNavigationEnable(false, true, fileBtn[i]);
@@ -236,6 +236,7 @@ function CreateSelectedFileMenu(_fileBtn, _fileIndex)
 	}
 	var str = fileOptionText[0];
 	var startGameBtn = new BentoUI_Button(startFunc, btnW, btnH, str, this, _secElement1);
+	BentoSetNavigationWrap(true, true, startGameBtn);
 	
 	var cancelFunc = function()
 	{
@@ -246,6 +247,7 @@ function CreateSelectedFileMenu(_fileBtn, _fileIndex)
 	str = fileOptionText[1];
 	var cancelBtn = new BentoUI_Button(cancelFunc, btnW, btnH, str, this, _secElement1);
 	cancelBtn.hotKey = cancelBtn.hotKey_cancel;
+	BentoSetNavigationWrap(true, true, cancelBtn);
 	
 	if(file_exists(scr_GetFileName(_fileIndex)))
 	{
@@ -268,6 +270,7 @@ function CreateSelectedFileMenu(_fileBtn, _fileIndex)
 		}
 		str = fileOptionText[2];
 		var copyBtn = new BentoUI_Button(copyFunc, btnW, btnH, str, this, _secElement2);
+		BentoSetNavigationWrap(true, true, copyBtn);
 		
 		var deleteFunc = function()
 		{
@@ -278,6 +281,7 @@ function CreateSelectedFileMenu(_fileBtn, _fileIndex)
 		}
 		str = fileOptionText[3];
 		var deleteBtn = new BentoUI_Button(deleteFunc, btnW, btnH, str, this, _secElement2);
+		BentoSetNavigationWrap(true, true, deleteBtn);
 	}
 }
 
@@ -691,7 +695,7 @@ function DrawSaveFileButton()
 						eX = tx + (7*(j-1))/2;
 						eY = ty+7;
 					}
-					draw_sprite_ext(sprt_HUD_ETank,(statEnergyTanks > j),floor(eX),floor(eY),1,1,0,c_white,1);
+					draw_sprite_ext(sprt_HUD_ETank,(statEnergyTanks > j),floor(eX),floor(eY),1,1,0,c_white,alpha);
 				}
 			}
 		}

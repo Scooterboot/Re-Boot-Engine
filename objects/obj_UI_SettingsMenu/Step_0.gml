@@ -7,6 +7,56 @@ if(activeState == UI_ActiveState.Active)
 		{
 			self.CreateDefaultMenu();
 		}
+		BentoLayerSetDrawWhenBackgrounded(true, defaultMenuLayer);
+	}
+	else if(BentoLayerExists(defaultMenuLayer))
+	{
+		BentoLayerSetDrawWhenBackgrounded(false, defaultMenuLayer);
+	}
+	
+	if(state == UI_SMState.Display)
+	{
+		
+	}
+	else
+	{
+		
+	}
+	
+	if(state == UI_SMState.Audio)
+	{
+		
+	}
+	else
+	{
+		
+	}
+	
+	if(state == UI_SMState.Gameplay)
+	{
+		
+	}
+	else
+	{
+		
+	}
+	
+	if(state == UI_SMState.Keyboard)
+	{
+		
+	}
+	else
+	{
+		
+	}
+	
+	if(state == UI_SMState.Controller)
+	{
+		
+	}
+	else
+	{
+		
 	}
 	
 	cleanUp = true;
@@ -24,6 +74,8 @@ else
 	
 	if(activeState == UI_ActiveState.Inactive)
 	{
+		state = UI_SMState.Default;
+		
 		if(cleanUp)
 		{
 			BentoLayerDestroy(defaultMenuLayer);

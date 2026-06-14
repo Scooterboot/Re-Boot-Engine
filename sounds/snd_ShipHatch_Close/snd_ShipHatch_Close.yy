@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.339646,
+  "duration":0.33965987,
   "exportDir":"",
   "name":"snd_ShipHatch_Close",
   "parent":{

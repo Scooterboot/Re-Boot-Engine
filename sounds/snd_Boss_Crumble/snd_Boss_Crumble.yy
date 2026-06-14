@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.885875,
+  "duration":0.88589567,
   "exportDir":"",
   "name":"snd_Boss_Crumble",
   "parent":{

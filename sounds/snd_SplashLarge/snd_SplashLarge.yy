@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":1.466208,
+  "duration":1.4662131,
   "exportDir":"",
   "name":"snd_SplashLarge",
   "parent":{

@@ -80,7 +80,7 @@ if(screenFade >= 1 && !menuClosing)
 				
 				if(global.musicVolume > 0 && global.musicVolume < 100)
 				{
-					audio_play_sound(snd_Menu_Cursor_1,0,false);
+					audio_play_sound(snd_MenuTick_Small,0,false);
 				}
 				audio_group_set_gain(audio_music,global.musicVolume/100,0);
 				break;
@@ -98,7 +98,7 @@ if(screenFade >= 1 && !menuClosing)
 				
 				if(global.soundVolume > 0 && global.soundVolume < 100)
 				{
-					audio_play_sound(snd_Menu_Cursor_1,0,false);
+					audio_play_sound(snd_MenuTick_Small,0,false);
 				}
 				audio_group_set_gain(audio_sound,global.soundVolume/100,0);
 				break;
@@ -116,7 +116,7 @@ if(screenFade >= 1 && !menuClosing)
 				
 				if(global.ambianceVolume > 0 && global.ambianceVolume < 100)
 				{
-					audio_play_sound(snd_Menu_Cursor_1,0,false);
+					audio_play_sound(snd_MenuTick_Small,0,false);
 				}
 				audio_group_set_gain(audio_ambiance,global.ambianceVolume/100,0);
 				break;

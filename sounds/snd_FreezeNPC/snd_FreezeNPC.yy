@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.301247,
+  "duration":0.30124718,
   "exportDir":"",
   "name":"snd_FreezeNPC",
   "parent":{

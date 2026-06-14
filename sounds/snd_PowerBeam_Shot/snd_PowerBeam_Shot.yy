@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.423125,
+  "duration":0.42312926,
   "exportDir":"",
   "name":"snd_PowerBeam_Shot",
   "parent":{

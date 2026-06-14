@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.186508,
+  "duration":0.18650794,
   "exportDir":"",
   "name":"snd_MiniKraid_SpikeShoot",
   "parent":{

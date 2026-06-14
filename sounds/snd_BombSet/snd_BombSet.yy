@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.041315,
+  "duration":0.041315194,
   "exportDir":"",
   "name":"snd_BombSet",
   "parent":{

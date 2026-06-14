@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.524444,
+  "duration":0.52444446,
   "exportDir":"",
   "name":"snd_PlasmaBeam_Shot",
   "parent":{

@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.730431,
+  "duration":0.73043084,
   "exportDir":"",
   "name":"snd_Gadora_EyeBeam",
   "parent":{

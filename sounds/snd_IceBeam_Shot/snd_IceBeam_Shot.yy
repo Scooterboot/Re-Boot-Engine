@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.57619,
+  "duration":0.5761905,
   "exportDir":"",
   "name":"snd_IceBeam_Shot",
   "parent":{

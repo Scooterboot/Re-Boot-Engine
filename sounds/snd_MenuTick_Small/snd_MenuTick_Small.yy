@@ -1,6 +1,6 @@
 {
   "$GMSound":"v2",
-  "%Name":"snd_Menu_MapCursor",
+  "%Name":"snd_MenuTick_Small",
   "audioGroupId":{
     "name":"audio_sound",
     "path":"audiogroups/audio_sound",
@@ -10,9 +10,9 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.026122449,
+  "duration":0.037460316,
   "exportDir":"",
-  "name":"snd_Menu_MapCursor",
+  "name":"snd_MenuTick_Small",
   "parent":{
     "name":"Menu",
     "path":"folders/Sounds/Menu.yy",
@@ -21,6 +21,6 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"snd_Menu_MapCursor",
+  "soundFile":"snd_MenuTick_Small",
   "volume":1.0,
 }

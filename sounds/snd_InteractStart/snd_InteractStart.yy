@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.617229,
+  "duration":0.6172336,
   "exportDir":"",
   "name":"snd_InteractStart",
   "parent":{

@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.592896,
+  "duration":0.5929025,
   "exportDir":"",
   "name":"snd_PushBlock_Move",
   "parent":{

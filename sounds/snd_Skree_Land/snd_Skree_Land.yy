@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":0.425102,
+  "duration":0.42510206,
   "exportDir":"",
   "name":"snd_Skree_Land",
   "parent":{

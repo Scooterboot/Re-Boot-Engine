@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":3.911043,
+  "duration":3.9110432,
   "exportDir":"",
   "name":"snd_Charge_Loop",
   "parent":{

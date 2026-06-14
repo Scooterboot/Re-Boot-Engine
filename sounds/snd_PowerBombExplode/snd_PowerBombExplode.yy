@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":2.394218,
+  "duration":2.3942177,
   "exportDir":"",
   "name":"snd_PowerBombExplode",
   "parent":{

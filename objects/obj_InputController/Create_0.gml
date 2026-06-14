@@ -34,6 +34,16 @@ function ControlInput(_verbIndex, _keyboardPressType, _keyboardComboType, _gamep
 	pressType = pressType_KB;
 	comboType = comboType_KB;
 	
+	pressTypeAllowed[PressType.Tap]			= true;
+	pressTypeAllowed[PressType.DoubleTap]	= true;
+	pressTypeAllowed[PressType.Press]		= true;
+	pressTypeAllowed[PressType.LongPress]	= true;
+	pressTypeAllowed[PressType.Hold]		= true;
+	pressTypeAllowed[PressType.LongHold]	= true;
+	pressTypeAllowed[PressType.Release]		= true;
+	
+	allowCombo = true;
+	
 	inputCounter = 0;
 	inputCounterMax = 15;
 	

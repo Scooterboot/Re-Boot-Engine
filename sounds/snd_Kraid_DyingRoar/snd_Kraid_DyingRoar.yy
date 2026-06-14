@@ -10,7 +10,7 @@
   "compression":0,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":3.742,
+  "duration":3.7420182,
   "exportDir":"",
   "name":"snd_Kraid_DyingRoar",
   "parent":{

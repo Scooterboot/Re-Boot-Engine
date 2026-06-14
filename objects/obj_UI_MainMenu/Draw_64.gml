@@ -28,24 +28,28 @@ if(room == rm_MainMenu &&
 			draw_set_font(fnt_GUI);
 			draw_set_halign(fa_center);
 			draw_set_valign(fa_middle);
-			if(pressStartAnim%6 >= 3)
+			
+			draw_set_alpha(titleAlpha);
+			if(pressStartAnim%4 >= 2)
 			{
 				draw_set_color(c_ltgray);
-				draw_set_alpha(titleAlpha);
 				for(var i = 0; i < 8; i++)
 				{
 					draw_text(stX+scr_round(lengthdir_x(1.1,45*i)), stY+scr_round(lengthdir_y(1.1,45*i)), startString);
 				}
-				draw_set_color(c_yellow);
 				draw_set_alpha(titleAlpha*0.75);
-				draw_text(stX, stY, startString);
 			}
 			else
 			{
-				draw_set_alpha(titleAlpha);
-				draw_text_shadow(stX, stY, startString,,,c_yellow);
-				draw_set_alpha(1);
+				draw_set_color(c_black);
+				draw_text(stX+1, stY+1, startString);
 			}
+			
+			draw_set_color(c_yellow);
+			draw_text(stX, stY, startString);
+			
+			draw_set_color(c_white);
+			draw_set_alpha(1);
 		}
 	}
 	
