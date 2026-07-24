@@ -15,12 +15,14 @@ function InputVerbConsume(_verbIndex, _playerIndex = 0)
     
     with(_playerArray[_playerIndex])
     {
-        if (array_get_index(__consumedArray, __verbStateArray[_verbIndex]) < 0)
+        var _verbState = __verbStateArray[_verbIndex];
+        
+        if (_verbState.__held && (array_get_index(__consumedArray, _verbState) < 0))
         {
-            array_push(__consumedArray, __verbStateArray[_verbIndex]);
+            array_push(__consumedArray, _verbState);
         }
         
-        with(__verbStateArray[_verbIndex])
+        with(_verbState)
         {
             __prevHeld   = false;
             __held       = false;

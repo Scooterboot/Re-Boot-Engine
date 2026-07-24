@@ -1,6 +1,6 @@
 /// @description Camera movement
 
-if((global.pauseState == PauseState.None || global.pauseState == PauseState.RoomTrans || global.pauseState == PauseState.XRay) && instance_exists(obj_Player))
+if(instance_exists(obj_Player) && (global.pauseState == PauseState.None || global.pauseState == PauseState.RoomTrans || global.pauseState == PauseState.XRay))
 {
 	var player = obj_Player;
 	var xx = x + (camWidth()/2),
@@ -683,10 +683,8 @@ if(instance_exists(obj_ScreenShaker) && obj_ScreenShaker.active)
 	shakeY += obj_ScreenShaker.shakeY;
 }
 
-//var camX = scr_round(playerX+shakeX + (camWidth()-global.zoomResWidth)/2) + scr_round(x-playerX),
-//	camY = scr_round(playerY+shakeY + (camHeight()-global.zoomResHeight)/2) + scr_round(y-playerY);
-var camX = scr_round(playerX+shakeX) + scr_round(x-playerX),
-	camY = scr_round(playerY+shakeY) + scr_round(y-playerY);
+var camX = scr_round(x+shakeX),
+	camY = scr_round(y+shakeY);
 camera_set_view_pos(view_camera[0], camX, camY);
 
 global.cameraX = camX;

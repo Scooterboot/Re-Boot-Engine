@@ -3851,14 +3851,37 @@ function Entity_ModifyDamageTaken(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSub
 {
 	return scr_round(_dmg * damageReduct);
 }
-function Entity_OnDamageTaken(_selfLifeBox, _dmgBox, _finalDmg, _dmg, _dmgType, _dmgSubType, _freezeType = 0, _freezeTime = 600, _npcDeathType = -1)
+function Entity_OnDamageTaken(_lBox, _dmgBox, _finalDmg, _dmg, _dmgType, _dmgSubType, _freezeType = 0, _freezeTime = 600, _npcDeathType = -1)
 {
 	var _enemy = _dmgBox.creator;
 	var knockBack = _enemy.playerKnockBackDur;
 	
-	var ang = _enemy.PlayerKnockBackDir(id);
-	var knockX = lengthdir_x(_enemy.playerKnockBackSpd,ang),
-		knockY = lengthdir_y(_enemy.playerKnockBackSpd,ang);
+	//var ang = _enemy.PlayerKnockBackDir(id);
+	//var knockX = lengthdir_x(_enemy.playerKnockBackSpd,ang),
+	//	knockY = lengthdir_y(_enemy.playerKnockBackSpd,ang);
+	
+	var knockSpd = _enemy.playerKnockBackSpd,
+		knockX = 0,
+		knockY = 0;
+	
+	var _sideL = collision_line(_lBox.bb_left(), _lBox.bb_top(), _lBox.bb_left(), _lBox.bb_bottom(), obj_DamageBox, true, true) != noone,
+		_sideR = collision_line(_lBox.bb_right(), _lBox.bb_top(), _lBox.bb_right(), _lBox.bb_bottom(), obj_DamageBox, true, true) != noone,
+		_sideT = collision_line(_lBox.bb_left(), _lBox.bb_top(), _lBox.bb_right(), _lBox.bb_top(), obj_DamageBox, true, true) != noone,
+		_sideB = collision_line(_lBox.bb_left(), _lBox.bb_bottom(), _lBox.bb_right(), _lBox.bb_bottom(), obj_DamageBox, true, true) != noone;
+	
+	if(_sideL) { knockX += knockSpd; }
+	if(_sideR) { knockX -= knockSpd; }
+	if(_sideT) { knockY += knockSpd; }
+	if(_sideB) { knockY -= knockSpd; }
+	
+	if(knockX == 0)
+	{
+		knockX -= knockSpd * dir;
+	}
+	if(knockY == 0)
+	{
+		knockY -= knockSpd;
+	}
 	
 	self.StrikePlayer(_finalDmg, knockBack, knockX, knockY, _enemy.playerInvFrames, _enemy.ignorePlayerImmunity);
 }

@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"scr_GetButtonSprtIndex",
   "parent":{
-    "name":"Control",
-    "path":"folders/Scripts/Control.yy",
+    "name":"Control_old",
+    "path":"folders/Scripts/Control_old.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -125,7 +125,9 @@ function InputGetBindingName(_binding, _forGamepad, _missingBindingName = "???")
 {
     static _gamepadButtonNameLookup = __InputSystem().__gamepadButtonNameLookup;
     static _kbmBindingNameMap       = __InputSystem().__kbmBindingNameMap;
-
+    
+    if (_binding == undefined) return _missingBindingName;
+    
     if (is_string(_binding)) _binding = ord(_binding);
     
     if (_forGamepad)

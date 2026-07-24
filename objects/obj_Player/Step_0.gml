@@ -2568,7 +2568,7 @@ if(!global.GamePaused())
 	}
 	
 	fell = false;
-	var shouldForceDown = (state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Dodge && jump <= 0 && bombJump <= 0 && !self.SpiderActive());
+	var shouldForceDown = (state != State.Grip && state != State.Spark && state != State.BallSpark && state != State.Dodge && jump <= 0 && bombJump <= 0 && (colEdge == Edge.Bottom || colEdge == Edge.None));//!self.SpiderActive());
 	if((grounded || onPlatform) && fVelY >= 0)
 	{
 		justFell = shouldForceDown;

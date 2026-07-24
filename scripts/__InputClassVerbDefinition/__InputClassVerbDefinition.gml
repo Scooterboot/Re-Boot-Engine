@@ -28,7 +28,7 @@ function __InputClassVerbDefinition(_index, _exportName, _kbmBinding, _gamepadBi
     }
     
     __verbIndex      = _index;
-    __exportName       = _exportName;
+    __exportName     = _exportName;
     __kbmBinding     = is_array(_kbmBinding)? _kbmBinding : [_kbmBinding];
     __gamepadBinding = is_array(_gamepadBinding)? _gamepadBinding : [_gamepadBinding];
     __metadata       = variable_clone(_metadata);

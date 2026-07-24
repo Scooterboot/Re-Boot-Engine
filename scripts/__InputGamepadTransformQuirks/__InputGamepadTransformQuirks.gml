@@ -22,12 +22,7 @@ function __InputGamepadTransformQuirks(_gamepadStruct)
         switch (os_type)
         {
             case os_windows:                
-                if ((_vidPid == "63257505") && (_buttonCount == 13) && (_hatCount == 1) && (__InputStringContains(_description, "switch co.,ltd. retro-bit controller"))) 
-                {
-                    __InputTrace("Overriding gamepad type: Switch (Saturn Wireless Pro)");
-                    __type = INPUT_GAMEPAD_TYPE_SWITCH;
-                }
-                else if ((_vidPid == "7e050920") && (_buttonCount > 21) && (not ((_buttonCount == 30) && (_hatCount == 0))))
+                 if ((_vidPid == "7e050920") && (_buttonCount > 21) && (not ((_buttonCount == 30) && (_hatCount == 0))))
                 {
                     __InputTrace("Blocking gamepad: Switch USB Controller");
                     __blocked = true;
@@ -87,11 +82,6 @@ function __InputGamepadTransformQuirks(_gamepadStruct)
                 {
                     __InputTrace("Blocking gamepad: Joy-Con IMU");
                     __blocked = true;
-                }
-                else if ((_vidPid == "63257505") && (_buttonCount == 13) && (_hatCount == 1) && (__InputStringContains(_description, "usb"))) 
-                {
-                    __InputTrace("Overriding gamepad type: Saturn Wireless Pro");
-                    __type = INPUT_GAMEPAD_TYPE_SWITCH;
                 }
                 else if ((__InputStringContains(_description, "touchpad", "touchscreen"))) 
                 {           

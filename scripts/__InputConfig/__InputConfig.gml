@@ -126,8 +126,8 @@
 #macro INPUT_REBIND_TIMEOUT  5000
 
 // Whether gamepad axis inputs will report a device as active and trigger a hotswap.
-#macro INPUT_GAMEPAD_THUMBSTICK_REPORTS_ACTIVE  true
-#macro INPUT_GAMEPAD_TRIGGER_REPORTS_ACTIVE     true
+#macro INPUT_GAMEPAD_THUMBSTICK_REPORTS_ACTIVE  true//false
+#macro INPUT_GAMEPAD_TRIGGER_REPORTS_ACTIVE     true//false
 
 // Whether various noisy, error-prone inputs will report a device as active and trigger a hotswap.
 // Because these inputs are unreliable, it is recommended that they are set to `false`. However, if

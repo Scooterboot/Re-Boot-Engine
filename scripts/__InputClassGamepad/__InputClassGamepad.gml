@@ -23,31 +23,80 @@ function __InputClassGamepad(_gamepadIndex) constructor
     __steamHandleIndex  = undefined;
 
     __readArray = variable_clone(_genericReadArray, 1);
+    __activityScanIndex = 0;
+    __active = false;
     
-    __prevValueArray = array_create(6, 0); // [gp_axislh, gp_axislv, gp_axisrh, gp_axisrv, gp_shoulderlb, gp_shoulderrb]
-    __valueArray     = array_create(6, 0); // [gp_axislh, gp_axislv, gp_axisrh, gp_axisrv, gp_shoulderlb, gp_shoulderrb]
+    __prevActivityArray = array_create(6, false); // [gp_axislh, gp_axislv, gp_axisrh, gp_axisrv, gp_shoulderlb, gp_shoulderrb]
     
     
     
-    static __UpdatePrevValues = function()
+    static __UpdateActivity = function()
     {
-        if (INPUT_BAN_GAMEPADS || __blocked || (not gamepad_is_connected(__gamepadIndex)))
+        var _gamepadIndex      = __gamepadIndex;
+        var _prevActivityArray = __prevActivityArray; //Axes only
+        
+        __active = false;
+        
+        if (INPUT_BAN_GAMEPADS || __blocked || (not gamepad_is_connected(_gamepadIndex)))
         {
-            __prevValueArray[@ 0] = 0;
-            __prevValueArray[@ 1] = 0;
-            __prevValueArray[@ 2] = 0;
-            __prevValueArray[@ 3] = 0;
-            __prevValueArray[@ 4] = 0;
-            __prevValueArray[@ 5] = 0;
+            _prevActivityArray[@ 0] = false;
+            _prevActivityArray[@ 1] = false;
+            _prevActivityArray[@ 2] = false;
+            _prevActivityArray[@ 3] = false;
+            _prevActivityArray[@ 4] = false;
+            _prevActivityArray[@ 5] = false;
             return;
         }
         
-        array_copy(__prevValueArray, 0, __valueArray, 0, 6);
-        __valueArray[@ 0] = __readArray[gp_axislh - INPUT_GAMEPAD_BINDING_MIN](__gamepadIndex, gp_axislh);
-        __valueArray[@ 1] = __readArray[gp_axislv - INPUT_GAMEPAD_BINDING_MIN](__gamepadIndex, gp_axislv);
-        __valueArray[@ 2] = __readArray[gp_axisrh - INPUT_GAMEPAD_BINDING_MIN](__gamepadIndex, gp_axisrh);
-        __valueArray[@ 3] = __readArray[gp_axisrv - INPUT_GAMEPAD_BINDING_MIN](__gamepadIndex, gp_axisrv);
-        __valueArray[@ 4] = __readArray[gp_shoulderlb - INPUT_GAMEPAD_BINDING_MIN](__gamepadIndex, gp_shoulderlb);
-        __valueArray[@ 5] = __readArray[gp_shoulderrb - INPUT_GAMEPAD_BINDING_MIN](__gamepadIndex, gp_shoulderrb);
+        var _axisIndexTriggerOffset = (gp_axisrv - gp_axislh) + 1;
+        
+        var _index     = __activityScanIndex;
+        var _readArray = __readArray;
+        
+        repeat(3) //Only scan a few bindings every frame to reduce the workload
+        {
+            _index = (_index + 1) mod INPUT_GAMEPAD_BINDING_COUNT;
+            
+            var _binding = _index + INPUT_GAMEPAD_BINDING_MIN;
+            var _value = _readArray[_binding - INPUT_GAMEPAD_BINDING_MIN](_gamepadIndex, _binding);
+            
+            if ((_binding == gp_axislh) || (_binding == gp_axislv) || (_binding == gp_axisrh) || (_binding == gp_axisrv))
+            {
+                if (INPUT_GAMEPAD_THUMBSTICK_REPORTS_ACTIVE)
+                {
+                    var _bindingActive = (abs(_value) > INPUT_GAMEPAD_THUMBSTICK_MIN_THRESHOLD);
+                    
+                    if ((not _prevActivityArray[_binding - gp_axislh]) && _bindingActive)
+                    {
+                        __active = true;
+                    }
+                    
+                    _prevActivityArray[@ _binding - gp_axislh] = _bindingActive;
+                }
+            }
+            else if ((_binding == gp_shoulderlb) || (_binding == gp_shoulderrb))
+            {
+                if (INPUT_GAMEPAD_TRIGGER_REPORTS_ACTIVE)
+                {
+                    var _bindingActive = (_value > INPUT_GAMEPAD_TRIGGER_MIN_THRESHOLD);
+                    
+                    if ((not _prevActivityArray[_axisIndexTriggerOffset + (_binding - gp_shoulderlb)]) && _bindingActive)
+                    {
+                        __active = true;
+                    }
+                    
+                    _prevActivityArray[@ _axisIndexTriggerOffset + (_binding - gp_shoulderlb)] = _bindingActive;
+                }
+            }
+            else 
+            {
+                if (_value > 0)
+                {
+                    __active = true;
+                }
+            }
+        }
+        
+        __activityScanIndex = _index;
     }
 }

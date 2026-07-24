@@ -6,7 +6,7 @@
   "name":"scr_LoadGamepad",
   "parent":{
     "name":"Load",
-    "path":"folders/Scripts/Control/Load.yy",
+    "path":"folders/Scripts/Control_old/Load.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

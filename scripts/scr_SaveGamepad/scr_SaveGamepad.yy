@@ -6,7 +6,7 @@
   "name":"scr_SaveGamepad",
   "parent":{
     "name":"Save",
-    "path":"folders/Scripts/Control/Save.yy",
+    "path":"folders/Scripts/Control_old/Save.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

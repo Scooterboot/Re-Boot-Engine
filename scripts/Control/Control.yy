@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"Control",
   "parent":{
-    "name":"Control",
-    "path":"folders/Scripts/Control.yy",
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

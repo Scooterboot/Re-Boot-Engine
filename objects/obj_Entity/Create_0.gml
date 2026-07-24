@@ -2663,13 +2663,13 @@ npcInvFrames = 8;
 
 playerKnockBackDur = 5;
 playerKnockBackSpd = 5;
-function PlayerKnockBackDir(_player)
+/*function PlayerKnockBackDir(_player)
 {
 	var vec = self.Center(true),
 		pVec = _player.Center(true);
 	
 	return point_direction(vec.X,vec.Y, pVec.X,pVec.Y);
-}
+}*/
 
 ignorePlayerImmunity = false;
 

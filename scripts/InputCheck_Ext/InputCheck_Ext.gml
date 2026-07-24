@@ -8,6 +8,7 @@ function InputCheck_Ext(_verbIndex, _altIndex, _playerIndex = 0)
 	if (not InputGameHasFocus()) return false;
 	
 	var _device = InputPlayerGetDevice(_playerIndex);
+	if(!InputDeviceIsActive(_device)) { return false; }
 	
 	with(_playerArray[_playerIndex])
     {

@@ -56,16 +56,16 @@ function __InputRegisterCollect()
             {
                 if (keyboard_check(vk_alt) && keyboard_check_pressed(vk_space))
                 {
-                    //Unstick Alt Space
-                    keyboard_key_release(vk_alt);
-                    keyboard_key_release(vk_space);
-                    keyboard_key_release(vk_lalt);
-                    keyboard_key_release(vk_ralt);
+                    if (not window_get_fullscreen())
+                    {
+                        //Windowed Alt-Space sticks every key pressed on release
+                        __InputReleaseAllKeys();
+                    }
                 }
                 
                 if (keyboard_check(0xE6) && !keyboard_check_pressed(0xE6))
                 {
-                    //Unstick OEM key (Power button on Steam Deck)
+                    //OEM key sticks on sleep (Power button on Steam Deck)
                     keyboard_key_release(0x0E6);
                 }
             }
@@ -74,14 +74,8 @@ function __InputRegisterCollect()
                 if (keyboard_check_released(vk_lmeta) || keyboard_check_released(vk_rmeta))
                 {
                     //Meta release sticks every key pressed during hold
-                    //This is "the nuclear option", but the problem is severe
-                    var _key = 0x008;
-                    var _len = 0x100 - _key;
-                    repeat(_len)
-                    {
-                        keyboard_key_release(_key);
-                        ++_key;
-                    }
+                    __InputReleaseAllKeys();
+
                 }
             }
             else if (INPUT_ON_MACOS)
@@ -172,7 +166,7 @@ function __InputRegisterCollect()
                 var _gamepad = __gamepadArray[_i];
                 if (is_struct(_gamepad))
                 {
-                    _gamepad.__UpdatePrevValues();
+                    _gamepad.__UpdateActivity();
                 }
                 
                 ++_i;
@@ -275,4 +269,15 @@ function __InputUpdateGamepadPresence()
         
         ++_device;
     }
+}
+
+function __InputReleaseAllKeys()
+{
+  var _key = INPUT_KEYCODE_MIN;
+  var _len = 0x100 - _key;
+  repeat(_len)
+  {
+      keyboard_key_release(_key);
+      ++_key;
+  }
 }
