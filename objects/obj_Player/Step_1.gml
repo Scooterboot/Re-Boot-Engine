@@ -143,30 +143,11 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 	
 	#endregion
 	
-	#region Scan Visor control
+	#region Scan Visor logic
 	
 	if(visorIndex == Visor.Scan && visorSelected)
 	{
-		if(instance_exists(scanVisor))
-		{
-			if(global.pauseState == PauseState.None)
-			{
-				if(InputPlayerGetDevice() == INPUT_KBM && instance_exists(obj_Mouse)) // && visor uses mouse for control == true
-				{
-					scanVisor.x = obj_Mouse.PosX();
-					scanVisor.y = obj_Mouse.PosY();
-				}
-				else
-				{
-					var moveX = global.controlClustX[INPUT_CLUSTER.VisorMove],
-						moveY = global.controlClustY[INPUT_CLUSTER.VisorMove];
-					var mspd = 5;
-					scanVisor.x += moveX*mspd;
-					scanVisor.y += moveY*mspd;
-				}
-			}
-		}
-		else
+		if(!instance_exists(scanVisor))
 		{
 			scanVisor = instance_create_depth(global.resWidth/2, global.resHeight/2, -1, obj_ScanVisor);
 		}
@@ -180,7 +161,7 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 	}
 	
 	#endregion
-	#region XRay Visor control
+	#region XRay Visor logic
 	
 	if(visorIndex == Visor.XRay && visorSelected)
 	{
@@ -204,22 +185,6 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 			
 			if(global.pauseState == PauseState.XRay)
 			{
-				var _moveX = clamp(global.controlClustX[INPUT_CLUSTER.VisorMove] + global.controlClustX[INPUT_CLUSTER.PlayerMove], -1,1),
-					_moveY = clamp(global.controlClustY[INPUT_CLUSTER.VisorMove] + global.controlClustY[INPUT_CLUSTER.PlayerMove], -1,1);
-				var moveDir = point_direction(0,0, _moveX,_moveY),
-					moveDist = point_distance(0,0, _moveX,_moveY);
-				if(InputPlayerGetDevice() == INPUT_KBM && instance_exists(obj_Mouse)) // && visor uses mouse for control == true
-				{
-					moveDir = point_direction(x,y, obj_Mouse.PosX_Room(),obj_Mouse.PosY_Room());
-					moveDist = 1;
-				}
-				
-				if(moveDist > 0)
-				{
-					var destAng = scr_round(angle_difference(moveDir, xrayVisor.coneDir));
-					xrayVisor.coneDir += min(abs(destAng), 4 * moveDist) * sign(destAng);
-				}
-				
 				var _dir = sign(lengthdir_x(16, xrayVisor.coneDir));
 				if(_dir != 0)
 				{

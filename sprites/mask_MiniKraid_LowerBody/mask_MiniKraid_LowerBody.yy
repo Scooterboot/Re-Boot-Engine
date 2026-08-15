@@ -81,8 +81,8 @@
   "swatchColours":null,
   "swfPrecision":0.5,
   "textureGroupId":{
-    "name":"Default",
-    "path":"texturegroups/Default",
+    "name":"_masks",
+    "path":"texturegroups/_masks",
   },
   "type":0,
   "VTile":false,

@@ -41,7 +41,14 @@ dropChance[5] = 20; // power bomb
 
 damage = 12;
 
-ignorePlayerImmunity = true;
+//ignorePlayerImmunity = true;
+bypassPlayerImmune[PlayerImmuneType.Dodge] = false;
+bypassPlayerImmune[PlayerImmuneType.Boost] = true;
+bypassPlayerImmune[PlayerImmuneType.Speed] = true;
+bypassPlayerImmune[PlayerImmuneType.Spark] = false;
+bypassPlayerImmune[PlayerImmuneType.Pseudo] = true;
+bypassPlayerImmune[PlayerImmuneType.Screw] = true;
+bypassPlayerImmune[PlayerImmuneType.Crystal] = false;
 
 enviroHandler = instance_create_depth(0,0,0,obj_SporeSpawn_EnviroHandler);
 

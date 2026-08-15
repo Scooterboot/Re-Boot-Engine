@@ -39,7 +39,14 @@ spitDamage = 5;
 spikeDamage = 10;
 fingerDamage = 10;
 
-ignorePlayerImmunity = true;
+//ignorePlayerImmunity = true;
+bypassPlayerImmune[PlayerImmuneType.Dodge] = false;
+bypassPlayerImmune[PlayerImmuneType.Boost] = true;
+bypassPlayerImmune[PlayerImmuneType.Speed] = true;
+bypassPlayerImmune[PlayerImmuneType.Spark] = true;
+bypassPlayerImmune[PlayerImmuneType.Pseudo] = true;
+bypassPlayerImmune[PlayerImmuneType.Screw] = true;
+bypassPlayerImmune[PlayerImmuneType.Crystal] = false;
 
 enviroHandler = instance_create_depth(0,0,0,obj_Kraid_EnviroHandler);
 

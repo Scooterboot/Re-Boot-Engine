@@ -7,7 +7,14 @@ lifeMax = 2000;
 freezeImmune = true;
 dmgAbsorb = true;
 damage = 20;
-ignorePlayerImmunity = true;
+//ignorePlayerImmunity = true;
+bypassPlayerImmune[PlayerImmuneType.Dodge] = false;
+bypassPlayerImmune[PlayerImmuneType.Boost] = true;
+bypassPlayerImmune[PlayerImmuneType.Speed] = true;
+bypassPlayerImmune[PlayerImmuneType.Spark] = true;
+bypassPlayerImmune[PlayerImmuneType.Pseudo] = true;
+bypassPlayerImmune[PlayerImmuneType.Screw] = true;
+bypassPlayerImmune[PlayerImmuneType.Crystal] = false;
 
 function Entity_CanTakeDamage(_selfLifeBox, _dmgBox, _dmg, _dmgType, _dmgSubType)
 {

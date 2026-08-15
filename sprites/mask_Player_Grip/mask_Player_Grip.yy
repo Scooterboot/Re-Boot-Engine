@@ -83,8 +83,8 @@
   "swatchColours":null,
   "swfPrecision":2.525,
   "textureGroupId":{
-    "name":"Player",
-    "path":"texturegroups/Player",
+    "name":"_masks",
+    "path":"texturegroups/_masks",
   },
   "type":0,
   "VTile":false,

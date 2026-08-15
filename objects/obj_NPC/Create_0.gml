@@ -31,7 +31,7 @@ damage = 0;
 
 // damage player through things like speed booster and screw attack
 // does not affect i-frames
-ignorePlayerImmunity = false;
+//ignorePlayerImmunity = false;
 
 boss = false;
 

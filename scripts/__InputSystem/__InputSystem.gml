@@ -336,18 +336,15 @@ function __InputSystem()
             if (not INPUT_BAN_GAMEPADS)
             {
                 var _gamepadCount = gamepad_get_device_count();
+				var _sortOrder = 1;
+                var _device = 0;
                 
                 if ((not INPUT_ON_WEB) && (INPUT_ON_MACOS || ((not __usingSteamworks) && INPUT_ON_WINDOWS) || (__usingSteamworks && INPUT_ON_LINUX)))
                 {
                     //Search last-to-first on platforms with low-index virtual controllers (Steam Input, ViGEm)
                     //We want real devices to take priority over virtual ones where possible to avoid thrashing
-                    var _sortOrder = -1;
-                    var _device = _gamepadCount - 1;
-                }
-                else
-                {
-                    var _sortOrder = 1;
-                    var _device = 0;
+                    _sortOrder = -1;
+                    _device = _gamepadCount - 1;
                 }
                 
                 repeat(_gamepadCount)

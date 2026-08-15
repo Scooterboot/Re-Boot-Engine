@@ -17,7 +17,9 @@ function scr_MainInitialize()
 	
 	randomize();
 	
-	instance_create_depth(0,0,-10,obj_Display);
+	var dpth = -12;
+	instance_create_depth(0,0,dpth,obj_Display);
+	
 	instance_create_depth(0,0,0,obj_Audio);
 	instance_create_depth(0,0,0,obj_InputController);
 	instance_create_depth(0,0,0,obj_Gameplay);
@@ -27,18 +29,18 @@ function scr_MainInitialize()
 	instance_create_depth(0,0,0,obj_TileFadeHandler);
 	instance_create_depth(0,0,0,obj_ScreenShaker);
 	
-	instance_create_depth(0,0,-9,obj_Mouse);
+	instance_create_depth(0,0,dpth+1,obj_Mouse);
 	
-	instance_create_depth(0,0,-4,obj_UI_Controller);
+	instance_create_depth(0,0,dpth+5,obj_UI_Controller);
 	
-	instance_create_depth(0,0,-7,obj_UI_SettingsMenu);
-	instance_create_depth(0,0,-6,obj_UI_MainMenu);
-	instance_create_depth(0,0,-6,obj_PauseMenu);//obj_UI_PauseMenu);
+	instance_create_depth(0,0,dpth+3,obj_UI_SettingsMenu);
+	instance_create_depth(0,0,dpth+4,obj_UI_MainMenu);
+	instance_create_depth(0,0,dpth+4,obj_PauseMenu);//obj_UI_PauseMenu);
 	
-	instance_create_depth(0,0,-2,obj_UI_RadialMenu);
-	instance_create_depth(0,0,-1,obj_UI_HUD);
+	instance_create_depth(0,0,dpth+6,obj_UI_RadialMenu);
+	instance_create_depth(0,0,dpth+7,obj_UI_HUD);
 	
-	instance_create_depth(0,0,-8,obj_Debug);
+	instance_create_depth(0,0,dpth+2,obj_Debug);
 	
 	room_goto(rm_MainMenu);
 	//room_goto(rm_Disclaimer);

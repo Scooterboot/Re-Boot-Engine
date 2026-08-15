@@ -20,6 +20,23 @@ if(!kill)
 {
 	scanAlpha = min(scanAlpha + 0.1, 1);
 	
+	if(global.pauseState == PauseState.None)
+	{
+		if(InputPlayerGetDevice() == INPUT_KBM && instance_exists(obj_Mouse)) // && visor uses mouse for control == true
+		{
+			x = obj_Mouse.PosX();
+			y = obj_Mouse.PosY();
+		}
+		else
+		{
+			var moveX = global.controlClustX[INPUT_CLUSTER.VisorMove],
+				moveY = global.controlClustY[INPUT_CLUSTER.VisorMove];
+			var mspd = 5;
+			x += moveX*mspd;
+			y += moveY*mspd;
+		}
+	}
+	
 	x = clamp(x, 0, global.resWidth);
 	y = clamp(y, 0, global.resHeight);
 }

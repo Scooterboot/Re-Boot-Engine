@@ -2643,6 +2643,11 @@ if(!global.GamePaused())
 		jump = 0;
 	}
 	
+	if(velXSpeedCurveFlag != 0 && !self.entity_place_collide(2*velXSpeedCurveFlag, 0))
+	{
+		velXSpeedCurveFlag = 0;
+	}
+	
 	var colL = instance_exists(collision_line(self.bb_left()+1,self.bb_top(),self.bb_left()+1,self.bb_bottom(),ColType_MovingSolid,true,true)),
 		colR = instance_exists(collision_line(self.bb_right()-1,self.bb_top(),self.bb_right()-1,self.bb_bottom(),ColType_MovingSolid,true,true)),
 		colT = instance_exists(collision_line(self.bb_left(),self.bb_top()+1,self.bb_right(),self.bb_top()+1,ColType_MovingSolid,true,true)),
@@ -2973,7 +2978,7 @@ if(!global.GamePaused())
 	{
 		if (dir != 0 && cMorph && rMorph && 
 			state != State.Morph && animState != AnimState.Morph && morphFrame <= 0 && 
-			state != State.Crouch && state != State.Spark && state != State.BallSpark && state != State.Grip && state != State.GravGrapple)
+			state != State.Crouch && state != State.Spark && state != State.BallSpark /*&& state != State.Grip*/ && state != State.GravGrapple)
 		{
 			audio_play_sound(snd_Morph,0,false);
 			if(state == State.Stand)
@@ -3004,11 +3009,8 @@ if(!global.GamePaused())
 	
 	if(state == State.Morph)
 	{
-		if(!self.GrappleSwinging())
-		{
-			moveState = MoveState.Default;
-		}
-		else
+		moveState = MoveState.Default;
+		if(self.GrappleSwinging())
 		{
 			moveState = MoveState.Custom;
 		}
@@ -3020,7 +3022,7 @@ if(!global.GamePaused())
 		
 		if(grounded && !prevGrounded)
 		{
-			if(morphFrame <= 0 && !shineRampFix && !slopeGrounded)
+			if(morphFrame <= 0 && !shineRampFix && slopeGrounded == 0)
 			{
 				if(!self.SpiderActive())
 				{
@@ -3409,7 +3411,7 @@ if(!global.GamePaused())
 		
 		if(grounded)
 		{
-			if(!slopeGrounded)
+			if(slopeGrounded == 0)
 			{
 				if(_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidState != LiquidState.None))
 				{
@@ -3457,7 +3459,7 @@ if(!global.GamePaused())
 				}
 			}
 			
-			if(slopeGrounded && state == State.Stand)
+			if(slopeGrounded != 0 && state == State.Stand)
 			{
 				brake = true;
 				animState = AnimState.Brake;
@@ -3553,7 +3555,7 @@ if(!global.GamePaused())
 		
 		if(grounded)
 		{
-			if(!slopeGrounded)
+			if(slopeGrounded == 0)
 			{
 				if(_SPEED_KEEP == 0 || (_SPEED_KEEP == 2 && liquidState != LiquidState.None))
 				{
@@ -3583,7 +3585,7 @@ if(!global.GamePaused())
 				smallLand = false;
 			}
 			
-			if(slopeGrounded && state == State.Stand)
+			if(slopeGrounded != 0 && state == State.Stand)
 			{
 				brake = true;
 				animState = AnimState.Brake;
@@ -4204,7 +4206,38 @@ if(!global.GamePaused())
 			shineSparkSpeed = moveSpeed[MoveSpeed.SparkStart,liquidState];
 			shineReflecCounter = 0;
 			
-			if(shineRestart && item[Item.ChainSpark])
+			if(shineEnd == shineEndMax-1)
+			{
+				if(shineRestart && (self.SparkDir_Hori() || (self.SparkDir_DiagDown() && !self.entity_place_collide(0,2)) || (self.SparkDir_DiagUp() && !self.entity_place_collide(0,-2))))
+				{
+					var dmgCol = false,
+						this = id;
+					with(lifeBoxes[0])
+					{
+						if(this.dmgBoxCheck(instance_place_list(x,y,obj_DamageBox,this.blockList,false)))
+						{
+							dmgCol = true;
+						}
+					}
+					
+					if(!self.entity_place_collide(2*dir,0) || dmgCol)
+					{
+						shineRestart = false;
+					}
+					else
+					{
+						audio_stop_sound(snd_ShineSpark_Charge);
+						audio_play_sound(snd_ShineSpark_Charge,0,false);
+					}
+				}
+				
+				if(!shineRestart)
+				{
+					audio_play_sound(snd_Hurt,0,false);
+				}
+			}
+			
+			if(shineRestart && item[Item.ChainSpark] && shineEnd < shineEndMax)
 			{
 				if(dir == sign(shineDir))
 				{
@@ -4836,7 +4869,21 @@ if(!global.GamePaused())
 	x = scr_round(position.X);
 	y = scr_round(position.Y);
 	
-	slopeGrounded = false;
+	if(velY <= 0)
+	{
+		slopeGrounded = 0;
+	}
+	else
+	{
+		if(slopeGrounded > 0)
+		{
+			slopeGrounded = max(slopeGrounded - 1, 0);
+		}
+		if(slopeGrounded < 0)
+		{
+			slopeGrounded = min(slopeGrounded + 1, 0);
+		}
+	}
 	prevGrounded = grounded;
 	
 	justBounced = false;

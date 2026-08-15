@@ -303,7 +303,38 @@ if(debug == 1)
 		draw_set_font(fnt_GUI);
 		draw_set_color(c_white);
 		draw_set_alpha(0.5);
-		if(!self.SpiderActive())
+		
+		draw_set_halign(fa_center);
+		draw_set_valign(fa_top);
+		var edgeAng = edgeAngle[Edge.Bottom];
+		if(entity_place_collide(0,2))
+		{
+			edgeAng = self.GetEdgeAngle(Edge.Bottom);
+			draw_text(x,y+10,string(edgeAng));
+		}
+		if(entity_place_collide(0,-2))
+		{
+			draw_set_halign(fa_center);
+			draw_set_valign(fa_bottom);
+			edgeAng = self.GetEdgeAngle(Edge.Top);
+			draw_text(x,y-10,string(edgeAng));
+		}
+		if(entity_place_collide(2,0))
+		{
+			draw_set_halign(fa_left);
+			draw_set_valign(fa_middle);
+			edgeAng = self.GetEdgeAngle(Edge.Right);
+			draw_text(bb_right(),y,string(edgeAng));
+		}
+		if(entity_place_collide(-2,0))
+		{
+			draw_set_halign(fa_right);
+			draw_set_valign(fa_middle);
+			edgeAng = self.GetEdgeAngle(Edge.Left);
+			draw_text(bb_left(),y,string(edgeAng));
+		}
+		
+		/*if(!self.SpiderActive())
 		{
 			draw_set_halign(fa_center);
 			draw_set_valign(fa_top);
@@ -359,7 +390,7 @@ if(debug == 1)
 				draw_set_valign(fa_middle);
 			}
 			draw_text(_dx,_dy,string(edgeAngle[spiderEdge]));
-		}
+		}*/
 		draw_set_alpha(1);
     }
 	
