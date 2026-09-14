@@ -154,12 +154,3 @@ if (INPUT_ON_LINUX || INPUT_ON_MACOS)
     InputIconDefineKeyboard(0x80, _f11);
     InputIconDefineKeyboard(0x81, _f12);
 }
-
-//F13 to F32 on Windows and Web
-if (INPUT_ON_WINDOWS || INPUT_ON_WEB)
-{
-    for(var _i = vk_f1 + 12; _i < vk_f1 + 32; _i++)
-    {
-        InputIconDefineKeyboard(_i, "[[F" + string(_i) + "]");
-    }
-}

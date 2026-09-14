@@ -32,8 +32,8 @@
 #macro vk_lmeta        (INPUT_ON_MACOS                                        ? 0x5C : 0x5B)
 #macro vk_period       (INPUT_ON_SWITCH_X                                     ? 0x6E : 0xBE)
 
-#macro mb_wheel_up    m_scroll_up
-#macro mb_wheel_down  m_scroll_down
+#macro mb_wheel_up    0xA004
+#macro mb_wheel_down  0xA005
 
 //Valid keycode bounds
 #macro INPUT_KEYCODE_MIN  0x008

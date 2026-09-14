@@ -249,6 +249,8 @@ function __InputCreateTypeLookup()
         _struct[$ "dd331d00"] = INPUT_GAMEPAD_TYPE_SWITCH;
         _struct[$ "dd331700"] = INPUT_GAMEPAD_TYPE_SWITCH;
         _struct[$ "f5108f01"] = INPUT_GAMEPAD_TYPE_SWITCH;
+        _struct[$ "d62020a7"] = INPUT_GAMEPAD_TYPE_SWITCH;
+        _struct[$ "0d0ffb00"] = INPUT_GAMEPAD_TYPE_SWITCH;
         _struct[$ "92124b46"] = INPUT_GAMEPAD_TYPE_SWITCH;
         _struct[$ "f8211900"] = INPUT_GAMEPAD_TYPE_SWITCH;
         _struct[$ "00f00300"] = INPUT_GAMEPAD_TYPE_SWITCH;
