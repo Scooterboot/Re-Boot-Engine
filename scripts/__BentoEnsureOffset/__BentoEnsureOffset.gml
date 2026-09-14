@@ -53,6 +53,8 @@ function __BentoEnsureOffset()
 
 function __BentoEnsureOffsetInner(_dirtyOffsetArray, _elementVars, _offsetX, _offsetY, _scissorParent, _scissorL, _scissorT, _scissorR, _scissorB)
 {
+    static _system = __BentoSystem();
+    
     with(_elementVars)
     {
         var _element = __attachedElement;
@@ -72,9 +74,29 @@ function __BentoEnsureOffsetInner(_dirtyOffsetArray, _elementVars, _offsetX, _of
         _offsetX += __offsetX;
         _offsetY += __offsetY;
         
-        //Calculate where our center is on the parent
-        var _leftWorld   = __solvedLeft + _offsetX;
-        var _topWorld    = __solvedTop  + _offsetY;
+        if (__positionOverride)
+        {
+            if (__positionInnerCoordSpace)
+            {
+                var _leftWorld = __BentoParsePercentageString(__positionX, _system.__percentageWidth ) + _offsetX - __originX*_width;
+                var _topWorld  = __BentoParsePercentageString(__positionY, _system.__percentageHeight) + _offsetY - __originY*_height;
+            }
+            else
+            {
+                var _leftWorld = (__BentoParsePercentageString(__positionX, _system.__percentageWidth ) / _system.__globalScale) + _offsetX - __originX*_width;
+                var _topWorld  = (__BentoParsePercentageString(__positionY, _system.__percentageHeight) / _system.__globalScale) + _offsetY - __originY*_height;
+            }
+            
+            _offsetX = _leftWorld - __solvedLeft;
+            _offsetY = _topWorld  - __solvedTop;
+        }
+        else
+        {
+            //Calculate where our center is on the parent
+            var _leftWorld = _offsetX + __solvedLeft;
+            var _topWorld  = _offsetY + __solvedTop;
+        }
+        
         var _rightWorld  = _leftWorld + _width;
         var _bottomWorld = _topWorld  + _height;
         

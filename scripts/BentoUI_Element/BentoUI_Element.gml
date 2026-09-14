@@ -1,5 +1,6 @@
 function BentoUI_Element(_width, _height, _rawText = [], _creatorUI, _parent = other) : BentoConstrAncestor(_parent) constructor
 {
+	BentoLayoutSetResize(BENTO_RESIZE_NORMAL, BENTO_RESIZE_NORMAL);
 	BentoLayoutSetSize(_width, _height);
 	BentoLayoutSetMinSize(_width, _height);
 	BentoLayoutSetMaxSize(_width, _height);

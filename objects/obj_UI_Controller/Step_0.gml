@@ -45,8 +45,8 @@ if(room == rm_MainMenu || room == rm_GameOver || room == rm_Disclaimer || global
 	}
 	
 	BentoInputHotkey(BENTO_HOTKEY_CANCEL, (global.controlPressed[INPUT_VERB.MenuCancel] || InputMousePressed(mb_right)));
-	BentoInputHotkey(BENTO_HOTKEY_MOUSE_WHEEL_UP, global.control[INPUT_VERB.MenuScrollUp]);
-	BentoInputHotkey(BENTO_HOTKEY_MOUSE_WHEEL_DOWN, global.control[INPUT_VERB.MenuScrollDown]);
+	BentoInputHotkey(BENTO_HOTKEY_SCROLL_UP, global.control[INPUT_VERB.MenuScrollUp]);
+	BentoInputHotkey(BENTO_HOTKEY_SCROLL_DOWN, global.control[INPUT_VERB.MenuScrollDown]);
 	BentoInputConfigureRetrigger(30,5,10,3);
 	
 	BentoSystemStep(0, 0, global.resWidth, global.resHeight);

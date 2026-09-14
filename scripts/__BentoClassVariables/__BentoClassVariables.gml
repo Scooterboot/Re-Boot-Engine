@@ -4,6 +4,8 @@
 
 function __BentoClassVariables(_attachedElement) constructor
 {
+    static _system = __BentoSystem();
+    
     static _globalCount = 0;
     __envIndex = _globalCount++;
     
@@ -14,6 +16,7 @@ function __BentoClassVariables(_attachedElement) constructor
     
     __attachedElement = _attachedElement;
     __elementIsInstance = __BentoIsInstance(_attachedElement);
+    _system.__previousElement = _attachedElement;
     
     __name  = undefined;
     __layer = undefined;
@@ -23,10 +26,19 @@ function __BentoClassVariables(_attachedElement) constructor
     __buttonIndex    = undefined;
     __hoverableIndex = undefined;
     
+    __callbackOnDestroy = undefined;
+    __callbackOnDestroyParams = undefined;
+    
     if (BENTO_ALLOW_ENCLOSED_GETTER)
     {
         __enclosed = false;
     }
+    
+    //Forced position
+    __positionX = undefined;
+    __positionY = undefined;
+    __positionInnerCoordSpace = true;
+    __positionOverride = false;
     
     //Cartesian offset from the calculated layout position
     __offsetX = 0;
@@ -52,6 +64,7 @@ function __BentoClassVariables(_attachedElement) constructor
     __primaryLongState = __BENTO_STATE_OFF;
     __byPlayer         = false;
     __clickState       = 0b00;
+    __hotspotScale     = 1;
     
     __longPressEnabled = false;
     __clickTiming      = undefined;
@@ -215,22 +228,20 @@ function __BentoClassVariables(_attachedElement) constructor
         
         __funcHover = method(_attachedElement, function(_mouseX, _mouseY)
         {
-            if (instance_position(_mouseX, _mouseY, self))
+            var _bentoVars = BENTO_VARS;
+            var _xCenter = 0.5*(bbox_left + bbox_right);
+            var _yCenter = 0.5*(bbox_top + bbox_bottom);
+            if (instance_position(_xCenter + ((_mouseX - _xCenter) / _bentoVars.__hotspotScale),
+                                  _yCenter + ((_mouseY - _yCenter) / _bentoVars.__hotspotScale), self))
             {
-                var _scissorParent = BENTO_VARS.__scissorParent;
+                var _scissorParent = _bentoVars.__scissorParent;
                 if (point_in_rectangle(_mouseX, _mouseY, _scissorParent.__scissorWorldLeft, _scissorParent.__scissorWorldTop, _scissorParent.__scissorWorldRight, _scissorParent.__scissorWorldBottom))
                 {
                     return self;
                 }
-                else
-                {
-                    return undefined;
-                }
             }
-            else
-            {
-                return undefined;
-            }
+            
+            return undefined;
         });
     }
     else
@@ -282,9 +293,14 @@ function __BentoClassVariables(_attachedElement) constructor
         
         __funcHover = method(_attachedElement, function(_mouseX, _mouseY)
         {
-            if (point_in_rectangle(_mouseX, _mouseY, bentoLeft, bentoTop, bentoRight, bentoBottom))
+            var _bentoVars = BENTO_VARS;
+            var _xCenter = 0.5*(bentoLeft + bentoRight);
+            var _yCenter = 0.5*(bentoTop + bentoBottom);
+            if (point_in_rectangle(_xCenter + ((_mouseX - _xCenter) / _bentoVars.__hotspotScale),
+                                   _yCenter + ((_mouseY - _yCenter) / _bentoVars.__hotspotScale),
+                                   bentoLeft, bentoTop, bentoRight, bentoBottom))
             {
-                var _scissorParent = BENTO_VARS.__scissorParent;
+                var _scissorParent = _bentoVars.__scissorParent;
                 if (point_in_rectangle(_mouseX, _mouseY, _scissorParent.__scissorWorldLeft, _scissorParent.__scissorWorldTop, _scissorParent.__scissorWorldRight, _scissorParent.__scissorWorldBottom))
                 {
                     return self;
@@ -307,6 +323,23 @@ function __BentoClassVariables(_attachedElement) constructor
     
     static __Destroy = function()
     {
+        if (is_callable(__callbackOnDestroy))
+        {
+            var _callbackOnDestroyParams = __callbackOnDestroyParams;
+            if (is_array(_callbackOnDestroyParams))
+            {
+                method_call(__callbackOnDestroy, _callbackOnDestroyParams);
+            }
+            else if (_callbackOnDestroyParams == undefined)
+            {
+                __callbackOnDestroy();
+            }
+            else
+            {
+                __callbackOnDestroy(_callbackOnDestroyParams);
+            }
+        }
+        
         __BentoRemoveParent(__attachedElement);
         BentoDestroyChildren(__attachedElement);
         
@@ -316,6 +349,16 @@ function __BentoClassVariables(_attachedElement) constructor
         }
         
         BentoFocusClose(__attachedElement);
+        
+        if (struct_exists(self, "__tableHAlignMap"))
+        {
+            ds_map_destroy(__tableHAlignMap);
+        }
+        
+        if (struct_exists(self, "__tableMaxWidthMap"))
+        {
+            ds_map_destroy(__tableMaxWidthMap);
+        }
         
         var _element = __layer.__environment.__nameMap[? __name];
         if (_element == __attachedElement) ds_map_delete(__layer.__environment.__nameMap, __name);
@@ -360,6 +403,12 @@ function __BentoClassVariables(_attachedElement) constructor
     
     __layoutClampInside = false;
     
+    //Table-specific values
+    __tableDefaultHAlign   = 0;
+    __tableDefaultMaxWidth = infinity;
+    __tableHAlignMap       = ds_map_create(); //FIXME - Create maps on demand
+    __tableMaxWidthMap     = ds_map_create(); //FIXME - Create maps on demand
+    
     //Anchor against the available space that the parent has allocated for this element. This is
     //especially useful for children of rect parents where you might want to position the element
     //relative to edges and corners.
@@ -383,6 +432,15 @@ function __BentoClassVariables(_attachedElement) constructor
     __layoutPadRight  = 0;
     __layoutPadBottom = 0;
     
+    __layoutMarginLeft   = 0;
+    __layoutMarginTop    = 0;
+    __layoutMarginRight  = 0;
+    __layoutMarginBottom = 0;
+    
+        //Derived from the above
+        __layoutMarginWidth  = 0;
+        __layoutMarginHeight = 0;
+    
     __layoutGutterX = 0;
     __layoutGutterY = 0;
     
@@ -390,6 +448,8 @@ function __BentoClassVariables(_attachedElement) constructor
     __solverPadTop    = 0;
     __solverPadRight  = 0;
     __solverPadBottom = 0;
+    __solverPadWidth  = 0;
+    __solverPadHeight = 0;
     
     //How the element should resize. All elements will always try to reduce in size, down to their
     //minimum size, if they are too big for their parent regardless of resizing logic.

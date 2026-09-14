@@ -1,8 +1,10 @@
 // Feather disable all
 
-function __BentoSolverGridResizeWidth()
+function __BentoSolverGridResizeWidth(_rootWidth)
 {
-    var _contentSize  = __solvedWidth - (__solverPadLeft + __solverPadRight);
+    var _layoutWidthMax = __BentoParsePercentageString(__layoutWidthMax, _rootWidth);
+    
+    var _contentSize  = __solvedWidth - (__solverPadWidth + __layoutMarginWidth);
     var _contentCount = floor((_contentSize + __layoutGutterX) / (__solverCellMinWidth + __layoutGutterX));
     _contentCount = clamp(_contentCount, __gridMinColumns, __gridMaxColumns);
     
@@ -18,11 +20,11 @@ function __BentoSolverGridResizeWidth()
         {
             if (__layoutWidthResize == BENTO_RESIZE_INFLATE)
             {
-                __solvedWidth = clamp(_cellSize, __solverMinWidth, __layoutWidthMax);
+                __solvedWidth = clamp(_cellSize, __solverMinWidth, _layoutWidthMax);
             }
             else
             {
-                __solvedWidth = clamp(min(__solvedWidth, _cellSize), __solverMinWidth, __layoutWidthMax);
+                __solvedWidth = clamp(min(__solvedWidth, _cellSize), __solverMinWidth, _layoutWidthMax);
             }
         }
         

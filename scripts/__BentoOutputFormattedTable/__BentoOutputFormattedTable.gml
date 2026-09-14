@@ -1,5 +1,3 @@
-// Feather ignore all
-
 /// @param array2D
 /// @param [headerRow]
 
@@ -10,14 +8,11 @@ function __BentoArray2DToFormattedTable(_rootArray, _headerRow = undefined)
         return "";
     }
     
+	var _hasHeaderRow = false;
     if (is_array(_headerRow))
     {
-        var _hasHeaderRow = true;
+        _hasHeaderRow = true;
         array_insert(_rootArray, 0, _headerRow);
-    }
-    else
-    {
-        var _hasHeaderRow = false;
     }
     
     var _rows = array_length(_rootArray);
@@ -53,20 +48,21 @@ function __BentoArray2DToFormattedTable(_rootArray, _headerRow = undefined)
     
     var _buffer = buffer_create(1024, buffer_grow, 1);
     
-    var _y = 0;
+    _y = 0;
     repeat(_rows)
     {
         var _rowArray = _rootArray[_y];
         if (is_array(_rowArray))
         {
             var _x = 0;
+			var _string = "";
             repeat(min(_columns, array_length(_rowArray)))
             {
                 buffer_write(_buffer, buffer_u8, ord("|"));
                 buffer_write(_buffer, buffer_u8, ord(" "));
                 
                 //Write value
-                var _string = string(_rowArray[_x]);
+                _string = string(_rowArray[_x]);
                 buffer_write(_buffer, buffer_text, _string);
                 
                 //Pad

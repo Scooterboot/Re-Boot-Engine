@@ -1,11 +1,13 @@
 // Feather disable all
 
-function __BentoSolverListPositions(_left, _top, _allocatedWidth, _allocatedHeight)
+function __BentoSolverListPositions(_left, _top, _allocatedWidth, _allocatedHeight, _rightToLeftRootWidth)
 {
     __BentoScrollLimitsMarkSelfDirty();
     
-    __solvedLeft = _left + __layoutAnchorX*(_allocatedWidth  - __solvedWidth );
-    __solvedTop  = _top  + __layoutAnchorY*(_allocatedHeight - __solvedHeight);
+    __solvedLeft = _left + __layoutAnchorX*(_allocatedWidth  - __solvedWidth ) + __layoutMarginLeft;
+    __solvedTop  = _top  + __layoutAnchorY*(_allocatedHeight - __solvedHeight) + __layoutMarginTop;
+    __solvedWidth  -= __layoutMarginWidth;
+    __solvedHeight -= __layoutMarginHeight;
     
     if (BENTO_FLOOR_LAYOUT_POSITIONS)
     {
@@ -28,7 +30,7 @@ function __BentoSolverListPositions(_left, _top, _allocatedWidth, _allocatedHeig
             ++_i;
         }
         
-        _majorSize += __solverPadLeft + __solverPadRight + max(_childCount-1, 0)*__layoutGutterX;
+        _majorSize += __solverPadWidth + max(_childCount-1, 0)*__layoutGutterX;
         
         var _majorPos = __solvedLeft + __solverPadLeft;
         var _minorPos = __solvedTop  + __solverPadTop;
@@ -36,7 +38,7 @@ function __BentoSolverListPositions(_left, _top, _allocatedWidth, _allocatedHeig
         
         _majorPos += __layoutHAlignChildren*(__solvedWidth - _majorSize);
         
-        var _minorAvailable = __solvedHeight - (__solverPadTop + __solverPadBottom);
+        var _minorAvailable = __solvedHeight - __solverPadHeight;
         var _minorAlign = __layoutVAlignChildren;
         var _i = 0;
         repeat(_childCount)
@@ -44,8 +46,8 @@ function __BentoSolverListPositions(_left, _top, _allocatedWidth, _allocatedHeig
             with(_childArray[_i])
             {
                 var _childMinorPos = _minorPos + _minorAlign*(_minorAvailable - __solvedHeight);
-                __SolverFinalPositions(_majorPos, _childMinorPos, __solvedWidth, _minorAvailable);
-                _majorPos += __solvedWidth + _gutter;
+                __SolverFinalPositions(_majorPos, _childMinorPos, __solvedWidth, _minorAvailable, _rightToLeftRootWidth);
+                _majorPos += __solvedWidth + __layoutMarginWidth + _gutter;
             }
           
             ++_i;
@@ -61,7 +63,7 @@ function __BentoSolverListPositions(_left, _top, _allocatedWidth, _allocatedHeig
             ++_i;
         }
         
-        _majorSize += __solverPadTop + __solverPadBottom + max(_childCount-1, 0)*__layoutGutterY;
+        _majorSize += __solverPadHeight + max(_childCount-1, 0)*__layoutGutterY;
         
         var _majorPos = __solvedTop  + __solverPadTop;
         var _minorPos = __solvedLeft + __solverPadLeft;
@@ -69,7 +71,7 @@ function __BentoSolverListPositions(_left, _top, _allocatedWidth, _allocatedHeig
         
         _majorPos += __layoutVAlignChildren*(__solvedHeight - _majorSize);
         
-        var _minorAvailable = __solvedWidth - (__solverPadLeft + __solverPadRight);
+        var _minorAvailable = __solvedWidth - __solverPadWidth;
         var _minorAlign = __layoutHAlignChildren;
         var _i = 0;
         repeat(_childCount)
@@ -77,8 +79,8 @@ function __BentoSolverListPositions(_left, _top, _allocatedWidth, _allocatedHeig
             with(_childArray[_i])
             {
                 var _childMinorPos = _minorPos + _minorAlign*(_minorAvailable - __solvedWidth);
-                __SolverFinalPositions(_childMinorPos, _majorPos, _minorAvailable, __solvedHeight);
-                _majorPos += __solvedHeight + _gutter;
+                __SolverFinalPositions(_childMinorPos, _majorPos, _minorAvailable, __solvedHeight, _rightToLeftRootWidth);
+                _majorPos += __solvedHeight + __layoutMarginHeight + _gutter;
             }
           
             ++_i;
@@ -87,4 +89,10 @@ function __BentoSolverListPositions(_left, _top, _allocatedWidth, _allocatedHeig
     
     //Reset the temporary layout array
     array_resize(__layoutChildArray, 0);
+    
+    //Flip the x-axis position if we're using a right-to-left layout
+    if (_rightToLeftRootWidth != undefined)
+    {
+        __solvedLeft = _rightToLeftRootWidth - (__solvedLeft + __solvedWidth);
+    }
 }

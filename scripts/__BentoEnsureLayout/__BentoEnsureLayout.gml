@@ -4,8 +4,14 @@
 
 function __BentoEnsureLayout()
 {
+    static _system = __BentoSystem();
+    
     if not (__dirtyFlags & __BENTO_DIRTY_LAYOUT) return;
     __dirtyFlags = ~((~__dirtyFlags) | __BENTO_DIRTY_LAYOUT);
+    
+    var _rootWidth  = _system.__percentageWidth;
+    var _rootHeight = _system.__percentageHeight;
+    var _rightToLeftRootWidth = _system.__rightToLeft? _rootWidth : undefined;
     
     var _layoutOrder = __layoutOrder;
     array_resize(_layoutOrder, 0);
@@ -20,7 +26,7 @@ function __BentoEnsureLayout()
         var _i = _count-1;
         repeat(_count)
         {
-            _layoutOrder[_i].__SolverGetDeflateWidth();
+            _layoutOrder[_i].__SolverGetDeflateWidth(_rootWidth);
             --_i;
         }
         
@@ -28,7 +34,7 @@ function __BentoEnsureLayout()
         var _i = 0;
         repeat(_count)
         {
-            _layoutOrder[_i].__SolverResizeWidth();
+            _layoutOrder[_i].__SolverResizeWidth(_rootWidth);
             ++_i;
         }
         
@@ -36,7 +42,7 @@ function __BentoEnsureLayout()
         var _i = _count-1;
         repeat(_count)
         {
-            _layoutOrder[_i].__SolverGetDeflateHeight();
+            _layoutOrder[_i].__SolverGetDeflateHeight(_rootHeight);
             --_i;
         }
         
@@ -44,13 +50,13 @@ function __BentoEnsureLayout()
         var _i = 0;
         repeat(_count)
         {
-            _layoutOrder[_i].__SolverResizeHeight();
+            _layoutOrder[_i].__SolverResizeHeight(_rootWidth, _rootHeight);
             ++_i;
         }
         
         //Final pass to set positions in stone
         var _rootBento = __rootElement.BENTO_VARS;
-        _rootBento.__SolverFinalPositions(0, 0, _rootBento.__solvedWidth, _rootBento.__solvedHeight);
+        _rootBento.__SolverFinalPositions(0, 0, _rootBento.__solvedWidth, _rootBento.__solvedHeight, _rightToLeftRootWidth);
     }
     
     //Ensure a full reset of the transform/scroll positions
@@ -72,6 +78,8 @@ function __BentoEnsureLayerOrderInner(_layoutOrder, _elementVars)
         __solverPadTop    = __layoutPadTop    + __scissorPadTop    + __scissorScrollbarTop;
         __solverPadRight  = __layoutPadRight  + __scissorPadRight  + __scissorScrollbarRight;
         __solverPadBottom = __layoutPadBottom + __scissorPadBottom + __scissorScrollbarBottom;
+        __solverPadWidth  = __solverPadLeft + __solverPadRight;
+        __solverPadHeight = __solverPadTop + __solverPadBottom;
         
         var _childArray  = __childArray;
         var _layoutArray = __layoutChildArray;

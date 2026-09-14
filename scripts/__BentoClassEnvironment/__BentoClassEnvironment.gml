@@ -28,6 +28,7 @@ function __BentoClassEnvironment(_name) constructor
     __envNavigationState = __BENTO_STATE_OFF;
     
     __envHotkeyInputMap = ds_map_create();
+    __envHotkeySeenMap  = ds_map_create();
     
     ///////
     // Set up a default input mode for convenience
@@ -70,8 +71,8 @@ function __BentoClassEnvironment(_name) constructor
     // Layers!
     ///////
     
-    __layerCurrent = new __BentoClassLayer(self, "default");
-    __layerArray = [__layerCurrent];
+    __layerCurrent =  undefined;
+    __layerArray = [];
     __newLayerArray = [];
     
     __nameMap = ds_map_create();
@@ -81,8 +82,8 @@ function __BentoClassEnvironment(_name) constructor
     ///////
     
     //Initialize to some guesswork values
-    __approxWidth  = window_get_width();
-    __approxHeight = window_get_height();
+    __approxWidth  = display_get_gui_width();
+    __approxHeight = display_get_gui_height();
     
     
     

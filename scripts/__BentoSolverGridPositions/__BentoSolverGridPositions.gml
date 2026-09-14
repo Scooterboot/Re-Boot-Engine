@@ -1,11 +1,13 @@
 // Feather disable all
 
-function __BentoSolverGridPositions(_left, _top, _allocatedWidth, _allocatedHeight)
+function __BentoSolverGridPositions(_left, _top, _allocatedWidth, _allocatedHeight, _rightToLeftRootWidth)
 {
     __BentoScrollLimitsMarkSelfDirty();
     
-    __solvedLeft = _left + __layoutAnchorX*(_allocatedWidth  - __solvedWidth );
-    __solvedTop  = _top  + __layoutAnchorY*(_allocatedHeight - __solvedHeight);
+    __solvedLeft = _left + __layoutAnchorX*(_allocatedWidth  - __solvedWidth ) + __layoutMarginLeft;
+    __solvedTop  = _top  + __layoutAnchorY*(_allocatedHeight - __solvedHeight) + __layoutMarginTop;
+    __solvedWidth  -= __layoutMarginWidth;
+    __solvedHeight -= __layoutMarginHeight;
     
     if (BENTO_FLOOR_LAYOUT_POSITIONS)
     {
@@ -15,8 +17,8 @@ function __BentoSolverGridPositions(_left, _top, _allocatedWidth, _allocatedHeig
         __solvedHeight = floor(__solvedHeight);
     }
     
-    var _contentWidth  = __solvedWidth  - (__solverPadLeft + __solverPadRight);
-    var _contentHeight = __solvedHeight - (__solverPadTop + __solverPadBottom);
+    var _contentWidth  = __solvedWidth  - __solverPadWidth;
+    var _contentHeight = __solvedHeight - __solverPadHeight;
     
     var _columns = floor((_contentWidth  + __layoutGutterX) / (__solverCellMinWidth  + __layoutGutterX));
     var _rows    = floor((_contentHeight + __layoutGutterY) / (__solverCellMinHeight + __layoutGutterY));
@@ -38,7 +40,7 @@ function __BentoSolverGridPositions(_left, _top, _allocatedWidth, _allocatedHeig
     var _i = 0;
     repeat(_childCount)
     {
-        _childArray[_i].__SolverFinalPositions(_childLeft, _childTop, _cellWidth, _cellHeight);
+        _childArray[_i].__SolverFinalPositions(_childLeft, _childTop, _cellWidth, _cellHeight, _rightToLeftRootWidth);
         
         _childLeft += _cellWidth + __layoutGutterX;
         ++_gridX;
@@ -56,4 +58,10 @@ function __BentoSolverGridPositions(_left, _top, _allocatedWidth, _allocatedHeig
     
     //Reset the temporary layout array
     array_resize(__layoutChildArray, 0);
+    
+    //Flip the x-axis position if we're using a right-to-left layout
+    if (_rightToLeftRootWidth != undefined)
+    {
+        __solvedLeft = _rightToLeftRootWidth - (__solvedLeft + __solvedWidth);
+    }
 }

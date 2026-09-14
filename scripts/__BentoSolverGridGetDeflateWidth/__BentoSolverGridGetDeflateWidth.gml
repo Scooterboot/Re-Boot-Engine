@@ -1,7 +1,10 @@
 // Feather disable all
 
-function __BentoSolverGridGetDeflateWidth()
+function __BentoSolverGridGetDeflateWidth(_rootWidth)
 {
+    var _layoutWidthMin = __BentoParsePercentageString(__layoutWidthMin, _rootWidth);
+    var _layoutWidthMax = __BentoParsePercentageString(__layoutWidthMax, _rootWidth);
+    
     var _deflateSize = 0;
     var _minSize = 0;
     
@@ -20,14 +23,14 @@ function __BentoSolverGridGetDeflateWidth()
     __solverCellMinWidth = _minSize;
     
     _minSize *= __gridMinColumns;
-    _minSize += __solverPadLeft + __solverPadRight + __layoutGutterX*(__gridMinColumns-1);
+    _minSize += __solverPadWidth + __layoutGutterX*(__gridMinColumns-1);
     
     _deflateSize *= __gridTargetColumns;
-    _deflateSize += __solverPadLeft + __solverPadRight + __layoutGutterX*(__gridTargetColumns-1);
+    _deflateSize += __solverPadWidth + __layoutGutterX*(__gridTargetColumns-1);
     
     __solverChildrenDeflateWidth = _deflateSize;
     
-    __solverMinWidth     = (__layoutWidthResize == BENTO_RESIZE_INFLATE)? __layoutWidthMin : clamp(_minSize, __layoutWidthMin, __layoutWidthMax);
-    __solverDeflateWidth = clamp(_deflateSize, __solverMinWidth, __layoutWidthMax);
-    __solvedWidth        = clamp((__layoutWidthResize == BENTO_RESIZE_NORMAL)? __layoutWidthPref : _deflateSize, __solverMinWidth, __layoutWidthMax);
+    __solverMinWidth     = ((__layoutWidthResize == BENTO_RESIZE_INFLATE)? _layoutWidthMin : clamp(_minSize, _layoutWidthMin, _layoutWidthMax)) + __layoutMarginWidth;
+    __solverDeflateWidth = clamp(_deflateSize, __solverMinWidth - __layoutMarginWidth, _layoutWidthMax) + __layoutMarginWidth;
+    __solvedWidth        = clamp(((__layoutWidthResize == BENTO_RESIZE_NORMAL)? __BentoSolverGetSafeWidth(_rootWidth) : _deflateSize) + __layoutMarginWidth, __solverMinWidth, _layoutWidthMax + __layoutMarginWidth);
 }

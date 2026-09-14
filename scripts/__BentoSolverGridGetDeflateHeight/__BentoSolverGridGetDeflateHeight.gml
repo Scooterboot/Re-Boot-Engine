@@ -1,7 +1,10 @@
 // Feather disable all
 
-function __BentoSolverGridGetDeflateHeight()
+function __BentoSolverGridGetDeflateHeight(_rootHeight)
 {
+    var _layoutHeightMin = __BentoParsePercentageString(__layoutHeightMin, _rootHeight);
+    var _layoutHeightMax = __BentoParsePercentageString(__layoutHeightMax, _rootHeight);
+    
     var _deflateSize = 0;
     var _minSize = 0;
     
@@ -20,14 +23,14 @@ function __BentoSolverGridGetDeflateHeight()
     __solverCellMinHeight = _minSize;
     
     _minSize *= __gridMinRows;
-    _minSize += __solverPadTop + __solverPadBottom + __layoutGutterY*(__gridMinRows-1);
+    _minSize += __solverPadHeight + __layoutGutterY*(__gridMinRows-1);
     
     _deflateSize *= __gridTargetRows;
-    _deflateSize += __solverPadTop + __solverPadBottom + __layoutGutterY*(__gridTargetRows-1);
+    _deflateSize += __solverPadHeight + __layoutGutterY*(__gridTargetRows-1);
     
     __solverChildrenDeflateHeight = _deflateSize;
     
-    __solverMinHeight     = (__layoutHeightResize == BENTO_RESIZE_INFLATE)? __layoutHeightMin : clamp(_minSize, __layoutHeightMin, __layoutHeightMax);
-    __solverDeflateHeight = clamp(_deflateSize, __solverMinHeight, __layoutHeightMax);
-    __solvedHeight        = clamp((__layoutHeightResize == BENTO_RESIZE_NORMAL)? __layoutHeightPref : _deflateSize, __solverMinHeight, __layoutHeightMax);
+    __solverMinHeight     = ((__layoutHeightResize == BENTO_RESIZE_INFLATE)? _layoutHeightMin : clamp(_minSize, _layoutHeightMin, _layoutHeightMax)) + __layoutMarginHeight;
+    __solverDeflateHeight = clamp(_deflateSize, __solverMinHeight - __layoutMarginHeight, _layoutHeightMax) + __layoutMarginHeight;
+    __solvedHeight        = clamp(((__layoutHeightResize == BENTO_RESIZE_NORMAL)? __BentoSolverGetSafeHeight(_rootHeight) : _deflateSize) + __layoutMarginHeight, __solverMinHeight, _layoutHeightMax + __layoutMarginHeight);
 }

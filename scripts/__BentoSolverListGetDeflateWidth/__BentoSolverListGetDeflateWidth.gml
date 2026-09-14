@@ -1,7 +1,10 @@
 // Feather disable all
 
-function __BentoSolverListGetDeflateWidth()
+function __BentoSolverListGetDeflateWidth(_rootWidth)
 {
+    var _layoutWidthMin = __BentoParsePercentageString(__layoutWidthMin, _rootWidth);
+    var _layoutWidthMax = __BentoParsePercentageString(__layoutWidthMax, _rootWidth);
+    
     var _deflateSize = 0;
     var _minSize = 0;
     
@@ -23,7 +26,7 @@ function __BentoSolverListGetDeflateWidth()
             ++_i;
         }
         
-        var _extra = __solverPadLeft + __solverPadRight + max(_childCount-1, 0)*__layoutGutterX;
+        var _extra = __solverPadWidth + max(_childCount-1, 0)*__layoutGutterX;
     }
     else
     {
@@ -40,7 +43,7 @@ function __BentoSolverListGetDeflateWidth()
             ++_i;
         }
         
-        var _extra = __solverPadLeft + __solverPadRight;
+        var _extra = __solverPadWidth;
     }
     
     _deflateSize += _extra;
@@ -48,7 +51,13 @@ function __BentoSolverListGetDeflateWidth()
     
     __solverChildrenDeflateWidth = _deflateSize;
     
-    __solverMinWidth     = (__layoutWidthResize == BENTO_RESIZE_INFLATE)? __layoutWidthMin : clamp(_minSize, __layoutWidthMin, __layoutWidthMax);
-    __solverDeflateWidth = clamp(_deflateSize, __solverMinWidth, __layoutWidthMax);
-    __solvedWidth        = clamp((__layoutWidthResize == BENTO_RESIZE_NORMAL)? __layoutWidthPref : _deflateSize, __solverMinWidth, __layoutWidthMax);
+    __solverMinWidth     = ((__layoutWidthResize == BENTO_RESIZE_INFLATE)? _layoutWidthMin : clamp(_minSize, _layoutWidthMin, _layoutWidthMax)) + __layoutMarginWidth;
+    __solverDeflateWidth = clamp(_deflateSize, __solverMinWidth - __layoutMarginWidth, _layoutWidthMax) + __layoutMarginWidth;
+    __solvedWidth        = clamp(((__layoutWidthResize == BENTO_RESIZE_NORMAL)? __BentoSolverGetSafeWidth(_rootWidth) : _deflateSize) + __layoutMarginWidth, __solverMinWidth, _layoutWidthMax + __layoutMarginWidth);
+    
+    //Ensure we can never deflate lower than our fixed size
+    if (__layoutWidthResize == BENTO_RESIZE_NORMAL)
+    {
+        __solverDeflateWidth = max(__solvedWidth, __solverDeflateWidth);
+    }
 }

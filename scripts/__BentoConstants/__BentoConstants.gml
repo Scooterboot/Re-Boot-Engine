@@ -1,22 +1,18 @@
 // Feather disable all
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// You're welcome to use any of the following macros in your game but ... //
-//                                                                        //
-//                       DO NOT EDIT THIS SCRIPT                          //
-//                       Bad things might happen.                         //
-//                                                                        //
-//            Customisation options can be found in __BentoConfig()       //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+//                                                         //
+//  Customisation options can be found in __BentoConfig()  //
+//                                                         //
+/////////////////////////////////////////////////////////////
 
-#macro BENTO_VERSION  "2.3.4-alpha"
-#macro BENTO_DATE     "2026-06-09"
+#macro BENTO_VERSION  "2.6.0.2-alpha"
+#macro BENTO_DATE     "2026-09-14"
 
 #macro BENTO_RUNNING_FROM_IDE  (GM_build_type == "run")
 
 #macro BENTO_NO_ELEMENT  noone
+#macro BENTO_PREV_ELEMENT  (__BentoSystem().__previousElement)
 
 ///////
 // User Event Mapping
@@ -115,10 +111,11 @@
 // Layout
 ///////
 
-#macro BENTO_LAYOUT_RECT  0
-#macro BENTO_LAYOUT_LIST  1
-#macro BENTO_LAYOUT_GRID  2
-#macro BENTO_LAYOUT_TEXT  3
+#macro BENTO_LAYOUT_RECT   0
+#macro BENTO_LAYOUT_LIST   1
+#macro BENTO_LAYOUT_GRID   2
+#macro BENTO_LAYOUT_TEXT   3
+#macro BENTO_LAYOUT_TABLE  4
 
 #macro BENTO_AXIS_X  0
 #macro BENTO_AXIS_Y  1

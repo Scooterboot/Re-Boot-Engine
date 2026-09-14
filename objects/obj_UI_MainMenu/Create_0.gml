@@ -251,7 +251,7 @@ function CreateSelectedFileMenu(_fileBtn, _fileIndex)
 	
 	if(file_exists(scr_GetFileName(_fileIndex)))
 	{
-		BentoSetOffset(116, , _mainElement);
+		BentoSetOffset(27, , _mainElement);
 		
 		var _secElement2 = new BentoUI_Spacer(_mainElement);
 		with(_secElement2)
@@ -403,12 +403,17 @@ function CreateConfirmCopyMenu(srcFile, destFile)
 	var _mainElement = new BentoUI_ConfirmPanel(pnlW, pnlH, str, this, _root);
 	with(_mainElement)
 	{
-		BentoSetPosition(ww/2 - pnlW/2, hh/2 - pnlH/2);
+		BentoSetPosition(ww/2, hh/2);
 		BentoSetOrigin(0.5, 0.5);
-		BentoLayoutSetGutter(32, 0);
-		BentoLayoutList(BENTO_AXIS_X, 0.5, 1);
-		BentoLayoutSetPadding(4);
 		BentoAnimPlayBuildIn(7,0,0,0,0.75,0.75,0,,false);
+	}
+	var _mainElement2 = new BentoUI_Spacer(_mainElement);
+	with(_mainElement2)
+	{
+		BentoLayoutSetResize(BENTO_RESIZE_INFLATE, BENTO_RESIZE_INFLATE);
+		BentoLayoutList(BENTO_AXIS_X, 0.5, 1);
+		BentoLayoutSetGutter(32, 0);
+		BentoLayoutSetPadding(4);
 	}
 	
 	var btnW = 31,
@@ -428,7 +433,7 @@ function CreateConfirmCopyMenu(srcFile, destFile)
 		{
 			if(variable_struct_exists(_childArr[i], "fileIndex") && _childArr[i].fileIndex == destFile)
 			{
-				BentoHover(_childArr[i],,creatorUI.fileMenuLayer);
+				BentoHover(_childArr[i]);
 				break;
 			}
 		}
@@ -451,7 +456,7 @@ function CreateConfirmCopyMenu(srcFile, destFile)
 			{
 				if(variable_struct_exists(_childArr[i], "fileIndex") && _childArr[i].fileIndex == destFile)
 				{
-					BentoHover(_childArr[i],,creatorUI.fileMenuLayer);
+					BentoHover(_childArr[i]);
 					break;
 				}
 			}
@@ -460,7 +465,7 @@ function CreateConfirmCopyMenu(srcFile, destFile)
 		audio_play_sound(snd_MenuBoop,0,false);
 	}
 	str = confirmCopyText[3];
-	var yesBtn = new BentoUI_Button(yesFunc, btnW, btnH, str, this, _mainElement);
+	var yesBtn = new BentoUI_Button(yesFunc, btnW, btnH, str, this, _mainElement2);
 	yesBtn.sprt = sprt_UI_Button2;
 	yesBtn.textOffsetY = 0;
 	yesBtn.srcFile = srcFile;
@@ -479,12 +484,12 @@ function CreateConfirmCopyMenu(srcFile, destFile)
 		audio_play_sound(snd_MenuTick,0,false);
 	}
 	str = confirmCopyText[4];
-	var noBtn = new BentoUI_Button(noFunc, btnW, btnH, str, this, _mainElement);
+	var noBtn = new BentoUI_Button(noFunc, btnW, btnH, str, this, _mainElement2);
 	noBtn.sprt = sprt_UI_Button2;
 	noBtn.textOffsetY = 0;
 	noBtn.hotKey = noBtn.hotKey_cancel;
 	BentoAnimPlayBuildIn(7,0,0,0,1,1,0,,false,noBtn);
-	BentoHover(noBtn,,confirmCopyLayer);
+	BentoHover(noBtn);
 	
 	yesBtn.panel = _mainElement;
 	yesBtn.noBtn = noBtn;
@@ -519,12 +524,17 @@ function CreateConfirmDeleteMenu()
 	var _mainElement = new BentoUI_ConfirmPanel(pnlW, pnlH, str, this, _root);
 	with(_mainElement)
 	{
-		BentoSetPosition(ww/2 - pnlW/2, hh/2 - pnlH/2);
+		BentoSetPosition(ww/2, hh/2);
 		BentoSetOrigin(0.5, 0.5);
-		BentoLayoutSetGutter(32, 0);
-		BentoLayoutList(BENTO_AXIS_X, 0.5, 1);
-		BentoLayoutSetPadding(4);
 		BentoAnimPlayBuildIn(7,0,0,0,0.75,0.75,0,,false);
+	}
+	var _mainElement2 = new BentoUI_Spacer(_mainElement);
+	with(_mainElement2)
+	{
+		BentoLayoutSetResize(BENTO_RESIZE_INFLATE, BENTO_RESIZE_INFLATE);
+		BentoLayoutList(BENTO_AXIS_X, 0.5, 1);
+		BentoLayoutSetGutter(32, 0);
+		BentoLayoutSetPadding(4);
 	}
 	
 	var btnW = 31,
@@ -545,7 +555,7 @@ function CreateConfirmDeleteMenu()
 		audio_play_sound(snd_MenuBoop,0,false);
 	}
 	str = confirmDeleteText[2];
-	var yesBtn = new BentoUI_Button(yesFunc, btnW, btnH, str, this, _mainElement);
+	var yesBtn = new BentoUI_Button(yesFunc, btnW, btnH, str, this, _mainElement2);
 	yesBtn.sprt = sprt_UI_Button2;
 	yesBtn.textOffsetY = 0;
 	BentoAnimPlayBuildIn(7,0,0,0,1,1,0,,false,yesBtn);
@@ -562,12 +572,12 @@ function CreateConfirmDeleteMenu()
 		audio_play_sound(snd_MenuTick,0,false);
 	}
 	str = confirmDeleteText[3];
-	var noBtn = new BentoUI_Button(noFunc, btnW, btnH, str, this, _mainElement);
+	var noBtn = new BentoUI_Button(noFunc, btnW, btnH, str, this, _mainElement2);
 	noBtn.sprt = sprt_UI_Button2;
 	noBtn.textOffsetY = 0;
 	noBtn.hotKey = noBtn.hotKey_cancel;
 	BentoAnimPlayBuildIn(7,0,0,0,1,1,0,,false,noBtn);
-	BentoHover(noBtn,,confirmDeleteLayer);
+	BentoHover(noBtn);
 	
 	yesBtn.panel = _mainElement;
 	yesBtn.noBtn = noBtn;

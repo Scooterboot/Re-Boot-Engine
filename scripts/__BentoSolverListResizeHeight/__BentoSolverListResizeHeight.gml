@@ -1,13 +1,14 @@
 // Feather disable all
 
-function __BentoSolverListResizeHeight()
+function __BentoSolverListResizeHeight(_rootWidth, _rootHeight)
 {
-    __BentoSolverMaintainAspectRatio();
+    var _layoutHeightMin = __BentoParsePercentageString(__layoutHeightMin, _rootHeight);
+    var _layoutHeightMax = __BentoParsePercentageString(__layoutHeightMax, _rootHeight);
+    
+    __BentoSolverMaintainAspectRatio(_rootWidth, _rootHeight);
     
     var _childArray = __layoutChildArray;
     var _childCount = array_length(_childArray);
-    
-    var _remaining = __solvedHeight - __solverChildrenDeflateHeight;
     
     if (__listAxis == BENTO_AXIS_X)
     {
@@ -15,7 +16,7 @@ function __BentoSolverListResizeHeight()
         // Minor Axis - Stretch inflate elements to the maximum available space
         //////
             
-        var _available = __solvedHeight - (__solverPadLeft + __solverPadRight);
+        var _available = __solvedHeight - (__solverPadHeight + __layoutMarginHeight);
         if (_available > 0)
         {
             var _i = 0;
@@ -25,11 +26,11 @@ function __BentoSolverListResizeHeight()
                 {
                     if (__layoutHeightResize == BENTO_RESIZE_INFLATE)
                     {
-                        __solvedHeight = clamp(_available, __layoutHeightMin, __layoutHeightMax);
+                        __solvedHeight = clamp(_available, _layoutHeightMin, _layoutHeightMax);
                     }
                     else
                     {
-                        __solvedHeight = clamp(min(__solvedHeight, _available), __layoutHeightMin, __layoutHeightMax);
+                        __solvedHeight = clamp(min(__solvedHeight, _available), _layoutHeightMin, _layoutHeightMax);
                     }
                 }
                 
@@ -42,10 +43,11 @@ function __BentoSolverListResizeHeight()
         //////
         // Major Axis
         //////
-            
+        
         static _modifiableArray = [];
         static _modifyingArray  = [];
-            
+        
+        var _remaining = __solvedHeight - (__solverChildrenDeflateHeight + __layoutMarginHeight); 
         if (_remaining > 0)
         {
             //////
@@ -108,9 +110,10 @@ function __BentoSolverListResizeHeight()
                     var _prevSize = _child.__solvedHeight;
                     if (_prevSize == _min)
                     {
-                        if (_prevSize + _addition >= _child.__layoutHeightMax)
+                        var _childLayoutHeightMax = __BentoParsePercentageString(_child.__layoutHeightMax, _rootHeight);
+                        if (_prevSize + _addition >= _childLayoutHeightMax)
                         {
-                            var _newSize = _child.__layoutHeightMax;
+                            var _newSize = _childLayoutHeightMax;
                             array_delete(_modifiableArray, array_get_index(_modifiableArray, _child), 1);
                         }
                         else

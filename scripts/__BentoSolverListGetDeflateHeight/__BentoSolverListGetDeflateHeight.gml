@@ -1,7 +1,10 @@
 // Feather disable all
 
-function __BentoSolverListGetDeflateHeight()
+function __BentoSolverListGetDeflateHeight(_rootHeight)
 {
+    var _layoutHeightMin = __BentoParsePercentageString(__layoutHeightMin, _rootHeight);
+    var _layoutHeightMax = __BentoParsePercentageString(__layoutHeightMax, _rootHeight);
+    
     var _deflateSize = 0;
     var _minSize = 0;
     
@@ -23,7 +26,7 @@ function __BentoSolverListGetDeflateHeight()
             ++_i;
         }
         
-        var _extra = __solverPadTop + __solverPadBottom + max(_childCount-1, 0)*__layoutGutterY;
+        var _extra = __solverPadHeight + max(_childCount-1, 0)*__layoutGutterY;
     }
     else
     {
@@ -40,7 +43,7 @@ function __BentoSolverListGetDeflateHeight()
             ++_i;
         }
         
-        var _extra = __solverPadTop + __solverPadBottom;
+        var _extra = __solverPadHeight;
     }
     
     _deflateSize += _extra
@@ -48,7 +51,13 @@ function __BentoSolverListGetDeflateHeight()
     
     __solverChildrenDeflateHeight = _deflateSize;
     
-    __solverMinHeight       = (__layoutHeightResize == BENTO_RESIZE_INFLATE)? __layoutHeightMin : clamp(_minSize, __layoutHeightMin, __layoutHeightMax);
-    __solverDeflateHeight   = clamp(_deflateSize, __solverMinHeight, __layoutHeightMax);
-    __solvedHeight          = clamp((__layoutHeightResize == BENTO_RESIZE_NORMAL)? __layoutHeightPref : _deflateSize, __solverMinHeight, __layoutHeightMax);
+    __solverMinHeight       = ((__layoutHeightResize == BENTO_RESIZE_INFLATE)? _layoutHeightMin : clamp(_minSize, _layoutHeightMin, _layoutHeightMax)) + __layoutMarginHeight;
+    __solverDeflateHeight   = clamp(_deflateSize, __solverMinHeight - __layoutMarginHeight, _layoutHeightMax) + __layoutMarginHeight;
+    __solvedHeight          = clamp(((__layoutHeightResize == BENTO_RESIZE_NORMAL)? __BentoSolverGetSafeHeight(_rootHeight) : _deflateSize) + __layoutMarginHeight, __solverMinHeight, _layoutHeightMax + __layoutMarginHeight);
+    
+    //Ensure we can never deflate lower than our fixed size
+    if (__layoutWidthResize == BENTO_RESIZE_NORMAL)
+    {
+        __solverDeflateHeight = max(__solvedHeight, __solverDeflateHeight);
+    }
 }

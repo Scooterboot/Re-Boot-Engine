@@ -1,6 +1,6 @@
 function UI_GetInputIconString(icon)
 {
-	if(is_struct(icon))
+	if(is_struct(icon) && is_instanceof(icon, UISpriteIcon))
 	{
 		return icon.GetScribText();
 	}

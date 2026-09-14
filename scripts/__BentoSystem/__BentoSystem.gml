@@ -31,7 +31,7 @@ function __BentoSystem()
     {
         __frame = 0;
         
-        show_debug_message($"Bento: Version {BENTO_VERSION}, {BENTO_DATE}");
+        __BentoTrace($"Welcome to Bento by Juju Adams! This is version {BENTO_VERSION}, {BENTO_DATE}");
             
         if (BENTO_STEAMWORKS_SUPPORT)
         {
@@ -49,7 +49,7 @@ function __BentoSystem()
             }
             catch(_error)
             {
-                show_debug_message("Steamworks extension unavailable");
+                __BentoTrace("Steamworks extension unavailable");
             }
         }
         
@@ -208,8 +208,10 @@ function __BentoSystem()
         ///////
         
         __globalScale = 1;
+        __rightToLeft = false;
         
-        __skinDict = {};
+        __templateDict = {};
+        __percentageParseDict = {};
         
         __scissorStack = [];
         
@@ -226,6 +228,9 @@ function __BentoSystem()
         __globalScissorXScale  = 1;
         __globalScissorYScale  = 1;
         
+        __percentageWidth  = display_get_gui_width();
+        __percentageHeight = display_get_gui_height();
+        
         __environmentArray = [];
         var _environment = BentoEnvironmentCreate("default");
         
@@ -233,7 +238,9 @@ function __BentoSystem()
         __environmentCurrent = _environment;
         
         __layerStack   = [];
-        __layerCurrent = __environmentCurrent.__layerCurrent;
+        __layerCurrent = undefined;
+        
+        __previousElement = BENTO_NO_ELEMENT;
         
         __textUseSteamKeyboard   = false;
         __textHandlerEnvironment = undefined;
