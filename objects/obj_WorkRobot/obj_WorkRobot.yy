@@ -35,9 +35,12 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"sprt_WorkRobot",
-    "path":"sprites/sprt_WorkRobot/sprt_WorkRobot.yy",
+    "name":"sprt_WorkRobot_Idle",
+    "path":"sprites/sprt_WorkRobot_Idle/sprt_WorkRobot_Idle.yy",
   },
-  "spriteMaskId":null,
+  "spriteMaskId":{
+    "name":"mask_WorkRobot1",
+    "path":"sprites/mask_WorkRobot1/mask_WorkRobot1.yy",
+  },
   "visible":true,
 }

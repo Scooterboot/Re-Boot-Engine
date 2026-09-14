@@ -1257,7 +1257,8 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 					{
 						if(fVX > 0)
 						{
-							if(self.Crawler_CanStickRight() && (horizontalEdge || colEdge == Edge.None))
+							var stickCheck = self.Crawler_CanStickRight();
+							if(stickCheck && (horizontalEdge || colEdge == Edge.None))
 							{
 								if(horizontalEdge)
 								{
@@ -1266,7 +1267,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 								}
 								colEdge = Edge.Right;
 							}
-							else if(!self.Crawler_CanStickRight() && colEdge = Edge.Right)
+							else if(!stickCheck && colEdge = Edge.Right)
 							{
 								colEdge = Edge.None;
 							}
@@ -1274,7 +1275,8 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 						}
 						if(fVX < 0)
 						{
-							if(self.Crawler_CanStickLeft() && (horizontalEdge || colEdge == Edge.None))
+							var stickCheck = self.Crawler_CanStickLeft();
+							if(stickCheck && (horizontalEdge || colEdge == Edge.None))
 							{
 								if(horizontalEdge)
 								{
@@ -1283,7 +1285,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 								}
 								colEdge = Edge.Left;
 							}
-							else if(!self.Crawler_CanStickLeft() && colEdge == Edge.Left)
+							else if(!stickCheck && colEdge == Edge.Left)
 							{
 								colEdge = Edge.None;
 							}
@@ -1540,7 +1542,8 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 					{
 						if(fVY > 0)
 						{
-							if(self.Crawler_CanStickBottom() && (verticalEdge || colEdge == Edge.None))
+							var stickCheck = self.Crawler_CanStickBottom();
+							if(stickCheck && (verticalEdge || colEdge == Edge.None))
 							{
 								if(verticalEdge)
 								{
@@ -1549,7 +1552,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 								}
 								colEdge = Edge.Bottom;
 							}
-							else if(!self.Crawler_CanStickBottom() && colEdge == Edge.Bottom)
+							else if(!stickCheck && colEdge == Edge.Bottom)
 							{
 								colEdge = Edge.None;
 							}
@@ -1557,7 +1560,8 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 						}
 						if(fVY < 0)
 						{
-							if(self.Crawler_CanStickTop() && (verticalEdge || colEdge == Edge.None))
+							var stickCheck = self.Crawler_CanStickTop();
+							if(stickCheck && (verticalEdge || colEdge == Edge.None))
 							{
 								if(verticalEdge)
 								{
@@ -1566,7 +1570,7 @@ function Collision_Crawler(vX, vY, slopeSpeedAdjust, ignoreOOB = false)
 								}
 								colEdge = Edge.Top;
 							}
-							else if(!self.Crawler_CanStickTop() && colEdge == Edge.Top)
+							else if(!stickCheck && colEdge == Edge.Top)
 							{
 								colEdge = Edge.None;
 							}

@@ -25,7 +25,7 @@ if(is_struct(targetPoint))
 		frame = 0;
 	}
 	
-	var alpha = min(0.375 + 0.375*frame, 1);
+	var alpha = min(0.625 + 0.25*frame, 1);
 	var frameFinal = scr_round((image_number-1)*frame);
 	var lineCol = [make_color_rgb(72,168,56), make_color_rgb(100,196,37), make_color_rgb(136,232,16), make_color_rgb(221,255,97)];
 	var lineCol2 = make_color_rgb(46,107,0);

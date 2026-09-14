@@ -205,6 +205,7 @@ function Entity_OnDamageDealt(_selfDmgBox, _lifeBox, _finalDmg, _dmg, _dmgType, 
 		part_emitter_burst(partSys,partEmit,obj_Particles.partFreeze,21*(1+isCharge));
 	}
 }
+dmgHasBeenAbsorbed = 0;//false;
 function Entity_OnDamageDealt_Blocked(_selfDmgBox, _lifeBox, _dmg, _dmgType, _dmgSubType)
 {
 	var partSys = obj_Particles.partSystemA,
@@ -221,10 +222,31 @@ function Entity_OnDamageDealt_Blocked(_selfDmgBox, _lifeBox, _dmg, _dmgType, _dm
 	{
 		if(ent.dmgAbsorb)
 		{
-			audio_stop_sound(snd_ProjAbsorbed);
-			audio_play_sound(snd_ProjAbsorbed,0,false);
+			//audio_stop_sound(snd_ProjAbsorbed);
+			//audio_play_sound(snd_ProjAbsorbed,0,false);
 				
-			part_particles_create(partSys,x,y,obj_Particles.partAbsorb,1);
+			//part_particles_create(partSys,x,y,obj_Particles.partAbsorb,1);
+			
+			if(dmgHasBeenAbsorbed <= 0)
+			{
+				var _x = -1, _y = -1;
+				with(_selfDmgBox)
+				{
+					if(place_meeting(x,y,_lifeBox))
+					{
+						_x = _selfDmgBox.x;
+						_y = _selfDmgBox.y;
+					}
+				}
+				if(_x >= 0 && _y >= 0)
+				{
+					audio_stop_sound(snd_ProjAbsorbed);
+					audio_play_sound(snd_ProjAbsorbed,0,false);
+					
+					part_particles_create(partSys,_x,_y,obj_Particles.partAbsorb,1);
+				}
+				dmgHasBeenAbsorbed = 2;
+			}
 		}
 		else if(!reflected || multiHit)
 		{

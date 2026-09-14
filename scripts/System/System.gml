@@ -123,7 +123,7 @@ function LerpArray(arr, amount, loop = false)
 			var value1 = arr[array_length(arr)-1],
 				value2 = arr[0],
 				amt2 = amt-(array_length(arr)-1);
-			return value1 + (value2-value1)*amt2;
+			return lerp(value1, value2, amt2);
 		}
 	}
 	
@@ -134,7 +134,7 @@ function LerpArray(arr, amount, loop = false)
 			var value1 = arr[i],
 				value2 = arr[i+1],
 				amt2 = amt-i;
-			result = value1 + (value2-value1)*amt2;
+			result = lerp(value1, value2, amt2);
 			break;
 		}
 	}

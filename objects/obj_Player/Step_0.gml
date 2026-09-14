@@ -1315,6 +1315,31 @@ if(!global.GamePaused())
 	#endregion
 	#region Jump Logic
 	
+	if(self.SpiderActive())
+	{
+		spiderJump = false;
+		spiderJumpDir = scr_wrap(edgeAngle[spiderEdge] + 90,0,360);
+		switch(spiderEdge)
+		{
+			case Edge.Bottom:
+				spiderJump_SpeedAddX = velX;
+				spiderJump_SpeedAddY = 0;
+			break;
+			case Edge.Left:
+				spiderJump_SpeedAddX = 0;
+				spiderJump_SpeedAddY = velY;
+			break;
+			case Edge.Top:
+				spiderJump_SpeedAddX = velX;
+				spiderJump_SpeedAddY = 0;
+			break;
+			case Edge.Right:
+				spiderJump_SpeedAddX = 0;
+				spiderJump_SpeedAddY = velY;
+			break;
+		}
+	}
+	
 	var isJumping = (cJump && dir != 0 && state != State.Spark && state != State.BallSpark && 
 	state != State.Hurt && (!self.SpiderActive() || !sparkCancelSpiderJumpTweak) && (state != State.Grapple || grapWJCounter > 0)) && 
 	(state != State.Morph || (!self.entity_place_collide(0,1) && !self.entity_place_collide(0,-1)) || (!self.entity_place_collide(0,1) ^^ !self.entity_place_collide(0,-1)) || self.entity_place_collide(0,0));
@@ -1379,14 +1404,26 @@ if(!global.GamePaused())
 						audio_play_sound(snd_WallJump,0,false);
 						
 						var baseVel = moveSpeed[MoveSpeed.WallJump,liquidState];
+						var clingFlag = false;
 						if(state == State.Grip && grippedDir != dir)
 						{
 							baseVel = moveSpeed[MoveSpeed.ClingWallJump,liquidState];
+							clingFlag = true;
+							fastWJCheckVel = 0;
 							wjGripAnim = true;
 						}
 						if(state == State.Grapple)
 						{
 							baseVel = moveSpeed[MoveSpeed.ClingWallJump,liquidState];
+							clingFlag = true;
+							fastWJCheckVel = 0;
+							
+							var _dir = sign(grapAngle);
+							if(_dir != 0)
+							{
+								dir = _dir;
+								dirFrame = 4*dir;
+							}
 						}
 						
 						if(move != 0)
@@ -1400,7 +1437,7 @@ if(!global.GamePaused())
 							m = dir;
 						}
 						
-						if(_FAST_WALLJUMP)
+						if(_FAST_WALLJUMP && !clingFlag)
 						{
 							velX = max(baseVel,abs(prevVelX))*m;
 							
@@ -1782,25 +1819,21 @@ if(!global.GamePaused())
 		{
 			if(grappleDist <= grappleMinDist+2 && self.entity_place_collide(sign(grapple.x-x),0) && abs(grapAngle) < 45)
 			{
-				if(sign(x-grapple.x) != 0)
-			    {
-			        dir = sign(x-grapple.x);
-			    }
-			    speedCounter = 0;
+				speedCounter = 0;
 				speedBoost = false;
-
-			    dirFrame = 4*dir;
-			    canWallJump = (move != -dir);
-			    if(cFire)
-			    {
-			        grapWJCounter = 60;
-			    }
+				
+				var _dir = sign(grapAngle);
+				canWallJump = (move != -_dir);
+				if(cFire)
+				{
+					grapWJCounter = 60;
+				}
 				bufferJump = 0;
 			}
 			else
 			{
 				canWallJump = false;
-			    grapWJCounter = 0;
+				grapWJCounter = 0;
 				
 				var grapAngVel = angle_difference(point_direction(position.X+velX,position.Y+velY,grapple.x,grapple.y),point_direction(position.X,position.Y,grapple.x,grapple.y));
 				
@@ -2206,38 +2239,7 @@ if(!global.GamePaused())
 #region Spider Ball Movement
 	if(spiderBall)
 	{
-		if(spiderEdge == Edge.None)
-		{
-			spiderSpeed = 0;
-			if(state != State.BallSpark && !spiderJump && jump <= 0)
-			{
-				if(self.entity_place_collide(0,1) && self.Crawler_CanStickBottom())
-				{
-					spiderEdge = Edge.Bottom;
-					spiderSpeed = velX;
-					spiderMove = sign(spiderSpeed);
-				}
-				if(self.entity_place_collide(0,-1) && self.Crawler_CanStickTop())
-				{
-					spiderEdge = Edge.Top;
-					spiderSpeed = -velX;
-					spiderMove = sign(spiderSpeed);
-				}
-				if(self.entity_place_collide(1,0) && self.Crawler_CanStickRight())
-				{
-					spiderEdge = Edge.Right;
-					spiderSpeed = -velY;
-					spiderMove = sign(spiderSpeed);
-				}
-				if(self.entity_place_collide(-1,0) && self.Crawler_CanStickLeft())
-				{
-					spiderEdge = Edge.Left;
-					spiderSpeed = velY;
-					spiderMove = sign(spiderSpeed);
-				}
-			}
-		}
-		else
+		if(spiderEdge != Edge.None)
 		{
 			if(spiderEdge == Edge.Bottom && !self.entity_place_collide(0,2))
 			{
@@ -2620,7 +2622,38 @@ if(!global.GamePaused())
 	
 	if(spiderBall)
 	{
-		if(jump > 0)
+		if(colEdge == Edge.None)
+		{
+			spiderSpeed = 0;
+			if(state != State.BallSpark && !spiderJump && jump <= 0)
+			{
+				if(self.entity_place_collide(0,1) && self.Crawler_CanStickBottom())
+				{
+					colEdge = Edge.Bottom;
+					spiderSpeed = velX;
+					spiderMove = sign(spiderSpeed);
+				}
+				if(self.entity_place_collide(0,-1) && self.Crawler_CanStickTop())
+				{
+					colEdge = Edge.Top;
+					spiderSpeed = -velX;
+					spiderMove = sign(spiderSpeed);
+				}
+				if(self.entity_place_collide(1,0) && self.Crawler_CanStickRight())
+				{
+					colEdge = Edge.Right;
+					spiderSpeed = -velY;
+					spiderMove = sign(spiderSpeed);
+				}
+				if(self.entity_place_collide(-1,0) && self.Crawler_CanStickLeft())
+				{
+					colEdge = Edge.Left;
+					spiderSpeed = velY;
+					spiderMove = sign(spiderSpeed);
+				}
+			}
+		}
+		if(jump > 0 || state == State.BallSpark)
 		{
 			colEdge = Edge.None;
 		}
@@ -3166,34 +3199,12 @@ if(!global.GamePaused())
 	if(self.SpiderActive())
 	{
 		moveState = MoveState.Custom;
-		spiderJump = false;
-		spiderJumpDir = scr_wrap(edgeAngle[spiderEdge] + 90,0,360);
-		switch(spiderEdge)
-		{
-			case Edge.Bottom:
-				spiderJump_SpeedAddX = velX;
-				spiderJump_SpeedAddY = 0;
-			break;
-			case Edge.Left:
-				spiderJump_SpeedAddX = 0;
-				spiderJump_SpeedAddY = velY;
-			break;
-			case Edge.Top:
-				spiderJump_SpeedAddX = velX;
-				spiderJump_SpeedAddY = 0;
-			break;
-			case Edge.Right:
-				spiderJump_SpeedAddX = 0;
-				spiderJump_SpeedAddY = velY;
-			break;
-		}
 		
 		if(prevSpiderEdge == Edge.None)
 		{
+			audio_play_sound(snd_SpiderStick,0,false);
 			if(morphFrame <= 0 && !shineRampFix)
 			{
-				audio_play_sound(snd_SpiderStick,0,false);
-					
 				if(grounded && !prevGrounded)
 				{
 					audio_stop_sound(snd_SpiderLand);
@@ -3232,12 +3243,13 @@ if(!global.GamePaused())
 				_partType = obj_Particles.sbTrail2;
 			}
 			var _num = max(abs(spiderSpeed)/2,1);
-			var _partX = clamp(x+lengthdir_x(16,spiderJumpDir+180), self.bb_left(x), self.bb_right(x)),
-				_partY = clamp(y+lengthdir_y(16,spiderJumpDir+180), self.bb_top(y), self.bb_bottom(y));
-			var _partX1 = _partX + lengthdir_x(5,spiderJumpDir+90),
-				_partY1 = _partY + lengthdir_y(5,spiderJumpDir+90),
-				_partX2 = _partX + lengthdir_x(5,spiderJumpDir-90),
-				_partY2 = _partY + lengthdir_y(5,spiderJumpDir-90);
+			var _partDir = scr_wrap(edgeAngle[spiderEdge] + 90,0,360);
+			var _partX = clamp(x+lengthdir_x(16,_partDir+180), self.bb_left(x), self.bb_right(x)),
+				_partY = clamp(y+lengthdir_y(16,_partDir+180), self.bb_top(y), self.bb_bottom(y));
+			var _partX1 = _partX + lengthdir_x(5,_partDir+90),
+				_partY1 = _partY + lengthdir_y(5,_partDir+90),
+				_partX2 = _partX + lengthdir_x(5,_partDir-90),
+				_partY2 = _partY + lengthdir_y(5,_partDir-90);
 			part_emitter_region(obj_Particles.partSystemA,obj_Particles.partEmitA, _partX1,_partX2, _partY1,_partY2, ps_shape_line, ps_distr_linear);
 			part_emitter_burst(obj_Particles.partSystemA,obj_Particles.partEmitA,_partType,_num);
 			spiderPartCounter = 0;
@@ -5213,7 +5225,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 	}
 	else
 	{
-		#region Anim States
+		// Anim States
 		
 		self.SetArmPosStand();
 		
@@ -7023,14 +7035,19 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 				}
 				frame[Frame.Somersault] = 2 + scr_round(_somerFrame);
 				
-	            if(grapWJCounter > 0)
-	            {
-	                torsoR = sprt_Player_GrappleWJRight;
-	                torsoL = sprt_Player_GrappleWJLeft;
-	                bodyFrame = 0;
-	                self.ArmPos(-15*dir,-22);
+				if(grapWJCounter > 0)
+				{
+					var _dir = sign(scr_wrap(_grapAngle,-180,180));
+					if(_dir != 0)
+					{
+						fDir = _dir;
+					}
+					torsoR = sprt_Player_GrappleWJRight;
+					torsoL = sprt_Player_GrappleWJLeft;
+					bodyFrame = 0;
+					self.ArmPos(-15*fDir,-22);
 					rotation = 0;
-	            }
+				}
 				else if(aimFrame != aimFrameTarget)
 				{
 					torsoR = sprt_Player_JumpAimRight;
@@ -7373,8 +7390,6 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 			}
 			#endregion
 		}
-		
-		#endregion
 	}
 	
 	#region Misc anim counters
@@ -7946,11 +7961,12 @@ if(global.pauseState == PauseState.None)
 		
 		var bombPosX = x,
 			bombPosY = y+3,
-			instaBomb = cPlayerDown;
+			instaBomb = cPlayerDown,
+			spiderEdgeAng = scr_wrap(edgeAngle[spiderEdge] + 90,0,360);
 		if(self.SpiderActive())
 		{
-			bombPosX = x + lengthdir_x(-2,spiderJumpDir);
-			bombPosY = y+1 + lengthdir_y(-2,spiderJumpDir);
+			bombPosX = x + lengthdir_x(-2,spiderEdgeAng);
+			bombPosY = y+1 + lengthdir_y(-2,spiderEdgeAng);
 			if(spiderEdge == Edge.Top)
 			{
 				instaBomb = cPlayerUp;
@@ -8063,7 +8079,7 @@ if(global.pauseState == PauseState.None)
 								bombSpd = 2 + 4*bChargeScale;
 							for(var i = 0; i < 5; i++)
 							{
-								bombDir[i] += spiderJumpDir-90;
+								bombDir[i] += spiderEdgeAng-90;
 									
 								var bomb = instance_create_layer(x,y,"Projectiles_fg",obj_MBBomb);
 								bomb.damage = chargeBombDmg * bChargeScale;

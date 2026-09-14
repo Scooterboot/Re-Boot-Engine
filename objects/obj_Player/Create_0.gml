@@ -2127,10 +2127,10 @@ function ModifySlopeYSteepness_Up()
 	{
 		return 1;
 	}
-	if(fVelY < 0)
-	{
-		return 1;
-	}
+	//if(fVelY < 0)
+	//{
+	//	return 1;
+	//}
 	return 0.5;
 }
 function ModifySlopeYSteepness_Down()
@@ -2392,9 +2392,13 @@ function OnYCollision(fVY, isOOB = false)
 		if(slopeGrounded != 0 && velY > 0)
 		{
 			var botAng = self.GetEdgeAngle(Edge.Bottom);
-			if(abs(botAng) > 0 && abs(botAng) <= 45)
+			if(sign(slopeGrounded) == -sign(botAng) && abs(botAng) > 0 && abs(botAng) <= 45)
 			{
 				velX = velY * sign(slopeGrounded);
+			}
+			else
+			{
+				slopeGrounded = 0;
 			}
 		}
 		
@@ -2422,13 +2426,15 @@ function OnYCollision(fVY, isOOB = false)
 
 function CanMoveUpSlope_Right()
 {
-	return self.CanMoveUpSlope_LeftRight(-1);
+	//return self.CanMoveUpSlope_LeftRight(-1);
+	return (!grounded && !onPlatform);
 }
 function OnSlopeYCollision_Right(fVY, xShift)
 {
 	if(fVY > 0)
 	{
 		slopeGrounded = -3;
+		canMorphBounce = false;
 	}
 }
 
@@ -2443,13 +2449,15 @@ function CanMoveDownSlope_Right()
 
 function CanMoveUpSlope_Left()
 {
-	return self.CanMoveUpSlope_LeftRight(1);
+	//return self.CanMoveUpSlope_LeftRight(1);
+	return (!grounded && !onPlatform);
 }
 function OnSlopeYCollision_Left(fVY, xShift)
 {
 	if(fVY > 0)
 	{
 		slopeGrounded = 3;
+		canMorphBounce = false;
 	}
 }
 
@@ -2462,7 +2470,7 @@ function CanMoveDownSlope_Left()
 	return false;
 }
 
-function CanMoveUpSlope_LeftRight(dir)
+/*function CanMoveUpSlope_LeftRight(dir)
 {
 	if(!grounded && !onPlatform && state != State.Grapple)
 	{
@@ -2478,7 +2486,7 @@ function CanMoveUpSlope_LeftRight(dir)
 		return steepFlag;
 	}
 	return false;
-}
+}*/
 
 function DestroyBlock(bx,by)
 {

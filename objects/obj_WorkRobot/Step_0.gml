@@ -1,46 +1,75 @@
 
 if(!self.PauseAI())
 {
-    var fspeed = mSpeed;
-	if(frame < 3)
+	if(state == WorkRobotState.Idle)
 	{
-		frame += fspeed;
-	}
-	else
-	{
-		frame = scr_wrap(frame+fspeed,3,27);
-	}
-	currentFrame = scr_floor(frame);
-
-	if(currentFrame == 11 || currentFrame == 23)
-	{
-		if(sndPlayedAt != currentFrame)
-		{
-			audio_play_sound(snd_WorkRobot,0,false);
-			sndPlayedAt = currentFrame;
-		}
-	}
-	else
-	{
-		sndPlayedAt = 0;
-	}
-
-	if(movedAtFrame != currentFrame)
-	{
-		velX = moveXSeq[currentFrame]*dir;
-		movedAtFrame = currentFrame;
-	}
-	else
-	{
+		currentSprt = sprt_WorkRobot_Idle;
+		currentFrame = idleFrame;
+		
+		walkFrame = 12*idleFrame;
 		velX = 0;
+		wallCol = 0;
+		
+		ai[0]++;
+		if(ai[0] > 180)
+		{
+			state = WorkRobotState.Moving;
+		}
+		// WIP
 	}
-
-	grounded = (entity_place_collide(0,1) || (bb_bottom()+1) >= room_height);// && velY == 0);
+	if(state == WorkRobotState.Moving)
+	{
+		currentSprt = sprt_WorkRobot_Walk;
+		
+		var fspeed = mSpeed * movingDir * facingDir;
+		walkFrame = scr_wrap(walkFrame + fspeed, 0, 24);
+		currentFrame = scr_floor(walkFrame);
+		
+		if(currentFrame == 7 || currentFrame == 19)
+		{
+			if(sndPlayedAt != currentFrame)
+			{
+				audio_play_sound(snd_WorkRobot,0,false);
+				sndPlayedAt = currentFrame;
+			}
+		}
+		else
+		{
+			sndPlayedAt = 0;
+		}
+		
+		if(movedAtFrame != currentFrame)
+		{
+			velX = moveXSeq[currentFrame] * movingDir;
+			movedAtFrame = currentFrame;
+		}
+		else
+		{
+			velX = 0;
+		}
+		
+		if(wallCol != 0)
+		{
+			self.ChangeFacingDir(-wallCol);
+			movingDir = facingDir;
+			wallCol = 0;
+		}
+		
+		//if(!self.entity_place_collide(12*facingDir, 2))
+		//{
+		//	velX = 0;
+		//	self.TryChangeToIdleState();
+		//}
+		
+		// WIP
+	}
+	
+	grounded = (self.entity_place_collide(0,1) || (self.bb_bottom()+1) >= room_height);// && velY == 0);
 	fGrav = grav[instance_exists(liquid)];
 
 	if(!grounded)
 	{
-	    velY = min(velY+fGrav, maxGrav);
+	    velY = min(velY+fGrav, fallSpeedMax);
 	}
 
 	fVelX = velX;
@@ -50,13 +79,14 @@ if(!self.PauseAI())
 	self.EntityLiquid_Large(x-xprevious,y-yprevious);
 }
 
-//var xdiff = LerpArray(topOffsetX,scr_floor(max(frame-3,0)),true) * dir;
-var xdiff = scr_round(LerpArray(topOffsetX,max(frame-3.5,0),true) * dir);
-for(var i = 0; i < array_length(mBlocks); i++)
+var xdiff = self.GetTopXOffset();
+mBlockOffset[0].X = xdiff;
+if(sign(xdiff) != 0)
 {
-	mBlockOffset[i].X = mBlockOffX_default[i];
-	mBlockOffset[i].X += xdiff * clamp(1 - (max(i-3,0) / 5),0,1);
+	mBlocks[0].image_xscale = sign(xdiff);
+	mBlocks[1].image_xscale = sign(xdiff);
 }
+
 self.UpdateMovingTiles();
 
 eyePalIndex += 0.1 * eyePalNum;

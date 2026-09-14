@@ -14,6 +14,7 @@ else
 	dmgDelay--;
 }
 self.IncrInvFrames();
+dmgHasBeenAbsorbed = max(dmgHasBeenAbsorbed-1,0);
 
 
 if(impacted == 1 && !reflected)
