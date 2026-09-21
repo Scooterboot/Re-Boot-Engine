@@ -133,6 +133,8 @@ function __BentoEnsureOffsetInner(_dirtyOffsetArray, _elementVars, _offsetX, _of
             _topWorld    += _deltaY;
             _rightWorld  += _deltaX;
             _bottomWorld += _deltaY;
+            _offsetX     += _deltaX;
+            _offsetY     += _deltaY;
         }
         
         //Set final variables ready for the reposition user event
@@ -149,8 +151,26 @@ function __BentoEnsureOffsetInner(_dirtyOffsetArray, _elementVars, _offsetX, _of
         }
         
         __scissorParent = _scissorParent;
-        __scissorVisibility = rectangle_in_rectangle(_leftWorld, _topWorld, _rightWorld, _bottomWorld,
-                                                     _scissorL, _scissorT, _scissorR, _scissorB);
+       var _visibility = rectangle_in_rectangle(_leftWorld, _topWorld, _rightWorld, _bottomWorld,
+                                                _scissorL, _scissorT, _scissorR, _scissorB);
+        
+        if (_visibility == 0)
+        {
+            __scissorCoverage = 0;
+        }
+        else if (_visibility == 1)
+        {
+            __scissorCoverage = 1;
+        }
+        else //if (_visibility == 2)
+        {
+            var _overlapL = max(_scissorL, _leftWorld  );
+            var _overlapT = max(_scissorT, _topWorld   );
+            var _overlapR = min(_scissorR, _rightWorld );
+            var _overlapB = min(_scissorB, _bottomWorld);
+            
+            __scissorCoverage = clamp(((_overlapR - _overlapL)*(_overlapB - _overlapT)) / ((_rightWorld - _leftWorld)*(_bottomWorld - _topWorld)), 0, 1);
+        }
         
         if (__scissorEnabled)
         {

@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"BentoClipGetFullyVisible",
+  "%Name":"BentoClipGetCoverage",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"BentoClipGetFullyVisible",
+  "name":"BentoClipGetCoverage",
   "parent":{
     "name":"Clipping Regions (Scissor Test)",
     "path":"folders/Scripts/Libraries/Bento/Functions/Clipping Regions (Scissor Test).yy",
