@@ -4,7 +4,7 @@ if(room == rm_MainMenu || room == rm_GameOver || room == rm_Disclaimer || global
 	surface_set_target(obj_Display.surfUI);
 	bm_set_one();
 
-	BentoSystemDraw();
+	BentoSystemDraw_Custom(global.resWidth, global.resHeight);
 
 	bm_reset();
 	surface_reset_target();

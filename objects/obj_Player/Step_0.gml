@@ -7746,6 +7746,9 @@ if(global.pauseState == PauseState.None)
 	
 	#endregion
 	
+	shootPosX = x+sprtOffsetX+shotOffsetX;
+	shootPosY = y+sprtOffsetY+runYOffset+shotOffsetY;
+	
 	self.UpdateBeam();
 	currentWeapon = weap[Weapon.Beam];
 	if(hyperBeam) { currentWeapon = weap[Weapon.HyperBeam]; }
@@ -7754,15 +7757,11 @@ if(global.pauseState == PauseState.None)
 	if(self.EquipmentSelected(Equipment.GrappleBeam)) { currentWeapon = weap[Weapon.GrappleBeam]; }
 	if(self.EquipmentSelected(Equipment.GravGrapple)) { currentWeapon = weap[Weapon.GravGrapple]; }
 	
-	var canShoot = (currentWeapon.CanShoot() && dir != 0 && !startClimb && !moonFallState && !isPushing && state != State.Spark && state != State.BallSpark && 
-					state != State.Hurt && (state != State.DmgBoost || animState != AnimState.DmgBoost) && state != State.Dodge && state != State.Death);
+	var canShoot = self.CanShoot();
 	if(!canShoot)
 	{
 		enqueShot = false;
 	}
-	
-	shootPosX = x+sprtOffsetX+shotOffsetX;
-	shootPosY = y+sprtOffsetY+runYOffset+shotOffsetY;
 	
 	#region Charge logic
 	

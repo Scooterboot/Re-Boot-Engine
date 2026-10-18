@@ -142,7 +142,7 @@ if(projStyle == ProjStyle.Wave || projStyle == ProjStyle.Spazer)
 			i *= -1;
 		}
 	}
-	delay = max(delay - 1, 0);
+	
 	if(delay <= 0)
 	{
 		if(projStyle == ProjStyle.Spazer)
@@ -163,6 +163,8 @@ if(projStyle == ProjStyle.Wave || projStyle == ProjStyle.Spazer)
 			t2 = min(t2 + increment * (wavesPerSecond / 2) * (abs(i)-1), (pi / 2) * (abs(i)-1));
 		}
 	}
+	delay = max(delay - 1, 0);
+	
 	i *= dir;
 	i *= waveDir;
 	shift = amplitude * sin(t - t2);

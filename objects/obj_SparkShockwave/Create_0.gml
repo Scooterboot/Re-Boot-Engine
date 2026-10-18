@@ -8,8 +8,6 @@ damageSubType[DmgSubType_Misc.SpeedBoost] = true;
 
 freezeType = 0;
 
-dmgDelay = 0;
-
 tileCollide = false;
 multiHit = true;
 

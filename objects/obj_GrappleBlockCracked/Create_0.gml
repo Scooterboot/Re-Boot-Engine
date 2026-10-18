@@ -1,6 +1,7 @@
 /// @description Initialize
 event_inherited();
 crumble = false;
+canBeCulled = true;
 time = 0;
 //timeLeft = 300;
 //respawnTime = 20;

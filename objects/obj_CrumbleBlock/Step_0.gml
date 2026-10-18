@@ -34,6 +34,7 @@ if(instance_exists(pushBlock) && pushBlock.grounded && pushBlock.fVelY >= 0)
 
 if(crumble)
 {
+	canBeCulled = false;
 	if(!visible)
 	{
 		self.RevealTile();

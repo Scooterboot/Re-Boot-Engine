@@ -34,7 +34,6 @@ damageType = DmgType.Beam;
 if(isCharge)
 {
 	damageType = DmgType.Charge;
-	dmgDelay = 1;
 }
 damageSubType[DmgSubType_Beam.All] = true;
 damageSubType[DmgSubType_Beam.Power] = true;
@@ -82,6 +81,7 @@ else if(isGrapple)
 
 particleDelay = 0;
 particleDelay2 = 0;
+partSwitch = 1;
 
 impactSnd = snd_BeamImpact;
 
@@ -113,24 +113,21 @@ if(isWave)
 else if(isSpazer)
 {
 	projStyle = ProjStyle.Spazer;
-	amplitude = 12 + isCharge;
+	amplitude = 13;
 	wavesPerSecond = 4;
 }
 if(isPlasma)
 {
 	if(isWave || isSpazer)
 	{
-		//delay += 3 + (3*isCharge);
 		delay = 2 + (2*isCharge);
 	}
 	multiHit = true;
 }
 else if(isSpazer)
 {
-	//delay += 2 + (1*isCharge);
-	delay = 1 + isCharge;
+	delay = 1;
 }
-//wavesPerSecond *= 1.25;
 wavesPerSecond *= 1.5;
 
 if(isSpazer || isPlasma)

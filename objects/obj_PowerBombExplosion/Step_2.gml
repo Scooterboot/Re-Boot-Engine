@@ -3,14 +3,7 @@ if(global.GamePaused())
 	exit;
 }
 
-if(dmgDelay <= 0)
-{
-	self.DamageBoxes();
-}
-else
-{
-	dmgDelay--;
-}
+self.DamageBoxes();
 self.IncrInvFrames();
 
 if(scaleTimer >= 75)

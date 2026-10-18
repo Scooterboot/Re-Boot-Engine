@@ -7,14 +7,7 @@ if(isExploProj)
 {
 	if(explode <= 5)
 	{
-		if(dmgDelay <= 0)
-		{
-			self.DamageBoxes();
-		}
-		else
-		{
-			dmgDelay--;
-		}
+		self.DamageBoxes();
 		self.IncrInvFrames();
 	
 		explode++;

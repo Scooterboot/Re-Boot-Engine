@@ -43,11 +43,14 @@ if(activeState == UI_ActiveState.Active)
 	
 	if(state == UI_SMState.Keyboard)
 	{
-		
+		if(!BentoLayerExists(kbBindMenuLayer))
+		{
+			self.CreateKBBindMenu();
+		}
 	}
-	else
+	else if(BentoLayerExists(kbBindMenuLayer))
 	{
-		
+		BentoLayerDestroy(kbBindMenuLayer);
 	}
 	
 	if(state == UI_SMState.Controller)

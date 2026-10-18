@@ -2,6 +2,7 @@
 
 if(crumble)
 {
+	canBeCulled = false;
     if(time >= timeLeft)
     {
         instance_destroy();

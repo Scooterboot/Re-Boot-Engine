@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"BentoSystemDraw_Custom",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"BentoSystemDraw_Custom",
+  "parent":{
+    "name":"Bento_Custom",
+    "path":"folders/Scripts/Libraries/Bento_Custom.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

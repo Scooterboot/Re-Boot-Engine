@@ -1604,21 +1604,7 @@ tetherProj = noone;
 
 waveDir = 1;
 
-//beam variables
-
-//chargeMult = 5;
-//beamDmg = 20;
-//beamShot = obj_PowerBeamShot;
-//beamCharge = obj_PowerBeamChargeShot;
-//beamDelay = 6;
-//beamChargeDelay = 18;
 beamChargeAnim = sprt_PowerBeamChargeAnim;
-//beamSound = snd_PowerBeam_Shot;
-//beamChargeSound = snd_PowerBeam_ChargeShot;
-//beamAmt = 1;
-//beamChargeAmt = 1;
-//beamIconIndex = 0;
-
 beamIsWave = false;
 beamWaveStyleOffset = 1;
 
@@ -1968,7 +1954,7 @@ weap[Weapon.HyperBeam].OnShoot = function()
 		self.PlayerShoot(obj_HyperBeamLesserShot,wep.damage,wep.shotSpeed,wep.shotDelay,2+2*beamIsWave,noone,beamIsWave,1);
 	}
 	
-	var flareDir = shootDir;
+	/*var flareDir = shootDir;
 	if(dir2 == -1)
 	{
 		flareDir = angle_difference(shootDir,180);
@@ -1980,7 +1966,7 @@ weap[Weapon.HyperBeam].OnShoot = function()
 	flare.direction = flareDir;
 	flare.image_angle = flareDir;
 	flare.image_xscale = dir2;
-	flare.creator = id;
+	flare.creator = id;*/
 	
 	hyperFired = wep.shotDelay+2;
 }
@@ -2008,7 +1994,19 @@ weap[Weapon.GravGrapple].OnShoot = function()
 }
 
 
-
+function CanShoot()
+{
+	if(is_undefined(currentWeapon)) { return false; }
+	if(startClimb) { return false; }
+	if(moonFallState) { return false; }
+	if(state == State.Spark || state == State.BallSpark) { return false; }
+	if(state == State.Hurt) { return false; }
+	if(state == State.DmgBoost && animState == AnimState.DmgBoost) { return false; }
+	if(state == State.Dodge) { return false; }
+	if(state == State.Death) { return false; }
+	
+	return currentWeapon.CanShoot();
+}
 function CanCharge()
 {
 	if(is_undefined(currentWeapon)) { return false; }
@@ -3498,8 +3496,8 @@ function GetShootDirection(_aimAngle, _dir)
 #region PlayerShoot
 function PlayerShoot(_shotIndex, _damage, _speed, _coolDown, _shotAmount, _soundIndex, _isWave = false, _waveStyleOffset = 0)
 {
-	var spawnX = scr_round(shootPosX - 2*sign(lengthdir_x(2,shootDir))),
-		spawnY = scr_round(shootPosY - 2*sign(lengthdir_y(2,shootDir)));
+	var spawnX = scr_round(shootPosX),
+		spawnY = scr_round(shootPosY);
 
 	if(_soundIndex != noone)
 	{

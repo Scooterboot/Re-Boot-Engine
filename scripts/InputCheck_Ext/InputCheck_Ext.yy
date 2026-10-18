@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"InputCheck_Ext",
   "parent":{
-    "name":"_Custom",
-    "path":"folders/Scripts/Libraries/Input/_Custom.yy",
+    "name":"Input_Custom",
+    "path":"folders/Scripts/Libraries/Input_Custom.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

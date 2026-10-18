@@ -2,11 +2,9 @@ function BentoUI_ConfirmPanel(_width, _height, _rawText = [], _creatorUI, _paren
 {
 	eventDraw = function()
 	{
-		var _x = bentoLeft,
-			_y = bentoTop,
-			_alpha = image_alpha;
+		var _alpha = image_alpha;
 		
-		BentoDrawClear(, 0.5 * _alpha);
+		BentoDrawClear(, 0.65 * _alpha);
 		BentoDrawSprite(sprt_UI_MessageBox, 0);
 		
 		textFont = fnt_Menu;

@@ -53,10 +53,7 @@ function CreateMainMenu()
 		hh = global.resHeight,
 		this = id;
 	
-	var _layer = BentoLayerCreate(mainMenuLayer),
-		_root = BentoLayerGetRoot(_layer);
-	
-	var _mainElement = new BentoUI_Spacer(_root);
+	var _mainElement = new BentoUI_Spacer(BentoLayerCreate(mainMenuLayer));
 	with(_mainElement)
 	{
 		BentoLayoutSetGutter(0, 1);
@@ -123,10 +120,7 @@ function CreateFileMenu()
 		hh = global.resHeight,
 		this = id;
 	
-	var _layer = BentoLayerCreate(fileMenuLayer),
-		_root = BentoLayerGetRoot(_layer);
-	
-	var _mainElement = new BentoUI_Spacer(_root);
+	var _mainElement = new BentoUI_Spacer(BentoLayerCreate(fileMenuLayer));
 	with(_mainElement)
 	{
 		BentoLayoutSetGutter(0, 4);
@@ -205,13 +199,10 @@ function CreateSelectedFileMenu(_fileBtn, _fileIndex)
 		hh = global.resHeight,
 		this = id;
 	
-	var _layer = BentoLayerCreate(selectedFileLayer),
-		_root = BentoLayerGetRoot(_layer);
-	
 	var btnW = 78,
 		btnH = 11;
 	
-	var _mainElement = new BentoUI_Spacer(_root);
+	var _mainElement = new BentoUI_Spacer(BentoLayerCreate(selectedFileLayer));
 	with(_mainElement)
 	{
 		BentoLayoutSetSize(_fileBtn.bentoWidth, _fileBtn.bentoHeight);
@@ -306,10 +297,7 @@ function CreateCopyFileMenu()
 		hh = global.resHeight,
 		this = id;
 	
-	var _layer = BentoLayerCreate(copyFileLayer),
-		_root = BentoLayerGetRoot(_layer);
-	
-	var _mainElement = new BentoUI_Spacer(_root);
+	var _mainElement = new BentoUI_Spacer(BentoLayerCreate(copyFileLayer));
 	with(_mainElement)
 	{
 		BentoLayoutSetGutter(0, 4);
@@ -392,15 +380,12 @@ function CreateConfirmCopyMenu(srcFile, destFile)
 		hh = global.resHeight,
 		this = id;
 	
-	var _layer = BentoLayerCreate(confirmCopyLayer),
-		_root = BentoLayerGetRoot(_layer);
-	
 	draw_set_font(fnt_Menu);
 	var str = confirmCopyText[0] + "[c_yellow]("+copyFileText[srcFile]+")[/c]" + confirmCopyText[1] + "[c_yellow]("+copyFileText[destFile]+")[/c]" + "\n\n" + confirmCopyText[2];
 	var pnlW = 256,//248,
 		pnlH = string_height(str) + 24;
 	
-	var _mainElement = new BentoUI_ConfirmPanel(pnlW, pnlH, str, this, _root);
+	var _mainElement = new BentoUI_ConfirmPanel(pnlW, pnlH, str, this, BentoLayerCreate(confirmCopyLayer));
 	with(_mainElement)
 	{
 		BentoSetPosition(ww/2, hh/2);
@@ -513,15 +498,12 @@ function CreateConfirmDeleteMenu()
 		hh = global.resHeight,
 		this = id;
 	
-	var _layer = BentoLayerCreate(confirmDeleteLayer),
-		_root = BentoLayerGetRoot(_layer);
-	
 	draw_set_font(fnt_Menu);
 	var str = confirmDeleteText[0] + "[c_yellow]("+fileMenuText[selectedFile]+")[/c]" + "\n\n" + confirmDeleteText[1];
 	var pnlW = 256,//248,
 		pnlH = string_height(str) + 24;
 	
-	var _mainElement = new BentoUI_ConfirmPanel(pnlW, pnlH, str, this, _root);
+	var _mainElement = new BentoUI_ConfirmPanel(pnlW, pnlH, str, this, BentoLayerCreate(confirmDeleteLayer));
 	with(_mainElement)
 	{
 		BentoSetPosition(ww/2, hh/2);

@@ -93,8 +93,8 @@ function __InputConfigVerbs()
 	InputDefineVerb(INPUT_VERB.MenuRight,	"menu right",	vk_right,	[ gp_axislh, gp_padr]);
 	InputDefineCluster(INPUT_CLUSTER.MenuMove, INPUT_VERB.MenuUp, INPUT_VERB.MenuRight, INPUT_VERB.MenuDown, INPUT_VERB.MenuLeft);
 	
-	InputDefineVerb(INPUT_VERB.MenuScrollUp,	"menu scroll up",		mb_wheel_up,	undefined);
-	InputDefineVerb(INPUT_VERB.MenuScrollDown,	"menu scroll down",		mb_wheel_down,	undefined);
+	InputDefineVerb(INPUT_VERB.MenuScrollUp,	"menu scroll up",		mb_wheel_up,	-gp_axisrv);
+	InputDefineVerb(INPUT_VERB.MenuScrollDown,	"menu scroll down",		mb_wheel_down,	gp_axisrv);
 	
 	InputDefineVerb(INPUT_VERB.Start,			"start",			vk_enter,	gp_start);
 	InputDefineVerb(INPUT_VERB.MenuAccept,		"menu accept",		ord("Z"),	_gp_face1);

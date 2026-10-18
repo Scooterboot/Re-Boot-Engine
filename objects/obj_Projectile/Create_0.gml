@@ -52,7 +52,6 @@ timeLeft = 300;
 isCharge = false;
 
 damage = 0;
-dmgDelay = 0;
 npcDeathType = -1;
 
 ignoreCamera = false;
@@ -121,6 +120,7 @@ rotFrame = 0;
 dmgBoxMask = noone;
 dmgBoxOffsetX = 0;
 dmgBoxOffsetY = 0;
+initDmg = 1;
 function DamageBoxes()
 {
 	if(damage > 0)
@@ -131,49 +131,65 @@ function DamageBoxes()
 			_mask = dmgBoxMask;
 		}
 		
-		if(!instance_exists(dmgBoxes[0]))
+		var _dir = direction;
+		var velocity = point_distance(0,0,fVelX,fVelY);
+		var numw = max(abs(bb_right(0) - bb_left(0)), 1),
+			numl = max(velocity, clamp(point_distance(x,y,xstart,ystart),1,projLength));
+		
+		if(initDmg > 0 && instance_exists(creator))
 		{
-			dmgBoxes[0] = self.CreateDamageBox(dmgBoxOffsetX,dmgBoxOffsetY,_mask,hostile);
+			var _mask2 = mask_ProjInitDmgBox,
+				_dir2 = point_direction(x,y,creator.x,creator.y),
+				_numd2 = point_distance(x,y,creator.x,creator.y) / sprite_get_width(_mask2);
+			
+			if(!instance_exists(dmgBoxes[0]))
+			{
+				dmgBoxes[0] = self.CreateDamageBox(dmgBoxOffsetX,dmgBoxOffsetY,_mask2,hostile);
+			}
+			if(instance_exists(dmgBoxes[0]))
+			{
+				dmgBoxes[0].mask_index = _mask2;
+				dmgBoxes[0].image_xscale = image_xscale * _numd2;
+				dmgBoxes[0].image_yscale = image_yscale;
+				dmgBoxes[0].image_angle = _dir2;
+				dmgBoxes[0].direction = _dir2;
+				dmgBoxes[0].Damage(x,y,damage,damageType,damageSubType,freezeType,freezeTime,npcDeathType);
+			}
+			initDmg--;
 		}
 		else
 		{
-			dmgBoxes[0].mask_index = _mask;
-			dmgBoxes[0].image_xscale = image_xscale;
-			dmgBoxes[0].image_yscale = image_yscale;
-			dmgBoxes[0].image_angle = image_angle;
-			dmgBoxes[0].direction = direction;
-			dmgBoxes[0].Damage(x,y,damage,damageType,damageSubType,freezeType,freezeTime,npcDeathType);
+			instance_destroy(dmgBoxes[0]);
 		}
 		
-		if(projLength > 0)
+		var numd = max(scr_ceil(numl / numw), 1);
+		for(var i = 0; i < numd; i++)
 		{
-			var numw = max(abs(bb_right(0) - bb_left(0)),1),
-		        numd = max(scr_ceil(clamp(point_distance(x,y,xstart,ystart),1,projLength) / numw), 1);
+			var xw = x-lengthdir_x(numw*i,_dir),
+				yw = y-lengthdir_y(numw*i,_dir);
 			
-			for(var i = 1; i < numd; i++)
+			var k = i+1;
+			if(array_length(dmgBoxes)-1 < k)
 			{
-				var xw = x-lengthdir_x(numw*i,direction),
-					yw = y-lengthdir_y(numw*i,direction);
-				
-				if(array_length(dmgBoxes) < i+1)
-				{
-					dmgBoxes[i] = noone;
-				}
-				
-				if(!instance_exists(dmgBoxes[i]))
-				{
-					dmgBoxes[i] = self.CreateDamageBox(dmgBoxOffsetX,dmgBoxOffsetY,_mask,hostile);
-				}
-				else
-				{
-					dmgBoxes[i].mask_index = _mask;
-					dmgBoxes[i].image_xscale = image_xscale;
-					dmgBoxes[i].image_yscale = image_yscale;
-					dmgBoxes[i].image_angle = image_angle;
-					dmgBoxes[i].direction = direction;
-					dmgBoxes[i].Damage(xw,yw,damage,damageType,damageSubType,freezeType,freezeTime,npcDeathType);
-				}
+				dmgBoxes[k] = noone;
 			}
+			if(!instance_exists(dmgBoxes[k]))
+			{
+				dmgBoxes[k] = self.CreateDamageBox(dmgBoxOffsetX,dmgBoxOffsetY,_mask,hostile);
+			}
+			if(instance_exists(dmgBoxes[k]))
+			{
+				dmgBoxes[k].mask_index = _mask;
+				dmgBoxes[k].image_xscale = image_xscale;
+				dmgBoxes[k].image_yscale = image_yscale;
+				dmgBoxes[k].image_angle = image_angle;
+				dmgBoxes[k].direction = direction;
+				dmgBoxes[k].Damage(xw,yw,damage,damageType,damageSubType,freezeType,freezeTime,npcDeathType);
+			}
+		}
+		for(var i = numd+1; i < array_length(dmgBoxes); i++)
+		{
+			instance_destroy(dmgBoxes[i]);
 		}
 	}
 }

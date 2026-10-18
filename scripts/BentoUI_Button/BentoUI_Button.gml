@@ -56,14 +56,13 @@ function BentoUI_Button(_clickFunc = undefined, _width, _height, _rawText = [], 
 	{
 		var _x = bentoLeft,
 			_y = bentoTop,
-			_alph = image_alpha,
-			_selected = BentoCursorGetHover();
+			_alph = image_alpha;
 		
 		if(sprite_exists(sprt))
 		{
 			var _ind = sprtInd,
 				_alph2 = sprtAlpha * _alph;
-			if(_selected)
+			if(BentoCursorGetHover())
 			{
 				_ind = sprtSelectInd;
 				_alph2 = sprtSelectAlpha * _alph;

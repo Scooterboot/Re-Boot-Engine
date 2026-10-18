@@ -7,7 +7,6 @@ if(activeState == UI_ActiveState.Active || activeState == UI_ActiveState.Deactiv
 	surface_set_target(obj_Display.surfUI);
 	bm_set_one();
 	
-	
 	var _headStr = headerText[state],
 		_footStr = footerText[0];
 	

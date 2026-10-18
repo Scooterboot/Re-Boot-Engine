@@ -118,8 +118,7 @@ part_type_alpha2(bTrails[0],.8,0);
 part_type_blend(bTrails[0],1);
 part_type_color2(bTrails[0],c_yellow,c_red);
 part_type_direction(bTrails[0],0,360,0,0);
-part_type_life(bTrails[0],8,25);
-//part_type_life(bTrails[0],8,16);
+part_type_life(bTrails[0],8,16);
 part_type_sprite(bTrails[0],sprt_ParticlePixel2,0,0,0);
 part_type_speed(bTrails[0],0.2,0.4,0,0);
 
@@ -128,11 +127,9 @@ part_type_alpha3(bTrails[1],1,.7,0);
 part_type_blend(bTrails[1],1);
 part_type_color3(bTrails[1],c_white,c_aqua,c_blue);
 part_type_direction(bTrails[1],0,360,0,0);
-part_type_life(bTrails[1],50/4,100/4);
-//part_type_life(bTrails[1],12,16);
+part_type_life(bTrails[1],12,16);
 part_type_sprite(bTrails[1],sprt_ParticlePixel2,0,0,0);
 part_type_speed(bTrails[1],.2,.6,0,0);
-//part_type_gravity(bTrails[1],.051,270);
 part_type_gravity(bTrails[1],.1,270);
 
 bTrails[2] = part_type_create();
@@ -140,8 +137,7 @@ part_type_alpha2(bTrails[2],.8,0);
 part_type_blend(bTrails[2],1);
 part_type_color2(bTrails[2],c_purple,c_fuchsia);
 part_type_direction(bTrails[2],0,360,0,0);
-part_type_life(bTrails[2],8,25);
-//part_type_life(bTrails[2],8,16);
+part_type_life(bTrails[2],8,16);
 part_type_sprite(bTrails[2],sprt_ParticlePixel2,0,0,0);
 part_type_speed(bTrails[2],0.2,0.4,0,0);
 
@@ -150,8 +146,7 @@ part_type_alpha2(bTrails[3],.8,0);
 part_type_blend(bTrails[3],1);
 part_type_color2(bTrails[3],c_yellow,c_red);
 part_type_direction(bTrails[3],0,360,0,0);
-part_type_life(bTrails[3],8,25);
-//part_type_life(bTrails[3],8,16);
+part_type_life(bTrails[3],8,16);
 part_type_sprite(bTrails[3],sprt_ParticlePixel2,0,0,0);
 part_type_speed(bTrails[3],0.2,0.4,0,0);
 
@@ -160,8 +155,7 @@ part_type_alpha2(bTrails[4],.8,0);
 part_type_blend(bTrails[4],1);
 part_type_color3(bTrails[4],c_white,c_lime,c_green);
 part_type_direction(bTrails[4],0,360,0,0);
-part_type_life(bTrails[4],8,25);
-//part_type_life(bTrails[4],8,16);
+part_type_life(bTrails[4],8,16);
 part_type_sprite(bTrails[4],sprt_ParticlePixel2,0,0,0);
 part_type_speed(bTrails[4],0.2,0.4,0,0);
 
@@ -247,7 +241,7 @@ for(var i = 0; i < 10; i++)
 	part_type_blend(bTrails[j],true);
 	part_type_color2(bTrails[j],c1,c2);
 	part_type_direction(bTrails[j],0,360,0,0);
-	part_type_life(bTrails[j],8,25);
+	part_type_life(bTrails[j],8,16);
 	part_type_sprite(bTrails[j],sprt_ParticlePixel2,0,0,0);
 	part_type_speed(bTrails[j],0.2,0.4,0,0);
 }
@@ -258,12 +252,10 @@ for(var i = 0; i < 10; i++)
 mTrail[0] = part_type_create();
 part_type_sprite(mTrail[0],sprt_MissileTrail,true,true,false);
 part_type_life(mTrail[0],14,14);
-//part_type_blend(mTrail[0],1);
 
 mTrail[1] = part_type_create();
 part_type_sprite(mTrail[1],sprt_SuperMissileTrail,true,true,false);
 part_type_life(mTrail[1],18,18);
-//part_type_blend(mTrail[1],1);
 
 
 
@@ -271,18 +263,14 @@ part_type_life(mTrail[1],18,18);
 explosion[0] = part_type_create();
 part_type_sprite(explosion[0],sprt_MBBombExplosion,true,true,false);
 part_type_life(explosion[0],10,10);
-//part_type_blend(explosion[0],1);
 
 explosion[1] = part_type_create();
 part_type_sprite(explosion[1],sprt_MissileExplosion,true,true,false);
 part_type_life(explosion[1],15,15);
-//part_type_blend(explosion[1],1);
-//part_type_scale(explosion[1],0.6,0.6);
 
 explosion[2] = part_type_create();
 part_type_sprite(explosion[2],sprt_SuperMissileExplosion,true,true,false);
 part_type_life(explosion[2],15,15);
-//part_type_blend(explosion[2],1);
 
 
 //Deflect
@@ -329,7 +317,7 @@ part_type_alpha3(gTrail,1,.7,0);
 part_type_blend(gTrail,1);
 part_type_color3(gTrail,c_white,c_aqua,c_blue);
 part_type_direction(gTrail,0,360,0,0);
-part_type_life(gTrail,12,25);
+part_type_life(gTrail,12,16);
 part_type_sprite(gTrail,sprt_ParticlePixel2,0,0,0);
 part_type_speed(gTrail,0.2,0.4,0,0);
 

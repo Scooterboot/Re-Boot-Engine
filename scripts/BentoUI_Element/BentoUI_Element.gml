@@ -50,6 +50,7 @@ function BentoUI_Element(_width, _height, _rawText = [], _creatorUI, _parent = o
 	textAlignY = fa_middle;
 	textOffsetX = 0;
 	textOffsetY = 1;
+	textShadow = true;
 	
 	drawText = function(_color, _alignOffX = 4, _alignOffY = 2)
 	{
@@ -73,15 +74,30 @@ function BentoUI_Element(_width, _height, _rawText = [], _creatorUI, _parent = o
 				draw_set_font(textFont);
 				draw_set_align(textAlignX, textAlignY);
 				draw_set_alpha(_alph);
-				draw_text_shadow(_x, _y, _text,,,_color);
+				if(textShadow)
+				{
+					draw_text_shadow(_x, _y, _text,,,_color);
+				}
+				else
+				{
+					draw_set_colour(_color);
+					draw_text(_x, _y, _text)
+				}
 				draw_set_alpha(1);
 				draw_set_colour(c_white);
 			}
 			else if(textScribbleType == UI_TextScribType.ScribJr)
 			{
 				var _scribJr = ScribbleJrExt(_text, textAlignX, textAlignY, textFont);
-			
-				draw_ScribbleJr_shadow(_scribJr, _x, _y, _color, _alph, , _alph);
+				
+				if(textShadow)
+				{
+					draw_ScribbleJr_shadow(_scribJr, _x, _y, _color, _alph, , _alph);
+				}
+				else
+				{
+					_scribJr.Draw(_x, _y, _color, _alph);
+				}
 			}
 			else if(textScribbleType == UI_TextScribType.ScribDeluxe)
 			{
@@ -89,7 +105,14 @@ function BentoUI_Element(_width, _height, _rawText = [], _creatorUI, _parent = o
 					.starting_format(font_get_name(textFont), _color)
 					.align(textAlignX,textAlignY);
 			
-				draw_scribble_shadow(_scrib, _x, _y, _color, _alph, , _alph);
+				if(textShadow)
+				{
+					draw_scribble_shadow(_scrib, _x, _y, _color, _alph, , _alph);
+				}
+				else
+				{
+					_scrib.blend(_color,_alph).draw(_x, _y);
+				}
 			}
 		}
 	}
