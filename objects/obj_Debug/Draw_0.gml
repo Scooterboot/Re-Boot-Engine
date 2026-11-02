@@ -416,21 +416,24 @@ if(debug > 0)
 	with(obj_GrappleTargetAssist)
 	{
 		var player = obj_Player;
-		var pos = self.GetPlayerPos();
-		var pX = pos.X, pY = pos.Y;
-		
-		draw_set_alpha(0.5);
-		draw_set_color(c_gray);
-		draw_line(pX,pY, pX+lengthdir_x(player.grappleMaxDist,shootDir),pY+lengthdir_y(player.grappleMaxDist,shootDir));
-		draw_line(pX,pY, pX+lengthdir_x(player.grappleMaxDist,shootDir+assistRadius),pY+lengthdir_y(player.grappleMaxDist,shootDir+assistRadius));
-		draw_line(pX,pY, pX+lengthdir_x(player.grappleMaxDist,shootDir-assistRadius),pY+lengthdir_y(player.grappleMaxDist,shootDir-assistRadius));
-	
-		if(is_struct(targetPoint))
+		if(!instance_exists(player.grapple) || player.grapple.grappleState == GrappleState.None)
 		{
-			draw_set_color(c_lime);
-			draw_line(player.shootPosX,player.shootPosY, targetPoint.x,targetPoint.y);
+			var pos = self.GetPlayerPos();
+			var pX = pos.X, pY = pos.Y;
+			
+			draw_set_alpha(0.5);
+			draw_set_color(c_gray);
+			draw_line(pX,pY, pX+lengthdir_x(player.grappleMaxDist,shootDir),pY+lengthdir_y(player.grappleMaxDist,shootDir));
+			draw_line(pX,pY, pX+lengthdir_x(player.grappleMaxDist,shootDir+assistRadius),pY+lengthdir_y(player.grappleMaxDist,shootDir+assistRadius));
+			draw_line(pX,pY, pX+lengthdir_x(player.grappleMaxDist,shootDir-assistRadius),pY+lengthdir_y(player.grappleMaxDist,shootDir-assistRadius));
+			
+			if(is_struct(targetPoint))
+			{
+				draw_set_color(c_lime);
+				draw_line(player.shootPosX,player.shootPosY, targetPoint.x,targetPoint.y);
+			}
 		}
-	
+		
 		if(obj_Debug.debug == 1)
 		{
 			draw_set_color(c_orange);
@@ -440,7 +443,7 @@ if(debug > 0)
 				draw_circle(gp.x-1,gp.y-1,4,false);
 			}
 		}
-	
+		
 		draw_set_alpha(1);
 		draw_set_color(c_white);
 	}

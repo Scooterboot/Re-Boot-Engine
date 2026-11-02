@@ -7,6 +7,8 @@ extSprt = sprt_BombBlockExt;
 destroy = false;
 time = 0;
 
+canBeCulled = false;
+
 function SetExtraRespawnVars(_respBlock)
 {
 	_respBlock.timeLeft = timeLeft;

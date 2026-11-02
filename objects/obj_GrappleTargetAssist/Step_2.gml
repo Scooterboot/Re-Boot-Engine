@@ -9,13 +9,14 @@ if(!instance_exists(obj_Player))
 	exit;
 }
 
+ds_list_clear(grapObj_list);
+ds_list_clear(grapPoint_list);
+targetPoint = noone;
+adjustedShootDir = 0;
+
 var player = obj_Player;
 if(instance_exists(player.grapple) && player.grapple.grappleState != GrappleState.None)
 {
-	ds_list_clear(grapObj_list);
-	ds_list_clear(grapPoint_list);
-	targetPoint = noone;
-	adjustedShootDir = 0;
 	exit;
 }
 
@@ -33,23 +34,37 @@ if(num > 0)
 		{
 			var gpObj = grapObj_list[| i];
 			
-			if(object_is_ancestor(gpObj.object_index,obj_Tile))
+			if(object_is_ancestor(gpObj.object_index,obj_Tile) || object_is_ancestor(gpObj.object_index,obj_MovingTile))
 			{
 				for(var xx = 0; xx < gpObj.image_xscale; xx++)
 				{
 					for(var yy = 0; yy < gpObj.image_yscale; yy++)
 					{
-						self.AddPointToList(gpObj.x+8 + 16*xx, gpObj.y+8 + 16*yy);
+						var _x = gpObj.x+8 + 16*xx, _y = gpObj.y+8 + 16*yy;
+						if(variable_instance_exists(gpObj, "GetGrapOffsetX"))
+						{
+							_x = gpObj.x + gpObj.GetGrapOffsetX(_x);
+						}
+						if(variable_instance_exists(gpObj, "GetGrapOffsetY"))
+						{
+							_y = gpObj.y + gpObj.GetGrapOffsetY(_y);
+						}
+						self.AddPointToList(_x, _y);
 					}
 				}
 			}
-			else if(object_is_ancestor(gpObj.object_index,obj_Entity))
-			{
-				self.AddPointToList(scr_round(gpObj.Center(true).X), scr_round(gpObj.Center(true).Y));
-			}
 			else
 			{
-				self.AddPointToList(gpObj.x, gpObj.y);
+				var _x = gpObj.x, _y = gpObj.y;
+				if(variable_instance_exists(gpObj, "GetGrapOffsetX"))
+				{
+					_x = gpObj.x + gpObj.GetGrapOffsetX(_x);
+				}
+				if(variable_instance_exists(gpObj, "GetGrapOffsetY"))
+				{
+					_y = gpObj.y + gpObj.GetGrapOffsetY(_y);
+				}
+				self.AddPointToList(_x, _y);
 			}
 		}
 	}
@@ -109,17 +124,9 @@ if(ds_list_size(grapPoint_list) > 0)
 		}
 	}
 }
-else
-{
-	targetPoint = noone;
-}
 
 if(is_struct(targetPoint))
 {
-	var targetDir = point_direction(player.shootPosX,player.shootPosY, targetPoint.x,targetPoint.y);
+	var targetDir = point_direction(player.shootPosX+player.fVelX,player.shootPosY+player.fVelY, targetPoint.x,targetPoint.y);
 	adjustedShootDir = targetDir - shootDir;
-}
-else
-{
-	adjustedShootDir = 0;
 }

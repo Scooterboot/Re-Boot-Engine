@@ -48,7 +48,10 @@ function AddPointToList(_x, _y)
 					{
 						colFound = col.grappleCollision;
 					}
-					break;
+					if(colFound)
+					{
+						break;
+					}
 				}
 			}
 		}

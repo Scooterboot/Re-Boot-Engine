@@ -50,7 +50,7 @@ function scr_MainInitialize()
 	#macro ColType_NPCSolid [obj_NPCTile, obj_SaveStation]
 	#macro ColType_MovingSolid [obj_MovingTile]
 	#macro ColType_Platform [obj_Platform]
-	#macro ColType_GrapplePoint [obj_GrappleBlock, obj_GrappleBlockCracked, obj_MagnetGrappleBlock, obj_PushBlock_Grapple, obj_PushBall_Grapple, obj_GrappleRipper]
+	#macro ColType_GrapplePoint [obj_GrappleBlock, obj_GrappleBlockCracked, obj_MagnetGrappleBlock, obj_GrapplePointHook, obj_PushBlock_Grapple, obj_PushBall_Grapple, obj_GrappleRipper]
 	#macro ColType_MagnetTrack [obj_MagnetTrackBlock]
 	#macro ColType_Breakable [obj_Breakable]
 	#macro ColType_BoostBallBlock [obj_ShotBlock, obj_BoostBallBlock]

@@ -1,7 +1,228 @@
 /// @description Everything
 
-// --- PHYSICS & STATES ---
-if(!global.GamePaused())
+#region --- HUD & Visor Control ---
+SetControlVars("menu hud visor");
+
+var numEquips = self.EquipIndexNum();
+var numVisors = self.VisorIndexNum();
+
+if(global.pauseState == PauseState.None || global.pauseState == PauseState.RadialMenu || global.pauseState == PauseState.XRay)
+{
+	#region Toggle current equipment
+	if(numEquips > 0 && equipIndex >= 0 && self.EquipmentHasAmmo(equipIndex))
+	{
+		if(!visorSelected || (visorIndex != Visor.Scan && visorIndex != Visor.XRay))
+		{
+			if(cEquipToggle && rEquipToggle)
+			{
+				equipSelected = !equipSelected;
+				audio_play_sound(snd_MenuTick,0,false);
+			}
+		}
+	}
+	#endregion
+	#region Toggle current visor
+	
+	var _tVisorOn = (cVisorToggle && rVisorToggle),
+		_tVisorOff = (cVisorToggle && rVisorToggle) || (cVisorCycle && rVisorCycle);
+	if(visorIndex == Visor.Scan)
+	{
+		_tVisorOn &= !cFire;
+		_tVisorOff |= cFire;
+	}
+	var _tvoff = false;
+	
+	if(numVisors > 0 && visorIndex >= 0 && global.pauseState != PauseState.RadialMenu)
+	{
+		var canUseVisor = true;
+		if(visorIndex == Visor.XRay)
+		{
+			canUseVisor = false;
+			
+			var canXRay = true;
+			/*if(state == State.Grip)
+			{
+				var rcheck = x+6,// - 1,
+					lcheck = x;// - 1;
+				if(grippedDir == -1)
+				{
+					rcheck = x;
+					lcheck = x-6;
+				}
+				if(collision_line(lcheck,y-17,rcheck,y-17,obj_CrumbleBlock,false,true))
+				{
+					canXRay = false;
+				}
+			}
+			else if(grounded)
+			{
+				canXRay = false;
+				
+				var _solids = array_concat(solids,ColType_Platform);
+				var num = instance_place_list(position.X,position.Y+1,_solids,blockList,true);
+				if(num > 0)
+				{
+					for(var i = 0; i < num; i++)
+					{
+						if(instance_exists(blockList[| i]))
+						{
+							var block = blockList[| i];
+							if(self.isValidSolid(block) && block.object_index != obj_CrumbleBlock && (!object_is_in_array(block.object_index,ColType_Platform) || self.bb_bottom() < block.bbox_top))
+							{
+								canXRay = true;
+								break;
+							}
+						}
+					}
+					ds_list_clear(blockList);
+				}
+			}*/
+			
+			if(canXRay && dir != 0 && fVelX == 0 && fVelY == 0 && !cPlayerRight && !cPlayerLeft && 
+				(((animState == AnimState.Stand || animState == AnimState.Crouch) && grounded) || animState == AnimState.Grip))
+			{
+				canUseVisor = true;
+			}
+		}
+		
+		if(canUseVisor)
+		{
+			if(!visorSelected)
+			{
+				if(_tVisorOn)
+				{
+					visorSelected = true;
+					audio_play_sound(snd_MenuTick,0,false);
+				}
+			}
+			else if(_tVisorOff)
+			{
+				visorSelected = false;
+				audio_play_sound(snd_MenuTick,0,false);
+				_tvoff = true;
+			}
+		}
+		else
+		{
+			visorSelected = false;
+		}
+	}
+	
+	#endregion
+	#region Cycle Visors
+	
+	if(numVisors > 1 && visorIndex >= 0 && !visorSelected && !_tvoff && global.pauseState == PauseState.None)
+	{
+		if(cVisorCycle && rVisorCycle)
+		{
+			var _len = ds_list_size(global.visorRadial),
+				_ind = -1;
+			for(var i = 0; i < _len; i++)
+			{
+				var _vInd = global.visorRadial[| i];
+				if(!is_undefined(_vInd) && visorIndex == _vInd)
+				{
+					_ind = i;
+					break;
+				}
+			}
+			var _dir = 1;
+			for(var i = 0; i < _len; i++)
+			{
+				var _index = scr_wrap(_ind+i + _dir, 0, _len);
+				var _vInd = global.visorRadial[| _index];
+				if(!is_undefined(_vInd) && self.HasVisor(_vInd))
+				{
+					visorIndex = _vInd;
+					visorSelected = false;
+					break;
+				}
+			}
+			audio_play_sound(snd_MenuTick,0,false);
+		}
+	}
+	
+	#endregion
+	
+	#region Scan Visor logic
+	
+	if(visorIndex == Visor.Scan && visorSelected)
+	{
+		if(!instance_exists(scanVisor))
+		{
+			scanVisor = instance_create_depth(global.resWidth/2, global.resHeight/2, -1, obj_ScanVisor);
+		}
+	}
+	else
+	{
+		if(instance_exists(scanVisor))
+        {
+            scanVisor.kill = true;
+        }
+	}
+	
+	#endregion
+	#region XRay Visor logic
+	
+	if(visorIndex == Visor.XRay && visorSelected)
+	{
+		var xpos = new Vector2(x + 3*dir, y - 12);
+		if(animState == AnimState.Grip)
+		{
+			if(dir == grippedDir)
+			{
+				xpos.X = x;
+			}
+			else
+			{
+				xpos.X = x + 5*dir;
+			}
+		}
+					
+		if(instance_exists(xrayVisor))
+		{
+			xrayVisor.x = xpos.X;
+			xrayVisor.y = xpos.Y;
+			
+			if(global.pauseState == PauseState.XRay)
+			{
+				var _dir = sign(lengthdir_x(16, xrayVisor.coneDir));
+				if(_dir != 0)
+				{
+					dir = _dir;
+					if(dir != oldDir)
+					{
+						lastDir = oldDir;
+					}
+					oldDir = dir;
+				}
+			}
+		}
+		else
+		{
+			var xrayDepth = layer_get_depth(layer_get_id("Tiles_fade0")) - 1;
+			xrayVisor = instance_create_depth(xpos.X, xpos.Y, xrayDepth, obj_XRayVisor);
+			xrayVisor.kill = 0;
+			xrayVisor.coneDir = 90-(dir*90);
+			global.pauseState = PauseState.XRay;
+		}
+	}
+	else
+	{
+		if(instance_exists(xrayVisor))
+        {
+            xrayVisor.kill = true;
+        }
+	}
+	
+	#endregion
+}
+
+SetReleaseVars("menu hud visor");
+#endregion
+
+// --- Physics & States ---
+if(global.pauseState == PauseState.None)
 {
 	#region debug keys
 	if(instance_exists(obj_Debug))
@@ -4984,7 +5205,7 @@ if(!global.GamePaused())
 	tempDisableScrewCheck = false;
 }
 
-// --- ANIMATIONS & MISC FX ---
+#region --- Animations & Misc FX ---
 if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && global.pauseState == PauseState.XRay) || global.pauseState == PauseState.RoomTrans)
 {
 	if(self.VisorSelected(Visor.XRay) && global.pauseState == PauseState.XRay)
@@ -7461,8 +7682,9 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 	}
 	#endregion
 }
+#endregion
 
-// --- SHOOT, ENVIRO DMG, & FINALIZE VARS ---
+// --- Shoot, Enviro Dmg, & Finalize Vars ---
 if(global.pauseState == PauseState.None)
 {
 	#region After Image Logic

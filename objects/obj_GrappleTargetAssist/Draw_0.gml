@@ -6,8 +6,6 @@ if(!instance_exists(obj_Player))
 	exit;
 }
 var player = obj_Player;
-//var pos = self.GetPlayerPos();
-//var pX = pos.X, pY = pos.Y;
 var pX = player.x+player.sprtOffsetX+player.shotOffsetX,
 	pY = player.y+player.sprtOffsetY+player.shotOffsetY;
 
@@ -66,6 +64,3 @@ else
 	frame = 0;
 	frameNum = 1;
 }
-
-ds_list_clear(grapPoint_list);
-targetPoint = noone;

@@ -172,18 +172,23 @@ if(grappleState == GrappleState.None)
 	{
 		impacted = 0;
 		audio_play_sound(snd_GrappleBeam_Latch,0,false);
+		
 		if(grapBlock.object_index == obj_PushBlock || object_is_ancestor(grapBlock.object_index,obj_PushBlock))
 		{
 			grappleState = GrappleState.PushBlock;
 		}
 		else
 		{
-			if(object_is_ancestor(grapBlock.object_index,obj_Tile) || object_is_ancestor(grapBlock.object_index,obj_MovingTile))
-			{
-				grapBlockOffX = scr_floor(clamp(x+sign(fVelX)*4,grapBlock.bbox_left,grapBlock.bbox_right-1)/16)*16 + 8 - grapBlock.x;
-				grapBlockOffY = scr_floor(clamp(y+sign(fVelY)*4,grapBlock.bbox_top,grapBlock.bbox_bottom-1)/16)*16 + 8 - grapBlock.y;
-			}
-		    grappleState = GrappleState.Swing;
+			grappleState = GrappleState.Swing;
+		}
+		
+		if(variable_instance_exists(grapBlock, "GetGrapOffsetX"))
+		{
+			grapBlockOffX = grapBlock.GetGrapOffsetX(x+sign(fVelX)*4);
+		}
+		if(variable_instance_exists(grapBlock, "GetGrapOffsetY"))
+		{
+			grapBlockOffY = grapBlock.GetGrapOffsetY(y+sign(fVelY)*4);
 		}
 	}
 }
@@ -202,7 +207,7 @@ if(grappleState != GrappleState.None)
 		}
 		else
 		{
-			x = scr_round(grapBlock.bbox_left + (grapBlock.bbox_right-1-grapBlock.bbox_left)/2);
+			x = grapBlock.x;
 		}
 		
 		if(!is_undefined(grapBlockOffY))
@@ -211,7 +216,7 @@ if(grappleState != GrappleState.None)
 		}
 		else
 		{
-			y = scr_round(grapBlock.bbox_top + (grapBlock.bbox_bottom-1-grapBlock.bbox_top)/2);
+			y = grapBlock.y;
 		}
 		
 	    drawGrapEffect = true;

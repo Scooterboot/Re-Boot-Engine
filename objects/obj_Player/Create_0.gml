@@ -28,9 +28,6 @@ godmode = false;
 //Tapping any aim button will shift the player forward one pixel during grounded movement.
 #macro _ARM_PUMP true
 
-// Allows vertical aiming via [Aim Up]+[Aim Down] (L+R) while moving
-//allowMovingVertAim = true;
-
 // Continue speed boosting/keep momentum after landing (also applies to spider ball)
 // 0 = disabled
 // 1 = enabled always
@@ -64,7 +61,7 @@ godmode = false;
 // Low-level Shine Spark flight control / Shine Spark steering
 //press directions to slightly change flight direction
 //value is the amount in degrees of angle change (set to 0 to disable)
-#macro _SPARK_STEERING 11.5
+#macro _SPARK_STEERING 11.25
 
 // High-level Shine Spark flight control when Accel Dash is enabled
 //activated by holding a direction and pressing Run during flight (consumes Dash charge)
@@ -5390,7 +5387,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 		            var linkX = startX + chainX/numlinks * i,
 						linkY = startY + chainY/numlinks * i;
 					
-		            draw_sprite_ext(sprt,random_range(0,3),linkX,linkY,1,1,rotation2,c_white,1);
+		            draw_sprite_ext(sprt,irandom(3),linkX,linkY,1,1,rotation2,c_white,1);
 		        }
 		    }
 		}
@@ -5402,7 +5399,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 			for(var i = 0; i <= length; i++)
 			{
 				var perc = i/length;
-				var perc2 = clamp(power(perc,0.5),0,1);
+				var perc2 = clamp(power(perc,0.25),0,1);
 				if(grapple.grappleState != GrappleState.None)
 				{
 					perc2 = 1;
@@ -5418,7 +5415,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 					{
 						var rotation3 = point_direction(linkX[j], linkY[j], linkX[i], linkY[i]);
 						rotation3 = scr_round(rotation3/2.8125)*2.8125;
-						draw_sprite_ext(sprt,random_range(0,3),scr_round(linkX[i]),scr_round(linkY[i]),(linkDist+1)/linklength,1,rotation3,c_white,1);
+						draw_sprite_ext(sprt,irandom(3),scr_round(linkX[i]),scr_round(linkY[i]),(linkDist+1)/linklength,1,rotation3,c_white,1);
 						j = i;
 					}
 				}
@@ -5515,7 +5512,7 @@ function PostDrawPlayer(posX, posY, rot, alph)
 			{
 				var rotation3 = point_direction(linkX[j], linkY[j], linkX[i], linkY[i]);
 				rotation3 = scr_round(rotation3/2.8125)*2.8125;
-				draw_sprite_ext(sprt,random_range(0,3),scr_round(linkX[i]),scr_round(linkY[i]),(linkDist+1)/linklength,1,rotation3,c_white,1);
+				draw_sprite_ext(sprt,irandom(3),scr_round(linkX[i]),scr_round(linkY[i]),(linkDist+1)/linklength,1,rotation3,c_white,1);
 				j = i;
 			}
 		}

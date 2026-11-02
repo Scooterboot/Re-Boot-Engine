@@ -26,6 +26,15 @@ dropChance[3] = 0; // missile
 dropChance[4] = 254; // super missile
 dropChance[5] = 0; // power bomb
 
+function GetGrapOffsetX(_x)
+{
+	return self.Center(,0,0).X;
+}
+function GetGrapOffsetY(_y)
+{
+	return self.Center(,0,0).Y;
+}
+
 mSpeed2 = 1;
 mSpeed = mSpeed2;
 
