@@ -2255,8 +2255,8 @@ function DestroyObject(xx,yy,objIndex)
 				instance_destroy(breakList[| i]);
 			}
 		}
+		ds_list_clear(breakList);
 	}
-	ds_list_clear(breakList);
 }
 #endregion
 
@@ -2327,8 +2327,8 @@ function DamageDoor(_x,_y,_objIndex,_dmg)
 				doorList[| i].DamageHatch(_dmg);
 			}
 		}
+		ds_list_clear(doorList);
 	}
-	ds_list_clear(doorList);
 }
 #endregion
 #region ShutterSwitch
@@ -2386,7 +2386,7 @@ function ToggleSwitch(_x,_y,_objIndex)
 				if(switchLOSCheck)
 				{
 					var entity = id,
-						center = Center();
+						center = self.Center();
 					with(sSwitch)
 					{
 						if(collision_line(center.X,center.Y,x,y,entity.solids,true,true))
@@ -2405,8 +2405,8 @@ function ToggleSwitch(_x,_y,_objIndex)
 				}
 			}
 		}
+		ds_list_clear(switchList);
 	}
-	ds_list_clear(switchList);
 }
 #endregion
 

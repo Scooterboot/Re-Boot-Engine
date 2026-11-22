@@ -14,6 +14,7 @@ enum GrappleState
 {
 	None,
 	Swing,
+	Zip,
 	PushBlock
 }
 grappleState = GrappleState.None;
@@ -23,6 +24,30 @@ grapBlock = noone;
 grapBlockOffX = undefined;
 grapBlockOffY = undefined;
 grapReel = false;
+
+function SetPosition()
+{
+	if(instance_exists(grapBlock))
+	{
+		if(!is_undefined(grapBlockOffX))
+		{
+			x = grapBlock.x + grapBlockOffX;
+		}
+		else
+		{
+			x = grapBlock.x;
+		}
+	
+		if(!is_undefined(grapBlockOffY))
+		{
+			y = grapBlock.y + grapBlockOffY;
+		}
+		else
+		{
+			y = grapBlock.y;
+		}
+	}
+}
 
 drawGrapEffect = false;
 grapFrame = 0;

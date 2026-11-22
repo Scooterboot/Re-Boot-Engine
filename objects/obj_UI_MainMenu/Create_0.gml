@@ -101,6 +101,10 @@ function CreateMainMenu()
 }
 
 #endregion
+
+#region Settings Menu
+#endregion
+
 #region File Menu
 
 fileMenuText = [

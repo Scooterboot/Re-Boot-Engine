@@ -180,6 +180,10 @@ if(grappleState == GrappleState.None)
 		else
 		{
 			grappleState = GrappleState.Swing;
+			if(variable_instance_exists(grapBlock, "grapZipPoint") && grapBlock.grapZipPoint)
+			{
+				grappleState = GrappleState.Zip;
+			}
 		}
 		
 		if(variable_instance_exists(grapBlock, "GetGrapOffsetX"))
@@ -190,6 +194,8 @@ if(grappleState == GrappleState.None)
 		{
 			grapBlockOffY = grapBlock.GetGrapOffsetY(y+sign(fVelY)*4);
 		}
+		
+		self.SetPosition();
 	}
 }
 if(grappleState != GrappleState.None)
@@ -201,26 +207,8 @@ if(grappleState != GrappleState.None)
 	
 	if(instance_exists(grapBlock))
 	{
-		if(!is_undefined(grapBlockOffX))
-		{
-			x = grapBlock.x + grapBlockOffX;
-		}
-		else
-		{
-			x = grapBlock.x;
-		}
-		
-		if(!is_undefined(grapBlockOffY))
-		{
-			y = grapBlock.y + grapBlockOffY;
-		}
-		else
-		{
-			y = grapBlock.y;
-		}
-		
-	    drawGrapEffect = true;
-		if(grappleState == GrappleState.Swing)
+		drawGrapEffect = true;
+		if(grappleState == GrappleState.Swing || grappleState == GrappleState.Zip)
 		{
 		    if(!stateChanged && player.state != State.Grapple)
 		    {
@@ -229,7 +217,7 @@ if(grappleState != GrappleState.None)
 				player.ChangeState(State.Grapple, AnimState.Grapple, MoveState.Custom, mask_Player_Somersault, false, true);
 				stateChanged = true;
 		    }
-			if(grapBlock.object_index == obj_GrappleBlockCracked)
+			if(grapBlock.object_index == obj_GrappleBlockSwing_Cracked)
 		    {
 		        grapBlock.crumble = true;
 		    }

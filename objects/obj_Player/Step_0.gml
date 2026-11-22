@@ -1,15 +1,12 @@
 /// @description Everything
 
 #region --- HUD & Visor Control ---
-SetControlVars("menu hud visor");
-
-var numEquips = self.EquipIndexNum();
-var numVisors = self.VisorIndexNum();
-
 if(global.pauseState == PauseState.None || global.pauseState == PauseState.RadialMenu || global.pauseState == PauseState.XRay)
 {
+	SetControlVars("menu hud visor");
+	
 	#region Toggle current equipment
-	if(numEquips > 0 && equipIndex >= 0 && self.EquipmentHasAmmo(equipIndex))
+	if(self.EquipIndexNum() > 0 && equipIndex >= 0 && self.EquipmentHasAmmo(equipIndex))
 	{
 		if(!visorSelected || (visorIndex != Visor.Scan && visorIndex != Visor.XRay))
 		{
@@ -21,6 +18,8 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 		}
 	}
 	#endregion
+	
+	var numVisors = self.VisorIndexNum();
 	#region Toggle current visor
 	
 	var _tVisorOn = (cVisorToggle && rVisorToggle),
@@ -216,9 +215,9 @@ if(global.pauseState == PauseState.None || global.pauseState == PauseState.Radia
 	}
 	
 	#endregion
+	
+	SetReleaseVars("menu hud visor");
 }
-
-SetReleaseVars("menu hud visor");
 #endregion
 
 // --- Physics & States ---
@@ -512,7 +511,7 @@ if(global.pauseState == PauseState.None)
 	
 	if(move != 0 && !brake && morphFrame <= 0 && frame[Frame.WallJump] <= 0 && (state != State.Grip || !startClimb) && 
 	(!cMoonwalk || state == State.Somersault || state == State.Morph || state == State.Grip || (global.aimStyle == 2 && cAimUp)) && 
-	!self.GrapplePulling() && state != State.Grapple && state != State.GravGrapple && 
+	!self.GrapplingPushBlock() && state != State.Grapple && state != State.GravGrapple && 
 	state != State.Slide && state != State.Dodge && state != State.Spark && state != State.BallSpark && 
 	state != State.Hurt && state != State.DmgBoost && animState != AnimState.DmgBoost && dmgBoost <= 0)
 	{
@@ -537,7 +536,7 @@ if(global.pauseState == PauseState.None)
 		brake = false;
 	}
 	
-	walkState = ((cMoonwalk || self.GrapplePulling()) && velX != 0 && sign(velX) != dir && state == State.Stand);
+	walkState = ((cMoonwalk || self.GrapplingPushBlock()) && velX != 0 && sign(velX) != dir && state == State.Stand);
 	
 	dir2 = dir;
 	//if(animState == AnimState.Grip)
@@ -547,7 +546,7 @@ if(global.pauseState == PauseState.None)
 
 #region Aim Control, part 1
 	
-	if(!self.GrapplePulling() && !self.GrappleSwinging() && !self.GravGrapSwinging())
+	if(!self.GrapplingPushBlock() && !self.GrappleSwinging() && !self.GravGrapSwinging())
 	{
 		if((aimAngle > -2 && (aimAngle < 2 || state != State.Grip || rlAngle)) || prAngle || grounded || move != 0 || 
 			state == State.Morph || state == State.Somersault || state == State.Spark || state == State.BallSpark || state == State.CrystalFlash)
@@ -1611,6 +1610,7 @@ if(global.pauseState == PauseState.None)
 						grapWJCounter = 0;
 						instance_destroy(grapple);
 						grappleDist = 0;
+						grappleReelVel = 0;
 						
 						audio_stop_sound(snd_Somersault);
 						audio_stop_sound(snd_Somersault_Loop);
@@ -2022,8 +2022,7 @@ if(global.pauseState == PauseState.None)
 	if(self.GrappleSwinging())
 	{
 		grapAngle = scr_wrap(point_direction(position.X, position.Y, grapple.x, grapple.y) - 90, -180, 180);
-		var dist = point_distance(position.X,position.Y,grapple.x,grapple.y);
-		var ndist = point_distance(position.X+velX,position.Y+velY,grapple.x,grapple.y);
+		var _realDist = point_distance(position.X, position.Y, grapple.x, grapple.y);
 		
 		var reel = 0;
 		var _lmult = 1;
@@ -2036,117 +2035,137 @@ if(global.pauseState == PauseState.None)
 			_lmult = 0.5;
 		}
 		
-		if(state == State.Grapple)
+		#region Grapple Walljump state activation
+		var _grapWallJump = (state == State.Grapple && _realDist <= grappleMinDist+2);
+		var _angCheck = (abs(grapAngle) < 45);
+		if(grapple.grappleState == GrappleState.Zip)
 		{
-			if(grappleDist <= grappleMinDist+2 && self.entity_place_collide(sign(grapple.x-x),0) && abs(grapAngle) < 45)
+			_angCheck = (abs(grapAngle) < 112.5 && abs(grapAngle) > 67.5);
+		}
+		if(_grapWallJump && self.entity_place_collide(sign(grapple.x-x),0) && _angCheck)
+		{
+			speedCounter = 0;
+			speedBoost = false;
+			
+			var _dir = sign(grapAngle);
+			canWallJump = (move != -_dir);
+			if(cFire)
 			{
-				speedCounter = 0;
-				speedBoost = false;
-				
-				var _dir = sign(grapAngle);
-				canWallJump = (move != -_dir);
-				if(cFire)
+				grapWJCounter = 60;
+			}
+			bufferJump = 0;
+		}
+		else
+		{
+			canWallJump = false;
+			grapWJCounter = 0;
+		}
+		#endregion
+		#region Grapple gravity
+		if(grapple.grappleState == GrappleState.Swing || _grapWallJump)
+		{
+			if(!speedBoost)
+			{
+				var angCurv = dcos(grapAngle+90);
+				if(angCurv != 0)
 				{
-					grapWJCounter = 60;
+					angCurv = sqrt(abs(angCurv)) * sign(angCurv);
 				}
-				bufferJump = 0;
+				
+				var angleGrav = grapGrav[liquidState] * angCurv;
+				velX += lengthdir_x(angleGrav,grapAngle);
+				velY += lengthdir_y(angleGrav,grapAngle);
+				velX *= grapDamp[liquidState];
+				velY *= grapDamp[liquidState];
+			}
+		}
+		#endregion
+		
+		// Swinging velocity logic
+		if(grapple.grappleState == GrappleState.Swing && state == State.Grapple)
+		{
+			#region Swinging
+			if(!speedBoost)
+			{
+				var grapMoveSpeed = moveSpeed[MoveSpeed.Grapple,liquidState];
+				velX += lengthdir_x(grapMoveSpeed * move,grapAngle);
+				velY += lengthdir_y(grapMoveSpeed * move,grapAngle);
 			}
 			else
 			{
-				canWallJump = false;
-				grapWJCounter = 0;
-				
-				var grapAngVel = angle_difference(point_direction(position.X+velX,position.Y+velY,grapple.x,grapple.y),point_direction(position.X,position.Y,grapple.x,grapple.y));
-				
-				if(!speedBoost)
+				if(point_distance(0,0,velX,velY) >= minBoostSpeed*0.75)
 				{
-					var angCurv = dcos(grapAngle+90);
-					if(angCurv != 0)
+					if(point_distance(0,0,velX,velY) < maxSpeed[MaxSpeed.SpeedBoost,liquidState]*1.25)
 					{
-						angCurv = sqrt(abs(angCurv)) * sign(angCurv);
+						var grapAngVel = angle_difference(point_direction(position.X+velX,position.Y+velY,grapple.x,grapple.y),point_direction(position.X,position.Y,grapple.x,grapple.y));
+						velX += lengthdir_x(moveSpeed[0,liquidState]*sign(grapAngVel),grapAngle);
+						velY += lengthdir_y(moveSpeed[0,liquidState]*sign(grapAngVel),grapAngle);
 					}
-					
-					var grapMoveSpeed = moveSpeed[MoveSpeed.Grapple,liquidState],
-						angleGrav = grapGrav[liquidState] * angCurv;
-					
-					velX += lengthdir_x(grapMoveSpeed * move + angleGrav,grapAngle);
-					velY += lengthdir_y(grapMoveSpeed * move + angleGrav,grapAngle);
-					velX *= grapDamp[liquidState];
-					velY *= grapDamp[liquidState];
 				}
 				else
 				{
-					if(point_distance(0,0,velX,velY) >= minBoostSpeed*0.75)
-					{
-						if(point_distance(0,0,velX,velY) < maxSpeed[MaxSpeed.SpeedBoost,liquidState]*1.25)
-						{
-							velX += lengthdir_x(moveSpeed[0,liquidState]*sign(grapAngVel),grapAngle);
-							velY += lengthdir_y(moveSpeed[0,liquidState]*sign(grapAngVel),grapAngle);
-						}
-					}
-					else
-					{
-						speedBoost = false;
-						speedCounter = 0;
-					}
-				}
-				
-				var grapVel = point_distance(0,0, velX,velY),
-					detectKick = 8 + grapVel;
-				var checkL = self.entity_place_collide(lengthdir_x(-detectKick, grapAngle), lengthdir_y(-detectKick, grapAngle)),
-					checkR = self.entity_place_collide(lengthdir_x(detectKick, grapAngle), lengthdir_y(detectKick, grapAngle));
-				
-				var kickDir = checkL - checkR;
-				if(kickDir == 0 && (checkL || checkR))
-				{
-					kickDir = move;
-				}
-				
-				if(cJump)
-				{
-					if(kickDir != 0 && (rJump || bufferJump > 0))
-					{
-						var kickSpeed = max(moveSpeed[MoveSpeed.GrappleKick,liquidState], grapVel);
-			            velX = lengthdir_x(kickSpeed * kickDir,grapAngle);
-						velY = lengthdir_y(kickSpeed * kickDir,grapAngle);
-			            audio_play_sound(snd_WallJump,0,false);
-			            grapWallBounceFrame = 15;
-						
-						if(!liquid)
-						{
-							var partLen = 25;
-							var gAngle = grapAngle-90;
-							for(var i = 0; i < 45; i++)
-							{
-								if(!self.entity_position_collide(lengthdir_x(partLen,gAngle), lengthdir_y(partLen,gAngle)))
-								{
-									gAngle -= kickDir;
-								}
-								else
-								{
-									gAngle += kickDir;
-								}
-							}
-							
-							var partX = x+lengthdir_x(partLen,gAngle),
-								partY = y+lengthdir_y(partLen,gAngle);
-							part_particles_create(obj_Particles.partSystemB,partX,partY,obj_Particles.bDust[0],3);
-						}
-						bufferJump = 0;
-					}
-					bufferJump = max(bufferJump-1,0);
-				}
-				else
-				{
-					bufferJump = bufferJumpMax;
+					speedBoost = false;
+					speedCounter = 0;
 				}
 			}
+			#endregion
+			#region Wall kicking
+			var grapVel = point_distance(0,0, velX,velY),
+				detectKick = 8 + grapVel;
+			var checkL = self.entity_place_collide(lengthdir_x(-detectKick, grapAngle), lengthdir_y(-detectKick, grapAngle)),
+				checkR = self.entity_place_collide(lengthdir_x(detectKick, grapAngle), lengthdir_y(detectKick, grapAngle));
 			
+			var kickDir = checkL - checkR;
+			if(kickDir == 0 && (checkL || checkR))
+			{
+				kickDir = move;
+			}
+			
+			if(cJump)
+			{
+				if(kickDir != 0 && (rJump || bufferJump > 0))
+				{
+					var kickSpeed = max(moveSpeed[MoveSpeed.GrappleKick,liquidState], grapVel);
+				    velX = lengthdir_x(kickSpeed * kickDir,grapAngle);
+					velY = lengthdir_y(kickSpeed * kickDir,grapAngle);
+				    audio_play_sound(snd_WallJump,0,false);
+				    grapWallBounceFrame = 15;
+							
+					if(!liquid)
+					{
+						var partLen = 25;
+						var gAngle = grapAngle-90;
+						for(var i = 0; i < 45; i++)
+						{
+							if(!self.entity_position_collide(lengthdir_x(partLen,gAngle), lengthdir_y(partLen,gAngle)))
+							{
+								gAngle -= kickDir;
+							}
+							else
+							{
+								gAngle += kickDir;
+							}
+						}
+								
+						var partX = x+lengthdir_x(partLen,gAngle),
+							partY = y+lengthdir_y(partLen,gAngle);
+						part_particles_create(obj_Particles.partSystemB,partX,partY,obj_Particles.bDust[0],3);
+					}
+					bufferJump = 0;
+				}
+				bufferJump = max(bufferJump-1,0);
+			}
+			else
+			{
+				bufferJump = bufferJumpMax;
+			}
+			#endregion
+			#region Reeling
 			var _rlSpd = grappleReelSpd*_lmult,
 				_rlMax = grappleReelMax*_lmult,
 				_rlFrict = grappleReelFrict*_lmult;
-			var up = (cPlayerUp && dist >= grappleMinDist),
-				down = (cPlayerDown && dist <= grappleMaxDist);
+			var up = (cPlayerUp && _realDist >= grappleMinDist),
+				down = (cPlayerDown && _realDist <= grappleMaxDist);
 			if(global.grappleStyle == 1 && move != 0)
 			{
 				up = false;
@@ -2158,8 +2177,8 @@ if(global.pauseState == PauseState.None)
 				{
 					_rlSpd += _rlFrict;
 				}
-				grappleReelVel = max(grappleReelVel - _rlSpd, -_rlMax, grappleMinDist-dist);
-				grappleDist = min(dist,grappleMaxDist);
+				grappleReelVel = max(grappleReelVel - _rlSpd, -_rlMax, grappleMinDist-_realDist);
+				grappleDist = min(_realDist,grappleMaxDist);
 			}
 			else if(down)
 			{
@@ -2167,8 +2186,8 @@ if(global.pauseState == PauseState.None)
 				{
 					_rlSpd += _rlFrict;
 				}
-				grappleReelVel = min(grappleReelVel + _rlSpd, _rlMax, grappleMaxDist-dist);
-				grappleDist = min(dist,grappleMaxDist);
+				grappleReelVel = min(grappleReelVel + _rlSpd, _rlMax, grappleMaxDist-_realDist);
+				grappleDist = min(_realDist,grappleMaxDist);
 			}
 			else
 			{
@@ -2183,72 +2202,121 @@ if(global.pauseState == PauseState.None)
 			}
 			
 			reel = grappleReelVel;
-			if(grappleDist >= grappleMaxDist+1)
+			var _gMaxDist = grappleMaxDist;//min(_realDist+1,grappleMaxDist);
+			if(grappleDist >= _gMaxDist+1)
 			{
-				var reelSpd = clamp(grappleMaxDist-grappleDist, -3*_lmult, 3*_lmult);
+				var reelSpd = clamp(_gMaxDist-grappleDist, -3*_lmult, 3*_lmult);
 				if(reelSpd < 0)
 				{
 					reel = reelSpd;
 				}
 				grappleReelVel = min(grappleReelVel,0);
 			}
-			if(grappleDist <= grappleMinDist-1)
+			var _gMinDist = grappleMinDist;//max(_realDist-1,grappleMinDist);
+			if(grappleDist <= _gMinDist-1)
 			{
-				var reelSpd = clamp(grappleMinDist-grappleDist, -3*_lmult, 3*_lmult);
+				var reelSpd = clamp(_gMinDist-grappleDist, -3*_lmult, 3*_lmult);
 				if(reelSpd > 0)
 				{
 					reel = reelSpd;
 				}
 				grappleReelVel = max(grappleReelVel,0);
 			}
+			#endregion
 		}
-		if(state == State.Morph)
+		// Zipping logic
+		if(grapple.grappleState == GrappleState.Zip || state == State.Morph)
 		{
-			grappleReelVel = max(grappleReelVel - spiderGrappleReelSpd*_lmult, -spiderGrappleReelMax*_lmult);
-			reel = grappleReelVel;
-			grappleDist = min(dist,grappleMaxDist);
-			
+			#region Zipping
 			velX = (velX > 0) ? max(velX-fFrict/2,0) : min(velX+fFrict/2,0);
 			velY = (velY > 0) ? max(velY-fFrict/2,0) : min(velY+fFrict/2,0);
 			
-			canMorphBounce = false;
+			var _rlSpd = grappleZipReelSpd*_lmult,
+				_rlSpd2 = grappleReelSpd*_lmult,
+				_rlMax = grappleZipReelMax*_lmult,
+				_rlFrict = grappleReelFrict*_lmult;
+			if(grappleReelVel > 0)
+			{
+				_rlSpd += _rlFrict;
+			}
+			if(grappleReelVel < -1)
+			{
+				_rlSpd = lerp(_rlSpd, _rlSpd2, clamp(abs(grappleReelVel)-1,0,1));
+			}
+			grappleReelVel = max(grappleReelVel - _rlSpd, -_rlMax);
+			grappleDist = min(_realDist,grappleMaxDist);
 			
-			if((item[Item.MagniBall] || item[Item.SpiderBall]) && unmorphing == 0)
+			reel = grappleReelVel;
+			
+			if(!_grapWallJump)
 			{
-				spiderGrappleSpeedKeep = true;
+				if(abs(fVelX) <= 1 && abs(fVelY) <= 1 && grappleReelVel >= _rlMax/2)
+				{
+					grappleZipUnstuck++;
+				}
+				else
+				{
+					grappleZipUnstuck = max(grappleZipUnstuck-1,0);
+				}
 			}
-			if(abs(fVelX) <= 1 && abs(fVelY) <= 1)
+			
+			if(state == State.Morph)
 			{
-				spiderGrappleUnstuck++;
+				canMorphBounce = false;
+				
+				if((item[Item.MagniBall] || item[Item.SpiderBall]) && unmorphing == 0)
+				{
+					spiderGrappleSpeedKeep = true;
+				}
 			}
-			else
-			{
-				spiderGrappleUnstuck = max(spiderGrappleUnstuck-1,0);
-			}
+			#endregion
 		}
-		
-		var vX = position.X - grapple.x,
-			vY = position.Y - grapple.y;
 		
 		grappleDist += reel;
 		
-		var ddist = ndist - dist;
-		vX /= dist;
-		vY /= dist;
-		velX -= vX * ddist;
-		velY -= vY * ddist;
-		vX *= grappleDist;
-		vY *= grappleDist;
-		grappleVelX = (grapple.x + vX) - position.X;
-		grappleVelY = (grapple.y + vY) - position.Y;
+		// Core swing formula - originally written by Skiphs
+		var _velDist = point_distance(position.X+velX, position.Y+velY, grapple.x, grapple.y);
+		var _diffDist = _velDist - _realDist;
+		
+		var _posDiff = new Vector2(position.X - grapple.x, position.Y - grapple.y);
+		_posDiff.Divide(_realDist);
+		velX -= _posDiff.X * _diffDist;
+		velY -= _posDiff.Y * _diffDist;
+		_posDiff.Multiply(grappleDist);
+		
+		grappleVelX = (grapple.x + _posDiff.X) - position.X;
+		grappleVelY = (grapple.y + _posDiff.Y) - position.Y;
 		
 		grapBoost = true;
 		
-		if(state == State.Morph)
+		if(grapple.grappleState == GrappleState.Zip || state == State.Morph)
 		{
-			if(point_distance(position.X+velX+grappleVelX,position.Y+velY+grappleVelY,grapple.x,grapple.y) <= 24 || !cFire || spiderGrappleUnstuck > 10)
+			var _distCheck = (point_distance(position.X+velX+grappleVelX,position.Y+velY+grappleVelY,grapple.x,grapple.y) <= 24);
+			if(state != State.Morph && instance_exists(grapple.grapBlock) && object_is_ancestor(grapple.grapBlock.object_index,obj_Tile))
+			{
+				_distCheck = (_distCheck && (self.entity_place_collide(0,2) || self.entity_place_collide(0,-2)));
+			}
+			if(_distCheck || (!cFire && grapWJCounter <= 0) || grappleZipUnstuck > 10)
 			{
 				instance_destroy(grapple);
+				
+				// experiment
+				/*if(_distCheck && speedBoost)
+				{
+					shineStart = 0;
+					shineRestart = false;
+					if(state == State.Morph)
+					{
+						self.ChangeState(State.BallSpark, AnimState.Morph, MoveState.Custom, mask_Player_Morph, false);
+					}
+					else
+					{
+						self.ChangeState(State.Spark, AnimState.Spark, MoveState.Custom, mask_Player_Jump, false);
+					}
+					rSparkJump = true;
+					shineDir = scr_wrap(grapAngle + 180, -180, 180);
+					audio_play_sound(snd_ShineSpark,0,false);
+				}*/
 			}
 		}
 	}
@@ -2270,7 +2338,7 @@ if(global.pauseState == PauseState.None)
 			grapAngle = 0;
 		}
 		
-		spiderGrappleUnstuck = 0;
+		grappleZipUnstuck = 0;
 	}
 
 #endregion
@@ -5069,7 +5137,7 @@ if(global.pauseState == PauseState.None)
 
 #region Aim Control, part 2
 
-	if(!self.GrapplePulling() && !self.GrappleSwinging() && !self.GravGrapSwinging() && state != State.Morph)
+	if(!self.GrapplingPushBlock() && !self.GrappleSwinging() && !self.GravGrapSwinging() && state != State.Morph)
 	{
 		var _up = cPlayerUp,
 			_down = cPlayerDown,
@@ -5257,7 +5325,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 	{
 		aimFrameTarget = 4;
 		aimSpeed = 1;
-		if(abs(aimFrameTarget-aimFrame) <= 2)
+		if(abs(aimFrameTarget-aimFrame) <= 3)
 		{
 			aimSpeed = 0.5;
 		}
@@ -6897,7 +6965,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 						torsoR = sprt_Player_DodgeBack_Right;
 						torsoL = sprt_Player_DodgeBack_Left;
 					}
-					if(dodgeLength <= dodgeLengthMax-2)
+					if(dodgeLength <= dodgeLengthMax-4)
 					{
 						frame[Frame.Dodge] = min(frame[Frame.Dodge] + (0.5 * _liqMult), 2);
 						if(groundedDodge == 1)
@@ -6907,7 +6975,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 					}
 					else
 					{
-						frame[Frame.Dodge] = max(frame[Frame.Dodge] - (1 * _liqMult), 0);
+						frame[Frame.Dodge] = max(frame[Frame.Dodge] - (0.5 * _liqMult), 0);
 					}
 					bodyFrame = scr_floor(frame[Frame.Dodge]);
 					
@@ -7235,9 +7303,12 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 			{
 				for(var i = 0, len = array_length(frame); i < len; i++)
 				{
-					if(i == Frame.GrappleLeg) continue;
-					if(i == Frame.GrappleBody) continue;
 					if(i == Frame.JAim) continue;
+					if(i == Frame.SparkV) continue;
+					if(i == Frame.SparkH) continue;
+					if(i == Frame.GrappleBody) continue;
+					if(i == Frame.GrappleLeg_Swing) continue;
+					if(i == Frame.GrappleLeg_Reel) continue;
 					
 					frame[i] = 0;
 					frameCounter[i] = 0;
@@ -7268,6 +7339,115 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 					bodyFrame = 0;
 					self.ArmPos(-15*fDir,-22);
 					rotation = 0;
+					
+					if(instance_exists(grapple) && grapple.grappleState = GrappleState.Zip)
+					{
+						bodyFrame = 1;
+						self.ArmPos(-11*fDir,3);
+					}
+				}
+				else if(instance_exists(grapple) && grapple.grappleState = GrappleState.Zip)
+				{
+					#region Grapple zip anim
+					var _ang = scr_wrap(_grapAngle,-180,180);
+					if(abs(_ang) < 22.5 || abs(_ang) > 157.5)
+					{
+						var _rot = 0;
+						if(abs(_ang) > 157.5)
+						{
+							_rot = 180;
+						}
+						
+						if(frame[Frame.SparkV] <= 0)
+						{
+							torsoR = sprt_Player_SparkStartRight;
+							torsoL = sprt_Player_SparkStartLeft;
+							bodyFrame = 3;
+							rotation = _rot;
+							
+							self.ArmPos(2*dir,9);
+							var _armDir = point_direction(0,0,armOffsetX,armOffsetY),
+								_armDist = point_distance(0,0,armOffsetX,armOffsetY);
+							self.ArmPos(lengthdir_x(_armDist, _armDir + rotation),lengthdir_y(_armDist, _armDir + rotation));
+						}
+						else
+						{
+							torsoR = sprt_Player_SparkVRight;
+							torsoL = sprt_Player_SparkVLeft;
+							bodyFrame = frame[Frame.SparkV]-1;
+							rotation = _rot;
+							
+							self.SetArmPosSpark(rotation);
+						}
+						
+						if(frame[Frame.SparkV] < 2)
+						{
+							frameCounter[Frame.SparkV] += 1;
+							var num = 2;
+							if(frame[Frame.SparkV] > 0)
+							{
+								num = 1;
+							}
+							if(frameCounter[Frame.SparkV] > num)
+							{
+								frame[Frame.SparkV] += 1;
+								frameCounter[Frame.SparkV] = 0;
+							}
+						}
+					}
+					else
+					{
+						torsoR = sprt_Player_SparkHRight;
+						torsoL = sprt_Player_SparkHLeft;
+						bodyFrame = frame[Frame.SparkH];
+						
+						switch(bodyFrame)
+						{
+							case 2:
+							{
+								self.ArmPos(-17,-1);
+								if(dir == -1)
+								{
+									self.ArmPos(-4,-3);
+								}
+								break;
+							}
+							case 1:
+							{
+								self.ArmPos(-10,8);
+								if(dir == -1)
+								{
+									self.ArmPos(-5,-3);
+								}
+								break;
+							}
+							default:
+							{
+								self.ArmPos(-5,9);
+								if(dir == -1)
+								{
+									self.ArmPos(-9,-2);
+								}
+								break;
+							}
+						}
+						
+						if(frame[Frame.SparkH] < 2)
+						{
+							frameCounter[Frame.SparkH] += 1;
+							var num = 2;
+							if(frame[Frame.SparkH] > 0)
+							{
+								num = 1;
+							}
+							if(frameCounter[Frame.SparkH] > num)
+							{
+								frame[Frame.SparkH] += 1;
+								frameCounter[Frame.SparkH] = 0;
+							}
+						}
+					}
+					#endregion
 				}
 				else if(aimFrame != aimFrameTarget)
 				{
@@ -7283,15 +7463,20 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 					rotation = scr_round(gRot/2.8125)*2.8125;
 					
 					self.SetArmPosJump();
-					var armR = point_direction(0,0,armOffsetX,armOffsetY),
-						armL = point_distance(0,0,armOffsetX,armOffsetY);
-					
-					self.ArmPos(lengthdir_x(armL,armR+rotation),lengthdir_y(armL,armR+rotation));
+					var _armDir = point_direction(0,0,armOffsetX,armOffsetY),
+						_armDist = point_distance(0,0,armOffsetX,armOffsetY);
+					self.ArmPos(lengthdir_x(_armDist, _armDir + rotation),lengthdir_y(_armDist, _armDir + rotation));
 				}
 	            else
 	            {
+					var _velDir = point_direction(0,0,velX,velY),
+						_velDist = point_distance(0,0,velX,velY);
+					var _relVelX = lengthdir_x(_velDist, _velDir - _grapAngle);
+					
 	                torsoR = sprt_Player_GrappleRight;
 	                torsoL = sprt_Player_GrappleLeft;
+					rotation = scr_round(_grapAngle/2.8125)*2.8125;
+					self.ArmPos(lengthdir_x(31, rotation + 90),lengthdir_y(31, rotation + 90));
 					
 					if(speedBoost)
 					{
@@ -7303,79 +7488,49 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 					}
 					bodyFrame = frame[Frame.GrappleBody];
 					
-					legs = sprt_Player_GrappleLeg;
-	                rotation = scr_round(_grapAngle/2.8125)*2.8125;
-
-	                self.ArmPos(lengthdir_x(31, rotation + 90),lengthdir_y(31, rotation + 90));
-					var _gFrNum = 0.34;
-					if(liquidState == LiquidState.Liquid || liquidState == LiquidState.DmgLiquid)
+					var _swingDestFrame = 0;
+					if(move == sign(_relVelX) || speedBoost)
 					{
-						_gFrNum = 0.25;
-					}
-					if(liquidState == LiquidState.HydroBoost)
-					{
-						_gFrNum = 0.3;
-					}
-	                if(grappleReelVel <= -1 && grapWallBounceFrame <= 0)
-	                {
-	                    grapFrame = max(grapFrame-_gFrNum,0);
-	                }
-	                else
-	                {
-	                    grapFrame = min(grapFrame+_gFrNum,3);
-	                }
-	                if(grapFrame <= 2)
-	                {
-	                    frame[Frame.GrappleLeg] = 0;
-	                    legFrame = scr_ceil(grapFrame);
-	                }
-	                else
-					{
-						if(instance_exists(grapple))
-		                {
-							var grapAngVel = angle_difference(point_direction(x+velX,y+velY,grapple.x,grapple.y),point_direction(x,y,grapple.x,grapple.y));
+						_swingDestFrame = -2*move*dir;
+						//_swingDestFrame = clamp((_relVelX*dir) / 2.75, -3, 3);
 						
-							var gFrameDest = 0;
-		                    if(grappleReelVel >= 1)
-		                    {
-		                        gFrameDest = 2*dir;
-		                    }
-		                    else
-							{
-								if(move != 0 && move == sign(grapAngVel))
-								{
-									gFrameDest = move;
-								}
-							}
-		                    if(grapWallBounceFrame > 0)
-		                    {
-		                        gFrameDest = 2*sign(grapAngVel);
-		                        frame[Frame.GrappleLeg] = gFrameDest;
-		                    }
-							if(frame[Frame.GrappleLeg] != gFrameDest)
-							{
-								var fnum = 3 / _liqMult;
-								frameCounter[Frame.GrappleLeg]++;
-								if(frameCounter[Frame.GrappleLeg] > fnum)
-								{
-									if(frame[Frame.GrappleLeg] < gFrameDest)
-									{
-										frame[Frame.GrappleLeg] = min(frame[Frame.GrappleLeg]+1,gFrameDest);
-									}
-									else
-									{
-										frame[Frame.GrappleLeg] = max(frame[Frame.GrappleLeg]-1,gFrameDest);
-									}
-									frameCounter[Frame.GrappleLeg] = 0;
-								}
-							}
-							else
-							{
-								frameCounter[Frame.GrappleLeg] = 0;
-							}
-						}
-	                    legFrame = 5+(scr_round(frame[Frame.GrappleLeg])*dir);
-	                }
+						//var _relMove = 0;
+						//if(move != 0)
+						//{
+						//	_relMove = move;
+						//}
+						//else //if(abs(_relVelX) > 1)
+						//{
+							//_relMove = sign(scr_round(_relVelX));
+						//}
+						
+						//_swingDestFrame = (-2 + clamp((_relVelX*_relMove) - 3, 0, 5))*_relMove*dir;
+						//_swingDestFrame = clamp(scr_round(_relVelX * _relMove / 2.25) - 2, -2, 3)*_relMove*dir;
+					}
+					if(grapWallBounceFrame > 0)
+		            {
+		                _swingDestFrame = 3*sign(-_relVelX*dir);
+		                frame[Frame.GrappleLeg_Swing] = _swingDestFrame;
+		            }
+					self.IncrFrameToDest(Frame.GrappleLeg_Swing, _swingDestFrame, 3 / _liqMult);
+					
+					legs = sprt_Player_GrappleLeg_Swing;
+					legFrame = 3 + frame[Frame.GrappleLeg_Swing];
+					
+					var _reelDestFrame = 0;
+					if(abs(grappleReelVel) >= 1 && grapWallBounceFrame <= 0)
+					{
+						_reelDestFrame = 3 * sign(grappleReelVel);
+					}
+					self.IncrFrameToDest(Frame.GrappleLeg_Reel, _reelDestFrame, 3 / _liqMult);
+					
+					if(frame[Frame.GrappleLeg_Reel] != 0)
+					{
+						legs = sprt_Player_GrappleLeg_Reel;
+						legFrame = 3 + frame[Frame.GrappleLeg_Reel];
+						
+						frame[Frame.GrappleLeg_Swing] = 0;
+					}
 	            }
 				break;
 			}
@@ -7385,9 +7540,9 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 			{
 				for(var i = 0, len = array_length(frame); i < len; i++)
 				{
-					if(i == Frame.GrappleLeg) continue;
-					if(i == Frame.GrappleBody) continue;
 					if(i == Frame.JAim) continue;
+					if(i == Frame.GrappleBody) continue;
+					if(i == Frame.GrappleLeg_Reel) continue;
 					
 					frame[i] = 0;
 					frameCounter[i] = 0;
@@ -7422,7 +7577,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 					self.ArmPos(lengthdir_x(armL,armR+rotation),lengthdir_y(armL,armR+rotation));
 					
 					frame[Frame.GrappleBody] = 0;
-					frame[Frame.GrappleLeg] = 0;
+					frame[Frame.GrappleLeg_Reel] = 0;
 				}
 	            else
 	            {
@@ -7431,95 +7586,30 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 					var _relVelX = lengthdir_x(_velDist, _velDir - _grapAngle),
 						_relVelY = lengthdir_y(_velDist, _velDir - _grapAngle);
 					
-					if(abs(_relVelX) < 2)
+					var _bodyDest = 0,
+						_delay = 1 / _liqMult;
+					if(abs(_relVelX) >= 2)
 					{
-						if(abs(frame[Frame.GrappleBody]) > 0)
-						{
-							frameCounter[Frame.GrappleBody]++;
-							if(frameCounter[Frame.GrappleBody] > 1)
-							{
-								if(frame[Frame.GrappleBody] > 0)
-								{
-									frame[Frame.GrappleBody] = max(frame[Frame.GrappleBody]-1, 0);
-								}
-								if(frame[Frame.GrappleBody] < 0)
-								{
-									frame[Frame.GrappleBody] = min(frame[Frame.GrappleBody]+1, 0);
-								}
-								frameCounter[Frame.GrappleBody] = 0;
-							}
-						}
-						else
-						{
-							frameCounter[Frame.GrappleBody] = 0;
-						}
+						_bodyDest = sign(_relVelX) * scr_round(min(abs(_relVelX)-1, 3)) * dir;
+						_delay -= 1;
 					}
-					else
-					{
-						var _bodyDest = sign(_relVelX) * scr_round(min(abs(_relVelX)-1, 3)) * dir;
-						
-						if(frame[Frame.GrappleBody] > _bodyDest)
-						{
-							frame[Frame.GrappleBody] = max(frame[Frame.GrappleBody]-1,_bodyDest);
-						}
-						if(frame[Frame.GrappleBody] < _bodyDest)
-						{
-							frame[Frame.GrappleBody] = min(frame[Frame.GrappleBody]+1,_bodyDest);
-						}
-					}
-					
-					if(abs(_relVelY) < 2)
-					{
-						if(abs(frame[Frame.GrappleLeg]) > 0)
-						{
-							frameCounter[Frame.GrappleLeg]++;
-							if(frameCounter[Frame.GrappleLeg] > 1)
-							{
-								if(frame[Frame.GrappleLeg] > 0)
-								{
-									frame[Frame.GrappleLeg] = max(frame[Frame.GrappleLeg]-1, 0);
-								}
-								if(frame[Frame.GrappleLeg] < 0)
-								{
-									frame[Frame.GrappleLeg] = min(frame[Frame.GrappleLeg]+1, 0);
-								}
-								frameCounter[Frame.GrappleLeg] = 0;
-							}
-						}
-						else
-						{
-							frameCounter[Frame.GrappleLeg] = 0;
-						}
-					}
-					else
-					{
-						var _legDest = 0;
-						if(sign(_relVelY) > 0)
-						{
-							_legDest = scr_round(min(abs(_relVelY)-1, 2));
-						}
-						if(sign(_relVelY) < 0)
-						{
-							_legDest = -scr_round(min(abs(_relVelY)-1, 3));
-						}
-						
-						if(frame[Frame.GrappleLeg] > _legDest)
-						{
-							frame[Frame.GrappleLeg] = max(frame[Frame.GrappleLeg]-1,_legDest);
-						}
-						if(frame[Frame.GrappleLeg] < _legDest)
-						{
-							frame[Frame.GrappleLeg] = min(frame[Frame.GrappleLeg]+1,_legDest);
-						}
-					}
+					self.IncrFrameToDest(Frame.GrappleBody, _bodyDest, _delay);
 					
 	                torsoR = sprt_Player_GrappleRight;
 	                torsoL = sprt_Player_GrappleLeft;
 					bodyFrame = frame[Frame.GrappleBody] + 10;
 					
-					legs = sprt_Player_GrappleLeg;
-					var _legSeq = [0,1,2,5,6,7];
-					legFrame = _legSeq[frame[Frame.GrappleLeg]+3];
+					var _legDest = 0;
+					_delay = 1 / _liqMult;
+					if(abs(_relVelY) >= 2)
+					{
+						_legDest = sign(_relVelY) * scr_round(min(abs(_relVelY)-1, 3));
+						_delay -= 1;
+					}
+					self.IncrFrameToDest(Frame.GrappleLeg_Reel, _legDest, _delay);
+					
+					legs = sprt_Player_GrappleLeg_Reel;
+					legFrame = frame[Frame.GrappleLeg_Reel]+3;
 					
 	                rotation = scr_round(_grapAngle/2.8125)*2.8125;
 	                self.ArmPos(lengthdir_x(31, rotation + 90),lengthdir_y(31, rotation + 90));
@@ -7632,7 +7722,7 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 		spaceJump = max(spaceJump - 1, 0);
 		morphFrame = max(morphFrame - animSpeed, 0);
 		
-		if(animState == AnimState.Brake)
+		if(animState == AnimState.Brake || animState == AnimState.Dodge)
 		{
 			runToStandFrame[0] = 0;
 			runToStandFrame[1] = 0;
@@ -7663,14 +7753,13 @@ if(global.pauseState == PauseState.None || (self.VisorSelected(Visor.XRay) && gl
 		{
 			shineDownRot = 0;
 		}
-		if(animState != AnimState.Grapple)
+		if(animState == AnimState.Grapple)
 		{
-		    grapFrame = 3;
-		    grapWallBounceFrame = 0;
+			grapWallBounceFrame = max(grapWallBounceFrame-1,0);
 		}
 		else
 		{
-		    grapWallBounceFrame = max(grapWallBounceFrame-1,0);
+		    grapWallBounceFrame = 0;
 		}
 		if(state != State.DmgBoost && animState != AnimState.DmgBoost)
 		{

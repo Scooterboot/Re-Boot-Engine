@@ -131,7 +131,6 @@ function DamageBoxes()
 			_mask = dmgBoxMask;
 		}
 		
-		var _dir = direction;
 		var velocity = point_distance(0,0,fVelX,fVelY);
 		var numw = max(abs(bb_right(0) - bb_left(0)), 1),
 			numl = max(velocity, clamp(point_distance(x,y,xstart,ystart),1,projLength));
@@ -139,7 +138,7 @@ function DamageBoxes()
 		if(initDmg > 0 && instance_exists(creator))
 		{
 			var _mask2 = mask_ProjInitDmgBox,
-				_dir2 = point_direction(x,y,creator.x,creator.y),
+				_dir = point_direction(x,y,creator.x,creator.y),
 				_numd2 = point_distance(x,y,creator.x,creator.y) / sprite_get_width(_mask2);
 			
 			if(!instance_exists(dmgBoxes[0]))
@@ -151,8 +150,8 @@ function DamageBoxes()
 				dmgBoxes[0].mask_index = _mask2;
 				dmgBoxes[0].image_xscale = image_xscale * _numd2;
 				dmgBoxes[0].image_yscale = image_yscale;
-				dmgBoxes[0].image_angle = _dir2;
-				dmgBoxes[0].direction = _dir2;
+				dmgBoxes[0].image_angle = _dir;
+				dmgBoxes[0].direction = _dir;
 				dmgBoxes[0].Damage(x,y,damage,damageType,damageSubType,freezeType,freezeTime,npcDeathType);
 			}
 			initDmg--;
@@ -165,8 +164,8 @@ function DamageBoxes()
 		var numd = max(scr_ceil(numl / numw), 1);
 		for(var i = 0; i < numd; i++)
 		{
-			var xw = x-lengthdir_x(numw*i,_dir),
-				yw = y-lengthdir_y(numw*i,_dir);
+			var xw = x-lengthdir_x(numw*i, direction),
+				yw = y-lengthdir_y(numw*i, direction);
 			
 			var k = i+1;
 			if(array_length(dmgBoxes)-1 < k)

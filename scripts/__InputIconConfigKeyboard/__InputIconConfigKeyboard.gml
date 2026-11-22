@@ -12,13 +12,13 @@
 //                   //
 ///////////////////////
 
-InputIconDefineKeyboard(mb_left,       sprt_UI_MBIcon_LeftClick);//"mouse left");
-InputIconDefineKeyboard(mb_middle,     sprt_UI_MBIcon_MiddleClick);//"mouse middle");
-InputIconDefineKeyboard(mb_right,      sprt_UI_MBIcon_RightClick);//"mouse right");
-InputIconDefineKeyboard(mb_side1,      sprt_UI_MBIcon_SideClickForward);//"mouse 4");
-InputIconDefineKeyboard(mb_side2,      sprt_UI_MBIcon_SideClickBack);//"mouse 5");
-InputIconDefineKeyboard(mb_wheel_down, sprt_UI_MBIcon_ScrollUp);//"mouse wheel down");
-InputIconDefineKeyboard(mb_wheel_up,   sprt_UI_MBIcon_ScrollDown);//"mouse wheel up");
+InputIconDefineKeyboard(mb_left,       new UISpriteIcon(sprt_UI_MBIcon_LeftClick));//"mouse left");
+InputIconDefineKeyboard(mb_middle,     new UISpriteIcon(sprt_UI_MBIcon_MiddleClick));//"mouse middle");
+InputIconDefineKeyboard(mb_right,      new UISpriteIcon(sprt_UI_MBIcon_RightClick));//"mouse right");
+InputIconDefineKeyboard(mb_side1,      new UISpriteIcon(sprt_UI_MBIcon_SideClickForward));//"mouse 4");
+InputIconDefineKeyboard(mb_side2,      new UISpriteIcon(sprt_UI_MBIcon_SideClickBack));//"mouse 5");
+InputIconDefineKeyboard(mb_wheel_down, new UISpriteIcon(sprt_UI_MBIcon_ScrollUp));//"mouse wheel down");
+InputIconDefineKeyboard(mb_wheel_up,   new UISpriteIcon(sprt_UI_MBIcon_ScrollDown));//"mouse wheel up");
 
 InputIconDefineKeyboard("A", new UISpriteIcon(sprt_UI_KBIcon_Alphabet,0));//"A");
 InputIconDefineKeyboard("B", new UISpriteIcon(sprt_UI_KBIcon_Alphabet,1));//"B");
@@ -70,36 +70,36 @@ InputIconDefineKeyboard(vk_lbracket,   new UISpriteIcon(sprt_UI_KBIcon_Symbols,8
 InputIconDefineKeyboard(vk_fslash,     new UISpriteIcon(sprt_UI_KBIcon_Symbols,9));//"/");
 InputIconDefineKeyboard(vk_bslash,     new UISpriteIcon(sprt_UI_KBIcon_Symbols,10));//"\\");
 
-InputIconDefineKeyboard(vk_capslock,  sprt_UI_KBIcon_CapsLock);//"Caps Lock");
+InputIconDefineKeyboard(vk_capslock,  new UISpriteIcon(sprt_UI_KBIcon_CapsLock));//"Caps Lock");
 InputIconDefineKeyboard(vk_lmeta,     new UISpriteIcon(sprt_UI_KBIcon_Meta_LR,0));//"Left Meta");
 InputIconDefineKeyboard(vk_rmeta,     new UISpriteIcon(sprt_UI_KBIcon_Meta_LR,1));//"Right Meta");
-InputIconDefineKeyboard(vk_clear,     sprt_UI_KBIcon_Clear);//"Clear");
-InputIconDefineKeyboard(vk_menu,      sprt_UI_KBIcon_Menu);//"Menu");
+InputIconDefineKeyboard(vk_clear,     new UISpriteIcon(sprt_UI_KBIcon_Clear));//"Clear");
+InputIconDefineKeyboard(vk_menu,      new UISpriteIcon(sprt_UI_KBIcon_Menu));//"Menu");
 
 InputIconDefineKeyboard(vk_printscreen, new UISpriteIcon(sprt_UI_KBIcon_MiscKeys,0));//"Print Screen");
 InputIconDefineKeyboard(vk_scrollock,   new UISpriteIcon(sprt_UI_KBIcon_MiscKeys,1));//"Scroll Lock");
 InputIconDefineKeyboard(vk_pause,       new UISpriteIcon(sprt_UI_KBIcon_MiscKeys,2));//"Pause Break");
 
-InputIconDefineKeyboard(vk_escape,    sprt_UI_KBIcon_Escape);//"Escape");
-InputIconDefineKeyboard(vk_backspace, sprt_UI_KBIcon_Backspace);//"Backspace");
-InputIconDefineKeyboard(vk_space,     sprt_UI_KBIcon_Space);//"Space");
-InputIconDefineKeyboard(vk_enter,     sprt_UI_KBIcon_Enter);//"Enter");
+InputIconDefineKeyboard(vk_escape,    new UISpriteIcon(sprt_UI_KBIcon_Escape));//"Escape");
+InputIconDefineKeyboard(vk_backspace, new UISpriteIcon(sprt_UI_KBIcon_Backspace));//"Backspace");
+InputIconDefineKeyboard(vk_space,     new UISpriteIcon(sprt_UI_KBIcon_Space));//"Space");
+InputIconDefineKeyboard(vk_enter,     new UISpriteIcon(sprt_UI_KBIcon_Enter));//"Enter");
 
 InputIconDefineKeyboard(vk_up,    new UISpriteIcon(sprt_UI_KBIcon_ArrowKeys,0));//"Up");
 InputIconDefineKeyboard(vk_down,  new UISpriteIcon(sprt_UI_KBIcon_ArrowKeys,1));//"Down");
 InputIconDefineKeyboard(vk_left,  new UISpriteIcon(sprt_UI_KBIcon_ArrowKeys,2));//"Left");
 InputIconDefineKeyboard(vk_right, new UISpriteIcon(sprt_UI_KBIcon_ArrowKeys,3));//"Right");
 
-InputIconDefineKeyboard(vk_tab,      sprt_UI_KBIcon_Tab);//"Tab");
+InputIconDefineKeyboard(vk_tab,      new UISpriteIcon(sprt_UI_KBIcon_Tab));//"Tab");
 InputIconDefineKeyboard(vk_ralt,     new UISpriteIcon(sprt_UI_KBIcon_Alt_LR,1));//"Right Alt");
 InputIconDefineKeyboard(vk_lalt,     new UISpriteIcon(sprt_UI_KBIcon_Alt_LR,0));//"Left Alt");
-InputIconDefineKeyboard(vk_alt,      sprt_UI_KBIcon_Alt);//"Alt");
+InputIconDefineKeyboard(vk_alt,      new UISpriteIcon(sprt_UI_KBIcon_Alt));//"Alt");
 InputIconDefineKeyboard(vk_rshift,   new UISpriteIcon(sprt_UI_KBIcon_Shift_LR,1));//"Right Shift");
 InputIconDefineKeyboard(vk_lshift,   new UISpriteIcon(sprt_UI_KBIcon_Shift_LR,0));//"Left Shift");
-InputIconDefineKeyboard(vk_shift,    sprt_UI_KBIcon_Shift);//"Shift");
+InputIconDefineKeyboard(vk_shift,    new UISpriteIcon(sprt_UI_KBIcon_Shift));//"Shift");
 InputIconDefineKeyboard(vk_rcontrol, new UISpriteIcon(sprt_UI_KBIcon_Ctrl_LR,1));//"Right Ctrl");
 InputIconDefineKeyboard(vk_lcontrol, new UISpriteIcon(sprt_UI_KBIcon_Ctrl_LR,0));//"Left Ctrl");
-InputIconDefineKeyboard(vk_control,  sprt_UI_KBIcon_Ctrl);//"Ctrl");
+InputIconDefineKeyboard(vk_control,  new UISpriteIcon(sprt_UI_KBIcon_Ctrl));//"Ctrl");
 
 InputIconDefineKeyboard(vk_f1,  new UISpriteIcon(sprt_UI_KBIcon_FunctionKeys,0));//"F1");
 InputIconDefineKeyboard(vk_f2,  new UISpriteIcon(sprt_UI_KBIcon_FunctionKeys,1));//"F2");
@@ -114,7 +114,7 @@ InputIconDefineKeyboard(vk_f10, new UISpriteIcon(sprt_UI_KBIcon_FunctionKeys,9))
 InputIconDefineKeyboard(vk_f11, new UISpriteIcon(sprt_UI_KBIcon_FunctionKeys,10));//"F11");
 InputIconDefineKeyboard(vk_f12, new UISpriteIcon(sprt_UI_KBIcon_FunctionKeys,11));//"F12");
 
-InputIconDefineKeyboard(vk_numlock,  sprt_UI_KBIcon_Numlock);//"Num Lock");
+InputIconDefineKeyboard(vk_numlock,  new UISpriteIcon(sprt_UI_KBIcon_Numlock));//"Num Lock");
 InputIconDefineKeyboard(vk_divide,   new UISpriteIcon(sprt_UI_KBIcon_NumSymbols,0));//"Numpad /");
 InputIconDefineKeyboard(vk_multiply, new UISpriteIcon(sprt_UI_KBIcon_NumSymbols,1));//"Numpad *");
 InputIconDefineKeyboard(vk_subtract, new UISpriteIcon(sprt_UI_KBIcon_NumSymbols,2));//"Numpad -");
@@ -132,12 +132,12 @@ InputIconDefineKeyboard(vk_numpad7, new UISpriteIcon(sprt_UI_KBIcon_Numpad,7));/
 InputIconDefineKeyboard(vk_numpad8, new UISpriteIcon(sprt_UI_KBIcon_Numpad,8));//"Numpad 8");
 InputIconDefineKeyboard(vk_numpad9, new UISpriteIcon(sprt_UI_KBIcon_Numpad,9));//"Numpad 9");
 
-InputIconDefineKeyboard(vk_delete,   sprt_UI_KBIcon_Delete);//"Delete");
-InputIconDefineKeyboard(vk_insert,   sprt_UI_KBIcon_Insert);//"Insert");
-InputIconDefineKeyboard(vk_home,     sprt_UI_KBIcon_Home);//"Home");
+InputIconDefineKeyboard(vk_delete,   new UISpriteIcon(sprt_UI_KBIcon_Delete));//"Delete");
+InputIconDefineKeyboard(vk_insert,   new UISpriteIcon(sprt_UI_KBIcon_Insert));//"Insert");
+InputIconDefineKeyboard(vk_home,     new UISpriteIcon(sprt_UI_KBIcon_Home));//"Home");
 InputIconDefineKeyboard(vk_pageup,   new UISpriteIcon(sprt_UI_KBIcon_PageUpDown,0));//"Page up");
 InputIconDefineKeyboard(vk_pagedown, new UISpriteIcon(sprt_UI_KBIcon_PageUpDown,1));//"Page down");
-InputIconDefineKeyboard(vk_end,      sprt_UI_KBIcon_End);//"End");
+InputIconDefineKeyboard(vk_end,      new UISpriteIcon(sprt_UI_KBIcon_End));//"End");
 
 var _playerIndex = 0,
 	_forGamepad = InputPlayerUsingGamepad(_playerIndex),

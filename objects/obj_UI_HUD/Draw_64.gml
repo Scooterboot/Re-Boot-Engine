@@ -236,7 +236,11 @@ if(room != rm_MainMenu && instance_exists(obj_Player))
 				}
 				
 				var _spdScale = power((abs(velX) / spdMax),2);
-				if(SpiderActive())
+				if(self.GrappleSwinging())
+				{
+					_spdScale = power((abs(fVelX) / spdMax),2);
+				}
+				else if(self.SpiderActive())
 				{
 					_spdScale = power((abs(spiderSpeed) / spdMax),2);
 				}

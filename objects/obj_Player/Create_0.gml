@@ -232,11 +232,11 @@ shineLauncherStart = 0;
 	due to the existence of omni-directional reflec panels.
 */
 function GetSparkDir() { return scr_wrap(shineDir+shineDirDiff,-180,180); }
-function SparkDir_VertUp() { return abs(self.GetSparkDir()) > 157.5; }
-function SparkDir_DiagUp() { return abs(self.GetSparkDir()) >= 112.5 && abs(self.GetSparkDir()) <= 157.5; }
-function SparkDir_Hori() { return abs(self.GetSparkDir()) > 67.5 && abs(self.GetSparkDir()) < 112.5; }
-function SparkDir_DiagDown() { return abs(self.GetSparkDir()) >= 22.5 && abs(self.GetSparkDir()) <= 67.5; }
-function SparkDir_VertDown() { return abs(self.GetSparkDir()) < 22.5; }
+function SparkDir_VertUp() { return abs(self.GetSparkDir()) >= 157.5; }
+function SparkDir_DiagUp() { return abs(self.GetSparkDir()) > 123.75 && abs(self.GetSparkDir()) < 157.5; }
+function SparkDir_Hori() { return abs(self.GetSparkDir()) >= 56.25 && abs(self.GetSparkDir()) <= 123.755; }
+function SparkDir_DiagDown() { return abs(self.GetSparkDir()) > 22.5 && abs(self.GetSparkDir()) < 56.25; }
+function SparkDir_VertDown() { return abs(self.GetSparkDir()) <= 22.5; }
 
 shineReflecCounter = 0;
 
@@ -251,7 +251,6 @@ spiderJumpBoost = false;
 spiderJumpDir = 0;
 spiderJump_SpeedAddX = 0;
 spiderJump_SpeedAddY = 0;
-spiderGrappleUnstuck = 0;
 spiderGrappleSpeedKeep = false;
 spiderCornerFix = false;
 
@@ -371,8 +370,9 @@ grappleReelVel = 0;
 grappleReelSpd = 0.75;
 grappleReelFrict = 1;
 grappleReelMax = 6;
-spiderGrappleReelSpd = 0.625;
-spiderGrappleReelMax = 8;
+grappleZipReelSpd = 0.1875;//0.625;
+grappleZipReelMax = 8.25;
+grappleZipUnstuck = 0;
 
 grapWJCounter = 0;
 
@@ -924,7 +924,8 @@ enum Frame
 	SparkV,
 	SparkH,
 	GrappleBody,
-	GrappleLeg,
+	GrappleLeg_Swing,
+	GrappleLeg_Reel,
 	Hurt,
 	DmgBoost,
 	
@@ -933,6 +934,32 @@ enum Frame
 
 frame = array_create(Frame._Length, 0);
 frameCounter = array_create(Frame._Length, 0);
+
+#region IncrFrameToDest
+function IncrFrameToDest(frameID, destination, delay)
+{
+	if(frame[frameID] != destination)
+	{
+		frameCounter[frameID]++;
+		if(frameCounter[frameID] >= delay)
+		{
+			if(frame[frameID] < destination)
+			{
+				frame[frameID] = min(frame[frameID]+1, destination);
+			}
+			else
+			{
+				frame[frameID] = max(frame[frameID]-1, destination);
+			}
+			frameCounter[frameID] -= delay;
+		}
+	}
+	else
+	{
+		frameCounter[frameID] = 0;
+	}
+}
+#endregion
 
 idleNum = [32,8,8,8,16,6,6,6];
 idleSequence = [0,1,2,3,4,3,2,1];
@@ -973,7 +1000,6 @@ gripAimAnim = 0;
 climbSequence = [0,0,1,2,3,4,5,6,7,8,9,9,9,9,10,10,11,11,11];
 climbFrame = 0;
 
-grapFrame = 3;
 grapWallBounceFrame = 0;
 
 grapPartFrame = 0;
@@ -3697,11 +3723,11 @@ function SpiderActive(edge = undefined)
 #region GrappleSwinging
 function GrappleSwinging()
 {
-	return (instance_exists(grapple) && grapple.grappleState == GrappleState.Swing);
+	return (instance_exists(grapple) && (grapple.grappleState == GrappleState.Swing || grapple.grappleState == GrappleState.Zip));
 }
 #endregion
-#region GrapplePulling
-function GrapplePulling()
+#region GrapplingPushBlock
+function GrapplingPushBlock()
 {
 	return (instance_exists(grapple) && grapple.grappleState == GrappleState.PushBlock);
 }

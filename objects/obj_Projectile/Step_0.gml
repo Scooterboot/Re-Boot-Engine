@@ -249,42 +249,32 @@ position.Y = y;
 
 #region Tile interaction / Block destruction
 
-if(impacted > 0)
+if(impacted > 0 || !tileCollide)
 {
-	self.TileInteract(x+fVelX,y+fVelY);
 	self.TileInteract(x,y);
-	self.TileInteract(x-fVelX,y-fVelY);
 }
 else
 {
 	self.TileInteract(x-fVelX,y-fVelY);
-	if(!tileCollide)
-	{
-		self.TileInteract(x,y);
-	}
 }
 
 if(projLength > 0)
 {
-	var numw = max(abs(bb_right(0) - bb_left(0)),1),
-        numd = clamp(point_distance(x,y,xstart,ystart),1,projLength);
-	for(var j = numw; j < numd; j += numw)
+	var velocity = point_distance(0,0,fVelX,fVelY);
+	var numw = max(abs(bb_right(0) - bb_left(0)), 1),
+		numl = max(velocity, clamp(point_distance(x,y,xstart,ystart),1,projLength));
+	var numd = max(scr_ceil(numl / numw), 1);
+	for(var i = 1; i < numd; i++)
 	{
-		var xw = x-lengthdir_x(j,direction),
-			yw = y-lengthdir_y(j,direction);
-		if(impacted > 0)
+		var xw = x-lengthdir_x(numw*i, direction),
+			yw = y-lengthdir_y(numw*i, direction);
+		if(impacted > 0 || !tileCollide)
 		{
-			self.TileInteract(xw+fVelX,yw+fVelY);
 			self.TileInteract(xw,yw);
-			self.TileInteract(xw-fVelX,yw-fVelY);
 		}
 		else
 		{
 			self.TileInteract(xw-fVelX,yw-fVelY);
-			if(!tileCollide)
-			{
-				self.TileInteract(xw,yw);
-			}
 		}
 	}
 }

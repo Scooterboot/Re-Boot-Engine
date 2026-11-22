@@ -23,28 +23,28 @@ InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_shoulderr,  new UISpriteIcon(
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_shoulderlb, new UISpriteIcon(sprt_UI_XBIcon_Shoulders,2)); //"LT"); //LT
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_shoulderrb, new UISpriteIcon(sprt_UI_XBIcon_Shoulders,3)); //"RT"); //RT
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_select, sprt_UI_XBIcon_View); //"view"); //View
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_start,  sprt_UI_XBIcon_Menu); //"menu"); //Menu
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_select, new UISpriteIcon(sprt_UI_XBIcon_View)); //"view"); //View
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_start,  new UISpriteIcon(sprt_UI_XBIcon_Menu)); //"menu"); //Menu
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_padl, sprt_UI_GPIcon_DPad_Left); //"dpad left" ); //D-pad left
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_padr, sprt_UI_GPIcon_DPad_Right); //"dpad right"); //D-pad right
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_padu, sprt_UI_GPIcon_DPad_Up); //"dpad up"   ); //D-pad up
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_padd, sprt_UI_GPIcon_DPad_Down); //"dpad down" ); //D-pad down
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_padl, new UISpriteIcon(sprt_UI_GPIcon_DPad_Left)); //"dpad left" ); //D-pad left
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_padr, new UISpriteIcon(sprt_UI_GPIcon_DPad_Right)); //"dpad right"); //D-pad right
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_padu, new UISpriteIcon(sprt_UI_GPIcon_DPad_Up)); //"dpad up"   ); //D-pad up
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_padd, new UISpriteIcon(sprt_UI_GPIcon_DPad_Down)); //"dpad down" ); //D-pad down
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, -gp_axislh, sprt_UI_GPIcon_LStick_Left); //"thumbstick l left" );
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX,  gp_axislh, sprt_UI_GPIcon_LStick_Right); //"thumbstick l right");
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, -gp_axislv, sprt_UI_GPIcon_LStick_Up); //"thumbstick l up"   );
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX,  gp_axislv, sprt_UI_GPIcon_LStick_Down); //"thumbstick l down" );
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX,  gp_stickl, sprt_UI_GPIcon_LStick_Click); //"thumbstick l click");
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, -gp_axislh, new UISpriteIcon(sprt_UI_GPIcon_LStick_Left)); //"thumbstick l left" );
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX,  gp_axislh, new UISpriteIcon(sprt_UI_GPIcon_LStick_Right)); //"thumbstick l right");
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, -gp_axislv, new UISpriteIcon(sprt_UI_GPIcon_LStick_Up)); //"thumbstick l up"   );
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX,  gp_axislv, new UISpriteIcon(sprt_UI_GPIcon_LStick_Down)); //"thumbstick l down" );
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX,  gp_stickl, new UISpriteIcon(sprt_UI_GPIcon_LStick_Click)); //"thumbstick l click");
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, -gp_axisrh, sprt_UI_GPIcon_RStick_Left); //"thumbstick r left" );
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX,  gp_axisrh, sprt_UI_GPIcon_RStick_Right); //"thumbstick r right");
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, -gp_axisrv, sprt_UI_GPIcon_RStick_Up); //"thumbstick r up"   );
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX,  gp_axisrv, sprt_UI_GPIcon_RStick_Down); //"thumbstick r down" );
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX,  gp_stickr, sprt_UI_GPIcon_RStick_Click); //"thumbstick r click");
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, -gp_axisrh, new UISpriteIcon(sprt_UI_GPIcon_RStick_Left)); //"thumbstick r left" );
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX,  gp_axisrh, new UISpriteIcon(sprt_UI_GPIcon_RStick_Right)); //"thumbstick r right");
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, -gp_axisrv, new UISpriteIcon(sprt_UI_GPIcon_RStick_Up)); //"thumbstick r up"   );
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX,  gp_axisrv, new UISpriteIcon(sprt_UI_GPIcon_RStick_Down)); //"thumbstick r down" );
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX,  gp_stickr, new UISpriteIcon(sprt_UI_GPIcon_RStick_Click)); //"thumbstick r click");
 
 //Series S|X only
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_extra1, sprt_UI_XBIcon_Share); //"share");
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_extra1, new UISpriteIcon(sprt_UI_XBIcon_Share)); //"share");
 
 //Elite and third party controllers
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_XBOX, gp_paddler,  new UISpriteIcon(sprt_UI_XBIcon_Paddles,0)); //"P1");

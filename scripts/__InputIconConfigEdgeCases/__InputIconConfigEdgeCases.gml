@@ -32,26 +32,26 @@ InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_shoulderr,  new UISpriteIc
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_shoulderlb, new UISpriteIcon(sprt_UI_GPIcon_Shoulders,2)); //"trigger l" );
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_shoulderrb, new UISpriteIcon(sprt_UI_GPIcon_Shoulders,3)); //"trigger r" );
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_select, sprt_UI_GPIcon_Select); //"select");
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_start,  sprt_UI_GPIcon_Start); //"start" );
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_home,   sprt_UI_GPIcon_Home); //"home"  );
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_select, new UISpriteIcon(sprt_UI_GPIcon_Select)); //"select");
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_start,  new UISpriteIcon(sprt_UI_GPIcon_Start)); //"start" );
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_home,   new UISpriteIcon(sprt_UI_GPIcon_Home)); //"home"  );
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_padl, sprt_UI_GPIcon_DPad_Left); //"dpad left" ); 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_padr, sprt_UI_GPIcon_DPad_Right); //"dpad right"); 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_padu, sprt_UI_GPIcon_DPad_Up); //"dpad up"   ); 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_padd, sprt_UI_GPIcon_DPad_Down); //"dpad down" ); 
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_padl, new UISpriteIcon(sprt_UI_GPIcon_DPad_Left)); //"dpad left" ); 
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_padr, new UISpriteIcon(sprt_UI_GPIcon_DPad_Right)); //"dpad right"); 
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_padu, new UISpriteIcon(sprt_UI_GPIcon_DPad_Up)); //"dpad up"   ); 
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_padd, new UISpriteIcon(sprt_UI_GPIcon_DPad_Down)); //"dpad down" ); 
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, -gp_axislh, sprt_UI_GPIcon_LStick_Left); //"thumbstick l left" );
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN,  gp_axislh, sprt_UI_GPIcon_LStick_Right); //"thumbstick l right");
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, -gp_axislv, sprt_UI_GPIcon_LStick_Up); //"thumbstick l up"   );
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN,  gp_axislv, sprt_UI_GPIcon_LStick_Down); //"thumbstick l down" );
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN,  gp_stickl, sprt_UI_GPIcon_LStick_Click); //"thumbstick l click");
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, -gp_axislh, new UISpriteIcon(sprt_UI_GPIcon_LStick_Left)); //"thumbstick l left" );
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN,  gp_axislh, new UISpriteIcon(sprt_UI_GPIcon_LStick_Right)); //"thumbstick l right");
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, -gp_axislv, new UISpriteIcon(sprt_UI_GPIcon_LStick_Up)); //"thumbstick l up"   );
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN,  gp_axislv, new UISpriteIcon(sprt_UI_GPIcon_LStick_Down)); //"thumbstick l down" );
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN,  gp_stickl, new UISpriteIcon(sprt_UI_GPIcon_LStick_Click)); //"thumbstick l click");
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, -gp_axisrh, sprt_UI_GPIcon_RStick_Left); //"thumbstick r left" );
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN,  gp_axisrh, sprt_UI_GPIcon_RStick_Right); //"thumbstick r right");
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, -gp_axisrv, sprt_UI_GPIcon_RStick_Up); //"thumbstick r up"   );
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN,  gp_axisrv, sprt_UI_GPIcon_RStick_Down); //"thumbstick r down" );
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN,  gp_stickr, sprt_UI_GPIcon_RStick_Click); //"thumbstick r click");
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, -gp_axisrh, new UISpriteIcon(sprt_UI_GPIcon_RStick_Left)); //"thumbstick r left" );
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN,  gp_axisrh, new UISpriteIcon(sprt_UI_GPIcon_RStick_Right)); //"thumbstick r right");
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, -gp_axisrv, new UISpriteIcon(sprt_UI_GPIcon_RStick_Up)); //"thumbstick r up"   );
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN,  gp_axisrv, new UISpriteIcon(sprt_UI_GPIcon_RStick_Down)); //"thumbstick r down" );
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN,  gp_stickr, new UISpriteIcon(sprt_UI_GPIcon_RStick_Click)); //"thumbstick r click");
 
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_paddler,  new UISpriteIcon(sprt_UI_GPIcon_Paddles,0)); //"paddle r" );
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_paddlel,  new UISpriteIcon(sprt_UI_GPIcon_Paddles,1)); //"paddle l" );
@@ -65,4 +65,4 @@ InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_extra4, new UISpriteIcon(s
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_extra5, new UISpriteIcon(sprt_UI_GPIcon_FaceButtons1,8)); //"extra 5");
 InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_extra6, new UISpriteIcon(sprt_UI_GPIcon_FaceButtons2,0)); //"extra 6");
 
-InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_touchpadbutton, sprt_UI_GPIcon_TouchPad); //"touchpad");
+InputIconDefineGamepad(INPUT_GAMEPAD_TYPE_UNKNOWN, gp_touchpadbutton, new UISpriteIcon(sprt_UI_GPIcon_TouchPad)); //"touchpad");
