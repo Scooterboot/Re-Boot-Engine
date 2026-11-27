@@ -9,11 +9,27 @@
 
 function InputVerbConsume(_verbIndex, _playerIndex = 0)
 {
-    static _playerArray = __InputSystemPlayerArray();
+    static _verbToClusterMap = __InputSystem().__verbToClusterMap;
+    static _playerArray      = __InputSystemPlayerArray();
     
     __INPUT_VALIDATE_PLAYER_INDEX
     
-    __InputVerbConsumeInternal(_playerArray[_playerIndex], _verbIndex, false);
+    with(_playerArray[_playerIndex])
+    {
+        __InputVerbConsumeInternal(self, _verbIndex, false);
+        
+        //Update clusters associated with this verb
+        var _verbToClusterArray = _verbToClusterMap[? _verbIndex];
+        if (is_array(_verbToClusterArray))
+        {
+            var _i = 0;
+            repeat(array_length(_verbToClusterArray))
+            {
+                __UpdateCluster(_verbToClusterArray[_i]);
+                ++_i;
+            }
+        }
+    }
 }
 
 function __InputVerbConsumeInternal(_playerStruct, _verbIndex, _ignoreHeldCheck)

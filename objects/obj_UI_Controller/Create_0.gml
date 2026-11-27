@@ -1,6 +1,7 @@
 /// @description 
 
 usingMouse = false;
+bentoInputMode = BENTO_MODE_UNKNOWN;
 
 buttonIconKey = array_create(INPUT_VERB._Length);
 

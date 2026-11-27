@@ -7,11 +7,11 @@
 /// @param x
 /// @param y
 /// @param primaryAction
+/// @param environmentOrName
 
-function BentoInputPointer(_x, _y, _primaryAction)
+function BentoInputPointer(_x, _y, _primaryAction, _environmentOrName = undefined)
 {
-    static _system = __BentoSystem();
-    with(_system.__environmentCurrent)
+    with(__BentoEnvironmentSeek(_environmentOrName))
     {
         __envMouseX    = _x / _system.__globalScale;
         __envMouseY    = _y / _system.__globalScale;

@@ -609,7 +609,7 @@ frict[Friction.Crouch,		LiquidState.HydroBoost]	= 0.5;
 frict[Friction.MoonPrep,	LiquidState.HydroBoost]	= 0.75;
 frict[Friction.DodgeSlow,	LiquidState.HydroBoost]	= 0.625;
 frict[Friction.DodgeFast,	LiquidState.HydroBoost]	= 0.25;
-frict[Friction.SpdCap,		LiquidState.HydroBoost]	= 0.0625;
+frict[Friction.SpdCap,		LiquidState.HydroBoost]	= 0.125;
 
 frict[Friction.Default,		LiquidState.Liquid]		= 0.0625;
 frict[Friction.Air,			LiquidState.Liquid]		= 0.03125;
@@ -618,7 +618,7 @@ frict[Friction.Crouch,		LiquidState.Liquid]		= 0.125;
 frict[Friction.MoonPrep,	LiquidState.Liquid]		= 0.1875;
 frict[Friction.DodgeSlow,	LiquidState.Liquid]		= 0.5;
 frict[Friction.DodgeFast,	LiquidState.Liquid]		= 0.5;
-frict[Friction.SpdCap,		LiquidState.Liquid]		= 0.0625;
+frict[Friction.SpdCap,		LiquidState.Liquid]		= 0.125;
 
 frict[Friction.Default,		LiquidState.DmgLiquid]	= 0.25;
 frict[Friction.Air,			LiquidState.DmgLiquid]	= 0.25;
@@ -627,7 +627,7 @@ frict[Friction.Crouch,		LiquidState.DmgLiquid]	= 0.5;
 frict[Friction.MoonPrep,	LiquidState.DmgLiquid]	= 0.75;
 frict[Friction.DodgeSlow,	LiquidState.DmgLiquid]	= 0.5;
 frict[Friction.DodgeFast,	LiquidState.DmgLiquid]	= 0.5;
-frict[Friction.SpdCap,		LiquidState.DmgLiquid]	= 0.625;
+frict[Friction.SpdCap,		LiquidState.DmgLiquid]	= 0.125;
 
 // turn around speed is equal to moveSpeed + frict
 // this value gets added on top when holding run
@@ -2202,6 +2202,18 @@ function OnXCollision(fVX, isOOB = false)
 	var diagSparkSlide = (_SPARK_DAIG_SLIDE && (((self.SparkDir_DiagUp() || self.SparkDir_DiagDown()) && (cPlayerRight - cPlayerLeft) != dir)) || self.SparkDir_VertUp() || self.SparkDir_VertDown());
 	if((state == State.Spark || state == State.BallSpark) && shineStart <= 0 && shineLauncherStart <= 0)
 	{
+		if(diagSparkSlide && (place_meeting(position.X+2,position.Y,obj_Spikes) || place_meeting(position.X-2,position.Y,obj_Spikes)))
+		{
+			var this = id;
+			with(lifeBoxes[0])
+			{
+				if(this.dmgBoxCheck(instance_place_list(x,y,obj_DamageBox,this.blockList,false)))
+				{
+					diagSparkSlide = false;
+					break;
+				}
+			}
+		}
 		if(!diagSparkSlide)
 		{
 			if(item[Item.ChainSpark] && (self.SparkDir_Hori() || (self.SparkDir_DiagDown() && !self.entity_place_collide(0,2)) || (self.SparkDir_DiagUp() && !self.entity_place_collide(0,-2))))

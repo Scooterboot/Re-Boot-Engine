@@ -3,13 +3,20 @@
 if(room == rm_MainMenu)
 {
 	camera_set_view_pos(view_camera[0], room_width/2 - global.resWidth/2, room_height/2 - global.resHeight/2);
+	self.UpdateText();
+	cleanUp = true;
 	
-	if(obj_UI_SettingsMenu.activeState == UI_ActiveState.Inactive)
+	if(!BentoEnvironmentExists(mainMenuEnviro))
+	{
+		environment = BentoEnvironmentCreate(mainMenuEnviro);
+	}
+	if(BentoEnvironmentExists(environment) && !instance_exists(obj_UI_SettingsMenu_Parent))
 	{
 		activeState = UI_ActiveState.Active;
 		
 		if(state == targetState)
 		{
+			self.UpdateBentoEnviro(environment);
 			screenFade = max(screenFade-screenFadeRate,0);
 		}
 	
@@ -54,11 +61,11 @@ if(room == rm_MainMenu)
 		{
 			if(state == targetState)
 			{
-				if(!BentoLayerExists(mainMenuLayer))
+				if(!BentoLayerExists(mainMenuLayer, environment))
 				{
 					self.CreateMainMenu();
 				}
-				BentoLayerSetDrawWhenBackgrounded(true, mainMenuLayer);
+				BentoLayerSetDrawWhenBackgrounded(true, mainMenuLayer, environment);
 			}
 			else
 			{
@@ -70,11 +77,34 @@ if(room == rm_MainMenu)
 			}
 		}
 		
+		if(state == UI_MMState.SettingsMenu)
+		{
+			if(state == targetState)
+			{
+				if(!BentoLayerExists(settingsMenuLayer, environment))
+				{
+					self.CreateSettingsMenu();
+				}
+			}
+			else
+			{
+				if(screenFade > 1)
+				{
+					state = targetState;
+				}
+				screenFade += screenFadeRate;
+			}
+		}
+		else
+		{
+			BentoLayerDestroy(settingsMenuLayer, environment);
+		}
+		
 		if(state == UI_MMState.FileMenu)
 		{
 			if(state == targetState)
 			{
-				if(!BentoLayerExists(fileMenuLayer))
+				if(!BentoLayerExists(fileMenuLayer, environment))
 				{
 					self.CreateFileMenu();
 				}
@@ -83,7 +113,7 @@ if(room == rm_MainMenu)
 				{
 					case UI_MMSubState.FileSelected:
 					{
-						if(!BentoLayerExists(selectedFileLayer) || selectedFile == -1)
+						if(!BentoLayerExists(selectedFileLayer, environment) || selectedFile == -1)
 						{
 							subState = UI_MMSubState.None;
 						}
@@ -91,7 +121,7 @@ if(room == rm_MainMenu)
 					}
 					case UI_MMSubState.FileCopy:
 					{
-						if(!BentoLayerExists(copyFileLayer))
+						if(!BentoLayerExists(copyFileLayer, environment))
 						{
 							subState = UI_MMSubState.FileSelected;
 						}
@@ -99,7 +129,7 @@ if(room == rm_MainMenu)
 					}
 					case UI_MMSubState.ConfirmCopy:
 					{
-						if(!BentoLayerExists(confirmCopyLayer))
+						if(!BentoLayerExists(confirmCopyLayer, environment))
 						{
 							subState = UI_MMSubState.FileCopy;
 						}
@@ -107,7 +137,7 @@ if(room == rm_MainMenu)
 					}
 					case UI_MMSubState.ConfirmDelete:
 					{
-						if(!BentoLayerExists(confirmDeleteLayer))
+						if(!BentoLayerExists(confirmDeleteLayer, environment))
 						{
 							subState = UI_MMSubState.FileCopy;
 						}
@@ -116,10 +146,10 @@ if(room == rm_MainMenu)
 					default:
 					{
 						selectedFile = -1;
-						BentoLayerDestroy(selectedFileLayer);
-						BentoLayerDestroy(copyFileLayer);
-						if(!BentoLayerGetBlockingAnimation(confirmCopyLayer)) { BentoLayerDestroy(confirmCopyLayer); }
-						if(!BentoLayerGetBlockingAnimation(confirmDeleteLayer)) { BentoLayerDestroy(confirmDeleteLayer); }
+						BentoLayerDestroy(selectedFileLayer, environment);
+						BentoLayerDestroy(copyFileLayer, environment);
+						if(!BentoLayerGetBlockingAnimation(confirmCopyLayer)) { BentoLayerDestroy(confirmCopyLayer, environment); }
+						if(!BentoLayerGetBlockingAnimation(confirmDeleteLayer)) { BentoLayerDestroy(confirmDeleteLayer, environment); }
 						
 						break;
 					}
@@ -190,7 +220,7 @@ if(room == rm_MainMenu)
 		else
 		{
 			subState = UI_MMSubState.None;
-			BentoLayerDestroy(fileMenuLayer);
+			BentoLayerDestroy(fileMenuLayer, environment);
 		
 			for(var i = 0; i < array_length(fileTime); i++)
 			{
@@ -205,40 +235,11 @@ if(room == rm_MainMenu)
 		{
 			scr_LoadGame(selectedFile);
 		}
-		
-		if(state == targetState)
-		{
-			BentoLayerDestroy(inputBlockLayer);
-		}
-		else if(!BentoLayerExists(inputBlockLayer))
-		{
-			BentoLayerCreate(inputBlockLayer);
-		}
 	}
 	else
 	{
 		activeState = UI_ActiveState.Inactive;
-		
-		if(obj_UI_SettingsMenu.activeState == UI_ActiveState.Active || obj_UI_SettingsMenu.activeState == UI_ActiveState.Deactivating)
-		{
-			BentoLayerSetDrawWhenBackgrounded(false, mainMenuLayer);
-		}
 	}
-	
-	if(updateText || obj_UI_Controller.updateText)
-	{
-		for(var i = 0; i < array_length(headerTextRaw); i++)
-		{
-			headerText[i] = UI_InsertIconsIntoString(headerTextRaw[i]);
-		}
-		for(var i = 0; i < array_length(footerTextRaw); i++)
-		{
-			footerText[i] = UI_InsertIconsIntoString(footerTextRaw[i]);
-		}
-		updateText = false;
-	}
-	
-	cleanUp = true;
 }
 else
 {
@@ -255,13 +256,7 @@ else
 	
 	if(cleanUp)
 	{
-		BentoLayerDestroy(mainMenuLayer);
-		BentoLayerDestroy(fileMenuLayer);
-		BentoLayerDestroy(selectedFileLayer);
-		BentoLayerDestroy(copyFileLayer);
-		BentoLayerDestroy(confirmCopyLayer);
-		BentoLayerDestroy(confirmDeleteLayer);
-		BentoLayerDestroy(inputBlockLayer);
+		BentoEnvironmentDestroy(environment);
 		cleanUp = false;
 	}
 	

@@ -7,11 +7,11 @@
 /// 
 /// @param name
 /// @param value
+/// @param environmentOrName
 
-function BentoInputHotkey(_name, _value)
+function BentoInputHotkey(_name, _value, _environmentOrName = undefined)
 {
-    static _system = __BentoSystem();
-    with(_system.__environmentCurrent)
+    with(__BentoEnvironmentSeek(_environmentOrName))
     {
         __envHotkeyInputMap[? _name] = _value;
         __envHotkeySeenMap[?  _name] = true;

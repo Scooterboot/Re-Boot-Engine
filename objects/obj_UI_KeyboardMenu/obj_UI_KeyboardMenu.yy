@@ -1,7 +1,9 @@
 {
   "$GMObject":"",
   "%Name":"obj_UI_KeyboardMenu",
-  "eventList":[],
+  "eventList":[
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+  ],
   "managed":true,
   "name":"obj_UI_KeyboardMenu",
   "overriddenProperties":[],
@@ -10,8 +12,8 @@
     "path":"folders/Objects/UI/Settings Menus.yy",
   },
   "parentObjectId":{
-    "name":"obj_UI_Parent",
-    "path":"objects/obj_UI_Parent/obj_UI_Parent.yy",
+    "name":"obj_UI_ControlBindMenu_Parent",
+    "path":"objects/obj_UI_ControlBindMenu_Parent/obj_UI_ControlBindMenu_Parent.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,

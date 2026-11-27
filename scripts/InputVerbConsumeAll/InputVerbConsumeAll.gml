@@ -18,7 +18,15 @@ function InputVerbConsumeAll(_playerIndex = 0)
         var _i = 0;
         repeat(_verbCount)
         {
-            InputVerbConsume(_i, _playerIndex);
+            __InputVerbConsumeInternal(self, _i, false);
+            ++_i;
+        }
+        
+        //Update all clusters
+        var _i = 0;
+        repeat(_clusterCount)
+        {
+            __UpdateCluster(_i);
             ++_i;
         }
     }

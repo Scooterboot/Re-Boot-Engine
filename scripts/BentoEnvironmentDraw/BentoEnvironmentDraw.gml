@@ -5,11 +5,11 @@
 /// 
 /// N.B. If you're calling `BentoSystemDraw()` then you don't need to call this function.
 /// 
-/// @param name
+/// @param environmentOrName
 
-function BentoEnvironmentDraw(_name)
+function BentoEnvironmentDraw(_environmentOrName)
 {
-    var _environment = __BentoEnvironmentFind(_name)
+    var _environment = __BentoEnvironmentSeek(_environmentOrName);
     if (_environment == undefined) return;
     
     _environment.__Draw();

@@ -1,14 +1,33 @@
 /// @description 
 
-if(room == rm_MainMenu && 
-	obj_UI_SettingsMenu.activeState != UI_ActiveState.Active && 
-	obj_UI_SettingsMenu.activeState != UI_ActiveState.Deactivating)
+var flag = false;
+with(obj_UI_SettingsMenu_Parent)
+{
+	if(screenFade >= 1)
+	{
+		flag = true;
+	}
+}
+if(room == rm_MainMenu && (!instance_exists(obj_UI_SettingsMenu_Parent) || !flag))
 {
 	var ww = global.resWidth,
 		hh = global.resHeight;
 	
 	surface_set_target(obj_Display.surfUI);
 	bm_set_one();
+	
+	if(state == UI_MMState.SettingsMenu)
+	{
+		BentoDrawClear(, 1);
+		draw_sprite_ext(bg_Space, 0, ww/2, hh/2, 1, 1, 0,c_white,1);
+	}
+	if(state == UI_MMState.FileMenu)
+	{
+		BentoDrawClear(, 1);
+		draw_sprite_ext(bg_Zebes, 0, ww/2, hh/2, 1, 1, 0,c_white,1);
+	}
+	
+	BentoEnvironmentDraw(environment);
 	
 	if(state == UI_MMState.TitleIntro)
 	{
@@ -53,51 +72,59 @@ if(room == rm_MainMenu &&
 		}
 	}
 	
-	if(state == UI_MMState.FileMenu)
+	if(state == UI_MMState.MainMenu)
 	{
-		var _tipStr = headerText[0];
-		if(subState == UI_MMSubState.FileCopy || subState == UI_MMSubState.ConfirmCopy)
+		var _fSprt = sprt_UI_Footer2,
+			_fH = sprite_get_height(_fSprt);
+		footerY = min(footerY+1, _fH);
+		
+		var cw = 24;
+		draw_sprite_stretched_ext(_fSprt,0, (ww-global.ogResWidth)/2-cw, hh-footerY, global.ogResWidth+cw*2, _fH, c_white,1);
+		
+		var _tipStr = footerText[0];
+		var _scrib = scribble(_tipStr)
+			.starting_format(font_get_name(fnt_GUI_Small),c_white)
+			.align(fa_center,fa_top);
+		draw_scribble_shadow(_scrib, scr_round(ww/2), scr_round(hh-footerY+4));
+	}
+	else if(state == UI_MMState.SettingsMenu || state == UI_MMState.FileMenu)
+	{
+		var _headStr = headerText[0],
+			_footStr = footerText[1];
+		
+		if(state == UI_MMState.FileMenu)
 		{
-			_tipStr = headerText[1];
+			_headStr = headerText[1];
+			if(subState == UI_MMSubState.FileCopy || subState == UI_MMSubState.ConfirmCopy)
+			{
+				_headStr = headerText[2];
+			}
+			if(subState != UI_MMSubState.None)
+			{
+				_footStr = footerText[2];
+			}
 		}
 		
-		var _scrib = scribble(_tipStr)
+		var cw = 24;
+		var hh2 = sprite_get_height(sprt_UI_Header2);
+		draw_sprite_stretched_ext(sprt_UI_Header2,0, (ww-global.ogResWidth)/2-cw,0, global.ogResWidth+cw*2, hh2, c_white,1);
+		
+		var _scrib = scribble(_headStr)
 			.starting_format(font_get_name(fnt_Menu),c_white)
 			.align(fa_center,fa_top);
-		
 		draw_scribble_shadow(_scrib, scr_round(ww/2), 1);
-	}
-	
-	if(state != UI_MMState.TitleIntro && state != UI_MMState.Title)
-	{
-		footerY = min(footerY+1, 13);
+		
+		hh2 = sprite_get_height(sprt_UI_Footer2);
+		draw_sprite_stretched_ext(sprt_UI_Footer2,0, (ww-global.ogResWidth)/2-cw,hh-hh2, global.ogResWidth+cw*2, hh2, c_white,1);
+		
+		_scrib = scribble(_footStr)
+		.starting_format(font_get_name(fnt_GUI_Small),c_white)
+		.align(fa_center,fa_bottom);
+		draw_scribble_shadow(_scrib, scr_round(ww/2), scr_round(hh));
 	}
 	else
 	{
 		footerY = 0;
-	}
-	if(footerY > 0)
-	{
-		var _fSprt = sprt_UI_Footer,
-			_fW = sprite_get_width(_fSprt),
-			_fH = sprite_get_height(_fSprt);
-		draw_sprite_ext(_fSprt,0, ww/2, hh-footerY, global.wideResWidth/_fW,footerY/_fH,0, c_white,1);
-		
-		var _tipStr = footerText[0];
-		if(state == UI_MMState.FileMenu)
-		{
-			_tipStr = footerText[1];
-		}
-		if(subState != UI_MMSubState.None)
-		{
-			_tipStr = footerText[2];
-		}
-		
-		var _scrib = scribble(_tipStr)
-			.starting_format(font_get_name(fnt_GUI_Small),c_white)
-			.align(fa_center,fa_top);
-		
-		draw_scribble_shadow(_scrib, scr_round(ww/2), scr_round(hh-footerY+4));
 	}
 	
 	if(screenFade > 0)

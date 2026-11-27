@@ -7,6 +7,7 @@ enum UI_MMState
 	TitleIntro,
 	Title,
 	MainMenu,
+	SettingsMenu,
 	FileMenu,
 	LoadGame
 }
@@ -37,7 +38,8 @@ fileEnergy = array_create(5, -1);
 
 itemList = ds_list_create();
 
-inputBlockLayer = "input block (main menu)";
+mainMenuEnviro = "main menu environment";
+environment = BentoEnvironmentCreate(mainMenuEnviro);
 
 #region Main Menu
 
@@ -53,7 +55,7 @@ function CreateMainMenu()
 		hh = global.resHeight,
 		this = id;
 	
-	var _mainElement = new BentoUI_Spacer(BentoLayerCreate(mainMenuLayer));
+	var _mainElement = new BentoUI_Spacer(BentoLayerCreate(mainMenuLayer, environment));
 	with(_mainElement)
 	{
 		BentoLayoutSetGutter(0, 1);
@@ -75,10 +77,7 @@ function CreateMainMenu()
 	}
 	btnFunc[1] = function()
 	{
-		if(obj_UI_SettingsMenu.activeState == UI_ActiveState.Inactive)
-		{
-			obj_UI_SettingsMenu.activeState = UI_ActiveState.Activating;
-		}
+		creatorUI.targetState = UI_MMState.SettingsMenu;
 		
 		audio_play_sound(snd_MenuBoop,0,false);
 	}
@@ -101,10 +100,127 @@ function CreateMainMenu()
 }
 
 #endregion
-
 #region Settings Menu
-#endregion
 
+settingsMenuText = [
+"DISPLAY SETTINGS",
+"AUDIO SETTINGS",
+"GAMEPLAY SETTINGS",
+"KEYBOARD BINDINGS",
+"CONTROLLER BINDINGS",
+"BACK"];
+
+settingsMenuLayer = "settings menu";
+function CreateSettingsMenu()
+{
+	BentoLayerSetDrawWhenBackgrounded(false, mainMenuLayer, environment);
+	
+	var ww = global.resWidth,
+		hh = global.resHeight,
+		this = id;
+	
+	var _mainElement = new BentoUI_Spacer(BentoLayerCreate(settingsMenuLayer, environment));
+	with(_mainElement)
+	{
+		BentoLayoutSetGutter(0, 3);
+		BentoLayoutSetResize(BENTO_RESIZE_INFLATE, BENTO_RESIZE_INFLATE);
+		BentoLayoutList(BENTO_AXIS_Y, 0, 0.5);
+		BentoSetOffset(ww/2-76);
+	}
+	
+	var btn = [],
+		btnFunc = [],
+		btnW = 152,
+		btnH = 11;
+	
+	btnFunc[0] = function()
+	{
+		// display
+		if(!instance_exists(obj_UI_SettingsMenu_Parent))
+		{
+			instance_create_depth(0,0,creatorUI.depth-1,obj_UI_DisplayMenu);
+		}
+		
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	btnFunc[1] = function()
+	{
+		// audio
+		if(!instance_exists(obj_UI_SettingsMenu_Parent))
+		{
+			instance_create_depth(0,0,creatorUI.depth-1,obj_UI_AudioMenu);
+		}
+		
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	btnFunc[2] = function()
+	{
+		// gameplay
+		if(!instance_exists(obj_UI_SettingsMenu_Parent))
+		{
+			instance_create_depth(0,0,creatorUI.depth-1,obj_UI_GameplayMenu);
+		}
+		
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	btnFunc[3] = function()
+	{
+		// keyboard
+		if(!instance_exists(obj_UI_SettingsMenu_Parent))
+		{
+			instance_create_depth(0,0,creatorUI.depth-1,obj_UI_KeyboardMenu);
+		}
+		
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	btnFunc[4] = function()
+	{
+		// controller
+		if(!instance_exists(obj_UI_SettingsMenu_Parent))
+		{
+			instance_create_depth(0,0,creatorUI.depth-1,obj_UI_GamepadMenu);
+		}
+		
+		audio_play_sound(snd_MenuBoop,0,false);
+	}
+	btnFunc[5] = function()
+	{
+		// back
+		creatorUI.targetState = UI_MMState.MainMenu;
+		
+		audio_play_sound(snd_MenuTick,0,false);
+	}
+	
+	for(var i = 0; i < array_length(settingsMenuText); i++)
+	{
+		var _bw = btnW;
+		if(i == 5)
+		{
+			_bw = 56;
+		}
+		
+		btn[i] = new BentoUI_Button(btnFunc[i], _bw, btnH, settingsMenuText[i], this, _mainElement);
+		btn[i].sprtAlpha = 0.75;
+		btn[i].sprtSelectAlpha = 0.85;
+		if(i < 5)
+		{
+			btn[i].textAlignX = fa_left;
+		}
+		else
+		{
+			BentoSetOffset(,16,btn[i]);
+			btn[i].hotKey = btn[i].hotKey_cancel;
+		}
+		
+		if(i == 0 || i == 5)
+		{
+			BentoSetNavigationWrap(false, true, btn[i]);
+		}
+		
+		BentoAnimPlayBuildIn(7,2*i, 0,0,0,1, 0,animCur_UI_Basic,false,btn[i]);
+	}
+}
+#endregion
 #region File Menu
 
 fileMenuText = [
@@ -118,13 +234,13 @@ fileMenuText = [
 fileMenuLayer = "file menu";
 function CreateFileMenu()
 {
-	BentoLayerSetDrawWhenBackgrounded(false, mainMenuLayer);
+	BentoLayerSetDrawWhenBackgrounded(false, mainMenuLayer, environment);
 	
 	var ww = global.resWidth,
 		hh = global.resHeight,
 		this = id;
 	
-	var _mainElement = new BentoUI_Spacer(BentoLayerCreate(fileMenuLayer));
+	var _mainElement = new BentoUI_Spacer(BentoLayerCreate(fileMenuLayer, environment));
 	with(_mainElement)
 	{
 		BentoLayoutSetGutter(0, 4);
@@ -206,7 +322,7 @@ function CreateSelectedFileMenu(_fileBtn, _fileIndex)
 	var btnW = 78,
 		btnH = 11;
 	
-	var _mainElement = new BentoUI_Spacer(BentoLayerCreate(selectedFileLayer));
+	var _mainElement = new BentoUI_Spacer(BentoLayerCreate(selectedFileLayer, environment));
 	with(_mainElement)
 	{
 		BentoLayoutSetSize(_fileBtn.bentoWidth, _fileBtn.bentoHeight);
@@ -294,14 +410,14 @@ copyFileText = [
 copyFileLayer = "copy file menu";
 function CreateCopyFileMenu()
 {
-	BentoLayerSetDrawWhenBackgrounded(false, fileMenuLayer);
-	BentoLayerSetDrawWhenBackgrounded(false, selectedFileLayer);
+	BentoLayerSetDrawWhenBackgrounded(false, fileMenuLayer, environment);
+	BentoLayerSetDrawWhenBackgrounded(false, selectedFileLayer, environment);
 	
 	var ww = global.resWidth,
 		hh = global.resHeight,
 		this = id;
 	
-	var _mainElement = new BentoUI_Spacer(BentoLayerCreate(copyFileLayer));
+	var _mainElement = new BentoUI_Spacer(BentoLayerCreate(copyFileLayer, environment));
 	with(_mainElement)
 	{
 		BentoLayoutSetGutter(0, 4);
@@ -346,8 +462,8 @@ function CreateCopyFileMenu()
 			{
 				creatorUI.subState = UI_MMSubState.FileSelected;
 				BentoLayerDestroy(creatorUI.copyFileLayer);
-				BentoLayerSetDrawWhenBackgrounded(true, creatorUI.fileMenuLayer);
-				BentoLayerSetDrawWhenBackgrounded(true, creatorUI.selectedFileLayer);
+				BentoLayerSetDrawWhenBackgrounded(true, creatorUI.fileMenuLayer, creatorUI.environment);
+				BentoLayerSetDrawWhenBackgrounded(true, creatorUI.selectedFileLayer, creatorUI.environment);
 				
 				audio_play_sound(snd_MenuTick,0,false);
 			}
@@ -389,7 +505,7 @@ function CreateConfirmCopyMenu(srcFile, destFile)
 	var pnlW = 256,//248,
 		pnlH = string_height(str) + 24;
 	
-	var _mainElement = new BentoUI_ConfirmPanel(pnlW, pnlH, str, this, BentoLayerCreate(confirmCopyLayer));
+	var _mainElement = new BentoUI_ConfirmPanel(pnlW, pnlH, str, this, BentoLayerCreate(confirmCopyLayer, environment));
 	with(_mainElement)
 	{
 		BentoSetPosition(ww/2, hh/2);
@@ -436,7 +552,7 @@ function CreateConfirmCopyMenu(srcFile, destFile)
 			BentoLayerDestroy(creatorUI.selectedFileLayer);
 			BentoLayerDestroy(creatorUI.copyFileLayer);
 			BentoLayerDestroy(creatorUI.confirmCopyLayer);
-			BentoLayerSetDrawWhenBackgrounded(true, creatorUI.fileMenuLayer);
+			BentoLayerSetDrawWhenBackgrounded(true, creatorUI.fileMenuLayer, creatorUI.environment);
 			
 			var _root = BentoLayerGetRoot(creatorUI.fileMenuLayer),
 				_mainElement = BentoGetChild(0, _root),
@@ -507,7 +623,7 @@ function CreateConfirmDeleteMenu()
 	var pnlW = 256,//248,
 		pnlH = string_height(str) + 24;
 	
-	var _mainElement = new BentoUI_ConfirmPanel(pnlW, pnlH, str, this, BentoLayerCreate(confirmDeleteLayer));
+	var _mainElement = new BentoUI_ConfirmPanel(pnlW, pnlH, str, this, BentoLayerCreate(confirmDeleteLayer, environment));
 	with(_mainElement)
 	{
 		BentoSetPosition(ww/2, hh/2);
@@ -702,12 +818,11 @@ function DrawSaveFileButton()
 #endregion
 
 headerTextRaw = [
+"SETTINGS",
 "SELECT FILE DATA",
 "DATA COPY MODE"];
-headerText = [];
 
 footerTextRaw = [
 "${MenuMove} - Move   ${MenuAccept_0} - Select",
 "${MenuMove} - Move   ${MenuAccept_0} - Select   ${MenuCancel_0} - Back",
 "${MenuMove} - Move   ${MenuAccept_0} - Select   ${MenuCancel_0} - Cancel"];
-footerText = [];

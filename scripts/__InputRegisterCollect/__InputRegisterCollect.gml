@@ -59,14 +59,14 @@ function __InputRegisterCollect()
                     if (not window_get_fullscreen())
                     {
                         //Windowed Alt-Space sticks every key pressed on release
-                        __InputReleaseAllKeys();
+                        __InputClearAlllKeys();
                     }
                 }
                 
                 if (keyboard_check(0xE6) && !keyboard_check_pressed(0xE6))
                 {
                     //OEM key sticks on sleep (Power button on Steam Deck)
-                    keyboard_key_release(0x0E6);
+                    keyboard_clear(0x0E6);
                 }
             }
             else if (INPUT_ON_WEB && INPUT_ON_APPLE)
@@ -74,7 +74,7 @@ function __InputRegisterCollect()
                 if (keyboard_check_released(vk_lmeta) || keyboard_check_released(vk_rmeta))
                 {
                     //Meta release sticks every key pressed during hold
-                    __InputReleaseAllKeys();
+                    __InputClearAlllKeys();
 
                 }
             }
@@ -271,13 +271,13 @@ function __InputUpdateGamepadPresence()
     }
 }
 
-function __InputReleaseAllKeys()
+function __InputClearAlllKeys()
 {
   var _key = INPUT_KEYCODE_MIN;
   var _len = 0x100 - _key;
   repeat(_len)
   {
-      keyboard_key_release(_key);
+      keyboard_clear(_key);
       ++_key;
   }
 }

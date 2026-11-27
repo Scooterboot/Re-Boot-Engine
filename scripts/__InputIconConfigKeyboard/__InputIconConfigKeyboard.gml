@@ -139,18 +139,14 @@ InputIconDefineKeyboard(vk_pageup,   new UISpriteIcon(sprt_UI_KBIcon_PageUpDown,
 InputIconDefineKeyboard(vk_pagedown, new UISpriteIcon(sprt_UI_KBIcon_PageUpDown,1));//"Page down");
 InputIconDefineKeyboard(vk_end,      new UISpriteIcon(sprt_UI_KBIcon_End));//"End");
 
-var _playerIndex = 0,
-	_forGamepad = InputPlayerUsingGamepad(_playerIndex),
-	_gamepadType = InputPlayerGetLastConnectedGamepadType(_playerIndex);
-
 //Newline to Enter
-InputIconDefineKeyboard(0x0A, InputIconGetDirect(vk_enter,_forGamepad,_gamepadType));
+InputIconDefineKeyboard(0x0A, InputIconGetDirect(vk_enter,false,INPUT_KBM));
 
 //Swap F11 and F12 keycodes on certain platforms
 if (INPUT_ON_LINUX || INPUT_ON_MACOS)
 {
-    var _f11 = InputIconGetDirect(vk_f11,_forGamepad,_gamepadType);
-    var _f12 = InputIconGetDirect(vk_f12,_forGamepad,_gamepadType);
+    var _f11 = InputIconGetDirect(vk_f11,false,INPUT_KBM);
+    var _f12 = InputIconGetDirect(vk_f12,false,INPUT_KBM);
     InputIconDefineKeyboard(0x80, _f11);
     InputIconDefineKeyboard(0x81, _f12);
 }

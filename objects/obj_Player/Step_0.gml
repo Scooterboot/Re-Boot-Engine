@@ -1527,7 +1527,7 @@ if(global.pauseState == PauseState.None)
 		fallspd = moonFallMax;
 	}
 	
-	if(jump <= 0 && bombJump <= 0 && !grounded && state != State.Elevator && (state != State.Grip || (startClimb && climbIndex > 7)) && state != State.Spark && state != State.BallSpark && state != State.Grapple && state != State.Hurt && state != State.Dodge && state != State.CrystalFlash)
+	if(jump <= 0 && bombJump <= 0 && !grounded && state != State.Elevator && (state != State.Grip || (startClimb && climbIndex > 7)) && state != State.Spark && state != State.BallSpark && state != State.Grapple /*&& state != State.Hurt*/ && state != State.Dodge && state != State.CrystalFlash)
 	{
 		velY += min(fGrav,max(fallspd-velY,0));
 	}
@@ -2762,8 +2762,8 @@ if(global.pauseState == PauseState.None)
 	
 		if(state == State.Hurt)
 		{
-			fVelX = hurtSpeedX;
-			fVelY = hurtSpeedY;
+			fVelX += hurtSpeedX;
+			fVelY += hurtSpeedY;
 		}
 		
 		if(dir == 0 || state == State.CrystalFlash)
@@ -4518,6 +4518,7 @@ if(global.pauseState == PauseState.None)
 						if(this.dmgBoxCheck(instance_place_list(x,y,obj_DamageBox,this.blockList,false)))
 						{
 							dmgCol = true;
+							break;
 						}
 					}
 					
@@ -5012,8 +5013,8 @@ if(global.pauseState == PauseState.None)
 		else
 		{
 			dmgBoost = 5;
-			velX = 0;
-			velY = 0;
+			velX = (velX > 0) ? max(velX-fFrict*2,0) : min(velX+fFrict*2,0);
+			velY = (velY > 0) ? max(velY-fFrict*2,0) : min(velY+fFrict*2,0);
 			hurtTime = max(hurtTime - 1, 0);
 		}
 		

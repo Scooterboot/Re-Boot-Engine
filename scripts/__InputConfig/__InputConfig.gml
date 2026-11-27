@@ -154,7 +154,7 @@
 // 2 = The library will not automatically collect player input. Instead, you must call
 //     `InputManualCollect()` yourself. This gives you maximum flexibility in how player input
 //     is collected at the cost of having to manage that yourself.
-#macro INPUT_COLLECT_MODE  2//0
+#macro INPUT_COLLECT_MODE  1//0
 
 // Whether to update library state immediately after collecting player input. This is set to `true`
 // by default. If this macro is set to `false` then you should call `InputManualUpdate()` at
@@ -169,3 +169,8 @@
 // This is set to `false` by default. If this macro is set to `true` then only the first player
 // can be assigned the `INPUT_KBM` device via `InputPlayerSetDevice()` or the Party plug-in.
 #macro INPUT_KBM_FIRST_PLAYER_ONLY  false
+
+// Whether to use the Steamworks extension, if it is available. This is set to `true` by default.
+// If this macro is set to `false` then the Steamworks extension is ignored by Input. This macro
+// may be useful if you want to use a version of Steamworks that is not supported by Input.
+#macro INPUT_USE_STEAMWORKS_EXTENSION  true

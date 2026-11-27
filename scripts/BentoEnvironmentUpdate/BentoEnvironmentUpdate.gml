@@ -1,17 +1,17 @@
 // Feather disable all
 
-/// @param name
+/// @param environmentOrName
 /// @param rootX
 /// @param rootY
 /// @param rootWidth
 /// @param roomHeight
 /// @param [timeStep=1]
 
-function BentoEnvironmentUpdate(_name, _rootX, _rootY, _rootWidth, _rootHeight, _timeStep = 1)
+function BentoEnvironmentUpdate(_environmentOrName, _rootX, _rootY, _rootWidth, _rootHeight, _timeStep = 1)
 {
     static _system = __BentoSystem();
     
-    var _environment = __BentoEnvironmentFind(_name)
+    var _environment = __BentoEnvironmentSeek(_environmentOrName);
     if (_environment == undefined) return;
     
     var _globalScale = _system.__globalScale;

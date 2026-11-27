@@ -1,10 +1,5 @@
 /// @description Sound & Animation
-//if(instance_exists(obj_MainMenu) && obj_MainMenu.currentScreen != MainScreen.TitleIntro && obj_MainMenu.currentScreen != MainScreen.Title)
-if(instance_exists(obj_UI_MainMenu) && (obj_UI_MainMenu.state = UI_MMState.FileMenu || obj_UI_MainMenu.state = UI_MMState.LoadGame))
-{
-	exit;
-}
-if(instance_exists(obj_UI_SettingsMenu) && obj_UI_SettingsMenu.activeState == UI_ActiveState.Active)
+if(instance_exists(obj_UI_MainMenu) && (obj_UI_MainMenu.state = UI_MMState.SettingsMenu || obj_UI_MainMenu.state = UI_MMState.FileMenu || obj_UI_MainMenu.state = UI_MMState.LoadGame))
 {
 	exit;
 }

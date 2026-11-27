@@ -23,33 +23,46 @@ function __InputInitializeSteam()
             __usingSteam = true;
         }
         
-        try
-        {
-            //Using Steamworks extension
-            __usingSteamworks = steam_input_init(true);
-            __usingBigPicture = steam_utils_is_steam_in_big_picture_mode();
-            __onSteamDeck     = steam_utils_is_steam_running_on_steam_deck();
-        }
-        catch(_error)
-        {
-            __InputTrace("Steamworks extension unavailable");
-        }
-        
-        if (not is_bool(__usingBigPicture))
+        if (INPUT_USE_STEAMWORKS_EXTENSION)
         {
             try
             {
-                __usingBigPicture = bool(__usingBigPicture);
+                //Using Steamworks extension
+                __usingSteamworks = steam_input_init(true);
+                __usingBigPicture = steam_utils_is_steam_in_big_picture_mode();
+                __onSteamDeck     = steam_utils_is_steam_running_on_steam_deck();
             }
             catch(_error)
             {
-                __usingBigPicture = false;
+                __InputTrace("Steamworks extension unavailable");
+            }
+        
+            if (not is_bool(__usingBigPicture))
+            {
+                try
+                {
+                    __usingBigPicture = bool(__usingBigPicture);
+                }
+                catch(_error)
+                {
+                    __usingBigPicture = false;
+                }
             }
         }
         
-        if (__usingSteamworks && (string(steam_get_app_id()) == "480"))
+        if (__usingSteamworks)
         {
-            __InputError("Steam application ID 480 is not supported.\nPlease change to your game's actual Steam application ID.\n \nIf you need a testing ID you should:\n1. Use ID 378090\n2. Set Debug to Enabled\n3. Install the game itself (Rebel Wings) on Steam.");
+            try
+            {
+                if (string(steam_get_app_id()) == "480")
+                {
+                    __InputError("Steam application ID 480 is not supported.\nPlease change to your game's actual Steam application ID.\n \nIf you need a testing ID you should:\n1. Use ID 378090\n2. Set Debug to Enabled\n3. Install the game itself (Rebel Wings) on Steam.");
+                }
+            }
+            catch (_error)
+            {
+                __InputError("Incompatible Steamworks extension version found.\nExtension version: ", extension_get_version("Steamworks"), "\nLatest compatible version: 2.2.3");
+            }
         }
         
         //Identify Steam Deck in absence of Steamworks

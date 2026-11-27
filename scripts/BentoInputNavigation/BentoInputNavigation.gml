@@ -13,11 +13,11 @@
 /// @param dY
 /// @param primaryAction
 /// @param [threshold=0.25]
+/// @param [environmentOrName]
 
-function BentoInputNavigation(_dX, _dY, _primaryAction, _threshold = 0.25)
+function BentoInputNavigation(_dX, _dY, _primaryAction, _threshold = 0.25, _environmentOrName = undefined)
 {
-    static _system = __BentoSystem();
-    with(_system.__environmentCurrent)
+    with(__BentoEnvironmentSeek(_environmentOrName))
     {
         if (sqrt(_dX*_dX + _dY*_dY) < _threshold)
         {

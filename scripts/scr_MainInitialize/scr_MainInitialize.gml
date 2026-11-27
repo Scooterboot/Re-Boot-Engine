@@ -33,7 +33,6 @@ function scr_MainInitialize()
 	
 	instance_create_depth(0,0,dpth+5,obj_UI_Controller);
 	
-	instance_create_depth(0,0,dpth+3,obj_UI_SettingsMenu);
 	instance_create_depth(0,0,dpth+4,obj_UI_MainMenu);
 	instance_create_depth(0,0,dpth+4,obj_PauseMenu);//obj_UI_PauseMenu);
 	

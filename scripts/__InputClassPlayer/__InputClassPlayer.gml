@@ -241,74 +241,10 @@ function __InputClassPlayer(_playerIndex) constructor
         //            //
         ////////////////
         
-        var _verbStateArray  = __verbStateArray;
-        
         var _i = 0;
         repeat(_clusterCount)
         {
-            var _clusterDefinition = _clusterDefinitionArray[_i];
-            
-            if (not is_struct(_clusterDefinition))
-            {
-                ++_i;
-                continue;
-            }
-            
-            //Pull raw verb values so we can apply thresholds in 2D
-            var _valueU = _verbStateArray[_clusterDefinition.__verbUp   ].__valueRaw;
-            var _valueR = _verbStateArray[_clusterDefinition.__verbRight].__valueRaw;
-            var _valueD = _verbStateArray[_clusterDefinition.__verbDown ].__valueRaw;
-            var _valueL = _verbStateArray[_clusterDefinition.__verbLeft ].__valueRaw;
-            
-            //Calculate the actual raw x/y values
-            var _dx = _valueR - _valueL;
-            var _dy = _valueD - _valueU;
-            
-            //Calculate the displacement
-            var _d = sqrt(_dx*_dx + _dy*_dy);
-            
-            //If the displacement is exactly zero then skip then early-out
-            if (_d <= 0.0)
-            {
-                __clusterXArray[@ _i] = 0;
-                __clusterYArray[@ _i] = 0;
-            }
-            else
-            {
-                //Scale down the x/y values so we clamp output values between 0 and 1. This should
-                //only matter if the player is combining boolean inputs (keyboard, dpad)
-                _dx /= max(1, _d);
-                _dy /= max(1, _d);
-                _d = min(1, _d);
-                
-                var _bias = _clusterDefinition.__axisBiasFactor;
-                if (_bias > 0)
-                {
-                    var _divisor = _clusterDefinition.__axisBiasDiagonals? 45 : 90;
-                    var _direction = point_direction(0, 0, _dx, _dy);
-                    
-                    if (_bias >= 1)
-                    {
-                        _direction = _divisor*round(_direction/_divisor);
-                    }
-                    else
-                    {
-                        var _dirMod = (_direction mod _divisor) / _divisor;
-                        _dirMod = clamp((_dirMod - 0.5*0.999*_bias) / (1 - 0.999*_bias), 0, 1);
-                        _dirMod = _dirMod*_dirMod*(3 - 2*_dirMod); //Smooth step babyyyy
-                        _direction = _divisor*((_direction div _divisor) + _dirMod);
-                    }
-                    
-                    var _distance = point_distance(0, 0, _dx, _dy);
-                    _dx = lengthdir_x(_distance, _direction);
-                    _dy = lengthdir_y(_distance, _direction);
-                }
-                
-                //Spit out the answer!
-                __clusterXArray[@ _i] = _dx;
-                __clusterYArray[@ _i] = _dy;
-            }
-            
+            __UpdateCluster(_i);
             ++_i;
         }
         
@@ -322,6 +258,69 @@ function __InputClassPlayer(_playerIndex) constructor
             {
                 __lastHotswapBlockedTime = current_time;
             }
+        }
+    }
+    
+    static __UpdateCluster = function(_clusterIndex)
+    {
+        var _clusterDefinition = _clusterDefinitionArray[_clusterIndex];
+        if (not is_struct(_clusterDefinition)) return;
+        
+        var _verbStateArray = __verbStateArray;
+        
+        //Pull raw verb values so we can apply thresholds in 2D
+        var _valueU = _verbStateArray[_clusterDefinition.__verbUp   ].__valueRaw;
+        var _valueR = _verbStateArray[_clusterDefinition.__verbRight].__valueRaw;
+        var _valueD = _verbStateArray[_clusterDefinition.__verbDown ].__valueRaw;
+        var _valueL = _verbStateArray[_clusterDefinition.__verbLeft ].__valueRaw;
+        
+        //Calculate the actual raw x/y values
+        var _dx = _valueR - _valueL;
+        var _dy = _valueD - _valueU;
+        
+        //Calculate the displacement
+        var _d = sqrt(_dx*_dx + _dy*_dy);
+        
+        //If the displacement is exactly zero then skip then early-out
+        if (_d <= 0.0)
+        {
+            __clusterXArray[@ _clusterIndex] = 0;
+            __clusterYArray[@ _clusterIndex] = 0;
+        }
+        else
+        {
+            //Scale down the x/y values so we clamp output values between 0 and 1. This should
+            //only matter if the player is combining boolean inputs (keyboard, dpad)
+            _dx /= max(1, _d);
+            _dy /= max(1, _d);
+            _d = min(1, _d);
+            
+            var _bias = _clusterDefinition.__axisBiasFactor;
+            if (_bias > 0)
+            {
+                var _divisor = _clusterDefinition.__axisBiasDiagonals? 45 : 90;
+                var _direction = point_direction(0, 0, _dx, _dy);
+                
+                if (_bias >= 1)
+                {
+                    _direction = _divisor*round(_direction/_divisor);
+                }
+                else
+                {
+                    var _dirMod = (_direction mod _divisor) / _divisor;
+                    _dirMod = clamp((_dirMod - 0.5*0.999*_bias) / (1 - 0.999*_bias), 0, 1);
+                    _dirMod = _dirMod*_dirMod*(3 - 2*_dirMod); //Smooth step babyyyy
+                    _direction = _divisor*((_direction div _divisor) + _dirMod);
+                }
+                
+                var _distance = point_distance(0, 0, _dx, _dy);
+                _dx = lengthdir_x(_distance, _direction);
+                _dy = lengthdir_y(_distance, _direction);
+            }
+            
+            //Spit out the answer!
+            __clusterXArray[@ _clusterIndex] = _dx;
+            __clusterYArray[@ _clusterIndex] = _dy;
         }
     }
 }

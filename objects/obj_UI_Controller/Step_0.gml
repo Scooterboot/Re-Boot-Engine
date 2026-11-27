@@ -17,39 +17,22 @@ if(room == rm_MainMenu || room == rm_GameOver || room == rm_Disclaimer || global
 		
 		if(usingMouse)
 		{
-			BentoSetMode(BENTO_MODE_MOUSE);
+			bentoInputMode = BENTO_MODE_MOUSE;
 		}
 		else
 		{
-			BentoSetMode(BENTO_MODE_KEYBOARD);
+			bentoInputMode = BENTO_MODE_KEYBOARD;
 		}
 	}
 	else if (_device == INPUT_TOUCH)
 	{
-	    BentoSetMode(BENTO_MODE_TOUCH);
+		bentoInputMode = BENTO_MODE_TOUCH;
 	}
 	else if (InputDeviceIsGamepad(_device))
 	{
-	    BentoSetMode(BENTO_MODE_GAMEPAD);
+		bentoInputMode = BENTO_MODE_GAMEPAD;
 	}
-	
-	if (BentoUsingPointer() && instance_exists(obj_Mouse))
-	{
-		BentoInputPointer(obj_Mouse.PosX(), obj_Mouse.PosY(), InputMouseCheck());
-	}
-	else
-	{
-		var _dX = global.control[INPUT_VERB.MenuRight] - global.control[INPUT_VERB.MenuLeft],
-			_dY = global.control[INPUT_VERB.MenuDown] - global.control[INPUT_VERB.MenuUp];
-	    BentoInputNavigation(_dX, _dY, global.control[INPUT_VERB.MenuAccept], 0);
-	}
-	
-	BentoInputHotkey(BENTO_HOTKEY_CANCEL, (global.controlPressed[INPUT_VERB.MenuCancel] || InputMousePressed(mb_right)));
-	BentoInputHotkey(BENTO_HOTKEY_SCROLL_UP, global.control[INPUT_VERB.MenuScrollUp]);
-	BentoInputHotkey(BENTO_HOTKEY_SCROLL_DOWN, global.control[INPUT_VERB.MenuScrollDown]);
 	BentoInputConfigureRetrigger(30,5,10,3);
-	
-	BentoSystemStep(0, 0, global.resWidth, global.resHeight);
 }
 
 updateText = false;

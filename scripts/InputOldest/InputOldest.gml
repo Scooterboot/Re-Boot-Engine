@@ -24,7 +24,7 @@ function InputOldest(_verbIndexArray = -1, _playerIndex = 0)
     
     with(_playerArray[_playerIndex])
     {
-        var _minTime = -1;
+        var _minTime = infinity;
         var _minVerb = undefined;
         
         var _i = 0;
